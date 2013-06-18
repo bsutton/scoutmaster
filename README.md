@@ -1,13 +1,13 @@
 scoutmaster
 ===========
 
-CRM for running a local Boy Scout Group
+CRM for running a local Scout Group
 
-Scout Master is design to allow a local Group Leader and the Group Committee to easly manage a Scout Group.
+Scout Master is design to allow a local Group Leader, Group Council and Group Committee to easly manage a Scout Group.
 
 Scout Master is NOT a tool to publish a web site you can use the likes of Drupal to do that.
 
-Scout Master is squarly focused on management activities within a Scout Group.
+Scout Master is squarely focused on management activities within a Scout Group.
 
 We need your help in making ScoutMaster great.
 
