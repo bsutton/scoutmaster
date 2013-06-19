@@ -11,7 +11,7 @@ Scout Master is squarely focused on management activities within a Scout Group.
 
 We need your help in making ScoutMaster great.
 
-Check out the sites wiki for details on the technology we use and how you can get involved.
+Check out the sites wiki at https://github.com/bsutton/scoutmaster/wiki for details on the technology we use and how you can get involved.
 
 The aim of version one of Scout Master is the following:
 
