@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import au.com.noojee.scouts.views.ContactView;
 import au.com.noojee.scouts.views.ImportView;
-import au.com.noojee.scouts.views.StartView;
+import au.com.noojee.scouts.views.AppointmentView;
 
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -43,12 +44,12 @@ public class NavigatorUI extends UI
 	class ViewMap
 	{
 		String menuItemName;
-		Class view;
+		Class<? extends View> view;
 
-		ViewMap(String menuItemName, Class view)
+		ViewMap(String menuItemName, Class<? extends View> class1)
 		{
 			this.menuItemName = menuItemName;
-			this.view = view;
+			this.view = class1;
 		}
 	}
 
@@ -58,13 +59,11 @@ public class NavigatorUI extends UI
 	 * After UI class is created, init() is executed. You should build and wire
 	 * up your user interface here.
 	 */
-	@SuppressWarnings(
-	{ "unchecked", "serial" })
 	protected void init(VaadinRequest request)
 	{
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap("Contact", ContactView.class));
-		viewMap.add(new ViewMap("Start", StartView.class));
+		viewMap.add(new ViewMap("Start", AppointmentView.class));
 		viewMap.add(new ViewMap("Import", ImportView.class));
 
 		VerticalLayout mainLayout = new VerticalLayout();
@@ -91,6 +90,8 @@ public class NavigatorUI extends UI
 			if (viewmap.menuItemName != "")
 				menubar.addItem(viewmap.menuItemName, new MenuBar.Command()
 				{
+					private static final long serialVersionUID = 1L;
+
 					public void menuSelected(MenuItem selectedItem)
 					{
 						navigator.navigateTo(viewmap.menuItemName);

@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.0.beta1</vaadin.version>
+		<vaadin.version>7.1.0</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 	</properties>
 	<repositories>
@@ -120,6 +120,26 @@
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>dragdroplayouts</artifactId>
+			<version>1.0.0.alpha4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>joda-money</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.addon</groupId>
+			<artifactId>vaadin-calendar</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.2</version>
 		</dependency>
 	</dependencies>
 

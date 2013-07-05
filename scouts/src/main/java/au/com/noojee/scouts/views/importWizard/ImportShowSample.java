@@ -11,10 +11,12 @@ import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.noojee.scouts.domain.FormFieldImpl;
 import au.com.noojee.scouts.domain.Importable;
 import au.com.noojee.scouts.views.ImportView;
 
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -105,7 +107,7 @@ public class ImportShowSample implements WizardStep
 			
 			
 
-			Hashtable<String, FieldMap> fieldMaps = new Hashtable<String, FieldMap>();
+			Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
 
 			fieldMaps = this.importView.getMatch().getFieldMap();
 			addItemProperties(container, fieldMaps);
@@ -134,28 +136,31 @@ public class ImportShowSample implements WizardStep
 		return container;
 	}
 
-	private static void addItemProperties(IndexedContainer container, Hashtable<String, FieldMap> fieldMaps)
+	private static void addItemProperties(IndexedContainer container, Hashtable<String, FormFieldImpl> fieldMaps)
 	{
 		for (String key : fieldMaps.keySet())
 		{
-			container.addContainerProperty(fieldMaps.get(key).entityField, String.class, null);
+			container.addContainerProperty(fieldMaps.get(key).getFieldName(), String.class, null);
 		}
 	}
 
 	
 	private static <R extends Importable> void addRow(IndexedContainer container, String[] csvHeaders, String[] fields,
-			Hashtable<String, FieldMap> fieldMaps)
+			Hashtable<String, FormFieldImpl> fieldMaps)
 	{
 		Object itemId = container.addItem();
 		Item item = container.getItem(itemId);
 		for (int i = 0; i < fields.length; i++)
 		{
 			String csvHeaderName = csvHeaders[i];
-			FieldMap fieldMap = fieldMaps.get(csvHeaderName);
+			FormFieldImpl fieldMap = fieldMaps.get(csvHeaderName);
 			if (fieldMap != null)
 			{
 				String field = fields[i];
-				item.getItemProperty(fieldMap.entityField).setValue(field);
+				String fieldName = fieldMap.getFieldName();
+				@SuppressWarnings("unchecked")
+				Property<String> itemProperty = item.getItemProperty(fieldName);
+				itemProperty.setValue(field);
 			}
 		}
 	}

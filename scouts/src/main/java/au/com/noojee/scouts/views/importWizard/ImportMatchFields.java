@@ -12,13 +12,22 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.noojee.scouts.domain.EntityAdaptor;
+import au.com.noojee.scouts.domain.FormFieldImpl;
+import au.com.noojee.scouts.domain.ImportColumnFieldMapping;
+import au.com.noojee.scouts.domain.ImportUserMapping;
 import au.com.noojee.scouts.domain.Importable;
 import au.com.noojee.scouts.views.ImportView;
 
+import com.vaadin.addon.jpacontainer.EntityProvider;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -26,14 +35,19 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class ImportMatchFields implements WizardStep
 {
 
 	private ImportView importView;
+	private String selectedUserMapping = null;
 	private ArrayList<ComboBox> mappings;
+	private ArrayList<ImportUserMapping> userMapping;
+
 	private String[] headers;
+	private TextField fieldMapping;
 
 	public ImportMatchFields(ImportView importView)
 	{
@@ -99,31 +113,38 @@ public class ImportMatchFields implements WizardStep
 		this.mappings = new ArrayList<ComboBox>();
 
 		VerticalLayout layout = new VerticalLayout();
+
+		HorizontalLayout row = new HorizontalLayout();
+		FormLayout fl = new FormLayout();
+		this.selectedUserMapping = this.importView.getFile().getImportMapping();
+		fieldMapping = new TextField("Import Mapping", selectedUserMapping);
+		fl.addComponent(fieldMapping);
+		row.addComponent(fl);
+		row.addComponent(new Label(
+				"Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
+
+		layout.setMargin(true);
 		try
 		{
-		String[] headers = getHeaders();
+			String[] headers = getHeaders();
 
-		EntityAdaptor<? extends Importable> adaptor = new EntityAdaptor(importable);
+			EntityAdaptor<Class <? extends Importable>> adaptor = new EntityAdaptor<Class <? extends Importable>>(importable);
 
-		ArrayList<String> fields = adaptor.getFieldNames();
-		fields.add(0, "--Please Select--");
-		for (String header : headers)
-		{
-			HorizontalLayout row = new HorizontalLayout();
-//			row.setMargin(true);
-//			row.setSpacing(true);
-//			row.addComponent(new Label(header));
-			FormLayout fl = new FormLayout();
-			ComboBox box = new ComboBox(header + "  --Maps to-->  ", fields);
-			box.setNullSelectionAllowed(true);
-			box.setInputPrompt("--Please Select--");
-			box.setNullSelectionItemId("--Please Select--");
-			box.setTextInputAllowed(false);
-			fl.addComponent(box);
-			row.addComponent(fl);
-			this.mappings.add(box);
-			layout.addComponent(row);
-		}
+			ArrayList<FormFieldImpl> fields = adaptor.getFields();
+			for (String header : headers)
+			{
+				row = new HorizontalLayout();
+				fl = new FormLayout();
+				ComboBox box = new ComboBox(header + "  --Maps to-->  ", fields);
+				box.setNullSelectionAllowed(true);
+				box.setInputPrompt("--Please Select--");
+				box.setNullSelectionItemId("--Please Select--");
+				box.setTextInputAllowed(false);
+				fl.addComponent(box);
+				row.addComponent(fl);
+				this.mappings.add(box);
+				layout.addComponent(row);
+			}
 		}
 		catch (IOException e)
 		{
@@ -135,6 +156,54 @@ public class ImportMatchFields implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
+		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, "scouts");
+
+		// Save the user selected mappings
+		if (!fieldMapping.getValue().equals(selectedUserMapping))
+		{
+			// the name has changed so we need to save a new one
+
+			ImportUserMapping userMapping = new ImportUserMapping(fieldMapping.getValue());
+
+			for (ComboBox mapping : mappings)
+			{
+				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
+						(String) mapping.getValue());
+				userMapping.addColumnFieldMapping(columnMapping);
+			}
+			userMappings.addEntity(userMapping);
+			userMappings.commit();
+
+		}
+		else
+		{
+			// The name hasn't changed so save over the existing one.
+			// userMappings.addContainerFilter("mappingName",
+			// fieldMapping.getValue(), true, false);
+			// userMappings.applyFilters();
+			//
+			// ImportUserMapping userMapping = new
+			// ImportUserMapping(fieldMapping.getValue());
+
+			EntityProvider<ImportUserMapping> ep = userMappings.getEntityProvider();
+			EntityManager em = ep.getEntityManager();
+			
+			TypedQuery<ImportUserMapping> q2 =
+				      em.createQuery("SELECT * FROM ImportUserMapping", ImportUserMapping.class);
+
+			ImportUserMapping userMapping = q2.getSingleResult();
+			em.getTransaction().begin();
+
+			for (ComboBox mapping : mappings)
+			{
+				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
+						(String) mapping.getValue());
+				userMapping.addColumnFieldMapping(columnMapping);
+			}
+
+			em.getTransaction().commit();
+		}
+
 		return true;
 	}
 
@@ -144,32 +213,37 @@ public class ImportMatchFields implements WizardStep
 		return true;
 	}
 
-	public Hashtable<String, FieldMap> getFieldMap()
+	public Hashtable<String, FormFieldImpl> getFieldMap()
 	{
-		Hashtable<String, FieldMap> fieldMaps = new Hashtable<String, FieldMap>();
+		Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
 
 		for (int index = 0; index < headers.length; index++)
 		{
 			ComboBox box = this.mappings.get(index);
 			if (box.getValue() != null)
 			{
-				fieldMaps.put(headers[index], new FieldMap(headers[index], (String) box.getValue()));
+				FormFieldImpl field = (FormFieldImpl) box.getValue();
+				fieldMaps.put(field.getFieldName(), field);
 			}
 		}
 
 		return fieldMaps;
 	}
 
-}
-
-class FieldMap
-{
-	String csvHeader;
-	String entityField;
-
-	public FieldMap(String csvHeader, String entityField)
+	class FieldMap
 	{
-		this.csvHeader = csvHeader;
-		this.entityField = entityField;
+		String csvHeader;
+		FormFieldImpl formField;
+
+		public String displayName()
+		{
+			return formField.displayName();
+		}
+
+		public boolean visible()
+		{
+			return formField.visible();
+		}
 	}
+
 }

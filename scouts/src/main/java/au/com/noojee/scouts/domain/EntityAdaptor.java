@@ -5,43 +5,42 @@ import java.util.ArrayList;
 
 import au.com.noojee.scouts.FormField;
 
-public class EntityAdaptor<T extends Class<?>>
+public class EntityAdaptor<T>
 {
-	T entity;
+	Class<?> entity;
 
-	public EntityAdaptor(T entity)
+	public EntityAdaptor(Class<?> entity)
 	{
 		this.entity = entity;
 	}
 
-	public ArrayList<FormField> getFields()
+	public ArrayList<FormFieldImpl> getFields()
 	{
-		ArrayList<FormField> formFields = new ArrayList<FormField>();
+		ArrayList<FormFieldImpl> formFields = new ArrayList<FormFieldImpl>();
 		Field[] fields = entity.getDeclaredFields();
-		
-		
+
 		for (Field field : fields)
 		{
-			Class<?> fieldClass = field.getType();
-			
-			if(field.isAnnotationPresent(FormField.class)) {
-				FormField singleAnnotation = 
-	            		(FormField) field.getAnnotation(FormField.class);
-	            formFields.add( (FormField) singleAnnotation);
+			if (field.isAnnotationPresent(FormField.class))
+			{
+				FormField singleAnnotation = (FormField) field.getAnnotation(FormField.class);
+
+				FormFieldImpl formField = new FormFieldImpl(field.getName(), ((FormField) singleAnnotation));
+				formFields.add(formField);
 			}
 		}
-		
+
 		return formFields;
 	}
 
-	public ArrayList<String> getFieldNames()
+	public ArrayList<String> getFieldDisplayNames()
 	{
-		ArrayList<String> fieldNames = new ArrayList<String>();
-		
-		for (FormField field : getFields())
+		ArrayList<String> fieldDisplayNames = new ArrayList<String>();
+
+		for (FormFieldImpl field : getFields())
 		{
-			fieldNames.add(field.name());
+			fieldDisplayNames.add(field.displayName());
 		}
-		return fieldNames;
+		return fieldDisplayNames;
 	}
 }

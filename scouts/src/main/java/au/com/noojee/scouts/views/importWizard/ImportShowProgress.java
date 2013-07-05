@@ -10,28 +10,27 @@ import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.noojee.scouts.domain.Contact;
+import au.com.noojee.scouts.domain.FormFieldImpl;
 import au.com.noojee.scouts.domain.Importable;
 import au.com.noojee.scouts.views.ImportView;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.data.Item;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.ProgressIndicator;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
 
 public class ImportShowProgress implements WizardStep
 {
 	static private Logger logger = Logger.getLogger(ImportShowProgress.class);
-	JPAContainer<Contact> contacts;
+	JPAContainer<? extends Importable> entities;
 	private ImportView importView;
 	private boolean importComplete = false;
-	private ProgressIndicator indicator;
+	private ProgressBar indicator;
 	private float count;
 	private Label progressDescription;
 
@@ -55,13 +54,12 @@ public class ImportShowProgress implements WizardStep
 
 		progressDescription = new Label("Imported: " + this.count + " records");
 		layout.addComponent(progressDescription);
-		indicator = new ProgressIndicator(new Float(0.0));
+		indicator = new ProgressBar(new Float(0.0));
 		indicator.setIndeterminate(true);
 		layout.addComponent(indicator);
 
 		// Set polling frequency to 0.5 seconds.
-		indicator.setPollingInterval(500);
-		
+
 		File tempFile = this.importView.getFile().getTempFile();
 
 		FileReader reader = null;
@@ -69,16 +67,16 @@ public class ImportShowProgress implements WizardStep
 		{
 			reader = new FileReader(tempFile);
 			Class<? extends Importable> clazz = importView.getType().getEntityClass();
-			contacts = buildContainerFromCSV(clazz, reader);
+			entities = buildContainerFromCSV(clazz, reader);
 
 			reader.close();
 			if (tempFile.exists())
 				tempFile.delete();
 
 		}
-		catch (IOException e)
+		catch (IOException | InstantiationException | IllegalAccessException e)
 		{
-			logger.error(e,e);
+			logger.error(e, e);
 			Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		finally
@@ -90,14 +88,11 @@ public class ImportShowProgress implements WizardStep
 				}
 				catch (IOException e)
 				{
-					logger.error(e,e);
+					logger.error(e, e);
 					Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 				}
 		}
 
-		
-		
-		
 		return layout;
 	}
 
@@ -125,19 +120,21 @@ public class ImportShowProgress implements WizardStep
 	 * @param reader
 	 * @return
 	 * @throws IOException
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
-	protected JPAContainer buildContainerFromCSV(Class<? extends Importable> importable, Reader reader)
-			throws IOException
+	protected <T extends Importable> JPAContainer<T> buildContainerFromCSV(Class<T> entityClass,
+			Reader reader) throws IOException, InstantiationException, IllegalAccessException
 	{
-		JPAContainer container = JPAContainerFactory.make(importable, "scouts");
-		
+		JPAContainer<T> container = JPAContainerFactory.make(entityClass, "scouts");
+
 		CSVReader csvReader = null;
 
 		try
 		{
 			csvReader = new CSVReader(reader);
 
-			Hashtable<String, FieldMap> fieldMaps = new Hashtable<String, FieldMap>();
+			Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
 
 			fieldMaps = this.importView.getMatch().getFieldMap();
 			String[] columnHeaders = null;
@@ -151,7 +148,7 @@ public class ImportShowProgress implements WizardStep
 				}
 				else
 				{
-					addRow(container, columnHeaders, record, fieldMaps);
+					addRow(container, entityClass, columnHeaders, record, fieldMaps);
 					indicator.setValue(count);
 					this.count++;
 					this.updateProgress();
@@ -172,22 +169,26 @@ public class ImportShowProgress implements WizardStep
 	 * is a string.
 	 * 
 	 * @param container
+	 * @param entityClass
 	 * @param csvHeaders
 	 * @param fields
+	 * @throws IllegalAccessException
+	 * @throws InstantiationException
 	 */
-	private static <R extends Importable> void addRow(JPAContainer<R> container, String[] csvHeaders, String[] fields,
-			Hashtable<String, FieldMap> fieldMaps)
+	@SuppressWarnings("unchecked")
+	private static <T> void addRow(JPAContainer<T> container,
+			Class<T> entityClass, String[] csvHeaders, String[] fields,
+			Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
 	{
-		Object itemId = container.addItem();
-		Item item = container.getItem(itemId);
+		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 		for (int i = 0; i < fields.length; i++)
 		{
 			String csvHeaderName = csvHeaders[i];
-			FieldMap fieldMap = fieldMaps.get(csvHeaderName);
+			FormFieldImpl fieldMap = fieldMaps.get(csvHeaderName);
 			if (fieldMap != null)
 			{
 				String field = fields[i];
-				item.addItemProperty(itemId, container.addIfieldMap.entityField).setValue(field);
+				entityItem.getItemProperty(fieldMap.getFieldName()).setValue(field);
 			}
 		}
 	}

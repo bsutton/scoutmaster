@@ -12,7 +12,7 @@ import au.com.noojee.scouts.domain.Note;
 import au.com.noojee.scouts.domain.PreferredCommunications;
 import au.com.noojee.scouts.domain.PreferredEmail;
 import au.com.noojee.scouts.domain.PreferredPhone;
-import au.com.noojee.scouts.domain.Section;
+import au.com.noojee.scouts.domain.SectionType;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -59,6 +59,12 @@ public class ContactView extends VerticalLayout implements View
 	private JPAContainer<Contact> contactContainer;
 
 	private JPAContainer<Note> notes;
+	
+	public JPAContainer<Note> getNotes()
+	{
+		return notes;
+	}
+
 	/* User interface components are stored in session. */
 	private Table contactList = new Table();
 	private TextField searchField = new TextField();
@@ -74,7 +80,7 @@ public class ContactView extends VerticalLayout implements View
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		contactContainer = createDummyDatasource();
+		contactContainer = JPAContainerFactory.make(Contact.class, "scouts");
 
 		initLayout();
 		initContactList();
@@ -240,7 +246,7 @@ public class ContactView extends VerticalLayout implements View
 		bindBooleanField(youthLayout, "Custody Order", "custodyOrder");
 		bindTextAreaField(youthLayout, "Custody Order Details", "custodyOrderDetails", 4);
 		bindTextField(youthLayout, "School", "school");
-		bindEnumField(youthLayout, "Section Eligib.", "sectionEligibility", Section.class);
+		bindEnumField(youthLayout, "Section Eligib.", "sectionEligibility", SectionType.class);
 		// bindPanel(youthLayout,"Address", "address");
 		// mainEditPanel.addComponent(youthLayout);
 
@@ -253,7 +259,7 @@ public class ContactView extends VerticalLayout implements View
 		bindBooleanField(memberLayout, "Member", "isMember");
 		bindTextField(memberLayout, "Member No", "memberNo");
 		bindDateField(memberLayout, "Member Since", "memberSince");
-		bindEnumField(youthLayout, "Section ", "section", Section.class);
+		bindEnumField(youthLayout, "Section ", "section", SectionType.class);
 		// mainEditPanel.addComponent(memberLayout);
 
 		// Affiliate fields
@@ -328,6 +334,7 @@ public class ContactView extends VerticalLayout implements View
 					case AdultHelper:
 					case Volunteer:
 					case QuarterMaster:
+					case CommitteeMember:
 						showAdult(true);
 						showYouth(false);
 						showMember(false);
@@ -343,13 +350,9 @@ public class ContactView extends VerticalLayout implements View
 						showAffiliate(true);
 						showAffiliateAdult(true);
 						break;
-					case AssistantCubLeader:
-					case AssistantJoeyLeader:
-					case AssistantScoutLeader:
-					case CubLeader:
+					case AssistantLeader:
+					case Leader:
 					case GroupLeader:
-					case JoeyLeader:
-					case ScoutLeader:
 					case President:
 					case Secretary:
 					case Treasurer:
@@ -365,6 +368,8 @@ public class ContactView extends VerticalLayout implements View
 						showMember(true);
 						showAffiliate(true);
 						showAffiliateAdult(false);
+						break;
+					default:
 						break;
 				}
 				Object contactId = contactList.getValue();
@@ -444,7 +449,7 @@ public class ContactView extends VerticalLayout implements View
 	}
 
 
-	private ComboBox bindEnumField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName, Class clazz)
+	private ComboBox bindEnumField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName, Class<?> clazz)
 	{
 		ComboBox field = new ComboBox(fieldLabel, createContainerFromEnumClass(fieldName, clazz));
 		field.setNewItemsAllowed(false);
@@ -519,7 +524,7 @@ public class ContactView extends VerticalLayout implements View
 	private void initContactList()
 	{
 		contactList.setContainerDataSource(contactContainer);
-		contactList.setVisibleColumns(new String[]
+		contactList.setVisibleColumns((Object[])new String[]
 		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.ROLE, Contact.SECTION });
 		contactList.setSelectable(true);
 		contactList.setImmediate(true);
@@ -623,39 +628,11 @@ public class ContactView extends VerticalLayout implements View
 		}
 	}
 
-	/*
-	 * Generate some in-memory example data to play with. In a real application
-	 * we could be using SQLContainer, JPAContainer or some other to persist the
-	 * data.
-	 */
-	private static JPAContainer<Contact> createDummyDatasource()
-	{
 
-		JPAContainer<Contact> contacts = JPAContainerFactory.make(Contact.class, "scouts");
-		/*
-		 * IndexedContainer ic = new IndexedContainer();
-		 * 
-		 * for (String p : fieldNames) { ic.addContainerProperty(p,
-		 * String.class, ""); }
-		 * 
-		 * //Create dummy data by randomly combining first and last names
-		 * String[] fnames = { "Peter", "Alice", "Joshua", "Mike", "Olivia",
-		 * "Nina", "Alex", "Rita", "Dan", "Umberto", "Henrik", "Rene", "Lisa",
-		 * "Marge" }; String[] lnames = { "Smith", "Gordon", "Simpson", "Brown",
-		 * "Clavel", "Simons", "Verne", "Scott", "Allison", "Gates", "Rowling",
-		 * "Barks", "Ross", "Schneider", "Tate" }; for (int i = 0; i < 1000;
-		 * i++) { Object id = ic.addItem(); ic.getContainerProperty(id,
-		 * FNAME).setValue(fnames[(int) (fnames.length * Math.random())]);
-		 * ic.getContainerProperty(id, LNAME).setValue(lnames[(int)
-		 * (lnames.length * Math.random())]); }
-		 */
-		return contacts;
-	}
-
-	public Container createContainerFromEnumClass(String fieldName, Class<? extends Enum<?>> enumClass)
+	public Container createContainerFromEnumClass(String fieldName, Class<?> clazz)
 	{
 		LinkedHashMap<Enum<?>, String> enumMap = new LinkedHashMap<Enum<?>, String>();
-		for (Object enumConstant : enumClass.getEnumConstants())
+		for (Object enumConstant : clazz.getEnumConstants())
 		{
 			enumMap.put((Enum<?>) enumConstant, enumConstant.toString());
 		}

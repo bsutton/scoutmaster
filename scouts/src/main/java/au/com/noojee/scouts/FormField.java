@@ -11,8 +11,16 @@ import java.lang.annotation.Target;
 public @interface FormField
 {
 
+	/**
+	 * If true then the Form Field should be displayed in an edit form for the entity.
+	 * @return
+	 */
 	boolean visible() default true;
 
-	String name();
+	/**
+	 * When displaying this field use the displayName to identify the field to the user.
+	 * @return
+	 */
+	String displayName();
 
 }

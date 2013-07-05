@@ -34,14 +34,12 @@ public class ImportComplete implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onBack()
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -1,201 +1,242 @@
 package au.com.noojee.scouts.domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Query;
 import javax.persistence.Transient;
+
+import org.apache.log4j.Logger;
 
 import au.com.noojee.scouts.FormField;
 
+import com.vaadin.addon.jpacontainer.EntityProvider;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+
 @Entity
+@NamedQueries(
+{
+		@NamedQuery(name = "Contact.findAll", query = "SELECT contact FROM Contact contact"),
+		@NamedQuery(name = "Contact.findByName", query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") 
+})
 public class Contact implements Importable
 {
-
+	static public Logger logger = Logger.getLogger(Contact.class);
+	
 	public static final String FIRSTNAME = "firstname";
 	public static final String LASTNAME = "lastname";
 	public static final String BIRTH_DATE = "birthDate";
 	public static final String ROLE = "role";
 	public static final String SECTION = "section";
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	/** Common contact fields **/
-	@FormField(name="Created", visible=false)
-	private Date created = Calendar.getInstance().getTime();
+	@FormField(displayName = "Created", visible = false)
+	private Date created = new Date();
 
-	@FormField(name="Active")
+	@FormField(displayName = "Active")
 	private boolean active = true;
 
-	@FormField(name="Prefix")
+	@FormField(displayName = "Prefix")
 	private String prefix = "";
-	
-	@FormField(name="Firstname")
+
+	@FormField(displayName = "Firstname")
 	private String firstname = "";
-	
-	@FormField(name="Middle Name")
+
+	@FormField(displayName = "Middle Name")
 	private String middlename = "";
 
-	@FormField(name="Lastname")
+	@FormField(displayName = "Lastname")
 	private String lastname = "";
 
-	@FormField(name="Birth Date")
+	@FormField(displayName = "Birth Date")
 	private Date birthDate;
-	
-	@FormField(name="Gender")
+
+	@FormField(displayName = "Gender")
 	private Gender gender = Gender.Male;
 
 	@Transient
-	private Long age;
-	
+	private Age age;
+
 	/**
 	 * Adult fields
 	 */
-	
-	
-	@FormField(name="Home Phone")
+
+	@FormField(displayName = "Home Phone")
 	private String homePhone = "";
-	
-	@FormField(name="Work Phone")
+
+	@FormField(displayName = "Work Phone")
 	private String workPhone = "";
-	
-	@FormField(name="Mobile")
+
+	@FormField(displayName = "Mobile")
 	private String mobile = "";
-	
-	@FormField(name="Home Email")
+
+	@FormField(displayName = "Home Email")
 	private String homeEmail = "";
-	
-	@FormField(name="Work Email")
+
+	@FormField(displayName = "Work Email")
 	private String workEmail = "";
-	
-	@FormField(name="Preferred Phone")
+
+	@FormField(displayName = "Preferred Phone")
 	private PreferredPhone preferredPhone = PreferredPhone.MOBILE;
-	
-	@FormField(name="Preferred Email")
+
+	@FormField(displayName = "Preferred Email")
 	private PreferredEmail preferredEmail = PreferredEmail.HOME;
-	
-	@FormField(name="Preferred Communications")
+
+	@FormField(displayName = "Preferred Communications")
 	private PreferredCommunications preferredCommunications = PreferredCommunications.EMAIL_SMS;
-	
+
 	/**
 	 * Youth fields
 	 */
-	@FormField(name="Allergies")
+	@FormField(displayName = "Allergies")
 	private String allergies = "";
-	
-	@FormField(name="Custody Order")
+
+	@FormField(displayName = "Custody Order")
 	private Boolean custodyOrder = false;
-	
-	@FormField(name="Custody Order Details")
+
+	@FormField(displayName = "Custody Order Details")
 	private String custodyOrderDetails = "";
-	
-	@FormField(name="School")
+
+	@FormField(displayName = "School")
 	private String school = "";
+
+	@FormField(displayName = "Section Eligibility")
+	@ManyToOne
+	private SectionType sectionEligibility;
+
+	@OneToOne(mappedBy = "occupant", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@FormField(displayName = "Address")
+	private Address address;
 	
-	@FormField(name="Section Eligibility")
-	private Section sectionEligibility;
-	
-	//private Address address;
-	
-	
+
 	/**
 	 * Member fields
 	 */
-	@FormField(name="Member")
-	private Boolean isMember = false; // this should be derived from the member records.
-	
-	@FormField(name="Member No")
+	@FormField(displayName = "Member")
+	private Boolean isMember = false; // this should be derived from the member
+										// records.
+
+	@FormField(displayName = "Member No")
 	private String memberNo = "";
-	
-	@FormField(name="Member Since")
-	private Date memberSince = Calendar.getInstance().getTime(); // this should be derived from the member records.
-	
+
+	@FormField(displayName = "Member Since")
+	private Date memberSince = Calendar.getInstance().getTime(); // this should
+																	// be
+																	// derived
+																	// from the
+																	// member
+																	// records.
+
 	/** The actual section the Youth or Adult member is attached to. */
-	@FormField(name="Section")
-	private Section section;
-	
-	
+	@FormField(displayName = "Section")
+	@ManyToOne
+	private SectionType section;
+
 	/**
-	 * Affiliate - An Affiliate as any one that is actively associated with the group
-	 *  including Youth doing the three for free and the the parents of those Youth.
-	 *  
-	 *  Prospects are not Affiliates.
+	 * Affiliate - An Affiliate is any one that is actively associated with the
+	 * group including Youth doing the three for free and the the parents of
+	 * those Youth.
+	 * 
+	 * Prospects are not Affiliates.
 	 */
-	@FormField(name="Hobbies")
+	@FormField(displayName = "Hobbies")
 	private String hobbies = "";
-	
-	@FormField(name="Affiliated Since")
+
+	@FormField(displayName = "Affiliated Since")
 	private Date affiliatedSince = Calendar.getInstance().getTime();
-	
-	@FormField(name="Group Role")
+
+	@FormField(displayName = "Group Role")
 	private GroupRole role = GroupRole.YouthMember;
-	
-	@FormField(name="Medicare No")
+
+	@FormField(displayName = "Medicare No")
 	private String medicareNo = "";
-	
-	@FormField(name="Ambulance Subscriber")
+
+	@FormField(displayName = "Ambulance Subscriber")
 	private Boolean ambulanceSubscriber = false;
-	
-	@FormField(name="Private Medical Insurance")
+
+	@FormField(displayName = "Private Medical Insurance")
 	private Boolean privateMedicalInsurance = false;
-	
-	@FormField(name="Private Medical Fund Name")
+
+	@FormField(displayName = "Private Medical Fund Name")
 	private String privateMedicalFundName = "";
-	
+
 	/**
 	 * Affiliated Adults
 	 */
-	@FormField(name="Current Employer")
+	@FormField(displayName = "Current Employer")
 	private String currentEmployer = "";
-	
-	@FormField(name="Job Title")
+
+	@FormField(displayName = "Job Title")
 	private String jobTitle = "";
-	
-	@FormField(name="Has WWC")
+
+	@FormField(displayName = "Has WWC")
 	private Boolean hasWWC = false;
-	
-	@FormField(name="WWC Expiry")
+
+	@FormField(displayName = "WWC Expiry")
 	private Date wwcExpiry;
-	
-	@FormField(name="WWC No")
+
+	@FormField(displayName = "WWC No")
 	private String wwcNo = "";
-	
-	@FormField(name="Has Police Check")
+
+	@FormField(displayName = "Has Police Check")
 	private Boolean hasPoliceCheck = false;
-	
-	@FormField(name="Police Check Expiry")
+
+	@FormField(displayName = "Police Check Expiry")
 	private Date policeCheckExpiry;
-	
-	@FormField(name="Has Food Handling Certificate")
+
+	@FormField(displayName = "Has Food Handling Certificate")
 	private Boolean hasFoodHandlingCertificate = false;
-	
-	@FormField(name="Has First Aid Certificate")
+
+	@FormField(displayName = "Has First Aid Certificate")
 	private Boolean hasFirstAidCertificate = false;
 
-	
-	//@OneToMany(mappedBy = "contact")
-	//private Set<Tag> tags;
-	
+	/**
+	 * List of tags used to describe this Contact.
+	 */
+	@ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(mappedBy = "contact")
-	@FormField(name="")
-	private Set<Note> notes;
+	@OneToMany
+	//(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@FormField(displayName = "")
+	private List<Note> notes = new ArrayList<>();
+	
+	/**
+	 * List of interactions with this contact.
+	 */
+	@OneToMany
+	private List<Activity> activites = new ArrayList<>();
 
 	public Contact()
 	{
 		Calendar TenYearsAgo = Calendar.getInstance();
 		TenYearsAgo.add(Calendar.YEAR, -10);
-		this.birthDate = TenYearsAgo.getTime(); 
+		this.birthDate = TenYearsAgo.getTime();
 	}
+
 	@Transient
 	public Long getAge()
 	{
@@ -227,6 +268,129 @@ public class Contact implements Importable
 	public Long getId()
 	{
 		return this.id;
+	}
+
+	public void setFirstname(String firstname)
+	{
+		this.firstname = firstname;
+
+	}
+
+	public void setLastname(String lastname)
+	{
+		this.lastname = lastname;
+	}
+
+	public void setMiddleName(String middlename)
+	{
+		this.middlename = middlename;
+	}
+
+	public void addNote(String subject, String body)
+	{
+		Note note = new Note(subject, body);
+		//note.setContact(this);
+		this.notes.add(note);
+	}
+
+	public void setAddress(Address address)
+	{
+		address.setOccupant(this);
+		this.address = address;
+
+	}
+
+	public void addTag(Tag tag)
+	{
+		tag.addContact(this);
+		this.tags.add(tag);
+	}
+
+	public void deleteTag(String tagName)
+	{
+		Tag tagToRemove = null;
+		for (Tag tag : this.tags)
+		{
+			if (tag.isTag(tagName))
+			{
+				tagToRemove = tag;
+			}
+		}
+		if (tagToRemove != null)
+			this.tags.remove(tagToRemove);
+		logger.warn("Attempt to delete non-existant tag. tagName=" + tagName);
+	}
+
+	@SuppressWarnings("unchecked")
+	static List<Contact> findContactByName(String firstname, String lastname)
+	{
+		List<Contact> resultContacts = null;
+		JPAContainer<Contact> contacts = JPAContainerFactory.make(Contact.class, "scouts");
+		EntityProvider<Contact> ep = contacts.getEntityProvider();
+		EntityManager em = ep.getEntityManager();
+
+		try
+		{
+			Query query = em.createNamedQuery("Contact.findByName");
+			query.setParameter("firstname", firstname);
+			query.setParameter("lastname", lastname);
+			resultContacts =  query.getResultList();
+		}
+		finally
+		{
+			if (em != null)
+				em.close();
+		}
+		return resultContacts;
+	}
+
+	public Note getNote(String noteSubject)
+	{
+		Note found = null;
+		for (Note note : notes)
+		{
+			if (note.getSubject().equals(noteSubject))
+			{
+				found = note;
+				break;
+			}
+		}
+		return found;
+
+	}
+
+	public Address getAddress()
+	{
+		return this.address;
+	}
+
+	public Tag getTag(String tagName)
+	{
+		Tag found = null;
+		for (Tag tag : tags)
+		{
+			if (tag.isTag(tagName))
+			{
+				found = tag;
+				break;
+			}
+		}
+		return found;
+	}
+
+	public List<Note> getNotes()
+	{
+		return notes;
+	}
+
+	public Set<Tag> getTags()
+	{
+		return this.tags;
+	}
+
+	public String getMiddleName()
+	{
+		return this.middlename;
 	}
 
 }

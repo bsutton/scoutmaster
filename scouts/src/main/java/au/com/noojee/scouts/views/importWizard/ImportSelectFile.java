@@ -7,14 +7,19 @@ import java.io.OutputStream;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.noojee.scouts.domain.ImportUserMapping;
 import au.com.noojee.scouts.views.ImportView;
 
-import com.vaadin.server.Sizeable;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.ProgressIndicator;
+import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FailedEvent;
@@ -31,21 +36,19 @@ public class ImportSelectFile implements WizardStep
 	protected Table table;
 
 	private boolean uploadComplete = false;
-	private ImportView importView;
 	protected String selectedFilename;
 	private Upload upload;
-	private ProgressIndicator progressIndicator;
+	private ProgressBar progressBar;
 	protected boolean uploadStarted;
 	private VerticalLayout content;
+	private ComboBox mapping;
 
 	public ImportSelectFile(ImportView importView)
 	{
-		this.importView = importView;
-		this.progressIndicator = new ProgressIndicator();
-		this.progressIndicator.setCaption("Progress");
-		this.progressIndicator.setWidth("50%");
-		this.progressIndicator.setHeight(100.0f, Unit.POINTS);
-		this.progressIndicator.setPollingInterval(1000);
+		this.progressBar = new ProgressBar();
+		this.progressBar.setCaption("Progress");
+		this.progressBar.setWidth("50%");
+		this.progressBar.setHeight(100.0f, Unit.POINTS);
 
 	}
 
@@ -125,8 +128,8 @@ public class ImportSelectFile implements WizardStep
 				@Override
 				public void updateProgress(long readBytes, long contentLength)
 				{
-					ImportSelectFile.this.progressIndicator.setValue(((float) (readBytes / contentLength)));
-					ImportSelectFile.this.progressIndicator.setVisible(true);
+					ImportSelectFile.this.progressBar.setValue(((float) (readBytes / contentLength)));
+					ImportSelectFile.this.progressBar.setVisible(true);
 				}
 			});
 
@@ -139,8 +142,8 @@ public class ImportSelectFile implements WizardStep
 				{
 					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
 					ImportSelectFile.this.uploadComplete = true;
-					ImportSelectFile.this.progressIndicator.setValue(1.0f);
-					ImportSelectFile.this.progressIndicator.setVisible(true);
+					ImportSelectFile.this.progressBar.setValue(1.0f);
+					ImportSelectFile.this.progressBar.setVisible(true);
 					ImportSelectFile.this.content.addComponent(new Label("File " + ImportSelectFile.this.selectedFilename + " has been uploaded."));
 
 					Notification.show("The upload has completed. Click 'Next'");
@@ -152,9 +155,20 @@ public class ImportSelectFile implements WizardStep
 
 			content.addComponent(upload);
 
-			content.addComponent(this.progressIndicator);
-			this.progressIndicator.setValue(0.0f);
-			this.progressIndicator.setVisible(false);
+			content.addComponent(this.progressBar);
+			this.progressBar.setValue(0.0f);
+			this.progressBar.setVisible(false);
+			JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, "scouts");
+			// Display the set of import mappings
+			HorizontalLayout row = new HorizontalLayout();
+			FormLayout fl = new FormLayout();
+			mapping = new ComboBox("Field Mappings", userMappings);
+			mapping.setInputPrompt("--Please Select--");
+			mapping.setNullSelectionItemId("--Please Select--");
+			fl.addComponent(mapping);
+			row.addComponent(fl);
+			row.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
+			content.addComponent(row);
 			content.setMargin(true);
 		}
 
@@ -186,6 +200,11 @@ public class ImportSelectFile implements WizardStep
 	public String getSelectedFilename()
 	{
 		return selectedFilename;
+	}
+
+	public String getImportMapping()
+	{
+		return (String) mapping.getValue();
 	}
 
 }

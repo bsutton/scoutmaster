@@ -110,7 +110,7 @@ public class ImportView extends VerticalLayout implements View, WizardProgressLi
 	@Override
 	public void activeStepChanged(WizardStepActivationEvent event)
 	{
-		// TODO Auto-generated method stub
+		// NOOP
 
 	}
 
