@@ -20,7 +20,7 @@ Allow the creation of a Contact database that hold member, leader, volenteer and
 
 Provide email/sms tools to allow a leader to simply and easily communicate with their Patrol and the Patrol's parents.
 
-Create an publish event activities as a calendar including meeting times and places.
+Create and publish event activities as a calendar including meeting times and places.
 
 Version 2.0
 Track membership and activity payments, including raising invoices, credit notes and reciepts.
