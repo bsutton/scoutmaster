@@ -26,7 +26,7 @@ public class EntityAdaptor<T>
 			{
 				FormField singleAnnotation = (FormField) field.getAnnotation(FormField.class);
 
-				FormFieldImpl formField = new FormFieldImpl(field.getName(), ((FormField) singleAnnotation));
+				FormFieldImpl formField = new FormFieldImpl(field, field.getName(), ((FormField) singleAnnotation));
 				formFields.add(formField);
 			}
 		}
