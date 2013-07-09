@@ -23,6 +23,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 
+@Menu (display="Forgotten Password", path="MenuBar.Admin")
 public class ForgottenPasswordView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;

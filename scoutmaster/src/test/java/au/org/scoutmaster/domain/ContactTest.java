@@ -13,11 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import au.org.scoutmaster.domain.Address;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Note;
-import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.filter.Transaction;
 
@@ -45,14 +41,15 @@ public class ContactTest
 	{
 		try (Transaction t = new Transaction(em))
 		{
+			ContactDao daoContact = new ContactDao(em);
 			Contact contact = new Contact();
 			contact.setFirstname("Brett");
 			contact.setLastname("Sutton");
-			contact.addNote("My first note goes here", "The note body 1 is here");
-			contact.addNote("My second note goes here", "The note body 2 is here");
-			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
-			contact.addTag(new Tag("Tag1", "The Tag1"));
-			contact.addTag(new Tag("Tag2", "The Tag2"));
+			daoContact.addNote(contact, "My first note goes here", "The note body 1 is here");
+			daoContact.addNote(contact, "My second note goes here", "The note body 2 is here");
+			contact.setAddress( new Address("10 smith drv", "Sometown", "Victoria", "3000"));
+			daoContact.addTag(contact, new Tag("Tag1", "The Tag1"));
+			daoContact.addTag(contact, new Tag("Tag2", "The Tag2"));
 
 			em.persist(contact);
 			t.commit();
@@ -69,7 +66,7 @@ public class ContactTest
 			// Delete the resulting contact
 			em.remove(contact);
 			t.commit();
-			
+
 			t.begin();
 			Assert.assertFalse(contactExists("Brett", "Sutton"));
 			Assert.assertTrue(Tag.findTag("Tag2") == null);
@@ -78,7 +75,7 @@ public class ContactTest
 			Assert.assertTrue(Note.findNote("My second note goes here").size() == 0);
 			Assert.assertTrue(Address.findAddress("10 smith drv", "Sometown", "Victoria", "3000").size() == 0);
 			t.commit();
-			
+
 			t.begin();
 			Tag tag = Tag.findTag("Tag1");
 			em.remove(tag);
@@ -96,17 +93,18 @@ public class ContactTest
 	{
 		try (Transaction t = new Transaction(em))
 		{
+			ContactDao daoContact = new ContactDao(em);
 
 			// create a contact
 			Contact contact = new Contact();
 			contact.setFirstname("Brett");
 			contact.setLastname("Sutton");
-			contact.addNote("My first note goes here", "The note body 1 is here");
-			contact.addNote("My second note goes here", "The note body 2 is here");
+			daoContact.addNote(contact, "My first note goes here", "The note body 1 is here");
+			daoContact.addNote(contact, "My second note goes here", "The note body 2 is here");
 			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
-			contact.addTag(new Tag("Tag1", "The Tag1"));
-			contact.addTag(new Tag("Tag2", "The Tag2"));
-			em.persist(contact);
+			daoContact.addTag(contact, new Tag("Tag1", "The Tag1"));
+			daoContact.addTag(contact, new Tag("Tag2", "The Tag2"));
+			daoContact.persist(contact);
 			t.commit();
 			t.begin();
 
@@ -119,18 +117,18 @@ public class ContactTest
 			Assert.assertTrue(tagExists("Brett", "Sutton", "Tag2"));
 
 			// update the contact.
-			Query query = em.createNamedQuery("Contact.findAll");
-			Contact result = (Contact) query.getSingleResult();
-			if (result != null)
+			List<Contact> list = daoContact.findAll();
+			if (list.size() == 1)
 			{
+				Contact result = list.get(0);
 				result.setFirstname("Stephen");
-				result.setMiddleName("Bret");
-				result.addNote("Note 3", "Note 3 body");
-				result.detachTag("Tag2");
-				result.addTag(new Tag("Tag3", "The Tag3"));
-				result.setAddress(new Address("20 replacement drv", "Othertown", "Victoria", "3000"));
+				result.setMiddlename("Bret");
+				daoContact.addNote(contact, "Note 3", "Note 3 body");
+				daoContact.detachTag(contact, "Tag2");
+				daoContact.addTag(contact, new Tag("Tag3", "The Tag3"));
+				contact.setAddress(new Address("20 replacement drv", "Othertown", "Victoria", "3000"));
+				daoContact.persist(result);
 			}
-			em.persist(result);
 			t.commit();
 			t.begin();
 
@@ -146,11 +144,10 @@ public class ContactTest
 			t.begin();
 
 			// Now cleanup
-			em.remove(contact);
-			em.remove(result);
+			daoContact.remove(contact);
 			t.commit();
 			t.begin();
-			
+
 			Assert.assertTrue(!contactExists("Stephen", "Sutton"));
 			Assert.assertTrue(Note.findNote("My first note goes here").size() == 0);
 			Assert.assertTrue(Note.findNote("My second note goes here").size() == 0);
@@ -160,7 +157,7 @@ public class ContactTest
 			Assert.assertTrue(Tag.findTag("Tag2") != null);
 			Assert.assertTrue(Tag.findTag("Tag2") != null);
 			t.commit();
-			
+
 			Organisation org = new Organisation();
 			org.setName("Heidelberg Scouts");
 			org.setLocation(new Address("31 Outhwaite Rd", "Heidelberg Heights", "Victoria", "3081"));
@@ -168,7 +165,6 @@ public class ContactTest
 			org.addTag(tag4);
 			Tag tag2 = Tag.findTag("Tag2");
 			org.addTag(tag2);
-			
 
 		}
 		finally
@@ -181,49 +177,42 @@ public class ContactTest
 	{
 		try (Transaction t = new Transaction(em))
 		{
+			ContactDao daoContact = new ContactDao(em);
 			Contact contact = new Contact();
 			contact.setFirstname("Rhiannon");
 			contact.setLastname("Sutton");
-			em.persist(contact);
+			daoContact.persist(contact);
 			t.commit();
 			t.begin();
 
 			// Check the contact notes and Tags exists
 			Assert.assertTrue(contactExists("Rhiannon", "Sutton"));
-			List<Contact> foundContacts = Contact.findContactByName("Rhiannon", "Sutton");
+			List<Contact> foundContacts = daoContact.findContactByName("Rhiannon", "Sutton");
 			Assert.assertTrue(foundContacts.size() == 1);
 			contact = foundContacts.get(0);
 			Assert.assertTrue(contact.getNotes().size() == 0);
 			Assert.assertTrue(contact.getAddress() == null);
 			Assert.assertTrue(contact.getTags().size() == 0);
 
-			Query query = em.createNamedQuery("Contact.findByName");
-			query.setParameter("firstname", "Rhiannon");
-			query.setParameter("lastname", "Sutton");
-			Contact result = (Contact) query.getSingleResult();
-			if (result != null)
-			{
-				result.setMiddleName("Paige");
-				result.setAddress(new Address("10 Mossman Drv", "Eaglemont", "Victoria", "3084"));
-			}
-			em.persist(result);
+			contact.setMiddlename("Paige");
+			contact.setAddress(new Address("10 Mossman Drv", "Eaglemont", "Victoria", "3084"));
+			daoContact.persist(contact);
 			t.commit();
 			t.begin();
 
 			// Check the contact notes and Tags exists
 			Assert.assertTrue(contactExists("Rhiannon", "Sutton"));
-			foundContacts = Contact.findContactByName("Rhiannon", "Sutton");
+			foundContacts = daoContact.findContactByName("Rhiannon", "Sutton");
 			Assert.assertTrue(foundContacts.size() == 1);
 			contact = foundContacts.get(0);
 
-			Assert.assertEquals("Paige", contact.getMiddleName());
+			Assert.assertEquals("Paige", contact.getMiddlename());
 			Assert.assertTrue(addressExists("Rhiannon", "Sutton", "10 Mossman Drv", "Eaglemont", "Victoria", "3084"));
 			Assert.assertTrue(contact.getNotes().size() == 0);
 			Assert.assertTrue(contact.getTags().size() == 0);
 
 			// Now cleanup
-			em.remove(contact);
-			em.remove(result);
+			daoContact.remove(contact);
 			t.commit();
 			t.begin();
 
@@ -245,14 +234,15 @@ public class ContactTest
 	{
 		try (Transaction t = new Transaction(em))
 		{
+			ContactDao daoContact = new ContactDao(em);
 			Contact contact = new Contact();
 			contact.setFirstname("Tristan");
 			contact.setLastname("Sutton");
-			em.persist(contact);
+			daoContact.persist(contact);
 
 			// Check the contact notes and Tags exists
 			Assert.assertTrue(contactExists("Tristan", "Sutton"));
-			List<Contact> foundContacts = Contact.findContactByName("Tristan", "Sutton");
+			List<Contact> foundContacts = daoContact.findContactByName("Tristan", "Sutton");
 			Assert.assertTrue(contact.getNotes().size() == 0);
 			Assert.assertTrue(contact.getAddress() == null);
 			Assert.assertTrue(contact.getTags().size() == 0);
@@ -263,18 +253,18 @@ public class ContactTest
 			Contact result = (Contact) query.getSingleResult();
 			if (result != null)
 			{
-				result.setMiddleName("Ryan");
-				result.addNote("My first note goes here", "The note body 1 is here");
-				result.addNote("My second note goes here", "The note body 2 is here");
+				result.setMiddlename("Ryan");
+				daoContact.addNote(result, "My first note goes here", "The note body 1 is here");
+				daoContact.addNote(result, "My second note goes here", "The note body 2 is here");
 			}
 			em.persist(result);
 
 			// Check the contact notes exists
 			Assert.assertTrue(contactExists("Tristan", "Sutton"));
-			foundContacts = Contact.findContactByName("Tristan", "Sutton");
+			foundContacts = daoContact.findContactByName("Tristan", "Sutton");
 			Assert.assertTrue(foundContacts.size() == 1);
 			contact = foundContacts.get(0);
-			Assert.assertEquals("Ryan", contact.getMiddleName());
+			Assert.assertEquals("Ryan", contact.getMiddlename());
 			Assert.assertTrue(noteExists("Tristan", "Sutton", "My first note goes here"));
 			Assert.assertTrue(noteExists("Tristan", "Sutton", "My second note goes here"));
 
@@ -296,7 +286,9 @@ public class ContactTest
 	{
 		boolean exists = false;
 
-		List<Contact> foundContacts = Contact.findContactByName(firstname, lastname);
+		ContactDao daoContact = new ContactDao(em);
+
+		List<Contact> foundContacts = daoContact.findContactByName(firstname, lastname);
 		Assert.assertTrue(foundContacts.size() == 1);
 		Contact contact = foundContacts.get(0);
 		Tag tag = contact.getTag(tagName);
@@ -311,7 +303,9 @@ public class ContactTest
 	{
 		boolean exists = false;
 
-		List<Contact> foundContacts = Contact.findContactByName(firstname, lastname);
+		ContactDao daoContact = new ContactDao(em);
+
+		List<Contact> foundContacts = daoContact.findContactByName(firstname, lastname);
 		Assert.assertTrue(foundContacts.size() == 1);
 		Contact contact = foundContacts.get(0);
 		Address address = contact.getAddress();
@@ -328,10 +322,12 @@ public class ContactTest
 	{
 		boolean exists = false;
 
-		List<Contact> foundContacts = Contact.findContactByName(firstname, lastname);
+		ContactDao daoContact = new ContactDao(em);
+
+		List<Contact> foundContacts = daoContact.findContactByName(firstname, lastname);
 		Assert.assertTrue(foundContacts.size() == 1);
 		Contact contact = foundContacts.get(0);
-		Note note = contact.getNote(noteSubject);
+		Note note = daoContact.getNote(contact, noteSubject);
 		if (note != null)
 			exists = true;
 
@@ -340,7 +336,9 @@ public class ContactTest
 
 	private boolean contactExists(String firstname, String lastname)
 	{
-		List<Contact> foundContacts = Contact.findContactByName(firstname, lastname);
+		ContactDao daoContact = new ContactDao(em);
+
+		List<Contact> foundContacts = daoContact.findContactByName(firstname, lastname);
 		return foundContacts.size() == 1;
 	}
 

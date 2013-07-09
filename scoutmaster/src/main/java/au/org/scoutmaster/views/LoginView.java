@@ -94,7 +94,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			// Password must be at least 8 characters long and contain at least
 			// one number
 			//
-			if (value != null && (value.length() < 8 || !value.matches(".*\\d.*")))
+			if (value != null && (value.length() < 8 || !value.matches(".*")))
 			{
 				return false;
 			}

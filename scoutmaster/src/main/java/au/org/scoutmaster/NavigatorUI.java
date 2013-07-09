@@ -73,7 +73,8 @@ public class NavigatorUI extends UI
 		// HACK:
 		// hack: create a default admin account - MUST BE REMOVED once we have db sorted.
 		// HACK:
-		User.addUser("bsutton@noojee.com.au", "password");
+		if (User.findUser("bsutton@noojee.com.au") == null)
+			User.addUser("bsutton@noojee.com.au", "password");
 
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);

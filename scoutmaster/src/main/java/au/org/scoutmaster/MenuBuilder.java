@@ -12,6 +12,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.UI;
 
 public class MenuBuilder
 {
@@ -51,10 +52,10 @@ public class MenuBuilder
 					String[] pathElements = path.split("\\.");
 					
 					if (pathElements.length == 2)
-						getMenuItem(menubar, menu.display(), pathElements[1]);
+						getMenuItem(menubar, menu.display(), pathElements[1], false);
 					else
 					{
-						MenuItem parentMenuItem = getMenuItem(menubar,  pathElements[1], pathElements[1]);
+						MenuItem parentMenuItem = getMenuItem(menubar,  pathElements[1], pathElements[1], true);
 						resursiveAdd(parentMenuItem, viewmap.viewName, menu.display(),
 								Arrays.copyOfRange(pathElements, 2, pathElements.length));
 					}
@@ -109,7 +110,7 @@ public class MenuBuilder
 
 	}
 
-	private MenuItem getMenuItem(MenuItem parentItem, String menuName, String currentPath)
+	private MenuItem getMenuItem(MenuItem parentItem, final String menuName, String currentPath)
 	{
 		MenuItem currentItem = findMenuItem(parentItem.getChildren(), currentPath);
 		if (currentItem != null)
@@ -120,7 +121,7 @@ public class MenuBuilder
 
 				public void menuSelected(MenuItem selectedItem)
 				{
-					// you can't navigate to a parent menu item
+					UI.getCurrent().getNavigator().navigateTo(menuName);
 				}
 			});
 
@@ -128,7 +129,7 @@ public class MenuBuilder
 		return currentItem;
 	}
 
-	private MenuItem getMenuItem(MenuBar parentItem, String menuName, String currentPath)
+	private MenuItem getMenuItem(MenuBar parentItem, final String menuName, String currentPath, final boolean parent)
 	{
 		MenuItem currentItem = findMenuItem(parentItem.getItems(), currentPath);
 		if (currentItem == null)
@@ -139,7 +140,8 @@ public class MenuBuilder
 
 				public void menuSelected(MenuItem selectedItem)
 				{
-					// you can't navigate to a parent menu item
+					if (!parent)
+						UI.getCurrent().getNavigator().navigateTo(menuName);
 				}
 			});
 
