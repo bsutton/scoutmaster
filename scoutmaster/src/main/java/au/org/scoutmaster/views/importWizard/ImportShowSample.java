@@ -50,14 +50,24 @@ public class ImportShowSample implements WizardStep
 		FileReader reader;
 		try
 		{
-			reader = new FileReader(tempFile);
-			IndexedContainer indexedContainer = buildContainerFromCSV(reader);
-			reader.close();
+			if (tempFile.exists())
+			{
+				reader = new FileReader(tempFile);
+				IndexedContainer indexedContainer = buildContainerFromCSV(reader);
+				reader.close();
 
-			/* Finally, let's update the table with the container */
-			table.setCaption("Sample from: " + this.importView.getFile().getSelectedFilename());
-			table.setContainerDataSource(indexedContainer);
-			table.setVisible(true);
+				/* Finally, let's update the table with the container */
+				table.setCaption("Sample from: " + this.importView.getFile().getSelectedFilename());
+				table.setContainerDataSource(indexedContainer);
+				table.setVisible(true);
+			}
+			else
+			{
+				/* Finally, let's update the table with the container */
+				table.setCaption("No file selected");
+				table.setVisible(true);
+	
+			}
 
 		}
 		catch (FileNotFoundException e)
@@ -70,14 +80,14 @@ public class ImportShowSample implements WizardStep
 			logger.error(e, e);
 			Notification.show(e.getMessage());
 		}
-		
-		 /* Main layout */
+
+		/* Main layout */
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		layout.setSpacing(true);
 		layout.addComponent(table);
-		layout.addComponent(new Label("If you are happy with the mappings click Next to import the data or click 'Back' to adjust the mappings."));
-		 
+		layout.addComponent(new Label(
+				"If you are happy with the mappings click Next to import the data or click 'Back' to adjust the mappings."));
 
 		return layout;
 	}
@@ -104,14 +114,11 @@ public class ImportShowSample implements WizardStep
 			csvReader = new CSVReader(reader);
 			String[] columnHeaders = null;
 			String[] record;
-			
-			
 
 			Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
 
 			fieldMaps = this.importView.getMatch().getFieldMap();
 			addItemProperties(container, fieldMaps);
-
 
 			// Import no more than 100 records as this is only a sample
 			int count = 0;
@@ -144,7 +151,6 @@ public class ImportShowSample implements WizardStep
 		}
 	}
 
-	
 	private static <R extends Importable> void addRow(IndexedContainer container, String[] csvHeaders, String[] fields,
 			Hashtable<String, FormFieldImpl> fieldMaps)
 	{

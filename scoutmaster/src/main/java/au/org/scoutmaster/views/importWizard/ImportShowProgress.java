@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Hashtable;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
@@ -72,6 +76,9 @@ public class ImportShowProgress implements WizardStep
 			reader.close();
 			if (tempFile.exists())
 				tempFile.delete();
+			// mark progress as complete.
+			indicator.setValue((float) 1);
+			importComplete = true;
 
 		}
 		catch (IOException | InstantiationException | IllegalAccessException e)
@@ -126,7 +133,8 @@ public class ImportShowProgress implements WizardStep
 	protected <T extends Importable> JPAContainer<T> buildContainerFromCSV(Class<T> entityClass,
 			Reader reader) throws IOException, InstantiationException, IllegalAccessException
 	{
-		JPAContainer<T> container = JPAContainerFactory.make(entityClass, "scoutmaster");
+		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		JPAContainer<T> container = JPAContainerFactory.make(entityClass, em);
 
 		CSVReader csvReader = null;
 
@@ -180,17 +188,21 @@ public class ImportShowProgress implements WizardStep
 			Class<T> entityClass, String[] csvHeaders, String[] fields,
 			Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
 	{
+		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		
 		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
+		T entity = entityItem.getEntity();
 		for (int i = 0; i < fields.length; i++)
 		{
 			String csvHeaderName = csvHeaders[i];
-			FormFieldImpl fieldMap = fieldMaps.get(csvHeaderName);
-			if (fieldMap != null)
+			FormFieldImpl formField = fieldMaps.get(csvHeaderName);
+			if (formField != null)
 			{
 				String field = fields[i];
-				entityItem.getItemProperty(fieldMap.getFieldName()).setValue(field);
+				formField.setValue(entity, field);
 			}
 		}
+		em.persist(entity);
 	}
 
 }

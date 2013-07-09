@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -23,9 +24,9 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.views.ImportView;
 
-import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.ComboBox;
@@ -128,7 +129,8 @@ public class ImportMatchFields implements WizardStep
 		{
 			String[] headers = getHeaders();
 
-			EntityAdaptor<Class <? extends Importable>> adaptor = new EntityAdaptor<Class <? extends Importable>>(importable);
+			EntityAdaptor<Class<? extends Importable>> adaptor = new EntityAdaptor<Class<? extends Importable>>(
+					importable);
 
 			ArrayList<FormFieldImpl> fields = adaptor.getFields();
 			for (String header : headers)
@@ -156,10 +158,11 @@ public class ImportMatchFields implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
-		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, "scoutmaster");
+		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, em);
 
 		// Save the user selected mappings
-		if (!fieldMapping.getValue().equals(selectedUserMapping))
+		if (selectedUserMapping != null && !fieldMapping.getValue().equals(selectedUserMapping))
 		{
 			// the name has changed so we need to save a new one
 
@@ -185,23 +188,25 @@ public class ImportMatchFields implements WizardStep
 			// ImportUserMapping userMapping = new
 			// ImportUserMapping(fieldMapping.getValue());
 
-			EntityProvider<ImportUserMapping> ep = userMappings.getEntityProvider();
-			EntityManager em = ep.getEntityManager();
-			
-			TypedQuery<ImportUserMapping> q2 =
-				      em.createQuery("SELECT * FROM ImportUserMapping", ImportUserMapping.class);
+			TypedQuery<ImportUserMapping> q2 = em
+					.createNamedQuery("ImportUserMapping.findAll", ImportUserMapping.class);
 
-			ImportUserMapping userMapping = q2.getSingleResult();
-			em.getTransaction().begin();
+			List<ImportUserMapping> results = q2.getResultList();
 
-			for (ComboBox mapping : mappings)
+			if (results.size() == 1)
 			{
-				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
-						(String) mapping.getValue());
-				userMapping.addColumnFieldMapping(columnMapping);
-			}
+				em.getTransaction().begin();
+				ImportUserMapping userMapping = results.get(0);
 
-			em.getTransaction().commit();
+				for (ComboBox mapping : mappings)
+				{
+					ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
+							(String) mapping.getValue());
+					userMapping.addColumnFieldMapping(columnMapping);
+				}
+
+				em.getTransaction().commit();
+			}
 		}
 
 		return true;
@@ -223,7 +228,7 @@ public class ImportMatchFields implements WizardStep
 			if (box.getValue() != null)
 			{
 				FormFieldImpl field = (FormFieldImpl) box.getValue();
-				fieldMaps.put(field.getFieldName(), field);
+				fieldMaps.put(headers[index], field);
 			}
 		}
 

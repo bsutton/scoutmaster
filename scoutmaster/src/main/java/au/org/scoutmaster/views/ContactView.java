@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Gender;
 import au.org.scoutmaster.domain.GroupRole;
@@ -13,6 +15,7 @@ import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.PreferredEmail;
 import au.org.scoutmaster.domain.PreferredPhone;
 import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -44,7 +47,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Contact")
+@Menu(display = "Contact")
 public class ContactView extends VerticalLayout implements View
 {
 	/**
@@ -62,14 +65,33 @@ public class ContactView extends VerticalLayout implements View
 	private JPAContainer<Contact> contactContainer;
 
 	private JPAContainer<Note> notes;
-	
+
 	public JPAContainer<Note> getNotes()
 	{
 		return notes;
 	}
 
 	/* User interface components are stored in session. */
-	private Table contactList = new Table();
+	private Table contactList = new Table()
+	{
+		@Override
+		protected String formatPropertyValue(Object rowId, Object colId, Property property)
+		{
+			if (property.getType() == Set.class)
+			{
+				return null;
+			}
+			try
+			{
+				property.getValue();
+			}
+			catch (Exception e)
+			{
+				return null;
+			}
+			return super.formatPropertyValue(rowId, colId, property);
+		}
+	};
 	private TextField searchField = new TextField();
 	private Button addNewContactButton = new Button("New");
 	private Button removeContactButton = new Button("Remove this contact");
@@ -83,7 +105,7 @@ public class ContactView extends VerticalLayout implements View
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		contactContainer = JPAContainerFactory.make(Contact.class, "scoutmaster");
+		contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
 
 		initLayout();
 		initContactList();
@@ -92,7 +114,7 @@ public class ContactView extends VerticalLayout implements View
 		initAddRemoveButtons();
 		this.setVisible(true);
 	}
-	
+
 	/*
 	 * In this example layouts are programmed in Java. You may choose use a
 	 * visual editor, CSS or HTML templates for layout instead.
@@ -249,7 +271,7 @@ public class ContactView extends VerticalLayout implements View
 		bindBooleanField(youthLayout, "Custody Order", "custodyOrder");
 		bindTextAreaField(youthLayout, "Custody Order Details", "custodyOrderDetails", 4);
 		bindTextField(youthLayout, "School", "school");
-		bindEnumField(youthLayout, "Section Eligib.", "sectionEligibility", SectionType.class);
+		bindEntityField(youthLayout, "Section Eligib.", "sectionEligibility", SectionType.class);
 		// bindPanel(youthLayout,"Address", "address");
 		// mainEditPanel.addComponent(youthLayout);
 
@@ -262,7 +284,7 @@ public class ContactView extends VerticalLayout implements View
 		bindBooleanField(memberLayout, "Member", "isMember");
 		bindTextField(memberLayout, "Member No", "memberNo");
 		bindDateField(memberLayout, "Member Since", "memberSince");
-		bindEnumField(youthLayout, "Section ", "section", SectionType.class);
+		bindEntityField(youthLayout, "Section ", "section", SectionType.class);
 		// mainEditPanel.addComponent(memberLayout);
 
 		// Affiliate fields
@@ -307,10 +329,12 @@ public class ContactView extends VerticalLayout implements View
 			// not working?
 			public void valueChange(ValueChangeEvent event)
 			{
-				Object contactId = contactList.getValue();
+				Long contactId = (Long) contactList.getValue();
 
+				ContactDao daoContact = new ContactDao();
 				Contact contact = contactContainer.getItem(contactId).getEntity();
-				labelAge.setValue(contact.getAge().toString());
+				
+				labelAge.setValue(daoContact.getAge(contact).toString());
 
 				/*
 				 * When a contact is selected from the list, we want to show
@@ -366,7 +390,7 @@ public class ContactView extends VerticalLayout implements View
 						showAffiliateAdult(true);
 						break;
 					case YouthMember:
-						showAdult(false);
+						showAdult(true);
 						showYouth(true);
 						showMember(true);
 						showAffiliate(true);
@@ -377,8 +401,10 @@ public class ContactView extends VerticalLayout implements View
 				}
 				Object contactId = contactList.getValue();
 
+				ContactDao daoContact = new ContactDao();
+				
 				Contact contact = contactContainer.getItem(contactId).getEntity();
-				labelAge.setValue(contact.getAge().toString());
+				labelAge.setValue(daoContact.getAge(contact).toString());
 
 				/*
 				 * When a contact is selected from the list, we want to show
@@ -451,8 +477,25 @@ public class ContactView extends VerticalLayout implements View
 		mainEditPanel.addComponent(buttonLayout);
 	}
 
+	private ComboBox bindEntityField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName,
+			Class<?> clazz)
+	{
+		JPAContainer container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
+		
+		ComboBox field = new ComboBox(fieldLabel, container);
+		field.setNewItemsAllowed(false);
+		field.setNullSelectionAllowed(false);
+		field.setTextInputAllowed(false);
+		layoutFields.addComponent(field);
+		field.setWidth("100%");
+		field.setImmediate(true);
+		editorFields.bind(field, fieldName);
+		group.add(field);
+		return field;
+	}
 
-	private ComboBox bindEnumField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName, Class<?> clazz)
+	private ComboBox bindEnumField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName,
+			Class<?> clazz)
 	{
 		ComboBox field = new ComboBox(fieldLabel, createContainerFromEnumClass(fieldName, clazz));
 		field.setNewItemsAllowed(false);
@@ -527,8 +570,11 @@ public class ContactView extends VerticalLayout implements View
 	private void initContactList()
 	{
 		contactList.setContainerDataSource(contactContainer);
-		contactList.setVisibleColumns((Object[])new String[]
-		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.ROLE, Contact.SECTION });
+		contactList.setVisibleColumns((Object[]) new String[]
+		// { Contact.FIRSTNAME, Contact.LASTNAME, Contact.ROLE, Contact.SECTION
+		// });
+				{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.SECTION });
+
 		contactList.setSelectable(true);
 		contactList.setImmediate(true);
 
@@ -630,7 +676,6 @@ public class ContactView extends VerticalLayout implements View
 			return true;
 		}
 	}
-
 
 	public Container createContainerFromEnumClass(String fieldName, Class<?> clazz)
 	{
