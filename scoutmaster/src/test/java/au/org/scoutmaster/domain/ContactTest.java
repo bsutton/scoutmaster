@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.filter.Transaction;
 
@@ -161,7 +162,7 @@ public class ContactTest
 			Organisation org = new Organisation();
 			org.setName("Heidelberg Scouts");
 			org.setLocation(new Address("31 Outhwaite Rd", "Heidelberg Heights", "Victoria", "3081"));
-			Tag tag4 = Tag.addTag("Tag4", "Yet another tag");
+			Tag tag4 = TagDao.addTag("Tag4", "Yet another tag");
 			org.addTag(tag4);
 			Tag tag2 = Tag.findTag("Tag2");
 			org.addTag(tag2);

@@ -171,7 +171,7 @@ public class FormHelper
 			JPAContainer<?> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
 			VerticalLayout layout = new VerticalLayout();
-			TokenField field = new TokenField(fieldLabel, layout);
+			TokenField field = new ContactTokenField(fieldLabel, layout);
 			field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake textfield look
 			field.setWidth("100%"); // width...
 			field.setInputWidth("100%"); // and input width separately
