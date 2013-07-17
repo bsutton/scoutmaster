@@ -42,4 +42,10 @@
     -->
     <!-- <set-configuration-property name="devModeRedirectEnabled" value="true" /> -->
 
+
+    <inherits name="fi.jasoft.dragdroplayouts.DragDropLayoutsWidgetSet" />
+
+    <inherits name="com.vaadin.addon.calendar.gwt.CalendarWidgetset" />
+
+    <inherits name="org.vaadin.tokenfield.TokenfieldWidgetset" />
 </module>

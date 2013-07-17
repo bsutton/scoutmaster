@@ -25,14 +25,17 @@ import au.org.scoutmaster.FormField;
 @Entity
 @NamedQueries(
 {
-		@NamedQuery(name = "Contact.findAll", query = "SELECT contact FROM Contact contact"),
-		@NamedQuery(name = "Contact.findByName", query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
+	@NamedQuery(name = Contact.FIND_ALL, query = "SELECT contact FROM Contact contact"),
+	@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") 
+})
 public class Contact extends BaseEntity implements Importable
 {
-
+	static public final String FIND_ALL = "Contact.findAll";
+	static public final String FIND_BY_NAME = "Contact.findByName";
 
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(Contact.class);
 
 	public static final String FIRSTNAME = "firstname";
@@ -49,8 +52,6 @@ public class Contact extends BaseEntity implements Importable
 
 	@FormField(displayName = "Firstname")
 	private String firstname = "";
-
-
 
 	@FormField(displayName = "Middle Name")
 	private String middlename = "";
@@ -72,13 +73,13 @@ public class Contact extends BaseEntity implements Importable
 	 */
 
 	@FormField(displayName = "Home Phone")
-	private String homePhone = "";
+	private Phone homePhone;
 
 	@FormField(displayName = "Work Phone")
-	private String workPhone = "";
+	private Phone workPhone;
 
 	@FormField(displayName = "Mobile")
-	private String mobile = "";
+	private Phone mobile;
 
 	@FormField(displayName = "Home Email")
 	private String homeEmail = "";
@@ -123,7 +124,7 @@ public class Contact extends BaseEntity implements Importable
 	 */
 	@FormField(displayName = "Member")
 	private Boolean isMember = false; // this should be derived from the
-											// member
+										// member
 	// records.
 
 	@FormField(displayName = "Member No")
@@ -131,7 +132,7 @@ public class Contact extends BaseEntity implements Importable
 
 	@FormField(displayName = "Member Since")
 	private Date memberSince = new Date(new java.util.Date().getTime()); // this
-																				// should
+																			// should
 	// be
 	// derived
 	// from the
@@ -193,7 +194,7 @@ public class Contact extends BaseEntity implements Importable
 	private Boolean hasPoliceCheck = false;
 
 	@FormField(displayName = "Police Check Expiry")
-	private Date policeCheckExpiry  = new Date(new java.util.Date().getTime());
+	private Date policeCheckExpiry = new Date(new java.util.Date().getTime());
 
 	@FormField(displayName = "Has Food Handling Certificate")
 	private Boolean hasFoodHandlingCertificate = false;
@@ -204,7 +205,8 @@ public class Contact extends BaseEntity implements Importable
 	/**
 	 * List of tags used to describe this Contact.
 	 */
-	//@ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
+	// FetchType.EAGER)
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<>();
 
@@ -228,7 +230,6 @@ public class Contact extends BaseEntity implements Importable
 		this.wwcExpiry = new Date(TenYearsAgo.getTime().getTime());
 	}
 
-
 	@Override
 	public String toString()
 	{
@@ -240,7 +241,6 @@ public class Contact extends BaseEntity implements Importable
 	{
 		return this.id;
 	}
-
 
 	public Tag getTag(String tagName)
 	{
@@ -260,12 +260,11 @@ public class Contact extends BaseEntity implements Importable
 	{
 		return this.notes;
 	}
-	
+
 	public Set<Tag> getTags()
 	{
 		return this.tags;
 	}
-
 
 	public Date getBirthDate()
 	{
@@ -277,66 +276,55 @@ public class Contact extends BaseEntity implements Importable
 		return middlename;
 	}
 
-
 	public void setMiddlename(String middlename)
 	{
 		this.middlename = middlename;
 	}
-
 
 	public SectionType getSectionEligibility()
 	{
 		return sectionEligibility;
 	}
 
-
 	public void setSectionEligibility(SectionType sectionEligibility)
 	{
 		this.sectionEligibility = sectionEligibility;
 	}
-
 
 	public SectionType getSection()
 	{
 		return section;
 	}
 
-
 	public void setSection(SectionType section)
 	{
 		this.section = section;
 	}
-
 
 	public Date getWwcExpiry()
 	{
 		return wwcExpiry;
 	}
 
-
 	public void setWwcExpiry(Date wwcExpiry)
 	{
 		this.wwcExpiry = wwcExpiry;
 	}
-
 
 	public Date getPoliceCheckExpiry()
 	{
 		return policeCheckExpiry;
 	}
 
-
 	public void setPoliceCheckExpiry(Date policeCheckExpiry)
 	{
 		this.policeCheckExpiry = policeCheckExpiry;
 	}
 
-
 	public boolean getActive()
 	{
 		return active;
 	}
-
 
 	public String getPrefix()
 	{
@@ -353,197 +341,165 @@ public class Contact extends BaseEntity implements Importable
 		return firstname;
 	}
 
-
 	public String getLastname()
 	{
 		return lastname;
 	}
-
 
 	public Gender getGender()
 	{
 		return gender;
 	}
 
-	public void setHomePhone(String homePhone)
+	public void setHomePhone(Phone homePhone)
 	{
-		this.homePhone= homePhone ;
+		this.homePhone = homePhone;
 	}
 
-
-	public String getHomePhone()
+	public Phone getHomePhone()
 	{
 		return homePhone;
 	}
 
-
-	public String getWorkPhone()
+	public Phone getWorkPhone()
 	{
 		return workPhone;
 	}
 
-
-	public String getMobile()
+	public Phone getMobile()
 	{
 		return mobile;
 	}
-
 
 	public String getHomeEmail()
 	{
 		return homeEmail;
 	}
 
-
 	public String getWorkEmail()
 	{
 		return workEmail;
 	}
-
 
 	public PreferredPhone getPreferredPhone()
 	{
 		return preferredPhone;
 	}
 
-
 	public PreferredEmail getPreferredEmail()
 	{
 		return preferredEmail;
 	}
-
 
 	public PreferredCommunications getPreferredCommunications()
 	{
 		return preferredCommunications;
 	}
 
-
 	public String getAllergies()
 	{
 		return allergies;
 	}
-
 
 	public Boolean getCustodyOrder()
 	{
 		return custodyOrder;
 	}
 
-
 	public String getCustodyOrderDetails()
 	{
 		return custodyOrderDetails;
 	}
-
 
 	public String getSchool()
 	{
 		return school;
 	}
 
-
 	public Boolean getIsMember()
 	{
 		return isMember;
 	}
-
 
 	public String getMemberNo()
 	{
 		return memberNo;
 	}
 
-
 	public Date getMemberSince()
 	{
 		return memberSince;
 	}
-
 
 	public String getHobbies()
 	{
 		return hobbies;
 	}
 
-
 	public Date getAffiliatedSince()
 	{
 		return affiliatedSince;
 	}
-
 
 	public GroupRole getRole()
 	{
 		return role;
 	}
 
-
 	public String getMedicareNo()
 	{
 		return medicareNo;
 	}
-
 
 	public Boolean getAmbulanceSubscriber()
 	{
 		return ambulanceSubscriber;
 	}
 
-
 	public Boolean getPrivateMedicalInsurance()
 	{
 		return privateMedicalInsurance;
 	}
-
 
 	public String getPrivateMedicalFundName()
 	{
 		return privateMedicalFundName;
 	}
 
-
 	public String getCurrentEmployer()
 	{
 		return currentEmployer;
 	}
-
 
 	public String getJobTitle()
 	{
 		return jobTitle;
 	}
 
-
 	public Boolean getHasWWC()
 	{
 		return hasWWC;
 	}
-
 
 	public String getWwcNo()
 	{
 		return wwcNo;
 	}
 
-
 	public Boolean getHasPoliceCheck()
 	{
 		return hasPoliceCheck;
 	}
-
 
 	public Boolean getHasFoodHandlingCertificate()
 	{
 		return hasFoodHandlingCertificate;
 	}
 
-
 	public Boolean getHasFirstAidCertificate()
 	{
 		return hasFirstAidCertificate;
 	}
-
 
 	public List<Activity> getActivites()
 	{
@@ -560,13 +516,9 @@ public class Contact extends BaseEntity implements Importable
 		return address;
 	}
 
-
 	public void setLastname(String lastname)
 	{
 		this.lastname = lastname;
 	}
-
-
-
 
 }

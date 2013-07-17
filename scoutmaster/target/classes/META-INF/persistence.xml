@@ -5,6 +5,7 @@
 	version="2.0">
 	<persistence-unit name="scoutmaster" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<non-jta-data-source>java:comp/env/jdbc/scoutmaster-ds</non-jta-data-source>
 		<class>au.org.scoutmaster.domain.Activity</class>
 		<class>au.org.scoutmaster.domain.ActivityType</class>
 		<class>au.org.scoutmaster.domain.Address</class>
@@ -43,14 +44,17 @@
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
 
 		<properties>
+		<property name="eclipselink.session.customizer" value="au.org.scoutmaster.dao.EclipseLinkSessionCustomizer"/>
+<!-- 		
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB" />
-			<property name="javax.persistence.jdbc.user" value="root" />
-			<property name="javax.persistence.jdbc.password" value="++Ast810" />
+			<property name="javax.persistence.jdbc.user" value="????" />
+			<property name="javax.persistence.jdbc.password" value="???" />
+-->			
 
 			<!-- EclipseLink should create the database schema automatically -->
-			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />

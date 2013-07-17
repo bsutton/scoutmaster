@@ -1,33 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	id="WebApp_ID" version="2.5">
+<web-app id="WebApp_ID" version="3.0"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	<display-name>Vaadin Web Application</display-name>
 	<context-param>
 		<description>Vaadin production mode</description>
 		<param-name>productionMode</param-name>
 		<param-value>false</param-value>
 	</context-param>
+	<!-- Liquibase settings -->
+	<context-param>
+		<param-name>liquibase.changelog</param-name>
+		<!-- located in src/main/resources -->
+		<param-value>liquibase/db.changelog-master.xml</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>liquibase.datasource</param-name>
+		<param-value>java:comp/env/jdbc/scoutmaster-ds</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>liquibase.should.run</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>liquibase.onerror.fail</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>liquibase.contexts</param-name>
+		<param-value>production</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>liquibase.integration.servlet.LiquibaseServletListener
+		</listener-class>
+	</listener>
+
+	<!-- per request Entity Manager injection -->
 	<filter>
 		<filter-name>EntityManagerInjectorFilter</filter-name>
-		<filter-class>au.org.scoutmaster.filter.EntityManagerInjectorFilter</filter-class>
+		<filter-class>au.org.scoutmaster.filter.EntityManagerInjectorFilter
+		</filter-class>
+		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
 		<filter-name>EntityManagerInjectorFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<!-- Vaadin servlet - where the action happens -->
 	<servlet>
 		<servlet-name>Vaadin Application Servlet</servlet-name>
 		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
 		<init-param>
 			<description>Vaadin UI to display</description>
 			<param-name>UI</param-name>
-			<param-value>au.org.scoutmaster.NavigatorUI</param-value>
+			<param-value>au.org.scoutmaster.views.NavigatorUI</param-value>
 		</init-param>
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Vaadin Application Servlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
+	
 </web-app>

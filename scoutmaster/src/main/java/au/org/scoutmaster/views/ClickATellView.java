@@ -18,7 +18,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-public class LoginView extends CustomComponent implements View, Button.ClickListener
+public class ClickATellView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 	private final Button loginButton;
 
-	public LoginView()
+	public ClickATellView()
 	{
 		setSizeFull();
 

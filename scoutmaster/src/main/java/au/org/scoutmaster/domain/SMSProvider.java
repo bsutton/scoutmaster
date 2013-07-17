@@ -1,41 +1,97 @@
 package au.org.scoutmaster.domain;
 
-import java.net.URL;
-import java.util.List;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries(
+{
+		@NamedQuery(name = "SMSProvider.findAll", query = "SELECT smsprovider FROM SMSProvider smsprovider"),
+		@NamedQuery(name = "SMSProvider.findByType"
+		, query = "SELECT smsprovider FROM SMSProvider smsprovider "
+				+ "join SMSProviderType smsprovidertype "
+				+ "	on smsprovider.type_id = smsprovidertype.id "
+				+ "WHERE smsprovidertype.name = :name") })
+
 public class SMSProvider extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-	SMSProviderType type;
+	private SMSProviderType type;
 
-	String username;
+	private String username;
 
-	String password;
+	private String password;
 
-	URL ApiURL;
+	private String ApiId;
 
-	boolean active;
+	private boolean active;
 
-	boolean defaultProvider;
+	private boolean defaultProvider;
 
-	public void send(List<Phone> targets, String msg)
+	
+	public String getUsername()
 	{
-		iSMSProvider provider = this.type.getProvider();
-
-		provider.init();
-
-		for (Phone target : targets)
-		{
-			if (target.phoneType == PhoneType.MOBILE)
-			{
-				provider.send(target, msg);
-			}
-		}
+		return username;
 	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+
+	public String getPassword()
+	{
+		return password;
+	}
+
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+
+	public String getApiId()
+	{
+		return ApiId;
+	}
+
+	public void setApiId(String ApiId)
+	{
+		this.ApiId = ApiId;
+	}
+
+	public boolean isActive()
+	{
+		return active;
+	}
+
+	public void setActive(boolean active)
+	{
+		this.active = active;
+	}
+
+	public boolean isDefaultProvider()
+	{
+		return defaultProvider;
+	}
+
+	public void setDefaultProvider(boolean defaultProvider)
+	{
+		this.defaultProvider = defaultProvider;
+	}
+
+
+	public SMSProviderType getType()
+	{
+		return type;
+	}
+
+	public void setType(SMSProviderType type)
+	{
+		this.type = type;
+	}
+
 }
