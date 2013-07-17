@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.filter.EntityManagerProvider;
 
 public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 {
@@ -45,5 +46,14 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 			tag = tags.get(0);
 		 
 		return tag;
+	}
+	public static Tag addTag(String name, String description)
+	{
+		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		Tag tag = new Tag(name, description);
+		em.persist(tag);
+	
+		return tag;
+	
 	}
 }

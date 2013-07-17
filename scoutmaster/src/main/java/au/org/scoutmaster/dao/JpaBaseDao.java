@@ -17,7 +17,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager(); 
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[1];
+		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
 	}
 
 	@SuppressWarnings("unchecked")
@@ -25,7 +25,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		this.entityManager = em; 
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[1];
+		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
 	}
 
 	public void persist(E entity)
