@@ -14,11 +14,14 @@ import au.org.scoutmaster.filter.EntityManagerProvider;
 @Entity
 @NamedQueries(
 {
-		@NamedQuery(name = "Address.findAll", query = "SELECT address FROM Address address"),
-		@NamedQuery(name = "Address.findMatching", query = "SELECT address FROM Address address WHERE address.street = :street "
+		@NamedQuery(name = Address.FIND_ALL, query = "SELECT address FROM Address address"),
+		@NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
 				+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
 public class Address extends BaseEntity
 {
+	public static final String FIND_ALL = "Address.findAll";
+	public static final String FIND_MATCHING = "Address.findMatching";
+	
 	private static final long serialVersionUID = 1L;
 	String street;
 	String city;
@@ -70,7 +73,7 @@ public class Address extends BaseEntity
 		List<Address> addressList = new ArrayList<Address>();
 		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
 
-		Query query = em.createNamedQuery("Address.findMatching");
+		Query query = em.createNamedQuery(Address.FIND_MATCHING);
 		query.setParameter("street", street);
 		query.setParameter("city", city);
 		query.setParameter("state", state);

@@ -3,17 +3,14 @@ package au.org.scoutmaster.domain.access;
 import java.sql.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import au.org.scoutmaster.domain.BaseEntity;
+
 @Entity
-public class SessionHistory
+public class SessionHistory  extends BaseEntity
 {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private static final long serialVersionUID = 1L;
 
 	Date start;
 	

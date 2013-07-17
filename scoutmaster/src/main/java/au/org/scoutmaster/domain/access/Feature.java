@@ -1,9 +1,8 @@
 package au.org.scoutmaster.domain.access;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import au.org.scoutmaster.domain.BaseEntity;
 
 /**
  * Features are used to describe a user accessible feature of scoutmaster.
@@ -13,11 +12,9 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Feature
+public class Feature extends BaseEntity
 {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * An informal hierarchical descriptor of the feature

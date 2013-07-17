@@ -1,15 +1,11 @@
-package au.org.scoutmaster;
+package au.org.scoutmaster.views;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.views.AppointmentView;
-import au.org.scoutmaster.views.ContactView;
-import au.org.scoutmaster.views.ForgottenPasswordView;
-import au.org.scoutmaster.views.ImportView;
-import au.org.scoutmaster.views.LoginView;
-import au.org.scoutmaster.views.ResetPasswordView;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -33,17 +29,17 @@ import com.vaadin.ui.VerticalLayout;
  * Or you may choose to embed your UI to an existing web page.
  */
 @Title("Scoutmaster")
+@Push
 public class NavigatorUI extends UI
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	Navigator navigator;
+	private MenuBar menubar;
 
-	class ViewMap
+
+	class ViewMap implements Serializable
 	{
+		private static final long serialVersionUID = 1L;
 		String viewName;
 		Class<? extends View> view;
 
@@ -54,7 +50,9 @@ public class NavigatorUI extends UI
 		}
 	}
 
-	ArrayList<ViewMap> viewMap = new ArrayList<ViewMap>();
+	private ArrayList<ViewMap> viewMap = new ArrayList<ViewMap>();
+
+	private VerticalLayout mainLayout;
 
 	/*
 	 * After UI class is created, init() is executed. You should build and wire
@@ -69,6 +67,7 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
+		viewMap.add(new ViewMap(MessagingWizardView.NAME, MessagingWizardView.class));
 		
 		// HACK:
 		// hack: create a default admin account - MUST BE REMOVED once we have db sorted.
@@ -76,7 +75,7 @@ public class NavigatorUI extends UI
 		if (User.findUser("bsutton@noojee.com.au") == null)
 			User.addUser("bsutton@noojee.com.au", "password");
 
-		VerticalLayout mainLayout = new VerticalLayout();
+		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
 		mainLayout.setSpacing(true);
 		mainLayout.setSizeFull();
@@ -87,8 +86,6 @@ public class NavigatorUI extends UI
 
 		final Navigator navigator = new Navigator(this, viewContainer);
 
-		MenuBar menubar = new MenuBuilder(navigator, viewMap).build();
-		menubar.setWidth("100%");
 
 		// Wire up the navigation
 		for (final ViewMap viewmap : this.viewMap)
@@ -96,7 +93,6 @@ public class NavigatorUI extends UI
 			navigator.addView(viewmap.viewName, viewmap.view);
 		}
 
-		mainLayout.addComponent(menubar);
 		mainLayout.addComponent(viewContainer);
 		mainLayout.setExpandRatio(viewContainer, 1.0f);
 
@@ -132,6 +128,16 @@ public class NavigatorUI extends UI
 					// then cancel
 					return false;
 				}
+				else if (isLoggedIn)
+				{
+					// check if the menu bar has been added and if not then add it.
+					if (NavigatorUI.this.menubar == null)
+					{
+						NavigatorUI.this.menubar = new MenuBuilder(navigator, viewMap).build();
+						NavigatorUI.this.menubar.setWidth("100%");
+						mainLayout.addComponentAsFirst(menubar);
+					}
+				}
 
 				return true;
 			}
@@ -139,6 +145,7 @@ public class NavigatorUI extends UI
 			@Override
 			public void afterViewChange(ViewChangeEvent event)
 			{
+				
 
 			}
 		});
