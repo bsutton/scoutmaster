@@ -166,8 +166,9 @@ public class ImportSelectFile implements WizardStep
 			mapping.setInputPrompt("--Please Select--");
 			mapping.setNullSelectionItemId("--Please Select--");
 			fl.addComponent(mapping);
+			fl.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
 			row.addComponent(fl);
-			row.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
+			//row.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
 			content.addComponent(row);
 			content.setMargin(true);
 		}

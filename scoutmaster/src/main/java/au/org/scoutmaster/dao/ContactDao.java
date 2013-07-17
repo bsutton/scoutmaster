@@ -37,7 +37,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	@Override
 	public List<Contact> findAll()
 	{
-		Query query = entityManager.createNamedQuery("Contact.findAll");
+		Query query = entityManager.createNamedQuery(Contact.FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<Contact> list = query.getResultList();
 		return list;
@@ -47,7 +47,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	@SuppressWarnings("unchecked")
 	public List<Contact> findContactByName(String firstname, String lastname)
 	{
-		Query query = entityManager.createNamedQuery("Contact.findByName");
+		Query query = entityManager.createNamedQuery(Contact.FIND_BY_NAME);
 		query.setParameter("firstname", firstname);
 		query.setParameter("lastname", lastname);
 		List<Contact> resultContacts = query.getResultList();

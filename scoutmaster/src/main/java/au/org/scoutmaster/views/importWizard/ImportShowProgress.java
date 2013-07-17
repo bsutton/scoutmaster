@@ -1,41 +1,29 @@
 package au.org.scoutmaster.views.importWizard;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Hashtable;
-
-import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.org.scoutmaster.util.ProgressBarWorker;
+import au.org.scoutmaster.util.ProgressTaskListener;
 import au.org.scoutmaster.views.ImportView;
 
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class ImportShowProgress implements WizardStep
+public class ImportShowProgress implements WizardStep, ProgressTaskListener
 {
 	static private Logger logger = Logger.getLogger(ImportShowProgress.class);
-	JPAContainer<? extends Importable> entities;
 	private ImportView importView;
 	private boolean importComplete = false;
 	private ProgressBar indicator;
-	private float count;
+	private int count;
 	private Label progressDescription;
 
 	public ImportShowProgress(ImportView importView)
@@ -52,7 +40,7 @@ public class ImportShowProgress implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		this.count = 0.0f;
+		this.count = 0;
 
 		VerticalLayout layout = new VerticalLayout();
 
@@ -65,47 +53,14 @@ public class ImportShowProgress implements WizardStep
 		// Set polling frequency to 0.5 seconds.
 
 		File tempFile = this.importView.getFile().getTempFile();
+		Class<? extends Importable> clazz = importView.getType().getEntityClass();
 
-		FileReader reader = null;
-		try
-		{
-			reader = new FileReader(tempFile);
-			Class<? extends Importable> clazz = importView.getType().getEntityClass();
-			entities = buildContainerFromCSV(clazz, reader);
-
-			reader.close();
-			if (tempFile.exists())
-				tempFile.delete();
-			// mark progress as complete.
-			indicator.setValue((float) 1);
-			importComplete = true;
-
-		}
-		catch (IOException | InstantiationException | IllegalAccessException e)
-		{
-			logger.error(e, e);
-			Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-		}
-		finally
-		{
-			if (reader != null)
-				try
-				{
-					reader.close();
-				}
-				catch (IOException e)
-				{
-					logger.error(e, e);
-					Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-				}
-		}
+		ProgressBarWorker worker = new ProgressBarWorker(new ImportTask(
+				EntityManagerProvider.INSTANCE.getEntityManager(), this, tempFile, clazz, this.importView.getMatch()
+						.getFieldMap()));
+		worker.start();
 
 		return layout;
-	}
-
-	private void updateProgress()
-	{
-		progressDescription.setValue("Imported: " + this.count + " records");
 	}
 
 	@Override
@@ -120,89 +75,26 @@ public class ImportShowProgress implements WizardStep
 		return true;
 	}
 
-	/**
-	 * Uses http://opencsv.sourceforge.net/ to read the entire contents of a CSV
-	 * file, and creates an IndexedContainer from it
-	 * 
-	 * @param reader
-	 * @return
-	 * @throws IOException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	protected <T extends Importable> JPAContainer<T> buildContainerFromCSV(Class<T> entityClass,
-			Reader reader) throws IOException, InstantiationException, IllegalAccessException
+	@Override
+	public void taskProgress(final int count, final int max)
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-		JPAContainer<T> container = JPAContainerFactory.make(entityClass, em);
-
-		CSVReader csvReader = null;
-
-		try
+		UI.getCurrent().access(new Runnable()
 		{
-			csvReader = new CSVReader(reader);
-
-			Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
-
-			fieldMaps = this.importView.getMatch().getFieldMap();
-			String[] columnHeaders = null;
-			String[] record;
-			this.count = 0;
-			while ((record = csvReader.readNext()) != null)
+			@Override
+			public void run()
 			{
-				if (columnHeaders == null)
-				{
-					columnHeaders = record;
-				}
-				else
-				{
-					addRow(container, entityClass, columnHeaders, record, fieldMaps);
-					indicator.setValue(count);
-					this.count++;
-					this.updateProgress();
-				}
+				progressDescription.setValue("Imported: " + count + " records.");
 			}
-		}
-		finally
-		{
-			if (csvReader != null)
-				csvReader.close();
-		}
-		return container;
+		});
+
 	}
 
-	/**
-	 * Adds an item to the given container, assuming each field maps to it's
-	 * corresponding property id. Again, note that I am assuming that the field
-	 * is a string.
-	 * 
-	 * @param container
-	 * @param entityClass
-	 * @param csvHeaders
-	 * @param fields
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 */
-	@SuppressWarnings("unchecked")
-	private static <T> void addRow(JPAContainer<T> container,
-			Class<T> entityClass, String[] csvHeaders, String[] fields,
-			Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
+	@Override
+	public void taskComplete()
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-		
-		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
-		T entity = entityItem.getEntity();
-		for (int i = 0; i < fields.length; i++)
-		{
-			String csvHeaderName = csvHeaders[i];
-			FormFieldImpl formField = fieldMaps.get(csvHeaderName);
-			if (formField != null)
-			{
-				String field = fields[i];
-				formField.setValue(entity, field);
-			}
-		}
-		em.persist(entity);
+		indicator.setValue(1.0f);
+		indicator.setVisible(false);
+		importComplete = true;
 	}
 
 }

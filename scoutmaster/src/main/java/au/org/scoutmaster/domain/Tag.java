@@ -23,10 +23,17 @@ import au.org.scoutmaster.filter.EntityManagerProvider;
  */
 @Entity
 @NamedQueries(
-{ @NamedQuery(name = "Tag.findAll", query = "SELECT tag FROM Tag tag"),
-		@NamedQuery(name = "Tag.findMatching", query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+{ 
+	@NamedQuery(name = Tag.FIND_ALL, query = "SELECT tag FROM Tag tag"),
+	@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") 
+}
+)
 public class Tag extends BaseEntity
 {
+
+	static public final String FIND_ALL = "Tag.findAll";
+	static public final String FIND_BY_NAME = "Tag.findByName";
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -51,21 +58,26 @@ public class Tag extends BaseEntity
 	@Column(length = 250)
 	String description;
 
-//	@ManyToMany
-//	private final List<Contact> contacts = new ArrayList<>();
-//
-//	@ManyToMany
-//	private final List<School> schools = new ArrayList<>();
-//
-//	@ManyToMany
-//	private final List<Organisation> organisations = new ArrayList<>();
-//
-//	@ManyToMany
-//	private final List<Household> households = new ArrayList<>();
+	// @ManyToMany
+	// private final List<Contact> contacts = new ArrayList<>();
+	//
+	// @ManyToMany
+	// private final List<School> schools = new ArrayList<>();
+	//
+	// @ManyToMany
+	// private final List<Organisation> organisations = new ArrayList<>();
+	//
+	// @ManyToMany
+	// private final List<Household> households = new ArrayList<>();
 
 	public Tag()
 	{
 
+	}
+
+	public Tag(String name)
+	{
+		this.name = name;
 	}
 
 	public Tag(String name, String description)
@@ -74,10 +86,10 @@ public class Tag extends BaseEntity
 		this.description = description;
 	}
 
-//	public void addContact(Contact contact)
-//	{
-//		this.contacts.add(contact);
-//	}
+	// public void addContact(Contact contact)
+	// {
+	// this.contacts.add(contact);
+	// }
 
 	public boolean isTag(String tagName)
 	{
@@ -117,34 +129,34 @@ public class Tag extends BaseEntity
 		return this.description;
 	}
 
-//	public List<Contact> getContacts()
-//	{
-//		return this.contacts;
-//	}
-//
-//	public List<School> getSchools()
-//	{
-//		return this.schools;
-//	}
-//
-//	public List<Organisation> getOrganisations()
-//	{
-//		return this.organisations;
-//	}
-//
-//	public List<Household> getHouseholds()
-//	{
-//		return this.households;
-//	}
+	// public List<Contact> getContacts()
+	// {
+	// return this.contacts;
+	// }
+	//
+	// public List<School> getSchools()
+	// {
+	// return this.schools;
+	// }
+	//
+	// public List<Organisation> getOrganisations()
+	// {
+	// return this.organisations;
+	// }
+	//
+	// public List<Household> getHouseholds()
+	// {
+	// return this.households;
+	// }
 
 	public static Tag addTag(String name, String description)
-	{	
+	{
 		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
 		Tag tag = new Tag(name, description);
 		em.persist(tag);
-		
+
 		return tag;
-		
+
 	}
 
 }

@@ -48,6 +48,11 @@
 			<version>1.0.0-beta1</version>
 		</dependency>
 		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>tokenfield</artifactId>
+			<version>7.0.1</version>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.21</version>
@@ -131,6 +136,42 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>smsj</groupId>
+			<artifactId>smsj</artifactId>
+			<version>20051126</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-push</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.edugility</groupId>
+			<artifactId>liquibase-jul</artifactId>
+			<version>1.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-shared</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -199,6 +240,33 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.0</version>
 			</plugin>
+
+
+			<plugin>
+				<!-- -->
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>2.0.1</version>
+				<configuration>
+					<changeLogFile>src/main/java/au/org/scoutmaster/dao/changelog/db.changelog-master.xml</changeLogFile>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url>
+					<username>root</username>
+					<password>++Ast810</password>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+
+						<goals>
+							<goal>update</goal>
+							<goal>migrate</goal>
+							<goal>migrateSQL</goal>
+
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -230,7 +298,26 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.liquibase</groupId>
+										<artifactId>liquibase-maven-plugin</artifactId>
+										<versionRange>
+											[2.0.1,)
+										</versionRange>
+										<goals>
+											<goal>update</goal>
+											<goal>migrate</goal>
+											<goal>migrateSQL</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+
 							</pluginExecutions>
+
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>

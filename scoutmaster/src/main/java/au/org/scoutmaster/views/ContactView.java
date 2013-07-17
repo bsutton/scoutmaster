@@ -1,9 +1,5 @@
 package au.org.scoutmaster.views;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Set;
 
 import au.org.scoutmaster.dao.ContactDao;
@@ -16,16 +12,15 @@ import au.org.scoutmaster.domain.PreferredEmail;
 import au.org.scoutmaster.domain.PreferredPhone;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.org.scoutmaster.util.FormHelper;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.data.Container;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.navigator.View;
@@ -35,7 +30,6 @@ import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
@@ -43,7 +37,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -51,8 +44,8 @@ import com.vaadin.ui.VerticalLayout;
 public class ContactView extends VerticalLayout implements View
 {
 	/**
-	 * 
-	 */
+         *
+         */
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "Contact";
@@ -74,6 +67,8 @@ public class ContactView extends VerticalLayout implements View
 	/* User interface components are stored in session. */
 	private Table contactList = new Table()
 	{
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected String formatPropertyValue(Object rowId, Object colId, Property property)
 		{
@@ -92,15 +87,28 @@ public class ContactView extends VerticalLayout implements View
 			return super.formatPropertyValue(rowId, colId, property);
 		}
 	};
+
 	private TextField searchField = new TextField();
 	private Button addNewContactButton = new Button("New");
 	private Button removeContactButton = new Button("Remove this contact");
 	private Button saveContactButton = new Button("Save");
 	private Button cancelContactButton = new Button("Cancel");
-	private FieldGroup editorFields = new FieldGroup();
-	private FormLayout layoutFields = new FormLayout();
+	public FieldGroup editorFields = new FieldGroup();
+	public FormLayout layoutFields = new FormLayout();
 
 	private VerticalLayout mainEditPanel = new VerticalLayout();
+
+	private FormHelper commonHelp;
+
+	private FormHelper adultHelp;
+
+	private FormHelper youthHelp;
+
+	private FormHelper memberHelp;
+
+	private FormHelper affiliatedHelp;
+
+	private FormHelper affiliateAdultHelper;
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -119,6 +127,7 @@ public class ContactView extends VerticalLayout implements View
 	 * In this example layouts are programmed in Java. You may choose use a
 	 * visual editor, CSS or HTML templates for layout instead.
 	 */
+
 	private void initLayout()
 	{
 		this.setSizeFull();
@@ -168,8 +177,8 @@ public class ContactView extends VerticalLayout implements View
 		addNewContactButton.addClickListener(new ClickListener()
 		{
 			/**
-			 * 
-			 */
+                         *
+                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
@@ -200,8 +209,8 @@ public class ContactView extends VerticalLayout implements View
 		removeContactButton.addClickListener(new ClickListener()
 		{
 			/**
-			 * 
-			 */
+                         *
+                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
@@ -214,8 +223,8 @@ public class ContactView extends VerticalLayout implements View
 		cancelContactButton.addClickListener(new ClickListener()
 		{
 			/**
-			 * 
-			 */
+                         *
+                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
@@ -232,89 +241,80 @@ public class ContactView extends VerticalLayout implements View
 		mainEditPanel.addComponent(removeContactButton);
 
 		// Common fields
-		ArrayList<AbstractField<?>> commonLayout = new ArrayList<AbstractField<?>>();
 		// commonLayout.setCaption("Common");
 		// commonLayout.setMargin(true);
 
-		bindBooleanField(commonLayout, "Active", "active");
-		final ComboBox role = bindEnumField(commonLayout, "Role", "role", GroupRole.class);
-		bindTextField(commonLayout, "Prefix", "prefix");
-		bindTextField(commonLayout, "Firstname", Contact.FIRSTNAME);
-		bindTextField(commonLayout, "Middle name", "middlename");
-		bindTextField(commonLayout, "Lastname", Contact.LASTNAME);
-		DateField birthDate = bindDateField(commonLayout, "Birth Date", Contact.BIRTH_DATE);
-		final Label labelAge = bindLabelField(commonLayout, "Age", "age");
-		bindEnumField(commonLayout, "Gender", "gender", Gender.class);
+		commonHelp = new FormHelper(this.layoutFields, this.editorFields);
+
+		commonHelp.bindBooleanField("Active", "active");
+		final ComboBox role = commonHelp.bindEnumField("Role", "role", GroupRole.class);
+		commonHelp.bindTextField("Prefix", "prefix");
+		commonHelp.bindTextField("Firstname", Contact.FIRSTNAME);
+		commonHelp.bindTextField("Middle name", "middlename");
+		commonHelp.bindTextField("Lastname", Contact.LASTNAME);
+		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
+		final Label labelAge = commonHelp.bindLabelField("Age", "age");
+		commonHelp.bindEnumField("Gender", "gender", Gender.class);
+		commonHelp.bindTokenField("Token", "token", Token.class);
 
 		// Adult fields
-		final ArrayList<AbstractField<?>> adultLayout = new ArrayList<AbstractField<?>>();
+
+		adultHelp = new FormHelper(this.layoutFields, this.editorFields);
+		adultHelp.bindTextField("Home Phone", "homePhone");
+		adultHelp.bindTextField("Work Phone", "workPhone");
+		adultHelp.bindTextField("Mobile", "mobile");
+		adultHelp.bindEnumField("Preferred Phone", "preferredPhone", PreferredPhone.class);
+		adultHelp.bindTextField("Home Email", "homeEmail");
+		adultHelp.bindTextField("Work Email", "workEmail");
+		adultHelp.bindEnumField("Preferred Email", "preferredEmail", PreferredEmail.class);
+		adultHelp.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
+
 		// adultLayout.setCaption("Adult");
 		// adultLayout.setMargin(true);
-
-		bindTextField(adultLayout, "Home Phone", "homePhone");
-		bindTextField(adultLayout, "Work Phone", "workPhone");
-		bindTextField(adultLayout, "Mobile", "mobile");
-		bindEnumField(adultLayout, "Preferred Phone", "preferredPhone", PreferredPhone.class);
-		bindTextField(adultLayout, "Home Email", "homeEmail");
-		bindTextField(adultLayout, "Work Email", "workEmail");
-		bindEnumField(adultLayout, "Preferred Email", "preferredEmail", PreferredEmail.class);
-		bindEnumField(adultLayout, "Preferred Communications", "preferredCommunications", PreferredCommunications.class);
 
 		// mainEditPanel.addComponent(adultLayout);
 
-		// Youth fields
-		// FormLayout youthLayout = new FormLayout();
-		final ArrayList<AbstractField<?>> youthLayout = new ArrayList<AbstractField<?>>();
-		// youthLayout.setCaption("Youth");
-		// youthLayout.setMargin(true);
+		youthHelp = new FormHelper(this.layoutFields, this.editorFields);
 
-		bindBooleanField(youthLayout, "Custody Order", "custodyOrder");
-		bindTextAreaField(youthLayout, "Custody Order Details", "custodyOrderDetails", 4);
-		bindTextField(youthLayout, "School", "school");
-		bindEntityField(youthLayout, "Section Eligib.", "sectionEligibility", SectionType.class);
+		youthHelp.bindBooleanField("Custody Order", "custodyOrder");
+		youthHelp.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
+		youthHelp.bindTextField("School", "school");
+		youthHelp.bindEntityField("Section Eligib.", "sectionEligibility", SectionType.class);
 		// bindPanel(youthLayout,"Address", "address");
 		// mainEditPanel.addComponent(youthLayout);
 
-		// Member fields
-		// FormLayout memberLayout = new FormLayout();
-		final ArrayList<AbstractField<?>> memberLayout = new ArrayList<AbstractField<?>>();
-		// memberLayout.setCaption("Member");
-		// memberLayout.setMargin(true);
+		memberHelp = new FormHelper(this.layoutFields, this.editorFields);
 
-		bindBooleanField(memberLayout, "Member", "isMember");
-		bindTextField(memberLayout, "Member No", "memberNo");
-		bindDateField(memberLayout, "Member Since", "memberSince");
-		bindEntityField(youthLayout, "Section ", "section", SectionType.class);
+		memberHelp.bindBooleanField("Member", "isMember");
+		memberHelp.bindTextField("Member No", "memberNo");
+		memberHelp.bindDateField("Member Since", "memberSince");
+		memberHelp.bindEntityField("Section ", "section", SectionType.class);
 		// mainEditPanel.addComponent(memberLayout);
 
-		// Affiliate fields
-		final ArrayList<AbstractField<?>> affiliatedLayout = new ArrayList<AbstractField<?>>();
-		// FormLayout affiliatedLayout = new FormLayout();
-		// affiliatedLayout.setCaption("Affiliate");
-		// affiliatedLayout.setMargin(true);
+		affiliatedHelp = new FormHelper(this.layoutFields, this.editorFields);
 
-		bindTextField(affiliatedLayout, "Hobbies", "hobbies");
-		bindDateField(affiliatedLayout, "Affiliated Since", "affiliatedSince");
-		bindTextField(affiliatedLayout, "Allergies", "allergies");
-		bindBooleanField(affiliatedLayout, "Ambulance Subscriber", "ambulanceSubscriber");
-		bindBooleanField(affiliatedLayout, "Private Medical Ins.", "privateMedicalInsurance");
-		bindTextField(affiliatedLayout, "Private Medical Fund", "privateMedicalFundName");
+		affiliatedHelp.bindTextField("Hobbies", "hobbies");
+		affiliatedHelp.bindDateField("Affiliated Since", "affiliatedSince");
+		affiliatedHelp.bindTextField("Allergies", "allergies");
+		affiliatedHelp.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
+		affiliatedHelp.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
+		affiliatedHelp.bindTextField("Private Medical Fund", "privateMedicalFundName");
 
 		// Affiliated Adult fields
-		final ArrayList<AbstractField<?>> affiliatedAdultLayout = new ArrayList<AbstractField<?>>();
 		// adultLayout.setCaption("Adult");
 		// adultLayout.setMargin(true);
 
-		bindTextField(affiliatedAdultLayout, "Current Employer", "currentEmployer");
-		bindTextField(affiliatedAdultLayout, "Job Title", "jobTitle");
+		affiliateAdultHelper = new FormHelper(this.layoutFields, this.editorFields);
+		affiliateAdultHelper.bindTextField("Current Employer", "currentEmployer");
+		affiliateAdultHelper.bindTextField("Job Title", "jobTitle");
 		// bindTextField(affiliatedAdultLayout, "Assets", "assets");
-		bindBooleanField(affiliatedAdultLayout, "Has WWC", "hasWWC");
-		bindDateField(affiliatedAdultLayout, "WWC Expiry", "wwcExpiry");
-		bindTextField(affiliatedAdultLayout, "WWC No.", "wwcNo");
-		bindBooleanField(affiliatedAdultLayout, "Has Police Check", "hasPoliceCheck");
-		bindDateField(affiliatedAdultLayout, "Police Check Expiry", "policeCheckExpiry");
-		bindBooleanField(affiliatedAdultLayout, "Has Food Handling", "hasFoodHandlingCertificate");
-		bindBooleanField(affiliatedAdultLayout, "Has First Aid Certificate", "hasFirstAidCertificate");
+		affiliateAdultHelper.bindBooleanField("Has WWC", "hasWWC");
+		affiliateAdultHelper.bindDateField("WWC Expiry", "wwcExpiry");
+		affiliateAdultHelper.bindTextField("WWC No.", "wwcNo");
+		affiliateAdultHelper.bindBooleanField("Has Police Check", "hasPoliceCheck");
+		affiliateAdultHelper.bindDateField("Police Check Expiry", "policeCheckExpiry");
+		affiliateAdultHelper.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
+		affiliateAdultHelper.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
 
 		// mainEditPanel.addComponent(affiliatedLayout);
 
@@ -333,7 +333,7 @@ public class ContactView extends VerticalLayout implements View
 
 				ContactDao daoContact = new ContactDao();
 				Contact contact = contactContainer.getItem(contactId).getEntity();
-				
+
 				labelAge.setValue(daoContact.getAge(contact).toString());
 
 				/*
@@ -390,7 +390,7 @@ public class ContactView extends VerticalLayout implements View
 						showAffiliateAdult(true);
 						break;
 					case YouthMember:
-						showAdult(true);
+						showAdult(false);
 						showYouth(true);
 						showMember(true);
 						showAffiliate(true);
@@ -399,10 +399,11 @@ public class ContactView extends VerticalLayout implements View
 					default:
 						break;
 				}
+
 				Object contactId = contactList.getValue();
 
 				ContactDao daoContact = new ContactDao();
-				
+
 				Contact contact = contactContainer.getItem(contactId).getEntity();
 				labelAge.setValue(daoContact.getAge(contact).toString());
 
@@ -420,7 +421,7 @@ public class ContactView extends VerticalLayout implements View
 
 			private void showAffiliateAdult(boolean visible)
 			{
-				for (AbstractField<?> field : affiliatedAdultLayout)
+				for (AbstractField<?> field : ContactView.this.affiliateAdultHelper.getFieldList())
 				{
 					field.setVisible(visible);
 				}
@@ -429,7 +430,7 @@ public class ContactView extends VerticalLayout implements View
 
 			private void showAffiliate(boolean visible)
 			{
-				for (AbstractField<?> field : affiliatedLayout)
+				for (AbstractField<?> field : ContactView.this.affiliatedHelp.getFieldList())
 				{
 					field.setVisible(visible);
 				}
@@ -438,7 +439,7 @@ public class ContactView extends VerticalLayout implements View
 
 			private void showMember(boolean visible)
 			{
-				for (AbstractField<?> field : memberLayout)
+				for (AbstractField<?> field : ContactView.this.memberHelp.getFieldList())
 				{
 					field.setVisible(visible);
 				}
@@ -447,7 +448,7 @@ public class ContactView extends VerticalLayout implements View
 
 			private void showYouth(boolean visible)
 			{
-				for (AbstractField<?> field : youthLayout)
+				for (AbstractField<?> field : ContactView.this.youthHelp.getFieldList())
 				{
 					field.setVisible(visible);
 				}
@@ -456,7 +457,7 @@ public class ContactView extends VerticalLayout implements View
 
 			private void showAdult(boolean visible)
 			{
-				for (AbstractField<?> field : adultLayout)
+				for (AbstractField<?> field : ContactView.this.adultHelp.getFieldList())
 				{
 					field.setVisible(visible);
 				}
@@ -477,96 +478,6 @@ public class ContactView extends VerticalLayout implements View
 		mainEditPanel.addComponent(buttonLayout);
 	}
 
-	private ComboBox bindEntityField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName,
-			Class<?> clazz)
-	{
-		JPAContainer container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
-		
-		ComboBox field = new ComboBox(fieldLabel, container);
-		field.setNewItemsAllowed(false);
-		field.setNullSelectionAllowed(false);
-		field.setTextInputAllowed(false);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		field.setImmediate(true);
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-	}
-
-	private ComboBox bindEnumField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName,
-			Class<?> clazz)
-	{
-		ComboBox field = new ComboBox(fieldLabel, createContainerFromEnumClass(fieldName, clazz));
-		field.setNewItemsAllowed(false);
-		field.setNullSelectionAllowed(false);
-		field.setTextInputAllowed(false);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		field.setImmediate(true);
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-	}
-
-	private CheckBox bindBooleanField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName)
-	{
-		CheckBox field = new CheckBox(fieldLabel);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		field.setImmediate(true);
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-
-	}
-
-	private Label bindLabelField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName)
-	{
-		Label field = new Label(fieldLabel);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		// group.add(field);
-		return field;
-	}
-
-	private TextField bindTextField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName)
-	{
-		TextField field = new TextField(fieldLabel);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		field.setImmediate(true);
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-	}
-
-	private TextArea bindTextAreaField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName, int rows)
-	{
-		TextArea field = new TextArea(fieldLabel);
-		field.setRows(rows);
-		layoutFields.addComponent(field);
-		field.setWidth("100%");
-		field.setImmediate(true);
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-
-	}
-
-	private DateField bindDateField(ArrayList<AbstractField<?>> group, String fieldLabel, String fieldName)
-	{
-		DateField field = new DateField(fieldLabel);
-		field.setDateFormat("yyyy-MM-dd");
-
-		layoutFields.addComponent(field);
-		field.setImmediate(true);
-		field.setWidth("100%");
-		editorFields.bind(field, fieldName);
-		group.add(field);
-		return field;
-	}
-
 	private void initContactList()
 	{
 		contactList.setContainerDataSource(contactContainer);
@@ -581,8 +492,8 @@ public class ContactView extends VerticalLayout implements View
 		contactList.addValueChangeListener(new Property.ValueChangeListener()
 		{
 			/**
-			 * 
-			 */
+                         *
+                         */
 			private static final long serialVersionUID = 1L;
 
 			public void valueChange(ValueChangeEvent event)
@@ -632,8 +543,8 @@ public class ContactView extends VerticalLayout implements View
 		searchField.addTextChangeListener(new TextChangeListener()
 		{
 			/**
-			 * 
-			 */
+                         *
+                         */
 			private static final long serialVersionUID = 1L;
 
 			public void textChange(final TextChangeEvent event)
@@ -653,8 +564,8 @@ public class ContactView extends VerticalLayout implements View
 	private class ContactFilter implements Filter
 	{
 		/**
-		 * 
-		 */
+                 *
+                 */
 		private static final long serialVersionUID = 1L;
 		private String needle;
 
@@ -676,35 +587,4 @@ public class ContactView extends VerticalLayout implements View
 			return true;
 		}
 	}
-
-	public Container createContainerFromEnumClass(String fieldName, Class<?> clazz)
-	{
-		LinkedHashMap<Enum<?>, String> enumMap = new LinkedHashMap<Enum<?>, String>();
-		for (Object enumConstant : clazz.getEnumConstants())
-		{
-			enumMap.put((Enum<?>) enumConstant, enumConstant.toString());
-		}
-
-		return createContainerFromMap(fieldName, enumMap);
-	}
-
-	@SuppressWarnings("unchecked")
-	public Container createContainerFromMap(String fieldName, Map<?, String> hashMap)
-	{
-		IndexedContainer container = new IndexedContainer();
-		container.addContainerProperty(fieldName, String.class, "");
-
-		Iterator<?> iter = hashMap.keySet().iterator();
-		while (iter.hasNext())
-		{
-			Object itemId = iter.next();
-			container.addItem(itemId);
-			container.getItem(itemId).getItemProperty(fieldName).setValue(hashMap.get(itemId));
-		}
-
-		return container;
-	}
-
-	// use it this way: createContainerFromEnumClass(MyEnum.class)
-
 }

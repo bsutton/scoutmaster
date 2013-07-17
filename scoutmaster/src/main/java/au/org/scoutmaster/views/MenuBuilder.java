@@ -1,12 +1,11 @@
-package au.org.scoutmaster;
+package au.org.scoutmaster.views;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import au.org.scoutmaster.NavigatorUI.ViewMap;
-import au.org.scoutmaster.views.Menu;
+import au.org.scoutmaster.views.NavigatorUI.ViewMap;
 
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;

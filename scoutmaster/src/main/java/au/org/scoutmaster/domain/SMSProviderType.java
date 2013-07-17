@@ -30,7 +30,7 @@ public class SMSProviderType extends BaseEntity
 
 	static public void initDB()
 	{
-		new SMSProviderType("Clickatell", "", new ClickATellProvider());
+		new SMSProviderType("ClickATell", "", new ClickATellProvider());
 	}
 
 	public iSMSProvider getProvider()

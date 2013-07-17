@@ -2,15 +2,11 @@ package au.org.scoutmaster.domain.access;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -19,6 +15,7 @@ import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
 
+import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.PasswordHash;
 
@@ -26,16 +23,12 @@ import au.org.scoutmaster.util.PasswordHash;
 @NamedQueries(
 { @NamedQuery(name = "User.findAll", query = "SELECT user FROM User user"),
 		@NamedQuery(name = "User.findByName", query = "SELECT user FROM User user WHERE user.username = :username"), })
-public class User
+public class User  extends BaseEntity
 {
+	private static final long serialVersionUID = 1L;
+
 	@Transient
 	private static final Logger logger = Logger.getLogger(User.class);
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-
-	Date created = new Date(new java.util.Date().getTime());
 
 	String username;
 
@@ -158,5 +151,6 @@ public class User
 		em.persist(user);
 		em.flush();
 	}
+
 
 }
