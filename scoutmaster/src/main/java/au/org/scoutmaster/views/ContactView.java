@@ -11,6 +11,7 @@ import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.PreferredEmail;
 import au.org.scoutmaster.domain.PreferredPhone;
 import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.FormHelper;
 
@@ -49,6 +50,30 @@ public class ContactView extends VerticalLayout implements View
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "Contact";
+	
+
+	private TextField searchField = new TextField();
+	private Button addNewContactButton = new Button("New");
+	private Button removeContactButton = new Button("Remove this contact");
+	private Button saveContactButton = new Button("Save");
+	private Button cancelContactButton = new Button("Cancel");
+	public FieldGroup editorFields = new FieldGroup();
+	public FormLayout layoutFields = new FormLayout();
+
+	private VerticalLayout mainEditPanel = new VerticalLayout();
+
+	private FormHelper commonHelp;
+
+	private FormHelper adultHelp;
+
+	private FormHelper youthHelp;
+
+	private FormHelper memberHelp;
+
+	private FormHelper affiliatedHelp;
+
+	private FormHelper affiliateAdultHelper;
+
 
 	/*
 	 * Any component can be bound to an external data source. This example uses
@@ -87,28 +112,6 @@ public class ContactView extends VerticalLayout implements View
 			return super.formatPropertyValue(rowId, colId, property);
 		}
 	};
-
-	private TextField searchField = new TextField();
-	private Button addNewContactButton = new Button("New");
-	private Button removeContactButton = new Button("Remove this contact");
-	private Button saveContactButton = new Button("Save");
-	private Button cancelContactButton = new Button("Cancel");
-	public FieldGroup editorFields = new FieldGroup();
-	public FormLayout layoutFields = new FormLayout();
-
-	private VerticalLayout mainEditPanel = new VerticalLayout();
-
-	private FormHelper commonHelp;
-
-	private FormHelper adultHelp;
-
-	private FormHelper youthHelp;
-
-	private FormHelper memberHelp;
-
-	private FormHelper affiliatedHelp;
-
-	private FormHelper affiliateAdultHelper;
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -190,16 +193,6 @@ public class ContactView extends VerticalLayout implements View
 				contactContainer.removeAllContainerFilters();
 				Long contactid = (Long) contactContainer.addEntity(new Contact());
 
-				/*
-				 * Each Item has a set of Properties that hold values. Here we
-				 * set a couple of those.
-				 */
-				// contactList.getContainerProperty(contactid,
-				// FNAME).setValue("New");
-				// contactList.getContainerProperty(contactid,
-				// LNAME).setValue("Contact");
-				// contactList.getContainerProperty(contactid,
-				// BIRTH_DATE).setValue("2000/1/1");
 
 				/* Lets choose the newly created contact to edit it. */
 				contactList.select(contactid);
@@ -240,10 +233,6 @@ public class ContactView extends VerticalLayout implements View
 
 		mainEditPanel.addComponent(removeContactButton);
 
-		// Common fields
-		// commonLayout.setCaption("Common");
-		// commonLayout.setMargin(true);
-
 		commonHelp = new FormHelper(this.layoutFields, this.editorFields);
 
 		commonHelp.bindBooleanField("Active", "active");
@@ -255,7 +244,7 @@ public class ContactView extends VerticalLayout implements View
 		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
 		final Label labelAge = commonHelp.bindLabelField("Age", "age");
 		commonHelp.bindEnumField("Gender", "gender", Gender.class);
-		commonHelp.bindTokenField("Token", "token", Token.class);
+		commonHelp.bindTokenField("Tags", "tag", Tag.class);
 
 		// Adult fields
 

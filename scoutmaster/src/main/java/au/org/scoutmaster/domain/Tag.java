@@ -35,6 +35,8 @@ public class Tag extends BaseEntity
 	static public final String FIND_BY_NAME = "Tag.findByName";
 
 	private static final long serialVersionUID = 1L;
+	public static final String DESCRIPTION = "description";
+	public static final String NAME = "name";
 
 	/**
 	 * Builtin-tags
@@ -54,6 +56,16 @@ public class Tag extends BaseEntity
 
 	@Column(unique = true, length = 30)
 	String name;
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
 
 	@Column(length = 250)
 	String description;
@@ -78,6 +90,7 @@ public class Tag extends BaseEntity
 	public Tag(String name)
 	{
 		this.name = name;
+		this.description = "";
 	}
 
 	public Tag(String name, String description)
@@ -149,14 +162,5 @@ public class Tag extends BaseEntity
 	// return this.households;
 	// }
 
-	public static Tag addTag(String name, String description)
-	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-		Tag tag = new Tag(name, description);
-		em.persist(tag);
-
-		return tag;
-
-	}
 
 }
