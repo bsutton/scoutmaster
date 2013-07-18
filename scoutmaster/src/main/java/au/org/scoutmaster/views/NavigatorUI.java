@@ -29,6 +29,7 @@ import com.vaadin.ui.VerticalLayout;
  * Or you may choose to embed your UI to an existing web page.
  */
 @Title("Scoutmaster")
+
 @Push
 public class NavigatorUI extends UI
 {

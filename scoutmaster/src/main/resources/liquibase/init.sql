@@ -3,31 +3,20 @@
 
 -- MySQL dump 10.13  Distrib 5.5.31, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: scoutmaster
+-- Host: localhost    Database: scoutmastertest
 -- ------------------------------------------------------
 -- Server version	5.5.31-0ubuntu0.13.04.1
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT ;
 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS ;
 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION ;
-SET NAMES utf8;
-SET @OLD_TIME_ZONE=@@TIME_ZONE;
-SET TIME_ZONE='+00:00';
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
-SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0;
+SET NAMES utf8 ;
+SET @OLD_TIME_ZONE=@@TIME_ZONE ;
+SET TIME_ZONE='+00:00' ;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 ;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 ;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO'; 
+SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 ;
 
 --
 -- Table structure for table `activity`
@@ -37,7 +26,7 @@ DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `ACTIVITYDATE` date DEFAULT NULL,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -51,8 +40,8 @@ CREATE TABLE `activity` (
   KEY `FK_ACTIVITY_WITHCONTACT_ID` (`WITHCONTACT_ID`),
   KEY `FK_ACTIVITY_ADDEDBY_ID` (`ADDEDBY_ID`),
   KEY `FK_ACTIVITY_TYPE_ID` (`TYPE_ID`),
-  CONSTRAINT `FK_ACTIVITY_ADDEDBY_ID` FOREIGN KEY (`ADDEDBY_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_ACTIVITY_TYPE_ID` FOREIGN KEY (`TYPE_ID`) REFERENCES `activitytype` (`ID`),
+  CONSTRAINT `FK_ACTIVITY_ADDEDBY_ID` FOREIGN KEY (`ADDEDBY_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_ACTIVITY_WITHCONTACT_ID` FOREIGN KEY (`WITHCONTACT_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -74,7 +63,7 @@ DROP TABLE IF EXISTS `activitytype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activitytype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -101,7 +90,7 @@ DROP TABLE IF EXISTS `address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `address` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CITY` varchar(255) DEFAULT NULL,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -130,7 +119,7 @@ DROP TABLE IF EXISTS `contact`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contact` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `ACTIVE` tinyint(1) DEFAULT '0',
   `AFFILIATEDSINCE` date DEFAULT NULL,
   `ALLERGIES` varchar(255) DEFAULT NULL,
@@ -149,7 +138,6 @@ CREATE TABLE `contact` (
   `HASWWC` tinyint(1) DEFAULT '0',
   `HOBBIES` varchar(255) DEFAULT NULL,
   `HOMEEMAIL` varchar(255) DEFAULT NULL,
-  `HOMEPHONE` varchar(255) DEFAULT NULL,
   `ISMEMBER` tinyint(1) DEFAULT '0',
   `JOBTITLE` varchar(255) DEFAULT NULL,
   `LASTNAME` varchar(255) DEFAULT NULL,
@@ -157,7 +145,6 @@ CREATE TABLE `contact` (
   `MEMBERNO` varchar(255) DEFAULT NULL,
   `MEMBERSINCE` date DEFAULT NULL,
   `MIDDLENAME` varchar(255) DEFAULT NULL,
-  `MOBILE` varchar(255) DEFAULT NULL,
   `POLICECHECKEXPIRY` date DEFAULT NULL,
   `PREFERREDCOMMUNICATIONS` int(11) DEFAULT NULL,
   `PREFERREDEMAIL` int(11) DEFAULT NULL,
@@ -169,21 +156,38 @@ CREATE TABLE `contact` (
   `SCHOOL` varchar(255) DEFAULT NULL,
   `UPDATED` date DEFAULT NULL,
   `WORKEMAIL` varchar(255) DEFAULT NULL,
-  `WORKPHONE` varchar(255) DEFAULT NULL,
   `WWCEXPIRY` date DEFAULT NULL,
   `WWCNO` varchar(255) DEFAULT NULL,
   `SECTION_ID` bigint(20) DEFAULT NULL,
   `SECTIONELIGIBILITY_ID` bigint(20) DEFAULT NULL,
   `ADDRESS_ID` bigint(20) DEFAULT NULL,
+  `HOMEPHONE_ID` bigint(20) DEFAULT NULL,
+  `MOBILE_ID` bigint(20) DEFAULT NULL,
+  `WORKPHONE_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_CONTACT_SECTION_ID` (`SECTION_ID`),
+  KEY `FK_CONTACT_WORKPHONE_ID` (`WORKPHONE_ID`),
+  KEY `FK_CONTACT_HOMEPHONE_ID` (`HOMEPHONE_ID`),
   KEY `FK_CONTACT_ADDRESS_ID` (`ADDRESS_ID`),
   KEY `FK_CONTACT_SECTIONELIGIBILITY_ID` (`SECTIONELIGIBILITY_ID`),
+  KEY `FK_CONTACT_MOBILE_ID` (`MOBILE_ID`),
+  CONSTRAINT `FK_CONTACT_MOBILE_ID` FOREIGN KEY (`MOBILE_ID`) REFERENCES `phone` (`ID`),
   CONSTRAINT `FK_CONTACT_ADDRESS_ID` FOREIGN KEY (`ADDRESS_ID`) REFERENCES `address` (`ID`),
+  CONSTRAINT `FK_CONTACT_HOMEPHONE_ID` FOREIGN KEY (`HOMEPHONE_ID`) REFERENCES `phone` (`ID`),
   CONSTRAINT `FK_CONTACT_SECTIONELIGIBILITY_ID` FOREIGN KEY (`SECTIONELIGIBILITY_ID`) REFERENCES `sectiontype` (`ID`),
-  CONSTRAINT `FK_CONTACT_SECTION_ID` FOREIGN KEY (`SECTION_ID`) REFERENCES `sectiontype` (`ID`)
+  CONSTRAINT `FK_CONTACT_SECTION_ID` FOREIGN KEY (`SECTION_ID`) REFERENCES `sectiontype` (`ID`),
+  CONSTRAINT `FK_CONTACT_WORKPHONE_ID` FOREIGN KEY (`WORKPHONE_ID`) REFERENCES `phone` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `contact`
+--
+
+LOCK TABLES `contact` WRITE;
+/*!40000 ALTER TABLE `contact` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contact` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `contact_activity`
@@ -197,8 +201,8 @@ CREATE TABLE `contact_activity` (
   `activites_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Contact_ID`,`activites_ID`),
   KEY `FK_CONTACT_ACTIVITY_activites_ID` (`activites_ID`),
-  CONSTRAINT `FK_CONTACT_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`),
-  CONSTRAINT `FK_CONTACT_ACTIVITY_Contact_ID` FOREIGN KEY (`Contact_ID`) REFERENCES `contact` (`ID`)
+  CONSTRAINT `FK_CONTACT_ACTIVITY_Contact_ID` FOREIGN KEY (`Contact_ID`) REFERENCES `contact` (`ID`),
+  CONSTRAINT `FK_CONTACT_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -271,8 +275,10 @@ DROP TABLE IF EXISTS `creditnote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `creditnote` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `ASSOCIATEDINVOICE_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_CREDITNOTE_ASSOCIATEDINVOICE_ID` (`ASSOCIATEDINVOICE_ID`),
@@ -323,9 +329,12 @@ DROP TABLE IF EXISTS `creditnoteline`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `creditnoteline` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
+  `CREATED` date DEFAULT NULL,
   `ORDINAL` int(11) DEFAULT NULL,
   `QUANTITY` decimal(38,0) DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `itemCostMoney` longblob,
   `itemCostTaxPercentage` decimal(38,0) DEFAULT NULL,
   `lineTotalMoney` longblob,
@@ -350,64 +359,6 @@ LOCK TABLES `creditnoteline` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `databasechangelog`
---
-
-DROP TABLE IF EXISTS `databasechangelog`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `databasechangelog` (
-  `ID` varchar(63) NOT NULL,
-  `AUTHOR` varchar(63) NOT NULL,
-  `FILENAME` varchar(200) NOT NULL,
-  `DATEEXECUTED` datetime NOT NULL,
-  `ORDEREXECUTED` int(11) NOT NULL,
-  `EXECTYPE` varchar(10) NOT NULL,
-  `MD5SUM` varchar(35) DEFAULT NULL,
-  `DESCRIPTION` varchar(255) DEFAULT NULL,
-  `COMMENTS` varchar(255) DEFAULT NULL,
-  `TAG` varchar(255) DEFAULT NULL,
-  `LIQUIBASE` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`ID`,`AUTHOR`,`FILENAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `databasechangelog`
---
-
-LOCK TABLES `databasechangelog` WRITE;
-/*!40000 ALTER TABLE `databasechangelog` DISABLE KEYS */;
-/*!40000 ALTER TABLE `databasechangelog` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `databasechangeloglock`
---
-
-DROP TABLE IF EXISTS `databasechangeloglock`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `databasechangeloglock` (
-  `ID` int(11) NOT NULL,
-  `LOCKED` tinyint(1) NOT NULL,
-  `LOCKGRANTED` datetime DEFAULT NULL,
-  `LOCKEDBY` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `databasechangeloglock`
---
-
-LOCK TABLES `databasechangeloglock` WRITE;
-/*!40000 ALTER TABLE `databasechangeloglock` DISABLE KEYS */;
-INSERT INTO `databasechangeloglock` VALUES (1,0,NULL,NULL);
-/*!40000 ALTER TABLE `databasechangeloglock` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `event`
 --
 
@@ -415,7 +366,7 @@ DROP TABLE IF EXISTS `event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `event` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `DTYPE` varchar(31) DEFAULT NULL,
   `ALLDAYEVENT` tinyint(1) DEFAULT '0',
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
@@ -454,8 +405,8 @@ CREATE TABLE `event_contact` (
   `coordinators_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Event_ID`,`coordinators_ID`),
   KEY `FK_EVENT_CONTACT_coordinators_ID` (`coordinators_ID`),
-  CONSTRAINT `FK_EVENT_CONTACT_coordinators_ID` FOREIGN KEY (`coordinators_ID`) REFERENCES `contact` (`ID`),
-  CONSTRAINT `FK_EVENT_CONTACT_Event_ID` FOREIGN KEY (`Event_ID`) REFERENCES `event` (`ID`)
+  CONSTRAINT `FK_EVENT_CONTACT_Event_ID` FOREIGN KEY (`Event_ID`) REFERENCES `event` (`ID`),
+  CONSTRAINT `FK_EVENT_CONTACT_coordinators_ID` FOREIGN KEY (`coordinators_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -476,7 +427,7 @@ DROP TABLE IF EXISTS `feature`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feature` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -503,7 +454,7 @@ DROP TABLE IF EXISTS `household`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `household` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `NAME` varchar(255) DEFAULT NULL,
@@ -539,8 +490,8 @@ CREATE TABLE `household_activity` (
   `activites_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Household_ID`,`activites_ID`),
   KEY `FK_HOUSEHOLD_ACTIVITY_activites_ID` (`activites_ID`),
-  CONSTRAINT `FK_HOUSEHOLD_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`),
-  CONSTRAINT `FK_HOUSEHOLD_ACTIVITY_Household_ID` FOREIGN KEY (`Household_ID`) REFERENCES `household` (`ID`)
+  CONSTRAINT `FK_HOUSEHOLD_ACTIVITY_Household_ID` FOREIGN KEY (`Household_ID`) REFERENCES `household` (`ID`),
+  CONSTRAINT `FK_HOUSEHOLD_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -591,8 +542,8 @@ CREATE TABLE `household_relationship` (
   `members_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Household_ID`,`members_ID`),
   KEY `FK_HOUSEHOLD_RELATIONSHIP_members_ID` (`members_ID`),
-  CONSTRAINT `FK_HOUSEHOLD_RELATIONSHIP_Household_ID` FOREIGN KEY (`Household_ID`) REFERENCES `household` (`ID`),
-  CONSTRAINT `FK_HOUSEHOLD_RELATIONSHIP_members_ID` FOREIGN KEY (`members_ID`) REFERENCES `relationship` (`ID`)
+  CONSTRAINT `FK_HOUSEHOLD_RELATIONSHIP_members_ID` FOREIGN KEY (`members_ID`) REFERENCES `relationship` (`ID`),
+  CONSTRAINT `FK_HOUSEHOLD_RELATIONSHIP_Household_ID` FOREIGN KEY (`Household_ID`) REFERENCES `household` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -639,7 +590,7 @@ DROP TABLE IF EXISTS `importcolumnfieldmapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `importcolumnfieldmapping` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `CSVCOLUMNNAME` varchar(255) DEFAULT NULL,
@@ -669,7 +620,7 @@ DROP TABLE IF EXISTS `importusermapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `importusermapping` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `MAPPINGNAME` varchar(255) DEFAULT NULL,
@@ -695,12 +646,14 @@ DROP TABLE IF EXISTS `invoice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoice` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `INVOICEDATE` date DEFAULT NULL,
   `INVOICENO` varchar(255) DEFAULT NULL,
   `NOTES` varchar(255) DEFAULT NULL,
   `TERMS` int(11) DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `BILLTO_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `FK_INVOICE_BILLTO_ID` (`BILLTO_ID`),
@@ -729,8 +682,8 @@ CREATE TABLE `invoice_invoiceline` (
   `invoiceLines_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Invoice_ID`,`invoiceLines_ID`),
   KEY `FK_INVOICE_INVOICELINE_invoiceLines_ID` (`invoiceLines_ID`),
-  CONSTRAINT `FK_INVOICE_INVOICELINE_invoiceLines_ID` FOREIGN KEY (`invoiceLines_ID`) REFERENCES `invoiceline` (`ID`),
-  CONSTRAINT `FK_INVOICE_INVOICELINE_Invoice_ID` FOREIGN KEY (`Invoice_ID`) REFERENCES `invoice` (`ID`)
+  CONSTRAINT `FK_INVOICE_INVOICELINE_Invoice_ID` FOREIGN KEY (`Invoice_ID`) REFERENCES `invoice` (`ID`),
+  CONSTRAINT `FK_INVOICE_INVOICELINE_invoiceLines_ID` FOREIGN KEY (`invoiceLines_ID`) REFERENCES `invoiceline` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -755,8 +708,8 @@ CREATE TABLE `invoice_payment` (
   `payments_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Invoice_ID`,`payments_ID`),
   KEY `FK_INVOICE_PAYMENT_payments_ID` (`payments_ID`),
-  CONSTRAINT `FK_INVOICE_PAYMENT_Invoice_ID` FOREIGN KEY (`Invoice_ID`) REFERENCES `invoice` (`ID`),
-  CONSTRAINT `FK_INVOICE_PAYMENT_payments_ID` FOREIGN KEY (`payments_ID`) REFERENCES `payment` (`ID`)
+  CONSTRAINT `FK_INVOICE_PAYMENT_payments_ID` FOREIGN KEY (`payments_ID`) REFERENCES `payment` (`ID`),
+  CONSTRAINT `FK_INVOICE_PAYMENT_Invoice_ID` FOREIGN KEY (`Invoice_ID`) REFERENCES `invoice` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -777,9 +730,12 @@ DROP TABLE IF EXISTS `invoiceline`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoiceline` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
+  `CREATED` date DEFAULT NULL,
   `ORDINAL` int(11) DEFAULT NULL,
   `QUANTITY` decimal(38,0) DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `itemCostMoney` longblob,
   `itemCostTaxPercentage` decimal(38,0) DEFAULT NULL,
   `lineTotalMoney` longblob,
@@ -789,8 +745,8 @@ CREATE TABLE `invoiceline` (
   PRIMARY KEY (`ID`),
   KEY `FK_INVOICELINE_INVOICE_ID` (`INVOICE_ID`),
   KEY `FK_INVOICELINE_PRODUCT_ID` (`PRODUCT_ID`),
-  CONSTRAINT `FK_INVOICELINE_INVOICE_ID` FOREIGN KEY (`INVOICE_ID`) REFERENCES `invoice` (`ID`),
-  CONSTRAINT `FK_INVOICELINE_PRODUCT_ID` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `product` (`ID`)
+  CONSTRAINT `FK_INVOICELINE_PRODUCT_ID` FOREIGN KEY (`PRODUCT_ID`) REFERENCES `product` (`ID`),
+  CONSTRAINT `FK_INVOICELINE_INVOICE_ID` FOREIGN KEY (`INVOICE_ID`) REFERENCES `invoice` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -811,7 +767,7 @@ DROP TABLE IF EXISTS `note`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `note` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `BODY` varchar(255) DEFAULT NULL,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -838,7 +794,7 @@ DROP TABLE IF EXISTS `organisation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `organisation` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -876,8 +832,8 @@ CREATE TABLE `organisation_activity` (
   `activites_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Organisation_ID`,`activites_ID`),
   KEY `FK_ORGANISATION_ACTIVITY_activites_ID` (`activites_ID`),
-  CONSTRAINT `FK_ORGANISATION_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`),
-  CONSTRAINT `FK_ORGANISATION_ACTIVITY_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`)
+  CONSTRAINT `FK_ORGANISATION_ACTIVITY_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`),
+  CONSTRAINT `FK_ORGANISATION_ACTIVITY_activites_ID` FOREIGN KEY (`activites_ID`) REFERENCES `activity` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -902,8 +858,8 @@ CREATE TABLE `organisation_contact` (
   `contacts_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Organisation_ID`,`contacts_ID`),
   KEY `FK_ORGANISATION_CONTACT_contacts_ID` (`contacts_ID`),
-  CONSTRAINT `FK_ORGANISATION_CONTACT_contacts_ID` FOREIGN KEY (`contacts_ID`) REFERENCES `contact` (`ID`),
-  CONSTRAINT `FK_ORGANISATION_CONTACT_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`)
+  CONSTRAINT `FK_ORGANISATION_CONTACT_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`),
+  CONSTRAINT `FK_ORGANISATION_CONTACT_contacts_ID` FOREIGN KEY (`contacts_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -928,8 +884,8 @@ CREATE TABLE `organisation_note` (
   `notes_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Organisation_ID`,`notes_ID`),
   KEY `FK_ORGANISATION_NOTE_notes_ID` (`notes_ID`),
-  CONSTRAINT `FK_ORGANISATION_NOTE_notes_ID` FOREIGN KEY (`notes_ID`) REFERENCES `note` (`ID`),
-  CONSTRAINT `FK_ORGANISATION_NOTE_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`)
+  CONSTRAINT `FK_ORGANISATION_NOTE_Organisation_ID` FOREIGN KEY (`Organisation_ID`) REFERENCES `organisation` (`ID`),
+  CONSTRAINT `FK_ORGANISATION_NOTE_notes_ID` FOREIGN KEY (`notes_ID`) REFERENCES `note` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -976,11 +932,13 @@ DROP TABLE IF EXISTS `payment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payment` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `NOTE` varchar(255) DEFAULT NULL,
   `PAYMENTDATE` date DEFAULT NULL,
   `REFERENCE` varchar(255) DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `MONEY` longblob,
   `TAXPERCENTAGE` decimal(38,0) DEFAULT NULL,
   PRIMARY KEY (`ID`)
@@ -1030,7 +988,7 @@ DROP TABLE IF EXISTS `phone`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `phone` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `LOCATIONTYPE` int(11) DEFAULT NULL,
@@ -1059,9 +1017,12 @@ DROP TABLE IF EXISTS `product`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `CONSISTENCYVERSION` bigint(20) NOT NULL,
+  `CREATED` date DEFAULT NULL,
   `DESRIPTION` varchar(255) DEFAULT NULL,
   `NAME` varchar(255) DEFAULT NULL,
+  `UPDATED` date DEFAULT NULL,
   `chargeMoney` longblob,
   `chargeTaxPercentage` decimal(38,0) DEFAULT NULL,
   `costtMoney` longblob,
@@ -1090,7 +1051,7 @@ DROP TABLE IF EXISTS `qualification`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `qualification` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `EXPIRES` date DEFAULT NULL,
@@ -1101,8 +1062,8 @@ CREATE TABLE `qualification` (
   PRIMARY KEY (`ID`),
   KEY `FK_QUALIFICATION_LEADER_ID` (`LEADER_ID`),
   KEY `FK_QUALIFICATION_TYPE_ID` (`TYPE_ID`),
-  CONSTRAINT `FK_QUALIFICATION_LEADER_ID` FOREIGN KEY (`LEADER_ID`) REFERENCES `contact` (`ID`),
-  CONSTRAINT `FK_QUALIFICATION_TYPE_ID` FOREIGN KEY (`TYPE_ID`) REFERENCES `qualificationtype` (`ID`)
+  CONSTRAINT `FK_QUALIFICATION_TYPE_ID` FOREIGN KEY (`TYPE_ID`) REFERENCES `qualificationtype` (`ID`),
+  CONSTRAINT `FK_QUALIFICATION_LEADER_ID` FOREIGN KEY (`LEADER_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1123,7 +1084,7 @@ DROP TABLE IF EXISTS `qualificationtype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `qualificationtype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -1154,7 +1115,7 @@ DROP TABLE IF EXISTS `relationship`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `relationship` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `UPDATED` date DEFAULT NULL,
@@ -1171,11 +1132,11 @@ CREATE TABLE `relationship` (
   KEY `FK_RELATIONSHIP_TYPE_ID` (`TYPE_ID`),
   KEY `FK_RELATIONSHIP_FIRST_ID` (`FIRST_ID`),
   KEY `FK_RELATIONSHIP_SECONDCONTACT_ID` (`SECONDCONTACT_ID`),
+  CONSTRAINT `FK_RELATIONSHIP_SECONDCONTACT_ID` FOREIGN KEY (`SECONDCONTACT_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_RELATIONSHIP_FIRST_ID` FOREIGN KEY (`FIRST_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_RELATIONSHIP_HOUSEHOLD_ID` FOREIGN KEY (`HOUSEHOLD_ID`) REFERENCES `household` (`ID`),
   CONSTRAINT `FK_RELATIONSHIP_ORGANISATION_ID` FOREIGN KEY (`ORGANISATION_ID`) REFERENCES `organisation` (`ID`),
   CONSTRAINT `FK_RELATIONSHIP_SCHOOL_ID` FOREIGN KEY (`SCHOOL_ID`) REFERENCES `school` (`ID`),
-  CONSTRAINT `FK_RELATIONSHIP_SECONDCONTACT_ID` FOREIGN KEY (`SECONDCONTACT_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_RELATIONSHIP_TYPE_ID` FOREIGN KEY (`TYPE_ID`) REFERENCES `relationshiptype` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1197,13 +1158,13 @@ DROP TABLE IF EXISTS `relationshiptype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `relationshiptype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `LHS` varchar(255) DEFAULT NULL,
-  `LHSTYPE` int(11) DEFAULT NULL,
+  `LHSTYPE` varchar(255) DEFAULT NULL,
   `RHS` varchar(255) DEFAULT NULL,
-  `RHSTYPE` int(11) DEFAULT NULL,
+  `RHSTYPE` varchar(255) DEFAULT NULL,
   `UPDATED` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1226,7 +1187,7 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -1257,8 +1218,8 @@ CREATE TABLE `role_feature` (
   `permitted_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Role_ID`,`permitted_ID`),
   KEY `FK_ROLE_FEATURE_permitted_ID` (`permitted_ID`),
-  CONSTRAINT `FK_ROLE_FEATURE_permitted_ID` FOREIGN KEY (`permitted_ID`) REFERENCES `feature` (`ID`),
-  CONSTRAINT `FK_ROLE_FEATURE_Role_ID` FOREIGN KEY (`Role_ID`) REFERENCES `role` (`ID`)
+  CONSTRAINT `FK_ROLE_FEATURE_Role_ID` FOREIGN KEY (`Role_ID`) REFERENCES `role` (`ID`),
+  CONSTRAINT `FK_ROLE_FEATURE_permitted_ID` FOREIGN KEY (`permitted_ID`) REFERENCES `feature` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1279,7 +1240,7 @@ DROP TABLE IF EXISTS `school`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `school` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -1316,8 +1277,8 @@ CREATE TABLE `school_address` (
   `location_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`School_ID`,`location_ID`),
   KEY `FK_SCHOOL_ADDRESS_location_ID` (`location_ID`),
-  CONSTRAINT `FK_SCHOOL_ADDRESS_location_ID` FOREIGN KEY (`location_ID`) REFERENCES `address` (`ID`),
-  CONSTRAINT `FK_SCHOOL_ADDRESS_School_ID` FOREIGN KEY (`School_ID`) REFERENCES `school` (`ID`)
+  CONSTRAINT `FK_SCHOOL_ADDRESS_School_ID` FOREIGN KEY (`School_ID`) REFERENCES `school` (`ID`),
+  CONSTRAINT `FK_SCHOOL_ADDRESS_location_ID` FOREIGN KEY (`location_ID`) REFERENCES `address` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1342,8 +1303,8 @@ CREATE TABLE `school_contact` (
   `youth_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`School_ID`,`youth_ID`),
   KEY `FK_SCHOOL_CONTACT_youth_ID` (`youth_ID`),
-  CONSTRAINT `FK_SCHOOL_CONTACT_School_ID` FOREIGN KEY (`School_ID`) REFERENCES `school` (`ID`),
-  CONSTRAINT `FK_SCHOOL_CONTACT_youth_ID` FOREIGN KEY (`youth_ID`) REFERENCES `contact` (`ID`)
+  CONSTRAINT `FK_SCHOOL_CONTACT_youth_ID` FOREIGN KEY (`youth_ID`) REFERENCES `contact` (`ID`),
+  CONSTRAINT `FK_SCHOOL_CONTACT_School_ID` FOREIGN KEY (`School_ID`) REFERENCES `school` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1364,7 +1325,7 @@ DROP TABLE IF EXISTS `section`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `section` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `UPDATED` date DEFAULT NULL,
@@ -1403,9 +1364,9 @@ CREATE TABLE `section_contact` (
   KEY `FK_SECTION_CONTACT_leaders_ID` (`leaders_ID`),
   KEY `FK_SECTION_CONTACT_adultHelpers_ID` (`adultHelpers_ID`),
   KEY `FK_SECTION_CONTACT_youthMembers_ID` (`youthMembers_ID`),
+  CONSTRAINT `FK_SECTION_CONTACT_Section_ID` FOREIGN KEY (`Section_ID`) REFERENCES `section` (`ID`),
   CONSTRAINT `FK_SECTION_CONTACT_adultHelpers_ID` FOREIGN KEY (`adultHelpers_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_SECTION_CONTACT_leaders_ID` FOREIGN KEY (`leaders_ID`) REFERENCES `contact` (`ID`),
-  CONSTRAINT `FK_SECTION_CONTACT_Section_ID` FOREIGN KEY (`Section_ID`) REFERENCES `section` (`ID`),
   CONSTRAINT `FK_SECTION_CONTACT_youthMembers_ID` FOREIGN KEY (`youthMembers_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1457,8 +1418,8 @@ CREATE TABLE `section_transitionmember` (
   `transitioningYouthMembers_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`Section_ID`,`transitioningYouthMembers_ID`),
   KEY `SECTIONTRANSITIONMEMBERtransitioningYouthMembersID` (`transitioningYouthMembers_ID`),
-  CONSTRAINT `FK_SECTION_TRANSITIONMEMBER_Section_ID` FOREIGN KEY (`Section_ID`) REFERENCES `section` (`ID`),
-  CONSTRAINT `SECTIONTRANSITIONMEMBERtransitioningYouthMembersID` FOREIGN KEY (`transitioningYouthMembers_ID`) REFERENCES `transitionmember` (`ID`)
+  CONSTRAINT `SECTIONTRANSITIONMEMBERtransitioningYouthMembersID` FOREIGN KEY (`transitioningYouthMembers_ID`) REFERENCES `transitionmember` (`ID`),
+  CONSTRAINT `FK_SECTION_TRANSITIONMEMBER_Section_ID` FOREIGN KEY (`Section_ID`) REFERENCES `section` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1479,7 +1440,7 @@ DROP TABLE IF EXISTS `sectionmeetingdefaults`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sectionmeetingdefaults` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `ENDTIME` time DEFAULT NULL,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -1493,8 +1454,8 @@ CREATE TABLE `sectionmeetingdefaults` (
   PRIMARY KEY (`ID`),
   KEY `FK_SECTIONMEETINGDEFAULTS_LOCATION_ID` (`LOCATION_ID`),
   KEY `FK_SECTIONMEETINGDEFAULTS_SECTION_ID` (`SECTION_ID`),
-  CONSTRAINT `FK_SECTIONMEETINGDEFAULTS_LOCATION_ID` FOREIGN KEY (`LOCATION_ID`) REFERENCES `address` (`ID`),
-  CONSTRAINT `FK_SECTIONMEETINGDEFAULTS_SECTION_ID` FOREIGN KEY (`SECTION_ID`) REFERENCES `section` (`ID`)
+  CONSTRAINT `FK_SECTIONMEETINGDEFAULTS_SECTION_ID` FOREIGN KEY (`SECTION_ID`) REFERENCES `section` (`ID`),
+  CONSTRAINT `FK_SECTIONMEETINGDEFAULTS_LOCATION_ID` FOREIGN KEY (`LOCATION_ID`) REFERENCES `address` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1515,7 +1476,7 @@ DROP TABLE IF EXISTS `sectiontryout`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sectiontryout` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `ACTUALCOMPLETIONDATE` date DEFAULT NULL,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -1554,7 +1515,7 @@ DROP TABLE IF EXISTS `sectiontryouttype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sectiontryouttype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `COST` longblob,
   `CREATED` date DEFAULT NULL,
@@ -1588,8 +1549,8 @@ CREATE TABLE `sectiontryouttype_section` (
   `sections_ID` bigint(20) NOT NULL,
   PRIMARY KEY (`SectionTryoutType_ID`,`sections_ID`),
   KEY `FK_SECTIONTRYOUTTYPE_SECTION_sections_ID` (`sections_ID`),
-  CONSTRAINT `FK_SECTIONTRYOUTTYPE_SECTION_sections_ID` FOREIGN KEY (`sections_ID`) REFERENCES `section` (`ID`),
-  CONSTRAINT `FK_SECTIONTRYOUTTYPE_SECTION_SectionTryoutType_ID` FOREIGN KEY (`SectionTryoutType_ID`) REFERENCES `sectiontryouttype` (`ID`)
+  CONSTRAINT `FK_SECTIONTRYOUTTYPE_SECTION_SectionTryoutType_ID` FOREIGN KEY (`SectionTryoutType_ID`) REFERENCES `sectiontryouttype` (`ID`),
+  CONSTRAINT `FK_SECTIONTRYOUTTYPE_SECTION_sections_ID` FOREIGN KEY (`sections_ID`) REFERENCES `section` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1610,7 +1571,7 @@ DROP TABLE IF EXISTS `sectiontype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sectiontype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -1651,8 +1612,8 @@ CREATE TABLE `sectiontype_qualificationtype` (
   KEY `SECTIONTYPE_QUALIFICATIONTYPEleaderRequirements_ID` (`leaderRequirements_ID`),
   KEY `SCTONTYPEQUALIFICATIONTYPEprntHelperRequirementsID` (`parentHelperRequirements_ID`),
   KEY `SCTNTYPQUALIFICATIONTYPEssstntLeaderRequirementsID` (`assistentLeaderRequirements_ID`),
-  CONSTRAINT `FK_SECTIONTYPE_QUALIFICATIONTYPE_SectionType_ID` FOREIGN KEY (`SectionType_ID`) REFERENCES `sectiontype` (`ID`),
   CONSTRAINT `SCTNTYPQUALIFICATIONTYPEssstntLeaderRequirementsID` FOREIGN KEY (`assistentLeaderRequirements_ID`) REFERENCES `qualificationtype` (`ID`),
+  CONSTRAINT `FK_SECTIONTYPE_QUALIFICATIONTYPE_SectionType_ID` FOREIGN KEY (`SectionType_ID`) REFERENCES `sectiontype` (`ID`),
   CONSTRAINT `SCTONTYPEQUALIFICATIONTYPEprntHelperRequirementsID` FOREIGN KEY (`parentHelperRequirements_ID`) REFERENCES `qualificationtype` (`ID`),
   CONSTRAINT `SECTIONTYPE_QUALIFICATIONTYPEleaderRequirements_ID` FOREIGN KEY (`leaderRequirements_ID`) REFERENCES `qualificationtype` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1668,30 +1629,6 @@ LOCK TABLES `sectiontype_qualificationtype` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `sequence`
---
-
-DROP TABLE IF EXISTS `sequence`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sequence` (
-  `SEQ_NAME` varchar(50) NOT NULL,
-  `SEQ_COUNT` decimal(38,0) DEFAULT NULL,
-  PRIMARY KEY (`SEQ_NAME`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sequence`
---
-
-LOCK TABLES `sequence` WRITE;
-/*!40000 ALTER TABLE `sequence` DISABLE KEYS */;
-INSERT INTO `sequence` VALUES ('SEQ_GEN',250);
-/*!40000 ALTER TABLE `sequence` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sessionhistory`
 --
 
@@ -1699,7 +1636,7 @@ DROP TABLE IF EXISTS `sessionhistory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessionhistory` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `END` date DEFAULT NULL,
@@ -1729,8 +1666,8 @@ DROP TABLE IF EXISTS `smsprovider`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `smsprovider` (
-  `ID` bigint(20) NOT NULL,
-  `APIURL` longblob,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
+  `APIID` varchar(255) DEFAULT NULL,
   `ACTIVE` tinyint(1) DEFAULT '0',
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
@@ -1762,7 +1699,7 @@ DROP TABLE IF EXISTS `smsprovidertype`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `smsprovidertype` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(255) DEFAULT NULL,
@@ -1792,7 +1729,7 @@ DROP TABLE IF EXISTS `tag`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tag` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DESCRIPTION` varchar(250) DEFAULT NULL,
@@ -1820,7 +1757,7 @@ DROP TABLE IF EXISTS `transitionmember`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transitionmember` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `EXPECTEDSTARTDATE` date DEFAULT NULL,
@@ -1835,9 +1772,9 @@ CREATE TABLE `transitionmember` (
   KEY `FK_TRANSITIONMEMBER_TOSECTION_ID` (`TOSECTION_ID`),
   KEY `FK_TRANSITIONMEMBER_FROMSECTION_ID` (`FROMSECTION_ID`),
   KEY `FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID` (`TRANSITIONSUPERVISOR_ID`),
+  CONSTRAINT `FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID` FOREIGN KEY (`TRANSITIONSUPERVISOR_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_TRANSITIONMEMBER_FROMSECTION_ID` FOREIGN KEY (`FROMSECTION_ID`) REFERENCES `section` (`ID`),
   CONSTRAINT `FK_TRANSITIONMEMBER_TOSECTION_ID` FOREIGN KEY (`TOSECTION_ID`) REFERENCES `section` (`ID`),
-  CONSTRAINT `FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID` FOREIGN KEY (`TRANSITIONSUPERVISOR_ID`) REFERENCES `contact` (`ID`),
   CONSTRAINT `FK_TRANSITIONMEMBER_YOUTHMEMBER_ID` FOREIGN KEY (`YOUTHMEMBER_ID`) REFERENCES `contact` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1859,7 +1796,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `ID` bigint(20) NOT NULL,
+  `ID` bigint(20) NOT NULL AUTO_INCREMENT,
   `CONSISTENCYVERSION` bigint(20) NOT NULL,
   `CREATED` date DEFAULT NULL,
   `DELETED` tinyint(1) DEFAULT '0',
@@ -1877,7 +1814,6 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,1,'2013-07-09',0,1,'1000:9011e439266122f8b670bea20e6340b0e0d6f2603b07a7e7:bb9602d61e1d36f25e5ee1e303ff927b77c868a78f93e6ca','2013-07-09','bsutton@noojee.com.au');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1908,28 +1844,16 @@ LOCK TABLES `user_role` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'scoutmaster'
+-- Dumping routines for database 'scoutmastertest'
 --
+SET TIME_ZONE=@OLD_TIME_ZONE ;
 
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
- SET SQL_MODE=@OLD_SQL_MODE ;
- SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS ;
- SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS ;
- SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT ;
+SET SQL_MODE=@OLD_SQL_MODE ;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS ;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS ;
+SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT ;
 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS ;
 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION ;
 SET SQL_NOTES=@OLD_SQL_NOTES ;
 
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2013-07-13 22:11:45
+-- Dump completed on 2013-07-18 22:13:52

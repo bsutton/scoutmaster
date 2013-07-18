@@ -12,8 +12,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import au.org.scoutmaster.domain.ImportColumnFieldMapping;
-import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.filter.Transaction;
 
