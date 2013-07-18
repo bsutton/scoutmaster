@@ -25,7 +25,7 @@ abstract public class BaseEntity implements Serializable
 	private static final long serialVersionUID = -7289994339186082141L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 	
 	private Date created = new Date(new java.util.Date().getTime());

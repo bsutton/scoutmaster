@@ -236,11 +236,6 @@ public class Contact extends BaseEntity implements Importable
 		return this.firstname + ", " + this.lastname;
 	}
 
-	@Override
-	public Long getId()
-	{
-		return this.id;
-	}
 
 	public Tag getTag(String tagName)
 	{

@@ -10,6 +10,7 @@ import org.vaadin.tokenfield.TokenField;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.views.ContactTokenField;
+import au.org.scoutmaster.views.Selected;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -166,12 +167,12 @@ public class FormHelper
 		return this.fieldList;
 	}
 
-	public TokenField bindTokenField(String fieldLabel, String fieldName, Class<? extends BaseEntity> clazz)
+	public <T> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName, Class<? extends BaseEntity> clazz)
 	{
 			JPAContainer<?> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
 			VerticalLayout layout = new VerticalLayout();
-			TokenField field = new ContactTokenField(fieldLabel, layout);
+			TokenField field = new ContactTokenField(selected, fieldLabel, layout);
 			field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake textfield look
 			field.setWidth("100%"); // width...
 			field.setInputWidth("100%"); // and input width separately

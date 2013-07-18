@@ -10,6 +10,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
 /**
@@ -23,11 +26,9 @@ import au.org.scoutmaster.filter.EntityManagerProvider;
  */
 @Entity
 @NamedQueries(
-{ 
-	@NamedQuery(name = Tag.FIND_ALL, query = "SELECT tag FROM Tag tag"),
-	@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") 
-}
-)
+{ @NamedQuery(name = Tag.FIND_ALL, query = "SELECT tag FROM Tag tag"),
+		@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+@AutoProperty
 public class Tag extends BaseEntity
 {
 
@@ -109,12 +110,6 @@ public class Tag extends BaseEntity
 		return this.name.equals(tagName);
 	}
 
-	@Override
-	public String toString()
-	{
-		return this.name;
-	}
-
 	static public Tag findTag(String tagName)
 	{
 		Tag tag = null;
@@ -162,5 +157,22 @@ public class Tag extends BaseEntity
 	// return this.households;
 	// }
 
+	@Override
+	public boolean equals(Object other)
+	{
+		return Pojomatic.equals(this, other);
+	}
+
+	@Override
+	public String toString()
+	{
+		return Pojomatic.toString(this);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Pojomatic.hashCode(this);
+	}
 
 }
