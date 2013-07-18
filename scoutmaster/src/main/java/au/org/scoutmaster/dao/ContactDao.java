@@ -126,6 +126,20 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		return found;
 
 	}
+	public boolean hasTag(Contact contact, Tag tag)
+	{
+		boolean hasTag = false;
+		for (Tag aTag : contact.getTags())
+		{
+			if (aTag.equals(tag))
+			{
+				hasTag = true;
+				break;
+			}
+				
+		}
+		return hasTag;
+	}
 
 
 

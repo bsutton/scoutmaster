@@ -42,7 +42,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Contact")
-public class ContactView extends VerticalLayout implements View
+public class ContactView extends VerticalLayout implements View, Selected<Contact>
 {
 	/**
          *
@@ -95,7 +95,7 @@ public class ContactView extends VerticalLayout implements View
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected String formatPropertyValue(Object rowId, Object colId, Property property)
+		protected String formatPropertyValue(Object rowId, Object colId, Property<?> property)
 		{
 			if (property.getType() == Set.class)
 			{
@@ -244,7 +244,7 @@ public class ContactView extends VerticalLayout implements View
 		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
 		final Label labelAge = commonHelp.bindLabelField("Age", "age");
 		commonHelp.bindEnumField("Gender", "gender", Gender.class);
-		commonHelp.bindTokenField("Tags", "tag", Tag.class);
+		commonHelp.bindTokenField(this, "Tags", "tag", Tag.class);
 
 		// Adult fields
 
@@ -575,5 +575,16 @@ public class ContactView extends VerticalLayout implements View
 		{
 			return true;
 		}
+	}
+
+	@Override
+	public Contact getCurrent()
+	{
+		Long contactId = (Long)contactList.getValue();
+		Contact contact = contactContainer.getItem(contactId).getEntity();
+		
+		return contact;
+
+
 	}
 }

@@ -8,10 +8,12 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
@@ -60,8 +62,11 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		loginButton.addStyleName("default");
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, password, loginButton);
-		fields.setCaption("Please login to access Scoutmaster.");
+		Label label = new Label("<H1>Please login to Scoutmaster.</H1>");
+		label.setContentMode(ContentMode.HTML);
+		
+		
+		VerticalLayout fields = new VerticalLayout(label, user, password, loginButton);
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();

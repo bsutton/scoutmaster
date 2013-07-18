@@ -54,6 +54,7 @@
 -->			
 
 			<!-- EclipseLink should create the database schema automatically -->
+			<!-- property name="eclipselink.ddl-generation" value="none" /-->
 			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
@@ -106,8 +107,8 @@
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url"
 				value="jdbc:mysql://localhost/scoutmastertest?sessionVariables=storage_engine=InnoDB" />
-			<property name="javax.persistence.jdbc.user" value="root" />
-			<property name="javax.persistence.jdbc.password" value="++Ast810" />
+			<property name="javax.persistence.jdbc.user" value="scoutmaster" />
+			<property name="javax.persistence.jdbc.password" value="master$4scout" />
 
 			<!-- EclipseLink should create the database schema automatically -->
 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
