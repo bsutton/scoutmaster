@@ -60,7 +60,7 @@
 		<init-param>
 			<description>Vaadin UI to display</description>
 			<param-name>UI</param-name>
-			<param-value>au.org.scoutmaster.views.NavigatorUI</param-value>
+			<param-value>au.org.scoutmaster.application.NavigatorUI</param-value>
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
