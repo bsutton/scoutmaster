@@ -235,6 +235,16 @@ public class ImportMatchFields implements WizardStep
 		return fieldMaps;
 	}
 
+	public ArrayList<ImportUserMapping> getUserMapping()
+	{
+		return userMapping;
+	}
+
+	public void setUserMapping(ArrayList<ImportUserMapping> userMapping)
+	{
+		this.userMapping = userMapping;
+	}
+
 	class FieldMap
 	{
 		String csvHeader;
