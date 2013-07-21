@@ -41,7 +41,7 @@ public class ImportUserMapping extends BaseEntity
 
 	public ImportUserMapping(String mappingName)
 	{
-		this.mappingName = mappingName;
+		this.setMappingName(mappingName);
 	}
 	
 	public void addColumnFieldMapping(ImportColumnFieldMapping mapping)
@@ -57,6 +57,16 @@ public class ImportUserMapping extends BaseEntity
 	}
 
 	public void setName(String mappingName)
+	{
+		this.setMappingName(mappingName);
+	}
+
+	public String getMappingName()
+	{
+		return mappingName;
+	}
+
+	public void setMappingName(String mappingName)
 	{
 		this.mappingName = mappingName;
 	}
