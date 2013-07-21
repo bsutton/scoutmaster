@@ -6,6 +6,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.log4j.Logger;
 
+import au.org.scoutmaster.application.Menu;
 import au.org.scoutmaster.util.RandomString;
 
 import com.vaadin.data.validator.EmailValidator;
@@ -80,7 +81,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 		String username = user.getValue();
 
 		Email email = new SimpleEmail();
-		email.setHostName("smtp.scoutmaster.org");
+		email.setHostName("smtp.scoutmaster.org.au");
 		email.setSmtpPort(465);
 		email.setAuthenticator(new DefaultAuthenticator("username", "password"));
 		email.setSSLOnConnect(true);
