@@ -13,10 +13,12 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
@@ -31,6 +33,8 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	private final PasswordField password;
 
 	private final Button loginButton;
+
+	private final Button forgottenButton;
 
 	public LoginView()
 	{
@@ -61,12 +65,17 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		loginButton.setClickShortcut(KeyCode.ENTER);
 		loginButton.addStyleName("default");
 
+		forgottenButton = new Button("Forgotten Password", this);
+
 		// Add both to a panel
 		Label label = new Label("<H1>Please login to Scoutmaster.</H1>");
 		label.setContentMode(ContentMode.HTML);
+
+		HorizontalLayout buttons = new HorizontalLayout(loginButton, forgottenButton);
+		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
+		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
 		
-		
-		VerticalLayout fields = new VerticalLayout(label, user, password, loginButton);
+		VerticalLayout fields = new VerticalLayout(label, user, password, buttons);
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -123,40 +132,48 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	public void buttonClick(ClickEvent event)
 	{
 
-		//
-		// Validate the fields using the navigator. By using validors for the
-		// fields we reduce the amount of queries we have to use to the database
-		// for wrongly entered passwords
-		//
-		if (user.isValid() && password.isValid())
+		if (event.getButton() == forgottenButton)
 		{
-			String username = user.getValue();
-			String password = this.password.getValue();
-
-			User user = User.findUser(username);
-			if (user.validatePassword(password))
-			{
-				// Store the current user in the service session
-				getSession().setAttribute("user", user);
-
-				// Navigate to main view
-				getUI().getNavigator().navigateTo(ContactView.NAME);
-
-			}
-			else
-			{
-
-				// Wrong password clear the password field and refocuses it
-				this.password.setValue(null);
-				this.password.focus();
-			}
+			UI.getCurrent().getNavigator().navigateTo(ForgottenPasswordView.NAME);
 		}
 		else
 		{
-			//user.setComponentError(new UserError("I dont like you"));
-			Notification.show("Invalid username or password");
+			//
+			// Validate the fields using the navigator. By using validors for
+			// the
+			// fields we reduce the amount of queries we have to use to the
+			// database
+			// for wrongly entered passwords
+			//
+			if (user.isValid() && password.isValid())
+			{
+				String username = user.getValue();
+				String password = this.password.getValue();
+
+				User user = User.findUser(username);
+				if (user.validatePassword(password))
+				{
+					// Store the current user in the service session
+					getSession().setAttribute("user", user);
+
+					// Navigate to main view
+					getUI().getNavigator().navigateTo(ContactView.NAME);
+
+				}
+				else
+				{
+
+					// Wrong password clear the password field and refocuses it
+					this.password.setValue(null);
+					this.password.focus();
+				}
+			}
+			else
+			{
+				// user.setComponentError(new UserError("I dont like you"));
+				Notification.show("Invalid username or password");
+			}
 		}
 	}
 
-	
 }
