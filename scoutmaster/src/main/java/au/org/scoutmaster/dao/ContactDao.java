@@ -9,7 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
+import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Tag;
@@ -139,6 +141,11 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 				
 		}
 		return hasTag;
+	}
+	public Age getAge(java.util.Date value)
+	{
+		DateTime date = new DateTime(value);
+		return new Age(date);
 	}
 
 
