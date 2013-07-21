@@ -25,6 +25,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class SendMessage implements WizardStep, ProgressTaskListener
 {
+	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(SendMessage.class);
 	JPAContainer<? extends Importable> entities;
 	private MessagingWizardView messagingWizardView;
