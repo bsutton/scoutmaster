@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+         
+	<changeSet author="bsutton" id="1.0.2">
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Case Coordinator is " />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Case Coordinator" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Child of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Parent of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Employee of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Organisation" />
+			<column name="RHSTYPE" value="ORGANISATION" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Gardian of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Ward of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Grandparent of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Grandchild of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Head of Household for" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Head of Household is" />
+			<column name="RHSTYPE" value="HOUSEHOLD" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Household Member of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Household Member is" />
+			<column name="RHSTYPE" value="HOUSEHOLD" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Sibling of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Sibling of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Spouse of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Spouse of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Step Parent of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Step Child of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Supervised by" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Supervisor" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+		<insert schemaName="scoutmaster" tableName="relationshiptype">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Within our catchment" />
+			<column name="LHSTYPE" value="ORGANISATION" />
+			<column name="RHS" value="In catchment of" />
+			<column name="RHSTYPE" value="ORGANISATION" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>
