@@ -44,7 +44,7 @@
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
 
 		<properties>
-		<property name="eclipselink.session.customizer" value="au.org.scoutmaster.dao.EclipseLinkSessionCustomizer"/>
+		<property name="eclipselink.session.customizer" value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer"/>
 <!-- 		
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url"
