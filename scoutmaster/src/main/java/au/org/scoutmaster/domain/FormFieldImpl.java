@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 
 import org.apache.log4j.Logger;
 
-import au.org.scoutmaster.FormField;
-
 public class FormFieldImpl
 {
 	private static Logger logger = Logger.getLogger(FormFieldImpl.class);

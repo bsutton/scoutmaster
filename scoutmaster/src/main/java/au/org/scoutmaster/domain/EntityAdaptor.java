@@ -3,8 +3,6 @@ package au.org.scoutmaster.domain;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-import au.org.scoutmaster.FormField;
-
 
 public class EntityAdaptor<T>
 {
