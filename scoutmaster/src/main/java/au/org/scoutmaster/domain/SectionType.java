@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * A section type is used to identify basic attributes about a section type.
@@ -20,9 +22,18 @@ import javax.persistence.ManyToMany;
  * 
  */
 @Entity
+@NamedQueries(
+
+{ @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype"),
+	@NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") })
+
 public class SectionType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_ALL = "SectionType.FindAll";
+
+	public static final String FIND_BY_NAME = "SectionType.FindByName";
 
 	/**
 	 * The name of the section type. e.g Cubs.
@@ -57,5 +68,15 @@ public class SectionType extends BaseEntity
 	List<QualificationType> assistentLeaderRequirements = new ArrayList<>();
 	@ManyToMany
 	List<QualificationType> parentHelperRequirements = new ArrayList<>();
+	
+	public String getName()
+	{
+		return this.name;
+	}
+	
+	public String toString()
+	{
+		return name;
+	}
 
 }
