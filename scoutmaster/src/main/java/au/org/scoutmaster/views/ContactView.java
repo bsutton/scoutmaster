@@ -1,7 +1,10 @@
 package au.org.scoutmaster.views;
 
-import java.util.Set;
+import org.apache.commons.lang.mutable.MutableBoolean;
+import org.apache.log4j.Logger;
+import org.vaadin.dialogs.ConfirmDialog;
 
+import au.org.scoutmaster.application.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Gender;
@@ -11,7 +14,6 @@ import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.PreferredEmail;
 import au.org.scoutmaster.domain.PreferredPhone;
 import au.org.scoutmaster.domain.SectionType;
-import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.FormHelper;
 
@@ -22,12 +24,14 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -37,24 +41,24 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Contact")
-public class ContactView extends VerticalLayout implements View, Selected<Contact>
+public class ContactView extends VerticalLayout implements View, RowChangeListener
 {
-	/**
-         *
-         */
+	private static Logger logger = Logger.getLogger(ContactView.class);
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "Contact";
-	
 
 	private TextField searchField = new TextField();
 	private Button addNewContactButton = new Button("New");
-	private Button removeContactButton = new Button("Remove this contact");
+	private Button deleteContactButton = new Button("Delete this contact");
 	private Button saveContactButton = new Button("Save");
 	private Button cancelContactButton = new Button("Cancel");
 	public FieldGroup editorFields = new FieldGroup();
@@ -74,7 +78,6 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 
 	private FormHelper affiliateAdultHelper;
 
-
 	/*
 	 * Any component can be bound to an external data source. This example uses
 	 * just a dummy in-memory list, but there are many more practical
@@ -90,37 +93,17 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 	}
 
 	/* User interface components are stored in session. */
-	private Table contactList = new Table()
-	{
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected String formatPropertyValue(Object rowId, Object colId, Property<?> property)
-		{
-			if (property.getType() == Set.class)
-			{
-				return null;
-			}
-			try
-			{
-				property.getValue();
-			}
-			catch (Exception e)
-			{
-				return null;
-			}
-			return super.formatPropertyValue(rowId, colId, property);
-		}
-	};
+	private ContactTable contactTable;
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
+		contactTable = new ContactTable(contactContainer, this);
 
 		initLayout();
-		initContactList();
 		initEditor();
+		contactTable.init();
 		initSearch();
 		initAddRemoveButtons();
 		this.setVisible(true);
@@ -143,9 +126,10 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 
 		/* Build the component tree */
 		VerticalLayout leftLayout = new VerticalLayout();
+
+		// Start by defining the LHS which contains the table
 		splitPanel.addComponent(leftLayout);
-		splitPanel.addComponent(mainEditPanel);
-		leftLayout.addComponent(contactList);
+		leftLayout.addComponent(contactTable);
 		HorizontalLayout bottomLeftLayout = new HorizontalLayout();
 		leftLayout.addComponent(bottomLeftLayout);
 		bottomLeftLayout.addComponent(searchField);
@@ -158,8 +142,8 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		 * On the left side, expand the size of the contactList so that it uses
 		 * all the space left after from bottomLeftLayout
 		 */
-		leftLayout.setExpandRatio(contactList, 1);
-		contactList.setSizeFull();
+		leftLayout.setExpandRatio(contactTable, 1);
+		contactTable.setSizeFull();
 
 		/*
 		 * In the bottomLeftLayout, searchField takes all the width there is
@@ -170,18 +154,33 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		searchField.setWidth("100%");
 		bottomLeftLayout.setExpandRatio(searchField, 1);
 
+		// Now define the RHS which contains the edit area.
+		VerticalLayout rightLayout = new VerticalLayout();
+		splitPanel.addComponent(rightLayout);
+
+		HorizontalLayout buttonLayout = new HorizontalLayout();
+		buttonLayout.setWidth("100%");
+		buttonLayout.addComponent(saveContactButton);
+		buttonLayout.addComponent(cancelContactButton);
+		buttonLayout.setComponentAlignment(cancelContactButton, Alignment.MIDDLE_RIGHT);
+		rightLayout.addComponent(buttonLayout);
+
 		/* Put a little margin around the fields in the right side editor */
-		// mainEditPanel.setMargin(true);
+		Panel scroll = new Panel();
+		mainEditPanel.setMargin(true);
 		mainEditPanel.setVisible(true);
+		scroll.setContent(mainEditPanel);
+
+		rightLayout.addComponent(scroll);
+		rightLayout.setExpandRatio(scroll, 1);
+		scroll.setSizeFull();
+
 	}
 
 	private void initAddRemoveButtons()
 	{
 		addNewContactButton.addClickListener(new ClickListener()
 		{
-			/**
-                         *
-                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
@@ -193,36 +192,61 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 				contactContainer.removeAllContainerFilters();
 				Long contactid = (Long) contactContainer.addEntity(new Contact());
 
-
 				/* Lets choose the newly created contact to edit it. */
-				contactList.select(contactid);
+				contactTable.select(contactid);
 			}
 		});
 
-		removeContactButton.addClickListener(new ClickListener()
+		deleteContactButton.addClickListener(new ClickListener()
 		{
-			/**
-                         *
-                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
 			{
-				Object contactId = contactList.getValue();
-				contactList.removeItem(contactId);
+				Object contactId = contactTable.getValue();
+				if (contactId != null)
+				{
+					Contact contact = contactContainer.getItem(contactId).getEntity();
+					ConfirmDialog.show(UI.getCurrent(), "Delete Contact",
+							"Are you sure you want to delete " + contact.toString(), "Delete", "Cancel",
+							new ConfirmDialog.Listener()
+							{
+								private static final long serialVersionUID = 1L;
+
+								@Override
+								public void onClose(ConfirmDialog dialog)
+								{
+									if (dialog.isConfirmed())
+									{
+										Object contactId = contactTable.getValue();
+										contactTable.removeItem(contactId);
+									}
+								}
+							});
+				}
 			}
 		});
 
 		cancelContactButton.addClickListener(new ClickListener()
 		{
-			/**
-                         *
-                         */
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
 			{
 				editorFields.discard();
+				Notification.show("Changes discarded.", "Any changes you have made to this contact been discarded.",
+						Type.TRAY_NOTIFICATION);
+			}
+		});
+
+		saveContactButton.addClickListener(new ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void buttonClick(ClickEvent event)
+			{
+				commit();
+
 			}
 		});
 
@@ -231,24 +255,29 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 	private void initEditor()
 	{
 
-		mainEditPanel.addComponent(removeContactButton);
+		mainEditPanel.addComponent(deleteContactButton);
 
 		commonHelp = new FormHelper(this.layoutFields, this.editorFields);
+		adultHelp = new FormHelper(this.layoutFields, this.editorFields);
+		youthHelp = new FormHelper(this.layoutFields, this.editorFields);
+		memberHelp = new FormHelper(this.layoutFields, this.editorFields);
+		affiliatedHelp = new FormHelper(this.layoutFields, this.editorFields);
+		affiliateAdultHelper = new FormHelper(this.layoutFields, this.editorFields);
 
 		commonHelp.bindBooleanField("Active", "active");
 		final ComboBox role = commonHelp.bindEnumField("Role", "role", GroupRole.class);
-		commonHelp.bindTextField("Prefix", "prefix");
 		commonHelp.bindTextField("Firstname", Contact.FIRSTNAME);
 		commonHelp.bindTextField("Middle name", "middlename");
 		commonHelp.bindTextField("Lastname", Contact.LASTNAME);
 		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
 		final Label labelAge = commonHelp.bindLabelField("Age", "age");
+//		youthHelp.bindEntityField("Section Eligib.", "sectionEligibility", SectionType.class);
+//		memberHelp.bindEntityField("Section ", "section", SectionType.class);
 		commonHelp.bindEnumField("Gender", "gender", Gender.class);
-		commonHelp.bindTokenField(this, "Tags", "tag", Tag.class);
+		// commonHelp.bindTokenField(this, "Tags", "tag", Tag.class);
 
 		// Adult fields
 
-		adultHelp = new FormHelper(this.layoutFields, this.editorFields);
 		adultHelp.bindTextField("Home Phone", "homePhone");
 		adultHelp.bindTextField("Work Phone", "workPhone");
 		adultHelp.bindTextField("Mobile", "mobile");
@@ -258,29 +287,14 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		adultHelp.bindEnumField("Preferred Email", "preferredEmail", PreferredEmail.class);
 		adultHelp.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
 
-		// adultLayout.setCaption("Adult");
-		// adultLayout.setMargin(true);
-
-		// mainEditPanel.addComponent(adultLayout);
-
-		youthHelp = new FormHelper(this.layoutFields, this.editorFields);
-
 		youthHelp.bindBooleanField("Custody Order", "custodyOrder");
 		youthHelp.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
 		youthHelp.bindTextField("School", "school");
-		youthHelp.bindEntityField("Section Eligib.", "sectionEligibility", SectionType.class);
 		// bindPanel(youthLayout,"Address", "address");
-		// mainEditPanel.addComponent(youthLayout);
-
-		memberHelp = new FormHelper(this.layoutFields, this.editorFields);
 
 		memberHelp.bindBooleanField("Member", "isMember");
 		memberHelp.bindTextField("Member No", "memberNo");
 		memberHelp.bindDateField("Member Since", "memberSince");
-		memberHelp.bindEntityField("Section ", "section", SectionType.class);
-		// mainEditPanel.addComponent(memberLayout);
-
-		affiliatedHelp = new FormHelper(this.layoutFields, this.editorFields);
 
 		affiliatedHelp.bindTextField("Hobbies", "hobbies");
 		affiliatedHelp.bindDateField("Affiliated Since", "affiliatedSince");
@@ -289,11 +303,6 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		affiliatedHelp.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
 		affiliatedHelp.bindTextField("Private Medical Fund", "privateMedicalFundName");
 
-		// Affiliated Adult fields
-		// adultLayout.setCaption("Adult");
-		// adultLayout.setMargin(true);
-
-		affiliateAdultHelper = new FormHelper(this.layoutFields, this.editorFields);
 		affiliateAdultHelper.bindTextField("Current Employer", "currentEmployer");
 		affiliateAdultHelper.bindTextField("Job Title", "jobTitle");
 		// bindTextField(affiliatedAdultLayout, "Assets", "assets");
@@ -305,36 +314,18 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		affiliateAdultHelper.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
 		affiliateAdultHelper.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
 
-		// mainEditPanel.addComponent(affiliatedLayout);
-
 		mainEditPanel.addComponent(layoutFields);
 
-		// Tags
-
+		// When a persons birth date changes recalculate their age.
 		birthDate.addValueChangeListener(new Property.ValueChangeListener()
 		{
 			private static final long serialVersionUID = 1L;
 
-			// not working?
 			public void valueChange(ValueChangeEvent event)
 			{
-				Long contactId = (Long) contactList.getValue();
-
+				DateField birthDate = (DateField) event.getProperty();
 				ContactDao daoContact = new ContactDao();
-				Contact contact = contactContainer.getItem(contactId).getEntity();
-
-				labelAge.setValue(daoContact.getAge(contact).toString());
-
-				/*
-				 * When a contact is selected from the list, we want to show
-				 * that in our editor on the right. This is nicely done by the
-				 * FieldGroup that binds all the fields to the corresponding
-				 * Properties in our contact at once.
-				 */
-				if (contactId != null)
-					editorFields.setItemDataSource(contactList.getItem(contactId));
-
-				mainEditPanel.setVisible(contactId != null);
+				labelAge.setValue(daoContact.getAge(birthDate.getValue()).toString());
 			}
 		});
 
@@ -342,7 +333,6 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		{
 			private static final long serialVersionUID = 1L;
 
-			// not working?
 			public void valueChange(ValueChangeEvent event)
 			{
 				switch ((GroupRole) role.getValue())
@@ -389,68 +379,46 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 						break;
 				}
 
-				Object contactId = contactList.getValue();
+				Object contactId = contactTable.getValue();
 
 				ContactDao daoContact = new ContactDao();
 
 				Contact contact = contactContainer.getItem(contactId).getEntity();
 				labelAge.setValue(daoContact.getAge(contact).toString());
-
-				/*
-				 * When a contact is selected from the list, we want to show
-				 * that in our editor on the right. This is nicely done by the
-				 * FieldGroup that binds all the fields to the corresponding
-				 * Properties in our contact at once.
-				 */
-				if (contactId != null)
-					editorFields.setItemDataSource(contactList.getItem(contactId));
-
-				mainEditPanel.setVisible(contactId != null);
 			}
 
 			private void showAffiliateAdult(boolean visible)
 			{
-				for (AbstractField<?> field : ContactView.this.affiliateAdultHelper.getFieldList())
-				{
-					field.setVisible(visible);
-				}
-
+				showFieldSection(affiliateAdultHelper, visible);
 			}
 
 			private void showAffiliate(boolean visible)
 			{
-				for (AbstractField<?> field : ContactView.this.affiliatedHelp.getFieldList())
-				{
-					field.setVisible(visible);
-				}
-
+				showFieldSection(affiliatedHelp, visible);
 			}
 
 			private void showMember(boolean visible)
 			{
-				for (AbstractField<?> field : ContactView.this.memberHelp.getFieldList())
-				{
-					field.setVisible(visible);
-				}
-
+				showFieldSection(memberHelp, visible);
 			}
 
 			private void showYouth(boolean visible)
 			{
-				for (AbstractField<?> field : ContactView.this.youthHelp.getFieldList())
-				{
-					field.setVisible(visible);
-				}
-
+				showFieldSection(youthHelp, visible);
 			}
 
 			private void showAdult(boolean visible)
 			{
-				for (AbstractField<?> field : ContactView.this.adultHelp.getFieldList())
+				showFieldSection(adultHelp, visible);
+
+			}
+
+			private void showFieldSection(FormHelper fieldLayout, boolean visible)
+			{
+				for (AbstractField<?> field : fieldLayout.getFieldList())
 				{
 					field.setVisible(visible);
 				}
-
 			}
 		});
 
@@ -459,48 +427,8 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 		 * writes the changes to the data source. Here we choose to write the
 		 * changes automatically without calling commit().
 		 */
-		editorFields.setBuffered(false);
+		editorFields.setBuffered(true);
 
-		HorizontalLayout buttonLayout = new HorizontalLayout();
-		buttonLayout.addComponent(saveContactButton);
-		buttonLayout.addComponent(cancelContactButton);
-		mainEditPanel.addComponent(buttonLayout);
-	}
-
-	private void initContactList()
-	{
-		contactList.setContainerDataSource(contactContainer);
-		contactList.setVisibleColumns((Object[]) new String[]
-		// { Contact.FIRSTNAME, Contact.LASTNAME, Contact.ROLE, Contact.SECTION
-		// });
-				{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.SECTION });
-
-		contactList.setSelectable(true);
-		contactList.setImmediate(true);
-
-		contactList.addValueChangeListener(new Property.ValueChangeListener()
-		{
-			/**
-                         *
-                         */
-			private static final long serialVersionUID = 1L;
-
-			public void valueChange(ValueChangeEvent event)
-			{
-				Object contactId = contactList.getValue();
-
-				/*
-				 * When a contact is selected from the list, we want to show
-				 * that in our editor on the right. This is nicely done by the
-				 * FieldGroup that binds all the fields to the corresponding
-				 * Properties in our contact at once.
-				 */
-				if (contactId != null)
-					editorFields.setItemDataSource(contactList.getItem(contactId));
-
-				mainEditPanel.setVisible(contactId != null);
-			}
-		});
 	}
 
 	private void initSearch()
@@ -578,13 +506,84 @@ public class ContactView extends VerticalLayout implements View, Selected<Contac
 	}
 
 	@Override
-	public Contact getCurrent()
+	/** Called when the currently selected row in the 
+	 *  table part of this view has changed.
+	 *  We use this to update the editor's current item.
+	 */
+	public boolean allowRowChange()
 	{
-		Long contactId = (Long)contactList.getValue();
-		Contact contact = contactContainer.getItem(contactId).getEntity();
-		
-		return contact;
+		final MutableBoolean allowChange = new MutableBoolean(false);
 
+		if (editorFields.isModified())
+		{
+			ConfirmDialog
+					.show(UI.getCurrent(),
+							"Discard changes?",
+							"You have unsaved changes for this Contact. Continuing will result in those changes being discarded. ",
+							"Continue", "Cancel", new ConfirmDialog.Listener()
+							{
+								private static final long serialVersionUID = 1L;
+
+								public void onClose(ConfirmDialog dialog)
+								{
+									if (dialog.isConfirmed())
+									{
+										/*
+										 * When a contact is selected from the
+										 * list, we want to show that in our
+										 * editor on the right. This is nicely
+										 * done by the FieldGroup that binds all
+										 * the fields to the corresponding
+										 * Properties in our contact at once.
+										 */
+										editorFields.discard();
+										allowChange.setValue(true);
+									}
+									else
+									{
+										// User did not confirm so don't allow
+										// the change.
+
+									}
+								}
+							});
+		}
+		else
+		{
+			allowChange.setValue(true);
+		}
+		return allowChange.toBoolean();
 
 	}
+
+	@Override
+	/** Called when the currently selected row in the 
+	 *  table part of this view has changed.
+	 *  We use this to update the editor's current item.
+	 */
+	public void rowChanged(final Item contact)
+	{
+		editorFields.setItemDataSource(contact);
+		mainEditPanel.setVisible(contact != null);
+
+	}
+
+	protected void commit()
+	{
+		try
+		{
+
+			editorFields.commit();
+			Notification.show("Changes Saved", "Any changes you have made to this Contact have been saved.",
+					Type.TRAY_NOTIFICATION);
+		}
+		catch (CommitException e)
+		{
+			Notification.show("Error saving changes.",
+					"Any error occured attempting to save your changes: " + e.getMessage(), Type.ERROR_MESSAGE);
+			logger.error(e, e);
+		}
+
+	}
+
 }
