@@ -1,5 +1,6 @@
 package au.org.scoutmaster.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -17,7 +18,9 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.AbstractField;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -27,8 +30,10 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class FormHelper
+public class FormHelper implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	ArrayList<AbstractField<?>> fieldList = new ArrayList<AbstractField<?>>();
 	private FormLayout form;
 	private FieldGroup group;
@@ -81,7 +86,8 @@ public class FormHelper
 	public Label bindLabelField(String fieldLabel,
 			String fieldName)
 	{
-		Label field = new Label(fieldLabel);
+		Label field = new Label();
+		field.setCaption(fieldLabel);
 		field.setWidth("100%");
 		this.form.addComponent(field);
 		return field;
@@ -123,6 +129,10 @@ public class FormHelper
 		JPAContainer<?> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
 		ComboBox field = new ComboBox(fieldLabel, container);
+		field.setConverter(clazz);
+		field.setItemCaptionMode(ItemCaptionMode.PROPERTY);
+		field.setItemCaptionPropertyId("name");
+		//field.setConverter(clazz);
 		field.setNewItemsAllowed(false);
 		field.setNullSelectionAllowed(false);
 		field.setTextInputAllowed(false);
@@ -169,26 +179,28 @@ public class FormHelper
 
 	public <T> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName, Class<? extends BaseEntity> clazz)
 	{
-			JPAContainer<?> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
+			//JPAContainer<? extends BaseEntity> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
 			VerticalLayout layout = new VerticalLayout();
-			TokenField field = new ContactTokenField(selected, fieldLabel, layout);
+			TokenField field = new ContactTokenField<T>(selected, fieldLabel, layout);
 			field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake textfield look
 			field.setWidth("100%"); // width...
 			field.setInputWidth("100%"); // and input width separately
-			field.setContainerDataSource(container); // 'address book'
-			field.setFilteringMode(ComboBox.FILTERINGMODE_CONTAINS); // suggest
+			//field.setContainerDataSource(container); // 'address book'
+			field.setFilteringMode(FilteringMode.CONTAINS); // suggest
 			field.setTokenCaptionPropertyId("name"); // use container item property "name" in input
-			field.setInputPrompt("Enter contact name or new email address");
+			field.setInputPrompt("Enter one or more comma separated tags");
 			field.setRememberNewTokens(false); // we can opt to do this ourselves
 			field.setImmediate(true);
-			this.group.bind(field, fieldName);
+			
+			// we can't bind the token field as it has its own data source.
+			//this.group.bind(field, fieldName);
 			this.fieldList.add(field);
 			this.form.addComponent(field);
 			return field;
 	}
 
-	public void bind(ContactTokenField contactTokenField)
+	public void bind(ContactTokenField<?> contactTokenField)
 	{
 		this.fieldList.add(contactTokenField);
 		this.form.addComponent(contactTokenField);
