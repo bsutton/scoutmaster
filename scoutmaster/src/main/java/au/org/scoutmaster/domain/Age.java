@@ -1,5 +1,8 @@
 package au.org.scoutmaster.domain;
 
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
 /**
  * Used to represent the age of a person in Years, Months and days
  * @author bsutton
@@ -7,8 +10,9 @@ package au.org.scoutmaster.domain;
  */
 public class Age extends Period
 {
-	private Age(int years, int months, int days)
+	public Age(DateTime date)
 	{
-		super(years, months, days);
+		super(new Interval(date, DateTime.now()));
 	}
+	
 }

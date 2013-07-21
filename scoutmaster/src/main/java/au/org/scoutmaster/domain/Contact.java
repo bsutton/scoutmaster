@@ -20,8 +20,6 @@ import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
 
-import au.org.scoutmaster.FormField;
-
 @Entity
 @NamedQueries(
 {

@@ -38,6 +38,46 @@ public class Organisation extends BaseEntity
 	 */
 	private String name;
 
+	public boolean isOurScoutGroup()
+	{
+		return isOurScoutGroup;
+	}
+
+	public void setOurScoutGroup(boolean isOurScoutGroup)
+	{
+		this.isOurScoutGroup = isOurScoutGroup;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public Phone getPrimaryPhone()
+	{
+		return primaryPhone;
+	}
+
+	public void setPrimaryPhone(Phone primaryPhone)
+	{
+		this.primaryPhone = primaryPhone;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public Address getLocation()
+	{
+		return location;
+	}
+
 	/**
 	 * A description of the organisation and how the group interacts with it.
 	 */
