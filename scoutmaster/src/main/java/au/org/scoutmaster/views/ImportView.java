@@ -7,6 +7,7 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
+import au.org.scoutmaster.application.Menu;
 import au.org.scoutmaster.views.importWizard.ImportComplete;
 import au.org.scoutmaster.views.importWizard.ImportMatchFields;
 import au.org.scoutmaster.views.importWizard.ImportSelectFile;
