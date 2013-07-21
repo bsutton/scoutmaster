@@ -19,6 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ImportShowProgress implements WizardStep, ProgressTaskListener
 {
+	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(ImportShowProgress.class);
 	private ImportView importView;
 	private boolean importComplete = false;
