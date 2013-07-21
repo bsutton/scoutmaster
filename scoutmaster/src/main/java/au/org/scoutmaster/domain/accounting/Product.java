@@ -21,6 +21,8 @@ import au.org.scoutmaster.domain.Organisation;
 @Entity
 public class Product extends BaseEntity
 {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * The name of the product.
 	 */
