@@ -37,14 +37,14 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	}
 	public SectionType findByName(String name)
 	{
-		SectionType tag = null;
+		SectionType section = null;
 		Query query = entityManager.createNamedQuery(SectionType.FIND_BY_NAME);
 		query.setParameter("name", name);
 		@SuppressWarnings("unchecked")
-		List<SectionType> tags = query.getResultList();
-		if (tags.size() > 0)
-			tag = tags.get(0);
+		List<SectionType> sections = query.getResultList();
+		if (sections.size() > 0)
+			section = sections.get(0);
 		 
-		return tag;
+		return section;
 	}
 }

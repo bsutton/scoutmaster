@@ -34,8 +34,14 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
+@SuppressWarnings("deprecation")
 public class TagTokenEditor extends UI
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	protected void init(VaadinRequest request)
 	{
@@ -45,6 +51,11 @@ public class TagTokenEditor extends UI
 
 	static class Content extends VerticalLayout
 	{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		Content()
 		{
@@ -120,6 +131,11 @@ public class TagTokenEditor extends UI
 				TokenField f = new TokenField()
 				{
 
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					protected void onTokenInput(Object tokenId)
 					{
@@ -187,7 +203,8 @@ public class TagTokenEditor extends UI
 					// dialog if not in 'address book', otherwise just add
 					protected void onTokenInput(Object tokenId)
 					{
-						Set<Object> set = (Set<Object>) getValue();
+						@SuppressWarnings("unchecked")
+						Set<Contact> set = (Set<Contact>) getValue();
 						Contact c = new Contact("", tokenId.toString());
 						if (set != null && set.contains(c))
 						{
@@ -250,7 +267,8 @@ public class TagTokenEditor extends UI
 				f.setInputPrompt("Enter contact name or new email address");
 				f.setRememberNewTokens(false); // we'll do this via the dialog
 				// Pre-add a few:
-				Iterator it = f.getTokenIds().iterator();
+				@SuppressWarnings("unchecked")
+				Iterator<Long> it = f.getTokenIds().iterator();
 				f.addToken(it.next());
 				f.addToken(it.next());
 				f.addToken(new Contact("", "thatnewguy@example.com"));
@@ -274,6 +292,7 @@ public class TagTokenEditor extends UI
 				l.addComponent(controls);
 
 				// generate container
+				@SuppressWarnings("unused")
 				Container tokens = generateTestContainer();
 
 				// w/ datasource, no configurator
@@ -305,7 +324,7 @@ public class TagTokenEditor extends UI
 					{
 						try
 						{
-							Layout l = (Layout) ((Class) event.getProperty().getValue()).newInstance();
+							Layout l = (Layout) ((Class<?>) event.getProperty().getValue()).newInstance();
 							if (l instanceof GridLayout)
 							{
 								((GridLayout) l).setColumns(3);
@@ -418,6 +437,10 @@ public class TagTokenEditor extends UI
 	 */
 	public static class EditContactWindow extends Window
 	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private Contact contact;
 
 		EditContactWindow(final String t, final TokenField f)
@@ -474,13 +497,14 @@ public class TagTokenEditor extends UI
 
 				private static final long serialVersionUID = 1L;
 
+				@SuppressWarnings("unchecked")
 				public void buttonClick(ClickEvent event)
 				{
 					if (contact.getEmail() == null || contact.getEmail().length() < 1)
 					{
 						contact.setEmail(contact.getName());
 					}
-					((BeanItemContainer) f.getContainerDataSource()).addBean(contact);
+					((BeanItemContainer<Contact>) f.getContainerDataSource()).addBean(contact);
 					f.addToken(contact);
 					f.getUI().removeWindow(EditContactWindow.this);
 				}

@@ -132,7 +132,6 @@ public class FormHelper implements Serializable
 		field.setConverter(clazz);
 		field.setItemCaptionMode(ItemCaptionMode.PROPERTY);
 		field.setItemCaptionPropertyId("name");
-		//field.setConverter(clazz);
 		field.setNewItemsAllowed(false);
 		field.setNullSelectionAllowed(false);
 		field.setTextInputAllowed(false);
