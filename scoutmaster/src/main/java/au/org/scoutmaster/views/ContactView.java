@@ -61,7 +61,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private Button deleteContactButton = new Button("Delete this contact");
 	private Button saveContactButton = new Button("Save");
 	private Button cancelContactButton = new Button("Cancel");
-	public FieldGroup editorFields = new FieldGroup();
+	public FieldGroup fieldGroup = new FieldGroup();
 	public FormLayout layoutFields = new FormLayout();
 
 	private VerticalLayout mainEditPanel = new VerticalLayout();
@@ -129,11 +129,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 		// Start by defining the LHS which contains the table
 		splitPanel.addComponent(leftLayout);
-		leftLayout.addComponent(contactTable);
 		HorizontalLayout bottomLeftLayout = new HorizontalLayout();
 		leftLayout.addComponent(bottomLeftLayout);
 		bottomLeftLayout.addComponent(searchField);
 		bottomLeftLayout.addComponent(addNewContactButton);
+		leftLayout.addComponent(contactTable);
 
 		/* Set the contents in the left of the split panel to use all the space */
 		leftLayout.setSizeFull();
@@ -233,7 +233,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 			public void buttonClick(ClickEvent event)
 			{
-				editorFields.discard();
+				fieldGroup.discard();
 				Notification.show("Changes discarded.", "Any changes you have made to this contact been discarded.",
 						Type.TRAY_NOTIFICATION);
 			}
@@ -257,12 +257,12 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 		mainEditPanel.addComponent(deleteContactButton);
 
-		commonHelp = new FormHelper(this.layoutFields, this.editorFields);
-		adultHelp = new FormHelper(this.layoutFields, this.editorFields);
-		youthHelp = new FormHelper(this.layoutFields, this.editorFields);
-		memberHelp = new FormHelper(this.layoutFields, this.editorFields);
-		affiliatedHelp = new FormHelper(this.layoutFields, this.editorFields);
-		affiliateAdultHelper = new FormHelper(this.layoutFields, this.editorFields);
+		commonHelp = new FormHelper(this.layoutFields, this.fieldGroup);
+		adultHelp = new FormHelper(this.layoutFields, this.fieldGroup);
+		youthHelp = new FormHelper(this.layoutFields, this.fieldGroup);
+		memberHelp = new FormHelper(this.layoutFields, this.fieldGroup);
+		affiliatedHelp = new FormHelper(this.layoutFields, this.fieldGroup);
+		affiliateAdultHelper = new FormHelper(this.layoutFields, this.fieldGroup);
 
 		commonHelp.bindBooleanField("Active", "active");
 		final ComboBox role = commonHelp.bindEnumField("Role", "role", GroupRole.class);
@@ -272,7 +272,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
 		final Label labelAge = commonHelp.bindLabelField("Age", "age");
 //		youthHelp.bindEntityField("Section Eligib.", "sectionEligibility", SectionType.class);
-//		memberHelp.bindEntityField("Section ", "section", SectionType.class);
+		memberHelp.bindEntityField("Section ", "section", SectionType.class);
 		commonHelp.bindEnumField("Gender", "gender", Gender.class);
 		// commonHelp.bindTokenField(this, "Tags", "tag", Tag.class);
 
@@ -427,7 +427,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		 * writes the changes to the data source. Here we choose to write the
 		 * changes automatically without calling commit().
 		 */
-		editorFields.setBuffered(true);
+		fieldGroup.setBuffered(true);
 
 	}
 
@@ -514,7 +514,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	{
 		final MutableBoolean allowChange = new MutableBoolean(false);
 
-		if (editorFields.isModified())
+		if (fieldGroup.isModified())
 		{
 			ConfirmDialog
 					.show(UI.getCurrent(),
@@ -536,7 +536,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 										 * the fields to the corresponding
 										 * Properties in our contact at once.
 										 */
-										editorFields.discard();
+										fieldGroup.discard();
 										allowChange.setValue(true);
 									}
 									else
@@ -563,7 +563,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	 */
 	public void rowChanged(final Item contact)
 	{
-		editorFields.setItemDataSource(contact);
+		fieldGroup.setItemDataSource(contact);
 		mainEditPanel.setVisible(contact != null);
 
 	}
@@ -573,7 +573,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		try
 		{
 
-			editorFields.commit();
+			fieldGroup.commit();
 			Notification.show("Changes Saved", "Any changes you have made to this Contact have been saved.",
 					Type.TRAY_NOTIFICATION);
 		}
