@@ -269,8 +269,8 @@
 					<changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
 					<driver>com.mysql.jdbc.Driver</driver>
 					<url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url>
-					<username>root</username>
-					<password>++Ast810</password>
+					<username>scoutmaster</username>
+					<password>master$4scout</password>
 				</configuration>
 				<executions>
 					<execution>
