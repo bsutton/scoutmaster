@@ -1,17 +1,19 @@
 package au.org.scoutmaster.domain;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.servlet.ServletException;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.filter.Transaction;
 
@@ -27,20 +29,21 @@ public class ImportMatchFieldsTest
 		em = entityManagerFactory.createEntityManager();
 		EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
 	}
-	
+
 	@After
 	public void finalise()
 	{
 		em.close();
 	}
 
-
 	@Test
 	public void test()
 	{
+		String existingFieldMapping = "AMapping";
+
 		try (Transaction t = new Transaction(em))
 		{
-			String existingFieldMapping = "AMapping";
+			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
 
 			// Create the mapping
 			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
@@ -51,28 +54,38 @@ public class ImportMatchFieldsTest
 			for (String mapping : mappings.keySet())
 			{
 				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
-				userMapping.addColumnFieldMapping(columnMapping);
+				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
-			em.persist(userMapping);
+			daoImportUserMapping.persist(userMapping);
+			t.commit();
+		}
+		finally
+		{
+		}
+
+		try (Transaction t = new Transaction(em))
+		{
+			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
 
 			// Now replace the children.
+			List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
+			Assert.assertTrue(userMappings.size() == 1);
+			ImportUserMapping userMapping = userMappings.get(0);
 
-			Query query = em.createNamedQuery("ImportUserMapping.findByName");
-			query.setParameter("name", existingFieldMapping);
-
-			userMapping = (ImportUserMapping) query.getSingleResult();
-			em.getTransaction().begin();
 			userMapping.setName("AName-1");
+			Hashtable<String, String> mappings = new Hashtable<>();
+
 			mappings = new Hashtable<>();
 			mappings.put("christian1", "firstname");
 			mappings.put("surname1", "lastname");
 
-			userMapping.clearMappings();
+			daoImportUserMapping.clearMappings(userMapping);
 			for (String mapping : mappings.keySet())
 			{
 				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
-				userMapping.addColumnFieldMapping(columnMapping);
+				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
+			daoImportUserMapping.merge(userMapping);
 			t.commit();
 		}
 		finally
@@ -81,7 +94,7 @@ public class ImportMatchFieldsTest
 	}
 
 	@Test
-	void cascadeDelete()
+	public void cascadeDelete()
 	{
 		String existingFieldMapping = "AMapping";
 
@@ -89,6 +102,7 @@ public class ImportMatchFieldsTest
 		{
 
 			// Create the mapping
+			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
 			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
 
 			Hashtable<String, String> mappings = new Hashtable<>();
@@ -97,16 +111,14 @@ public class ImportMatchFieldsTest
 			for (String mapping : mappings.keySet())
 			{
 				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
-				userMapping.addColumnFieldMapping(columnMapping);
+				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
-			em.persist(userMapping);
+			daoImportUserMapping.persist(userMapping);
 
 			// Now delete the entity and its children
-			Query query = em.createNamedQuery("ImportUserMapping.findByName");
-			query.setParameter("name", existingFieldMapping);
-
-			userMapping = (ImportUserMapping) query.getSingleResult();
-			em.remove(userMapping);
+			List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
+			Assert.assertTrue(userMappings.size() == 1);
+			daoImportUserMapping.remove(userMappings.get(0));
 			t.commit();
 		}
 		finally

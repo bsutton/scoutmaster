@@ -13,22 +13,17 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.views.ImportView;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -158,25 +153,25 @@ public class ImportMatchFields implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, em);
+//		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+//		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, em);
 
+		
 		// Save the user selected mappings
 		if (selectedUserMapping != null && !fieldMapping.getValue().equals(selectedUserMapping))
 		{
 			// the name has changed so we need to save a new one
 
+			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao();
 			ImportUserMapping userMapping = new ImportUserMapping(fieldMapping.getValue());
 
 			for (ComboBox mapping : mappings)
 			{
 				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
 						(String) mapping.getValue());
-				userMapping.addColumnFieldMapping(columnMapping);
+				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
-			userMappings.addEntity(userMapping);
-			userMappings.commit();
-
+			daoImportUserMapping.persist(userMapping);
 		}
 		else
 		{
@@ -188,24 +183,20 @@ public class ImportMatchFields implements WizardStep
 			// ImportUserMapping userMapping = new
 			// ImportUserMapping(fieldMapping.getValue());
 
-			TypedQuery<ImportUserMapping> q2 = em
-					.createNamedQuery("ImportUserMapping.findAll", ImportUserMapping.class);
+			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao();
 
-			List<ImportUserMapping> results = q2.getResultList();
-
+			List<ImportUserMapping> results = daoImportUserMapping.findAll();
+			
 			if (results.size() == 1)
 			{
-				em.getTransaction().begin();
 				ImportUserMapping userMapping = results.get(0);
 
 				for (ComboBox mapping : mappings)
 				{
 					ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
 							(String) mapping.getValue());
-					userMapping.addColumnFieldMapping(columnMapping);
+					daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 				}
-
-				em.getTransaction().commit();
 			}
 		}
 
