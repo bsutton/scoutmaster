@@ -10,11 +10,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import au.org.scoutmaster.views.ContactTokenFieldTest;
-
 @RunWith(Suite.class)
 @SuiteClasses(
-{ ContactTest.class, ImportMatchFieldsTest.class, ContactTokenFieldTest.class })
+{ ContactTest.class, ImportMatchFieldsTest.class, TagTest.class })
 public class AllTests
 {
 	@BeforeClass

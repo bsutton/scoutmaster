@@ -6,7 +6,7 @@ public interface Dao<E, K>
 {
 	void persist(E entity);
 	
-	public void merge(E entity);
+	public E merge(E entity);
 
 	void remove(E entity);
 

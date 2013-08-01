@@ -36,6 +36,11 @@
 		<param-value>production</param-value>
 	</context-param>
 
+	<!-- context-param>
+		<param-name>vaadin.theme</param-name>
+		<param-value>scoutmaster</param-value>
+	</context-param-->
+
 	<listener>
 		<listener-class>liquibase.integration.servlet.LiquibaseServletListener
 		</listener-class>

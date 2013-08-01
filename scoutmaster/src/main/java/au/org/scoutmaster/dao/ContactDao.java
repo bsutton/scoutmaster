@@ -47,7 +47,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Contact> findContactByName(String firstname, String lastname)
+	public List<Contact> findByName(String firstname, String lastname)
 	{
 		Query query = entityManager.createNamedQuery(Contact.FIND_BY_NAME);
 		query.setParameter("firstname", firstname);
@@ -85,7 +85,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		contact.getNotes().add(note);
 	}
 
-	public void addTag(Contact contact, Tag tag)
+	public void attachTag(Contact contact, Tag tag)
 	{
 //		tag.addContact(this);
 		contact.getTags().add(tag);
@@ -108,10 +108,17 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 			}
 		}
 		if (tagToRemove != null)
-			contact.getTags().remove(tagToRemove);
+			detachTag(contact, tagToRemove);
 		else
-			logger.warn("Attempt to delete non-existant tag. tagName=" + tagName);
+			logger.warn("Attempt to detach non-existant tag. tagName=" + tagName);
 	}
+
+	public void detachTag(Contact contact, Tag tag)
+	{
+		if (tag != null)
+			contact.getTags().remove(tag);
+	}
+
 
 
 	public Note getNote(Contact contact, String noteSubject)
@@ -147,7 +154,5 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		DateTime date = new DateTime(value);
 		return new Age(date);
 	}
-
-
 
 }

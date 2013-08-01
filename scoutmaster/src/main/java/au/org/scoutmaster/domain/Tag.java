@@ -1,19 +1,12 @@
 package au.org.scoutmaster.domain;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
-
-import au.org.scoutmaster.filter.EntityManagerProvider;
 
 /**
  * Tags are used to group and identify certain attributes of a contact,
@@ -58,15 +51,6 @@ public class Tag extends BaseEntity
 	@Column(unique = true, length = 30)
 	String name;
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
 
 	@Column(length = 250)
 	String description;
@@ -110,23 +94,7 @@ public class Tag extends BaseEntity
 		return this.name.equals(tagName);
 	}
 
-	static public Tag findTag(String tagName)
-	{
-		Tag tag = null;
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-
-		Query query = em.createNamedQuery("Tag.findMatching");
-		query.setParameter("tagName", tagName);
-		@SuppressWarnings("unchecked")
-		List<Tag> tagList = query.getResultList();
-		if (tagList.size() == 1)
-			tag = tagList.get(0);
-		if (tagList.size() > 1)
-			throw new NonUniqueResultException("Found more than one tag for tagName=" + tagName);
-
-		return tag;
-	}
-
+	
 	public String getName()
 	{
 		return this.name;
@@ -136,6 +104,18 @@ public class Tag extends BaseEntity
 	{
 		return this.description;
 	}
+	
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
 
 	// public List<Contact> getContacts()
 	// {

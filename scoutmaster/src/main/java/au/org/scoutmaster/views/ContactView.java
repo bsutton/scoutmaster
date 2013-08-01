@@ -13,7 +13,7 @@ import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.PreferredEmail;
 import au.org.scoutmaster.domain.PreferredPhone;
-import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.FormHelper;
 
@@ -94,6 +94,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 	/* User interface components are stored in session. */
 	private ContactTable contactTable;
+	private VerticalLayout rightLayout;
 
 	@Override
 	public void enter(ViewChangeEvent event)
@@ -154,8 +155,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		searchField.setWidth("100%");
 		bottomLeftLayout.setExpandRatio(searchField, 1);
 
-		// Now define the RHS which contains the edit area.
-		VerticalLayout rightLayout = new VerticalLayout();
+		rightLayout = new VerticalLayout();
 		splitPanel.addComponent(rightLayout);
 
 		HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -173,6 +173,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 		rightLayout.addComponent(scroll);
 		rightLayout.setExpandRatio(scroll, 1);
+		rightLayout.setVisible(false);
 		scroll.setSizeFull();
 
 	}
@@ -272,9 +273,9 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
 		final Label labelAge = commonHelp.bindLabelField("Age", "age");
 //		youthHelp.bindEntityField("Section Eligib.", "sectionEligibility", SectionType.class);
-		memberHelp.bindEntityField("Section ", "section", SectionType.class);
+		//memberHelp.bindEntityField("Section ", "section", SectionType.class);
 		commonHelp.bindEnumField("Gender", "gender", Gender.class);
-		// commonHelp.bindTokenField(this, "Tags", "tag", Tag.class);
+		commonHelp.bindTokenField(contactTable, "Tags", "tags", Tag.class);
 
 		// Adult fields
 
@@ -428,6 +429,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		 * changes automatically without calling commit().
 		 */
 		fieldGroup.setBuffered(true);
+		fieldGroup.setItemDataSource(null);
 
 	}
 
@@ -564,7 +566,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	public void rowChanged(final Item contact)
 	{
 		fieldGroup.setItemDataSource(contact);
-		mainEditPanel.setVisible(contact != null);
+		rightLayout.setVisible(contact != null);
 
 	}
 

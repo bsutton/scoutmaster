@@ -16,7 +16,9 @@ import au.org.scoutmaster.views.MessagingWizardView;
 import au.org.scoutmaster.views.ResetPasswordView;
 
 import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -40,7 +42,9 @@ import com.vaadin.ui.VerticalLayout;
  * Or you may choose to embed your UI to an existing web page.
  */
 @Title("Scoutmaster")
+//@Theme("scoutmaster")
 @Push
+@Widgetset(value="au.org.scoutmaster.AppWidgetSet")
 public class NavigatorUI extends UI
 {
 	private static final long serialVersionUID = 1L;

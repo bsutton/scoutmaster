@@ -176,7 +176,7 @@ public class FormHelper implements Serializable
 		return this.fieldList;
 	}
 
-	public <T> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName, Class<? extends BaseEntity> clazz)
+	public <T extends BaseEntity> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName, Class<? extends BaseEntity> clazz)
 	{
 			//JPAContainer<? extends BaseEntity> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
@@ -193,7 +193,7 @@ public class FormHelper implements Serializable
 			field.setImmediate(true);
 			
 			// we can't bind the token field as it has its own data source.
-			//this.group.bind(field, fieldName);
+			this.group.bind(field, fieldName);
 			this.fieldList.add(field);
 			this.form.addComponent(field);
 			return field;

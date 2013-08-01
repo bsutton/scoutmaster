@@ -514,4 +514,5 @@ public class Contact extends BaseEntity implements Importable
 		this.lastname = lastname;
 	}
 
+
 }

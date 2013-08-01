@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views;
+package au.org.scoutmaster.domain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,7 +17,7 @@ import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.ui.Notification;
 
-public class ContactTokenFieldTest
+public class TagTest
 {
 
 	private EntityManagerFactory entityManagerFactory;

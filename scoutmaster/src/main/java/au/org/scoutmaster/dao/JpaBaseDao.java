@@ -33,9 +33,9 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 		entityManager.persist(entity);
 	}
 
-	public void merge(E entity)
+	public E merge(E entity)
 	{
-		entityManager.merge(entity);
+		return entityManager.merge(entity);
 	}
 
 
@@ -48,4 +48,11 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
+	
+	public void flush()
+	{
+		this.entityManager.flush();
+		
+	}
+
 }

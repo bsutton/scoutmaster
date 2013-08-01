@@ -9,7 +9,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
 
-public class ContactTable extends Table
+public class ContactTable extends Table implements Selected<Contact>
 {
 
 	private static final long serialVersionUID = 1L;

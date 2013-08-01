@@ -1,0 +1,107 @@
+package au.org.scoutmaster.domain.converter;
+
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
+import org.apache.log4j.Logger;
+
+import au.org.scoutmaster.dao.TagDao;
+import au.org.scoutmaster.domain.Tag;
+
+import com.vaadin.data.util.converter.Converter;
+
+public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
+{
+	private static Logger logger = Logger.getLogger(TagConverter.class);
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public Set<Tag> convertToModel(Set<? extends Object> value, Class<? extends Set<Tag>> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+	{
+		HashSet<Tag> result = null;
+		TagDao daoTag = new TagDao();
+
+		logger.info("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
+				+ " targetType:" + targetType);
+
+		// if (value instanceof Long)
+		// {
+		// logger.info("Calling findById");
+		// result = daoTag.findById((Long) value);
+		// }
+		// else if (value instanceof String)
+		// {
+		// logger.info("Calling findByName");
+		// result = daoTag.findByName((String) value);
+		// }
+		// else
+		if (value instanceof Set)
+		{
+			logger.info("Calling findByName");
+			@SuppressWarnings("unchecked")
+			HashSet<Object> set = (HashSet<Object>) value;
+			result = new HashSet<Tag>();
+			for (Object item : set.toArray())
+			{
+				// Now we have to determine if the element is an identity or an
+				// actual tag
+				if (item instanceof Long)
+					result.add(daoTag.findById((Long) item));
+				else
+					result.add((Tag) item);
+			}
+		}
+
+		logger.info("result:" + result);
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<? extends Object> convertToPresentation(Set<Tag> value,
+			Class<? extends Set<? extends Object>> targetType, Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+	{
+		Set<? extends Object> result;
+		// if (targetType == Set<String>.class)
+		// {
+		// if (value != null)
+		// result = value.toString();
+		// else
+		// result = "";
+		// }
+		// else
+		if (targetType == Set.class)
+		{
+			result = new HashSet<Tag>();
+
+			logger.info("convertToPresentation: value" + value + " targetType:" + targetType);
+			if (value != null)
+				((HashSet<Tag>) result).addAll(value);
+		}
+		else
+			throw new UnsupportedOperationException("Conversion for Tag from type " + targetType + " not supported");
+
+		logger.info("result: " + result.toString());
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<Set<Tag>> getModelType()
+	{
+		Set<Tag> a = new HashSet<>();
+		return (Class<Set<Tag>>) a.getClass();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Class<Set<? extends Object>> getPresentationType()
+	{
+		Set<Object> a = new HashSet<>();
+		return (Class<Set<? extends Object>>) a.getClass();
+	}
+
+}
