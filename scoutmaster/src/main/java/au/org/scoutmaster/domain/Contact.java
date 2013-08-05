@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
 
@@ -48,12 +49,16 @@ public class Contact extends BaseEntity implements Importable
 	@FormField(displayName = "Prefix")
 	private String prefix = "";
 
+	@NotNull
+	@javax.validation.constraints.Size(min=1,max=255)
 	@FormField(displayName = "Firstname")
 	private String firstname = "";
 
 	@FormField(displayName = "Middle Name")
 	private String middlename = "";
 
+	@NotNull
+	@javax.validation.constraints.Size(min=1,max=255)
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
 

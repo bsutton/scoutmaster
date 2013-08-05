@@ -7,10 +7,10 @@
 	<changeSet author="bsutton" id="1.0.1">
 
 		<!-- Change the type columns to string to directly store the enum value -->
-		<!-- dropColumn schemaName="scoutmaster" tableName="relationshiptype" columnName="LHSTYPE" 
-			/> <dropColumn schemaName="scoutmaster" tableName="relationshiptype" columnName="LHSTYPE" 
-			/> <addColumn schemaName="scoutmaster" tableName="relationshiptype"> <column 
-			name="LHSTYPE" type="varchar(255)" /> </addColumn> <addColumn schemaName="scoutmaster" 
+		<!-- dropColumn tableName="relationshiptype" columnName="LHSTYPE" 
+			/> <dropColumn tableName="relationshiptype" columnName="LHSTYPE" 
+			/> <addColumn tableName="relationshiptype"> <column 
+			name="LHSTYPE" type="varchar(255)" /> </addColumn> <addColumn 
 			tableName="relationshiptype"> <column name="RHSTYPE" type="varchar(255)" 
 			/> </addColumn -->
 

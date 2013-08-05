@@ -9,6 +9,7 @@ import java.util.Map;
 import org.vaadin.tokenfield.TokenField;
 
 import au.org.scoutmaster.domain.BaseEntity;
+import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.views.ContactTokenField;
 import au.org.scoutmaster.views.Selected;
@@ -19,6 +20,7 @@ import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
 import com.vaadin.ui.CheckBox;
@@ -34,14 +36,14 @@ public class FormHelper implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	ArrayList<AbstractField<?>> fieldList = new ArrayList<AbstractField<?>>();
+	ArrayList<AbstractComponent> fieldList = new ArrayList<>();
 	private FormLayout form;
 	private FieldGroup group;
 
-	public FormHelper(FormLayout form, FieldGroup grouop)
+	public FormHelper(FormLayout form, FieldGroup group)
 	{
 		this.form = form;
-		this.group = grouop;
+		this.group = group;
 	}
 
 	public TextField bindTextField(String fieldLabel,
@@ -50,6 +52,7 @@ public class FormHelper implements Serializable
 		TextField field = new TextField(fieldLabel);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		if (this.group != null)
 		this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
@@ -63,6 +66,7 @@ public class FormHelper implements Serializable
 		field.setRows(rows);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		if (this.group != null)
 		this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
@@ -77,6 +81,7 @@ public class FormHelper implements Serializable
 
 		field.setImmediate(true);
 		field.setWidth("100%");
+		if (this.group != null)
 		this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
@@ -90,6 +95,7 @@ public class FormHelper implements Serializable
 		field.setCaption(fieldLabel);
 		field.setWidth("100%");
 		this.form.addComponent(field);
+		this.fieldList.add(field);
 		return field;
 	}
 
@@ -104,6 +110,7 @@ public class FormHelper implements Serializable
 		field.setTextInputAllowed(false);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		if (this.group != null)
 		this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
@@ -116,6 +123,7 @@ public class FormHelper implements Serializable
 		CheckBox field = new CheckBox(fieldLabel);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		if (this.group != null)
 		this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
@@ -128,16 +136,20 @@ public class FormHelper implements Serializable
 	{
 		JPAContainer<?> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
-		ComboBox field = new ComboBox(fieldLabel, container);
-		field.setConverter(clazz);
+		ComboBox field = new ComboBox(fieldLabel);
+		
 		field.setItemCaptionMode(ItemCaptionMode.PROPERTY);
 		field.setItemCaptionPropertyId("name");
+		field.setContainerDataSource(container);
+		SingleSelectConverter<SectionType> converter = new SingleSelectConverter<>(field);
+		field.setConverter(converter);
 		field.setNewItemsAllowed(false);
 		field.setNullSelectionAllowed(false);
 		field.setTextInputAllowed(false);
 		field.setWidth("100%");
 		field.setImmediate(true);
-		this.group.bind(field, fieldName);
+		if (this.group != null)
+			this.group.bind(field, fieldName);
 		this.fieldList.add(field);
 		this.form.addComponent(field);
 		return field;
@@ -171,7 +183,7 @@ public class FormHelper implements Serializable
 		return container;
 	}
 
-	public ArrayList<AbstractField<?>> getFieldList()
+	public ArrayList<AbstractComponent> getFieldList()
 	{
 		return this.fieldList;
 	}
@@ -185,14 +197,13 @@ public class FormHelper implements Serializable
 			field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake textfield look
 			field.setWidth("100%"); // width...
 			field.setInputWidth("100%"); // and input width separately
-			//field.setContainerDataSource(container); // 'address book'
 			field.setFilteringMode(FilteringMode.CONTAINS); // suggest
 			field.setTokenCaptionPropertyId("name"); // use container item property "name" in input
 			field.setInputPrompt("Enter one or more comma separated tags");
 			field.setRememberNewTokens(false); // we can opt to do this ourselves
 			field.setImmediate(true);
 			
-			// we can't bind the token field as it has its own data source.
+			if (this.group != null)
 			this.group.bind(field, fieldName);
 			this.fieldList.add(field);
 			this.form.addComponent(field);

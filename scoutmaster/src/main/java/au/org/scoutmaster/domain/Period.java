@@ -3,17 +3,18 @@ package au.org.scoutmaster.domain;
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
 
+import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 @Embeddable
 public class Period
 {
 	@Basic
-	private int years;
+	protected int years;
 	@Basic
-	private int months;
+	protected int months;
 	@Basic
-	private int days;
+	protected int days;
 
 	public Period()
 	{
@@ -76,35 +77,27 @@ public class Period
 		}
 		return sb.toString();
 	}
-}
 
-class Builder
-{
-	private int years;
-	private int months;
-	private int days;
-
-	Period build()
+	public DateTime getDateTime()
 	{
-		return new Period(this.years, this.months, this.days);
+		return new DateTime(years, months, days, 0, 0);
 	}
-
-	Builder setYears(int years)
+	
+	Period withYears(int years)
 	{
 		this.years = years;
 		return this;
 	}
-
-	Builder setMonths(int months)
+	
+	Period withMonths(int months)
 	{
 		this.months = months;
 		return this;
 	}
-
-	Builder setDays(int days)
+	Period withDays(int days)
 	{
 		this.days = days;
 		return this;
 	}
-
 }
+

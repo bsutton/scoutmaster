@@ -48,7 +48,7 @@ public class SectionTypeConverter implements Converter<Object, SectionType>
 		if (value != null)
 			result = value.getName();
 		else
-			result = "0";
+			result = "";
 		logger.info("result: " + result);
 		return result;
 	}

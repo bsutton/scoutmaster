@@ -7,7 +7,7 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.3">
-		<insert schemaName="scoutmaster" tableName="sectiontype">
+		<insert tableName="sectiontype">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Joeys" />
@@ -15,11 +15,11 @@
 			<column name="startingAgeDays" value="0" />
 			<column name="startingAgeMonths" value="0" />
 			<column name="startingAgeYears" value="6" />
-			<column name="endingAgeDays" value="31" />
-			<column name="endingAgeMonths" value="12" />
+			<column name="endingAgeDays" value="30" />
+			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="7" />
 		</insert>
-		<insert schemaName="scoutmaster" tableName="sectiontype">
+		<insert tableName="sectiontype">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Cubs" />
@@ -27,11 +27,11 @@
 			<column name="startingAgeDays" value="0" />
 			<column name="startingAgeMonths" value="0" />
 			<column name="startingAgeYears" value="8" />
-			<column name="endingAgeDays" value="31" />
-			<column name="endingAgeMonths" value="12" />
+			<column name="endingAgeDays" value="30" />
+			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="10" />
 		</insert>
-		<insert schemaName="scoutmaster" tableName="sectiontype">
+		<insert tableName="sectiontype">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Scouts" />
@@ -39,32 +39,32 @@
 			<column name="startingAgeDays" value="0" />
 			<column name="startingAgeMonths" value="0" />
 			<column name="startingAgeYears" value="11" />
-			<column name="endingAgeDays" value="30" />
-			<column name="endingAgeMonths" value="6" />
+			<column name="endingAgeDays" value="29" />
+			<column name="endingAgeMonths" value="5" />
 			<column name="endingAgeYears" value="14" />
 		</insert>
-		<insert schemaName="scoutmaster" tableName="sectiontype">
+		<insert tableName="sectiontype">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Venturers" />
 			<column name="DESCRIPTION" value="Venturer Section" />
-			<column name="startingAgeDays" value="30" />
+			<column name="startingAgeDays" value="0" />
 			<column name="startingAgeMonths" value="6" />
 			<column name="startingAgeYears" value="14" />
-			<column name="endingAgeDays" value="0" />
-			<column name="endingAgeMonths" value="12" />
+			<column name="endingAgeDays" value="30" />
+			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="20" />
 		</insert>
-		<insert schemaName="scoutmaster" tableName="sectiontype">
+		<insert tableName="sectiontype">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
-			<column name="NAME" value="Rover" />
+			<column name="NAME" value="Rovers" />
 			<column name="DESCRIPTION" value="Rover Section" />
 			<column name="startingAgeDays" value="0" />
 			<column name="startingAgeMonths" value="0" />
 			<column name="startingAgeYears" value="18" />
-			<column name="endingAgeDays" value="0" />
-			<column name="endingAgeMonths" value="12" />
+			<column name="endingAgeDays" value="30" />
+			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="25" />
 		</insert>
 

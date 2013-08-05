@@ -7,7 +7,7 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.3">
-		<update schemaName="scoutmaster" tableName="sectiontype">
+		<update tableName="sectiontype">
 			<column name="NAME" value="Rovers" />
 			<where>NAME="Rover"</where>
 		</update>

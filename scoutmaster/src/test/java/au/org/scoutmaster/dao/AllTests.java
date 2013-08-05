@@ -1,4 +1,4 @@
-package au.org.scoutmaster.domain;
+package au.org.scoutmaster.dao;
 
 import java.sql.SQLException;
 
@@ -14,7 +14,7 @@ import au.org.scoutmaster.DatabaseProvider;
 
 @RunWith(Suite.class)
 @SuiteClasses(
-{ ContactTest.class, ImportMatchFieldsTest.class, TagTest.class })
+{ SectionTypeDaoTest.class })
 public class AllTests
 {
 	@BeforeClass

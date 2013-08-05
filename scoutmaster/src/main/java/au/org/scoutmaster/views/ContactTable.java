@@ -7,6 +7,7 @@ import au.org.scoutmaster.domain.Contact;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Table;
 
 public class ContactTable extends Table implements Selected<Contact>
@@ -14,9 +15,9 @@ public class ContactTable extends Table implements Selected<Contact>
 
 	private static final long serialVersionUID = 1L;
 	private JPAContainer<Contact> contactContainer;
-	private RowChangeListener rowChangeListener;
+	private RowChangeListener<Contact> rowChangeListener;
 
-	ContactTable(JPAContainer<Contact> contactContainer, RowChangeListener rowChangeListener)
+	ContactTable(JPAContainer<Contact> contactContainer, RowChangeListener<Contact> rowChangeListener)
 	{
 		this.contactContainer = contactContainer;
 		this.rowChangeListener = rowChangeListener;
@@ -40,8 +41,12 @@ public class ContactTable extends Table implements Selected<Contact>
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event)
 			{
 				Long contactId = (Long) ContactTable.this.getValue();
-
-				ContactTable.this.rowChangeListener.rowChanged(ContactTable.this.getItem(contactId));
+//				ContactDao daoContact = new ContactDao();
+//				Contact contact = daoContact.findById(contactId);
+				
+//				Contact contact = ContactTable.this.contactContainer.getItem(contactId).getEntity();
+				//ContactTable.this.rowChangeListener.rowChanged(new BeanItem(contact));
+				ContactTable.this.rowChangeListener.rowChanged(ContactTable.this.contactContainer.getItem(contactId));
 
 			}
 		});

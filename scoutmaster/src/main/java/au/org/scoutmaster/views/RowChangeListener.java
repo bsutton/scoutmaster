@@ -2,7 +2,8 @@ package au.org.scoutmaster.views;
 
 import com.vaadin.data.Item;
 
-public interface RowChangeListener
+
+public interface RowChangeListener<ENTITY>
 {
 	/**
 	 * Called when a user attempts to change the current row.
@@ -17,6 +18,7 @@ public interface RowChangeListener
 	 * @param item
 	 * @return
 	 */
+	//void rowChanged(ENTITY entity);
 	void rowChanged(Item item);
 
 

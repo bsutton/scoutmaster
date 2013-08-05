@@ -24,7 +24,7 @@ import javax.persistence.NamedQuery;
 @Entity
 @NamedQueries(
 
-{ @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype"),
+{ @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype  order by sectiontype.startingAge.years,  sectiontype.startingAge.months, sectiontype.startingAge.days"),
 	@NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") })
 
 public class SectionType extends BaseEntity
@@ -38,26 +38,27 @@ public class SectionType extends BaseEntity
 	/**
 	 * The name of the section type. e.g Cubs.
 	 */
-	String name;
+	private String name;
 
 	/**
 	 * A optional description of the section type
 	 */
-	String description;
+	private String description;
 
 	@Embedded
 	@AttributeOverrides(
 	{ @AttributeOverride(name = "years", column = @Column(name = "startingAgeYears")),
 			@AttributeOverride(name = "months", column = @Column(name = "startingAgeMonths")),
 			@AttributeOverride(name = "days", column = @Column(name = "startingAgeDays")) })
-	Period startingAge;
+	
+	private Age startingAge;
 
 	@Embedded
 	@AttributeOverrides(
 	{ @AttributeOverride(name = "years", column = @Column(name = "endingAgeYears")),
 			@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths")),
 			@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays")) })
-	Period endingAge;
+	private Age endingAge;
 
 	/**
 	 * details the qualifications required by the section leader.
@@ -74,6 +75,56 @@ public class SectionType extends BaseEntity
 		return this.name;
 	}
 	
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public Age getStartingAge()
+	{
+		return startingAge;
+	}
+
+	public void setStartingAge(Age startingAge)
+	{
+		this.startingAge = startingAge;
+	}
+
+	public Age getEndingAge()
+	{
+		return endingAge;
+	}
+
+	public void setEndingAge(Age endingAge)
+	{
+		this.endingAge = endingAge;
+	}
+
+	public List<QualificationType> getLeaderRequirements()
+	{
+		return leaderRequirements;
+	}
+
+	public void setLeaderRequirements(List<QualificationType> leaderRequirements)
+	{
+		this.leaderRequirements = leaderRequirements;
+	}
+
+	public List<QualificationType> getParentHelperRequirements()
+	{
+		return parentHelperRequirements;
+	}
+
+	public void setParentHelperRequirements(List<QualificationType> parentHelperRequirements)
+	{
+		this.parentHelperRequirements = parentHelperRequirements;
+	}
+
 	public String toString()
 	{
 		return name;

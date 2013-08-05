@@ -1,4 +1,4 @@
-package au.org.scoutmaster.domain;
+package au.org.scoutmaster;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +25,7 @@ public class DatabaseProvider
 	public static void initDatabaseProvider()
 	{
 
-		connectionString = "jdbc:mysql://localhost/" + SCOUTMASTERTEST_DB_NAME + "?sessionVariables=storage_engine=InnoDB";
+		connectionString = "jdbc:mysql://localhost?sessionVariables=storage_engine=InnoDB";
 		username = "scoutmaster";
 		password = "master$4scout";
 
@@ -36,14 +36,16 @@ public class DatabaseProvider
 
 			Statement stmt = conn.createStatement();
 
-			String sql = "DROP DATABASE " + SCOUTMASTERTEST_DB_NAME;
+			String sql = "DROP DATABASE if exists " + SCOUTMASTERTEST_DB_NAME;
 			stmt.executeUpdate(sql);
 			logger.info("Database dropped successfully...");
 
 			sql = "CREATE DATABASE " + SCOUTMASTERTEST_DB_NAME;
 			stmt.executeUpdate(sql);
 			logger.info("Database created successfully...");
-
+			
+			// Now the connection string to include the db name (can't include it to start with as it shouldn't exists as yet.
+			connectionString = "jdbc:mysql://localhost/" + SCOUTMASTERTEST_DB_NAME + "?sessionVariables=storage_engine=InnoDB";
 		}
 		catch (SQLException e)
 		{
@@ -59,7 +61,7 @@ public class DatabaseProvider
 
 	}
 
-	static void initLiquibase() throws LiquibaseException, SQLException
+	public static void initLiquibase() throws LiquibaseException, SQLException
 	{
 		Liquibase liquibase = new Liquibase(MASTER_XML,
 				new FileSystemResourceAccessor(), new JdbcConnection(getConnection()));

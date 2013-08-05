@@ -16,7 +16,6 @@ import au.org.scoutmaster.views.MessagingWizardView;
 import au.org.scoutmaster.views.ResetPasswordView;
 
 import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
