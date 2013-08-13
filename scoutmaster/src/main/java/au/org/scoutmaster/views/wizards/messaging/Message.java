@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.messagingWizard;
+package au.org.scoutmaster.views.wizards.messaging;
 
 public class Message
 {

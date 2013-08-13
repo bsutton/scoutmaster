@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.importWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
 import java.io.File;
 
@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
 import au.org.scoutmaster.views.ImportView;
@@ -56,8 +55,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener
 		File tempFile = this.importView.getFile().getTempFile();
 		Class<? extends Importable> clazz = importView.getType().getEntityClass();
 
-		ProgressBarWorker worker = new ProgressBarWorker(new ImportTask(
-				EntityManagerProvider.INSTANCE.getEntityManager(), this, tempFile, clazz, this.importView.getMatch()
+		ProgressBarWorker worker = new ProgressBarWorker(new ImportTask(this, tempFile, clazz, this.importView.getMatch()
 						.getFieldMap()));
 		worker.start();
 
@@ -95,6 +93,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener
 	{
 		indicator.setValue(1.0f);
 		indicator.setVisible(false);
+		indicator.setEnabled(false);
 		importComplete = true;
 	}
 

@@ -1,5 +1,10 @@
 package au.org.scoutmaster.views;
 
+import java.util.List;
+
+import au.org.scoutmaster.application.Menu;
+import au.org.scoutmaster.dao.SMSProviderDao;
+import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.data.validator.AbstractValidator;
@@ -11,6 +16,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
@@ -18,50 +24,65 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
+@Menu(display = "ClickATellView")
 public class ClickATellView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String NAME = "login";
+	public static final String NAME = "ClickATellView";
 
 	private final TextField user;
+	private final TextField apiId;
 
 	private final PasswordField password;
 
-	private final Button loginButton;
+	private final Button saveButton;
 
 	public ClickATellView()
 	{
 		setSizeFull();
+		
+		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
+
+		if (provider.size() != 1)
+			throw new IllegalStateException("The ClickATell Provider is missing from the database.");
+
+		SMSProvider clickATellProvider = provider.get(0);
+
 
 		// Create the user input field
-		user = new TextField("User:");
-		// HACK: during development
-		user.setValue("bsutton@noojee.com.au");
+		user = new TextField("Username:");
 		user.setWidth("300px");
 		user.setRequired(true);
-		user.setInputPrompt("Your username (eg. joe@email.com)");
-		user.addValidator(new EmailValidator("Username must be an email address"));
+		user.setDescription("SMS Provider Username");
 		user.setImmediate(true);
-		user.setInvalidAllowed(false);
+		user.setValue(clickATellProvider.getUsername());
 
 		// Create the password input field
 		password = new PasswordField("Password:");
 		password.setWidth("300px");
-		password.addValidator(new PasswordValidator());
 		password.setRequired(true);
-		// HACK: during development
-		password.setValue("password");
 		password.setNullRepresentation("");
+		password.setDescription("SMS Provider Password");
+		password.setValue(clickATellProvider.getPassword());
+
+		// Create the user input field
+		apiId = new TextField("Api Id:");
+		apiId.setWidth("300px");
+		apiId.setRequired(true);
+		apiId.setDescription("SMS Providier API key");
+		apiId.setImmediate(true);
+		apiId.setValue(clickATellProvider.getApiId());
 
 		// Create login button
-		loginButton = new Button("Login", this);
-		loginButton.setClickShortcut(KeyCode.ENTER);
-		loginButton.addStyleName("default");
+		saveButton = new Button("Save", this);
+		saveButton.setClickShortcut(KeyCode.ENTER);
+		saveButton.addStyleName("default");
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, password, loginButton);
-		fields.setCaption("Please login to access Scoutmaster.");
+		VerticalLayout fields = new VerticalLayout(user, password, apiId, saveButton);
+		fields.setCaption("Configure Click A Tell provider settings.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -81,77 +102,30 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 		user.focus();
 	}
 
-	//
-	// Validator for validating the passwords
-	//
-	private static final class PasswordValidator extends AbstractValidator<String>
-	{
-		private static final long serialVersionUID = 1L;
-
-		public PasswordValidator()
-		{
-			super("The password provided is not valid");
-		}
-
-		@Override
-		protected boolean isValidValue(String value)
-		{
-			//
-			// Password must be at least 8 characters long and contain at least
-			// one number
-			//
-			if (value != null && (value.length() < 8 || !value.matches(".*")))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public Class<String> getType()
-		{
-			return String.class;
-		}
-	}
-
+	/**
+	 * Save button click so lets save the details.
+	 */
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
 
-		//
-		// Validate the fields using the navigator. By using validors for the
-		// fields we reduce the amount of queries we have to use to the database
-		// for wrongly entered passwords
-		//
-		if (user.isValid() && password.isValid())
-		{
-			String username = user.getValue();
-			String password = this.password.getValue();
+		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
 
-			User user = User.findUser(username);
-			if (user.validatePassword(password))
-			{
-				// Store the current user in the service session
-				getSession().setAttribute("user", user);
+		if (provider.size() != 1)
+			throw new IllegalStateException("The ClickATell Provider is missing from the database.");
 
-				// Navigate to main view
-				getUI().getNavigator().navigateTo(ContactView.NAME);
+		SMSProvider clickATellProvider = provider.get(0);
 
-			}
-			else
-			{
+		clickATellProvider.setUsername(user.getValue());
+		clickATellProvider.setPassword(password.getValue());
+		clickATellProvider.setApiId(apiId.getValue());
+		clickATellProvider.setActive(true);
+		clickATellProvider.setDefaultProvider(true);
+		
+		daoSMSProvider.persist(clickATellProvider);
+		Notification.show("Provider details have been saved.", Type.TRAY_NOTIFICATION);
 
-				// Wrong password clear the password field and refocuses it
-				this.password.setValue(null);
-				this.password.focus();
-			}
-		}
-		else
-		{
-			//user.setComponentError(new UserError("I dont like you"));
-			Notification.show("Invalid username or password");
-		}
 	}
 
-	
 }

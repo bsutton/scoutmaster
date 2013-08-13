@@ -1,35 +1,36 @@
-package au.org.scoutmaster.views.messagingWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
+import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.org.scoutmaster.views.MessagingWizardView;
+import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class TransmissionComplete implements WizardStep
+public class ImportComplete implements WizardStep
 {
 
 	@SuppressWarnings("unused")
-	private MessagingWizardView messagingWizardView;
+	private ImportView importView;
 
-	public TransmissionComplete(MessagingWizardView messagingWizardView)
+	public ImportComplete(ImportView importView, Wizard wizard)
 	{
-		this.messagingWizardView = messagingWizardView;
+		this.importView = importView;
 	}
 
 	@Override
 	public String getCaption()
 	{
-		return "Transmission Complete";
+		return "Import Complete";
 	}
 
 	@Override
 	public Component getContent()
 	{
 		VerticalLayout layout = new VerticalLayout();
-		layout.addComponent(new Label("Transmission complete."));
+		layout.addComponent(new Label("Import complete."));
 		layout.setMargin(true);
 		return layout;
 	}

@@ -23,10 +23,30 @@ public class Address extends BaseEntity
 	public static final String FIND_MATCHING = "Address.findMatching";
 	
 	private static final long serialVersionUID = 1L;
-	String street;
-	String city;
-	String postcode;
-	String state;
+	private String street= "";
+	private String city = "";
+	private String postcode= "";
+	private String state = "";
+
+	public void setStreet(String street)
+	{
+		this.street = street;
+	}
+
+	public void setCity(String city)
+	{
+		this.city = city;
+	}
+
+	public void setPostcode(String postcode)
+	{
+		this.postcode = postcode;
+	}
+
+	public void setState(String state)
+	{
+		this.state = state;
+	}
 
 	public Address()
 	{
@@ -82,5 +102,4 @@ public class Address extends BaseEntity
 
 		return addressList;
 	}
-
 }

@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.importWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
 import java.io.File;
 import java.io.FileReader;
@@ -7,12 +7,17 @@ import java.io.Reader;
 import java.util.Hashtable;
 
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.org.scoutmaster.application.LocalEntityManagerFactory;
+import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.filter.Transaction;
+import au.org.scoutmaster.util.FormHelper;
 import au.org.scoutmaster.util.ProgressBarTask;
 import au.org.scoutmaster.util.ProgressTaskListener;
 
@@ -26,20 +31,20 @@ public class ImportTask extends ProgressBarTask
 {
 	private Logger logger = Logger.getLogger(ImportTask.class);
 
-	
 	private File tempFile;
 	private Class<? extends Importable> clazz;
 	private Hashtable<String, FormFieldImpl> fieldMap;
 
 	private EntityManager em;
 
-	ImportTask(EntityManager em, ProgressTaskListener listener, File tempFile, Class<? extends Importable> clazz, Hashtable<String, FormFieldImpl> fieldMap)
+	ImportTask(ProgressTaskListener listener, File tempFile, Class<? extends Importable> clazz,
+			Hashtable<String, FormFieldImpl> fieldMap)
 	{
 		super(listener);
 		this.tempFile = tempFile;
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
-		this.em = em;
+		this.em = LocalEntityManagerFactory.createEntityManager();
 	}
 
 	@Override
@@ -55,10 +60,8 @@ public class ImportTask extends ProgressBarTask
 			reader.close();
 			if (tempFile.exists())
 				tempFile.delete();
-			
-			super.taskComplete();
-			
 
+			super.taskComplete();
 
 		}
 		catch (IOException | InstantiationException | IllegalAccessException e)
@@ -99,7 +102,7 @@ public class ImportTask extends ProgressBarTask
 
 		CSVReader csvReader = null;
 
-		try
+		try (Transaction t = new Transaction(em))
 		{
 			csvReader = new CSVReader(reader);
 
@@ -114,10 +117,31 @@ public class ImportTask extends ProgressBarTask
 				}
 				else
 				{
-					addRow(container, entityClass, columnHeaders, record, fieldMap);
-					super.taskProgress(count++, -1);
+					try
+					{
+						++count;
+						addRow(container, entityClass, columnHeaders, record, fieldMap);
+						super.taskProgress(count, -1);
+					}
+					catch (Throwable e)
+					{
+						Notification.show("Import for row " + count + " failed: " + e.getMessage(),
+								Type.TRAY_NOTIFICATION);
+					}
 				}
 			}
+			t.commit();
+			// em.flush();
+		}
+		catch (ConstraintViolationException e)
+		{
+			FormHelper.showConstraintViolation(e);
+		}
+		catch (Throwable e)
+		{
+			logger.error(e, e);
+			Notification.show("Error during import", e.getMessage(), Type.ERROR_MESSAGE);
+
 		}
 		finally
 		{
@@ -134,26 +158,21 @@ public class ImportTask extends ProgressBarTask
 	 * @param container
 	 * @param entityClass
 	 * @param csvHeaders
-	 * @param fields
+	 * @param fieldValues
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private <T> void addRow(JPAContainer<T> container, Class<T> entityClass, String[] csvHeaders,
-			String[] fields, Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException,
-			IllegalAccessException
+	private <T> void addRow(JPAContainer<T> container, Class<T> entityClass, String[] csvHeaders, String[] fieldValues,
+			Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
 	{
 		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
+
+		EntityAdaptor adaptor = EntityAdaptor.create(entityClass);
+
 		T entity = entityItem.getEntity();
-		for (int i = 0; i < fields.length; i++)
-		{
-			String csvHeaderName = csvHeaders[i];
-			FormFieldImpl formField = fieldMaps.get(csvHeaderName);
-			if (formField != null)
-			{
-				String field = fields[i];
-				formField.setValue(entity, field);
-			}
-		}
-		em.persist(entity);
+
+		adaptor.save(em, entity, csvHeaders, fieldValues, fieldMaps);
+
+		em.merge(entity);
 	}
 }

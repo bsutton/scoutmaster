@@ -8,9 +8,11 @@ import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
 import au.org.scoutmaster.application.Menu;
-import au.org.scoutmaster.views.messagingWizard.EnterMessage;
-import au.org.scoutmaster.views.messagingWizard.SendMessage;
-import au.org.scoutmaster.views.messagingWizard.TransmissionComplete;
+import au.org.scoutmaster.views.wizards.messaging.ConfirmDetailsStep;
+import au.org.scoutmaster.views.wizards.messaging.MessageDetailsStep;
+import au.org.scoutmaster.views.wizards.messaging.SelectRecipientsStep;
+import au.org.scoutmaster.views.wizards.messaging.SendMessageStep;
+import au.org.scoutmaster.views.wizards.messaging.TransmissionCompleteStep;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -28,26 +30,25 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 
 	private Wizard wizard;
 	
-	private EnterMessage enter;
-	private SendMessage send;
-	private TransmissionComplete complete;
+	private SelectRecipientsStep select;
+	private MessageDetailsStep details;
+	private ConfirmDetailsStep confirm;
+	private SendMessageStep send;
+	private TransmissionCompleteStep complete;
 
-	
-
-
-	public EnterMessage getEnter()
+	public MessageDetailsStep getDetails()
 	{
-		return enter;
+		return details;
 	}
 
 
-	public SendMessage getSend()
+	public SendMessageStep getSend()
 	{
 		return send;
 	}
 
 
-	public TransmissionComplete getComplete()
+	public TransmissionCompleteStep getComplete()
 	{
 		return complete;
 	}
@@ -57,20 +58,25 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	public void enter(ViewChangeEvent event)
 	{
 
-		enter = new EnterMessage(this);
-		send = new SendMessage(this);
-		complete = new TransmissionComplete(this);
+		select = new SelectRecipientsStep(this);
+		details = new MessageDetailsStep(this);
+		send = new SendMessageStep(this);
+		confirm = new ConfirmDetailsStep(this);
+		complete = new TransmissionCompleteStep(this);
 
 
 		// create the Wizard component and add the steps
 		wizard = new Wizard();
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
-		wizard.addStep(enter, "enter");
+		wizard.addStep(select, "select");
+		wizard.addStep(details, "enter");
+		wizard.addStep(confirm, "confirm");
 		wizard.addStep(send, "send");
 		wizard.addStep(complete, "complete");
-		wizard.setHeight("600px");
-		wizard.setWidth("800px");
+//		wizard.setHeight("600px");
+//		wizard.setWidth("800px");
+		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
 		
 		/* Main layout */
@@ -78,6 +84,7 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 		this.setSpacing(true);
 		this.addComponent(wizard);
 		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
+		this.setSizeFull();
 
 	}
 

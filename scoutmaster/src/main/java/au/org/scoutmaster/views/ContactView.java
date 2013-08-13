@@ -1,5 +1,7 @@
 package au.org.scoutmaster.views;
 
+import javax.validation.ConstraintViolationException;
+
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.apache.log4j.Logger;
 import org.vaadin.dialogs.ConfirmDialog;
@@ -17,17 +19,17 @@ import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.FormHelper;
+import au.org.scoutmaster.util.MultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.navigator.View;
@@ -40,19 +42,19 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Contact")
-public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>
+public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>, Selected<Contact>
 {
 	private static Logger logger = Logger.getLogger(ContactView.class);
 	private static final long serialVersionUID = 1L;
@@ -62,27 +64,28 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private boolean inNew = false;
 
 	private TextField searchField = new TextField();
-	private Button addNewContactButton = new Button("New");
-	private Button deleteContactButton = new Button("Delete this contact");
+	private Button newButton = new Button("New");
+	private Button deleteButton = new Button("Delete");
 	private Button saveContactButton = new Button("Save");
-	private Button cancelContactButton = new Button("Cancel");
-	//public BeanFieldGroup<Contact> fieldGroup = new BeanFieldGroup<>(Contact.class);
-	public FieldGroup fieldGroup = new FieldGroup();
-	public FormLayout layoutFields = new FormLayout();
+	private Button cancelButton = new Button("Cancel");
+	TabSheet tabs = new TabSheet();
+	public BeanFieldGroup<Contact> fieldGroup = new BeanFieldGroup<>(Contact.class);
 
 	private VerticalLayout mainEditPanel = new VerticalLayout();
 
-	private FormHelper commonHelp;
+	private MultiColumnFormLayout<Contact> overviewForm;
 
-	private FormHelper adultHelp;
+	private MultiColumnFormLayout<Contact> contactForm;
 
-	private FormHelper youthHelp;
+	private MultiColumnFormLayout<Contact> youthForm;
 
-	private FormHelper memberHelp;
+	private MultiColumnFormLayout<Contact> memberForm;
 
-	private FormHelper affiliatedHelp;
+	private MultiColumnFormLayout<Contact> medicalForm;
 
-	private FormHelper affiliateAdultHelper;
+	private MultiColumnFormLayout<Contact> background;
+
+	private Contact currentContact;
 
 	/*
 	 * Any component can be bound to an external data source. This example uses
@@ -106,19 +109,40 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	public void enter(ViewChangeEvent event)
 	{
 		contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
-		contactTable = new ContactTable(contactContainer, this);
+		contactContainer.addNestedContainerProperty("homePhone.phoneNo");
+		contactContainer.addNestedContainerProperty("homePhone.primaryPhone");
+		contactContainer.addNestedContainerProperty("homePhone.locationType");
+		contactContainer.addNestedContainerProperty("homePhone.phoneType");
+
+		contactContainer.addNestedContainerProperty("workPhone.phoneNo");
+		contactContainer.addNestedContainerProperty("workPhone.primaryPhone");
+		contactContainer.addNestedContainerProperty("workPhone.locationType");
+		contactContainer.addNestedContainerProperty("workPhone.phoneType");
+
+		contactContainer.addNestedContainerProperty("mobile.phoneNo");
+		contactContainer.addNestedContainerProperty("mobile.primaryPhone");
+		contactContainer.addNestedContainerProperty("mobile.locationType");
+		contactContainer.addNestedContainerProperty("mobile.phoneType");
+
+		contactContainer.addNestedContainerProperty("address.street");
+		contactContainer.addNestedContainerProperty("address.city");
+		contactContainer.addNestedContainerProperty("address.postcode");
+		contactContainer.addNestedContainerProperty("address.state");
+
+		contactTable = new ContactTable(contactContainer, new String[]
+				{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.SECTION });
+		contactTable.setRowChangeListener(this);
 
 		initLayout();
 		initEditor();
 		contactTable.init();
 		initSearch();
-		initAddRemoveButtons();
+		initButtons();
 		this.setVisible(true);
 	}
 
 	/*
-	 * In this example layouts are programmed in Java. You may choose use a
-	 * visual editor, CSS or HTML templates for layout instead.
+	 * build the button layout aned editor panel
 	 */
 
 	private void initLayout()
@@ -137,7 +161,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		HorizontalLayout bottomLeftLayout = new HorizontalLayout();
 		leftLayout.addComponent(bottomLeftLayout);
 		bottomLeftLayout.addComponent(searchField);
-		bottomLeftLayout.addComponent(addNewContactButton);
+		bottomLeftLayout.addComponent(newButton);
 		leftLayout.addComponent(contactTable);
 		leftLayout.setSizeFull();
 
@@ -164,24 +188,21 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setWidth("100%");
 		buttonLayout.addComponent(saveContactButton);
-		buttonLayout.addComponent(cancelContactButton);
-		buttonLayout.setComponentAlignment(cancelContactButton, Alignment.MIDDLE_RIGHT);
+		buttonLayout.addComponent(cancelButton);
+		buttonLayout.setComponentAlignment(cancelButton, Alignment.MIDDLE_RIGHT);
 		buttonLayout.setComponentAlignment(saveContactButton, Alignment.MIDDLE_LEFT);
-		// buttonLayout.setHeight("40px");
 
 		/* Put a little margin around the fields in the right side editor */
 		Panel scroll = new Panel();
 		mainEditPanel.setMargin(true);
 		mainEditPanel.setVisible(true);
-		// mainEditPanel.setSizeUndefined();
 		scroll.setContent(mainEditPanel);
-		// scroll.setSizeFull();
 
 		// Delete button
 		HorizontalLayout deleteLayout = new HorizontalLayout();
 		deleteLayout.setWidth("100%");
-		deleteLayout.addComponent(deleteContactButton);
-		deleteLayout.setComponentAlignment(deleteContactButton, Alignment.MIDDLE_RIGHT);
+		deleteLayout.addComponent(deleteButton);
+		deleteLayout.setComponentAlignment(deleteButton, Alignment.MIDDLE_RIGHT);
 		deleteLayout.setHeight("40px");
 
 		rightLayout.addComponent(buttonLayout);
@@ -190,35 +211,40 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		rightLayout.addComponent(deleteLayout);
 
 		rightLayout.setVisible(false);
-		// scroll.setSizeFull();
-
 	}
 
-	private void initAddRemoveButtons()
+	private void initButtons()
 	{
-		addNewContactButton.addClickListener(new ClickListener()
+		newButton.addClickListener(new ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event)
 			{
-				/*
-				 * Rows in the Container data model are called Item. Here we add
-				 * a new row in the beginning of the list.
-				 */
-				if (allowRowChange())
+				try
 				{
-					contactContainer.removeAllContainerFilters();
-					Long contactid = (Long) contactContainer.addEntity(new Contact());
-					inNew = true;
-
-					/* Lets choose the newly created contact to edit it. */
-					contactTable.select(contactid);
+					/*
+					 * Rows in the Container data model are called Item. Here we
+					 * add a new row in the beginning of the list.
+					 */
+					if (allowRowChange())
+					{
+						contactContainer.removeAllContainerFilters();
+						inNew = true;
+						rowChanged(new Contact());
+						tabs.setSelectedTab(overviewForm);
+						rightLayout.setVisible(true);
+					}
+				}
+				catch (ConstraintViolationException e)
+				{
+					FormHelper.showConstraintViolation(e);
 				}
 			}
+
 		});
 
-		deleteContactButton.addClickListener(new ClickListener()
+		deleteButton.addClickListener(new ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -241,6 +267,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 									{
 										Object contactId = contactTable.getValue();
 										contactTable.removeItem(contactId);
+										ContactView.this.currentContact = null;
 										inNew = false;
 									}
 								}
@@ -249,7 +276,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			}
 		});
 
-		cancelContactButton.addClickListener(new ClickListener()
+		cancelButton.addClickListener(new ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -258,8 +285,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 				fieldGroup.discard();
 				if (inNew)
 				{
-					Object contactId = contactTable.getValue();
-					contactTable.removeItem(contactId);
+					ContactView.this.contactTable.select(null);
 				}
 
 				inNew = false;
@@ -274,8 +300,20 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 			public void buttonClick(ClickEvent event)
 			{
-				commit();
-				inNew = false;
+				try
+				{
+					commit();
+
+					if (inNew)
+					{
+						contactContainer.addEntity(ContactView.this.currentContact);
+						inNew = false;
+					}
+				}
+				catch (ConstraintViolationException e)
+				{
+					FormHelper.showConstraintViolation(e);
+				}
 
 			}
 		});
@@ -285,68 +323,127 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private void initEditor()
 	{
 
-		commonHelp = new FormHelper(this.layoutFields, this.fieldGroup);
-		adultHelp = new FormHelper(this.layoutFields, this.fieldGroup);
-		youthHelp = new FormHelper(this.layoutFields, this.fieldGroup);
-		memberHelp = new FormHelper(this.layoutFields, this.fieldGroup);
-		affiliatedHelp = new FormHelper(this.layoutFields, this.fieldGroup);
-		affiliateAdultHelper = new FormHelper(this.layoutFields, this.fieldGroup);
+		// Overview taba
+		overviewForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		overviewForm.setSizeFull();
+		tabs.addTab(overviewForm, "Overview");
+		overviewForm.setMargin(true);
+		overviewForm.bindBooleanField("Active", "active");
+		overviewForm.newLine();
+		overviewForm.colspan(2);
+		final ComboBox role = overviewForm.bindEnumField("Role", "role", GroupRole.class);
+		overviewForm.newLine();
+		overviewForm.colspan(2);
+		overviewForm.bindTokenField(this, "Tags", "tags", Tag.class);
+		overviewForm.colspan(2);
+		overviewForm.bindTextField("Firstname", Contact.FIRSTNAME);
+		overviewForm.newLine();
+		overviewForm.colspan(2);
+		overviewForm.bindTextField("Middle name", "middlename");
+		overviewForm.newLine();
+		overviewForm.colspan(2);
+		overviewForm.bindTextField("Lastname", Contact.LASTNAME);
+		overviewForm.newLine();
+		DateField birthDate = overviewForm.bindDateField("Birth Date", Contact.BIRTH_DATE);
 
-		commonHelp.bindBooleanField("Active", "active");
-		final ComboBox role = commonHelp.bindEnumField("Role", "role", GroupRole.class);
-		commonHelp.bindTextField("Firstname", Contact.FIRSTNAME);//.addValidator(
-				//new StringLengthValidator("You must enter a Firstname", 1, 255, false));
-		commonHelp.bindTextField("Middle name", "middlename");
-		commonHelp.bindTextField("Lastname", Contact.LASTNAME).addValidator(
-				new StringLengthValidator("You must enter a Lastname", 1, 255, false));
-		DateField birthDate = commonHelp.bindDateField("Birth Date", Contact.BIRTH_DATE);
+		final Label labelAge = overviewForm.bindLabelField("Age", "age");
+		overviewForm.bindEnumField("Gender", "gender", Gender.class);
+		overviewForm.newLine();
 
-		final Label labelAge = commonHelp.bindLabelField("Age", "age");
-		final Label labelSectionEligibity = youthHelp.bindLabelField("Section Eligibility", "sectionEligibility");
 
-		memberHelp.bindEntityField("Section ", "section", SectionType.class);
-		commonHelp.bindEnumField("Gender", "gender", Gender.class);
-		commonHelp.bindTokenField(contactTable, "Tags", "tags", Tag.class);
+		// Contact tab
+		contactForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		contactForm.setSizeFull();
+		tabs.addTab(contactForm, "Contact");
+		contactForm.setMargin(true);
+		
+		contactForm.colspan(2);
+		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
+		contactForm.newLine();
+		contactForm.colspan(2);
+		contactForm.bindTextField("Home Email", "homeEmail");
+		contactForm.newLine();
+		contactForm.colspan(2);
+		contactForm.bindTextField("Work Email", "workEmail");
+		contactForm.newLine();
+		contactForm.bindTextField("Home Phone", "homePhone.phoneNo");
+		contactForm.bindBooleanField("Primary", "homePhone.primaryPhone");
+		contactForm.bindTextField("Work Phone", "workPhone.phoneNo");
+		contactForm.bindBooleanField("Primary", "workPhone.primaryPhone");
+		contactForm.bindTextField("Mobile Phone", "mobile.phoneNo");
+		contactForm.bindBooleanField("Primary", "mobile.primaryPhone");
+		contactForm.colspan(2);
+		contactForm.bindTextField("Street", "address.street");
+		contactForm.newLine();
+		contactForm.colspan(2);
+		contactForm.bindTextField("City", "address.city");
+		contactForm.newLine();
+		contactForm.bindTextField("State", "address.state");
+		contactForm.bindTextField("Postcode", "address.postcode");
+		contactForm.newLine();
+		contactForm.bindEnumField("Preferred Phone", "preferredPhone", PreferredPhone.class);
+		contactForm.bindEnumField("Preferred Email", "preferredEmail", PreferredEmail.class);
 
-		// Adult fields
+		
+		// Youth tab
+		youthForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		tabs.addTab(youthForm, "Youth");
+		youthForm.setSizeFull();
+		youthForm.setMargin(true);
+		final Label labelSectionEligibity = youthForm.bindLabelField("Section Eligibility", "sectionEligibility");
+		youthForm.newLine();
+		youthForm.bindBooleanField("Custody Order", "custodyOrder");
+		youthForm.newLine();
+		youthForm.colspan(2);
+		youthForm.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
+		youthForm.colspan(2);
+		youthForm.bindTextField("School", "school");
 
-		commonHelp.bindTextField("Home Phone", "homePhone");
-		adultHelp.bindTextField("Work Phone", "workPhone");
-		commonHelp.bindTextField("Mobile", "mobile");
-		adultHelp.bindEnumField("Preferred Phone", "preferredPhone", PreferredPhone.class);
-		commonHelp.bindTextField("Home Email", "homeEmail");
-		adultHelp.bindTextField("Work Email", "workEmail");
-		adultHelp.bindEnumField("Preferred Email", "preferredEmail", PreferredEmail.class);
-		commonHelp.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
 
-		youthHelp.bindBooleanField("Custody Order", "custodyOrder");
-		youthHelp.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
-		youthHelp.bindTextField("School", "school");
-		// bindPanel(youthLayout,"Address", "address");
+		// Member tab
+		memberForm = new MultiColumnFormLayout<Contact>(1, this.fieldGroup);
+		tabs.addTab(memberForm, "Member");
+		memberForm.setMargin(true);
+		memberForm.setSizeFull();
+		memberForm.bindBooleanField("Member", "isMember");
+		memberForm.bindEntityField("Section ", "section", "name", SectionType.class);
+		memberForm.bindTextField("Member No", "memberNo");
+		memberForm.bindDateField("Member Since", "memberSince");
 
-		memberHelp.bindBooleanField("Member", "isMember");
-		memberHelp.bindTextField("Member No", "memberNo");
-		memberHelp.bindDateField("Member Since", "memberSince");
 
-		affiliatedHelp.bindTextField("Hobbies", "hobbies");
-		affiliatedHelp.bindDateField("Affiliated Since", "affiliatedSince");
-		affiliatedHelp.bindTextField("Allergies", "allergies");
-		affiliatedHelp.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
-		affiliatedHelp.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
-		affiliatedHelp.bindTextField("Private Medical Fund", "privateMedicalFundName");
+		// Medical Tab
+		medicalForm = new MultiColumnFormLayout<Contact>(1, this.fieldGroup);
+		tabs.addTab(medicalForm, "Medical");
+		medicalForm.setMargin(true);
+		medicalForm.setSizeFull();
+		medicalForm.bindTextField("Allergies", "allergies");
+		medicalForm.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
+		medicalForm.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
+		medicalForm.bindTextField("Private Medical Fund", "privateMedicalFundName");
 
-		affiliateAdultHelper.bindTextField("Current Employer", "currentEmployer");
-		affiliateAdultHelper.bindTextField("Job Title", "jobTitle");
-		// bindTextField(affiliatedAdultLayout, "Assets", "assets");
-		affiliateAdultHelper.bindBooleanField("Has WWC", "hasWWC");
-		affiliateAdultHelper.bindDateField("WWC Expiry", "wwcExpiry");
-		affiliateAdultHelper.bindTextField("WWC No.", "wwcNo");
-		affiliateAdultHelper.bindBooleanField("Has Police Check", "hasPoliceCheck");
-		affiliateAdultHelper.bindDateField("Police Check Expiry", "policeCheckExpiry");
-		affiliateAdultHelper.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
-		affiliateAdultHelper.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
+		// Background tab
+		background = new MultiColumnFormLayout<Contact>(1, this.fieldGroup);
+		tabs.addTab(background, "Background");
+		background.setMargin(true);
+		background.setSizeFull();
 
-		mainEditPanel.addComponent(layoutFields);
+		background.bindTextField("Hobbies", "hobbies");
+		background.bindDateField("Affiliated Since", "affiliatedSince");
+		background.bindTextField("Current Employer", "currentEmployer");
+		background.bindTextField("Job Title", "jobTitle");
+//		background.bindTextField("Assets", "assets");
+		background.bindBooleanField("Has WWC", "hasWWC");
+		background.bindDateField("WWC Expiry", "wwcExpiry");
+		background.bindTextField("WWC No.", "wwcNo");
+		background.bindBooleanField("Has Police Check", "hasPoliceCheck");
+		background.bindDateField("Police Check Expiry", "policeCheckExpiry");
+		background.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
+		background.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
+
+		tabs.setSizeFull();
+
+		mainEditPanel.addComponent(tabs);
+		mainEditPanel.setExpandRatio(tabs, (float) 1.0);
 
 		// When a persons birth date changes recalculate their age.
 		birthDate.addValueChangeListener(new Property.ValueChangeListener()
@@ -368,85 +465,80 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 			public void valueChange(ValueChangeEvent event)
 			{
-				switch ((GroupRole) role.getValue())
-				{
-					case AdultHelper:
-					case Volunteer:
-					case QuarterMaster:
-					case CommitteeMember:
-						showAdult(true);
-						showYouth(false);
-						showMember(false);
-						showAffiliate(true);
-						showAffiliateAdult(true);
-						break;
-
-					case Gardian:
-					case Parent:
-						showAdult(true);
-						showYouth(false);
-						showMember(false);
-						showAffiliate(true);
-						showAffiliateAdult(true);
-						break;
-					case AssistantLeader:
-					case Leader:
-					case GroupLeader:
-					case President:
-					case Secretary:
-					case Treasurer:
-						showAdult(true);
-						showYouth(false);
-						showMember(true);
-						showAffiliate(true);
-						showAffiliateAdult(true);
-						break;
-					case YouthMember:
-						showAdult(false);
-						showYouth(true);
-						showMember(true);
-						showAffiliate(true);
-						showAffiliateAdult(false);
-						break;
-					default:
-						break;
-				}
-
-				Object contactId = contactTable.getValue();
-
+//				switch ((GroupRole) role.getValue())
+//				{
+//					case AdultHelper:
+//					case Volunteer:
+//					case QuarterMaster:
+//					case CommitteeMember:
+//						showAdult(true);
+//						showYouth(false);
+//						showMember(false);
+//						showAffiliate(true);
+//						showAffiliateAdult(true);
+//						break;
+//
+//					case Gardian:
+//					case Parent:
+//						showAdult(true);
+//						showYouth(false);
+//						showMember(false);
+//						showAffiliate(true);
+//						showAffiliateAdult(true);
+//						break;
+//					case AssistantLeader:
+//					case Leader:
+//					case GroupLeader:
+//					case President:
+//					case Secretary:
+//					case Treasurer:
+//						showAdult(true);
+//						showYouth(false);
+//						showMember(true);
+//						showAffiliate(true);
+//						showAffiliateAdult(true);
+//						break;
+//					case YouthMember:
+//						showAdult(false);
+//						showYouth(true);
+//						showMember(true);
+//						showAffiliate(true);
+//						showAffiliateAdult(false);
+//						break;
+//					default:
+//						break;
+//				}
 				ContactDao daoContact = new ContactDao();
-
-				Contact contact = contactContainer.getItem(contactId).getEntity();
-				labelAge.setValue(daoContact.getAge(contact).toString());
+				labelAge.setValue(daoContact.getAge(ContactView.this.currentContact).toString());
 			}
 
 			private void showAffiliateAdult(boolean visible)
 			{
-				showFieldSection(affiliateAdultHelper, visible);
+				showFieldSection(background, visible);
 			}
 
 			private void showAffiliate(boolean visible)
 			{
-				showFieldSection(affiliatedHelp, visible);
+				showFieldSection(medicalForm, visible);
 			}
 
 			private void showMember(boolean visible)
 			{
-				showFieldSection(memberHelp, visible);
+				showFieldSection(memberForm, visible);
 			}
 
 			private void showYouth(boolean visible)
 			{
-				showFieldSection(youthHelp, visible);
+				showFieldSection(youthForm, visible);
 			}
 
 			private void showAdult(boolean visible)
 			{
-				showFieldSection(adultHelp, visible);
+				showFieldSection(contactForm, visible);
 
 			}
 
-			private void showFieldSection(FormHelper fieldLayout, boolean visible)
+			private void showFieldSection(MultiColumnFormLayout<Contact> fieldLayout, boolean visible)
 			{
 				for (AbstractComponent field : fieldLayout.getFieldList())
 				{
@@ -461,7 +553,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		 * changes automatically without calling commit().
 		 */
 		fieldGroup.setBuffered(true);
-		//fieldGroup.setItemDataSource((Contact)null);
+		// fieldGroup.setItemDataSource((Contact)null);
 
 	}
 
@@ -541,6 +633,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 										 * Properties in our contact at once.
 										 */
 										fieldGroup.discard();
+										inNew = false;
 										allowChange.setValue(true);
 									}
 									else
@@ -565,10 +658,39 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	 *  table part of this view has changed.
 	 *  We use this to update the editor's current item.
 	 */
-	//public void rowChanged(final Contact contact)
-	public void rowChanged(final Item contact)
+	public void rowChanged(Contact contact)
 	{
-		fieldGroup.setItemDataSource(contact);
+		this.currentContact = contact;
+
+		// The contact is null if the row is de-selected
+		if (contact != null)
+		{
+			// When selecting the groups data source we need to wrap it in a
+			// BeanItem
+			// to support bean validation and sub-entities.
+			BeanItem<Contact> beanItem = new BeanItem<Contact>(contact);
+			beanItem.addNestedProperty("homePhone.phoneNo");
+			beanItem.addNestedProperty("homePhone.primaryPhone");
+			beanItem.addNestedProperty("homePhone.locationType");
+			beanItem.addNestedProperty("homePhone.phoneType");
+
+			beanItem.addNestedProperty("workPhone.phoneNo");
+			beanItem.addNestedProperty("workPhone.primaryPhone");
+			beanItem.addNestedProperty("workPhone.locationType");
+			beanItem.addNestedProperty("workPhone.phoneType");
+
+			beanItem.addNestedProperty("mobile.phoneNo");
+			beanItem.addNestedProperty("mobile.primaryPhone");
+			beanItem.addNestedProperty("mobile.locationType");
+			beanItem.addNestedProperty("mobile.phoneType");
+
+			beanItem.addNestedProperty("address.street");
+			beanItem.addNestedProperty("address.city");
+			beanItem.addNestedProperty("address.postcode");
+			beanItem.addNestedProperty("address.state");
+			fieldGroup.setItemDataSource(beanItem);
+		}
+
 		rightLayout.setVisible(contact != null);
 
 	}
@@ -585,6 +707,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			else
 			{
 				fieldGroup.commit();
+				
+				ContactDao daoContact = new ContactDao();
+				contactContainer.
+				daoContact.merge(currentContact);
+				
 				Notification.show("Changes Saved", "Any changes you have made to this Contact have been saved.",
 						Type.TRAY_NOTIFICATION);
 			}
@@ -608,6 +735,12 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		layout.setComponentAlignment(pleaseAdd, Alignment.MIDDLE_CENTER);
 		layout.setSizeFull();
 		return layout;
+	}
+
+	@Override
+	public Contact getCurrent()
+	{
+		return currentContact;
 	}
 
 }

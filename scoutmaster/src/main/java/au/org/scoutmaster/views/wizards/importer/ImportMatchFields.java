@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.importWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
 /**
  * Import code from:
@@ -22,17 +22,16 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.util.MultiColumnFormLayout;
 import au.org.scoutmaster.views.ImportView;
 
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 
 public class ImportMatchFields implements WizardStep
 {
@@ -108,39 +107,37 @@ public class ImportMatchFields implements WizardStep
 		this.headers = null;
 		this.mappings = new ArrayList<ComboBox>();
 
-		VerticalLayout layout = new VerticalLayout();
-
-		HorizontalLayout row = new HorizontalLayout();
-		FormLayout fl = new FormLayout();
+		MultiColumnFormLayout layout = new MultiColumnFormLayout<>(3, new FieldGroup());
 		this.selectedUserMapping = this.importView.getFile().getImportMapping();
-		fieldMapping = new TextField("Import Mapping", selectedUserMapping);
-		fl.addComponent(fieldMapping);
-		row.addComponent(fl);
-		row.addComponent(new Label(
-				"Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
+		
+		
+//		fieldMapping = new TextField("Import Mapping", selectedUserMapping);
+//		fl.addComponent(fieldMapping);
+//		row.addComponent(fl);
+//		row.addComponent(new Label(
+//				"Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
 
 		layout.setMargin(true);
+		layout.setSizeFull();
 		try
 		{
 			String[] headers = getHeaders();
+			
 
-			EntityAdaptor<Class<? extends Importable>> adaptor = new EntityAdaptor<Class<? extends Importable>>(
-					importable);
-
+			EntityAdaptor adaptor = EntityAdaptor.create(importable);
+			
 			ArrayList<FormFieldImpl> fields = adaptor.getFields();
 			for (String header : headers)
 			{
-				row = new HorizontalLayout();
-				fl = new FormLayout();
-				ComboBox box = new ComboBox(header + "  --Maps to-->  ", fields);
+				layout.addComponent(new Label(header));
+				layout.addComponent(new Label("--Maps to-->"));
+				ComboBox box = new ComboBox(null, fields);
 				box.setNullSelectionAllowed(true);
 				box.setInputPrompt("--Please Select--");
 				box.setNullSelectionItemId("--Please Select--");
 				box.setTextInputAllowed(false);
-				fl.addComponent(box);
-				row.addComponent(fl);
+				layout.addComponent(box);
 				this.mappings.add(box);
-				layout.addComponent(row);
 			}
 		}
 		catch (IOException e)
@@ -149,6 +146,8 @@ public class ImportMatchFields implements WizardStep
 		}
 		return layout;
 	}
+
+	
 
 	@Override
 	public boolean onAdvance()

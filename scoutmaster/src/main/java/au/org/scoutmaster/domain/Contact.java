@@ -20,6 +20,11 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
 
 @Entity
 @NamedQueries(
@@ -76,13 +81,13 @@ public class Contact extends BaseEntity implements Importable
 	 */
 
 	@FormField(displayName = "Home Phone")
-	private Phone homePhone;
+	private Phone homePhone = new Phone();
 
 	@FormField(displayName = "Work Phone")
-	private Phone workPhone;
+	private Phone workPhone = new Phone();
 
 	@FormField(displayName = "Mobile")
-	private Phone mobile;
+	private Phone mobile= new Phone();
 
 	@FormField(displayName = "Home Email")
 	private String homeEmail = "";
@@ -120,7 +125,7 @@ public class Contact extends BaseEntity implements Importable
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@FormField(displayName = "Address")
-	private Address address;
+	private Address address = new Address();
 
 	/**
 	 * Member fields
@@ -224,6 +229,14 @@ public class Contact extends BaseEntity implements Importable
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Activity> activites = new ArrayList<>();
+	
+	/**
+	 * Id imported along with the contact.
+	 * Used to link the contact to an external data source generally the one it was imported from.
+	 * This can be used during susequent imports to link additional data entities to this contact.
+	 */
+	@FormField(displayName = "Import ID")
+	private String importId;
 
 	public Contact()
 	{
@@ -349,9 +362,9 @@ public class Contact extends BaseEntity implements Importable
 		return gender;
 	}
 
-	public void setHomePhone(Phone homePhone)
+	public void setHomePhone(String phoneNo)
 	{
-		this.homePhone = homePhone;
+		this.homePhone.setPhoneNo(phoneNo);
 	}
 
 	public Phone getHomePhone()
@@ -372,6 +385,191 @@ public class Contact extends BaseEntity implements Importable
 	public String getHomeEmail()
 	{
 		return homeEmail;
+	}
+
+	public Age getAge()
+	{
+		return age;
+	}
+
+	public void setAge(Age age)
+	{
+		this.age = age;
+	}
+
+	public void setActive(boolean active)
+	{
+		this.active = active;
+	}
+
+	public void setPrefix(String prefix)
+	{
+		this.prefix = prefix;
+	}
+
+	public void setBirthDate(Date birthDate)
+	{
+		this.birthDate = birthDate;
+	}
+
+	public void setGender(Gender gender)
+	{
+		this.gender = gender;
+	}
+
+	public void setWorkPhone(Phone workPhone)
+	{
+		this.workPhone = workPhone;
+	}
+
+	public void setMobile(Phone mobile)
+	{
+		this.mobile = mobile;
+	}
+
+	public void setHomeEmail(String homeEmail)
+	{
+		this.homeEmail = homeEmail;
+	}
+
+	public void setWorkEmail(String workEmail)
+	{
+		this.workEmail = workEmail;
+	}
+
+	public void setPreferredPhone(PreferredPhone preferredPhone)
+	{
+		this.preferredPhone = preferredPhone;
+	}
+
+	public void setPreferredEmail(PreferredEmail preferredEmail)
+	{
+		this.preferredEmail = preferredEmail;
+	}
+
+	public void setPreferredCommunications(PreferredCommunications preferredCommunications)
+	{
+		this.preferredCommunications = preferredCommunications;
+	}
+
+	public void setAllergies(String allergies)
+	{
+		this.allergies = allergies;
+	}
+
+	public void setCustodyOrder(Boolean custodyOrder)
+	{
+		this.custodyOrder = custodyOrder;
+	}
+
+	public void setCustodyOrderDetails(String custodyOrderDetails)
+	{
+		this.custodyOrderDetails = custodyOrderDetails;
+	}
+
+	public void setSchool(String school)
+	{
+		this.school = school;
+	}
+
+	public void setIsMember(Boolean isMember)
+	{
+		this.isMember = isMember;
+	}
+
+	public void setMemberNo(String memberNo)
+	{
+		this.memberNo = memberNo;
+	}
+
+	public void setMemberSince(Date memberSince)
+	{
+		this.memberSince = memberSince;
+	}
+
+	public void setHobbies(String hobbies)
+	{
+		this.hobbies = hobbies;
+	}
+
+	public void setAffiliatedSince(Date affiliatedSince)
+	{
+		this.affiliatedSince = affiliatedSince;
+	}
+
+	public void setRole(GroupRole role)
+	{
+		this.role = role;
+	}
+
+	public void setMedicareNo(String medicareNo)
+	{
+		this.medicareNo = medicareNo;
+	}
+
+	public void setAmbulanceSubscriber(Boolean ambulanceSubscriber)
+	{
+		this.ambulanceSubscriber = ambulanceSubscriber;
+	}
+
+	public void setPrivateMedicalInsurance(Boolean privateMedicalInsurance)
+	{
+		this.privateMedicalInsurance = privateMedicalInsurance;
+	}
+
+	public void setPrivateMedicalFundName(String privateMedicalFundName)
+	{
+		this.privateMedicalFundName = privateMedicalFundName;
+	}
+
+	public void setCurrentEmployer(String currentEmployer)
+	{
+		this.currentEmployer = currentEmployer;
+	}
+
+	public void setJobTitle(String jobTitle)
+	{
+		this.jobTitle = jobTitle;
+	}
+
+	public void setHasWWC(Boolean hasWWC)
+	{
+		this.hasWWC = hasWWC;
+	}
+
+	public void setWwcNo(String wwcNo)
+	{
+		this.wwcNo = wwcNo;
+	}
+
+	public void setHasPoliceCheck(Boolean hasPoliceCheck)
+	{
+		this.hasPoliceCheck = hasPoliceCheck;
+	}
+
+	public void setHasFoodHandlingCertificate(Boolean hasFoodHandlingCertificate)
+	{
+		this.hasFoodHandlingCertificate = hasFoodHandlingCertificate;
+	}
+
+	public void setHasFirstAidCertificate(Boolean hasFirstAidCertificate)
+	{
+		this.hasFirstAidCertificate = hasFirstAidCertificate;
+	}
+
+	public void setTags(Set<Tag> tags)
+	{
+		this.tags = tags;
+	}
+
+	public void setNotes(List<Note> notes)
+	{
+		this.notes = notes;
+	}
+
+	public void setActivites(List<Activity> activites)
+	{
+		this.activites = activites;
 	}
 
 	public String getWorkEmail()
@@ -519,5 +717,38 @@ public class Contact extends BaseEntity implements Importable
 		this.lastname = lastname;
 	}
 
+	public void setStreet(String street)
+	{
+		this.address.setStreet(street);
+		
+	}
+
+	public void setCity(String city)
+	{
+		this.address.setCity(city);
+		
+	}
+
+	public void setState(String state)
+	{
+		this.address.setState(state);
+		
+	}
+
+	public void setPostcode(String postcode)
+	{
+		this.address.setPostcode(postcode);
+	}
+
+	public void setBirthDate(String fieldValue)
+	{
+		DateTimeParser[] parsers = { 
+		        DateTimeFormat.forPattern( "yyyy-MM-dd" ).getParser(),
+		        DateTimeFormat.forPattern( "yyyy/MM/dd" ).getParser() };
+		DateTimeFormatter formatter = new DateTimeFormatterBuilder().append( null, parsers ).toFormatter();
+
+		DateTime date1 = formatter.parseDateTime( fieldValue);
+		setBirthDate( new java.sql.Date(date1.toDate().getTime()));
+	}
 
 }

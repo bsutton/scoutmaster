@@ -5,22 +5,21 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
 import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.iSMSProvider;
 import au.org.scoutmaster.util.ProgressListener;
-import au.org.scoutmaster.views.messagingWizard.Message;
+import au.org.scoutmaster.views.wizards.messaging.Message;
 
 public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao<SMSProvider, Long>
 {
-
+	Logger logger = Logger.getLogger(SMSProviderDao.class);
 	private SmsSender smsSender;
-
-	// Send SMS with clickatell
-	// "bsutton", "SdKXfdTCXCYFAK", "api_id=3431385"
 
 	@Override
 	public List<SMSProvider> findAll()
@@ -28,8 +27,44 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 		Query query = entityManager.createNamedQuery("SMSProvider.findAll");
 		@SuppressWarnings("unchecked")
 		List<SMSProvider> list = query.getResultList();
+		initProviders(list);
 		return list;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<SMSProvider> findByName(String name)
+	{
+		Query query = entityManager.createNamedQuery(SMSProvider.FIND_BY_NAME);
+		query.setParameter("name", name);
+		List<SMSProvider> results = query.getResultList();
+		initProviders(results);
+		return results;
+	}
+
+	/**
+	 * Initialise each of the specified SMS Providers
+	 * 
+	 * @param list
+	 */
+	private void initProviders(List<SMSProvider> list)
+	{
+		for (SMSProvider provider : list)
+		{
+			try
+			{
+				@SuppressWarnings("unchecked")
+				Class<iSMSProvider> classz = (Class<iSMSProvider>) Class.forName(provider.getClassPath());
+				provider.setProvider(classz.newInstance());
+			}
+			catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)
+			{
+				logger.error(e, e);
+				throw new RuntimeException(e);
+			}
+		}
+
+	}
+
 
 	public void send(SMSProvider provider, List<Phone> targets, Message message, ProgressListener listener) throws SmsException, IOException
 	{
@@ -81,5 +116,6 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 				provider.getApiId());
 
 	}
+
 
 }

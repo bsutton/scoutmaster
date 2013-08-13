@@ -1,26 +1,31 @@
 package au.org.scoutmaster.domain;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 @Entity
 @NamedQueries(
 {
-		@NamedQuery(name = "SMSProvider.findAll", query = "SELECT smsprovider FROM SMSProvider smsprovider"),
-		@NamedQuery(name = "SMSProvider.findByType"
-		, query = "SELECT smsprovider FROM SMSProvider smsprovider "
-				+ "join SMSProviderType smsprovidertype "
-				+ "	on smsprovider.type_id = smsprovidertype.id "
-				+ "WHERE smsprovidertype.name = :name") })
+		@NamedQuery(name = SMSProvider.FIND_ALL, query = "SELECT smsprovider FROM SMSProvider smsprovider"),
+		@NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name")
+})
 
 public class SMSProvider extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
+	
+	public static final String FIND_BY_NAME = "findByName";
+	public static final String FIND_ALL = "findAll";
+	
 
-	@ManyToOne
-	private SMSProviderType type;
+	/**
+	 * The name of the provider used to display the provider to th e user.
+	 */
+	private String providerName;
+	
+	private String description;
 
 	private String username;
 
@@ -31,6 +36,15 @@ public class SMSProvider extends BaseEntity
 	private boolean active;
 
 	private boolean defaultProvider;
+	
+	/**
+	 * Class path to the iSMSProvider
+	 */
+	String classPath;
+
+	@Transient
+	iSMSProvider provider;
+
 
 	
 	public String getUsername()
@@ -83,15 +97,19 @@ public class SMSProvider extends BaseEntity
 		this.defaultProvider = defaultProvider;
 	}
 
-
-	public SMSProviderType getType()
+	public void setProvider(iSMSProvider newInstance)
 	{
-		return type;
+		this.provider = newInstance;
 	}
 
-	public void setType(SMSProviderType type)
+	public String getClassPath()
 	{
-		this.type = type;
+		return this.classPath;
+	}
+
+	public String getProviderName()
+	{
+		return this.providerName;
 	}
 
 }

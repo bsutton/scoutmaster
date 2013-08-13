@@ -7,7 +7,6 @@ import org.vaadin.dialogs.ConfirmDialog;
 import au.org.scoutmaster.domain.BaseEntity;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Item;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -504,7 +503,7 @@ public class BaseCrudView<T extends BaseEntity> extends HorizontalSplitPanel imp
 	 *  We use this to update the editor's current item.
 	 */
 	//public void rowChanged(final T contact)
-	public void rowChanged(final Item contact)
+	public void rowChanged(final T contact)
 	{
 		fieldGroup.setItemDataSource(contact);
 		rightLayout.setVisible(contact != null);
@@ -539,5 +538,6 @@ public class BaseCrudView<T extends BaseEntity> extends HorizontalSplitPanel imp
 		layout.setSizeFull();
 		return layout;
 	}
+
 
 }

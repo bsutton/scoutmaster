@@ -2,10 +2,19 @@ package au.org.scoutmaster.domain;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
 
+import javax.persistence.EntityManager;
+
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.log4j.Logger;
 
 public class EntityAdaptor<T>
 {
+	private static Logger logger = Logger.getLogger(EntityAdaptor.class);
+
 	Class<?> entity;
 
 	public EntityAdaptor(Class<?> entity)
@@ -28,6 +37,7 @@ public class EntityAdaptor<T>
 				formFields.add(formField);
 			}
 		}
+		Collections.sort(formFields,  new CustomComparator<FormFieldImpl>()  );
 
 		return formFields;
 	}
@@ -41,5 +51,29 @@ public class EntityAdaptor<T>
 			fieldDisplayNames.add(field.displayName());
 		}
 		return fieldDisplayNames;
+	}
+
+	public void save(EntityManager em, T entity, String[] csvHeaders, String[] fieldValues,
+			Hashtable<String, FormFieldImpl> fieldMap)
+	{
+		throw new NotImplementedException("Derived class must implatement this");
+	}
+
+	@SuppressWarnings("unchecked")
+	static public <T extends EntityAdaptor<?>> T create(Class<?> entityClass)
+	{
+		T adaptor = null;
+		if (entityClass.equals(Contact.class))
+			adaptor = (T) new ContactEntityAdaptor(entityClass);
+		return adaptor;
+	}
+
+	public class CustomComparator<Fs> implements Comparator<FormFieldImpl>
+	{
+		@Override
+		public int compare(FormFieldImpl o1, FormFieldImpl o2)
+		{
+			return o1.displayName().compareTo(o2.displayName());
+		}
 	}
 }

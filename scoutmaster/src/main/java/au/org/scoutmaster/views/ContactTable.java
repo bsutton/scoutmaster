@@ -7,19 +7,24 @@ import au.org.scoutmaster.domain.Contact;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Table;
 
-public class ContactTable extends Table implements Selected<Contact>
+public class ContactTable extends Table
 {
 
 	private static final long serialVersionUID = 1L;
 	private JPAContainer<Contact> contactContainer;
 	private RowChangeListener<Contact> rowChangeListener;
+	private String[] visibleColumns;
 
-	ContactTable(JPAContainer<Contact> contactContainer, RowChangeListener<Contact> rowChangeListener)
+	ContactTable(JPAContainer<Contact> contactContainer, String[] visibleColumns)
 	{
 		this.contactContainer = contactContainer;
+		this.visibleColumns = visibleColumns;
+	}
+	
+	public void setRowChangeListener(RowChangeListener<Contact> rowChangeListener)
+	{
 		this.rowChangeListener = rowChangeListener;
 	}
 
@@ -27,8 +32,7 @@ public class ContactTable extends Table implements Selected<Contact>
 	{
 
 		this.setContainerDataSource(contactContainer);
-		this.setVisibleColumns((Object[]) new String[]
-		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.SECTION });
+		this.setVisibleColumns((Object[]) visibleColumns);
 
 		this.setSelectable(true);
 		this.setImmediate(true);
@@ -41,13 +45,15 @@ public class ContactTable extends Table implements Selected<Contact>
 			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event)
 			{
 				Long contactId = (Long) ContactTable.this.getValue();
-//				ContactDao daoContact = new ContactDao();
-//				Contact contact = daoContact.findById(contactId);
-				
-//				Contact contact = ContactTable.this.contactContainer.getItem(contactId).getEntity();
-				//ContactTable.this.rowChangeListener.rowChanged(new BeanItem(contact));
-				ContactTable.this.rowChangeListener.rowChanged(ContactTable.this.contactContainer.getItem(contactId));
 
+				if (contactId != null) // it can be null when a row is being
+										// deleted.
+				{
+					Contact contact = ContactTable.this.contactContainer.getItem(contactId).getEntity();
+					ContactTable.this.rowChangeListener.rowChanged(contact);
+				}
+				else
+					ContactTable.this.rowChangeListener.rowChanged(null);
 			}
 		});
 	}
@@ -60,13 +66,15 @@ public class ContactTable extends Table implements Selected<Contact>
 	{
 		if (variables.containsKey("selected"))
 		{
-			if (ContactTable.this.rowChangeListener.allowRowChange())
+			
+			if (ContactTable.this.rowChangeListener != null
+					&& ContactTable.this.rowChangeListener.allowRowChange())
 				ContactTable.super.changeVariables(source, variables);
 			else
 				markAsDirty();
 		}
 		else
-		super.changeVariables(source, variables);
+			super.changeVariables(source, variables);
 	}
 
 	public Contact getCurrent()
@@ -80,6 +88,7 @@ public class ContactTable extends Table implements Selected<Contact>
 
 	/**
 	 * This nasty piece of work exists to stop the following exception being
+	 * 
 	 * thrown. java.lang.IllegalArgumentException: wrong number of arguments
 	 * sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	 * sun.reflect.NativeMethodAccessorImpl
@@ -125,5 +134,7 @@ public class ContactTable extends Table implements Selected<Contact>
 		}
 		return super.formatPropertyValue(rowId, colId, property);
 	}
+
+	
 
 }

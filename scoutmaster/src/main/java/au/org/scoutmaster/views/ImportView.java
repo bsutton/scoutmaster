@@ -8,12 +8,12 @@ import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
 import au.org.scoutmaster.application.Menu;
-import au.org.scoutmaster.views.importWizard.ImportComplete;
-import au.org.scoutmaster.views.importWizard.ImportMatchFields;
-import au.org.scoutmaster.views.importWizard.ImportSelectFile;
-import au.org.scoutmaster.views.importWizard.ImportSelectType;
-import au.org.scoutmaster.views.importWizard.ImportShowProgress;
-import au.org.scoutmaster.views.importWizard.ImportShowSample;
+import au.org.scoutmaster.views.wizards.importer.ImportComplete;
+import au.org.scoutmaster.views.wizards.importer.ImportMatchFields;
+import au.org.scoutmaster.views.wizards.importer.ImportSelectFile;
+import au.org.scoutmaster.views.wizards.importer.ImportSelectType;
+import au.org.scoutmaster.views.wizards.importer.ImportShowProgress;
+import au.org.scoutmaster.views.wizards.importer.ImportShowSample;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;

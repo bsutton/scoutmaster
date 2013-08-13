@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.importWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,6 +46,7 @@ public class ImportShowSample implements WizardStep
 	{
 		File tempFile = this.importView.getFile().getTempFile();
 		Table table = new Table();
+		table.setSizeFull();
 
 		FileReader reader;
 		try
@@ -85,7 +86,9 @@ public class ImportShowSample implements WizardStep
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		layout.setSpacing(true);
+		layout.setSizeFull();
 		layout.addComponent(table);
+		layout.setExpandRatio(table, 1);
 		layout.addComponent(new Label(
 				"If you are happy with the mappings click Next to import the data or click 'Back' to adjust the mappings."));
 

@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.messagingWizard;
+package au.org.scoutmaster.views.wizards.messaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +19,23 @@ import au.org.scoutmaster.views.MessagingWizardView;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SendMessage implements WizardStep, ProgressTaskListener
+public class SendMessageStep implements WizardStep, ProgressTaskListener
 {
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(SendMessage.class);
+	static private Logger logger = Logger.getLogger(SendMessageStep.class);
 	JPAContainer<? extends Importable> entities;
 	private MessagingWizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
 
-	public SendMessage(MessagingWizardView messagingWizardView)
+	public SendMessageStep(MessagingWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}
@@ -59,26 +61,34 @@ public class SendMessage implements WizardStep, ProgressTaskListener
 		indicator.setSizeFull();
 		layout.addComponent(indicator);
 
-
 		ContactDao daoContact = new ContactDao();
 		List<Contact> contacts = daoContact.findAll();
 		ArrayList<Phone> phones = new ArrayList<>();
-		
+
 		for (Contact contact : contacts)
 		{
 			PhoneDao daoPhone = new PhoneDao();
-			
+
 			if (!daoPhone.isEmpty(contact.getMobile()))
 				phones.add(contact.getMobile());
 		}
-		progressDescription.setValue("Sent: 0 of " + contacts.size() + " messages.");
 
-		EnterMessage enter = messagingWizardView.getEnter();
-		
-		SMSProvider provider = messagingWizardView.getEnter().getProvider();
+		if (phones.size() == 0)
+		{
+			Notification.show("None of the selected contacts have a mobile phone no.", Type.ERROR_MESSAGE);
+		}
+		else
+		{
+			progressDescription.setValue("Sent: 0 of " + contacts.size() + " messages.");
 
-		ProgressBarWorker worker = new ProgressBarWorker(new SendMessageTask(this, provider, enter.getMessage(), phones));
-		worker.start();
+			MessageDetailsStep enter = messagingWizardView.getDetails();
+
+			SMSProvider provider = messagingWizardView.getDetails().getProvider();
+
+			ProgressBarWorker worker = new ProgressBarWorker(new SendMessageTask(this, provider, enter.getMessage(),
+					phones));
+			worker.start();
+		}
 
 		return layout;
 	}
@@ -94,7 +104,6 @@ public class SendMessage implements WizardStep, ProgressTaskListener
 	{
 		return true;
 	}
-
 
 	public final void taskProgress(final int count, final int max)
 	{
@@ -112,6 +121,7 @@ public class SendMessage implements WizardStep, ProgressTaskListener
 	public final void taskComplete()
 	{
 		indicator.setValue(1.0f);
+		progressDescription.setValue("SMS Messages have been sent.");
 		sendComplete = true;
 	}
 }

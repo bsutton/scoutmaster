@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.messagingWizard;
+package au.org.scoutmaster.views.wizards.messaging;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -17,7 +17,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class EnterMessage  implements WizardStep
+public class MessageDetailsStep  implements WizardStep
 {
 
 	private TextField subject;
@@ -28,7 +28,7 @@ public class EnterMessage  implements WizardStep
 	private TextField from;
 	private ComboBox providers;
 
-	public EnterMessage(MessagingWizardView messagingWizardView)
+	public MessageDetailsStep(MessagingWizardView messagingWizardView)
 	{
 		
 	}
@@ -36,7 +36,7 @@ public class EnterMessage  implements WizardStep
 	@Override
 	public String getCaption()
 	{
-		return "Select entity";
+		return "Message Details";
 	}
 
 	@Override
@@ -47,8 +47,9 @@ public class EnterMessage  implements WizardStep
 		layout.addComponent(new Label("Enter the subject and message and then click next."));
 		FormLayout formLayout = new FormLayout();
 		formHelper = new FormHelper(formLayout, null);
-		providers = formHelper.bindEntityField("Provider", "provider", SMSProvider.class);
-		from = formHelper.bindTextField("From", "from");
+		providers = formHelper.bindEntityField("Provider", "providerName", "providerName", SMSProvider.class);
+		from = formHelper.bindTextField("From Mobile No.", "from");
+		from.setDescription("Enter you mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		subject = formHelper.bindTextField("Subject", "subject");
 		subject.setSizeFull();
 		message = formHelper.bindTextAreaField("Message", "message", 4);
@@ -87,7 +88,7 @@ public class EnterMessage  implements WizardStep
 	@Override
 	public boolean onBack()
 	{
-		return false;
+		return true;
 	}
 
 	public Message getMessage()
@@ -98,6 +99,16 @@ public class EnterMessage  implements WizardStep
 	public SMSProvider getProvider()
 	{
 		return (SMSProvider) providers.getConvertedValue();
+	}
+
+	public String getFrom()
+	{
+		return from.getValue();
+	}
+
+	public String getSubject()
+	{
+		return subject.getValue();
 	}
 
 }

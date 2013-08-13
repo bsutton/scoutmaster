@@ -1,4 +1,7 @@
-package au.org.scoutmaster.domain;
+package au.org.scoutmaster.smsproviders;
+
+import au.org.scoutmaster.domain.Phone;
+import au.org.scoutmaster.domain.iSMSProvider;
 
 public class ClickATellProvider implements iSMSProvider
 {

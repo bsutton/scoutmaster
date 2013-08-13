@@ -32,21 +32,6 @@ public class Tag extends BaseEntity
 	public static final String DESCRIPTION = "description";
 	public static final String NAME = "name";
 
-	/**
-	 * Builtin-tags
-	 * 
-	 * There are a number of built in tags which are used to identify important
-	 * attributes.
-	 * 
-	 * Note tags should NOT duplicate GroupRoles
-	 * 
-	 * @author bsutton
-	 * 
-	 */
-	enum BuiltInTag
-	{
-		PROSPECT, SUPPLIER
-	};
 
 	@Column(unique = true, length = 30)
 	String name;
@@ -54,6 +39,27 @@ public class Tag extends BaseEntity
 
 	@Column(length = 250)
 	String description;
+	
+	/**
+	 * Indicates that this is a builtin tag and therefore it may not be deleted
+	 */
+	Boolean builtin;
+	
+
+	/*
+	 * Non detachable tags are a special class of 
+	 * tags which are automatically assigned to an entity
+	 * based on some other entity property.
+	 * For instance a Contact which is a Youth Member would
+	 * also be automatically assigned to the tag Youth Member.
+	 * This is some what redundant but the idea is to make searching
+	 * for entities by a tag all encompasing.
+	 * i.e. all major attributes of an entity are cross referenced
+	 * by a tag for the purposes of searching.
+	 * 
+	 * Only builtin tags may be NON-detachable.
+	 */
+	Boolean detachable;
 
 	// @ManyToMany
 	// private final List<Contact> contacts = new ArrayList<>();

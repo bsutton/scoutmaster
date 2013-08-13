@@ -23,25 +23,60 @@ public class Phone extends BaseEntity
 	static public final String FIND_ALL = "Phone.findAll";
 
 	/**
-	 * the phone no.
-	 */
-	String phoneNo;
-	
-	/**
 	 * The type of phone number.
 	 */
-	private PhoneType phoneType;
+	private PhoneType phoneType = PhoneType.FIXED;
 	
 	/**
 	 * The location type of the phone.
 	 */
-	PhoneLocationType locationType;
+	private PhoneLocationType locationType = PhoneLocationType.HOME;
 	
 	/**
 	 * If true then this is the contacts primary phone no.
 	 * A contact MUST have only one primary phone no.
 	 */
-	boolean primaryPhone;
+	private boolean primaryPhone = false;
+
+	/**
+	 * the phone no.
+	 */
+	private String phoneNo = "";
+	
+	public Phone()
+	{
+		
+	}
+	public Phone(String phoneNo)
+	{
+		this.phoneNo = phoneNo;
+	}
+
+	public PhoneLocationType getLocationType()
+	{
+		return locationType;
+	}
+
+	public void setLocationType(PhoneLocationType locationType)
+	{
+		this.locationType = locationType;
+	}
+
+	public boolean getPrimaryPhone()
+	{
+		return primaryPhone;
+	}
+
+	public void setPrimaryPhone(boolean primaryPhone)
+	{
+		this.primaryPhone = primaryPhone;
+	}
+
+	public void setPhoneNo(String phoneNo)
+	{
+		this.phoneNo = phoneNo;
+	}
+
 
 	public PhoneType getPhoneType()
 	{

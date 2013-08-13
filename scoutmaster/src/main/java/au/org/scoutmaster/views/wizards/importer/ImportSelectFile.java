@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.importWizard;
+package au.org.scoutmaster.views.wizards.importer;
 
 import java.io.File;
 import java.io.FileOutputStream;

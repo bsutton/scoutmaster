@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.messagingWizard;
+package au.org.scoutmaster.views.wizards.messaging;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,7 +67,7 @@ public class SendMessageTask extends ProgressBarTask implements ProgressListener
 	@Override
 	public void complete()
 	{
-		// No Op
+		super.taskComplete();
 	}
 
 }

@@ -8,6 +8,7 @@ import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.views.AppointmentView;
+import au.org.scoutmaster.views.ClickATellView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.ImportView;
@@ -71,6 +72,7 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
 		viewMap.add(new ViewMap(MessagingWizardView.NAME, MessagingWizardView.class));
+		viewMap.add(new ViewMap(ClickATellView.NAME, ClickATellView.class));
 
 		// HACK:
 		// hack: create a default admin account - MUST BE REMOVED once we have

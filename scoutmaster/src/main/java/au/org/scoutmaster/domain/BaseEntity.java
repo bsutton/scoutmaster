@@ -23,7 +23,9 @@ abstract public class BaseEntity implements Serializable
 {
 
 	private static final long serialVersionUID = -7289994339186082141L;
-
+	
+	public static final String ID = "id";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
