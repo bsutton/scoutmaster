@@ -41,7 +41,7 @@ public class User  extends BaseEntity
 	 * Allows us to disable a user account. When a user is disabled they can't
 	 * log in.
 	 */
-	boolean enabled;
+	Boolean enabled;
 	/**
 	 * Given users are linked to lots of data it will be hard to delete one. As
 	 * such we just mark them as deleted and they will no longer be able to
@@ -49,7 +49,7 @@ public class User  extends BaseEntity
 	 * we also need to mangle the username so it doesn't conflict with a
 	 * potential new user that wants to use the same username.
 	 */
-	boolean deleted;
+	Boolean deleted;
 
 	/**
 	 * The set of roles the user undertakes.
@@ -130,7 +130,7 @@ public class User  extends BaseEntity
 
 	}
 
-	public boolean validatePassword(String password)
+	public boolean isValidPassword(String password)
 	{
 		try
 		{

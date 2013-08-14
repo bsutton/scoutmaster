@@ -35,7 +35,7 @@ public class SectionTryout extends BaseEntity
 	/**
 	 * The paperwork necessary for the trial has been completed.
 	 */
-	boolean trailPaperWorkCompleted;
+	Boolean trailPaperWorkCompleted;
 	/**
 	 * The date the youth first attended a trial.
 	 */
@@ -67,6 +67,6 @@ public class SectionTryout extends BaseEntity
 	/*
 	 * If the SetionTryoutType has a cost then records if the member has paid.
 	 */
-	boolean paid;
+	Boolean paid;
 	
 }

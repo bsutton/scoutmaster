@@ -95,7 +95,7 @@ public class Tag extends BaseEntity
 	// this.contacts.add(contact);
 	// }
 
-	public boolean isTag(String tagName)
+	public Boolean isTag(String tagName)
 	{
 		return this.name.equals(tagName);
 	}

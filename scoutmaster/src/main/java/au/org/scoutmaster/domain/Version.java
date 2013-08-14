@@ -15,23 +15,23 @@ public class Version extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	private int majorVersion;
+	private Integer majorVersion;
 
-	private int minorVersion;
+	private Integer minorVersion;
 
-	private int microVersion;
+	private Integer microVersion;
 
-	public int getMajorVersion()
+	public Integer getMajorVersion()
 	{
 		return this.majorVersion;
 	}
 
-	public int getMinorVersion()
+	public Integer getMinorVersion()
 	{
 		return this.minorVersion;
 	}
 
-	public int getMicroVersion()
+	public Integer getMicroVersion()
 	{
 		return this.microVersion;
 	}

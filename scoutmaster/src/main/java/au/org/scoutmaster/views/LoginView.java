@@ -151,7 +151,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				String password = this.password.getValue();
 
 				User user = User.findUser(username);
-				if (user.validatePassword(password))
+				if (user.isValidPassword(password))
 				{
 					// Store the current user in the service session
 					getSession().setAttribute("user", user);

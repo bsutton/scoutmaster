@@ -46,7 +46,7 @@ public class Event extends BaseEntity
 	 * If true then this event runs all day in which case the 'time' component of the event Start and End dates
 	 * should be ignored.
 	 */
-	boolean allDayEvent;
+	Boolean allDayEvent;
 	
 	/**
 	 * The start and and dates of this event

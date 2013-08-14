@@ -7,14 +7,14 @@ public enum Night
 	SUNDAY(Calendar.SUNDAY), MONDAY(Calendar.MONDAY), TUESDAY(Calendar.TUESDAY), WEDNESDAY(Calendar.WEDNESDAY), THURSDAY(
 			Calendar.THURSDAY), FRIDAY(Calendar.FRIDAY), SATURDAY(Calendar.SATURDAY);
 
-	private int dayOfWeek;
+	private Integer dayOfWeek;
 
-	Night(int dayOfWeek)
+	Night(Integer dayOfWeek)
 	{
 		this.dayOfWeek = dayOfWeek;
 	}
 
-	public int getDayOfWeek()
+	public Integer getDayOfWeek()
 	{
 		return dayOfWeek;
 	}

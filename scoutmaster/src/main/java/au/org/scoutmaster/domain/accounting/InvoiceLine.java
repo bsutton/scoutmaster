@@ -29,7 +29,7 @@ public class InvoiceLine  extends BaseEntity
 	/**
 	 * Controls the order this line item appears in the invoice.
 	 */
-	int ordinal; 	
+	Integer ordinal; 	
 	
 	/**
 	 * The number of items that need are to be invoiced.

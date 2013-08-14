@@ -24,7 +24,7 @@ public class QualificationType extends BaseEntity
 	/**
 	 * If try then this type of qualification expires after a defined period of time.
 	 */
-	boolean expires;
+	Boolean expires;
 	
 	/**
 	 * The default period of time that the qualifications is valid for.

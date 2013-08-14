@@ -52,7 +52,7 @@ public class SelectRecipientsStep implements WizardStep
 		JPAContainer<Contact> contactContainer = JPAContainerFactory.make(Contact.class,
 				EntityManagerProvider.INSTANCE.getEntityManager());
 		contactTable = new SearchableContactTable(contactContainer, new String[]
-		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.BIRTH_DATE, Contact.SECTION });
+		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.BIRTH_DATE, Contact.SECTION, Contact.MOBILE_PHONE });
 		layout.addComponent(contactTable);
 		return layout;
 	}

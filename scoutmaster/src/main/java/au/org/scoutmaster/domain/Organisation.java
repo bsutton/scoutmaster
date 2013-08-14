@@ -31,19 +31,19 @@ public class Organisation extends BaseEntity
 	 * organisations should be created by the setup wizard.
 	 * 
 	 */
-	private boolean isOurScoutGroup;
+	private Boolean isOurScoutGroup;
 
 	/**
 	 * The name of the organisation
 	 */
 	private String name;
 
-	public boolean isOurScoutGroup()
+	public Boolean isOurScoutGroup()
 	{
 		return isOurScoutGroup;
 	}
 
-	public void setOurScoutGroup(boolean isOurScoutGroup)
+	public void setOurScoutGroup(Boolean isOurScoutGroup)
 	{
 		this.isOurScoutGroup = isOurScoutGroup;
 	}

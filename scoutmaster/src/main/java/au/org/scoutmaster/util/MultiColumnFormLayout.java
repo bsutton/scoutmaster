@@ -26,9 +26,7 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 {
 	private static Logger logger = Logger.getLogger(MultiColumnFormLayout.class);
 	private static final long serialVersionUID = 1L;
-	private int rows;
 	private final int columns;
-	private int columnIndex;
 	private int colspan = 1;
 
 	private FieldGroup fieldGroup;
@@ -59,8 +57,6 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 
 	private void init()
 	{
-		this.rows = 0;
-		this.columnIndex = 0;
 		super.setSpacing(true);
 		super.setMargin(true);
 	}
@@ -73,7 +69,7 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 	@Override
 	public void addComponent(Component component)
 	{
-		if (columnIndex == columns)
+		if (getCursorX() == columns)
 		{
 			newLine();
 		}
@@ -91,17 +87,16 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 			super.addComponent(component);
 		super.setComponentAlignment(component, Alignment.MIDDLE_LEFT);
 
-		columnIndex += 2 + ((colspan - 1) * 2);
 		this.colspan = 1;
 	}
 
+	/**
+	 * Adds a new row to the grid and moves the cursor down one row.
+	 */
 	public void newLine()
 	{
-		this.rows++;
-		this.columnIndex = 0;
-		super.insertRow(rows);
-		super.setCursorY(rows);
-		super.setCursorX(0);
+		super.insertRow(getRows());
+		super.newLine();
 	}
 
 	/**

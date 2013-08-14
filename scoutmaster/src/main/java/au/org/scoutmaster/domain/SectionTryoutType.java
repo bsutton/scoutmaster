@@ -39,12 +39,12 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * If true then entry to this tryout requires paperwork to be completed.
 	 */
-	boolean paperWorkRequired;
+	Boolean paperWorkRequired;
 
 	/**
 	 * The number of weeks the tryout normally goes for.
 	 */
-	int weeks;
+	Integer weeks;
 
 	/**
 	 * The cost, if any associated with this tryout.

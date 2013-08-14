@@ -44,7 +44,7 @@ public class Invoice  extends BaseEntity
 	/**
 	 * The no. of days from the invoiceDate that the invoice is due.
 	 */
-	int terms;
+	Integer terms;
 	
 	/**
 	 * The date the invoice is due.

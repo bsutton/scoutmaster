@@ -36,7 +36,7 @@ public class Phone extends BaseEntity
 	 * If true then this is the contacts primary phone no.
 	 * A contact MUST have only one primary phone no.
 	 */
-	private boolean primaryPhone = false;
+	private Boolean primaryPhone = false;
 
 	/**
 	 * the phone no.
@@ -62,12 +62,12 @@ public class Phone extends BaseEntity
 		this.locationType = locationType;
 	}
 
-	public boolean getPrimaryPhone()
+	public Boolean getPrimaryPhone()
 	{
 		return primaryPhone;
 	}
 
-	public void setPrimaryPhone(boolean primaryPhone)
+	public void setPrimaryPhone(Boolean primaryPhone)
 	{
 		this.primaryPhone = primaryPhone;
 	}
@@ -89,6 +89,11 @@ public class Phone extends BaseEntity
 	}
 
 	public String getPhoneNo()
+	{
+		return phoneNo;
+	}
+	
+	public String toString()
 	{
 		return phoneNo;
 	}

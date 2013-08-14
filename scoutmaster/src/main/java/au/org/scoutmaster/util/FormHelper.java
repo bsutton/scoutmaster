@@ -22,6 +22,8 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.data.util.converter.ReverseConverter;
+import com.vaadin.data.util.converter.StringToBooleanConverter;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractLayout;

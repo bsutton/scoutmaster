@@ -33,9 +33,9 @@ public class SMSProvider extends BaseEntity
 
 	private String ApiId;
 
-	private boolean active;
+	private Boolean active;
 
-	private boolean defaultProvider;
+	private Boolean defaultProvider;
 	
 	/**
 	 * Class path to the iSMSProvider
@@ -77,22 +77,22 @@ public class SMSProvider extends BaseEntity
 		this.ApiId = ApiId;
 	}
 
-	public boolean isActive()
+	public Boolean isActive()
 	{
 		return active;
 	}
 
-	public void setActive(boolean active)
+	public void setActive(Boolean active)
 	{
 		this.active = active;
 	}
 
-	public boolean isDefaultProvider()
+	public Boolean isDefaultProvider()
 	{
 		return defaultProvider;
 	}
 
-	public void setDefaultProvider(boolean defaultProvider)
+	public void setDefaultProvider(Boolean defaultProvider)
 	{
 		this.defaultProvider = defaultProvider;
 	}

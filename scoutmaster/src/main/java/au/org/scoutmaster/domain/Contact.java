@@ -47,9 +47,12 @@ public class Contact extends BaseEntity implements Importable
 	public static final String BIRTH_DATE = "birthDate";
 	public static final String ROLE = "role";
 	public static final String SECTION = "section";
+	public static final String PRIMARY_PHONE = "primaryPhone";
+	public static final String MEMBER = "isMember";
+	public static final String MOBILE_PHONE = "mobile";
 
 	@FormField(displayName = "Active")
-	private boolean active = true;
+	private Boolean active = true;
 
 	@FormField(displayName = "Prefix")
 	private String prefix = "";
@@ -75,6 +78,9 @@ public class Contact extends BaseEntity implements Importable
 
 	@Transient
 	private Age age;
+	
+	@Transient
+	private Phone primaryPhone;
 
 	/**
 	 * Adult fields
@@ -332,7 +338,7 @@ public class Contact extends BaseEntity implements Importable
 		this.policeCheckExpiry = policeCheckExpiry;
 	}
 
-	public boolean getActive()
+	public Boolean getActive()
 	{
 		return active;
 	}
@@ -391,13 +397,31 @@ public class Contact extends BaseEntity implements Importable
 	{
 		return age;
 	}
+	
+	public String getPrimaryPhone()
+	{
+		Phone primary = null;
+		if (homePhone.getPrimaryPhone())
+			primary = homePhone;
+		else if (workPhone.getPrimaryPhone())
+			primary = workPhone;
+		else if (mobile.getPrimaryPhone())
+			primary = mobile;
+		return primary.getPhoneNo();
+			
+	}
+	
+	public void setPrimaryPhone(Phone phoneNo)
+	{
+		// No Op
+	}
 
 	public void setAge(Age age)
 	{
 		this.age = age;
 	}
 
-	public void setActive(boolean active)
+	public void setActive(Boolean active)
 	{
 		this.active = active;
 	}

@@ -17,11 +17,11 @@ import org.joda.time.Interval;
 public class Age
 {
 	@Basic
-	protected int years;
+	protected Integer years;
 	@Basic
-	protected int months;
+	protected Integer months;
 	@Basic
-	protected int days;
+	protected Integer days;
 
 	public Age()
 	{
@@ -36,7 +36,7 @@ public class Age
 		this.days = interval.toPeriod().getDays();
 	}
 
-	public Age(int years, int months, int days)
+	public Age(Integer years, Integer months, Integer days)
 	{
 		this.years = years;
 		this.months = months;
@@ -44,17 +44,17 @@ public class Age
 
 	}
 
-	public int getYears()
+	public Integer getYears()
 	{
 		return years;
 	}
 
-	public int getMonths()
+	public Integer getMonths()
 	{
 		return months;
 	}
 
-	public int getDays()
+	public Integer getDays()
 	{
 		return days;
 	}
@@ -91,19 +91,19 @@ public class Age
 		return new DateTime(years, months, days, 0, 0);
 	}
 
-	Age withYears(int years)
+	Age withYears(Integer years)
 	{
 		this.years = years;
 		return this;
 	}
 
-	Age withMonths(int months)
+	Age withMonths(Integer months)
 	{
 		this.months = months;
 		return this;
 	}
 
-	Age withDays(int days)
+	Age withDays(Integer days)
 	{
 		this.days = days;
 		return this;

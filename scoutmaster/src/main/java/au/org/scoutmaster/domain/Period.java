@@ -10,18 +10,18 @@ import org.joda.time.Interval;
 public class Period
 {
 	@Basic
-	protected int years;
+	protected Integer years;
 	@Basic
-	protected int months;
+	protected Integer months;
 	@Basic
-	protected int days;
+	protected Integer days;
 
 	public Period()
 	{
 
 	}
 
-	public Period(int years, int months, int days)
+	public Period(Integer years, Integer months, Integer days)
 	{
 		this.years = years;
 		this.months = months;
@@ -36,17 +36,17 @@ public class Period
 		this.days = interval.toPeriod().getDays();
 	}
 
-	public int getYears()
+	public Integer getYears()
 	{
 		return years;
 	}
 
-	public int getMonths()
+	public Integer getMonths()
 	{
 		return months;
 	}
 
-	public int getDays()
+	public Integer getDays()
 	{
 		return days;
 	}
@@ -83,18 +83,18 @@ public class Period
 		return new DateTime(years, months, days, 0, 0);
 	}
 	
-	Period withYears(int years)
+	Period withYears(Integer years)
 	{
 		this.years = years;
 		return this;
 	}
 	
-	Period withMonths(int months)
+	Period withMonths(Integer months)
 	{
 		this.months = months;
 		return this;
 	}
-	Period withDays(int days)
+	Period withDays(Integer days)
 	{
 		this.days = days;
 		return this;
