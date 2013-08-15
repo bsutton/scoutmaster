@@ -112,4 +112,14 @@ public class SMSProvider extends BaseEntity
 		return this.providerName;
 	}
 
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
 }

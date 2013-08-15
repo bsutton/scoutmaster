@@ -86,23 +86,20 @@ public class Contact extends BaseEntity implements Importable
 	 * Adult fields
 	 */
 
-	@FormField(displayName = "Home Phone")
-	private Phone homePhone = new Phone();
+	@FormField(displayName = "Phone 1")
+	private Phone phone1 = new Phone();
 
-	@FormField(displayName = "Work Phone")
-	private Phone workPhone = new Phone();
+	@FormField(displayName = "Phone 2")
+	private Phone phone2 = new Phone();
 
-	@FormField(displayName = "Mobile")
-	private Phone mobile= new Phone();
+	@FormField(displayName = "Phone 3")
+	private Phone phone3= new Phone();
 
 	@FormField(displayName = "Home Email")
 	private String homeEmail = "";
 
 	@FormField(displayName = "Work Email")
 	private String workEmail = "";
-
-	@FormField(displayName = "Preferred Phone")
-	private PreferredPhone preferredPhone = PreferredPhone.MOBILE;
 
 	@FormField(displayName = "Preferred Email")
 	private PreferredEmail preferredEmail = PreferredEmail.HOME;
@@ -368,24 +365,24 @@ public class Contact extends BaseEntity implements Importable
 		return gender;
 	}
 
-	public void setHomePhone(String phoneNo)
+	public void setPhone1(String phoneNo)
 	{
-		this.homePhone.setPhoneNo(phoneNo);
+		this.phone1.setPhoneNo(phoneNo);
 	}
 
-	public Phone getHomePhone()
+	public Phone getPhone1()
 	{
-		return homePhone;
+		return phone1;
 	}
 
-	public Phone getWorkPhone()
+	public Phone getPhone2()
 	{
-		return workPhone;
+		return phone2;
 	}
 
-	public Phone getMobile()
+	public Phone getPhone3()
 	{
-		return mobile;
+		return phone3;
 	}
 
 	public String getHomeEmail()
@@ -401,12 +398,12 @@ public class Contact extends BaseEntity implements Importable
 	public String getPrimaryPhone()
 	{
 		Phone primary = null;
-		if (homePhone.getPrimaryPhone())
-			primary = homePhone;
-		else if (workPhone.getPrimaryPhone())
-			primary = workPhone;
-		else if (mobile.getPrimaryPhone())
-			primary = mobile;
+		if (phone1.getPrimaryPhone())
+			primary = phone1;
+		else if (phone2.getPrimaryPhone())
+			primary = phone2;
+		else if (phone3.getPrimaryPhone())
+			primary = phone3;
 		return primary.getPhoneNo();
 			
 	}
@@ -441,14 +438,14 @@ public class Contact extends BaseEntity implements Importable
 		this.gender = gender;
 	}
 
-	public void setWorkPhone(Phone workPhone)
+	public void setPhone2(Phone workPhone)
 	{
-		this.workPhone = workPhone;
+		this.phone2 = workPhone;
 	}
 
-	public void setMobile(Phone mobile)
+	public void setPhone3(Phone mobile)
 	{
-		this.mobile = mobile;
+		this.phone3 = mobile;
 	}
 
 	public void setHomeEmail(String homeEmail)
@@ -459,11 +456,6 @@ public class Contact extends BaseEntity implements Importable
 	public void setWorkEmail(String workEmail)
 	{
 		this.workEmail = workEmail;
-	}
-
-	public void setPreferredPhone(PreferredPhone preferredPhone)
-	{
-		this.preferredPhone = preferredPhone;
 	}
 
 	public void setPreferredEmail(PreferredEmail preferredEmail)
@@ -599,11 +591,6 @@ public class Contact extends BaseEntity implements Importable
 	public String getWorkEmail()
 	{
 		return workEmail;
-	}
-
-	public PreferredPhone getPreferredPhone()
-	{
-		return preferredPhone;
 	}
 
 	public PreferredEmail getPreferredEmail()

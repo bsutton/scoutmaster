@@ -13,7 +13,6 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -24,7 +23,6 @@ public class SelectRecipientsStep implements WizardStep
 
 	private TextField subject;
 	private TextArea message;
-	private Label remaining;
 
 	FormHelper formHelper;
 	private TextField from;

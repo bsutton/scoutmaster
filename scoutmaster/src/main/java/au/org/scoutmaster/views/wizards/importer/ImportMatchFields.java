@@ -107,7 +107,7 @@ public class ImportMatchFields implements WizardStep
 		this.headers = null;
 		this.mappings = new ArrayList<ComboBox>();
 
-		MultiColumnFormLayout layout = new MultiColumnFormLayout<>(3, new FieldGroup());
+		MultiColumnFormLayout<Object> layout = new MultiColumnFormLayout<>(3, new FieldGroup());
 		this.selectedUserMapping = this.importView.getFile().getImportMapping();
 		
 		
@@ -124,7 +124,7 @@ public class ImportMatchFields implements WizardStep
 			String[] headers = getHeaders();
 			
 
-			EntityAdaptor adaptor = EntityAdaptor.create(importable);
+			EntityAdaptor<?> adaptor = EntityAdaptor.create(importable);
 			
 			ArrayList<FormFieldImpl> fields = adaptor.getFields();
 			for (String header : headers)

@@ -69,8 +69,8 @@ public class SendMessageStep implements WizardStep, ProgressTaskListener
 		{
 			PhoneDao daoPhone = new PhoneDao();
 
-			if (!daoPhone.isEmpty(contact.getMobile()))
-				phones.add(contact.getMobile());
+			if (!daoPhone.isEmpty(contact.getPhone3()))
+				phones.add(contact.getPhone3());
 		}
 
 		if (phones.size() == 0)

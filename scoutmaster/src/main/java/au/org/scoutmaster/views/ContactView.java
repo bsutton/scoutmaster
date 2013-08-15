@@ -12,6 +12,7 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Gender;
 import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.Note;
+import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
@@ -23,7 +24,6 @@ import au.org.scoutmaster.util.ValidatingFieldGroup;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -50,6 +50,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -68,20 +69,20 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			CheckBox property = (CheckBox) event.getProperty();
 			Boolean value = property.getValue();
 
-			if (property == primaryHomePhone && value == true)
+			if (property == primaryPhone1 && value == true)
 			{
-				primaryWorkPhone.setValue(false);
-				primaryMobilePhone.setValue(false);
+				primaryPhone2.setValue(false);
+				primaryPhone3.setValue(false);
 			}
-			else if (property == primaryWorkPhone && value == true)
+			else if (property == primaryPhone2 && value == true)
 			{
-				primaryHomePhone.setValue(false);
-				primaryMobilePhone.setValue(false);
+				primaryPhone1.setValue(false);
+				primaryPhone3.setValue(false);
 			}
-			else if (property == primaryMobilePhone && value == true)
+			else if (property == primaryPhone3 && value == true)
 			{
-				primaryWorkPhone.setValue(false);
-				primaryHomePhone.setValue(false);
+				primaryPhone2.setValue(false);
+				primaryPhone1.setValue(false);
 			}
 		}
 
@@ -137,28 +138,26 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	/* User interface components are stored in session. */
 	private ContactTable contactTable;
 	private VerticalLayout rightLayout;
-	private CheckBox primaryHomePhone;
-	private CheckBox primaryWorkPhone;
-	private CheckBox primaryMobilePhone;
+	private CheckBox primaryPhone1;
+	private CheckBox primaryPhone2;
+	private CheckBox primaryPhone3;
+	private Tab youthTab;
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
-		contactContainer.addNestedContainerProperty("homePhone.phoneNo");
-		contactContainer.addNestedContainerProperty("homePhone.primaryPhone");
-		contactContainer.addNestedContainerProperty("homePhone.locationType");
-		contactContainer.addNestedContainerProperty("homePhone.phoneType");
+		contactContainer.addNestedContainerProperty("phone1.phoneNo");
+		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone1.phoneType");
 
-		contactContainer.addNestedContainerProperty("workPhone.phoneNo");
-		contactContainer.addNestedContainerProperty("workPhone.primaryPhone");
-		contactContainer.addNestedContainerProperty("workPhone.locationType");
-		contactContainer.addNestedContainerProperty("workPhone.phoneType");
+		contactContainer.addNestedContainerProperty("phone2.phoneNo");
+		contactContainer.addNestedContainerProperty("phone2.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone2.phoneType");
 
-		contactContainer.addNestedContainerProperty("mobile.phoneNo");
-		contactContainer.addNestedContainerProperty("mobile.primaryPhone");
-		contactContainer.addNestedContainerProperty("mobile.locationType");
-		contactContainer.addNestedContainerProperty("mobile.phoneType");
+		contactContainer.addNestedContainerProperty("phone3.phoneNo");
+		contactContainer.addNestedContainerProperty("phone3.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone3.phoneType");
 
 		contactContainer.addNestedContainerProperty("address.street");
 		contactContainer.addNestedContainerProperty("address.city");
@@ -267,7 +266,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 					{
 						contactContainer.removeAllContainerFilters();
 						inNew = true;
-						EntityItem<Contact> entityItem = contactContainer.createEntityItem( new Contact());
+						EntityItem<Contact> entityItem = contactContainer.createEntityItem(new Contact());
 						rowChanged(entityItem);
 						tabs.setSelectedTab(overviewForm);
 						rightLayout.setVisible(true);
@@ -402,19 +401,26 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		contactForm.colspan(4);
 		contactForm.bindTextField("Work Email", "workEmail");
 		contactForm.newLine();
-		contactForm.colspan(3);
-		contactForm.bindTextField("Home Phone", "homePhone.phoneNo");
-		primaryHomePhone = contactForm.bindBooleanField("Primary", "homePhone.primaryPhone");
-		primaryHomePhone.addValueChangeListener(new PhoneChangeListener());
-		contactForm.colspan(3);
-		contactForm.bindTextField("Work Phone", "workPhone.phoneNo");
-		primaryWorkPhone = contactForm.bindBooleanField("Primary", "workPhone.primaryPhone");
-		primaryWorkPhone.addValueChangeListener(new PhoneChangeListener());
-		contactForm.colspan(3);
-		contactForm.bindTextField("Mobile Phone", "mobile.phoneNo");
-		primaryMobilePhone = contactForm.bindBooleanField("Primary", "mobile.primaryPhone");
-		primaryMobilePhone.addValueChangeListener(new PhoneChangeListener());
+		
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 1", "phone1.phoneNo");
+		contactForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
+		primaryPhone1 = contactForm.bindBooleanField("Primary", "phone1.primaryPhone");
+		primaryPhone1.addValueChangeListener(new PhoneChangeListener());
+		
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 2", "phone2.phoneNo");
+		contactForm.bindEnumField(null, "phone2.phoneType", PhoneType.class);
+		primaryPhone2 = contactForm.bindBooleanField("Primary", "phone2.primaryPhone");
+		primaryPhone2.addValueChangeListener(new PhoneChangeListener());
+		
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 3", "phone3.phoneNo");
+		contactForm.bindEnumField(null, "phone3.phoneType", PhoneType.class);
+		primaryPhone3 = contactForm.bindBooleanField("Primary", "phone3.primaryPhone");
+		primaryPhone3.addValueChangeListener(new PhoneChangeListener());
 		contactForm.newLine();
+		
 		contactForm.colspan(4);
 		contactForm.bindTextField("Street", "address.street");
 		contactForm.newLine();
@@ -429,7 +435,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 		// Youth tab
 		youthForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
-		tabs.addTab(youthForm, "Youth");
+		youthTab = tabs.addTab(youthForm, "Youth");
 		youthForm.setSizeFull();
 		youthForm.setMargin(true);
 		final Label labelSectionEligibity = youthForm.bindLabelField("Section Eligibility", "sectionEligibility");
@@ -526,7 +532,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			}
 		});
 
-		role.addValueChangeListener(new ChangeListener(labelAge));
+		role.addValueChangeListener(new ChangeListener(role, labelAge));
 
 		/*
 		 * Data can be buffered in the user interface. When doing so, commit()
@@ -734,94 +740,33 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
 		private final Label labelAge;
+		private final ComboBox role;
 		private static final long serialVersionUID = 1L;
 
-		private ChangeListener(Label labelAge)
+		private ChangeListener(ComboBox role, Label labelAge)
 		{
 			this.labelAge = labelAge;
+			this.role = role;
 		}
 
 		public void valueChange(ValueChangeEvent event)
 		{
-			// switch ((GroupRole) role.getValue())
-			// {
-			// case AdultHelper:
-			// case Volunteer:
-			// case QuarterMaster:
-			// case CommitteeMember:
-			// showAdult(true);
-			// showYouth(false);
-			// showMember(false);
-			// showAffiliate(true);
-			// showAffiliateAdult(true);
-			// break;
-			//
-			// case Gardian:
-			// case Parent:
-			// showAdult(true);
-			// showYouth(false);
-			// showMember(false);
-			// showAffiliate(true);
-			// showAffiliateAdult(true);
-			// break;
-			// case AssistantLeader:
-			// case Leader:
-			// case GroupLeader:
-			// case President:
-			// case Secretary:
-			// case Treasurer:
-			// showAdult(true);
-			// showYouth(false);
-			// showMember(true);
-			// showAffiliate(true);
-			// showAffiliateAdult(true);
-			// break;
-			// case YouthMember:
-			// showAdult(false);
-			// showYouth(true);
-			// showMember(true);
-			// showAffiliate(true);
-			// showAffiliateAdult(false);
-			// break;
-			// default:
-			// break;
-			// }
+			switch ((GroupRole) this.role.getValue())
+			{
+				case YouthMember:
+					showYouth(true);
+					break;
+				default:
+					showYouth(false);
+					break;
+			}
 			ContactDao daoContact = new ContactDao();
 			labelAge.setValue(daoContact.getAge(ContactView.this.currentContact).toString());
 		}
 
-		private void showAffiliateAdult(boolean visible)
-		{
-			showFieldSection(background, visible);
-		}
-
-		private void showAffiliate(boolean visible)
-		{
-			showFieldSection(medicalForm, visible);
-		}
-
-		private void showMember(boolean visible)
-		{
-			showFieldSection(memberForm, visible);
-		}
-
 		private void showYouth(boolean visible)
 		{
-			showFieldSection(youthForm, visible);
-		}
-
-		private void showAdult(boolean visible)
-		{
-			showFieldSection(contactForm, visible);
-
-		}
-
-		private void showFieldSection(MultiColumnFormLayout<Contact> fieldLayout, boolean visible)
-		{
-			for (AbstractComponent field : fieldLayout.getFieldList())
-			{
-				field.setVisible(visible);
-			}
+			youthTab.setVisible(visible);
 		}
 	}
 

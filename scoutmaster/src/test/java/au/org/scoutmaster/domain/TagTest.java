@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.TagDao;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.ui.Notification;

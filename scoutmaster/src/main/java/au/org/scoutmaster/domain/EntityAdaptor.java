@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 public class EntityAdaptor<T>
 {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(EntityAdaptor.class);
 
 	Class<?> entity;

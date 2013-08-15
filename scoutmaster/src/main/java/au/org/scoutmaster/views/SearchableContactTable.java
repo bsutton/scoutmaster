@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -20,8 +18,6 @@ import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.util.DefaultQueryModifierDelegate;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Compare.Equal;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -116,7 +112,6 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 		searchField.addTextChangeListener(new TextChangeListener()
 		{
 			private static final long serialVersionUID = 1L;
-			private boolean tagsEnabled;
 
 			public void textChange(final TextChangeEvent event)
 			{

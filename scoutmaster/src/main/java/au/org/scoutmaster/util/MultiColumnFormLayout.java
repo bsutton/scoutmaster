@@ -32,18 +32,17 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 	private FieldGroup fieldGroup;
 	private ArrayList<AbstractComponent> fieldList = new ArrayList<>();
 
-	
 	public MultiColumnFormLayout(int columns)
 	{
 		super(columns * 2, 1);
 		this.columns = columns * 2;
 		init();
 		this.fieldGroup = newBeanGroupInstance();
-//		
-//		for (int i = 0; i < columns; i+=2)
-//		{
-//			this.setColumnExpandRatio(i + 1, 1 / columns);
-//		}
+		//
+		// for (int i = 0; i < columns; i+=2)
+		// {
+		// this.setColumnExpandRatio(i + 1, 1 / columns);
+		// }
 	}
 
 	public MultiColumnFormLayout(int columns, FieldGroup fieldGroup)
@@ -74,17 +73,27 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 			newLine();
 		}
 
-		Label label = new Label(component.getCaption());
-		label.setSizeUndefined();
-		// maxLabelWidth = Math.max(lmaxLabelWidth, label.getWidth());
-		// label.setWidth("100%");
-		component.setCaption(null);
-		super.addComponent(label);
-		super.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
-		if (colspan > 1)
-			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (colspan - 1) * 2, getCursorY());
+		int fieldWidth = 1;
+		if (component.getCaption() != null)
+		{
+			Label label = new Label(component.getCaption());
+			label.setSizeUndefined();
+			// maxLabelWidth = Math.max(lmaxLabelWidth, label.getWidth());
+			// label.setWidth("100%");
+			component.setCaption(null);
+			super.addComponent(label);
+			super.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
+		}
 		else
-			super.addComponent(component);
+		{
+			// Else if the label is null then we let the field take the full width that the label normally occupies
+			fieldWidth = 2;
+		}
+
+		if (colspan > 1)
+			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (fieldWidth - 1) + ((colspan - 1) * 2), getCursorY());
+		else
+			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (fieldWidth - 1), getCursorY());
 		super.setComponentAlignment(component, Alignment.MIDDLE_LEFT);
 
 		this.colspan = 1;
@@ -154,7 +163,8 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		return field;
 	}
 
-	public ComboBox bindEntityField(String fieldLabel, String fieldName, String listFieldName, Class<? extends BaseEntity> listClazz)
+	public ComboBox bindEntityField(String fieldLabel, String fieldName, String listFieldName,
+			Class<? extends BaseEntity> listClazz)
 	{
 		ComboBox field = FormHelper.bindEntityField(this, fieldGroup, fieldLabel, fieldName, listFieldName, listClazz);
 		this.fieldList.add(field);

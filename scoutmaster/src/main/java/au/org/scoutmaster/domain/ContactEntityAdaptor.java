@@ -99,11 +99,11 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 				String fieldValue = fieldValues[i];
 
 				if (formField.getFieldName() == "homePhone")
-					entity.setHomePhone(fieldValue);
+					entity.setPhone1(fieldValue);
 				else if (formField.getFieldName() == "workPhone")
-					entity.setWorkPhone(new Phone(fieldValue));
+					entity.setPhone2(new Phone(fieldValue));
 				else if (formField.getFieldName() == "mobile")
-					entity.setMobile(new Phone(fieldValue));
+					entity.setPhone3(new Phone(fieldValue));
 				else if (formField.getFieldName() == "street")
 					entity.setStreet(fieldValue);
 				else if (formField.getFieldName() == "city")

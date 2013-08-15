@@ -42,6 +42,7 @@ public class BaseCrudView<T extends BaseEntity> extends HorizontalSplitPanel imp
 	public BeanFieldGroup<T> fieldGroup;
 	public FormLayout layoutFields = new FormLayout();
 
+	@SuppressWarnings("unused")
 	private JPAContainer<T> container;
 
 	/* User interface components are stored in session. */

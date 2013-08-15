@@ -167,7 +167,7 @@ public class ImportTask extends ProgressBarTask
 	{
 		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 
-		EntityAdaptor adaptor = EntityAdaptor.create(entityClass);
+		EntityAdaptor<T> adaptor = EntityAdaptor.create(entityClass);
 
 		T entity = entityItem.getEntity();
 

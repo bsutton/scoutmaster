@@ -25,12 +25,7 @@ public class Phone extends BaseEntity
 	/**
 	 * The type of phone number.
 	 */
-	private PhoneType phoneType = PhoneType.FIXED;
-	
-	/**
-	 * The location type of the phone.
-	 */
-	private PhoneLocationType locationType = PhoneLocationType.HOME;
+	private PhoneType phoneType = PhoneType.MOBILE;
 	
 	/**
 	 * If true then this is the contacts primary phone no.
@@ -50,16 +45,6 @@ public class Phone extends BaseEntity
 	public Phone(String phoneNo)
 	{
 		this.phoneNo = phoneNo;
-	}
-
-	public PhoneLocationType getLocationType()
-	{
-		return locationType;
-	}
-
-	public void setLocationType(PhoneLocationType locationType)
-	{
-		this.locationType = locationType;
 	}
 
 	public Boolean getPrimaryPhone()
