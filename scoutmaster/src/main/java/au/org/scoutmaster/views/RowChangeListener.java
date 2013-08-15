@@ -1,5 +1,7 @@
 package au.org.scoutmaster.views;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+
 
 
 public interface RowChangeListener<ENTITY>
@@ -17,5 +19,5 @@ public interface RowChangeListener<ENTITY>
 	 * @param item
 	 * @return
 	 */
-	void rowChanged(ENTITY entity);
+	void rowChanged(EntityItem<ENTITY> entityItem);
 }

@@ -13,8 +13,6 @@ import au.org.scoutmaster.domain.Gender;
 import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.PreferredCommunications;
-import au.org.scoutmaster.domain.PreferredEmail;
-import au.org.scoutmaster.domain.PreferredPhone;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
@@ -25,6 +23,7 @@ import au.org.scoutmaster.util.ValidatingFieldGroup;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -268,7 +267,8 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 					{
 						contactContainer.removeAllContainerFilters();
 						inNew = true;
-						rowChanged(new Contact());
+						EntityItem<Contact> entityItem = contactContainer.createEntityItem( new Contact());
+						rowChanged(entityItem);
 						tabs.setSelectedTab(overviewForm);
 						rightLayout.setVisible(true);
 					}
@@ -343,7 +343,8 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 					if (inNew)
 					{
-						contactContainer.addEntity(ContactView.this.currentContact);
+						Long id = (Long) contactContainer.addEntity(ContactView.this.currentContact);
+						ContactView.this.contactTable.select(id);
 						inNew = false;
 					}
 				}
@@ -638,12 +639,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	 *  table part of this view has changed.
 	 *  We use this to update the editor's current item.
 	 */
-	public void rowChanged(Contact contact)
+	public void rowChanged(EntityItem<Contact> item)
 	{
-		this.currentContact = contact;
 
 		// The contact is null if the row is de-selected
-		if (contact != null)
+		if (item != null)
 		{
 			// When selecting the groups data source we need to wrap it in a
 			// BeanItem
@@ -670,14 +670,16 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			// beanItem.addNestedProperty("address.state");
 			// fieldGroup.setItemDataSource(beanItem);
 
-			EntityItem<Contact> item = contactContainer.getItem(contact.getId());
-
+			this.currentContact = item.getEntity();
 			fieldGroup.setItemDataSource(item);
 		}
 		else
+		{
+			this.currentContact = null;
 			fieldGroup.setItemDataSource(null);
+		}
 
-		rightLayout.setVisible(contact != null);
+		rightLayout.setVisible(this.currentContact != null);
 
 	}
 

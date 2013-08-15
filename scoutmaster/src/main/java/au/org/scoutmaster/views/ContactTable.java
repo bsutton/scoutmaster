@@ -5,6 +5,7 @@ import java.util.Set;
 
 import au.org.scoutmaster.domain.Contact;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property;
 import com.vaadin.ui.Table;
@@ -49,7 +50,7 @@ public class ContactTable extends Table
 				if (contactId != null) // it can be null when a row is being
 										// deleted.
 				{
-					Contact contact = ContactTable.this.contactContainer.getItem(contactId).getEntity();
+					EntityItem<Contact> contact = ContactTable.this.contactContainer.getItem(contactId); //.getEntity();
 					ContactTable.this.rowChangeListener.rowChanged(contact);
 				}
 				else
