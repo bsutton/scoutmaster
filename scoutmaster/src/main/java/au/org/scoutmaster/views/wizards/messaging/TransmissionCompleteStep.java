@@ -2,8 +2,6 @@ package au.org.scoutmaster.views.wizards.messaging;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.org.scoutmaster.views.MessagingWizardView;
-
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;

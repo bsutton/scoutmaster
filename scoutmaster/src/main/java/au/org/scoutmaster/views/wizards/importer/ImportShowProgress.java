@@ -8,25 +8,28 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
-import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Notification.Type;
 
-public class ImportShowProgress implements WizardStep, ProgressTaskListener
+
+public class ImportShowProgress implements WizardStep, ProgressTaskListener<ImportItemStatus>
 {
+
 	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(ImportShowProgress.class);
-	private ImportView importView;
+	private ImportWizardView importView;
 	private boolean importComplete = false;
 	private ProgressBar indicator;
 	private int count;
 	private Label progressDescription;
 
-	public ImportShowProgress(ImportView importView)
+	public ImportShowProgress(ImportWizardView importView)
 	{
 		this.importView = importView;
 	}
@@ -49,13 +52,14 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener
 		indicator = new ProgressBar(new Float(0.0));
 		indicator.setIndeterminate(true);
 		layout.addComponent(indicator);
+		
 
 		// Set polling frequency to 0.5 seconds.
 
 		File tempFile = this.importView.getFile().getTempFile();
 		Class<? extends Importable> clazz = importView.getType().getEntityClass();
 
-		ProgressBarWorker worker = new ProgressBarWorker(new ImportTask(this, tempFile, clazz, this.importView.getMatch()
+		ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(new ImportTask(this, tempFile, clazz, this.importView.getMatch()
 						.getFieldMap()));
 		worker.start();
 
@@ -75,7 +79,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener
 	}
 
 	@Override
-	public void taskProgress(final int count, final int max)
+	public void taskProgress(final int count, final int max, ImportItemStatus status)
 	{
 		UI.getCurrent().access(new Runnable()
 		{
@@ -96,5 +100,20 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener
 		indicator.setEnabled(false);
 		importComplete = true;
 	}
+
+	@Override
+	public void taskItemError(ImportItemStatus status)
+	{
+		
+		
+	}
+
+	@Override
+	public void taskException(Exception e)
+	{
+		Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+		
+	}
+
 
 }

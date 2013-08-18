@@ -9,32 +9,7 @@
 		<param-name>productionMode</param-name>
 		<param-value>false</param-value>
 	</context-param>
-	<!-- Liquibase settings -->
-	<context-param>
-		<param-name>liquibase.changelog</param-name>
-		<!-- located in src/main/resources -->
-		<param-value>liquibase/db.changelog-master.xml</param-value>
-	</context-param>
 
-	<context-param>
-		<param-name>liquibase.datasource</param-name>
-		<param-value>java:comp/env/jdbc/scoutmaster-ds</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>liquibase.should.run</param-name>
-		<param-value>true</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>liquibase.onerror.fail</param-name>
-		<param-value>true</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>liquibase.contexts</param-name>
-		<param-value>production</param-value>
-	</context-param>
 
 	<!-- context-param>
 		<param-name>vaadin.theme</param-name>
@@ -42,9 +17,11 @@
 	</context-param-->
 
 	<listener>
-		<listener-class>liquibase.integration.servlet.LiquibaseServletListener
+		<listener-class>au.org.scoutmaster.application.ContextListener
 		</listener-class>
 	</listener>
+	
+	
 
 	<!-- per request Entity Manager injection -->
 	<filter>

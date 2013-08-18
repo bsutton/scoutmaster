@@ -6,7 +6,6 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
@@ -36,7 +35,7 @@ public class ImportSelectType  implements WizardStep
 		}
 	}
 
-	public ImportSelectType(ImportView importView)
+	public ImportSelectType(ImportWizardView importView)
 	{
 		importTypes.add(new ImportType("Contacts", Contact.class));
 		

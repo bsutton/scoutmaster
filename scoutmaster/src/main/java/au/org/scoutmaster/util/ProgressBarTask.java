@@ -2,11 +2,11 @@ package au.org.scoutmaster.util;
 
 import com.vaadin.ui.UI;
 
-public abstract class ProgressBarTask
+public abstract class ProgressBarTask<T>
 {
-	private ProgressTaskListener listener;
+	private ProgressTaskListener<T> listener;
 
-	public ProgressBarTask(ProgressTaskListener listener)
+	public ProgressBarTask(ProgressTaskListener<T> listener)
 	{
 		this.listener = listener;
 	}
@@ -22,11 +22,29 @@ public abstract class ProgressBarTask
 
 	}
 
-	public void taskProgress(int count, int max)
+	public void taskProgress(int count, int max, T status)
 	{
 		synchronized (UI.getCurrent())
 		{
-			listener.taskProgress(count++, max);
+			listener.taskProgress(count++, max, status);
 		}
+	}
+
+	public void taskItemError(T status)
+	{
+		synchronized (UI.getCurrent())
+		{
+			listener.taskItemError(status);
+		}
+	
+	}
+
+	public void taskException(Exception e)
+	{
+		synchronized (UI.getCurrent())
+		{
+			listener.taskException(e);
+		}
+	
 	}
 }

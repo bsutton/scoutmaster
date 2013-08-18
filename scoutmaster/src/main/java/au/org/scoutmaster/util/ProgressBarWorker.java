@@ -1,11 +1,11 @@
 package au.org.scoutmaster.util;
 
 
-public class ProgressBarWorker extends Thread
+public class ProgressBarWorker<T> extends Thread
 {
-	private ProgressBarTask task;
+	private ProgressBarTask<T> task;
 
-	public ProgressBarWorker(ProgressBarTask task)
+	public ProgressBarWorker(ProgressBarTask<T> task)
 	{
 		super(ProgressBarTask.class.getName());
 		this.task = task;

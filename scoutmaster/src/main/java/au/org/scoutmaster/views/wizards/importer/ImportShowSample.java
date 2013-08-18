@@ -13,7 +13,6 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.bytecode.opencsv.CSVReader;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -28,9 +27,9 @@ public class ImportShowSample implements WizardStep
 {
 	Logger logger = Logger.getLogger(ImportShowSample.class.getName());
 
-	private ImportView importView;
+	private ImportWizardView importView;
 
-	public ImportShowSample(ImportView importView)
+	public ImportShowSample(ImportWizardView importView)
 	{
 		this.importView = importView;
 	}

@@ -1,16 +1,16 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
+import java.util.ArrayList;
+
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.FormHelper;
-import au.org.scoutmaster.views.MessagingWizardView;
 import au.org.scoutmaster.views.SearchableContactTable;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
@@ -47,8 +47,10 @@ public class SelectRecipientsStep implements WizardStep
 		layout.setMargin(true);
 		layout.setSizeFull();
 
-		JPAContainer<Contact> contactContainer = JPAContainerFactory.make(Contact.class,
-				EntityManagerProvider.INSTANCE.getEntityManager());
+		ContactDao daoContact = new ContactDao();
+		
+		JPAContainer<Contact> contactContainer = daoContact.makeJPAContainer();
+
 		contactTable = new SearchableContactTable(contactContainer, new String[]
 		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.BIRTH_DATE, Contact.SECTION, Contact.MOBILE_PHONE });
 		layout.addComponent(contactTable);
@@ -81,6 +83,11 @@ public class SelectRecipientsStep implements WizardStep
 	public SMSProvider getProvider()
 	{
 		return (SMSProvider) providers.getConvertedValue();
+	}
+	
+	public ArrayList<Contact> getRecipients()
+	{
+		return contactTable.getFilteredContacts();
 	}
 
 }

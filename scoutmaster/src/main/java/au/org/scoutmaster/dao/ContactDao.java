@@ -12,11 +12,15 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.filter.EntityManagerProvider;
 
 public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact, Long>
 {
@@ -162,6 +166,28 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		
 		SectionTypeDao daoSectionType = new SectionTypeDao();
 		return daoSectionType.getEligibleSection(date);
+	}
+	public JPAContainer<Contact> makeJPAContainer()
+	{
+		JPAContainer<Contact> contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
+		contactContainer.addNestedContainerProperty("phone1.phoneNo");
+		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone1.phoneType");
+
+		contactContainer.addNestedContainerProperty("phone2.phoneNo");
+		contactContainer.addNestedContainerProperty("phone2.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone2.phoneType");
+
+		contactContainer.addNestedContainerProperty("phone3.phoneNo");
+		contactContainer.addNestedContainerProperty("phone3.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone3.phoneType");
+
+		contactContainer.addNestedContainerProperty("address.street");
+		contactContainer.addNestedContainerProperty("address.city");
+		contactContainer.addNestedContainerProperty("address.postcode");
+		contactContainer.addNestedContainerProperty("address.state");
+		
+		return contactContainer;
 	}
 
 }

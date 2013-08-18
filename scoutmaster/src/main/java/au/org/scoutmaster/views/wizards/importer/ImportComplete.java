@@ -3,8 +3,6 @@ package au.org.scoutmaster.views.wizards.importer;
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.org.scoutmaster.views.ImportView;
-
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -13,9 +11,9 @@ public class ImportComplete implements WizardStep
 {
 
 	@SuppressWarnings("unused")
-	private ImportView importView;
+	private ImportWizardView importView;
 
-	public ImportComplete(ImportView importView, Wizard wizard)
+	public ImportComplete(ImportWizardView importView, Wizard wizard)
 	{
 		this.importView = importView;
 	}

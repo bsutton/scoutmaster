@@ -23,7 +23,6 @@ import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.MultiColumnFormLayout;
-import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.ComboBox;
@@ -36,7 +35,7 @@ import com.vaadin.ui.TextField;
 public class ImportMatchFields implements WizardStep
 {
 
-	private ImportView importView;
+	private ImportWizardView importView;
 	private String selectedUserMapping = null;
 	private ArrayList<ComboBox> mappings;
 	private ArrayList<ImportUserMapping> userMapping;
@@ -44,7 +43,7 @@ public class ImportMatchFields implements WizardStep
 	private String[] headers;
 	private TextField fieldMapping;
 
-	public ImportMatchFields(ImportView importView)
+	public ImportMatchFields(ImportWizardView importView)
 	{
 		this.importView = importView;
 	}

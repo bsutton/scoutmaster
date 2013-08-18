@@ -30,6 +30,7 @@ public class ValidatingFieldGroup<T> extends FieldGroup
 	@Override
 	protected void configureField(Field<?> field)
 	{
+		field.removeAllValidators();
 		super.configureField(field);
 		// Add Bean validators if there are annotations
 		// Note that this requires a bean validation implementation to

@@ -34,7 +34,7 @@ public class ContactTable extends Table
 
 		this.setContainerDataSource(contactContainer);
 		this.setVisibleColumns((Object[]) visibleColumns);
-
+		
 		this.setSelectable(true);
 		this.setImmediate(true);
 

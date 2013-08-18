@@ -3,7 +3,6 @@ package au.org.scoutmaster.views.wizards.messaging;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.util.FormHelper;
-import au.org.scoutmaster.views.MessagingWizardView;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;

@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views;
+package au.org.scoutmaster.views.wizards.importer;
 
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
@@ -8,11 +8,6 @@ import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
 import au.org.scoutmaster.application.Menu;
-import au.org.scoutmaster.views.wizards.messaging.ConfirmDetailsStep;
-import au.org.scoutmaster.views.wizards.messaging.MessageDetailsStep;
-import au.org.scoutmaster.views.wizards.messaging.SelectRecipientsStep;
-import au.org.scoutmaster.views.wizards.messaging.SendMessageStep;
-import au.org.scoutmaster.views.wizards.messaging.TransmissionCompleteStep;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -21,34 +16,55 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Messaging")
-public class MessagingWizardView extends VerticalLayout implements View, WizardProgressListener
+@Menu(display="Import")
+public class ImportWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String NAME = "Messaging";
+	public static final String NAME = "Import";
 
 	private Wizard wizard;
 	
-	private SelectRecipientsStep select;
-	private MessageDetailsStep details;
-	private ConfirmDetailsStep confirm;
-	private SendMessageStep send;
-	private TransmissionCompleteStep complete;
+	private ImportSelectType type;
+	private ImportSelectFile file;
+	private ImportMatchFields match;
+	private ImportShowSample sample;
+	private ImportShowProgress progress;
+	private ImportComplete complete;
 
-	public MessageDetailsStep getDetails()
+
+
+	public ImportSelectType getType()
 	{
-		return details;
+		return type;
 	}
 
 
-	public SendMessageStep getSend()
+	public ImportSelectFile getFile()
 	{
-		return send;
+		return file;
 	}
 
 
-	public TransmissionCompleteStep getComplete()
+	public ImportMatchFields getMatch()
+	{
+		return match;
+	}
+
+
+	public ImportShowSample getSample()
+	{
+		return sample;
+	}
+
+
+	public ImportShowProgress getProgress()
+	{
+		return progress;
+	}
+
+
+	public ImportComplete getComplete()
 	{
 		return complete;
 	}
@@ -58,25 +74,26 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	public void enter(ViewChangeEvent event)
 	{
 
-		select = new SelectRecipientsStep(this);
-		details = new MessageDetailsStep(this);
-		send = new SendMessageStep(this);
-		confirm = new ConfirmDetailsStep(this);
-		complete = new TransmissionCompleteStep(this);
+		type = new ImportSelectType(this);
+		file = new ImportSelectFile(this);
+		match = new ImportMatchFields(this);
+		sample = new ImportShowSample(this);
+		progress = new ImportShowProgress(this);
+		complete = new ImportComplete(this, wizard);
 
 
 		// create the Wizard component and add the steps
 		wizard = new Wizard();
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
-		wizard.addStep(select, "select");
-		wizard.addStep(details, "enter");
-		wizard.addStep(confirm, "confirm");
-		wizard.addStep(send, "send");
+		wizard.addStep(type, "type");
+		wizard.addStep(file, "file");
+		wizard.addStep(match, "match");
+		wizard.addStep(sample, "sample");
+		wizard.addStep(progress, "progress");
 		wizard.addStep(complete, "complete");
-//		wizard.setHeight("600px");
-//		wizard.setWidth("800px");
-		wizard.setSizeFull();
+		wizard.setHeight("600px");
+		wizard.setWidth("800px");
 		wizard.setUriFragmentEnabled(true);
 		
 		/* Main layout */
@@ -84,7 +101,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 		this.setSpacing(true);
 		this.addComponent(wizard);
 		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		this.setSizeFull();
 
 	}
 
@@ -115,6 +131,9 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	{
 		this.endWizard("Import Cancelled!");
 		
+		if (this.file.getTempFile().exists())
+			this.file.getTempFile().delete();
+
 	}
 
 	private void endWizard(String message)

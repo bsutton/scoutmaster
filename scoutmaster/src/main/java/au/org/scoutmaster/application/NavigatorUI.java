@@ -7,14 +7,13 @@ import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.views.AppointmentView;
 import au.org.scoutmaster.views.ClickATellView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
-import au.org.scoutmaster.views.ImportView;
 import au.org.scoutmaster.views.LoginView;
-import au.org.scoutmaster.views.MessagingWizardView;
 import au.org.scoutmaster.views.ResetPasswordView;
+import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
+import au.org.scoutmaster.views.wizards.messaging.MessagingWizardView;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
@@ -42,6 +41,7 @@ import com.vaadin.ui.VerticalLayout;
  * Or you may choose to embed your UI to an existing web page.
  */
 @Title("Scoutmaster")
+// @PreserveOnRefresh
 //@Theme("scoutmaster")
 @Push
 @Widgetset(value="au.org.scoutmaster.AppWidgetSet")
@@ -66,8 +66,8 @@ public class NavigatorUI extends UI
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
-		viewMap.add(new ViewMap(AppointmentView.NAME, AppointmentView.class));
-		viewMap.add(new ViewMap(ImportView.NAME, ImportView.class));
+		//viewMap.add(new ViewMap(AppointmentView.NAME, AppointmentView.class));
+		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
@@ -155,7 +155,8 @@ public class NavigatorUI extends UI
 			@Override
 			public void afterViewChange(ViewChangeEvent event)
 			{
-
+				// For some reason the page title is set to null after each navigation transition.
+				getPage().setTitle("Scoutmaster");
 			}
 		});
 

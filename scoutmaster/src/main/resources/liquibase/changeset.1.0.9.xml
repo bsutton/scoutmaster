@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Add standard Section Types -->
+	<changeSet author="bsutton" id="1.0.9">
+			<dropColumn tableName="contact" columnName="preferredPhone"/>
+			<dropColumn tableName="phone" columnName="locationType"/>
+			
+			
+			<dropForeignKeyConstraint baseTableName="contact" constraintName="FK_CONTACT_HOMEPHONE_ID"/>
+			<dropForeignKeyConstraint baseTableName="contact" constraintName="FK_CONTACT_WORKPHONE_ID"/>
+			<dropForeignKeyConstraint baseTableName="contact" constraintName="FK_CONTACT_MOBILE_ID"/>
+			
+			<renameColumn tableName="contact" oldColumnName="HOMEPHONE_ID" newColumnName="phone1_id" columnDataType="BIGINT(19)"/>
+			<renameColumn tableName="contact" oldColumnName="WORKPHONE_ID" newColumnName="phone2_id" columnDataType="BIGINT(19)"/>
+			<renameColumn tableName="contact" oldColumnName="MOBILE_ID" newColumnName="phone3_id" columnDataType="BIGINT(19)"/>
+			
+			<addForeignKeyConstraint baseColumnNames="phone1_id" baseTableName="contact" constraintName="FK_CONTACT_PHONE1_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
+			<addForeignKeyConstraint baseColumnNames="phone2_id" baseTableName="contact" constraintName="FK_CONTACT_PHONE2_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
+			<addForeignKeyConstraint baseColumnNames="phone3_id" baseTableName="contact" constraintName="FK_CONTACT_PHONE3_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
+			
+			
+	</changeSet>
+</databaseChangeLog>

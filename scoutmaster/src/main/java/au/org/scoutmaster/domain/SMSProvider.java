@@ -16,8 +16,8 @@ public class SMSProvider extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String FIND_BY_NAME = "findByName";
-	public static final String FIND_ALL = "findAll";
+	public static final String FIND_BY_NAME = "SMSProvider.findByName";
+	public static final String FIND_ALL = "SMSProvider.findAll";
 	
 
 	/**

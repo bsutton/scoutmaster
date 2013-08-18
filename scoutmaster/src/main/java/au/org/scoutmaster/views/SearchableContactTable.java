@@ -129,6 +129,7 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 	{
 		contactContainer.removeAllContainerFilters();
 		buildQuery(tags);
+		contactTable.refreshRowCache();
 
 		// if (tags.size() > 0)
 		// {
@@ -156,35 +157,18 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 			{
 				@SuppressWarnings("unchecked")
 				Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
-				//
-				// Path<Integer> tagId = fromTag.<Integer> get("tags.id");
-				// In<Integer> in = criteriaBuilder.in(tagId);
-				// ArrayList<Long> ids = new ArrayList<>();
-				// for (Tag tag : tags)
-				// {
-				// ids.add(tag.getId());
-				// }
-				// in.in(ids);
-				//
-				// predicates.add(in);
 
 				if (tags.size() > 0)
 				{
 					try
 					{
-					Tag firstTag = tags.get(0);
-					Join<Contact, Tag> tagJoin = fromContact.join("tags");
-//					query.where(cb.and(cb.equal(fromContact.get("contact_id"), tagJoin.get("contact_id")), // join predicate
-//							cb.equal(tagJoin.get("tag_id"), cb.parameter(Long.class, "contact_tag.id"))));
-
-//					predicates.add(cb.and(cb.equal(fromContact.get("contact.id"), tagJoin.get("contact.id")), // join predicate
-//							cb.equal(tagJoin.get("tag.id"), firstTag.getId())));
-					predicates.add(cb.equal(tagJoin.get("id"), firstTag.getId()));
-					
+						Tag firstTag = tags.get(0);
+						Join<Contact, Tag> tagJoin = fromContact.join("tags");
+						predicates.add(cb.equal(tagJoin.get("id"), firstTag.getId()));
 					}
 					catch (Throwable e)
 					{
-						logger.error(e,e);
+						logger.error(e, e);
 					}
 				}
 
@@ -196,5 +180,17 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 	public int size()
 	{
 		return contactTable.size();
+	}
+	
+	public ArrayList<Contact> getFilteredContacts()
+	{
+		ArrayList<Contact> contacts = new ArrayList<>();
+		
+		for (Object itemId :contactContainer.getItemIds())
+		{
+			Contact contact = contactContainer.getItem(itemId).getEntity();
+			contacts.add(contact);
+		}
+		return contacts;
 	}
 }

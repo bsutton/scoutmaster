@@ -1,1257 +1,1781 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
-    <changeSet author="bsutton (generated)" id="1375182500425-1">
-        <createTable tableName="household_tag">
-            <column name="Household_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tags_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-2">
-        <createTable tableName="activity">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="ACTIVITYDATE" type="date"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DETAILS" type="VARCHAR(255)"/>
-            <column name="SUBJECT" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="ADDEDBY_ID" type="BIGINT(19)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-            <column name="WITHCONTACT_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-3">
-        <createTable tableName="sectionmeetingdefaults">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="ENDTIME" type="time"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="MEETINGDETAILS" type="VARCHAR(255)"/>
-            <column name="MEETINGNIGHT" type="INT(10)"/>
-            <column name="MEETINGSUBJECT" type="VARCHAR(255)"/>
-            <column name="STARTTIME" type="time"/>
-            <column name="UPDATED" type="date"/>
-            <column name="LOCATION_ID" type="BIGINT(19)"/>
-            <column name="SECTION_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-4">
-        <createTable tableName="importusermapping">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="MAPPINGNAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-5">
-        <createTable tableName="organisation_contact">
-            <column name="Organisation_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="contacts_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-6">
-        <createTable tableName="school_address">
-            <column name="School_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="location_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-7">
-        <createTable tableName="sectiontype_qualificationtype">
-            <column name="SectionType_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="assistentLeaderRequirements_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="leaderRequirements_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="parentHelperRequirements_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-8">
-        <createTable tableName="household_note">
-            <column name="Household_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notes_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-9">
-        <createTable tableName="contact_tag">
-            <column name="Contact_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tags_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-10">
-        <createTable tableName="school">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="ADVERTISINGCONTACT_ID" type="BIGINT(19)"/>
-            <column name="PRINCIPLE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-11">
-        <createTable tableName="payment_invoice">
-            <column name="Payment_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="invoices_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-12">
-        <createTable tableName="creditnoteline">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="ORDINAL" type="INT(10)"/>
-            <column name="QUANTITY" type="DECIMAL(38)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="itemCostMoney" type="LONGBLOB"/>
-            <column name="itemCostTaxPercentage" type="DECIMAL(38)"/>
-            <column name="lineTotalMoney" type="LONGBLOB"/>
-            <column name="lineTotalTaxPercentage" type="DECIMAL(38)"/>
-            <column name="CREDITNOTE_ID" type="BIGINT(19)"/>
-            <column name="PRODUCT_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-13">
-        <createTable tableName="household">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="LOCATION_ID" type="BIGINT(19)"/>
-            <column name="PRIMARYCONTACT_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-14">
-        <createTable tableName="invoice_payment">
-            <column name="Invoice_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="payments_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-15">
-        <createTable tableName="transitionmember">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="EXPECTEDSTARTDATE" type="date"/>
-            <column name="EXPEXTEDCOMPLETIONDATE" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="FROMSECTION_ID" type="BIGINT(19)"/>
-            <column name="TOSECTION_ID" type="BIGINT(19)"/>
-            <column name="TRANSITIONSUPERVISOR_ID" type="BIGINT(19)"/>
-            <column name="YOUTHMEMBER_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-16">
-        <createTable tableName="organisation_tag">
-            <column name="Organisation_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tags_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-17">
-        <createTable tableName="organisation_activity">
-            <column name="Organisation_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activites_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-18">
-        <createTable tableName="household_relationship">
-            <column name="Household_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="members_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-19">
-        <createTable tableName="qualificationtype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="EXPIRES" type="BIT(1)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="DAYS" type="INT(10)"/>
-            <column name="MONTHS" type="INT(10)"/>
-            <column name="YEARS" type="INT(10)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-20">
-        <createTable tableName="sessionhistory">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="END" type="date"/>
-            <column name="START" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="USER_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-21">
-        <createTable tableName="note">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="BODY" type="VARCHAR(255)"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="SUBJECT" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-22">
-        <createTable tableName="product">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="chargeMoney" type="LONGBLOB"/>
-            <column name="chargeTaxPercentage" type="DECIMAL(38)"/>
-            <column name="costtMoney" type="LONGBLOB"/>
-            <column name="costTaxPercentage" type="DECIMAL(38)"/>
-            <column name="SUPPLIER_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-23">
-        <createTable tableName="activitytype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-24">
-        <createTable tableName="relationshiptype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="LHS" type="VARCHAR(255)"/>
-            <column name="LHSTYPE" type="VARCHAR(255)"/>
-            <column name="RHS" type="VARCHAR(255)"/>
-            <column name="RHSTYPE" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-25">
-        <createTable tableName="smsprovider">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="APIID" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="ACTIVE" type="BIT(1)"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column defaultValueNumeric="0" name="DEFAULTPROVIDER" type="BIT(1)"/>
-            <column name="PASSWORD" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="USERNAME" type="VARCHAR(255)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-26">
-        <createTable tableName="invoice_invoiceline">
-            <column name="Invoice_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="invoiceLines_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-27">
-        <createTable tableName="household_activity">
-            <column name="Household_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activites_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-28">
-        <createTable tableName="organisation_note">
-            <column name="Organisation_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notes_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-29">
-        <createTable tableName="role">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-30">
-        <createTable tableName="section">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="MEETINGDEFAULTS_ID" type="BIGINT(19)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-31">
-        <createTable tableName="school_contact">
-            <column name="School_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="youth_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-32">
-        <createTable tableName="sectiontryouttype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="COST" type="LONGBLOB"/>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="PAPERWORKREQUIRED" type="BIT(1)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="WEEKS" type="INT(10)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-33">
-        <createTable tableName="section_contact">
-            <column name="Section_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="adultHelpers_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="leaders_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="youthMembers_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-34">
-        <createTable tableName="phone">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="LOCATIONTYPE" type="INT(10)"/>
-            <column name="PHONENO" type="VARCHAR(255)"/>
-            <column name="PHONETYPE" type="INT(10)"/>
-            <column defaultValueNumeric="0" name="PRIMARYPHONE" type="BIT(1)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-35">
-        <createTable tableName="contact_activity">
-            <column name="Contact_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activites_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-36">
-        <createTable tableName="creditnote">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="ASSOCIATEDINVOICE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-37">
-        <createTable tableName="user_role">
-            <column name="User_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="belongsTo_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-38">
-        <createTable tableName="sectiontryout">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="ACTUALCOMPLETIONDATE" type="date"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="EXPECTEDCOMPLETIONDATE" type="date"/>
-            <column name="OUTCOME" type="INT(10)"/>
-            <column defaultValueNumeric="0" name="PAID" type="BIT(1)"/>
-            <column name="STARTDATE" type="date"/>
-            <column defaultValueNumeric="0" name="TRAILPAPERWORKCOMPLETED" type="BIT(1)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="MONEY" type="LONGBLOB"/>
-            <column name="TAXPERCENTAGE" type="DECIMAL(38)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-            <column name="TRIALYOUTHMEMBER_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-39">
-        <createTable tableName="event">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="DTYPE" type="VARCHAR(31)"/>
-            <column defaultValueNumeric="0" name="ALLDAYEVENT" type="BIT(1)"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DETAILS" type="VARCHAR(255)"/>
-            <column name="EVENTENDDATETIME" type="date"/>
-            <column name="EVENTSTARTDATETIME" type="date"/>
-            <column name="LASTMODIFIED" type="date"/>
-            <column name="SUBJECT" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="SECTION_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-40">
-        <createTable tableName="event_contact">
-            <column name="Event_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="coordinators_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-41">
-        <createTable tableName="invoice">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="INVOICEDATE" type="date"/>
-            <column name="INVOICENO" type="VARCHAR(255)"/>
-            <column name="NOTES" type="VARCHAR(255)"/>
-            <column name="TERMS" type="INT(10)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="BILLTO_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-42">
-        <createTable tableName="relationship">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="FIRST_ID" type="BIGINT(19)"/>
-            <column name="HOUSEHOLD_ID" type="BIGINT(19)"/>
-            <column name="ORGANISATION_ID" type="BIGINT(19)"/>
-            <column name="SCHOOL_ID" type="BIGINT(19)"/>
-            <column name="SECONDCONTACT_ID" type="BIGINT(19)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-43">
-        <createTable tableName="feature">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="DESCRIPTOR" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-44">
-        <createTable tableName="contact_note">
-            <column name="Contact_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notes_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-45">
-        <createTable tableName="tag">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(250)"/>
-            <column name="NAME" type="VARCHAR(30)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-46">
-        <createTable tableName="importcolumnfieldmapping">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="CSVCOLUMNNAME" type="VARCHAR(255)"/>
-            <column name="DBFIELDNAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="USERMAPPING_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-47">
-        <createTable tableName="invoiceline">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="ORDINAL" type="INT(10)"/>
-            <column name="QUANTITY" type="DECIMAL(38)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="itemCostMoney" type="LONGBLOB"/>
-            <column name="itemCostTaxPercentage" type="DECIMAL(38)"/>
-            <column name="lineTotalMoney" type="LONGBLOB"/>
-            <column name="lineTotalTaxPercentage" type="DECIMAL(38)"/>
-            <column name="INVOICE_ID" type="BIGINT(19)"/>
-            <column name="PRODUCT_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-48">
-        <createTable tableName="address">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CITY" type="VARCHAR(255)"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="POSTCODE" type="VARCHAR(255)"/>
-            <column name="STATE" type="VARCHAR(255)"/>
-            <column name="STREET" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-49">
-        <createTable tableName="sectiontryouttype_section">
-            <column name="SectionTryoutType_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="sections_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-50">
-        <createTable tableName="qualification">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="EXPIRES" type="date"/>
-            <column name="OBTAINED" type="date"/>
-            <column name="UPDATED" type="date"/>
-            <column name="LEADER_ID" type="BIGINT(19)"/>
-            <column name="TYPE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-51">
-        <createTable tableName="contact">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column defaultValueNumeric="0" name="ACTIVE" type="BIT(1)"/>
-            <column name="AFFILIATEDSINCE" type="date"/>
-            <column name="ALLERGIES" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="AMBULANCESUBSCRIBER" type="BIT(1)"/>
-            <column name="BIRTHDATE" type="date"/>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="CURRENTEMPLOYER" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="CUSTODYORDER" type="BIT(1)"/>
-            <column name="CUSTODYORDERDETAILS" type="VARCHAR(255)"/>
-            <column name="FIRSTNAME" type="VARCHAR(255)"/>
-            <column name="GENDER" type="INT(10)"/>
-            <column defaultValueNumeric="0" name="HASFIRSTAIDCERTIFICATE" type="BIT(1)"/>
-            <column defaultValueNumeric="0" name="HASFOODHANDLINGCERTIFICATE" type="BIT(1)"/>
-            <column defaultValueNumeric="0" name="HASPOLICECHECK" type="BIT(1)"/>
-            <column defaultValueNumeric="0" name="HASWWC" type="BIT(1)"/>
-            <column name="HOBBIES" type="VARCHAR(255)"/>
-            <column name="HOMEEMAIL" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="ISMEMBER" type="BIT(1)"/>
-            <column name="JOBTITLE" type="VARCHAR(255)"/>
-            <column name="LASTNAME" type="VARCHAR(255)"/>
-            <column name="MEDICARENO" type="VARCHAR(255)"/>
-            <column name="MEMBERNO" type="VARCHAR(255)"/>
-            <column name="MEMBERSINCE" type="date"/>
-            <column name="MIDDLENAME" type="VARCHAR(255)"/>
-            <column name="POLICECHECKEXPIRY" type="date"/>
-            <column name="PREFERREDCOMMUNICATIONS" type="INT(10)"/>
-            <column name="PREFERREDEMAIL" type="INT(10)"/>
-            <column name="PREFERREDPHONE" type="INT(10)"/>
-            <column name="PREFIX" type="VARCHAR(255)"/>
-            <column name="PRIVATEMEDICALFUNDNAME" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="PRIVATEMEDICALINSURANCE" type="BIT(1)"/>
-            <column name="ROLE" type="INT(10)"/>
-            <column name="SCHOOL" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="WORKEMAIL" type="VARCHAR(255)"/>
-            <column name="WWCEXPIRY" type="date"/>
-            <column name="WWCNO" type="VARCHAR(255)"/>
-            <column name="SECTION_ID" type="BIGINT(19)"/>
-            <column name="SECTIONELIGIBILITY_ID" type="BIGINT(19)"/>
-            <column name="ADDRESS_ID" type="BIGINT(19)"/>
-            <column name="HOMEPHONE_ID" type="BIGINT(19)"/>
-            <column name="MOBILE_ID" type="BIGINT(19)"/>
-            <column name="WORKPHONE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-52">
-        <createTable tableName="user">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column defaultValueNumeric="0" name="DELETED" type="BIT(1)"/>
-            <column defaultValueNumeric="0" name="ENABLED" type="BIT(1)"/>
-            <column name="SALTEDPASSWORD" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="USERNAME" type="VARCHAR(255)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-53">
-        <createTable tableName="sectiontype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="endingAgeDays" type="INT(10)"/>
-            <column name="endingAgeMonths" type="INT(10)"/>
-            <column name="endingAgeYears" type="INT(10)"/>
-            <column name="startingAgeDays" type="INT(10)"/>
-            <column name="startingAgeMonths" type="INT(10)"/>
-            <column name="startingAgeYears" type="INT(10)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-54">
-        <createTable tableName="section_sectiontryout">
-            <column name="Section_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="trialMembers_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-55">
-        <createTable tableName="smsprovidertype">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="PROVIDER_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-56">
-        <createTable tableName="payment">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="NOTE" type="VARCHAR(255)"/>
-            <column name="PAYMENTDATE" type="date"/>
-            <column name="REFERENCE" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="MONEY" type="LONGBLOB"/>
-            <column name="TAXPERCENTAGE" type="DECIMAL(38)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-57">
-        <createTable tableName="creditnote_creditnoteline">
-            <column name="CreditNote_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creditNoteLines_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-58">
-        <createTable tableName="role_feature">
-            <column name="Role_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="permitted_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-59">
-        <createTable tableName="organisation">
-            <column autoIncrement="true" name="ID" type="BIGINT(19)">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="CONSISTENCYVERSION" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="CREATED" type="date"/>
-            <column name="DESCRIPTION" type="VARCHAR(255)"/>
-            <column defaultValueNumeric="0" name="ISOURSCOUTGROUP" type="BIT(1)"/>
-            <column name="NAME" type="VARCHAR(255)"/>
-            <column name="UPDATED" type="date"/>
-            <column name="LOCATION_ID" type="BIGINT(19)"/>
-            <column name="PRIMARYPHONE_ID" type="BIGINT(19)"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-60">
-        <createTable tableName="section_transitionmember">
-            <column name="Section_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="transitioningYouthMembers_ID" type="BIGINT(19)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-61">
-        <addUniqueConstraint columnNames="NAME" constraintName="NAME" deferrable="false" disabled="false" initiallyDeferred="false" tableName="tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-62">
-        <addPrimaryKey columnNames="User_ID, belongsTo_ID" constraintName="PRIMARY" tableName="user_role"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-63">
-        <addPrimaryKey columnNames="Organisation_ID, activites_ID" constraintName="PRIMARY" tableName="organisation_activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-64">
-        <addPrimaryKey columnNames="Organisation_ID, notes_ID" constraintName="PRIMARY" tableName="organisation_note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-65">
-        <addPrimaryKey columnNames="Section_ID, adultHelpers_ID, leaders_ID, youthMembers_ID" constraintName="PRIMARY" tableName="section_contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-66">
-        <addPrimaryKey columnNames="Contact_ID, activites_ID" constraintName="PRIMARY" tableName="contact_activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-67">
-        <addPrimaryKey columnNames="Organisation_ID, contacts_ID" constraintName="PRIMARY" tableName="organisation_contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-68">
-        <addPrimaryKey columnNames="CreditNote_ID, creditNoteLines_ID" constraintName="PRIMARY" tableName="creditnote_creditnoteline"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-69">
-        <addPrimaryKey columnNames="Invoice_ID, invoiceLines_ID" constraintName="PRIMARY" tableName="invoice_invoiceline"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-70">
-        <addPrimaryKey columnNames="Household_ID, tags_ID" constraintName="PRIMARY" tableName="household_tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-71">
-        <addPrimaryKey columnNames="Organisation_ID, tags_ID" constraintName="PRIMARY" tableName="organisation_tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-72">
-        <addPrimaryKey columnNames="Section_ID, trialMembers_ID" constraintName="PRIMARY" tableName="section_sectiontryout"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-73">
-        <addPrimaryKey columnNames="SectionType_ID, assistentLeaderRequirements_ID, leaderRequirements_ID, parentHelperRequirements_ID" constraintName="PRIMARY" tableName="sectiontype_qualificationtype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-74">
-        <addPrimaryKey columnNames="Household_ID, activites_ID" constraintName="PRIMARY" tableName="household_activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-75">
-        <addPrimaryKey columnNames="Contact_ID, tags_ID" constraintName="PRIMARY" tableName="contact_tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-76">
-        <addPrimaryKey columnNames="Invoice_ID, payments_ID" constraintName="PRIMARY" tableName="invoice_payment"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-77">
-        <addPrimaryKey columnNames="School_ID, location_ID" constraintName="PRIMARY" tableName="school_address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-78">
-        <addPrimaryKey columnNames="Section_ID, transitioningYouthMembers_ID" constraintName="PRIMARY" tableName="section_transitionmember"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-79">
-        <addPrimaryKey columnNames="Household_ID, members_ID" constraintName="PRIMARY" tableName="household_relationship"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-80">
-        <addPrimaryKey columnNames="Payment_ID, invoices_ID" constraintName="PRIMARY" tableName="payment_invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-81">
-        <addPrimaryKey columnNames="Event_ID, coordinators_ID" constraintName="PRIMARY" tableName="event_contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-82">
-        <addPrimaryKey columnNames="School_ID, youth_ID" constraintName="PRIMARY" tableName="school_contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-83">
-        <addPrimaryKey columnNames="Role_ID, permitted_ID" constraintName="PRIMARY" tableName="role_feature"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-84">
-        <addPrimaryKey columnNames="Household_ID, notes_ID" constraintName="PRIMARY" tableName="household_note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-85">
-        <addPrimaryKey columnNames="SectionTryoutType_ID, sections_ID" constraintName="PRIMARY" tableName="sectiontryouttype_section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-86">
-        <addPrimaryKey columnNames="Contact_ID, notes_ID" constraintName="PRIMARY" tableName="contact_note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-87">
-        <addForeignKeyConstraint baseColumnNames="Organisation_ID" baseTableName="organisation_contact" constraintName="FK_ORGANISATION_CONTACT_Organisation_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-88">
-        <addForeignKeyConstraint baseColumnNames="Invoice_ID" baseTableName="invoice_payment" constraintName="FK_INVOICE_PAYMENT_Invoice_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-89">
-        <addForeignKeyConstraint baseColumnNames="belongsTo_ID" baseTableName="user_role" constraintName="FK_USER_ROLE_belongsTo_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="role"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-90">
-        <addForeignKeyConstraint baseColumnNames="members_ID" baseTableName="household_relationship" constraintName="FK_HOUSEHOLD_RELATIONSHIP_members_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="relationship"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-91">
-        <addForeignKeyConstraint baseColumnNames="Role_ID" baseTableName="role_feature" constraintName="FK_ROLE_FEATURE_Role_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="role"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-92">
-        <addForeignKeyConstraint baseColumnNames="MEETINGDEFAULTS_ID" baseTableName="section" constraintName="FK_SECTION_MEETINGDEFAULTS_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectionmeetingdefaults"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-93">
-        <addForeignKeyConstraint baseColumnNames="Household_ID" baseTableName="household_note" constraintName="FK_HOUSEHOLD_NOTE_Household_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="household"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-94">
-        <addForeignKeyConstraint baseColumnNames="PRIMARYCONTACT_ID" baseTableName="household" constraintName="FK_HOUSEHOLD_PRIMARYCONTACT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-95">
-        <addForeignKeyConstraint baseColumnNames="ADVERTISINGCONTACT_ID" baseTableName="school" constraintName="FK_SCHOOL_ADVERTISINGCONTACT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-96">
-        <addForeignKeyConstraint baseColumnNames="adultHelpers_ID" baseTableName="section_contact" constraintName="FK_SECTION_CONTACT_adultHelpers_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-97">
-        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="sessionhistory" constraintName="FK_SESSIONHISTORY_USER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="user"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-98">
-        <addForeignKeyConstraint baseColumnNames="FIRST_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_FIRST_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-99">
-        <addForeignKeyConstraint baseColumnNames="TRANSITIONSUPERVISOR_ID" baseTableName="transitionmember" constraintName="FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-100">
-        <addForeignKeyConstraint baseColumnNames="activites_ID" baseTableName="contact_activity" constraintName="FK_CONTACT_ACTIVITY_activites_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-101">
-        <addForeignKeyConstraint baseColumnNames="TRIALYOUTHMEMBER_ID" baseTableName="sectiontryout" constraintName="FK_SECTIONTRYOUT_TRIALYOUTHMEMBER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-102">
-        <addForeignKeyConstraint baseColumnNames="LOCATION_ID" baseTableName="sectionmeetingdefaults" constraintName="FK_SECTIONMEETINGDEFAULTS_LOCATION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-103">
-        <addForeignKeyConstraint baseColumnNames="WORKPHONE_ID" baseTableName="contact" constraintName="FK_CONTACT_WORKPHONE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-104">
-        <addForeignKeyConstraint baseColumnNames="LOCATION_ID" baseTableName="household" constraintName="FK_HOUSEHOLD_LOCATION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-105">
-        <addForeignKeyConstraint baseColumnNames="YOUTHMEMBER_ID" baseTableName="transitionmember" constraintName="FK_TRANSITIONMEMBER_YOUTHMEMBER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-106">
-        <addForeignKeyConstraint baseColumnNames="SCHOOL_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_SCHOOL_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="school"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-107">
-        <addForeignKeyConstraint baseColumnNames="leaderRequirements_ID" baseTableName="sectiontype_qualificationtype" constraintName="SECTIONTYPE_QUALIFICATIONTYPEleaderRequirements_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="qualificationtype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-108">
-        <addForeignKeyConstraint baseColumnNames="PRINCIPLE_ID" baseTableName="school" constraintName="FK_SCHOOL_PRINCIPLE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-109">
-        <addForeignKeyConstraint baseColumnNames="trialMembers_ID" baseTableName="section_sectiontryout" constraintName="FK_SECTION_SECTIONTRYOUT_trialMembers_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontryout"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-110">
-        <addForeignKeyConstraint baseColumnNames="transitioningYouthMembers_ID" baseTableName="section_transitionmember" constraintName="SECTIONTRANSITIONMEMBERtransitioningYouthMembersID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="transitionmember"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-111">
-        <addForeignKeyConstraint baseColumnNames="LOCATION_ID" baseTableName="organisation" constraintName="FK_ORGANISATION_LOCATION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-112">
-        <addForeignKeyConstraint baseColumnNames="coordinators_ID" baseTableName="event_contact" constraintName="FK_EVENT_CONTACT_coordinators_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-113">
-        <addForeignKeyConstraint baseColumnNames="permitted_ID" baseTableName="role_feature" constraintName="FK_ROLE_FEATURE_permitted_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="feature"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-114">
-        <addForeignKeyConstraint baseColumnNames="Section_ID" baseTableName="section_sectiontryout" constraintName="FK_SECTION_SECTIONTRYOUT_Section_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-115">
-        <addForeignKeyConstraint baseColumnNames="Household_ID" baseTableName="household_relationship" constraintName="FK_HOUSEHOLD_RELATIONSHIP_Household_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="household"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-116">
-        <addForeignKeyConstraint baseColumnNames="INVOICE_ID" baseTableName="invoiceline" constraintName="FK_INVOICELINE_INVOICE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-117">
-        <addForeignKeyConstraint baseColumnNames="Contact_ID" baseTableName="contact_tag" constraintName="FK_CONTACT_TAG_Contact_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-118">
-        <addForeignKeyConstraint baseColumnNames="SECTION_ID" baseTableName="sectionmeetingdefaults" constraintName="FK_SECTIONMEETINGDEFAULTS_SECTION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-119">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="qualification" constraintName="FK_QUALIFICATION_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="qualificationtype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-120">
-        <addForeignKeyConstraint baseColumnNames="youth_ID" baseTableName="school_contact" constraintName="FK_SCHOOL_CONTACT_youth_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-121">
-        <addForeignKeyConstraint baseColumnNames="School_ID" baseTableName="school_contact" constraintName="FK_SCHOOL_CONTACT_School_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="school"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-122">
-        <addForeignKeyConstraint baseColumnNames="HOUSEHOLD_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_HOUSEHOLD_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="household"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-123">
-        <addForeignKeyConstraint baseColumnNames="User_ID" baseTableName="user_role" constraintName="FK_USER_ROLE_User_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="user"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-124">
-        <addForeignKeyConstraint baseColumnNames="Household_ID" baseTableName="household_activity" constraintName="FK_HOUSEHOLD_ACTIVITY_Household_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="household"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-125">
-        <addForeignKeyConstraint baseColumnNames="HOMEPHONE_ID" baseTableName="contact" constraintName="FK_CONTACT_HOMEPHONE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-126">
-        <addForeignKeyConstraint baseColumnNames="leaders_ID" baseTableName="section_contact" constraintName="FK_SECTION_CONTACT_leaders_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-127">
-        <addForeignKeyConstraint baseColumnNames="sections_ID" baseTableName="sectiontryouttype_section" constraintName="FK_SECTIONTRYOUTTYPE_SECTION_sections_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-128">
-        <addForeignKeyConstraint baseColumnNames="ADDRESS_ID" baseTableName="contact" constraintName="FK_CONTACT_ADDRESS_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-129">
-        <addForeignKeyConstraint baseColumnNames="youthMembers_ID" baseTableName="section_contact" constraintName="FK_SECTION_CONTACT_youthMembers_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-130">
-        <addForeignKeyConstraint baseColumnNames="notes_ID" baseTableName="contact_note" constraintName="FK_CONTACT_NOTE_notes_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-131">
-        <addForeignKeyConstraint baseColumnNames="Contact_ID" baseTableName="contact_activity" constraintName="FK_CONTACT_ACTIVITY_Contact_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-132">
-        <addForeignKeyConstraint baseColumnNames="payments_ID" baseTableName="invoice_payment" constraintName="FK_INVOICE_PAYMENT_payments_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="payment"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-133">
-        <addForeignKeyConstraint baseColumnNames="invoices_ID" baseTableName="payment_invoice" constraintName="FK_PAYMENT_INVOICE_invoices_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-134">
-        <addForeignKeyConstraint baseColumnNames="Organisation_ID" baseTableName="organisation_tag" constraintName="FK_ORGANISATION_TAG_Organisation_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-135">
-        <addForeignKeyConstraint baseColumnNames="Contact_ID" baseTableName="contact_note" constraintName="FK_CONTACT_NOTE_Contact_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-136">
-        <addForeignKeyConstraint baseColumnNames="Household_ID" baseTableName="household_tag" constraintName="FK_HOUSEHOLD_TAG_Household_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="household"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-137">
-        <addForeignKeyConstraint baseColumnNames="SECTIONELIGIBILITY_ID" baseTableName="contact" constraintName="FK_CONTACT_SECTIONELIGIBILITY_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-138">
-        <addForeignKeyConstraint baseColumnNames="CREDITNOTE_ID" baseTableName="creditnoteline" constraintName="FK_CREDITNOTELINE_CREDITNOTE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="creditnote"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-139">
-        <addForeignKeyConstraint baseColumnNames="invoiceLines_ID" baseTableName="invoice_invoiceline" constraintName="FK_INVOICE_INVOICELINE_invoiceLines_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoiceline"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-140">
-        <addForeignKeyConstraint baseColumnNames="PRIMARYPHONE_ID" baseTableName="organisation" constraintName="FK_ORGANISATION_PRIMARYPHONE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-141">
-        <addForeignKeyConstraint baseColumnNames="LEADER_ID" baseTableName="qualification" constraintName="FK_QUALIFICATION_LEADER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-142">
-        <addForeignKeyConstraint baseColumnNames="FROMSECTION_ID" baseTableName="transitionmember" constraintName="FK_TRANSITIONMEMBER_FROMSECTION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-143">
-        <addForeignKeyConstraint baseColumnNames="notes_ID" baseTableName="organisation_note" constraintName="FK_ORGANISATION_NOTE_notes_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-144">
-        <addForeignKeyConstraint baseColumnNames="tags_ID" baseTableName="household_tag" constraintName="FK_HOUSEHOLD_TAG_tags_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-145">
-        <addForeignKeyConstraint baseColumnNames="notes_ID" baseTableName="household_note" constraintName="FK_HOUSEHOLD_NOTE_notes_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="note"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-146">
-        <addForeignKeyConstraint baseColumnNames="SECTION_ID" baseTableName="event" constraintName="FK_EVENT_SECTION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-147">
-        <addForeignKeyConstraint baseColumnNames="Section_ID" baseTableName="section_transitionmember" constraintName="FK_SECTION_TRANSITIONMEMBER_Section_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-148">
-        <addForeignKeyConstraint baseColumnNames="activites_ID" baseTableName="organisation_activity" constraintName="FK_ORGANISATION_ACTIVITY_activites_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-149">
-        <addForeignKeyConstraint baseColumnNames="Organisation_ID" baseTableName="organisation_activity" constraintName="FK_ORGANISATION_ACTIVITY_Organisation_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-150">
-        <addForeignKeyConstraint baseColumnNames="location_ID" baseTableName="school_address" constraintName="FK_SCHOOL_ADDRESS_location_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="address"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-151">
-        <addForeignKeyConstraint baseColumnNames="PROVIDER_ID" baseTableName="smsprovidertype" constraintName="FK_SMSPROVIDERTYPE_PROVIDER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="smsprovider"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-152">
-        <addForeignKeyConstraint baseColumnNames="WITHCONTACT_ID" baseTableName="activity" constraintName="FK_ACTIVITY_WITHCONTACT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-153">
-        <addForeignKeyConstraint baseColumnNames="SectionTryoutType_ID" baseTableName="sectiontryouttype_section" constraintName="FK_SECTIONTRYOUTTYPE_SECTION_SectionTryoutType_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontryouttype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-154">
-        <addForeignKeyConstraint baseColumnNames="ADDEDBY_ID" baseTableName="activity" constraintName="FK_ACTIVITY_ADDEDBY_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-155">
-        <addForeignKeyConstraint baseColumnNames="parentHelperRequirements_ID" baseTableName="sectiontype_qualificationtype" constraintName="SCTONTYPEQUALIFICATIONTYPEprntHelperRequirementsID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="qualificationtype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-156">
-        <addForeignKeyConstraint baseColumnNames="Payment_ID" baseTableName="payment_invoice" constraintName="FK_PAYMENT_INVOICE_Payment_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="payment"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-157">
-        <addForeignKeyConstraint baseColumnNames="ASSOCIATEDINVOICE_ID" baseTableName="creditnote" constraintName="FK_CREDITNOTE_ASSOCIATEDINVOICE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-158">
-        <addForeignKeyConstraint baseColumnNames="TOSECTION_ID" baseTableName="transitionmember" constraintName="FK_TRANSITIONMEMBER_TOSECTION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-159">
-        <addForeignKeyConstraint baseColumnNames="SectionType_ID" baseTableName="sectiontype_qualificationtype" constraintName="FK_SECTIONTYPE_QUALIFICATIONTYPE_SectionType_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-160">
-        <addForeignKeyConstraint baseColumnNames="creditNoteLines_ID" baseTableName="creditnote_creditnoteline" constraintName="FK_CREDITNOTE_CREDITNOTELINE_creditNoteLines_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="creditnoteline"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-161">
-        <addForeignKeyConstraint baseColumnNames="tags_ID" baseTableName="organisation_tag" constraintName="FK_ORGANISATION_TAG_tags_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-162">
-        <addForeignKeyConstraint baseColumnNames="SECONDCONTACT_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_SECONDCONTACT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-163">
-        <addForeignKeyConstraint baseColumnNames="Event_ID" baseTableName="event_contact" constraintName="FK_EVENT_CONTACT_Event_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="event"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-164">
-        <addForeignKeyConstraint baseColumnNames="Invoice_ID" baseTableName="invoice_invoiceline" constraintName="FK_INVOICE_INVOICELINE_Invoice_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="invoice"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-165">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="relationshiptype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-166">
-        <addForeignKeyConstraint baseColumnNames="Section_ID" baseTableName="section_contact" constraintName="FK_SECTION_CONTACT_Section_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="section"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-167">
-        <addForeignKeyConstraint baseColumnNames="CreditNote_ID" baseTableName="creditnote_creditnoteline" constraintName="FK_CREDITNOTE_CREDITNOTELINE_CreditNote_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="creditnote"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-168">
-        <addForeignKeyConstraint baseColumnNames="PRODUCT_ID" baseTableName="invoiceline" constraintName="FK_INVOICELINE_PRODUCT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="product"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-169">
-        <addForeignKeyConstraint baseColumnNames="PRODUCT_ID" baseTableName="creditnoteline" constraintName="FK_CREDITNOTELINE_PRODUCT_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="product"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-170">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="smsprovider" constraintName="FK_SMSPROVIDER_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="smsprovidertype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-171">
-        <addForeignKeyConstraint baseColumnNames="contacts_ID" baseTableName="organisation_contact" constraintName="FK_ORGANISATION_CONTACT_contacts_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-172">
-        <addForeignKeyConstraint baseColumnNames="MOBILE_ID" baseTableName="contact" constraintName="FK_CONTACT_MOBILE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="phone"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-173">
-        <addForeignKeyConstraint baseColumnNames="USERMAPPING_ID" baseTableName="importcolumnfieldmapping" constraintName="FK_IMPORTCOLUMNFIELDMAPPING_USERMAPPING_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="importusermapping"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-174">
-        <addForeignKeyConstraint baseColumnNames="assistentLeaderRequirements_ID" baseTableName="sectiontype_qualificationtype" constraintName="SCTNTYPQUALIFICATIONTYPEssstntLeaderRequirementsID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="qualificationtype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-175">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="section" constraintName="FK_SECTION_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-176">
-        <addForeignKeyConstraint baseColumnNames="Organisation_ID" baseTableName="organisation_note" constraintName="FK_ORGANISATION_NOTE_Organisation_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-177">
-        <addForeignKeyConstraint baseColumnNames="activites_ID" baseTableName="household_activity" constraintName="FK_HOUSEHOLD_ACTIVITY_activites_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="activity"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-178">
-        <addForeignKeyConstraint baseColumnNames="SECTION_ID" baseTableName="contact" constraintName="FK_CONTACT_SECTION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-179">
-        <addForeignKeyConstraint baseColumnNames="School_ID" baseTableName="school_address" constraintName="FK_SCHOOL_ADDRESS_School_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="school"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-180">
-        <addForeignKeyConstraint baseColumnNames="BILLTO_ID" baseTableName="invoice" constraintName="FK_INVOICE_BILLTO_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="contact"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-181">
-        <addForeignKeyConstraint baseColumnNames="SUPPLIER_ID" baseTableName="product" constraintName="FK_PRODUCT_SUPPLIER_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-182">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="sectiontryout" constraintName="FK_SECTIONTRYOUT_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="sectiontryouttype"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-183">
-        <addForeignKeyConstraint baseColumnNames="ORGANISATION_ID" baseTableName="relationship" constraintName="FK_RELATIONSHIP_ORGANISATION_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="organisation"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-184">
-        <addForeignKeyConstraint baseColumnNames="tags_ID" baseTableName="contact_tag" constraintName="FK_CONTACT_TAG_tags_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="tag"/>
-    </changeSet>
-    <changeSet author="bsutton (generated)" id="1375182500425-185">
-        <addForeignKeyConstraint baseColumnNames="TYPE_ID" baseTableName="activity" constraintName="FK_ACTIVITY_TYPE_ID" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="activitytype"/>
-    </changeSet>
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+	<changeSet author="bsutton (generated)" id="1376825552731-1">
+		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_TAG">
+			<column name="Household_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tags_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-2">
+		<createTable catalogName="scoutmaster" tableName="ACTIVITY">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="ACTIVITYDATE" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DETAILS" type="VARCHAR(255)" />
+			<column name="SUBJECT" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="ADDEDBY_ID" type="BIGINT(19)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+			<column name="WITHCONTACT_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-3">
+		<createTable catalogName="scoutmaster" tableName="IMPORTUSERMAPPING">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="MAPPINGNAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-4">
+		<createTable catalogName="scoutmaster" tableName="SECTIONMEETINGDEFAULTS">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="ENDTIME" type="time" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="MEETINGDETAILS" type="VARCHAR(255)" />
+			<column name="MEETINGNIGHT" type="INT(10)" />
+			<column name="MEETINGSUBJECT" type="VARCHAR(255)" />
+			<column name="STARTTIME" type="time" />
+			<column name="UPDATED" type="date" />
+			<column name="LOCATION_ID" type="BIGINT(19)" />
+			<column name="SECTION_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-5">
+		<createTable catalogName="scoutmaster" tableName="ORGANISATION_CONTACT">
+			<column name="Organisation_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="contacts_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-6">
+		<createTable catalogName="scoutmaster" tableName="SCHOOL_ADDRESS">
+			<column name="School_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="location_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-7">
+		<createTable catalogName="scoutmaster" tableName="SECTIONTYPE_QUALIFICATIONTYPE">
+			<column name="SectionType_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="assistentLeaderRequirements_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="leaderRequirements_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="parentHelperRequirements_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-8">
+		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_NOTE">
+			<column name="Household_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-9">
+		<createTable catalogName="scoutmaster" tableName="CONTACT_TAG">
+			<column name="Contact_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tags_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-10">
+		<createTable catalogName="scoutmaster" tableName="SCHOOL">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="ADVERTISINGCONTACT_ID" type="BIGINT(19)" />
+			<column name="PRINCIPLE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-11">
+		<createTable catalogName="scoutmaster" tableName="PAYMENT_INVOICE">
+			<column name="Payment_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="invoices_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-12">
+		<createTable catalogName="scoutmaster" tableName="CREDITNOTELINE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="ORDINAL" type="INT(10)" />
+			<column name="QUANTITY" type="DECIMAL(38)" />
+			<column name="UPDATED" type="date" />
+			<column name="itemCostMoney" type="LONGBLOB" />
+			<column name="itemCostTaxPercentage" type="DECIMAL(38)" />
+			<column name="lineTotalMoney" type="LONGBLOB" />
+			<column name="lineTotalTaxPercentage" type="DECIMAL(38)" />
+			<column name="CREDITNOTE_ID" type="BIGINT(19)" />
+			<column name="PRODUCT_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-13">
+		<createTable catalogName="scoutmaster" tableName="TRANSITIONMEMBER">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="EXPECTEDSTARTDATE" type="date" />
+			<column name="EXPEXTEDCOMPLETIONDATE" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="FROMSECTION_ID" type="BIGINT(19)" />
+			<column name="TOSECTION_ID" type="BIGINT(19)" />
+			<column name="TRANSITIONSUPERVISOR_ID" type="BIGINT(19)" />
+			<column name="YOUTHMEMBER_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-14">
+		<createTable catalogName="scoutmaster" tableName="INVOICE_PAYMENT">
+			<column name="Invoice_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="payments_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-15">
+		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="LOCATION_ID" type="BIGINT(19)" />
+			<column name="PRIMARYCONTACT_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-16">
+		<createTable catalogName="scoutmaster" tableName="ORGANISATION_TAG">
+			<column name="Organisation_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tags_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-17">
+		<createTable catalogName="scoutmaster" tableName="ORGANISATION_ACTIVITY">
+			<column name="Organisation_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="activites_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-18">
+		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_RELATIONSHIP">
+			<column name="Household_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="members_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-19">
+		<createTable catalogName="scoutmaster" tableName="QUALIFICATIONTYPE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="EXPIRES" type="BIT(1)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="DAYS" type="INT(10)" />
+			<column name="MONTHS" type="INT(10)" />
+			<column name="YEARS" type="INT(10)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-20">
+		<createTable catalogName="scoutmaster" tableName="SESSIONHISTORY">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="END" type="date" />
+			<column name="START" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="USER_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-21">
+		<createTable catalogName="scoutmaster" tableName="NOTE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="BODY" type="VARCHAR(255)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="SUBJECT" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-22">
+		<createTable catalogName="scoutmaster" tableName="PRODUCT">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="chargeMoney" type="LONGBLOB" />
+			<column name="chargeTaxPercentage" type="DECIMAL(38)" />
+			<column name="costtMoney" type="LONGBLOB" />
+			<column name="costTaxPercentage" type="DECIMAL(38)" />
+			<column name="SUPPLIER_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-23">
+		<createTable catalogName="scoutmaster" tableName="ACTIVITYTYPE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-24">
+		<createTable catalogName="scoutmaster" tableName="RELATIONSHIPTYPE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="LHS" type="VARCHAR(255)" />
+			<column name="LHSTYPE" type="VARCHAR(255)" />
+			<column name="RHS" type="VARCHAR(255)" />
+			<column name="RHSTYPE" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-25">
+		<createTable catalogName="scoutmaster" tableName="SMSPROVIDER">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="APIID" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="ACTIVE" type="BIT(1)" />
+			<column name="CLASSPATH" type="VARCHAR(255)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column defaultValueNumeric="0" name="DEFAULTPROVIDER" type="BIT(1)" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="PASSWORD" type="VARCHAR(255)" />
+			<column name="PROVIDERNAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="USERNAME" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-26">
+		<createTable catalogName="scoutmaster" tableName="INVOICE_INVOICELINE">
+			<column name="Invoice_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="invoiceLines_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-27">
+		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_ACTIVITY">
+			<column name="Household_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="activites_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-28">
+		<createTable catalogName="scoutmaster" tableName="ORGANISATION_NOTE">
+			<column name="Organisation_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-29">
+		<createTable catalogName="scoutmaster" tableName="ROLE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-30">
+		<createTable catalogName="scoutmaster" tableName="SECTION">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="MEETINGDEFAULTS_ID" type="BIGINT(19)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-31">
+		<createTable catalogName="scoutmaster" tableName="SCHOOL_CONTACT">
+			<column name="School_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="youth_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-32">
+		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUTTYPE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="COST" type="LONGBLOB" />
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="PAPERWORKREQUIRED" type="BIT(1)" />
+			<column name="UPDATED" type="date" />
+			<column name="WEEKS" type="INT(10)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-33">
+		<createTable catalogName="scoutmaster" tableName="SECTION_CONTACT">
+			<column name="Section_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="adultHelpers_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="leaders_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="youthMembers_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-34">
+		<createTable catalogName="scoutmaster" tableName="PHONE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="PHONENO" type="VARCHAR(255)" />
+			<column name="PHONETYPE" type="INT(10)" />
+			<column defaultValueNumeric="0" name="PRIMARYPHONE" type="BIT(1)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-35">
+		<createTable catalogName="scoutmaster" tableName="CONTACT_ACTIVITY">
+			<column name="Contact_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="activites_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-36">
+		<createTable catalogName="scoutmaster" tableName="CREDITNOTE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="ASSOCIATEDINVOICE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-37">
+		<createTable catalogName="scoutmaster" tableName="USER_ROLE">
+			<column name="User_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="belongsTo_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-38">
+		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUT">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="ACTUALCOMPLETIONDATE" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="EXPECTEDCOMPLETIONDATE" type="date" />
+			<column name="OUTCOME" type="INT(10)" />
+			<column defaultValueNumeric="0" name="PAID" type="BIT(1)" />
+			<column name="STARTDATE" type="date" />
+			<column defaultValueNumeric="0" name="TRAILPAPERWORKCOMPLETED"
+				type="BIT(1)" />
+			<column name="UPDATED" type="date" />
+			<column name="MONEY" type="LONGBLOB" />
+			<column name="TAXPERCENTAGE" type="DECIMAL(38)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+			<column name="TRIALYOUTHMEMBER_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-39">
+		<createTable catalogName="scoutmaster" tableName="EVENT_CONTACT">
+			<column name="Event_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="coordinators_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-40">
+		<createTable catalogName="scoutmaster" tableName="EVENT">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="DTYPE" type="VARCHAR(31)" />
+			<column defaultValueNumeric="0" name="ALLDAYEVENT" type="BIT(1)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DETAILS" type="VARCHAR(255)" />
+			<column name="EVENTENDDATETIME" type="date" />
+			<column name="EVENTSTARTDATETIME" type="date" />
+			<column name="LASTMODIFIED" type="date" />
+			<column name="SUBJECT" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="SECTION_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-41">
+		<createTable catalogName="scoutmaster" tableName="INVOICE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="INVOICEDATE" type="date" />
+			<column name="INVOICENO" type="VARCHAR(255)" />
+			<column name="NOTES" type="VARCHAR(255)" />
+			<column name="TERMS" type="INT(10)" />
+			<column name="UPDATED" type="date" />
+			<column name="BILLTO_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-42">
+		<createTable catalogName="scoutmaster" tableName="RELATIONSHIP">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="FIRST_ID" type="BIGINT(19)" />
+			<column name="HOUSEHOLD_ID" type="BIGINT(19)" />
+			<column name="ORGANISATION_ID" type="BIGINT(19)" />
+			<column name="SCHOOL_ID" type="BIGINT(19)" />
+			<column name="SECONDCONTACT_ID" type="BIGINT(19)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-43">
+		<createTable catalogName="scoutmaster" tableName="FEATURE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="DESCRIPTOR" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-44">
+		<createTable catalogName="scoutmaster" tableName="CONTACT_NOTE">
+			<column name="Contact_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-45">
+		<createTable catalogName="scoutmaster" tableName="TAG">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column defaultValueNumeric="0" name="BUILTIN" type="BIT(1)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(250)" />
+			<column defaultValueNumeric="0" name="DETACHABLE" type="BIT(1)" />
+			<column name="NAME" type="VARCHAR(30)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-46">
+		<createTable catalogName="scoutmaster" tableName="IMPORTCOLUMNFIELDMAPPING">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="CSVCOLUMNNAME" type="VARCHAR(255)" />
+			<column name="DBFIELDNAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="USERMAPPING_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-47">
+		<createTable catalogName="scoutmaster" tableName="INVOICELINE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="ORDINAL" type="INT(10)" />
+			<column name="QUANTITY" type="DECIMAL(38)" />
+			<column name="UPDATED" type="date" />
+			<column name="itemCostMoney" type="LONGBLOB" />
+			<column name="itemCostTaxPercentage" type="DECIMAL(38)" />
+			<column name="lineTotalMoney" type="LONGBLOB" />
+			<column name="lineTotalTaxPercentage" type="DECIMAL(38)" />
+			<column name="INVOICE_ID" type="BIGINT(19)" />
+			<column name="PRODUCT_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-48">
+		<createTable catalogName="scoutmaster" tableName="ADDRESS">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CITY" type="VARCHAR(255)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="POSTCODE" type="VARCHAR(255)" />
+			<column name="STATE" type="VARCHAR(255)" />
+			<column name="STREET" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-49">
+		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUTTYPE_SECTION">
+			<column name="SectionTryoutType_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="sections_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-50">
+		<createTable catalogName="scoutmaster" tableName="QUALIFICATION">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="EXPIRES" type="date" />
+			<column name="OBTAINED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="LEADER_ID" type="BIGINT(19)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-51">
+		<createTable catalogName="scoutmaster" tableName="CONTACT">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column defaultValueNumeric="0" name="ACTIVE" type="BIT(1)" />
+			<column name="AFFILIATEDSINCE" type="date" />
+			<column name="ALLERGIES" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="AMBULANCESUBSCRIBER"
+				type="BIT(1)" />
+			<column name="BIRTHDATE" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="CURRENTEMPLOYER" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="CUSTODYORDER" type="BIT(1)" />
+			<column name="CUSTODYORDERDETAILS" type="VARCHAR(255)" />
+			<column name="FIRSTNAME" type="VARCHAR(255)" />
+			<column name="GENDER" type="INT(10)" />
+			<column defaultValueNumeric="0" name="HASFIRSTAIDCERTIFICATE"
+				type="BIT(1)" />
+			<column defaultValueNumeric="0" name="HASFOODHANDLINGCERTIFICATE"
+				type="BIT(1)" />
+			<column defaultValueNumeric="0" name="HASPOLICECHECK" type="BIT(1)" />
+			<column defaultValueNumeric="0" name="HASWWC" type="BIT(1)" />
+			<column name="HOBBIES" type="VARCHAR(255)" />
+			<column name="HOMEEMAIL" type="VARCHAR(255)" />
+			<column name="IMPORTID" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="ISMEMBER" type="BIT(1)" />
+			<column name="JOBTITLE" type="VARCHAR(255)" />
+			<column name="LASTNAME" type="VARCHAR(255)" />
+			<column name="MEDICARENO" type="VARCHAR(255)" />
+			<column name="MEMBERNO" type="VARCHAR(255)" />
+			<column name="MEMBERSINCE" type="date" />
+			<column name="MIDDLENAME" type="VARCHAR(255)" />
+			<column name="POLICECHECKEXPIRY" type="date" />
+			<column name="PREFERREDCOMMUNICATIONS" type="INT(10)" />
+			<column name="PREFERREDEMAIL" type="INT(10)" />
+			<column name="PREFIX" type="VARCHAR(255)" />
+			<column name="PRIVATEMEDICALFUNDNAME" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="PRIVATEMEDICALINSURANCE"
+				type="BIT(1)" />
+			<column name="ROLE" type="INT(10)" />
+			<column name="SCHOOL" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="WORKEMAIL" type="VARCHAR(255)" />
+			<column name="WWCEXPIRY" type="date" />
+			<column name="WWCNO" type="VARCHAR(255)" />
+			<column name="SECTION_ID" type="BIGINT(19)" />
+			<column name="SECTIONELIGIBILITY_ID" type="BIGINT(19)" />
+			<column name="ADDRESS_ID" type="BIGINT(19)" />
+			<column name="PHONE1_ID" type="BIGINT(19)" />
+			<column name="PHONE2_ID" type="BIGINT(19)" />
+			<column name="PHONE3_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-52">
+		<createTable catalogName="scoutmaster" tableName="USER">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column defaultValueNumeric="0" name="DELETED" type="BIT(1)" />
+			<column defaultValueNumeric="0" name="ENABLED" type="BIT(1)" />
+			<column name="SALTEDPASSWORD" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="USERNAME" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-53">
+		<createTable catalogName="scoutmaster" tableName="SECTIONTYPE">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="endingAgeDays" type="INT(10)" />
+			<column name="endingAgeMonths" type="INT(10)" />
+			<column name="endingAgeYears" type="INT(10)" />
+			<column name="startingAgeDays" type="INT(10)" />
+			<column name="startingAgeMonths" type="INT(10)" />
+			<column name="startingAgeYears" type="INT(10)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-54">
+		<createTable catalogName="scoutmaster" tableName="SECTION_SECTIONTRYOUT">
+			<column name="Section_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="trialMembers_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-55">
+		<createTable catalogName="scoutmaster" tableName="CREDITNOTE_CREDITNOTELINE">
+			<column name="CreditNote_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="creditNoteLines_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-56">
+		<createTable catalogName="scoutmaster" tableName="PAYMENT">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="NOTE" type="VARCHAR(255)" />
+			<column name="PAYMENTDATE" type="date" />
+			<column name="REFERENCE" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="MONEY" type="LONGBLOB" />
+			<column name="TAXPERCENTAGE" type="DECIMAL(38)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-57">
+		<createTable catalogName="scoutmaster" tableName="ORGANISATION">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column defaultValueNumeric="0" name="ISOURSCOUTGROUP" type="BIT(1)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="LOCATION_ID" type="BIGINT(19)" />
+			<column name="PRIMARYPHONE_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-58">
+		<createTable catalogName="scoutmaster" tableName="ROLE_FEATURE">
+			<column name="Role_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="permitted_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-59">
+		<createTable catalogName="scoutmaster" tableName="SECTION_TRANSITIONMEMBER">
+			<column name="Section_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="transitioningYouthMembers_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-60">
+		<addUniqueConstraint catalogName="scoutmaster"
+			columnNames="NAME" constraintName="NAME" deferrable="false" disabled="false"
+			initiallyDeferred="false" tableName="TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-61">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Organisation_ID, activites_ID" constraintName="PRIMARY"
+			tableName="ORGANISATION_ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-62">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Organisation_ID, contacts_ID" constraintName="PRIMARY"
+			tableName="ORGANISATION_CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-63">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="School_ID, location_ID" constraintName="PRIMARY"
+			tableName="SCHOOL_ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-64">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Contact_ID, tags_ID" constraintName="PRIMARY" tableName="CONTACT_TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-65">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Invoice_ID, invoiceLines_ID" constraintName="PRIMARY"
+			tableName="INVOICE_INVOICELINE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-66">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Household_ID, activites_ID" constraintName="PRIMARY"
+			tableName="HOUSEHOLD_ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-67">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Invoice_ID, payments_ID" constraintName="PRIMARY"
+			tableName="INVOICE_PAYMENT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-68">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Household_ID, tags_ID" constraintName="PRIMARY"
+			tableName="HOUSEHOLD_TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-69">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Contact_ID, notes_ID" constraintName="PRIMARY"
+			tableName="CONTACT_NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-70">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Role_ID, permitted_ID" constraintName="PRIMARY"
+			tableName="ROLE_FEATURE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-71">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="School_ID, youth_ID" constraintName="PRIMARY" tableName="SCHOOL_CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-72">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="SectionType_ID, assistentLeaderRequirements_ID, leaderRequirements_ID, parentHelperRequirements_ID"
+			constraintName="PRIMARY" tableName="SECTIONTYPE_QUALIFICATIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-73">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Household_ID, members_ID" constraintName="PRIMARY"
+			tableName="HOUSEHOLD_RELATIONSHIP" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-74">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="SectionTryoutType_ID, sections_ID" constraintName="PRIMARY"
+			tableName="SECTIONTRYOUTTYPE_SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-75">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Contact_ID, activites_ID" constraintName="PRIMARY"
+			tableName="CONTACT_ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-76">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="User_ID, belongsTo_ID" constraintName="PRIMARY"
+			tableName="USER_ROLE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-77">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Section_ID, trialMembers_ID" constraintName="PRIMARY"
+			tableName="SECTION_SECTIONTRYOUT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-78">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Household_ID, notes_ID" constraintName="PRIMARY"
+			tableName="HOUSEHOLD_NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-79">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Event_ID, coordinators_ID" constraintName="PRIMARY"
+			tableName="EVENT_CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-80">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Organisation_ID, notes_ID" constraintName="PRIMARY"
+			tableName="ORGANISATION_NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-81">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Section_ID, adultHelpers_ID, leaders_ID, youthMembers_ID"
+			constraintName="PRIMARY" tableName="SECTION_CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-82">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Section_ID, transitioningYouthMembers_ID"
+			constraintName="PRIMARY" tableName="SECTION_TRANSITIONMEMBER" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-83">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="CreditNote_ID, creditNoteLines_ID" constraintName="PRIMARY"
+			tableName="CREDITNOTE_CREDITNOTELINE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-84">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Payment_ID, invoices_ID" constraintName="PRIMARY"
+			tableName="PAYMENT_INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-85">
+		<addPrimaryKey catalogName="scoutmaster"
+			columnNames="Organisation_ID, tags_ID" constraintName="PRIMARY"
+			tableName="ORGANISATION_TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-86">
+		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_CONTACT"
+			constraintName="FK_ORGANISATION_CONTACT_Organisation_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-87">
+		<addForeignKeyConstraint baseColumnNames="CREDITNOTE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTELINE"
+			constraintName="FK_CREDITNOTELINE_CREDITNOTE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CREDITNOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-88">
+		<addForeignKeyConstraint baseColumnNames="invoiceLines_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_INVOICELINE"
+			constraintName="FK_INVOICE_INVOICELINE_invoiceLines_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICELINE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-89">
+		<addForeignKeyConstraint baseColumnNames="PRIMARYPHONE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION"
+			constraintName="FK_ORGANISATION_PRIMARYPHONE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PHONE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-90">
+		<addForeignKeyConstraint baseColumnNames="FROMSECTION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
+			constraintName="FK_TRANSITIONMEMBER_FROMSECTION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-91">
+		<addForeignKeyConstraint baseColumnNames="LEADER_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="QUALIFICATION"
+			constraintName="FK_QUALIFICATION_LEADER_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-92">
+		<addForeignKeyConstraint baseColumnNames="Invoice_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_PAYMENT"
+			constraintName="FK_INVOICE_PAYMENT_Invoice_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-93">
+		<addForeignKeyConstraint baseColumnNames="notes_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_NOTE"
+			constraintName="FK_ORGANISATION_NOTE_notes_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-94">
+		<addForeignKeyConstraint baseColumnNames="tags_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_TAG"
+			constraintName="FK_HOUSEHOLD_TAG_tags_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-95">
+		<addForeignKeyConstraint baseColumnNames="belongsTo_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="USER_ROLE"
+			constraintName="FK_USER_ROLE_belongsTo_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ROLE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-96">
+		<addForeignKeyConstraint baseColumnNames="members_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_RELATIONSHIP"
+			constraintName="FK_HOUSEHOLD_RELATIONSHIP_members_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="RELATIONSHIP" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-97">
+		<addForeignKeyConstraint baseColumnNames="Role_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ROLE_FEATURE"
+			constraintName="FK_ROLE_FEATURE_Role_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ROLE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-98">
+		<addForeignKeyConstraint baseColumnNames="MEETINGDEFAULTS_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION"
+			constraintName="FK_SECTION_MEETINGDEFAULTS_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONMEETINGDEFAULTS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-99">
+		<addForeignKeyConstraint baseColumnNames="ADDEDBY_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
+			constraintName="FK_ACTIVITY_ADDEDBY_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="USER" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-100">
+		<addForeignKeyConstraint baseColumnNames="Household_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_NOTE"
+			constraintName="FK_HOUSEHOLD_NOTE_Household_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="HOUSEHOLD" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-101">
+		<addForeignKeyConstraint baseColumnNames="notes_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_NOTE"
+			constraintName="FK_HOUSEHOLD_NOTE_notes_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-102">
+		<addForeignKeyConstraint baseColumnNames="PRIMARYCONTACT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD"
+			constraintName="FK_HOUSEHOLD_PRIMARYCONTACT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-103">
+		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="EVENT"
+			constraintName="FK_EVENT_SECTION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-104">
+		<addForeignKeyConstraint baseColumnNames="Section_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_TRANSITIONMEMBER"
+			constraintName="FK_SECTION_TRANSITIONMEMBER_Section_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-105">
+		<addForeignKeyConstraint baseColumnNames="activites_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_ACTIVITY"
+			constraintName="FK_ORGANISATION_ACTIVITY_activites_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-106">
+		<addForeignKeyConstraint baseColumnNames="ADVERTISINGCONTACT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL"
+			constraintName="FK_SCHOOL_ADVERTISINGCONTACT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-107">
+		<addForeignKeyConstraint baseColumnNames="adultHelpers_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
+			constraintName="FK_SECTION_CONTACT_adultHelpers_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-108">
+		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_ACTIVITY"
+			constraintName="FK_ORGANISATION_ACTIVITY_Organisation_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-109">
+		<addForeignKeyConstraint baseColumnNames="USER_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SESSIONHISTORY"
+			constraintName="FK_SESSIONHISTORY_USER_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="USER" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-110">
+		<addForeignKeyConstraint baseColumnNames="location_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_ADDRESS"
+			constraintName="FK_SCHOOL_ADDRESS_location_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-111">
+		<addForeignKeyConstraint baseColumnNames="FIRST_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_FIRST_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-112">
+		<addForeignKeyConstraint baseColumnNames="PHONE3_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_PHONE3_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PHONE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-113">
+		<addForeignKeyConstraint baseColumnNames="activites_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_ACTIVITY"
+			constraintName="FK_CONTACT_ACTIVITY_activites_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-114">
+		<addForeignKeyConstraint baseColumnNames="TRANSITIONSUPERVISOR_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
+			constraintName="FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-115">
+		<addForeignKeyConstraint baseColumnNames="TRIALYOUTHMEMBER_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUT"
+			constraintName="FK_SECTIONTRYOUT_TRIALYOUTHMEMBER_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-116">
+		<addForeignKeyConstraint baseColumnNames="WITHCONTACT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
+			constraintName="FK_ACTIVITY_WITHCONTACT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-117">
+		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONMEETINGDEFAULTS"
+			constraintName="FK_SECTIONMEETINGDEFAULTS_LOCATION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-118">
+		<addForeignKeyConstraint baseColumnNames="SectionTryoutType_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUTTYPE_SECTION"
+			constraintName="FK_SECTIONTRYOUTTYPE_SECTION_SectionTryoutType_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="SECTIONTRYOUTTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-119">
+		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD"
+			constraintName="FK_HOUSEHOLD_LOCATION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-120">
+		<addForeignKeyConstraint baseColumnNames="parentHelperRequirements_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
+			constraintName="SCTONTYPEQUALIFICATIONTYPEprntHelperRequirementsID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-121">
+		<addForeignKeyConstraint baseColumnNames="Payment_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="PAYMENT_INVOICE"
+			constraintName="FK_PAYMENT_INVOICE_Payment_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PAYMENT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-122">
+		<addForeignKeyConstraint baseColumnNames="ASSOCIATEDINVOICE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE"
+			constraintName="FK_CREDITNOTE_ASSOCIATEDINVOICE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-123">
+		<addForeignKeyConstraint baseColumnNames="YOUTHMEMBER_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
+			constraintName="FK_TRANSITIONMEMBER_YOUTHMEMBER_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-124">
+		<addForeignKeyConstraint baseColumnNames="SCHOOL_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_SCHOOL_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SCHOOL" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-125">
+		<addForeignKeyConstraint baseColumnNames="leaderRequirements_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
+			constraintName="SECTIONTYPE_QUALIFICATIONTYPEleaderRequirements_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-126">
+		<addForeignKeyConstraint baseColumnNames="TOSECTION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
+			constraintName="FK_TRANSITIONMEMBER_TOSECTION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-127">
+		<addForeignKeyConstraint baseColumnNames="PRINCIPLE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL"
+			constraintName="FK_SCHOOL_PRINCIPLE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-128">
+		<addForeignKeyConstraint baseColumnNames="trialMembers_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_SECTIONTRYOUT"
+			constraintName="FK_SECTION_SECTIONTRYOUT_trialMembers_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTRYOUT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-129">
+		<addForeignKeyConstraint baseColumnNames="transitioningYouthMembers_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_TRANSITIONMEMBER"
+			constraintName="SECTIONTRANSITIONMEMBERtransitioningYouthMembersID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="TRANSITIONMEMBER" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-130">
+		<addForeignKeyConstraint baseColumnNames="PHONE2_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_PHONE2_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PHONE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-131">
+		<addForeignKeyConstraint baseColumnNames="PHONE1_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_PHONE1_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PHONE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-132">
+		<addForeignKeyConstraint baseColumnNames="SectionType_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
+			constraintName="FK_SECTIONTYPE_QUALIFICATIONTYPE_SectionType_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="SECTIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-133">
+		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION"
+			constraintName="FK_ORGANISATION_LOCATION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-134">
+		<addForeignKeyConstraint baseColumnNames="creditNoteLines_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE_CREDITNOTELINE"
+			constraintName="FK_CREDITNOTE_CREDITNOTELINE_creditNoteLines_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="CREDITNOTELINE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-135">
+		<addForeignKeyConstraint baseColumnNames="tags_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_TAG"
+			constraintName="FK_ORGANISATION_TAG_tags_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-136">
+		<addForeignKeyConstraint baseColumnNames="coordinators_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="EVENT_CONTACT"
+			constraintName="FK_EVENT_CONTACT_coordinators_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-137">
+		<addForeignKeyConstraint baseColumnNames="SECONDCONTACT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_SECONDCONTACT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-138">
+		<addForeignKeyConstraint baseColumnNames="permitted_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ROLE_FEATURE"
+			constraintName="FK_ROLE_FEATURE_permitted_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="FEATURE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-139">
+		<addForeignKeyConstraint baseColumnNames="Section_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_SECTIONTRYOUT"
+			constraintName="FK_SECTION_SECTIONTRYOUT_Section_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-140">
+		<addForeignKeyConstraint baseColumnNames="Event_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="EVENT_CONTACT"
+			constraintName="FK_EVENT_CONTACT_Event_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="EVENT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-141">
+		<addForeignKeyConstraint baseColumnNames="Invoice_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_INVOICELINE"
+			constraintName="FK_INVOICE_INVOICELINE_Invoice_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-142">
+		<addForeignKeyConstraint baseColumnNames="Household_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_RELATIONSHIP"
+			constraintName="FK_HOUSEHOLD_RELATIONSHIP_Household_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="HOUSEHOLD" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-143">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="RELATIONSHIPTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-144">
+		<addForeignKeyConstraint baseColumnNames="INVOICE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICELINE"
+			constraintName="FK_INVOICELINE_INVOICE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-145">
+		<addForeignKeyConstraint baseColumnNames="Section_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
+			constraintName="FK_SECTION_CONTACT_Section_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-146">
+		<addForeignKeyConstraint baseColumnNames="CreditNote_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE_CREDITNOTELINE"
+			constraintName="FK_CREDITNOTE_CREDITNOTELINE_CreditNote_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="CREDITNOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-147">
+		<addForeignKeyConstraint baseColumnNames="Contact_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_TAG"
+			constraintName="FK_CONTACT_TAG_Contact_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-148">
+		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONMEETINGDEFAULTS"
+			constraintName="FK_SECTIONMEETINGDEFAULTS_SECTION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-149">
+		<addForeignKeyConstraint baseColumnNames="PRODUCT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTELINE"
+			constraintName="FK_CREDITNOTELINE_PRODUCT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PRODUCT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-150">
+		<addForeignKeyConstraint baseColumnNames="PRODUCT_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICELINE"
+			constraintName="FK_INVOICELINE_PRODUCT_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PRODUCT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-151">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="QUALIFICATION"
+			constraintName="FK_QUALIFICATION_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="QUALIFICATIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-152">
+		<addForeignKeyConstraint baseColumnNames="School_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_CONTACT"
+			constraintName="FK_SCHOOL_CONTACT_School_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SCHOOL" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-153">
+		<addForeignKeyConstraint baseColumnNames="youth_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_CONTACT"
+			constraintName="FK_SCHOOL_CONTACT_youth_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-154">
+		<addForeignKeyConstraint baseColumnNames="User_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="USER_ROLE"
+			constraintName="FK_USER_ROLE_User_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="USER" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-155">
+		<addForeignKeyConstraint baseColumnNames="HOUSEHOLD_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_HOUSEHOLD_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="HOUSEHOLD" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-156">
+		<addForeignKeyConstraint baseColumnNames="contacts_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_CONTACT"
+			constraintName="FK_ORGANISATION_CONTACT_contacts_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-157">
+		<addForeignKeyConstraint baseColumnNames="Household_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_ACTIVITY"
+			constraintName="FK_HOUSEHOLD_ACTIVITY_Household_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="HOUSEHOLD" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-158">
+		<addForeignKeyConstraint baseColumnNames="leaders_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
+			constraintName="FK_SECTION_CONTACT_leaders_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-159">
+		<addForeignKeyConstraint baseColumnNames="USERMAPPING_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="IMPORTCOLUMNFIELDMAPPING"
+			constraintName="FK_IMPORTCOLUMNFIELDMAPPING_USERMAPPING_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="IMPORTUSERMAPPING" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-160">
+		<addForeignKeyConstraint baseColumnNames="assistentLeaderRequirements_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
+			constraintName="SCTNTYPQUALIFICATIONTYPEssstntLeaderRequirementsID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID"
+			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-161">
+		<addForeignKeyConstraint baseColumnNames="sections_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUTTYPE_SECTION"
+			constraintName="FK_SECTIONTRYOUTTYPE_SECTION_sections_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-162">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION"
+			constraintName="FK_SECTION_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-163">
+		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_NOTE"
+			constraintName="FK_ORGANISATION_NOTE_Organisation_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-164">
+		<addForeignKeyConstraint baseColumnNames="youthMembers_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
+			constraintName="FK_SECTION_CONTACT_youthMembers_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-165">
+		<addForeignKeyConstraint baseColumnNames="ADDRESS_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_ADDRESS_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ADDRESS" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-166">
+		<addForeignKeyConstraint baseColumnNames="notes_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_NOTE"
+			constraintName="FK_CONTACT_NOTE_notes_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="NOTE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-167">
+		<addForeignKeyConstraint baseColumnNames="activites_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_ACTIVITY"
+			constraintName="FK_HOUSEHOLD_ACTIVITY_activites_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ACTIVITY" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-168">
+		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_SECTION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-169">
+		<addForeignKeyConstraint baseColumnNames="Contact_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_ACTIVITY"
+			constraintName="FK_CONTACT_ACTIVITY_Contact_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-170">
+		<addForeignKeyConstraint baseColumnNames="School_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_ADDRESS"
+			constraintName="FK_SCHOOL_ADDRESS_School_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SCHOOL" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-171">
+		<addForeignKeyConstraint baseColumnNames="invoices_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="PAYMENT_INVOICE"
+			constraintName="FK_PAYMENT_INVOICE_invoices_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="INVOICE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-172">
+		<addForeignKeyConstraint baseColumnNames="payments_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_PAYMENT"
+			constraintName="FK_INVOICE_PAYMENT_payments_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="PAYMENT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-173">
+		<addForeignKeyConstraint baseColumnNames="BILLTO_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="INVOICE"
+			constraintName="FK_INVOICE_BILLTO_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-174">
+		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_TAG"
+			constraintName="FK_ORGANISATION_TAG_Organisation_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-175">
+		<addForeignKeyConstraint baseColumnNames="Household_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_TAG"
+			constraintName="FK_HOUSEHOLD_TAG_Household_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="HOUSEHOLD" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-176">
+		<addForeignKeyConstraint baseColumnNames="Contact_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_NOTE"
+			constraintName="FK_CONTACT_NOTE_Contact_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="CONTACT" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-177">
+		<addForeignKeyConstraint baseColumnNames="SUPPLIER_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="PRODUCT"
+			constraintName="FK_PRODUCT_SUPPLIER_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-178">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUT"
+			constraintName="FK_SECTIONTRYOUT_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTRYOUTTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-179">
+		<addForeignKeyConstraint baseColumnNames="ORGANISATION_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
+			constraintName="FK_RELATIONSHIP_ORGANISATION_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ORGANISATION" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-180">
+		<addForeignKeyConstraint baseColumnNames="tags_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_TAG"
+			constraintName="FK_CONTACT_TAG_tags_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="TAG" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-181">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
+			constraintName="FK_ACTIVITY_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="ACTIVITYTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1376825552731-182">
+		<addForeignKeyConstraint baseColumnNames="SECTIONELIGIBILITY_ID"
+			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
+			constraintName="FK_CONTACT_SECTIONELIGIBILITY_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
+			referencedTableName="SECTIONTYPE" />
+	</changeSet>
 </databaseChangeLog>

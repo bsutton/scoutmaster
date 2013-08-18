@@ -22,13 +22,15 @@ import au.org.scoutmaster.util.PasswordHash;
 @Entity
 @NamedQueries(
 { @NamedQuery(name = "User.findAll", query = "SELECT user FROM User user"),
-		@NamedQuery(name = "User.findByName", query = "SELECT user FROM User user WHERE user.username = :username"), })
+		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"), })
 public class User  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
 	private static final Logger logger = Logger.getLogger(User.class);
+
+	public static final String FIND_BY_NAME = "User.findByName";
 
 	String username;
 

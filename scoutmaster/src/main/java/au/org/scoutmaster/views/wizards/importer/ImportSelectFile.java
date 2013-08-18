@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.domain.ImportUserMapping;
-import au.org.scoutmaster.views.ImportView;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -43,7 +42,7 @@ public class ImportSelectFile implements WizardStep
 	private VerticalLayout content;
 	private ComboBox mapping;
 
-	public ImportSelectFile(ImportView importView)
+	public ImportSelectFile(ImportWizardView importView)
 	{
 		this.progressBar = new ProgressBar();
 		this.progressBar.setCaption("Progress");

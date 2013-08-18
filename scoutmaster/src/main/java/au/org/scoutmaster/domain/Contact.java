@@ -49,7 +49,7 @@ public class Contact extends BaseEntity implements Importable
 	public static final String SECTION = "section";
 	public static final String PRIMARY_PHONE = "primaryPhone";
 	public static final String MEMBER = "isMember";
-	public static final String MOBILE_PHONE = "mobile";
+	public static final String MOBILE_PHONE = "primaryPhone";
 
 	@FormField(displayName = "Active")
 	private Boolean active = true;
@@ -395,7 +395,7 @@ public class Contact extends BaseEntity implements Importable
 		return age;
 	}
 	
-	public String getPrimaryPhone()
+	public Phone getPrimaryPhone()
 	{
 		Phone primary = null;
 		if (phone1.getPrimaryPhone())
@@ -404,7 +404,7 @@ public class Contact extends BaseEntity implements Importable
 			primary = phone2;
 		else if (phone3.getPrimaryPhone())
 			primary = phone3;
-		return primary.getPhoneNo();
+		return primary;
 			
 	}
 	

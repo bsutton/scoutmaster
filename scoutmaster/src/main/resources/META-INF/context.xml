@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/scoutmaster">
-    <ResourceLink name="jdbc/scoutmaster-ds" global="jdbc/scoutmaster-ds" type="javax.sql.DataSource" />  
-</Context>

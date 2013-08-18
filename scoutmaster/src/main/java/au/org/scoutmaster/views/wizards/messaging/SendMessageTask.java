@@ -1,67 +1,63 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
 import au.org.scoutmaster.dao.SMSProviderDao;
-import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.ProgressBarTask;
 import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.util.ProgressTaskListener;
 
-public class SendMessageTask extends ProgressBarTask implements ProgressListener
+public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>
 {
 	Logger logger = Logger.getLogger(SendMessageTask.class);
 	private Message message;
-	private List<Phone> targets;
+	private List<SMSTransmission> transmissions;
 	private SMSProvider provider;
 
-	public SendMessageTask(ProgressTaskListener listener, SMSProvider provider, Message message, List<Phone> targets)
+	public SendMessageTask(ProgressTaskListener<SMSTransmission> listener, SMSProvider provider, Message message,
+			ArrayList<SMSTransmission> transmissions)
 	{
 		super(listener);
 		this.message = message;
-		this.targets = targets;
+		this.transmissions = transmissions;
 		this.provider = provider;
 	}
 
 	@Override
 	public void run()
 	{
-		int count = 0;
-		int max = targets.size();
-
 		try
 		{
-			sendMessage(provider, targets, message);
-			Thread.sleep(2000);
-			super.taskProgress(count, max);
+			sendMessage(provider, transmissions, message);
 		}
-		catch (InterruptedException | SmsException | IOException e)
+		catch (Exception e)
 		{
 			logger.error(e,e);
+			super.taskException(e);
 		}
 
 		super.taskComplete();
 
 	}
 
-	public void sendMessage(SMSProvider provider, List<Phone> targets, Message message) throws SmsException,
-			IOException
+	public void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException
 	{
+
 		SMSProviderDao daoSMSProvider = new SMSProviderDao();
 		daoSMSProvider.send(provider, targets, message, this);
 
 	}
 
 	@Override
-	public void progress(int count, int max)
+	public void progress(int count, int max, SMSTransmission transmission)
 	{
-		super.taskProgress(count, max);
-		
+		super.taskProgress(count, max, transmission);
+
 	}
 
 	@Override
@@ -70,4 +66,17 @@ public class SendMessageTask extends ProgressBarTask implements ProgressListener
 		super.taskComplete();
 	}
 
+	@Override
+	public void exception(Exception e)
+	{
+		super.taskException(e);
+		
+	}
+
+	@Override
+	public void itemError(Exception e, SMSTransmission status)
+	{
+		super.taskItemError(status);
+		
+	}
 }

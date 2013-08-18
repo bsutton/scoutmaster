@@ -16,14 +16,13 @@ import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.org.scoutmaster.fields.GoogleField;
 import au.org.scoutmaster.util.FormHelper;
 import au.org.scoutmaster.util.MultiColumnFormLayout;
 import au.org.scoutmaster.util.ValidatingFieldGroup;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -34,7 +33,6 @@ import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -56,7 +54,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Contact")
-public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>, Selected<Contact>
+public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>, Selected<Contact>,
+		backgroundTab
 {
 
 	public class PhoneChangeListener implements ValueChangeListener
@@ -142,27 +141,13 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private CheckBox primaryPhone2;
 	private CheckBox primaryPhone3;
 	private Tab youthTab;
+	private MultiColumnFormLayout<Contact> googleForm;
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
-		contactContainer.addNestedContainerProperty("phone1.phoneNo");
-		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
-		contactContainer.addNestedContainerProperty("phone1.phoneType");
-
-		contactContainer.addNestedContainerProperty("phone2.phoneNo");
-		contactContainer.addNestedContainerProperty("phone2.primaryPhone");
-		contactContainer.addNestedContainerProperty("phone2.phoneType");
-
-		contactContainer.addNestedContainerProperty("phone3.phoneNo");
-		contactContainer.addNestedContainerProperty("phone3.primaryPhone");
-		contactContainer.addNestedContainerProperty("phone3.phoneType");
-
-		contactContainer.addNestedContainerProperty("address.street");
-		contactContainer.addNestedContainerProperty("address.city");
-		contactContainer.addNestedContainerProperty("address.postcode");
-		contactContainer.addNestedContainerProperty("address.state");
+		ContactDao daoContact = new ContactDao();
+		contactContainer = daoContact.makeJPAContainer();
 
 		contactTable = new ContactTable(contactContainer, new String[]
 		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.SECTION, Contact.PRIMARY_PHONE, Contact.MEMBER, Contact.ROLE });
@@ -386,97 +371,60 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		overviewForm.bindEnumField("Gender", "gender", Gender.class);
 		overviewForm.newLine();
 
-		// Contact tab
-		contactForm = new MultiColumnFormLayout<Contact>(4, this.fieldGroup);
-		contactForm.setSizeFull();
-		tabs.addTab(contactForm, "Contact");
-		contactForm.setMargin(true);
+		role.addValueChangeListener(new ChangeListener(role, labelAge));
 
-		contactForm.colspan(3);
-		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
-		contactForm.newLine();
-		contactForm.colspan(4);
-		contactForm.bindTextField("Home Email", "homeEmail");
-		contactForm.newLine();
-		contactForm.colspan(4);
-		contactForm.bindTextField("Work Email", "workEmail");
-		contactForm.newLine();
-		
-		contactForm.colspan(2);
-		contactForm.bindTextField("Phone 1", "phone1.phoneNo");
-		contactForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
-		primaryPhone1 = contactForm.bindBooleanField("Primary", "phone1.primaryPhone");
-		primaryPhone1.addValueChangeListener(new PhoneChangeListener());
-		
-		contactForm.colspan(2);
-		contactForm.bindTextField("Phone 2", "phone2.phoneNo");
-		contactForm.bindEnumField(null, "phone2.phoneType", PhoneType.class);
-		primaryPhone2 = contactForm.bindBooleanField("Primary", "phone2.primaryPhone");
-		primaryPhone2.addValueChangeListener(new PhoneChangeListener());
-		
-		contactForm.colspan(2);
-		contactForm.bindTextField("Phone 3", "phone3.phoneNo");
-		contactForm.bindEnumField(null, "phone3.phoneType", PhoneType.class);
-		primaryPhone3 = contactForm.bindBooleanField("Primary", "phone3.primaryPhone");
-		primaryPhone3.addValueChangeListener(new PhoneChangeListener());
-		contactForm.newLine();
-		
-		contactForm.colspan(4);
-		contactForm.bindTextField("Street", "address.street");
-		contactForm.newLine();
-		contactForm.colspan(4);
-		contactForm.bindTextField("City", "address.city");
-		contactForm.newLine();
-		contactForm.colspan(2);
-		contactForm.bindTextField("State", "address.state");
-		contactForm.colspan(2);
-		contactForm.bindTextField("Postcode", "address.postcode");
-		contactForm.newLine();
+		contactTab();
 
-		// Youth tab
-		youthForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
-		youthTab = tabs.addTab(youthForm, "Youth");
-		youthForm.setSizeFull();
-		youthForm.setMargin(true);
-		final Label labelSectionEligibity = youthForm.bindLabelField("Section Eligibility", "sectionEligibility");
-		youthForm.newLine();
-		youthForm.bindBooleanField("Custody Order", "custodyOrder");
-		youthForm.newLine();
-		youthForm.colspan(2);
-		youthForm.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
-		youthForm.colspan(2);
-		youthForm.bindTextField("School", "school");
+		final Label labelSectionEligibity = youthTab();
 
-		// Member tab
-		memberForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
-		tabs.addTab(memberForm, "Member");
-		memberForm.setMargin(true);
-		memberForm.setSizeFull();
-		memberForm.bindBooleanField("Member", "isMember");
-		memberForm.newLine();
-		memberForm.colspan(2);
-		memberForm.bindEntityField("Section ", "section", "name", SectionType.class);
-		memberForm.newLine();
-		memberForm.colspan(2);
-		memberForm.bindTextField("Member No", "memberNo");
-		memberForm.newLine();
-		memberForm.colspan(2);
-		memberForm.bindDateField("Member Since", "memberSince");
+		memberTab();
 
+		medicalTab();
+
+		backgroundTab();
+		
+		googleTab();
+
+		tabs.setSizeFull();
+
+		mainEditPanel.addComponent(tabs);
+		mainEditPanel.setExpandRatio(tabs, (float) 1.0);
+
+		// When a persons birth date changes recalculate their age.
+		birthDate.addValueChangeListener(new Property.ValueChangeListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void valueChange(ValueChangeEvent event)
+			{
+				DateField birthDate = (DateField) event.getProperty();
+				ContactDao daoContact = new ContactDao();
+				labelAge.setValue(daoContact.getAge(birthDate.getValue()).toString());
+				labelSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).toString());
+			}
+		});
+
+		/*
+		 * Data can be buffered in the user interface. When doing so, commit()
+		 * writes the changes to the data source. Here we choose to write the
+		 * changes automatically without calling commit().
+		 */
+		fieldGroup.setBuffered(true);
+		// fieldGroup.setItemDataSource((Contact)null);
+
+	}
+
+	private void googleTab()
+	{
 		// Medical Tab
-		medicalForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
-		tabs.addTab(medicalForm, "Medical");
-		medicalForm.setMargin(true);
-		medicalForm.setSizeFull();
-		medicalForm.colspan(2);
-		medicalForm.bindTextAreaField("Allergies", "allergies", 4);
-		medicalForm.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
-		medicalForm.newLine();
-		medicalForm.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
-		medicalForm.newLine();
-		medicalForm.colspan(2);
-		medicalForm.bindTextField("Private Medical Fund", "privateMedicalFundName");
+		GoogleField googleField = new GoogleField();
 
+		tabs.addTab(googleField, "Map");
+			
+	}
+
+	private void backgroundTab()
+	{
 		// Background tab
 		background = new MultiColumnFormLayout<Contact>(4, this.fieldGroup);
 		tabs.addTab(background, "Background");
@@ -512,36 +460,110 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		background.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
 		background.colspan(2);
 		background.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
+	}
 
-		tabs.setSizeFull();
+	private void medicalTab()
+	{
+		// Medical Tab
+		medicalForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		tabs.addTab(medicalForm, "Medical");
+		medicalForm.setMargin(true);
+		medicalForm.setSizeFull();
+		medicalForm.colspan(2);
+		medicalForm.bindTextAreaField("Allergies", "allergies", 4);
+		medicalForm.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
+		medicalForm.newLine();
+		medicalForm.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
+		medicalForm.newLine();
+		medicalForm.colspan(2);
+		medicalForm.bindTextField("Private Medical Fund", "privateMedicalFundName");
+	}
 
-		mainEditPanel.addComponent(tabs);
-		mainEditPanel.setExpandRatio(tabs, (float) 1.0);
+	private void memberTab()
+	{
+		// Member tab
+		memberForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		tabs.addTab(memberForm, "Member");
+		memberForm.setMargin(true);
+		memberForm.setSizeFull();
+		memberForm.bindBooleanField("Member", "isMember");
+		memberForm.newLine();
+		memberForm.colspan(2);
+		memberForm.bindEntityField("Section ", "section", "name", SectionType.class);
+		memberForm.newLine();
+		memberForm.colspan(2);
+		memberForm.bindTextField("Member No", "memberNo");
+		memberForm.newLine();
+		memberForm.colspan(2);
+		memberForm.bindDateField("Member Since", "memberSince");
+	}
 
-		// When a persons birth date changes recalculate their age.
-		birthDate.addValueChangeListener(new Property.ValueChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
+	private Label youthTab()
+	{
+		// Youth tab
+		youthForm = new MultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		youthTab = tabs.addTab(youthForm, "Youth");
+		youthForm.setSizeFull();
+		youthForm.setMargin(true);
+		final Label labelSectionEligibity = youthForm.bindLabelField("Section Eligibility", "sectionEligibility");
+		youthForm.newLine();
+		youthForm.bindBooleanField("Custody Order", "custodyOrder");
+		youthForm.newLine();
+		youthForm.colspan(2);
+		youthForm.bindTextAreaField("Custody Order Details", "custodyOrderDetails", 4);
+		youthForm.colspan(2);
+		youthForm.bindTextField("School", "school");
+		return labelSectionEligibity;
+	}
 
-			public void valueChange(ValueChangeEvent event)
-			{
-				DateField birthDate = (DateField) event.getProperty();
-				ContactDao daoContact = new ContactDao();
-				labelAge.setValue(daoContact.getAge(birthDate.getValue()).toString());
-				labelSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).toString());
-			}
-		});
+	private void contactTab()
+	{
+		// Contact tab
+		contactForm = new MultiColumnFormLayout<Contact>(4, this.fieldGroup);
+		contactForm.setSizeFull();
+		tabs.addTab(contactForm, "Contact");
+		contactForm.setMargin(true);
 
-		role.addValueChangeListener(new ChangeListener(role, labelAge));
+		contactForm.colspan(3);
+		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
+		contactForm.newLine();
+		contactForm.colspan(4);
+		contactForm.bindTextField("Home Email", "homeEmail");
+		contactForm.newLine();
+		contactForm.colspan(4);
+		contactForm.bindTextField("Work Email", "workEmail");
+		contactForm.newLine();
 
-		/*
-		 * Data can be buffered in the user interface. When doing so, commit()
-		 * writes the changes to the data source. Here we choose to write the
-		 * changes automatically without calling commit().
-		 */
-		fieldGroup.setBuffered(true);
-		// fieldGroup.setItemDataSource((Contact)null);
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 1", "phone1.phoneNo");
+		contactForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
+		primaryPhone1 = contactForm.bindBooleanField("Primary", "phone1.primaryPhone");
+		primaryPhone1.addValueChangeListener(new PhoneChangeListener());
 
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 2", "phone2.phoneNo");
+		contactForm.bindEnumField(null, "phone2.phoneType", PhoneType.class);
+		primaryPhone2 = contactForm.bindBooleanField("Primary", "phone2.primaryPhone");
+		primaryPhone2.addValueChangeListener(new PhoneChangeListener());
+
+		contactForm.colspan(2);
+		contactForm.bindTextField("Phone 3", "phone3.phoneNo");
+		contactForm.bindEnumField(null, "phone3.phoneType", PhoneType.class);
+		primaryPhone3 = contactForm.bindBooleanField("Primary", "phone3.primaryPhone");
+		primaryPhone3.addValueChangeListener(new PhoneChangeListener());
+		contactForm.newLine();
+
+		contactForm.colspan(4);
+		contactForm.bindTextField("Street", "address.street");
+		contactForm.newLine();
+		contactForm.colspan(4);
+		contactForm.bindTextField("City", "address.city");
+		contactForm.newLine();
+		contactForm.colspan(2);
+		contactForm.bindTextField("State", "address.state");
+		contactForm.colspan(2);
+		contactForm.bindTextField("Postcode", "address.postcode");
+		contactForm.newLine();
 	}
 
 	private void initSearch()

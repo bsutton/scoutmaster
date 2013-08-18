@@ -1,20 +1,27 @@
 package au.org.scoutmaster.dao;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
+import au.org.scoutmaster.domain.Activity;
+import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.iSMSProvider;
+import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.views.wizards.messaging.Message;
+import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
+
+import com.vaadin.ui.UI;
 
 public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao<SMSProvider, Long>
 {
@@ -24,13 +31,13 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	@Override
 	public List<SMSProvider> findAll()
 	{
-		Query query = entityManager.createNamedQuery("SMSProvider.findAll");
+		Query query = entityManager.createNamedQuery(SMSProvider.FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<SMSProvider> list = query.getResultList();
 		initProviders(list);
 		return list;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<SMSProvider> findByName(String name)
 	{
@@ -65,57 +72,74 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 
 	}
 
-
-	public void send(SMSProvider provider, List<Phone> targets, Message message, ProgressListener listener) throws SmsException, IOException
+	public void send(SMSProvider provider, List<SMSTransmission> targets, Message message,
+			ProgressListener<SMSTransmission> listener) throws SmsException 
 	{
 
 		init(provider);
 
 		int max = targets.size();
 		int count = 0;
-		for (Phone target : targets)
+		for (SMSTransmission transmission : targets)
 		{
-			if (target.getPhoneType() == PhoneType.MOBILE)
+			try
 			{
-				send(target.getPhoneNo(), message);
+				count++;
+				listener.progress(count, max, transmission);
+				send(transmission);
 			}
-			count++;
-			listener.progress(count, max);
+			catch (SmsException | IOException e)
+			{
+				transmission.setException(e);
+				listener.itemError(e, transmission);
+				logger.error(e, e);
+			}
+
 		}
 		listener.complete();
 	}
 
-	public void send(SMSProvider provider, String phoneNo, Message message, ProgressListener listener) throws SmsException, IOException
+	public void send(SMSProvider provider, SMSTransmission transmission, ProgressListener<SMSTransmission> listener)
+			throws SmsException, IOException
 	{
 
 		init(provider);
 
-		listener.progress(0, 1);
-		send(phoneNo, message);
+		send(transmission);
+		listener.progress(1, 1, transmission);
 		listener.complete();
 	}
 
-	private void send(String phone, Message message) throws SmsException, IOException
+	private void send(SMSTransmission transmission) throws SmsException, IOException
 	{
 		// The message that you want to send.
-		String msg = message.getSubject();
-		
+		String msg = transmission.getMessage().getSubject();
+
 		// International number to target without leading "+"
-		String reciever = phone;
-		
+		Phone reciever = transmission.getPhone();
+
 		// Number of sender (not supported on all transports)
 		smsSender.connect();
-		smsSender.sendTextSms(msg, reciever, message.getSender());
+		smsSender.sendTextSms(msg, reciever.getPhoneNo(), transmission.getMessage().getSender());
 		smsSender.disconnect();
 
+		// Log the activity
+		ActivityDao daoActivity = new ActivityDao();
+		Activity activity = new Activity();
+		User user = (User) UI.getCurrent().getSession().getAttribute("user");
+		activity.setAddedBy(user);
+		activity.setSubject("SMSMessage sent");
+		activity.setType(new ActivityType());
+		activity.setActivityDate((Date) new DateTime().toDate());
+		activity.setDetails("Subject: " + transmission.getMessage().getSubject() + "Phone: " + reciever + " Message:"
+				+ transmission.getMessage().getBody());
+		daoActivity.persist(activity);
 	}
 
 	private void init(SMSProvider provider) throws SmsException
 	{
-		smsSender = SmsSender.getClickatellSender(provider.getUsername(), provider.getPassword(),
-				provider.getApiId());
+		smsSender = SmsSender.getClickatellSender(provider.getUsername(), provider.getPassword(), provider.getApiId());
 
 	}
-
 
 }

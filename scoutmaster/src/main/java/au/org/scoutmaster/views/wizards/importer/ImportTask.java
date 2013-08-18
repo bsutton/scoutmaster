@@ -27,7 +27,7 @@ import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
-public class ImportTask extends ProgressBarTask
+public class ImportTask extends ProgressBarTask<ImportItemStatus>
 {
 	private Logger logger = Logger.getLogger(ImportTask.class);
 
@@ -37,7 +37,7 @@ public class ImportTask extends ProgressBarTask
 
 	private EntityManager em;
 
-	ImportTask(ProgressTaskListener listener, File tempFile, Class<? extends Importable> clazz,
+	ImportTask(ProgressTaskListener<ImportItemStatus> listener, File tempFile, Class<? extends Importable> clazz,
 			Hashtable<String, FormFieldImpl> fieldMap)
 	{
 		super(listener);
@@ -121,7 +121,7 @@ public class ImportTask extends ProgressBarTask
 					{
 						++count;
 						addRow(container, entityClass, columnHeaders, record, fieldMap);
-						super.taskProgress(count, -1);
+						super.taskProgress(count, -1, null);
 					}
 					catch (Throwable e)
 					{

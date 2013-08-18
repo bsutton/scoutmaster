@@ -1,7 +1,5 @@
 package au.org.scoutmaster.views;
 
-import java.util.List;
-
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
 
@@ -16,16 +14,22 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-public class LoginView extends CustomComponent implements View, Button.ClickListener
+/**
+ * This view is used the first time anyone ever logs into the system. They will
+ * have logged in with the temporary 'admin' account. This screen takes them
+ * through the process of creating their own user account.
+ * 
+ * @author bsutton
+ * 
+ */
+public class FirstLoginView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -35,25 +39,14 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 	private final PasswordField password;
 
+	private final PasswordField confirmPassword;
+
 	private final Button loginButton;
 
-	private final Button forgottenButton;
-
-	private boolean authSystemInitialised = false;
-
-	private boolean firstLogin = false;
-
-	public LoginView()
+	public FirstLoginView()
 	{
 		setSizeFull();
 
-		Label firstTime = null;
-		if (firstLogin())
-		{
-			firstTime = new Label(
-					"To login to scoutmaster for the first time use the username: admin and the password: admin. Once you have logged in MUST create a new user account for your self as the admin account will be permanently disabled.");
-
-		}
 		// Create the user input field
 		user = new TextField("User:");
 		user.setWidth("300px");
@@ -62,8 +55,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		user.addValidator(new EmailValidator("Username must be an email address"));
 		user.setImmediate(true);
 		user.setInvalidAllowed(false);
-		if (firstLogin())
-			user.setValue("admin");
 
 		// Create the password input field
 		password = new PasswordField("Password:");
@@ -71,25 +62,24 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		password.addValidator(new PasswordValidator());
 		password.setRequired(true);
 		password.setNullRepresentation("");
-		if (firstLogin())
-			password.setValue("admin");
+
+		// Create the password input field
+		confirmPassword = new PasswordField("Confirm Password:");
+		confirmPassword.setWidth("300px");
+		confirmPassword.addValidator(new PasswordValidator());
+		confirmPassword.setRequired(true);
+		confirmPassword.setNullRepresentation("");
 
 		// Create login button
 		loginButton = new Button("Login", this);
 		loginButton.setClickShortcut(KeyCode.ENTER);
 		loginButton.addStyleName("default");
 
-		forgottenButton = new Button("Forgotten Password", this);
-
 		// Add both to a panel
-		Label label = new Label("<H1>Please login to Scoutmaster.</H1>");
+		Label label = new Label("<H1>As the first user to login to Scoutmaster you must create your account.</H1>");
 		label.setContentMode(ContentMode.HTML);
 
-		HorizontalLayout buttons = new HorizontalLayout(loginButton, forgottenButton);
-		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
-		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
-
-		VerticalLayout fields = new VerticalLayout(label, firstTime, user, password, buttons);
+		VerticalLayout fields = new VerticalLayout(label, user, password, loginButton);
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -145,73 +135,43 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
+		if (user.isValid() && password.isValid() && confirmPassword.isValid())
+		{
+			String username = user.getValue();
+			String password = this.password.getValue();
+			String confirmPassword = this.confirmPassword.getValue();
 
-		if (event.getButton() == forgottenButton)
-		{
-			UI.getCurrent().getNavigator().navigateTo(ForgottenPasswordView.NAME);
-		}
-		else
-		{
-			//
-			// Validate the fields using the navigator. By using validors for
-			// the
-			// fields we reduce the amount of queries we have to use to the
-			// database
-			// for wrongly entered passwords
-			//
-			if (user.isValid() && password.isValid())
+			UserDao daoUser = new UserDao();
+			if (daoUser.findByName(username) != null)
 			{
-				String username = user.getValue();
-				String password = this.password.getValue();
-
-				User user = User.findUser(username);
-				if (user.isValidPassword(password))
-				{
-					// Store the current user in the service session
-					getSession().setAttribute("user", user);
-
-					if (firstLogin)
-						getUI().getNavigator().navigateTo(FirstLoginView.NAME);
-					else
-						// Navigate to main view
-						getUI().getNavigator().navigateTo(ContactView.NAME);
-
-				}
-				else
-				{
-
-					// Wrong password clear the password field and refocuses it
-					this.password.setValue(null);
-					this.password.focus();
-				}
+				Notification.show("The user " + username + " already exists. Choose another one.");
 			}
 			else
 			{
-				// user.setComponentError(new UserError("I dont like you"));
-				Notification.show("Invalid username or password");
+				if (confirmPassword.equals(password))
+				{
+					User user = daoUser.addUser(username, password);
+
+					// Store the current user in the service session
+					getSession().setAttribute("user", user);
+
+					// Navigate to main view
+					getUI().getNavigator().navigateTo(ContactView.NAME);
+				}
+				else
+				{
+					// Wrong password clear the password field and refocuses it
+					this.password.setValue(null);
+					this.confirmPassword.setValue(null);
+					this.password.focus();
+				}
 			}
 		}
-	}
-
-	private boolean firstLogin()
-	{
-
-		// On the first attempt to login to a site we automatically create an
-		// admin account.
-		// After the first login this account will be disabled.
-		if (authSystemInitialised == false)
+		else
 		{
-			UserDao daoUser = new UserDao();
-			List<User> users = daoUser.findAll();
-			if (users.size() == 0)
-			{
-				daoUser.addUser("admin", "admin");
-				this.firstLogin = true;
-			}
-			authSystemInitialised = true;
+			// user.setComponentError(new UserError("I dont like you"));
+			Notification.show("Invalid username or password");
 		}
-		return firstLogin;
-
 	}
 
 }

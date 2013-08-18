@@ -1,10 +1,12 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
+import java.util.List;
+
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.FormHelper;
-import au.org.scoutmaster.views.MessagingWizardView;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -48,6 +50,11 @@ public class MessageDetailsStep  implements WizardStep
 		FormLayout formLayout = new FormLayout();
 		formHelper = new FormHelper(formLayout, null);
 		providers = formHelper.bindEntityField("Provider", "providerName", "providerName", SMSProvider.class);
+		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		List<SMSProvider> list = daoSMSProvider.findAll();
+		if (list.size() == 0)
+			throw new IllegalStateException("You must first configure an SMS Provider");
+		providers.select(list.get(0).getId());
 		from = formHelper.bindTextField("From Mobile No.", "from");
 		from.setDescription("Enter you mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		subject = formHelper.bindTextField("Subject", "subject");

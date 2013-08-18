@@ -59,6 +59,11 @@
 			<version>1.0.0-beta1</version>
 		</dependency>
 		<dependency>
+			<groupId>com.vaadin.addon</groupId>
+			<artifactId>vaadin-touchkit-agpl</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>tokenfield</artifactId>
 			<version>7.0.1</version>
@@ -72,6 +77,16 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
 			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.tapio</groupId>
+			<artifactId>googlemaps</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>chatbox</artifactId>
+			<version>0.7.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
@@ -238,6 +253,36 @@
 			<version>${jasperreports.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>contextmenu</artifactId>
+			<version>4.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>tableexport</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.teemu</groupId>
+			<artifactId>webcam</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>ckeditor-wrapper-for-vaadin</artifactId>
+			<version>7.8.5</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -307,29 +352,12 @@
 			</plugin>
 
 
-			<!-- This seems to conflict with the instance of liquibase that runs when 
-				we start tomcat. -->
-			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>${liquibase.version}</version>
-				<configuration>
-					<changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
-					<driver>com.mysql.jdbc.Driver</driver>
-					<url>jdbc:mysql://localhost/scoutmastertest?sessionVariables=storage_engine=InnoDB</url>
-					<username>scoutmaster</username>
-					<password>master$4scout</password>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>update</goal>
-							<goal>updateSQL</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- plugin> <groupId>org.liquibase</groupId> <artifactId>liquibase-maven-plugin</artifactId> 
+				<version>${liquibase.version}</version> <configuration> <changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile> 
+				<driver>com.mysql.jdbc.Driver</driver> <url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url> 
+				<username>scoutmaster</username> <password>master$4scout</password> </configuration> 
+				<executions> <execution> <phase>process-resources</phase> <goals> <goal>update</goal> 
+				<goal>updateSQL</goal> </goals> </execution> </executions> </plugin -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -344,7 +372,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
-				<version>1.0-beta-2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -401,7 +428,6 @@
 										<versionRange>
 											[${liquibase.version},)
 										</versionRange>
-										
 										<goals>
 											<goal>update</goal>
 											<goal>migrate</goal>

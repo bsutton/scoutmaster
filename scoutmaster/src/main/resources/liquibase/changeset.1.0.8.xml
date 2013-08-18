@@ -7,13 +7,13 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.8">
-			<addColumn tableName="SMSProvider">
+			<addColumn tableName="smsprovider">
 			<column name="providerName" type="varchar(255)"/>
 			<column name="description" type="varchar(255)"/>
 			<column name="classPath" type="VARCHAR(1024)"/>
 		</addColumn>
 	
-		<insert tableName="SMSProvider">
+		<insert tableName="smsprovider">
 			<column name="providerName" value="ClickATell" />
 			<column name="DESCRIPTION" value="ClickATell SMS Provider" />
 			<column name="classPath" value="au.org.scoutmaster.smsproviders.ClickATellProvider" />
@@ -23,7 +23,7 @@
         <dropForeignKeyConstraint baseTableName="smsprovidertype" constraintName="FK_SMSPROVIDERTYPE_PROVIDER_ID"/>
         <dropForeignKeyConstraint  baseTableName="smsprovider" constraintName="FK_SMSPROVIDER_TYPE_ID" />
         
-		<dropTable tableName="SMSProviderType"/>
+		<dropTable tableName="smsprovidertype"/>
 	</changeSet>
 
 </databaseChangeLog>

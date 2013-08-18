@@ -1,8 +1,10 @@
 package au.org.scoutmaster.dao;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
@@ -48,6 +50,19 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
+	
+	public E findByName(String queryName, String fieldName, String value)
+	{
+		E entity = null;
+		Query query = entityManager.createNamedQuery(queryName);
+		query.setParameter(fieldName, value);
+		@SuppressWarnings("unchecked")
+		List<E> entities = query.getResultList();
+		if (entities.size() > 0)
+			entity = entities.get(0);
+		return entity;
+	}
+
 	
 	public void flush()
 	{

@@ -1,5 +1,6 @@
 package au.org.scoutmaster.util;
 
+
 /**
  * Used as a generic method to track progress of a job/task/thread.
  * 
@@ -7,7 +8,7 @@ package au.org.scoutmaster.util;
  * @author bsutton
  *
  */
-public interface ProgressListener
+public interface ProgressListener<T>
 {
 	/**
 	 * Count and max can be used to indicate the progress towards completion.
@@ -16,11 +17,25 @@ public interface ProgressListener
 	 * @param count
 	 * @param max
 	 */
-	void progress(int count, int max);
+	void progress(int count, int max, T status);
 	
 	/**
 	 * Called when the job is complete.
 	 */
 	void complete();
+
+	/**
+	 * Used to flag that an error occurred during a transmission.
+	 * @param e
+	 * @param transmission
+	 */
+	void itemError(Exception e, T status);
+
+	
+	/**
+	 * An unrecoverable error occured during transmission.
+	 * @param e
+	 */
+	void exception(Exception e);
 
 }
