@@ -17,9 +17,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -57,7 +58,7 @@ public class Contact extends BaseEntity implements Importable
 	@FormField(displayName = "Prefix")
 	private String prefix = "";
 
-	@NotNull
+	@NotBlank
 	@javax.validation.constraints.Size(min=1,max=255)
 	@FormField(displayName = "Firstname")
 	private String firstname = "";
@@ -65,12 +66,13 @@ public class Contact extends BaseEntity implements Importable
 	@FormField(displayName = "Middle Name")
 	private String middlename = "";
 
-	@NotNull
+	@NotBlank
 	@javax.validation.constraints.Size(min=1,max=255)
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
 
 	@FormField(displayName = "Birth Date")
+	@Past
 	private Date birthDate;
 
 	@FormField(displayName = "Gender")
@@ -142,6 +144,7 @@ public class Contact extends BaseEntity implements Importable
 	private String memberNo = "";
 
 	@FormField(displayName = "Member Since")
+	@Past
 	private Date memberSince = new Date(new java.util.Date().getTime()); // this
 																			// should
 	// be

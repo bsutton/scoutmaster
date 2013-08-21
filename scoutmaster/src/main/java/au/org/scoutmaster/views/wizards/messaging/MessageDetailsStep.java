@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.FormHelper;
@@ -50,7 +51,7 @@ public class MessageDetailsStep  implements WizardStep
 		FormLayout formLayout = new FormLayout();
 		formHelper = new FormHelper(formLayout, null);
 		providers = formHelper.bindEntityField("Provider", "providerName", "providerName", SMSProvider.class);
-		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> list = daoSMSProvider.findAll();
 		if (list.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
@@ -60,7 +61,7 @@ public class MessageDetailsStep  implements WizardStep
 		subject = formHelper.bindTextField("Subject", "subject");
 		subject.setSizeFull();
 		message = formHelper.bindTextAreaField("Message", "message", 4);
-		remaining = formHelper.bindLabelField("Characters remaining 160", "remaining");
+		remaining = formHelper.bindLabel("Characters remaining 160");
 		remaining.setImmediate(true);
 		
 		formLayout.addComponent(message);

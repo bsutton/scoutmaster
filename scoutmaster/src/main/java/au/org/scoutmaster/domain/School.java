@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * A school in the Scout Groups catchment area.
  * 
@@ -22,6 +24,7 @@ public class School extends BaseEntity
 	/**
 	 * The name of the school
 	 */
+	@NotBlank
 	String name;
 	
 	/**

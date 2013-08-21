@@ -51,10 +51,10 @@ public class MenuBuilder
 					String[] pathElements = path.split("\\.");
 					
 					if (pathElements.length == 2)
-						getMenuItem(menubar, menu.display(), pathElements[1], false);
+						getMenuItem(menubar, viewmap.viewName, menu.display(), pathElements[1], false);
 					else
 					{
-						MenuItem parentMenuItem = getMenuItem(menubar,  pathElements[1], pathElements[1], true);
+						MenuItem parentMenuItem = getMenuItem(menubar,  viewmap.viewName, pathElements[1], pathElements[1], true);
 						resursiveAdd(parentMenuItem, viewmap.viewName, menu.display(),
 								Arrays.copyOfRange(pathElements, 2, pathElements.length));
 					}
@@ -128,19 +128,19 @@ public class MenuBuilder
 		return currentItem;
 	}
 
-	private MenuItem getMenuItem(MenuBar parentItem, final String menuName, String currentPath, final boolean parent)
+	private MenuItem getMenuItem(MenuBar parentItem, final String viewName, final String displayName, String currentPath, final boolean parent)
 	{
 		MenuItem currentItem = findMenuItem(parentItem.getItems(), currentPath);
 		if (currentItem == null)
 		{
-			currentItem = parentItem.addItem(menuName, new MenuBar.Command()
+			currentItem = parentItem.addItem(displayName, new MenuBar.Command()
 			{
 				private static final long serialVersionUID = 1L;
 
 				public void menuSelected(MenuItem selectedItem)
 				{
 					if (!parent)
-						UI.getCurrent().getNavigator().navigateTo(menuName);
+						UI.getCurrent().getNavigator().navigateTo(viewName);
 				}
 			});
 

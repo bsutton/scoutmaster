@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.ProgressBarTask;
@@ -48,7 +49,7 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 	public void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException
 	{
 
-		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		daoSMSProvider.send(provider, targets, message, this);
 
 	}

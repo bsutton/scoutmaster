@@ -10,34 +10,50 @@ import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Query;
 import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.NotBlank;
 
+import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.PasswordHash;
 
 @Entity
 @NamedQueries(
-{ @NamedQuery(name = "User.findAll", query = "SELECT user FROM User user"),
-		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"), })
-public class User  extends BaseEntity
+{
+		@NamedQuery(name = User.FIND_ALL, query = "SELECT user FROM User user"),
+		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
+		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
+public class User extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
 	private static final Logger logger = Logger.getLogger(User.class);
 
-	public static final String FIND_BY_NAME = "User.findByName";
+	public String getEmailAddress()
+	{
+		return emailAddress;
+	}
 
+	public static final String FIND_ALL = "User.findAll";
+	public static final String FIND_BY_NAME = "User.findByName";
+	public static final String FIND_BY_EMAIL = "User.findByEmail";
+
+	@NotBlank
 	String username;
 
 	/**
 	 * A salted hash of the users password.
 	 */
 	String saltedPassword;
+
+	/**
+	 * The users email address used when they forget their password.
+	 */
+	private String emailAddress;
 
 	/**
 	 * Allows us to disable a user account. When a user is disabled they can't
@@ -75,35 +91,10 @@ public class User  extends BaseEntity
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public static User findUser(String username)
-	{
-		User user = null;
-		List<User> resultUsers = null;
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-
-		Query query = em.createNamedQuery("User.findByName");
-		query.setParameter("username", username);
-		resultUsers = query.getResultList();
-
-		if (!resultUsers.isEmpty())
-		{
-			if (resultUsers.size() != 1)
-			{
-				throw new IllegalStateException("There are two users with an identical name in the db: " + username);
-			}
-			else
-			{
-				user = resultUsers.get(0);
-			}
-		}
-		return user;
-	}
-
 	public void updatePassword(String username, String password)
 	{
-		User user = findUser(username);
-
+		UserDao daoUser = new UserDao();
+		User user = daoUser.findByName(username);
 		user.saltedPassword = generatePassword(password);
 
 		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
@@ -145,14 +136,9 @@ public class User  extends BaseEntity
 		}
 	}
 
-	public static void addUser(String username, String password)
+	public void setEmailAddress(String emailAddress)
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		this.emailAddress = emailAddress;
 
-		User user = new User(username, password);
-		em.persist(user);
-		em.flush();
 	}
-
-
 }

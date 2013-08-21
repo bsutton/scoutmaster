@@ -6,9 +6,14 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- Add standard Section Types -->
-	<changeSet author="bsutton" id="1.0.6">
-		<addColumn tableName="contact">
-			<column name="importId" type="VARCHAR(255)" />
-		</addColumn>
+	<changeSet author="bsutton" id="1.0.06">
+	
+		<insert tableName="SMSPROVIDER">
+			<column name="providerName" value="ClickATell" />
+			<column name="DESCRIPTION" value="ClickATell SMS Provider" />
+			<column name="classPath" value="au.org.scoutmaster.smsproviders.ClickATellProvider" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
 	</changeSet>
+
 </databaseChangeLog>

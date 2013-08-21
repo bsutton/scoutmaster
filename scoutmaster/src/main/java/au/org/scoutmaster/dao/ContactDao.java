@@ -12,15 +12,15 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 
 public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact, Long>
 {
@@ -36,19 +36,9 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	}
 
 	@Override
-	public Contact findById(Long id)
-	{
-		Contact contact = entityManager.find(this.entityClass, id);
-		return contact;
-	}
-
-	@Override
 	public List<Contact> findAll()
 	{
-		Query query = entityManager.createNamedQuery(Contact.FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<Contact> list = query.getResultList();
-		return list;
+		return super.findAll(Contact.FIND_ALL);
 	}
 	
 	

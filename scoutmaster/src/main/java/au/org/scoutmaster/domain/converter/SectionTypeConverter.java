@@ -21,20 +21,20 @@ public class SectionTypeConverter implements Converter<Object, SectionType>
 		SectionType result = null;
 		SectionTypeDao daoSectionType = new SectionTypeDao();
 		
-		logger.info("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null") + " targetType:" + targetType);
+		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null") + " targetType:" + targetType);
 
 		if (value instanceof Long)
 		{
-			logger.info("Calling findById");
+			logger.debug("Calling findById");
 			result = daoSectionType.findById((Long) value);
 		}
 		else if (value instanceof Object || value instanceof String)
 		{
-			logger.info("Calling findByName");
+			logger.debug("Calling findByName");
 			result = daoSectionType.findByName((String) value);
 		}
 
-		logger.info("result:" + result);
+		logger.debug("result:" + result);
 		return result;
 	}
 
@@ -44,12 +44,12 @@ public class SectionTypeConverter implements Converter<Object, SectionType>
 	{
 		String result = "0";
 		
-		logger.info("convertToPresentation: value" + value + " targetType:" + targetType);
+		logger.debug("convertToPresentation: value" + value + " targetType:" + targetType);
 		if (value != null)
 			result = value.getName();
 		else
 			result = "";
-		logger.info("result: " + result);
+		logger.debug("result: " + result);
 		return result;
 	}
 

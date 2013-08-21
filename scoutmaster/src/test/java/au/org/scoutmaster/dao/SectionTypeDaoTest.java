@@ -38,7 +38,7 @@ public class SectionTypeDaoTest
 	@Test
 	public void testSectionEligibility()
 	{
-		SectionTypeDao daoSectionType = new SectionTypeDao(em);
+		SectionTypeDao daoSectionType = new DaoFactory(em).getSectionTypeDao();
 		// Test the middle and cusp of each section
 		Age tooYoungStart = new Age(0, 0, 0);
 		testSectionEligibility(daoSectionType, tooYoungStart, "Too Young");

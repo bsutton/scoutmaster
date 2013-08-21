@@ -8,6 +8,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import au.org.scoutmaster.application.Menu;
 import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Gender;
 import au.org.scoutmaster.domain.GroupRole;
@@ -54,8 +55,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Contact")
-public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>, Selected<Contact>,
-		backgroundTab
+public class ContactView extends VerticalLayout implements View, RowChangeListener<Contact>, Selected<Contact>
 {
 
 	public class PhoneChangeListener implements ValueChangeListener
@@ -146,7 +146,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		ContactDao daoContact = new ContactDao();
+		ContactDao daoContact = new DaoFactory().getContactDao();
 		contactContainer = daoContact.makeJPAContainer();
 
 		contactTable = new ContactTable(contactContainer, new String[]
@@ -367,7 +367,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		overviewForm.newLine();
 		DateField birthDate = overviewForm.bindDateField("Birth Date", Contact.BIRTH_DATE);
 
-		final Label labelAge = overviewForm.bindLabelField("Age", "age");
+		final Label labelAge = overviewForm.bindLabel("Age");
 		overviewForm.bindEnumField("Gender", "gender", Gender.class);
 		overviewForm.newLine();
 
@@ -398,7 +398,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			public void valueChange(ValueChangeEvent event)
 			{
 				DateField birthDate = (DateField) event.getProperty();
-				ContactDao daoContact = new ContactDao();
+				ContactDao daoContact = new DaoFactory().getContactDao();
 				labelAge.setValue(daoContact.getAge(birthDate.getValue()).toString());
 				labelSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).toString());
 			}
@@ -505,7 +505,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		youthTab = tabs.addTab(youthForm, "Youth");
 		youthForm.setSizeFull();
 		youthForm.setMargin(true);
-		final Label labelSectionEligibity = youthForm.bindLabelField("Section Eligibility", "sectionEligibility");
+		final Label labelSectionEligibity = youthForm.bindLabel("Section Eligibility");
 		youthForm.newLine();
 		youthForm.bindBooleanField("Custody Order", "custodyOrder");
 		youthForm.newLine();
@@ -782,7 +782,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 					showYouth(false);
 					break;
 			}
-			ContactDao daoContact = new ContactDao();
+			ContactDao daoContact = new DaoFactory().getContactDao();
 			labelAge.setValue(daoContact.getAge(ContactView.this.currentContact).toString());
 		}
 

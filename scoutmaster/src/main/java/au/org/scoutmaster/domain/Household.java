@@ -9,6 +9,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * A household is used to link a number of contacts which live at a single
  * locations
@@ -31,27 +33,8 @@ public class Household extends BaseEntity
 	 * 
 	 * e.g. Smith - Drive St.
 	 */
+	@NotBlank
 	private String name;
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public Address getLocation()
-	{
-		return location;
-	}
-
-	public void setLocation(Address location)
-	{
-		this.location = location;
-	}
 
 	/**
 	 * The address of the household.
@@ -79,5 +62,26 @@ public class Household extends BaseEntity
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private final List<Activity> activites = new ArrayList<>();
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public Address getLocation()
+	{
+		return location;
+	}
+
+	public void setLocation(Address location)
+	{
+		this.location = location;
+	}
+
 
 }

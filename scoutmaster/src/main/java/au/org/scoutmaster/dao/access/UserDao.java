@@ -7,7 +7,6 @@ import javax.persistence.Query;
 
 import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.dao.JpaBaseDao;
-import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.access.User;
 
 public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
@@ -32,7 +31,7 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	@Override
 	public List<User> findAll()
 	{
-		Query query = entityManager.createNamedQuery(Phone.FIND_ALL);
+		Query query = entityManager.createNamedQuery(User.FIND_ALL);
 		@SuppressWarnings("unchecked")
 		List<User> list = query.getResultList();
 		
@@ -47,6 +46,10 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	}
 	public User findByName(String username)
 	{
-		return super.findByName(User.FIND_BY_NAME, "username", username);
+		return super.findSingleBySingleParameter(User.FIND_BY_NAME, "username", username);
+	}
+	public User findByEmail(String emailAddressValue)
+	{
+		return super.findSingleBySingleParameter(User.FIND_BY_NAME, "username", emailAddressValue);
 	}
 }

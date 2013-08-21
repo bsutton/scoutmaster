@@ -23,23 +23,12 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 		HashSet<Tag> result = null;
 		TagDao daoTag = new TagDao();
 
-		logger.info("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
+		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
 				+ " targetType:" + targetType);
 
-		// if (value instanceof Long)
-		// {
-		// logger.info("Calling findById");
-		// result = daoTag.findById((Long) value);
-		// }
-		// else if (value instanceof String)
-		// {
-		// logger.info("Calling findByName");
-		// result = daoTag.findByName((String) value);
-		// }
-		// else
 		if (value instanceof Set)
 		{
-			logger.info("Calling findByName");
+			logger.debug("Calling findByName");
 			@SuppressWarnings("unchecked")
 			HashSet<Object> set = (HashSet<Object>) value;
 			result = new HashSet<Tag>();
@@ -54,7 +43,7 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 			}
 		}
 
-		logger.info("result:" + result);
+		logger.debug("result:" + result);
 		return result;
 	}
 
@@ -65,26 +54,18 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		Set<? extends Object> result;
-		// if (targetType == Set<String>.class)
-		// {
-		// if (value != null)
-		// result = value.toString();
-		// else
-		// result = "";
-		// }
-		// else
 		if (targetType == Set.class)
 		{
 			result = new HashSet<Tag>();
 
-			logger.info("convertToPresentation: value" + value + " targetType:" + targetType);
+			logger.debug("convertToPresentation: value" + value + " targetType:" + targetType);
 			if (value != null)
 				((HashSet<Tag>) result).addAll(value);
 		}
 		else
 			throw new UnsupportedOperationException("Conversion for Tag from type " + targetType + " not supported");
 
-		logger.info("result: " + result.toString());
+		logger.debug("result: " + result.toString());
 		return result;
 	}
 

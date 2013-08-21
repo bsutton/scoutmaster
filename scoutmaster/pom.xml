@@ -307,8 +307,6 @@
 			</plugin>
 
 
-			<!-- This seems to conflict with the instance of liquibase that runs when 
-				we start tomcat. -->
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
@@ -316,7 +314,7 @@
 				<configuration>
 					<changeLogFile>src/main/resources/liquibase/db.changelog-master.xml</changeLogFile>
 					<driver>com.mysql.jdbc.Driver</driver>
-					<url>jdbc:mysql://localhost/scoutmastertest?sessionVariables=storage_engine=InnoDB</url>
+					<url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url>
 					<username>scoutmaster</username>
 					<password>master$4scout</password>
 				</configuration>

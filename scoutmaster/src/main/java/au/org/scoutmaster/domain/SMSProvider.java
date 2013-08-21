@@ -5,6 +5,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @NamedQueries(
 {
@@ -23,6 +25,7 @@ public class SMSProvider extends BaseEntity
 	/**
 	 * The name of the provider used to display the provider to th e user.
 	 */
+	@NotBlank
 	private String providerName;
 	
 	private String description;

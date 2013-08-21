@@ -1,5 +1,7 @@
 package au.org.scoutmaster.application;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -21,7 +23,7 @@ public class ContextListener implements ServletContextListener
 {
 	private static final String JNDI_SCOUTMASTER_DS = "java:comp/env/jdbc/scoutmaster-ds";
 	private static final Logger logger = Logger.getLogger(ContextListener.class);
-	private static final String MASTER_XML = "src/main/resources/liquibase/db.changelog-master.xml";
+	private static final String MASTER_XML = "liquibase/db.changelog-master.xml";
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce)
@@ -29,14 +31,17 @@ public class ContextListener implements ServletContextListener
 		Liquibase liquibase;
 		try
 		{
+			String masterPath = sce.getServletContext().getRealPath(new File("WEB-INF/classes/", MASTER_XML).getPath());
 			logger.info("Initialising liquibase");
+			
+			File masterFile = new File(masterPath);
+			File baseDir = masterFile.getParentFile().getParentFile();
 
-			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(), new JdbcConnection(getConnection()));
+			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(baseDir.getCanonicalPath()), new JdbcConnection(getConnection()));
 			liquibase.update("");
 			logger.info("Liquibase has completed successfully");
-
 		}
-		catch (LiquibaseException | NamingException | SQLException e)
+		catch (LiquibaseException | NamingException | SQLException | IOException e)
 		{
 			logger.info("Liquibase failed.");
 			logger.error(e, e);

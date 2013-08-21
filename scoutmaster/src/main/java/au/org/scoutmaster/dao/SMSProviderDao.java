@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.marre.SmsSender;
@@ -15,7 +13,6 @@ import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.domain.iSMSProvider;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.views.wizards.messaging.Message;
@@ -31,45 +28,12 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	@Override
 	public List<SMSProvider> findAll()
 	{
-		Query query = entityManager.createNamedQuery(SMSProvider.FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<SMSProvider> list = query.getResultList();
-		initProviders(list);
-		return list;
+		return super.findAll(SMSProvider.FIND_ALL);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<SMSProvider> findByName(String name)
 	{
-		Query query = entityManager.createNamedQuery(SMSProvider.FIND_BY_NAME);
-		query.setParameter("name", name);
-		List<SMSProvider> results = query.getResultList();
-		initProviders(results);
-		return results;
-	}
-
-	/**
-	 * Initialise each of the specified SMS Providers
-	 * 
-	 * @param list
-	 */
-	private void initProviders(List<SMSProvider> list)
-	{
-		for (SMSProvider provider : list)
-		{
-			try
-			{
-				@SuppressWarnings("unchecked")
-				Class<iSMSProvider> classz = (Class<iSMSProvider>) Class.forName(provider.getClassPath());
-				provider.setProvider(classz.newInstance());
-			}
-			catch (InstantiationException | IllegalAccessException | ClassNotFoundException e)
-			{
-				logger.error(e, e);
-				throw new RuntimeException(e);
-			}
-		}
-
+		return super.findListBySingleParameter(SMSProvider.FIND_BY_NAME, "name", name);
 	}
 
 	public void send(SMSProvider provider, List<SMSTransmission> targets, Message message,
@@ -124,12 +88,13 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 		smsSender.disconnect();
 
 		// Log the activity
-		ActivityDao daoActivity = new ActivityDao();
+		ActivityDao daoActivity = new DaoFactory().getActivityDao();
+		ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
 		Activity activity = new Activity();
 		User user = (User) UI.getCurrent().getSession().getAttribute("user");
 		activity.setAddedBy(user);
 		activity.setSubject("SMSMessage sent");
-		activity.setType(new ActivityType());
+		activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
 		activity.setActivityDate((Date) new DateTime().toDate());
 		activity.setDetails("Subject: " + transmission.getMessage().getSubject() + "Phone: " + reciever + " Message:"
 				+ transmission.getMessage().getBody());

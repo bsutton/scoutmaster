@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Add standard Activity Types -->
+	<changeSet author="bsutton" id="1.0.08">
+		<createTable catalogName="scoutmaster" tableName="EMAILSERVERSETTINGS">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="SMTPFQDN" type="VARCHAR(255)" />
+			<column name="SMTPPORT" type="INT(10)" defaultValueNumeric="25"/>
+			<column name="USERNAME" type="VARCHAR(255)" />
+			<column name="PASSWORD" type="VARCHAR(255)" />
+			<column name="FROMEMAILADDRESS" type="VARCHAR(255)" />
+			<column name="AUTHREQUIRED" type="BIT(1)" defaultValueNumeric="0" />
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+</databaseChangeLog>

@@ -3,7 +3,6 @@ package au.org.scoutmaster.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import au.org.scoutmaster.domain.Phone;
 
@@ -20,22 +19,17 @@ public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long
 	}
 
 	@Override
-	public Phone findById(Long id)
-	{
-		Phone Phone = entityManager.find(this.entityClass, id);
-		return Phone;
-	}
-
-	@Override
 	public List<Phone> findAll()
 	{
-		Query query = entityManager.createNamedQuery(Phone.FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<Phone> list = query.getResultList();
-		return list;
+		return super.findAll(Phone.FIND_ALL);
 	}
+
 	public boolean isEmpty(Phone phone)
 	{
 		return phone.getPhoneNo() == null || phone.getPhoneNo().trim().length() == 0;
+	}
+	public List<Phone> findByNo(String value)
+	{
+		return super.findListBySingleParameter(Phone.FIND_BY_NO, "phoneNo", value);
 	}
 }

@@ -10,6 +10,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Query;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
 @Entity
@@ -23,6 +25,7 @@ public class Note extends BaseEntity
 	@Transient
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
+	@NotBlank
 	private String subject;
 
 	private String body;

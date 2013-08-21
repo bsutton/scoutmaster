@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * A section type is used to identify basic attributes about a section type.
  * 
@@ -38,11 +40,13 @@ public class SectionType extends BaseEntity
 	/**
 	 * The name of the section type. e.g Cubs.
 	 */
+	@NotBlank
 	private String name;
 
 	/**
 	 * A optional description of the section type
 	 */
+	@NotBlank
 	private String description;
 
 	@Embedded

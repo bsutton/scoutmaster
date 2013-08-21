@@ -6,8 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- Add standard Section Types -->
-	<changeSet author="bsutton" id="1.0.3">
-		<insert tableName="sectiontype">
+	<changeSet author="bsutton" id="1.0.02">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Joeys" />
@@ -19,7 +19,7 @@
 			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="7" />
 		</insert>
-		<insert tableName="sectiontype">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Cubs" />
@@ -31,7 +31,7 @@
 			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="10" />
 		</insert>
-		<insert tableName="sectiontype">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Scouts" />
@@ -43,7 +43,7 @@
 			<column name="endingAgeMonths" value="5" />
 			<column name="endingAgeYears" value="14" />
 		</insert>
-		<insert tableName="sectiontype">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Venturers" />
@@ -55,7 +55,7 @@
 			<column name="endingAgeMonths" value="11" />
 			<column name="endingAgeYears" value="20" />
 		</insert>
-		<insert tableName="sectiontype">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Rovers" />

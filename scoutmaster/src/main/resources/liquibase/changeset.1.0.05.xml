@@ -6,13 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- Add Click A Tell SMS Provider -->
-	<changeSet author="bsutton" id="1.0.7">
-		<addColumn tableName="tag">
-			<column name="builtin" defaultValueNumeric="0" type="BIT(1)" />
-			<column name="detachable" defaultValueNumeric="0" type="BIT(1)" />
-		</addColumn>
-
-		<insert tableName="tag">
+	<changeSet author="bsutton" id="1.0.05">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Joey" />
@@ -20,7 +15,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Cub" />
@@ -28,7 +23,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Scout" />
@@ -36,7 +31,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Venturer" />
@@ -44,7 +39,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Rover" />
@@ -52,7 +47,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Leader" />
@@ -60,7 +55,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Joey Leader" />
@@ -68,7 +63,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Cub Leader" />
@@ -76,7 +71,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Scout Leader" />
@@ -84,7 +79,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Venturer Leader" />
@@ -92,7 +87,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Rover Leader" />
@@ -100,7 +95,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Parent" />
@@ -108,7 +103,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Gardian" />
@@ -116,7 +111,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Council Member" />
@@ -124,7 +119,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Committee Member" />
@@ -132,7 +127,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Adult Helper" />
@@ -140,7 +135,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Volunteer" />
@@ -148,7 +143,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="President" />
@@ -156,7 +151,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Secretary" />
@@ -164,7 +159,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Treasurer" />
@@ -172,7 +167,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Youth Member" />
@@ -180,7 +175,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Prospect" />
@@ -188,7 +183,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Youth Trial" />
@@ -196,7 +191,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Quarter Master" />
@@ -204,7 +199,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Group Leader" />
@@ -212,7 +207,7 @@
 			<column name="detachable" valueNumeric="0" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="District Leader" />
@@ -220,7 +215,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Region Leader" />
@@ -228,7 +223,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Branch Leader" />
@@ -236,7 +231,7 @@
 			<column name="detachable" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="tag">
+		<insert tableName="TAG">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Branch Staff" />

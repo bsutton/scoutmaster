@@ -1,9 +1,11 @@
 package au.org.scoutmaster.views;
 
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.validator.PasswordValidator;
+import au.org.scoutmaster.validator.UsernameValidator;
 
-import com.vaadin.data.validator.AbstractValidator;
-import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
@@ -37,11 +39,11 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		setSizeFull();
 
 		// Create the user input field
-		user = new TextField("User:");
+		user = new TextField("Username:");
 		user.setWidth("300px");
 		user.setRequired(true);
-		user.setInputPrompt("Your username (eg. joe@email.com)");
-		user.addValidator(new EmailValidator("Username must be an email address"));
+		user.setInputPrompt("Your username");
+		user.addValidator(new UsernameValidator());
 		user.setInvalidAllowed(false);
 
 		// Create the password input field
@@ -53,9 +55,9 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		password.setNullRepresentation("");
 
 		// Create the password input field
-		confirm = new PasswordField("Confirm:");
+		confirm = new PasswordField("Confirm Password:");
 		confirm.setWidth("300px");
-		confirm.addValidator(new PasswordValidator("Confirm"));
+		confirm.addValidator(new PasswordValidator("Confirm Password"));
 		confirm.setRequired(true);
 		confirm.setValue("");
 		confirm.setNullRepresentation("");
@@ -85,39 +87,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		user.focus();
 	}
 
-	//
-	// Validator for validating the passwords
-	//
-	private static final class PasswordValidator extends AbstractValidator<String>
-	{
-		private static final long serialVersionUID = 1L;
-
-		public PasswordValidator(String prompt)
-		{
-			super("The " + prompt + " provided is not valid");
-		}
-
-		@Override
-		protected boolean isValidValue(String value)
-		{
-			//
-			// Password must be at least 8 characters long and contain at least
-			// one number
-			//
-			if (value != null && (value.length() < 8 || !value.matches(".*\\d.*")))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public Class<String> getType()
-		{
-			return String.class;
-		}
-	}
-
+	
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
@@ -146,8 +116,9 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		}
 		else
 		{
+			UserDao daoUser = new DaoFactory().getUserDao();
 
-			User user = User.findUser(username);
+			User user = daoUser.findByName(username);
 			if (user != null)
 			{
 				user.updatePassword(username, password);

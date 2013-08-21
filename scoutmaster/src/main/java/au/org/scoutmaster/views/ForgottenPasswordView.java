@@ -7,11 +7,16 @@ import org.apache.commons.mail.SimpleEmail;
 import org.apache.log4j.Logger;
 
 import au.org.scoutmaster.application.Menu;
-import au.org.scoutmaster.util.RandomString;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.EMailServerSettingsDao;
+import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
+import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.domain.ForgottenPasswordReset;
+import au.org.scoutmaster.validator.UsernameValidator;
 
-import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinServletService;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -33,7 +38,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 	
 	public static final String NAME = "Forgotten";
 
-	private final TextField user;
+	private final TextField emailAddress;
 
 	private final Button retrieveButton;
 
@@ -42,18 +47,18 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 		setSizeFull();
 
 		// Create the user input field
-		user = new TextField("User:");
-		user.setWidth("300px");
-		user.setRequired(true);
-		user.setInputPrompt("Your username (eg. joe@email.com)");
-		user.addValidator(new EmailValidator("Username must be an email address"));
-		user.setInvalidAllowed(false);
+		emailAddress = new TextField("Email Address");
+		emailAddress.setWidth("300px");
+		emailAddress.setRequired(true);
+		emailAddress.setInputPrompt("Your email address.");
+		emailAddress.addValidator(new UsernameValidator());
+		emailAddress.setInvalidAllowed(false);
 
 		// Create login button
 		retrieveButton = new Button("Retrieve", this);
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, retrieveButton);
+		VerticalLayout fields = new VerticalLayout(emailAddress, retrieveButton);
 		fields.setCaption("Enter your email address to retrieve your password. (e.g. test@test.com)");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
@@ -71,39 +76,42 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 	public void enter(ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		user.focus();
+		emailAddress.focus();
 	}
 
 	
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
-		String username = user.getValue();
+		String emailAddressValue = emailAddress.getValue();
+		
+		EMailServerSettingsDao settingsDao = new DaoFactory().getEMailServerSettingsDao();
+		EMailServerSettings settings = settingsDao.findSettings();
 
 		Email email = new SimpleEmail();
-		email.setHostName("smtp.scoutmaster.org.au");
-		email.setSmtpPort(465);
-		email.setAuthenticator(new DefaultAuthenticator("username", "password"));
+		email.setHostName(settings.getSmtpFQDN());
+		email.setSmtpPort(settings.getSmtpPort());
+		if (settings.isAuthRequired())
+			email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings.getPassword()));
 		email.setSSLOnConnect(true);
 		try
 		{
-			email.setFrom("info@scoutmaster.org");
-			email.setSubject("[Scoutmaster] Please reset your password");
+			email.setFrom(settings.getFromAddress());
+			email.setSubject("[Scoutmaster] Password reset request");
 			
-			RandomString rs = new RandomString(RandomString.Type.ALPHANUMERIC, 32);
-			String resetid = rs.nextString();
-			// TODO save reset id to database with expiry date.
+			ForgottenPasswordResetDao forgottenPasswordResetDao= new DaoFactory().getForgottenPasswordResetDao();
+			ForgottenPasswordReset reset =forgottenPasswordResetDao.createReset(emailAddressValue);
 			
+			forgottenPasswordResetDao.persist(reset);
 			
-			//TODO get domain from db
-			String domain = "scoutmaster.org";
+			StringBuffer url = VaadinServletService.getCurrentServletRequest().getRequestURL();
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append("So you forgot your password, surely not :))\n");
 			sb.append("Use the following link within the next 24 hours to reset your password:");
-			sb.append("https://" + domain + ResetPasswordView.NAME + "?resetid=" + resetid);
+			sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid());
 			email.setMsg(sb.toString());
-			email.addTo(username);
+			email.addTo(emailAddressValue);
 			email.send();
 		}
 		catch (EmailException e)

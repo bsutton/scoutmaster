@@ -11,6 +11,7 @@
 		<class>au.org.scoutmaster.domain.Address</class>
 		<class>au.org.scoutmaster.domain.Contact</class>
 		<class>au.org.scoutmaster.domain.Event</class>
+		<class>au.org.scoutmaster.domain.EMailServerSettings</class>
 		<class>au.org.scoutmaster.domain.Household</class>
 		<class>au.org.scoutmaster.domain.ImportUserMapping</class>
 		<class>au.org.scoutmaster.domain.ImportColumnFieldMapping</class>
@@ -44,18 +45,21 @@
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
 
 		<properties>
-		<property name="eclipselink.session.customizer" value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer"/>
-			<!-- EclipseLink should create the database schema automatically -->
-			<property name="eclipselink.ddl-generation" value="drop-and-create-tables" />
+			<property name="eclipselink.session.customizer"
+				value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer" />
+			<!-- Following property should create the database schema automatically -->
+			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables" /-->
+			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />
-			<property name="eclipselink.logging.level" value="FINE" />
+			<property name="eclipselink.logging.level" value="WARNING" />
 		</properties>
 	</persistence-unit>
-	
-	<!--  UnitTest database -->
-	<persistence-unit name="scoutmastertest" transaction-type="RESOURCE_LOCAL">
+
+	<!-- UnitTest database -->
+	<persistence-unit name="scoutmastertest"
+		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>au.org.scoutmaster.domain.Activity</class>
 		<class>au.org.scoutmaster.domain.ActivityType</class>
@@ -109,5 +113,5 @@
 			<property name="eclipselink.logging.level" value="FINE" />
 		</properties>
 	</persistence-unit>
-	
+
 </persistence>

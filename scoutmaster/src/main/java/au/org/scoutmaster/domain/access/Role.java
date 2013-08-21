@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import au.org.scoutmaster.domain.BaseEntity;
 /**
  * A user can belong to one or more roles.
@@ -25,11 +27,13 @@ public class Role extends BaseEntity
 	/** 
 	 * The name of the role
 	 */
+	@NotBlank
 	String name;
 	
 	/**
 	 * A meaningful description of the the roles purpose.
 	 */
+	@NotBlank
 	String description;
 	
 	/**

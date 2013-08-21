@@ -7,6 +7,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import au.org.scoutmaster.domain.access.User;
 
 /**
@@ -46,11 +48,13 @@ public class Activity extends BaseEntity
 	/**
 	 * A short description of the activity
 	 */
+	@NotBlank
 	private String subject;
 	
 	/**
 	 * The activities details. May contain html for markup.
 	 */
+	@NotBlank
 	private String details;
 
 	public ActivityType getType()

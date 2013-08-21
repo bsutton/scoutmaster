@@ -6,7 +6,9 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.joda.money.Money;
 
 /**
@@ -29,11 +31,13 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The name used to identify this type of tryout. e.g. Three for free
 	 */
+	@NotBlank
 	String name;
 
 	/**
 	 * A description of the tryout and any special terms and conditions.
 	 */
+	@NotBlank
 	String description;
 
 	/**
@@ -44,6 +48,7 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The number of weeks the tryout normally goes for.
 	 */
+	@Min(value=1)
 	Integer weeks;
 
 	/**

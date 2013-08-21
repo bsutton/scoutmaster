@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
-	<changeSet author="bsutton (generated)" id="1376825552731-1">
+	<changeSet author="bsutton (generated)" id="1.0.00">
 		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_TAG">
 			<column name="Household_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -12,7 +12,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-2">
+	<changeSet author="bsutton (generated)" id="1377002421313-2">
 		<createTable catalogName="scoutmaster" tableName="ACTIVITY">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -30,7 +30,7 @@
 			<column name="WITHCONTACT_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-3">
+	<changeSet author="bsutton (generated)" id="1377002421313-3">
 		<createTable catalogName="scoutmaster" tableName="IMPORTUSERMAPPING">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -43,7 +43,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-4">
+	<changeSet author="bsutton (generated)" id="1377002421313-4">
 		<createTable catalogName="scoutmaster" tableName="SECTIONMEETINGDEFAULTS">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -62,7 +62,7 @@
 			<column name="SECTION_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-5">
+	<changeSet author="bsutton (generated)" id="1377002421313-5">
 		<createTable catalogName="scoutmaster" tableName="ORGANISATION_CONTACT">
 			<column name="Organisation_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -72,7 +72,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-6">
+	<changeSet author="bsutton (generated)" id="1377002421313-6">
 		<createTable catalogName="scoutmaster" tableName="SCHOOL_ADDRESS">
 			<column name="School_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -82,7 +82,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-7">
+	<changeSet author="bsutton (generated)" id="1377002421313-7">
 		<createTable catalogName="scoutmaster" tableName="SECTIONTYPE_QUALIFICATIONTYPE">
 			<column name="SectionType_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -98,7 +98,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-8">
+	<changeSet author="bsutton (generated)" id="1377002421313-8">
 		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_NOTE">
 			<column name="Household_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -108,7 +108,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-9">
+	<changeSet author="bsutton (generated)" id="1377002421313-9">
 		<createTable catalogName="scoutmaster" tableName="CONTACT_TAG">
 			<column name="Contact_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -118,7 +118,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-10">
+	<changeSet author="bsutton (generated)" id="1377002421313-10">
 		<createTable catalogName="scoutmaster" tableName="SCHOOL">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -134,7 +134,7 @@
 			<column name="PRINCIPLE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-11">
+	<changeSet author="bsutton (generated)" id="1377002421313-11">
 		<createTable catalogName="scoutmaster" tableName="PAYMENT_INVOICE">
 			<column name="Payment_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -144,7 +144,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-12">
+	<changeSet author="bsutton (generated)" id="1377002421313-12">
 		<createTable catalogName="scoutmaster" tableName="CREDITNOTELINE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -164,7 +164,7 @@
 			<column name="PRODUCT_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-13">
+	<changeSet author="bsutton (generated)" id="1377002421313-13">
 		<createTable catalogName="scoutmaster" tableName="TRANSITIONMEMBER">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -182,7 +182,7 @@
 			<column name="YOUTHMEMBER_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-14">
+	<changeSet author="bsutton (generated)" id="1377002421313-14">
 		<createTable catalogName="scoutmaster" tableName="INVOICE_PAYMENT">
 			<column name="Invoice_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -192,7 +192,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-15">
+	<changeSet author="bsutton (generated)" id="1377002421313-15">
 		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -207,7 +207,7 @@
 			<column name="PRIMARYCONTACT_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-16">
+	<changeSet author="bsutton (generated)" id="1377002421313-16">
 		<createTable catalogName="scoutmaster" tableName="ORGANISATION_TAG">
 			<column name="Organisation_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -217,7 +217,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-17">
+	<changeSet author="bsutton (generated)" id="1377002421313-17">
 		<createTable catalogName="scoutmaster" tableName="ORGANISATION_ACTIVITY">
 			<column name="Organisation_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -227,7 +227,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-18">
+	<changeSet author="bsutton (generated)" id="1377002421313-18">
 		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_RELATIONSHIP">
 			<column name="Household_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -237,7 +237,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-19">
+	<changeSet author="bsutton (generated)" id="1377002421313-19">
 		<createTable catalogName="scoutmaster" tableName="QUALIFICATIONTYPE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -255,7 +255,7 @@
 			<column name="YEARS" type="INT(10)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-20">
+	<changeSet author="bsutton (generated)" id="1377002421313-20">
 		<createTable catalogName="scoutmaster" tableName="SESSIONHISTORY">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -270,7 +270,7 @@
 			<column name="USER_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-21">
+	<changeSet author="bsutton (generated)" id="1377002421313-21">
 		<createTable catalogName="scoutmaster" tableName="NOTE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -284,7 +284,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-22">
+	<changeSet author="bsutton (generated)" id="1377002421313-22">
 		<createTable catalogName="scoutmaster" tableName="PRODUCT">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -303,7 +303,7 @@
 			<column name="SUPPLIER_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-23">
+	<changeSet author="bsutton (generated)" id="1377002421313-23">
 		<createTable catalogName="scoutmaster" tableName="ACTIVITYTYPE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -317,7 +317,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-24">
+	<changeSet author="bsutton (generated)" id="1377002421313-24">
 		<createTable catalogName="scoutmaster" tableName="RELATIONSHIPTYPE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -333,7 +333,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-25">
+	<changeSet author="bsutton (generated)" id="1377002421313-25">
 		<createTable catalogName="scoutmaster" tableName="SMSPROVIDER">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -353,7 +353,7 @@
 			<column name="USERNAME" type="VARCHAR(255)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-26">
+	<changeSet author="bsutton (generated)" id="1377002421313-26">
 		<createTable catalogName="scoutmaster" tableName="INVOICE_INVOICELINE">
 			<column name="Invoice_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -363,7 +363,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-27">
+	<changeSet author="bsutton (generated)" id="1377002421313-27">
 		<createTable catalogName="scoutmaster" tableName="HOUSEHOLD_ACTIVITY">
 			<column name="Household_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -373,7 +373,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-28">
+	<changeSet author="bsutton (generated)" id="1377002421313-28">
 		<createTable catalogName="scoutmaster" tableName="ORGANISATION_NOTE">
 			<column name="Organisation_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -383,7 +383,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-29">
+	<changeSet author="bsutton (generated)" id="1377002421313-29">
 		<createTable catalogName="scoutmaster" tableName="ROLE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -397,7 +397,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-30">
+	<changeSet author="bsutton (generated)" id="1377002421313-30">
 		<createTable catalogName="scoutmaster" tableName="SECTION">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -411,7 +411,7 @@
 			<column name="TYPE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-31">
+	<changeSet author="bsutton (generated)" id="1377002421313-31">
 		<createTable catalogName="scoutmaster" tableName="SCHOOL_CONTACT">
 			<column name="School_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -421,7 +421,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-32">
+	<changeSet author="bsutton (generated)" id="1377002421313-32">
 		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUTTYPE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -438,7 +438,7 @@
 			<column name="WEEKS" type="INT(10)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-33">
+	<changeSet author="bsutton (generated)" id="1377002421313-33">
 		<createTable catalogName="scoutmaster" tableName="SECTION_CONTACT">
 			<column name="Section_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -454,7 +454,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-34">
+	<changeSet author="bsutton (generated)" id="1377002421313-34">
 		<createTable catalogName="scoutmaster" tableName="PHONE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -469,7 +469,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-35">
+	<changeSet author="bsutton (generated)" id="1377002421313-35">
 		<createTable catalogName="scoutmaster" tableName="CONTACT_ACTIVITY">
 			<column name="Contact_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -479,7 +479,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-36">
+	<changeSet author="bsutton (generated)" id="1377002421313-36">
 		<createTable catalogName="scoutmaster" tableName="CREDITNOTE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -492,7 +492,7 @@
 			<column name="ASSOCIATEDINVOICE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-37">
+	<changeSet author="bsutton (generated)" id="1377002421313-37">
 		<createTable catalogName="scoutmaster" tableName="USER_ROLE">
 			<column name="User_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -502,7 +502,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-38">
+	<changeSet author="bsutton (generated)" id="1377002421313-38">
 		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUT">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -525,7 +525,7 @@
 			<column name="TRIALYOUTHMEMBER_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-39">
+	<changeSet author="bsutton (generated)" id="1377002421313-39">
 		<createTable catalogName="scoutmaster" tableName="EVENT_CONTACT">
 			<column name="Event_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -535,7 +535,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-40">
+	<changeSet author="bsutton (generated)" id="1377002421313-40">
 		<createTable catalogName="scoutmaster" tableName="EVENT">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -555,7 +555,7 @@
 			<column name="SECTION_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-41">
+	<changeSet author="bsutton (generated)" id="1377002421313-41">
 		<createTable catalogName="scoutmaster" tableName="INVOICE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -572,7 +572,7 @@
 			<column name="BILLTO_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-42">
+	<changeSet author="bsutton (generated)" id="1377002421313-42">
 		<createTable catalogName="scoutmaster" tableName="RELATIONSHIP">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -590,7 +590,7 @@
 			<column name="TYPE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-43">
+	<changeSet author="bsutton (generated)" id="1377002421313-43">
 		<createTable catalogName="scoutmaster" tableName="FEATURE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -604,7 +604,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-44">
+	<changeSet author="bsutton (generated)" id="1377002421313-44">
 		<createTable catalogName="scoutmaster" tableName="CONTACT_NOTE">
 			<column name="Contact_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -614,7 +614,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-45">
+	<changeSet author="bsutton (generated)" id="1377002421313-45">
 		<createTable catalogName="scoutmaster" tableName="TAG">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -630,7 +630,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-46">
+	<changeSet author="bsutton (generated)" id="1377002421313-46">
 		<createTable catalogName="scoutmaster" tableName="IMPORTCOLUMNFIELDMAPPING">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -645,7 +645,7 @@
 			<column name="USERMAPPING_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-47">
+	<changeSet author="bsutton (generated)" id="1377002421313-47">
 		<createTable catalogName="scoutmaster" tableName="INVOICELINE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -665,7 +665,7 @@
 			<column name="PRODUCT_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-48">
+	<changeSet author="bsutton (generated)" id="1377002421313-48">
 		<createTable catalogName="scoutmaster" tableName="ADDRESS">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -681,7 +681,7 @@
 			<column name="UPDATED" type="date" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-49">
+	<changeSet author="bsutton (generated)" id="1377002421313-49">
 		<createTable catalogName="scoutmaster" tableName="SECTIONTRYOUTTYPE_SECTION">
 			<column name="SectionTryoutType_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -691,7 +691,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-50">
+	<changeSet author="bsutton (generated)" id="1377002421313-50">
 		<createTable catalogName="scoutmaster" tableName="QUALIFICATION">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -707,7 +707,7 @@
 			<column name="TYPE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-51">
+	<changeSet author="bsutton (generated)" id="1377002421313-51">
 		<createTable catalogName="scoutmaster" tableName="CONTACT">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -764,7 +764,7 @@
 			<column name="PHONE3_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-52">
+	<changeSet author="bsutton (generated)" id="1377002421313-52">
 		<createTable catalogName="scoutmaster" tableName="USER">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -774,13 +774,14 @@
 			</column>
 			<column name="CREATED" type="date" />
 			<column defaultValueNumeric="0" name="DELETED" type="BIT(1)" />
+			<column name="EMAILADDRESS" type="VARCHAR(255)" />
 			<column defaultValueNumeric="0" name="ENABLED" type="BIT(1)" />
 			<column name="SALTEDPASSWORD" type="VARCHAR(255)" />
 			<column name="UPDATED" type="date" />
 			<column name="USERNAME" type="VARCHAR(255)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-53">
+	<changeSet author="bsutton (generated)" id="1377002421313-53">
 		<createTable catalogName="scoutmaster" tableName="SECTIONTYPE">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -800,7 +801,7 @@
 			<column name="startingAgeYears" type="INT(10)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-54">
+	<changeSet author="bsutton (generated)" id="1377002421313-54">
 		<createTable catalogName="scoutmaster" tableName="SECTION_SECTIONTRYOUT">
 			<column name="Section_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -810,7 +811,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-55">
+	<changeSet author="bsutton (generated)" id="1377002421313-55">
 		<createTable catalogName="scoutmaster" tableName="CREDITNOTE_CREDITNOTELINE">
 			<column name="CreditNote_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -820,7 +821,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-56">
+	<changeSet author="bsutton (generated)" id="1377002421313-56">
 		<createTable catalogName="scoutmaster" tableName="PAYMENT">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -837,7 +838,7 @@
 			<column name="TAXPERCENTAGE" type="DECIMAL(38)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-57">
+	<changeSet author="bsutton (generated)" id="1377002421313-57">
 		<createTable catalogName="scoutmaster" tableName="ORGANISATION">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -854,7 +855,7 @@
 			<column name="PRIMARYPHONE_ID" type="BIGINT(19)" />
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-58">
+	<changeSet author="bsutton (generated)" id="1377002421313-58">
 		<createTable catalogName="scoutmaster" tableName="ROLE_FEATURE">
 			<column name="Role_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -864,7 +865,7 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-59">
+	<changeSet author="bsutton (generated)" id="1377002421313-59">
 		<createTable catalogName="scoutmaster" tableName="SECTION_TRANSITIONMEMBER">
 			<column name="Section_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
@@ -874,135 +875,114 @@
 			</column>
 		</createTable>
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-60">
-		<addUniqueConstraint catalogName="scoutmaster"
-			columnNames="NAME" constraintName="NAME" deferrable="false" disabled="false"
-			initiallyDeferred="false" tableName="TAG" />
-	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-61">
+	<changeSet author="bsutton (generated)" id="1377002421313-60">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="Organisation_ID, activites_ID" constraintName="PRIMARY"
 			tableName="ORGANISATION_ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-62">
+	<changeSet author="bsutton (generated)" id="1377002421313-61">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="Organisation_ID, contacts_ID" constraintName="PRIMARY"
 			tableName="ORGANISATION_CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-63">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="School_ID, location_ID" constraintName="PRIMARY"
-			tableName="SCHOOL_ADDRESS" />
+	<changeSet author="bsutton (generated)" id="1377002421313-62">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="School_ID, location_ID"
+			constraintName="PRIMARY" tableName="SCHOOL_ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-64">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Contact_ID, tags_ID" constraintName="PRIMARY" tableName="CONTACT_TAG" />
+	<changeSet author="bsutton (generated)" id="1377002421313-63">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Contact_ID, tags_ID"
+			constraintName="PRIMARY" tableName="CONTACT_TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-65">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Invoice_ID, invoiceLines_ID" constraintName="PRIMARY"
-			tableName="INVOICE_INVOICELINE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-64">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Invoice_ID, invoiceLines_ID"
+			constraintName="PRIMARY" tableName="INVOICE_INVOICELINE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-66">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Household_ID, activites_ID" constraintName="PRIMARY"
-			tableName="HOUSEHOLD_ACTIVITY" />
+	<changeSet author="bsutton (generated)" id="1377002421313-65">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Household_ID, activites_ID"
+			constraintName="PRIMARY" tableName="HOUSEHOLD_ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-67">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Invoice_ID, payments_ID" constraintName="PRIMARY"
-			tableName="INVOICE_PAYMENT" />
+	<changeSet author="bsutton (generated)" id="1377002421313-66">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Invoice_ID, payments_ID"
+			constraintName="PRIMARY" tableName="INVOICE_PAYMENT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-68">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Household_ID, tags_ID" constraintName="PRIMARY"
-			tableName="HOUSEHOLD_TAG" />
+	<changeSet author="bsutton (generated)" id="1377002421313-67">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Household_ID, tags_ID"
+			constraintName="PRIMARY" tableName="HOUSEHOLD_TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-69">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Contact_ID, notes_ID" constraintName="PRIMARY"
-			tableName="CONTACT_NOTE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-68">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Contact_ID, notes_ID"
+			constraintName="PRIMARY" tableName="CONTACT_NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-70">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Role_ID, permitted_ID" constraintName="PRIMARY"
-			tableName="ROLE_FEATURE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-69">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Role_ID, permitted_ID"
+			constraintName="PRIMARY" tableName="ROLE_FEATURE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-71">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="School_ID, youth_ID" constraintName="PRIMARY" tableName="SCHOOL_CONTACT" />
+	<changeSet author="bsutton (generated)" id="1377002421313-70">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="School_ID, youth_ID"
+			constraintName="PRIMARY" tableName="SCHOOL_CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-72">
+	<changeSet author="bsutton (generated)" id="1377002421313-71">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="SectionType_ID, assistentLeaderRequirements_ID, leaderRequirements_ID, parentHelperRequirements_ID"
 			constraintName="PRIMARY" tableName="SECTIONTYPE_QUALIFICATIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-73">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Household_ID, members_ID" constraintName="PRIMARY"
-			tableName="HOUSEHOLD_RELATIONSHIP" />
+	<changeSet author="bsutton (generated)" id="1377002421313-72">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Household_ID, members_ID"
+			constraintName="PRIMARY" tableName="HOUSEHOLD_RELATIONSHIP" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-74">
+	<changeSet author="bsutton (generated)" id="1377002421313-73">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="SectionTryoutType_ID, sections_ID" constraintName="PRIMARY"
 			tableName="SECTIONTRYOUTTYPE_SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-75">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Contact_ID, activites_ID" constraintName="PRIMARY"
-			tableName="CONTACT_ACTIVITY" />
+	<changeSet author="bsutton (generated)" id="1377002421313-74">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Contact_ID, activites_ID"
+			constraintName="PRIMARY" tableName="CONTACT_ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-76">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="User_ID, belongsTo_ID" constraintName="PRIMARY"
-			tableName="USER_ROLE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-75">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="User_ID, belongsTo_ID"
+			constraintName="PRIMARY" tableName="USER_ROLE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-77">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Section_ID, trialMembers_ID" constraintName="PRIMARY"
-			tableName="SECTION_SECTIONTRYOUT" />
+	<changeSet author="bsutton (generated)" id="1377002421313-76">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Section_ID, trialMembers_ID"
+			constraintName="PRIMARY" tableName="SECTION_SECTIONTRYOUT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-78">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Household_ID, notes_ID" constraintName="PRIMARY"
-			tableName="HOUSEHOLD_NOTE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-77">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Household_ID, notes_ID"
+			constraintName="PRIMARY" tableName="HOUSEHOLD_NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-79">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Event_ID, coordinators_ID" constraintName="PRIMARY"
-			tableName="EVENT_CONTACT" />
+	<changeSet author="bsutton (generated)" id="1377002421313-78">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Event_ID, coordinators_ID"
+			constraintName="PRIMARY" tableName="EVENT_CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-80">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Organisation_ID, notes_ID" constraintName="PRIMARY"
-			tableName="ORGANISATION_NOTE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-79">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Organisation_ID, notes_ID"
+			constraintName="PRIMARY" tableName="ORGANISATION_NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-81">
+	<changeSet author="bsutton (generated)" id="1377002421313-80">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="Section_ID, adultHelpers_ID, leaders_ID, youthMembers_ID"
 			constraintName="PRIMARY" tableName="SECTION_CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-82">
+	<changeSet author="bsutton (generated)" id="1377002421313-81">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="Section_ID, transitioningYouthMembers_ID"
 			constraintName="PRIMARY" tableName="SECTION_TRANSITIONMEMBER" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-83">
+	<changeSet author="bsutton (generated)" id="1377002421313-82">
 		<addPrimaryKey catalogName="scoutmaster"
 			columnNames="CreditNote_ID, creditNoteLines_ID" constraintName="PRIMARY"
 			tableName="CREDITNOTE_CREDITNOTELINE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-84">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Payment_ID, invoices_ID" constraintName="PRIMARY"
-			tableName="PAYMENT_INVOICE" />
+	<changeSet author="bsutton (generated)" id="1377002421313-83">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Payment_ID, invoices_ID"
+			constraintName="PRIMARY" tableName="PAYMENT_INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-85">
-		<addPrimaryKey catalogName="scoutmaster"
-			columnNames="Organisation_ID, tags_ID" constraintName="PRIMARY"
-			tableName="ORGANISATION_TAG" />
+	<changeSet author="bsutton (generated)" id="1377002421313-84">
+		<addPrimaryKey catalogName="scoutmaster" columnNames="Organisation_ID, tags_ID"
+			constraintName="PRIMARY" tableName="ORGANISATION_TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-86">
+	<changeSet author="bsutton (generated)" id="1377002421313-85">
 		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_CONTACT"
 			constraintName="FK_ORGANISATION_CONTACT_Organisation_ID" deferrable="false"
@@ -1010,7 +990,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-87">
+	<changeSet author="bsutton (generated)" id="1377002421313-86">
 		<addForeignKeyConstraint baseColumnNames="CREDITNOTE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTELINE"
 			constraintName="FK_CREDITNOTELINE_CREDITNOTE_ID" deferrable="false"
@@ -1018,7 +998,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CREDITNOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-88">
+	<changeSet author="bsutton (generated)" id="1377002421313-87">
 		<addForeignKeyConstraint baseColumnNames="invoiceLines_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_INVOICELINE"
 			constraintName="FK_INVOICE_INVOICELINE_invoiceLines_ID" deferrable="false"
@@ -1026,7 +1006,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICELINE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-89">
+	<changeSet author="bsutton (generated)" id="1377002421313-88">
 		<addForeignKeyConstraint baseColumnNames="PRIMARYPHONE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION"
 			constraintName="FK_ORGANISATION_PRIMARYPHONE_ID" deferrable="false"
@@ -1034,7 +1014,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PHONE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-90">
+	<changeSet author="bsutton (generated)" id="1377002421313-89">
 		<addForeignKeyConstraint baseColumnNames="FROMSECTION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
 			constraintName="FK_TRANSITIONMEMBER_FROMSECTION_ID" deferrable="false"
@@ -1042,7 +1022,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-91">
+	<changeSet author="bsutton (generated)" id="1377002421313-90">
 		<addForeignKeyConstraint baseColumnNames="LEADER_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="QUALIFICATION"
 			constraintName="FK_QUALIFICATION_LEADER_ID" deferrable="false"
@@ -1050,7 +1030,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-92">
+	<changeSet author="bsutton (generated)" id="1377002421313-91">
 		<addForeignKeyConstraint baseColumnNames="Invoice_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_PAYMENT"
 			constraintName="FK_INVOICE_PAYMENT_Invoice_ID" deferrable="false"
@@ -1058,7 +1038,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-93">
+	<changeSet author="bsutton (generated)" id="1377002421313-92">
 		<addForeignKeyConstraint baseColumnNames="notes_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_NOTE"
 			constraintName="FK_ORGANISATION_NOTE_notes_ID" deferrable="false"
@@ -1066,7 +1046,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-94">
+	<changeSet author="bsutton (generated)" id="1377002421313-93">
 		<addForeignKeyConstraint baseColumnNames="tags_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_TAG"
 			constraintName="FK_HOUSEHOLD_TAG_tags_ID" deferrable="false"
@@ -1074,7 +1054,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-95">
+	<changeSet author="bsutton (generated)" id="1377002421313-94">
 		<addForeignKeyConstraint baseColumnNames="belongsTo_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="USER_ROLE"
 			constraintName="FK_USER_ROLE_belongsTo_ID" deferrable="false"
@@ -1082,7 +1062,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ROLE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-96">
+	<changeSet author="bsutton (generated)" id="1377002421313-95">
 		<addForeignKeyConstraint baseColumnNames="members_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_RELATIONSHIP"
 			constraintName="FK_HOUSEHOLD_RELATIONSHIP_members_ID" deferrable="false"
@@ -1090,7 +1070,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="RELATIONSHIP" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-97">
+	<changeSet author="bsutton (generated)" id="1377002421313-96">
 		<addForeignKeyConstraint baseColumnNames="Role_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ROLE_FEATURE"
 			constraintName="FK_ROLE_FEATURE_Role_ID" deferrable="false"
@@ -1098,7 +1078,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ROLE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-98">
+	<changeSet author="bsutton (generated)" id="1377002421313-97">
 		<addForeignKeyConstraint baseColumnNames="MEETINGDEFAULTS_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION"
 			constraintName="FK_SECTION_MEETINGDEFAULTS_ID" deferrable="false"
@@ -1106,7 +1086,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONMEETINGDEFAULTS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-99">
+	<changeSet author="bsutton (generated)" id="1377002421313-98">
 		<addForeignKeyConstraint baseColumnNames="ADDEDBY_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
 			constraintName="FK_ACTIVITY_ADDEDBY_ID" deferrable="false"
@@ -1114,7 +1094,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="USER" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-100">
+	<changeSet author="bsutton (generated)" id="1377002421313-99">
 		<addForeignKeyConstraint baseColumnNames="Household_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_NOTE"
 			constraintName="FK_HOUSEHOLD_NOTE_Household_ID" deferrable="false"
@@ -1122,7 +1102,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="HOUSEHOLD" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-101">
+	<changeSet author="bsutton (generated)" id="1377002421313-100">
 		<addForeignKeyConstraint baseColumnNames="notes_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_NOTE"
 			constraintName="FK_HOUSEHOLD_NOTE_notes_ID" deferrable="false"
@@ -1130,7 +1110,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-102">
+	<changeSet author="bsutton (generated)" id="1377002421313-101">
 		<addForeignKeyConstraint baseColumnNames="PRIMARYCONTACT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD"
 			constraintName="FK_HOUSEHOLD_PRIMARYCONTACT_ID" deferrable="false"
@@ -1138,7 +1118,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-103">
+	<changeSet author="bsutton (generated)" id="1377002421313-102">
 		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="EVENT"
 			constraintName="FK_EVENT_SECTION_ID" deferrable="false"
@@ -1146,7 +1126,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-104">
+	<changeSet author="bsutton (generated)" id="1377002421313-103">
 		<addForeignKeyConstraint baseColumnNames="Section_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_TRANSITIONMEMBER"
 			constraintName="FK_SECTION_TRANSITIONMEMBER_Section_ID" deferrable="false"
@@ -1154,7 +1134,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-105">
+	<changeSet author="bsutton (generated)" id="1377002421313-104">
 		<addForeignKeyConstraint baseColumnNames="activites_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_ACTIVITY"
 			constraintName="FK_ORGANISATION_ACTIVITY_activites_ID" deferrable="false"
@@ -1162,7 +1142,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-106">
+	<changeSet author="bsutton (generated)" id="1377002421313-105">
 		<addForeignKeyConstraint baseColumnNames="ADVERTISINGCONTACT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL"
 			constraintName="FK_SCHOOL_ADVERTISINGCONTACT_ID" deferrable="false"
@@ -1170,7 +1150,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-107">
+	<changeSet author="bsutton (generated)" id="1377002421313-106">
 		<addForeignKeyConstraint baseColumnNames="adultHelpers_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
 			constraintName="FK_SECTION_CONTACT_adultHelpers_ID" deferrable="false"
@@ -1178,7 +1158,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-108">
+	<changeSet author="bsutton (generated)" id="1377002421313-107">
 		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_ACTIVITY"
 			constraintName="FK_ORGANISATION_ACTIVITY_Organisation_ID" deferrable="false"
@@ -1186,7 +1166,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-109">
+	<changeSet author="bsutton (generated)" id="1377002421313-108">
 		<addForeignKeyConstraint baseColumnNames="USER_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SESSIONHISTORY"
 			constraintName="FK_SESSIONHISTORY_USER_ID" deferrable="false"
@@ -1194,7 +1174,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="USER" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-110">
+	<changeSet author="bsutton (generated)" id="1377002421313-109">
 		<addForeignKeyConstraint baseColumnNames="location_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_ADDRESS"
 			constraintName="FK_SCHOOL_ADDRESS_location_ID" deferrable="false"
@@ -1202,7 +1182,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-111">
+	<changeSet author="bsutton (generated)" id="1377002421313-110">
 		<addForeignKeyConstraint baseColumnNames="FIRST_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_FIRST_ID" deferrable="false"
@@ -1210,7 +1190,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-112">
+	<changeSet author="bsutton (generated)" id="1377002421313-111">
 		<addForeignKeyConstraint baseColumnNames="PHONE3_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_PHONE3_ID" deferrable="false"
@@ -1218,7 +1198,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PHONE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-113">
+	<changeSet author="bsutton (generated)" id="1377002421313-112">
 		<addForeignKeyConstraint baseColumnNames="activites_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_ACTIVITY"
 			constraintName="FK_CONTACT_ACTIVITY_activites_ID" deferrable="false"
@@ -1226,7 +1206,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-114">
+	<changeSet author="bsutton (generated)" id="1377002421313-113">
 		<addForeignKeyConstraint baseColumnNames="TRANSITIONSUPERVISOR_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
 			constraintName="FK_TRANSITIONMEMBER_TRANSITIONSUPERVISOR_ID"
@@ -1234,7 +1214,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-115">
+	<changeSet author="bsutton (generated)" id="1377002421313-114">
 		<addForeignKeyConstraint baseColumnNames="TRIALYOUTHMEMBER_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUT"
 			constraintName="FK_SECTIONTRYOUT_TRIALYOUTHMEMBER_ID" deferrable="false"
@@ -1242,7 +1222,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-116">
+	<changeSet author="bsutton (generated)" id="1377002421313-115">
 		<addForeignKeyConstraint baseColumnNames="WITHCONTACT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
 			constraintName="FK_ACTIVITY_WITHCONTACT_ID" deferrable="false"
@@ -1250,7 +1230,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-117">
+	<changeSet author="bsutton (generated)" id="1377002421313-116">
 		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONMEETINGDEFAULTS"
 			constraintName="FK_SECTIONMEETINGDEFAULTS_LOCATION_ID" deferrable="false"
@@ -1258,7 +1238,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-118">
+	<changeSet author="bsutton (generated)" id="1377002421313-117">
 		<addForeignKeyConstraint baseColumnNames="SectionTryoutType_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUTTYPE_SECTION"
 			constraintName="FK_SECTIONTRYOUTTYPE_SECTION_SectionTryoutType_ID"
@@ -1266,7 +1246,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="SECTIONTRYOUTTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-119">
+	<changeSet author="bsutton (generated)" id="1377002421313-118">
 		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD"
 			constraintName="FK_HOUSEHOLD_LOCATION_ID" deferrable="false"
@@ -1274,7 +1254,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-120">
+	<changeSet author="bsutton (generated)" id="1377002421313-119">
 		<addForeignKeyConstraint baseColumnNames="parentHelperRequirements_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
 			constraintName="SCTONTYPEQUALIFICATIONTYPEprntHelperRequirementsID"
@@ -1282,7 +1262,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-121">
+	<changeSet author="bsutton (generated)" id="1377002421313-120">
 		<addForeignKeyConstraint baseColumnNames="Payment_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="PAYMENT_INVOICE"
 			constraintName="FK_PAYMENT_INVOICE_Payment_ID" deferrable="false"
@@ -1290,7 +1270,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PAYMENT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-122">
+	<changeSet author="bsutton (generated)" id="1377002421313-121">
 		<addForeignKeyConstraint baseColumnNames="ASSOCIATEDINVOICE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE"
 			constraintName="FK_CREDITNOTE_ASSOCIATEDINVOICE_ID" deferrable="false"
@@ -1298,7 +1278,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-123">
+	<changeSet author="bsutton (generated)" id="1377002421313-122">
 		<addForeignKeyConstraint baseColumnNames="YOUTHMEMBER_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
 			constraintName="FK_TRANSITIONMEMBER_YOUTHMEMBER_ID" deferrable="false"
@@ -1306,7 +1286,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-124">
+	<changeSet author="bsutton (generated)" id="1377002421313-123">
 		<addForeignKeyConstraint baseColumnNames="SCHOOL_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_SCHOOL_ID" deferrable="false"
@@ -1314,7 +1294,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SCHOOL" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-125">
+	<changeSet author="bsutton (generated)" id="1377002421313-124">
 		<addForeignKeyConstraint baseColumnNames="leaderRequirements_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
 			constraintName="SECTIONTYPE_QUALIFICATIONTYPEleaderRequirements_ID"
@@ -1322,7 +1302,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-126">
+	<changeSet author="bsutton (generated)" id="1377002421313-125">
 		<addForeignKeyConstraint baseColumnNames="TOSECTION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="TRANSITIONMEMBER"
 			constraintName="FK_TRANSITIONMEMBER_TOSECTION_ID" deferrable="false"
@@ -1330,7 +1310,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-127">
+	<changeSet author="bsutton (generated)" id="1377002421313-126">
 		<addForeignKeyConstraint baseColumnNames="PRINCIPLE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL"
 			constraintName="FK_SCHOOL_PRINCIPLE_ID" deferrable="false"
@@ -1338,7 +1318,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-128">
+	<changeSet author="bsutton (generated)" id="1377002421313-127">
 		<addForeignKeyConstraint baseColumnNames="trialMembers_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_SECTIONTRYOUT"
 			constraintName="FK_SECTION_SECTIONTRYOUT_trialMembers_ID" deferrable="false"
@@ -1346,7 +1326,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTRYOUT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-129">
+	<changeSet author="bsutton (generated)" id="1377002421313-128">
 		<addForeignKeyConstraint baseColumnNames="transitioningYouthMembers_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_TRANSITIONMEMBER"
 			constraintName="SECTIONTRANSITIONMEMBERtransitioningYouthMembersID"
@@ -1354,7 +1334,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="TRANSITIONMEMBER" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-130">
+	<changeSet author="bsutton (generated)" id="1377002421313-129">
 		<addForeignKeyConstraint baseColumnNames="PHONE2_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_PHONE2_ID" deferrable="false"
@@ -1362,7 +1342,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PHONE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-131">
+	<changeSet author="bsutton (generated)" id="1377002421313-130">
 		<addForeignKeyConstraint baseColumnNames="PHONE1_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_PHONE1_ID" deferrable="false"
@@ -1370,7 +1350,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PHONE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-132">
+	<changeSet author="bsutton (generated)" id="1377002421313-131">
 		<addForeignKeyConstraint baseColumnNames="SectionType_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
 			constraintName="FK_SECTIONTYPE_QUALIFICATIONTYPE_SectionType_ID"
@@ -1378,7 +1358,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="SECTIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-133">
+	<changeSet author="bsutton (generated)" id="1377002421313-132">
 		<addForeignKeyConstraint baseColumnNames="LOCATION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION"
 			constraintName="FK_ORGANISATION_LOCATION_ID" deferrable="false"
@@ -1386,7 +1366,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-134">
+	<changeSet author="bsutton (generated)" id="1377002421313-133">
 		<addForeignKeyConstraint baseColumnNames="creditNoteLines_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE_CREDITNOTELINE"
 			constraintName="FK_CREDITNOTE_CREDITNOTELINE_creditNoteLines_ID"
@@ -1394,7 +1374,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="CREDITNOTELINE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-135">
+	<changeSet author="bsutton (generated)" id="1377002421313-134">
 		<addForeignKeyConstraint baseColumnNames="tags_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_TAG"
 			constraintName="FK_ORGANISATION_TAG_tags_ID" deferrable="false"
@@ -1402,7 +1382,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-136">
+	<changeSet author="bsutton (generated)" id="1377002421313-135">
 		<addForeignKeyConstraint baseColumnNames="coordinators_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="EVENT_CONTACT"
 			constraintName="FK_EVENT_CONTACT_coordinators_ID" deferrable="false"
@@ -1410,7 +1390,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-137">
+	<changeSet author="bsutton (generated)" id="1377002421313-136">
 		<addForeignKeyConstraint baseColumnNames="SECONDCONTACT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_SECONDCONTACT_ID" deferrable="false"
@@ -1418,7 +1398,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-138">
+	<changeSet author="bsutton (generated)" id="1377002421313-137">
 		<addForeignKeyConstraint baseColumnNames="permitted_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ROLE_FEATURE"
 			constraintName="FK_ROLE_FEATURE_permitted_ID" deferrable="false"
@@ -1426,7 +1406,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="FEATURE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-139">
+	<changeSet author="bsutton (generated)" id="1377002421313-138">
 		<addForeignKeyConstraint baseColumnNames="Section_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_SECTIONTRYOUT"
 			constraintName="FK_SECTION_SECTIONTRYOUT_Section_ID" deferrable="false"
@@ -1434,7 +1414,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-140">
+	<changeSet author="bsutton (generated)" id="1377002421313-139">
 		<addForeignKeyConstraint baseColumnNames="Event_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="EVENT_CONTACT"
 			constraintName="FK_EVENT_CONTACT_Event_ID" deferrable="false"
@@ -1442,7 +1422,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="EVENT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-141">
+	<changeSet author="bsutton (generated)" id="1377002421313-140">
 		<addForeignKeyConstraint baseColumnNames="Invoice_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_INVOICELINE"
 			constraintName="FK_INVOICE_INVOICELINE_Invoice_ID" deferrable="false"
@@ -1450,7 +1430,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-142">
+	<changeSet author="bsutton (generated)" id="1377002421313-141">
 		<addForeignKeyConstraint baseColumnNames="Household_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_RELATIONSHIP"
 			constraintName="FK_HOUSEHOLD_RELATIONSHIP_Household_ID" deferrable="false"
@@ -1458,7 +1438,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="HOUSEHOLD" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-143">
+	<changeSet author="bsutton (generated)" id="1377002421313-142">
 		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_TYPE_ID" deferrable="false"
@@ -1466,7 +1446,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="RELATIONSHIPTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-144">
+	<changeSet author="bsutton (generated)" id="1377002421313-143">
 		<addForeignKeyConstraint baseColumnNames="INVOICE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICELINE"
 			constraintName="FK_INVOICELINE_INVOICE_ID" deferrable="false"
@@ -1474,7 +1454,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-145">
+	<changeSet author="bsutton (generated)" id="1377002421313-144">
 		<addForeignKeyConstraint baseColumnNames="Section_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
 			constraintName="FK_SECTION_CONTACT_Section_ID" deferrable="false"
@@ -1482,7 +1462,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-146">
+	<changeSet author="bsutton (generated)" id="1377002421313-145">
 		<addForeignKeyConstraint baseColumnNames="CreditNote_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTE_CREDITNOTELINE"
 			constraintName="FK_CREDITNOTE_CREDITNOTELINE_CreditNote_ID"
@@ -1490,7 +1470,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="CREDITNOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-147">
+	<changeSet author="bsutton (generated)" id="1377002421313-146">
 		<addForeignKeyConstraint baseColumnNames="Contact_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_TAG"
 			constraintName="FK_CONTACT_TAG_Contact_ID" deferrable="false"
@@ -1498,7 +1478,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-148">
+	<changeSet author="bsutton (generated)" id="1377002421313-147">
 		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONMEETINGDEFAULTS"
 			constraintName="FK_SECTIONMEETINGDEFAULTS_SECTION_ID" deferrable="false"
@@ -1506,7 +1486,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-149">
+	<changeSet author="bsutton (generated)" id="1377002421313-148">
 		<addForeignKeyConstraint baseColumnNames="PRODUCT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CREDITNOTELINE"
 			constraintName="FK_CREDITNOTELINE_PRODUCT_ID" deferrable="false"
@@ -1514,7 +1494,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PRODUCT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-150">
+	<changeSet author="bsutton (generated)" id="1377002421313-149">
 		<addForeignKeyConstraint baseColumnNames="PRODUCT_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICELINE"
 			constraintName="FK_INVOICELINE_PRODUCT_ID" deferrable="false"
@@ -1522,7 +1502,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PRODUCT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-151">
+	<changeSet author="bsutton (generated)" id="1377002421313-150">
 		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="QUALIFICATION"
 			constraintName="FK_QUALIFICATION_TYPE_ID" deferrable="false"
@@ -1530,7 +1510,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="QUALIFICATIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-152">
+	<changeSet author="bsutton (generated)" id="1377002421313-151">
 		<addForeignKeyConstraint baseColumnNames="School_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_CONTACT"
 			constraintName="FK_SCHOOL_CONTACT_School_ID" deferrable="false"
@@ -1538,7 +1518,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SCHOOL" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-153">
+	<changeSet author="bsutton (generated)" id="1377002421313-152">
 		<addForeignKeyConstraint baseColumnNames="youth_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_CONTACT"
 			constraintName="FK_SCHOOL_CONTACT_youth_ID" deferrable="false"
@@ -1546,7 +1526,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-154">
+	<changeSet author="bsutton (generated)" id="1377002421313-153">
 		<addForeignKeyConstraint baseColumnNames="User_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="USER_ROLE"
 			constraintName="FK_USER_ROLE_User_ID" deferrable="false"
@@ -1554,7 +1534,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="USER" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-155">
+	<changeSet author="bsutton (generated)" id="1377002421313-154">
 		<addForeignKeyConstraint baseColumnNames="HOUSEHOLD_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_HOUSEHOLD_ID" deferrable="false"
@@ -1562,7 +1542,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="HOUSEHOLD" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-156">
+	<changeSet author="bsutton (generated)" id="1377002421313-155">
 		<addForeignKeyConstraint baseColumnNames="contacts_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_CONTACT"
 			constraintName="FK_ORGANISATION_CONTACT_contacts_ID" deferrable="false"
@@ -1570,7 +1550,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-157">
+	<changeSet author="bsutton (generated)" id="1377002421313-156">
 		<addForeignKeyConstraint baseColumnNames="Household_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_ACTIVITY"
 			constraintName="FK_HOUSEHOLD_ACTIVITY_Household_ID" deferrable="false"
@@ -1578,7 +1558,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="HOUSEHOLD" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-158">
+	<changeSet author="bsutton (generated)" id="1377002421313-157">
 		<addForeignKeyConstraint baseColumnNames="leaders_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
 			constraintName="FK_SECTION_CONTACT_leaders_ID" deferrable="false"
@@ -1586,7 +1566,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-159">
+	<changeSet author="bsutton (generated)" id="1377002421313-158">
 		<addForeignKeyConstraint baseColumnNames="USERMAPPING_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="IMPORTCOLUMNFIELDMAPPING"
 			constraintName="FK_IMPORTCOLUMNFIELDMAPPING_USERMAPPING_ID"
@@ -1594,7 +1574,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="IMPORTUSERMAPPING" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-160">
+	<changeSet author="bsutton (generated)" id="1377002421313-159">
 		<addForeignKeyConstraint baseColumnNames="assistentLeaderRequirements_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTYPE_QUALIFICATIONTYPE"
 			constraintName="SCTNTYPQUALIFICATIONTYPEssstntLeaderRequirementsID"
@@ -1602,7 +1582,7 @@
 			onUpdate="NO ACTION" referencedColumnNames="ID"
 			referencedTableCatalogName="scoutmaster" referencedTableName="QUALIFICATIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-161">
+	<changeSet author="bsutton (generated)" id="1377002421313-160">
 		<addForeignKeyConstraint baseColumnNames="sections_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUTTYPE_SECTION"
 			constraintName="FK_SECTIONTRYOUTTYPE_SECTION_sections_ID" deferrable="false"
@@ -1610,7 +1590,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-162">
+	<changeSet author="bsutton (generated)" id="1377002421313-161">
 		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION"
 			constraintName="FK_SECTION_TYPE_ID" deferrable="false"
@@ -1618,7 +1598,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-163">
+	<changeSet author="bsutton (generated)" id="1377002421313-162">
 		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_NOTE"
 			constraintName="FK_ORGANISATION_NOTE_Organisation_ID" deferrable="false"
@@ -1626,7 +1606,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-164">
+	<changeSet author="bsutton (generated)" id="1377002421313-163">
 		<addForeignKeyConstraint baseColumnNames="youthMembers_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTION_CONTACT"
 			constraintName="FK_SECTION_CONTACT_youthMembers_ID" deferrable="false"
@@ -1634,7 +1614,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-165">
+	<changeSet author="bsutton (generated)" id="1377002421313-164">
 		<addForeignKeyConstraint baseColumnNames="ADDRESS_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_ADDRESS_ID" deferrable="false"
@@ -1642,7 +1622,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ADDRESS" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-166">
+	<changeSet author="bsutton (generated)" id="1377002421313-165">
 		<addForeignKeyConstraint baseColumnNames="notes_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_NOTE"
 			constraintName="FK_CONTACT_NOTE_notes_ID" deferrable="false"
@@ -1650,7 +1630,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="NOTE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-167">
+	<changeSet author="bsutton (generated)" id="1377002421313-166">
 		<addForeignKeyConstraint baseColumnNames="activites_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_ACTIVITY"
 			constraintName="FK_HOUSEHOLD_ACTIVITY_activites_ID" deferrable="false"
@@ -1658,7 +1638,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ACTIVITY" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-168">
+	<changeSet author="bsutton (generated)" id="1377002421313-167">
 		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_SECTION_ID" deferrable="false"
@@ -1666,7 +1646,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-169">
+	<changeSet author="bsutton (generated)" id="1377002421313-168">
 		<addForeignKeyConstraint baseColumnNames="Contact_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_ACTIVITY"
 			constraintName="FK_CONTACT_ACTIVITY_Contact_ID" deferrable="false"
@@ -1674,7 +1654,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-170">
+	<changeSet author="bsutton (generated)" id="1377002421313-169">
 		<addForeignKeyConstraint baseColumnNames="School_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SCHOOL_ADDRESS"
 			constraintName="FK_SCHOOL_ADDRESS_School_ID" deferrable="false"
@@ -1682,7 +1662,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SCHOOL" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-171">
+	<changeSet author="bsutton (generated)" id="1377002421313-170">
 		<addForeignKeyConstraint baseColumnNames="invoices_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="PAYMENT_INVOICE"
 			constraintName="FK_PAYMENT_INVOICE_invoices_ID" deferrable="false"
@@ -1690,7 +1670,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="INVOICE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-172">
+	<changeSet author="bsutton (generated)" id="1377002421313-171">
 		<addForeignKeyConstraint baseColumnNames="payments_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICE_PAYMENT"
 			constraintName="FK_INVOICE_PAYMENT_payments_ID" deferrable="false"
@@ -1698,7 +1678,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="PAYMENT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-173">
+	<changeSet author="bsutton (generated)" id="1377002421313-172">
 		<addForeignKeyConstraint baseColumnNames="BILLTO_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="INVOICE"
 			constraintName="FK_INVOICE_BILLTO_ID" deferrable="false"
@@ -1706,7 +1686,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-174">
+	<changeSet author="bsutton (generated)" id="1377002421313-173">
 		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ORGANISATION_TAG"
 			constraintName="FK_ORGANISATION_TAG_Organisation_ID" deferrable="false"
@@ -1714,7 +1694,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-175">
+	<changeSet author="bsutton (generated)" id="1377002421313-174">
 		<addForeignKeyConstraint baseColumnNames="Household_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="HOUSEHOLD_TAG"
 			constraintName="FK_HOUSEHOLD_TAG_Household_ID" deferrable="false"
@@ -1722,7 +1702,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="HOUSEHOLD" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-176">
+	<changeSet author="bsutton (generated)" id="1377002421313-175">
 		<addForeignKeyConstraint baseColumnNames="Contact_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_NOTE"
 			constraintName="FK_CONTACT_NOTE_Contact_ID" deferrable="false"
@@ -1730,7 +1710,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="CONTACT" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-177">
+	<changeSet author="bsutton (generated)" id="1377002421313-176">
 		<addForeignKeyConstraint baseColumnNames="SUPPLIER_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="PRODUCT"
 			constraintName="FK_PRODUCT_SUPPLIER_ID" deferrable="false"
@@ -1738,7 +1718,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-178">
+	<changeSet author="bsutton (generated)" id="1377002421313-177">
 		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="SECTIONTRYOUT"
 			constraintName="FK_SECTIONTRYOUT_TYPE_ID" deferrable="false"
@@ -1746,7 +1726,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTRYOUTTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-179">
+	<changeSet author="bsutton (generated)" id="1377002421313-178">
 		<addForeignKeyConstraint baseColumnNames="ORGANISATION_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="RELATIONSHIP"
 			constraintName="FK_RELATIONSHIP_ORGANISATION_ID" deferrable="false"
@@ -1754,7 +1734,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ORGANISATION" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-180">
+	<changeSet author="bsutton (generated)" id="1377002421313-179">
 		<addForeignKeyConstraint baseColumnNames="tags_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT_TAG"
 			constraintName="FK_CONTACT_TAG_tags_ID" deferrable="false"
@@ -1762,7 +1742,7 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="TAG" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-181">
+	<changeSet author="bsutton (generated)" id="1377002421313-180">
 		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="ACTIVITY"
 			constraintName="FK_ACTIVITY_TYPE_ID" deferrable="false"
@@ -1770,12 +1750,17 @@
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="ACTIVITYTYPE" />
 	</changeSet>
-	<changeSet author="bsutton (generated)" id="1376825552731-182">
+	<changeSet author="bsutton (generated)" id="1377002421313-181">
 		<addForeignKeyConstraint baseColumnNames="SECTIONELIGIBILITY_ID"
 			baseTableCatalogName="scoutmaster" baseTableName="CONTACT"
 			constraintName="FK_CONTACT_SECTIONELIGIBILITY_ID" deferrable="false"
 			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
 			referencedColumnNames="ID" referencedTableCatalogName="scoutmaster"
 			referencedTableName="SECTIONTYPE" />
+	</changeSet>
+	<changeSet author="bsutton (generated)" id="1377002421313-182">
+		<addUniqueConstraint catalogName="scoutmaster"
+			columnNames="NAME" constraintName="NAME" deferrable="false" disabled="false"
+			initiallyDeferred="false" tableName="TAG" />
 	</changeSet>
 </databaseChangeLog>

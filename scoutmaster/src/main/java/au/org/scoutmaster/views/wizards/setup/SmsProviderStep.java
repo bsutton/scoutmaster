@@ -1,52 +1,58 @@
-package au.org.scoutmaster.views;
+package au.org.scoutmaster.views.wizards.setup;
 
 import java.util.List;
 
-import au.org.scoutmaster.application.Menu;
+import org.vaadin.teemu.wizards.WizardStep;
+
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.SMSProvider;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
-import com.vaadin.ui.Alignment;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 
-@Menu(display = "ClickATellView")
-public class ClickATellView extends CustomComponent implements View, Button.ClickListener
+public class SmsProviderStep implements WizardStep, ClickListener
 {
 	private static final long serialVersionUID = 1L;
+	private TextField user;
+	private TextField apiId;
 
-	public static final String NAME = "ClickATellView";
+	private PasswordField password;
 
-	private final TextField user;
-	private final TextField apiId;
+	private Button saveButton;
 
-	private final PasswordField password;
-
-	private final Button saveButton;
-
-	public ClickATellView()
+	public SmsProviderStep(SetupWizardView setupWizardView)
 	{
-		setSizeFull();
-		
-		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+	}
+
+	@Override
+	public String getCaption()
+	{
+		return "SMS Provider";
+	}
+
+	@Override
+	public Component getContent()
+	{
+
+		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
 
 		if (provider.size() != 1)
 			throw new IllegalStateException("The ClickATell Provider is missing from the database.");
 
 		SMSProvider clickATellProvider = provider.get(0);
-
 
 		// Create the user input field
 		user = new TextField("Username:");
@@ -55,6 +61,7 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 		user.setDescription("SMS Provider Username");
 		user.setImmediate(true);
 		user.setValue(clickATellProvider.getUsername());
+		user.setNullRepresentation("");
 
 		// Create the password input field
 		password = new PasswordField("Password:");
@@ -63,6 +70,7 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 		password.setNullRepresentation("");
 		password.setDescription("SMS Provider Password");
 		password.setValue(clickATellProvider.getPassword());
+		
 
 		// Create the user input field
 		apiId = new TextField("Api Id:");
@@ -71,6 +79,7 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 		apiId.setDescription("SMS Providier API key");
 		apiId.setImmediate(true);
 		apiId.setValue(clickATellProvider.getApiId());
+		apiId.setNullRepresentation("");
 
 		// Create login button
 		saveButton = new Button("Save", this);
@@ -79,34 +88,45 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(user, password, apiId, saveButton);
-		fields.setCaption("Configure Click A Tell provider settings.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
-		fields.setSizeUndefined();
+		//fields.setSizeUndefined();
+		
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
-		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
-		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
-		setCompositionRoot(viewLayout);
+		VerticalLayout viewLayout = new VerticalLayout();
+	//	viewLayout.setSizeFull();
+		viewLayout.setMargin(true);
+		Label title = new Label("<H1>Configure Click A Tell provider settings.</H1>");
+		title.setContentMode(ContentMode.HTML);
+		viewLayout.addComponent(title);
+		viewLayout.addComponents(fields);
+		
+		//viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+
+		// focus the username field when user arrives to the login view
+		user.focus();
+
+		return viewLayout;
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public boolean onAdvance()
 	{
-		// focus the username field when user arrives to the login view
-		user.focus();
+		return true;
 	}
 
-	/**
-	 * Save button click so lets save the details.
-	 */
+	@Override
+	public boolean onBack()
+	{
+		return true;
+	}
+
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
 
-		SMSProviderDao daoSMSProvider = new SMSProviderDao();
+		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
 
 		if (provider.size() != 1)
@@ -119,7 +139,7 @@ public class ClickATellView extends CustomComponent implements View, Button.Clic
 		clickATellProvider.setApiId(apiId.getValue());
 		clickATellProvider.setActive(true);
 		clickATellProvider.setDefaultProvider(true);
-		
+
 		daoSMSProvider.persist(clickATellProvider);
 		Notification.show("Provider details have been saved.", Type.TRAY_NOTIFICATION);
 

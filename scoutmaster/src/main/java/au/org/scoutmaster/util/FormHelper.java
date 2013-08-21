@@ -19,6 +19,7 @@ import au.org.scoutmaster.views.Selected;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.addon.jpacontainer.fieldfactory.SingleSelectConverter;
 import com.vaadin.data.Container;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.IndexedContainer;
@@ -62,6 +63,8 @@ public class FormHelper implements Serializable
 		TextField field = new TextField(fieldLabel);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		field.setNullRepresentation("");
+		field.setNullSettingAllowed(false);
 		if (group != null)
 			group.bind(field, fieldName);
 		form.addComponent(field);
@@ -82,6 +85,7 @@ public class FormHelper implements Serializable
 		field.setRows(rows);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		field.setNullRepresentation("");
 		if (group != null)
 			group.bind(field, fieldName);
 		form.addComponent(field);
@@ -109,14 +113,14 @@ public class FormHelper implements Serializable
 		return field;
 	}
 
-	public Label bindLabelField(String fieldLabel, String fieldName)
+	public Label bindLabel(String fieldLabel)
 	{
-		Label field = bindLabelField(form, group, fieldLabel, fieldName);
+		Label field = bindLabel(form, group, fieldLabel);
 		this.fieldList.add(field);
 		return field;
 	}
 
-	static public Label bindLabelField(AbstractLayout form, FieldGroup group,  String fieldLabel, String fieldName)
+	static public Label bindLabel(AbstractLayout form, FieldGroup group,  String fieldLabel)
 	{
 		Label field = new Label();
 		field.setCaption(fieldLabel);
@@ -124,6 +128,14 @@ public class FormHelper implements Serializable
 		form.addComponent(field);
 		return field;
 	}
+	
+	static public Label bindLabel(AbstractLayout form, FieldGroup group,  Label field)
+	{
+		field.setWidth("100%");
+		form.addComponent(field);
+		return field;
+	}
+
 	
 	public ComboBox bindEnumField(String fieldLabel, String fieldName, Class<?> clazz)
 	{
@@ -159,6 +171,7 @@ public class FormHelper implements Serializable
 		CheckBox field = new CheckBox(fieldLabel);
 		field.setWidth("100%");
 		field.setImmediate(true);
+		
 		if (group != null)
 			group.bind(field, fieldName);
 		form.addComponent(field);

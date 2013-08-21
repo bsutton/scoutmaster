@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
@@ -70,7 +71,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 		for (Contact contact : recipients)
 		{
-			PhoneDao daoPhone = new PhoneDao();
+			PhoneDao daoPhone = new DaoFactory().getPhoneDao();
 
 			// Find if the contact has a mobile.
 			// Check the primary field first.

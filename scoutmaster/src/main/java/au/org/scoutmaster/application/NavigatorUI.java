@@ -2,18 +2,22 @@ package au.org.scoutmaster.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.views.ClickATellView;
+import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
 import au.org.scoutmaster.views.wizards.messaging.MessagingWizardView;
+import au.org.scoutmaster.views.wizards.setup.SetupWizardView;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
@@ -42,9 +46,9 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Title("Scoutmaster")
 // @PreserveOnRefresh
-//@Theme("scoutmaster")
+// @Theme("scoutmaster")
 @Push
-@Widgetset(value="au.org.scoutmaster.AppWidgetSet")
+@Widgetset(value = "au.org.scoutmaster.AppWidgetSet")
 public class NavigatorUI extends UI
 {
 	private static final long serialVersionUID = 1L;
@@ -66,20 +70,14 @@ public class NavigatorUI extends UI
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
-		//viewMap.add(new ViewMap(AppointmentView.NAME, AppointmentView.class));
+		// viewMap.add(new ViewMap(AppointmentView.NAME,
+		// AppointmentView.class));
 		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
 		viewMap.add(new ViewMap(MessagingWizardView.NAME, MessagingWizardView.class));
-		viewMap.add(new ViewMap(ClickATellView.NAME, ClickATellView.class));
-
-		// HACK:
-		// hack: create a default admin account - MUST BE REMOVED once we have
-		// db sorted.
-		// HACK:
-		if (User.findUser("bsutton@noojee.com.au") == null)
-			User.addUser("bsutton@noojee.com.au", "password");
+		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
@@ -119,6 +117,25 @@ public class NavigatorUI extends UI
 				boolean isLoginView = event.getNewView() instanceof LoginView;
 				boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
 
+				UserDao daoUser = new DaoFactory().getUserDao();
+				List<User> users = daoUser.findAll();
+
+				if (users.size() == 0)
+				{
+					// Deal with recursion. When we navigateTo the setupwizard it comes back through
+					// beforeViewChange so we have to check that aren't aready on our way to the
+					// setupview.
+					if (event.getNewView() instanceof SetupWizardView)
+						return true;
+					else
+					{
+						// Must be a first time login so lets go and run the
+						// setup wizard.
+						getNavigator().navigateTo(SetupWizardView.NAME);
+						return false;
+					}
+				}
+
 				if (!isLoggedIn && !isLoginView && !isForgottenPasswordView)
 				{
 					// Redirect to login view always if a user has not yet
@@ -155,7 +172,8 @@ public class NavigatorUI extends UI
 			@Override
 			public void afterViewChange(ViewChangeEvent event)
 			{
-				// For some reason the page title is set to null after each navigation transition.
+				// For some reason the page title is set to null after each
+				// navigation transition.
 				getPage().setTitle("Scoutmaster");
 			}
 		});
@@ -188,7 +206,6 @@ public class NavigatorUI extends UI
 				ConfirmDialog d = super.create(caption, message, okCaption, cancelCaption);
 				d.setStyleName("black");
 				d.setModal(true);
-
 
 				return d;
 			}

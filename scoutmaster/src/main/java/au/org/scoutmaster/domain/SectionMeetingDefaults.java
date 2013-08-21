@@ -5,6 +5,8 @@ import java.sql.Time;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Used to hold the set of defaults for a given section.
  * 
@@ -40,6 +42,7 @@ public class SectionMeetingDefaults extends BaseEntity
 	/**
 	 * A short default description used when summarizing the meeting.
 	 */
+	@NotBlank
 	String meetingSubject;
 	
 	/**

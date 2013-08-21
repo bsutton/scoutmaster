@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 /*
  * Used to define different types of qualifications required by leaders, parents and scouts.
  */
@@ -14,11 +16,13 @@ public class QualificationType extends BaseEntity
 	/**
 	 * A short descriptive name for the qualification Type.
 	 */
+	@NotBlank
 	String name;
 	
 	/**
 	 * A detailed description of the qualification potentially containing HTML formating.
 	 */
+	@NotBlank
 	String description;
 	
 	/**

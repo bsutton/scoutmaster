@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain.access;
 
 import javax.persistence.Entity;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import au.org.scoutmaster.domain.BaseEntity;
 
 /**
@@ -20,8 +22,10 @@ public class Feature extends BaseEntity
 	 * An informal hierarchical descriptor of the feature
 	 * e.g.  Contact.list, Contact.edit, Contact.delete
 	 */
+	@NotBlank
 	String descriptor;
 	
+	@NotBlank
 	String description;
 
 }

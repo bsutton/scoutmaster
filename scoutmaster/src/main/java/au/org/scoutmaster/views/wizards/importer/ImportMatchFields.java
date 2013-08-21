@@ -16,6 +16,7 @@ import java.util.List;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
@@ -160,7 +161,7 @@ public class ImportMatchFields implements WizardStep
 		{
 			// the name has changed so we need to save a new one
 
-			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao();
+			ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 			ImportUserMapping userMapping = new ImportUserMapping(fieldMapping.getValue());
 
 			for (ComboBox mapping : mappings)
@@ -181,7 +182,7 @@ public class ImportMatchFields implements WizardStep
 			// ImportUserMapping userMapping = new
 			// ImportUserMapping(fieldMapping.getValue());
 
-			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao();
+			ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 
 			List<ImportUserMapping> results = daoImportUserMapping.findAll();
 			

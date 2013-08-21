@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.filter.Transaction;
@@ -43,7 +44,7 @@ public class ImportMatchFieldsTest
 
 		try (Transaction t = new Transaction(em))
 		{
-			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
+			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
 
 			// Create the mapping
 			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
@@ -65,7 +66,7 @@ public class ImportMatchFieldsTest
 
 		try (Transaction t = new Transaction(em))
 		{
-			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
+			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
 
 			// Now replace the children.
 			List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
@@ -102,7 +103,7 @@ public class ImportMatchFieldsTest
 		{
 
 			// Create the mapping
-			ImportUserMappingDao daoImportUserMapping = new ImportUserMappingDao(em);
+			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
 			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
 
 			Hashtable<String, String> mappings = new Hashtable<>();

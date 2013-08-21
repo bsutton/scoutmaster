@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.FormHelper;
@@ -47,7 +48,7 @@ public class SelectRecipientsStep implements WizardStep
 		layout.setMargin(true);
 		layout.setSizeFull();
 
-		ContactDao daoContact = new ContactDao();
+		ContactDao daoContact = new DaoFactory().getContactDao();
 		
 		JPAContainer<Contact> contactContainer = daoContact.makeJPAContainer();
 

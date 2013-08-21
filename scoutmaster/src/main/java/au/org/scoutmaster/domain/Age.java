@@ -2,6 +2,7 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Min;
 
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
@@ -17,10 +18,15 @@ import org.joda.time.Interval;
 public class Age
 {
 	@Basic
+	@Min(value=0)
 	protected Integer years;
+	
 	@Basic
+	@Min(value=0)
 	protected Integer months;
+	
 	@Basic
+	@Min(value=0)
 	protected Integer days;
 
 	public Age()

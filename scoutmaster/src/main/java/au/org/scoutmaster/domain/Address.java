@@ -9,6 +9,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Query;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
 @Entity
@@ -23,9 +25,17 @@ public class Address extends BaseEntity
 	public static final String FIND_MATCHING = "Address.findMatching";
 	
 	private static final long serialVersionUID = 1L;
+	
+	@NotBlank
 	private String street= "";
+	
+	@NotBlank
 	private String city = "";
+	
+	@NotBlank
 	private String postcode= "";
+	
+	@NotBlank
 	private String state = "";
 
 	public void setStreet(String street)

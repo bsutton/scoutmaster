@@ -6,8 +6,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * An organisation (company, government body) that the scout group interacts
@@ -22,9 +26,18 @@ import javax.persistence.OneToOne;
  * 
  */
 @Entity
+
+@NamedQueries(
+{
+	@NamedQuery(name = Organisation.FIND_ALL, query = "SELECT organisation FROM Organisation organisation"),
+	@NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"),
+})
 public class Organisation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
+
+	public static final String FIND_ALL = "findAll";
+	public static final String FIND_OUR_SCOUT_GROUP = "findOurScoutGroup";
 
 	/**
 	 * If true then this organisation represents our local scout group. This
@@ -36,7 +49,46 @@ public class Organisation extends BaseEntity
 	/**
 	 * The name of the organisation
 	 */
+	@NotBlank
 	private String name;
+
+	/**
+	 * A description of the organisation and how the group interacts with it.
+	 */
+	private String description;
+
+	/**
+	 * The list of contacts at the organsiation that the group associates with.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Contact> contacts = new ArrayList<>();
+
+	/**
+	 * The location of the organisation.
+	 */
+	@OneToOne
+	private Address location;
+
+	@OneToOne
+	private Phone primaryPhone;
+	
+
+	/**
+	 * The list of tags used to describe the organisation.
+	 */
+	@ManyToMany
+	private List<Tag> tags = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Note> notes = new ArrayList<>();
+
+	/**
+	 * List of interactions with this contact.
+	 */
+	@OneToMany
+	private List<Activity> activites = new ArrayList<>();
+
+
 
 	public Boolean isOurScoutGroup()
 	{
@@ -77,41 +129,6 @@ public class Organisation extends BaseEntity
 	{
 		return location;
 	}
-
-	/**
-	 * A description of the organisation and how the group interacts with it.
-	 */
-	private String description;
-
-	/**
-	 * The list of contacts at the organsiation that the group associates with.
-	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Contact> contacts = new ArrayList<>();
-
-	/**
-	 * The location of the organisation.
-	 */
-	@OneToOne
-	private Address location;
-
-	@OneToOne
-	private Phone primaryPhone;
-
-	/**
-	 * The list of tags used to describe the organisation.
-	 */
-	@ManyToMany
-	private List<Tag> tags = new ArrayList<>();
-
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Note> notes = new ArrayList<>();
-
-	/**
-	 * List of interactions with this contact.
-	 */
-	@OneToMany
-	private List<Activity> activites = new ArrayList<>();
 
 	public void setName(String name)
 	{

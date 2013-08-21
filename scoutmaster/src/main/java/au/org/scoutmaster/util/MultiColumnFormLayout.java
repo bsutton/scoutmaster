@@ -77,7 +77,7 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		if (component.getCaption() != null)
 		{
 			Label label = new Label(component.getCaption());
-			label.setSizeUndefined();
+			//label.setSizeUndefined();
 			// maxLabelWidth = Math.max(lmaxLabelWidth, label.getWidth());
 			// label.setWidth("100%");
 			component.setCaption(null);
@@ -142,12 +142,20 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		return field;
 	}
 
-	public Label bindLabelField(String fieldLabel, String fieldName)
+	public Label bindLabel(String fieldLabel)
 	{
-		Label field = FormHelper.bindLabelField(this, fieldGroup, fieldLabel, fieldName);
+		Label field = FormHelper.bindLabel(this, fieldGroup, fieldLabel);
 		this.fieldList.add(field);
 		return field;
 	}
+	
+	public Label bindLabel(Label label)
+	{
+		Label field = FormHelper.bindLabel(this, fieldGroup, label);
+		this.fieldList.add(field);
+		return field;
+	}
+
 
 	public ComboBox bindEnumField(String fieldLabel, String fieldName, Class<?> clazz)
 	{
@@ -206,5 +214,6 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 
 		return fieldGroup;
 	}
+
 
 }

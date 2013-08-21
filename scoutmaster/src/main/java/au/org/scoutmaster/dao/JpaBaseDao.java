@@ -51,17 +51,35 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 		return entityManager.find(entityClass, id);
 	}
 	
-	public E findByName(String queryName, String fieldName, String value)
+	protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue)
 	{
 		E entity = null;
 		Query query = entityManager.createNamedQuery(queryName);
-		query.setParameter(fieldName, value);
+		query.setParameter(paramName, paramValue);
 		@SuppressWarnings("unchecked")
 		List<E> entities = query.getResultList();
 		if (entities.size() > 0)
 			entity = entities.get(0);
 		return entity;
 	}
+
+	protected List<E> findListBySingleParameter(String queryName, String paramName, String paramValue)
+	{
+		Query query = entityManager.createNamedQuery(queryName);
+		query.setParameter(paramName, paramValue);
+		@SuppressWarnings("unchecked")
+		List<E> entities = query.getResultList();
+		return entities;
+	}
+
+	protected List<E> findAll(String queryName)
+	{
+		Query query = entityManager.createNamedQuery(queryName);
+		@SuppressWarnings("unchecked")
+		List<E> list = query.getResultList();
+		return list;
+	}
+
 
 	
 	public void flush()

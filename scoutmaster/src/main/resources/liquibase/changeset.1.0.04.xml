@@ -6,8 +6,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- Add standard Section Types -->
-	<changeSet author="bsutton" id="1.0.5">
-			<insert tableName="sectiontype">
+	<changeSet author="bsutton" id="1.0.04">
+			<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Too Young" />
@@ -20,7 +20,7 @@
 			<column name="endingAgeYears" value="5" />
 		</insert>
 	
-		<insert tableName="sectiontype">
+		<insert tableName="SECTIONTYPE">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Leaders" />

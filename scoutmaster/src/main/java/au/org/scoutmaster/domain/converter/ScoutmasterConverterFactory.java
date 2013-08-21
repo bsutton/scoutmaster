@@ -1,9 +1,8 @@
-package au.org.scoutmaster.application;
+package au.org.scoutmaster.domain.converter;
 
+import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.converter.SectionTypeConverter;
-import au.org.scoutmaster.domain.converter.TagConverter;
 
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
@@ -22,6 +21,8 @@ public class ScoutmasterConverterFactory extends DefaultConverterFactory
 			return (Converter<PRESENTATION, MODEL>) new SectionTypeConverter();
 		if (Tag.class == modelType)
 			return (Converter<PRESENTATION, MODEL>) new TagConverter();
+		if (Phone.class == modelType)
+			return (Converter<PRESENTATION, MODEL>) new PhoneConverter();
 
 		// Default to the supertype
 		return super.createConverter(presentationType, modelType);

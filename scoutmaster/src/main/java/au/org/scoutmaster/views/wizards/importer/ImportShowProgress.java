@@ -12,10 +12,10 @@ import au.org.scoutmaster.util.ProgressTaskListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Notification.Type;
 
 
 public class ImportShowProgress implements WizardStep, ProgressTaskListener<ImportItemStatus>

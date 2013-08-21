@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
@@ -34,10 +35,12 @@ public class Tag extends BaseEntity
 
 
 	@Column(unique = true, length = 30)
+	@NotBlank
 	String name;
 
 
 	@Column(length = 250)
+	@NotBlank
 	String description;
 	
 	/**

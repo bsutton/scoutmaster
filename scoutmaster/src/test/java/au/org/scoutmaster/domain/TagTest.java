@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
@@ -43,13 +44,13 @@ public class TagTest
 		String tokenName = "test";
 		Contact contact = new Contact();
 
-		TagDao daoTag = new TagDao(em);
+		TagDao daoTag = new DaoFactory(em).getTagDao();
 		Tag tag = daoTag.findByName(tokenName);
 		if (tag != null)
 		{
 
 			// Now check if the Tag is already associated with the contact
-			ContactDao daoContact = new ContactDao();
+			ContactDao daoContact = new DaoFactory().getContactDao();
 			if (daoContact.hasTag((Contact) contact, tag))
 				Notification.show(tag.getId() + " is already associated with this contact");
 			else

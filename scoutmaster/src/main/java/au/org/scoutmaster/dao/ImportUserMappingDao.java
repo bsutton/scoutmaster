@@ -3,7 +3,6 @@ package au.org.scoutmaster.dao;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
@@ -26,28 +25,14 @@ public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> im
 	}
 
 	@Override
-	public ImportUserMapping findById(Long id)
-	{
-		ImportUserMapping importUserMapping = entityManager.find(this.entityClass, id);
-		return importUserMapping;
-	}
-
-	@Override
 	public List<ImportUserMapping> findAll()
 	{
-		Query query = entityManager.createNamedQuery(ImportUserMapping.FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<ImportUserMapping> list = query.getResultList();
-		return list;
+		return super.findAll(ImportUserMapping.FIND_ALL);
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	public List<ImportUserMapping> findByName(String name)
 	{
-		Query query = entityManager.createNamedQuery(ImportUserMapping.FIND_BY_NAME);
-		query.setParameter("name", name);
-		List<ImportUserMapping> results = query.getResultList();
-		return results;
+		return super.findListBySingleParameter(ImportUserMapping.FIND_BY_NAME, "name", name);
 	}
 	
 	public void addColumnFieldMapping(ImportUserMapping importMapping, ImportColumnFieldMapping columnMapping)
