@@ -2,14 +2,24 @@ package au.org.scoutmaster.views.wizards.setup;
 
 import java.util.List;
 
+import org.marre.sms.SmsException;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.editors.InputDialog;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
+import au.org.scoutmaster.util.MultiColumnFormLayout;
+import au.org.scoutmaster.util.ProgressListener;
+import au.org.scoutmaster.util.ValidatingFieldGroup;
+import au.org.scoutmaster.views.wizards.messaging.Message;
+import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -20,20 +30,15 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.UI;
 
-public class SmsProviderStep implements WizardStep, ClickListener
+public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
 {
 	private static final long serialVersionUID = 1L;
-	private TextField user;
-	private TextField apiId;
-
-	private PasswordField password;
-
-	private Button saveButton;
 
 	public SmsProviderStep(SetupWizardView setupWizardView)
 	{
+		super(setupWizardView, new DaoFactory().getSMSProviderDao(), SMSProvider.class);
 	}
 
 	@Override
@@ -43,106 +48,148 @@ public class SmsProviderStep implements WizardStep, ClickListener
 	}
 
 	@Override
-	public Component getContent()
+	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
+		MultiColumnFormLayout<User> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setWidth("100%");
 
-		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
-
-		if (provider.size() != 1)
-			throw new IllegalStateException("The ClickATell Provider is missing from the database.");
-
-		SMSProvider clickATellProvider = provider.get(0);
+		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");
+		label.setContentMode(ContentMode.HTML);
+		formLayout.bindLabel(label);
 
 		// Create the user input field
-		user = new TextField("Username:");
-		user.setWidth("300px");
-		user.setRequired(true);
+		TextField user = formLayout.bindTextField("Username:", "username");
 		user.setDescription("SMS Provider Username");
-		user.setImmediate(true);
-		user.setValue(clickATellProvider.getUsername());
-		user.setNullRepresentation("");
+		//user.addValidator(new StringLengthValidator("Please enter a username.", 1, 32, false));
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
-		password.setRequired(true);
-		password.setNullRepresentation("");
+		PasswordField password = formLayout.bindPasswordField("Password:", "password");
 		password.setDescription("SMS Provider Password");
-		password.setValue(clickATellProvider.getPassword());
-		
+		//password.addValidator(new StringLengthValidator("Please enter a password.", 1, 32, false));
 
 		// Create the user input field
-		apiId = new TextField("Api Id:");
-		apiId.setWidth("300px");
-		apiId.setRequired(true);
-		apiId.setDescription("SMS Providier API key");
-		apiId.setImmediate(true);
-		apiId.setValue(clickATellProvider.getApiId());
-		apiId.setNullRepresentation("");
+		TextField apiId = formLayout.bindTextField("Api Id:", "ApiId");
+		apiId.setDescription("SMS Provider API key");
+		//apiId.addValidator(new StringLengthValidator("Please enter an API Key.", 1, 32, false));
 
-		// Create login button
-		saveButton = new Button("Save", this);
-		saveButton.setClickShortcut(KeyCode.ENTER);
-		saveButton.addStyleName("default");
-
-		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, password, apiId, saveButton);
-		fields.setSpacing(true);
-		fields.setMargin(new MarginInfo(true, true, true, false));
-		//fields.setSizeUndefined();
-		
-
-		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout();
-	//	viewLayout.setSizeFull();
-		viewLayout.setMargin(true);
-		Label title = new Label("<H1>Configure Click A Tell provider settings.</H1>");
-		title.setContentMode(ContentMode.HTML);
-		viewLayout.addComponent(title);
-		viewLayout.addComponents(fields);
-		
-		//viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+		Button test = new Button("Test");
+		formLayout.addComponent(test);
+		test.addClickListener(new ClickAdaptorLogged(this));
 
 		// focus the username field when user arrives to the login view
 		user.focus();
 
-		return viewLayout;
+		return formLayout;
 	}
 
 	@Override
-	public boolean onAdvance()
+	protected void initEntity(SMSProvider entity)
 	{
-		return true;
+		entity.setProviderName("ClickATell");
+		entity.setActive(true);
+		entity.setDefaultProvider(true);
 	}
 
 	@Override
-	public boolean onBack()
+	protected SMSProvider findEntity()
 	{
-		return true;
+		SMSProvider provider = null;
+
+		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+		List<SMSProvider> providers = daoSMSProvider.findByName("ClickATell");
+		if (providers.size() > 1)
+			throw new IllegalArgumentException("Found more passwordthan one ClickATell SMSProvider");
+
+		if (providers.size() == 1)
+			provider = providers.get(0);
+
+		return provider;
 	}
 
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
+		// test that the SMS Provider configuration works.
 
-		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		List<SMSProvider> provider = daoSMSProvider.findByName("ClickATell");
+		// First check that the entered details are valid.
+		if (super.validate())
+		{
+			final SMSProvider provider = super.getEntity();
+			if (provider == null)
+				Notification.show(
+						"Can't find the SMS Provider, this usually means the install did not complete correctly.",
+						Type.ERROR_MESSAGE);
+			else
+			{
 
-		if (provider.size() != 1)
-			throw new IllegalStateException("The ClickATell Provider is missing from the database.");
+				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.", "Enter your Mobile No. to recieve a test SMS.",
+						new InputDialog.Recipient()
+						{
+							public void gotInput(String input)
+							{
+								Phone phone = new Phone(input);
+								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", phone);
 
-		SMSProvider clickATellProvider = provider.get(0);
+								Contact contact = new Contact();
+								contact.setFirstname("Test");
+								contact.setLastname("SMS");
 
-		clickATellProvider.setUsername(user.getValue());
-		clickATellProvider.setPassword(password.getValue());
-		clickATellProvider.setApiId(apiId.getValue());
-		clickATellProvider.setActive(true);
-		clickATellProvider.setDefaultProvider(true);
+								SMSTransmission transmission = new SMSTransmission(contact, message, phone);
+								SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 
-		daoSMSProvider.persist(clickATellProvider);
-		Notification.show("Provider details have been saved.", Type.TRAY_NOTIFICATION);
+								try
+								{
+									daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
+								}
+								catch (SmsException e)
+								{
+									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+								}
+								catch (Throwable e)
+								{
+									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+								}
+							}
 
+							@Override
+							public void cancelled()
+							{
+								Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
+								
+							}
+						}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));
+
+			}
+		}
+
+	}
+
+	@Override
+	public void progress(int count, int max, SMSTransmission status)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void complete()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void itemError(Exception e, SMSTransmission status)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exception(Exception e)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

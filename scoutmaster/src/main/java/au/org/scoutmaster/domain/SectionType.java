@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -23,7 +24,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="SectionType")
+@Table(name="SectionType")
 @NamedQueries(
 
 { @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype  order by sectiontype.startingAge.years,  sectiontype.startingAge.months, sectiontype.startingAge.days"),
@@ -41,6 +43,7 @@ public class SectionType extends BaseEntity
 	 * The name of the section type. e.g Cubs.
 	 */
 	@NotBlank
+	@Column(unique=true)
 	private String name;
 
 	/**

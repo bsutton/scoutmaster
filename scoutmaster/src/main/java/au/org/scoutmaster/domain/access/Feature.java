@@ -1,6 +1,8 @@
 package au.org.scoutmaster.domain.access;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -14,6 +16,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  *
  */
 @Entity
+@Table(name="Feature")
 public class Feature extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -23,6 +26,7 @@ public class Feature extends BaseEntity
 	 * e.g.  Contact.list, Contact.edit, Contact.delete
 	 */
 	@NotBlank
+	@Column(unique=true)
 	String descriptor;
 	
 	@NotBlank

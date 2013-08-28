@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Used to define the set of qualifications the associated leader has.
@@ -11,7 +12,8 @@ import javax.persistence.ManyToOne;
  * @author bsutton
  *
  */
-@Entity
+@Entity(name="Qualification")
+@Table(name="Qualification")
 public class Qualification extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

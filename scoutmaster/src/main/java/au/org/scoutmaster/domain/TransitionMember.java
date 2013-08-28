@@ -5,6 +5,7 @@ import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * A youth members that are currently transitioning from one section to another
@@ -13,7 +14,8 @@ import javax.persistence.OneToOne;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="TransitionMember")
+@Table(name="Activity")
 public class TransitionMember extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

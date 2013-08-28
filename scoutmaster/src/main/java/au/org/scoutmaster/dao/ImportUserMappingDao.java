@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 
 public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> implements Dao<ImportUserMapping, Long>
 {
@@ -45,6 +47,11 @@ public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> im
 	{
 		importMapping.getColumnFieldMappings().clear();
 
+	}
+	@Override
+	public JPAContainer<ImportUserMapping> makeJPAContainer()
+	{
+		return super.makeJPAContainer(ImportUserMapping.class);
 	}
 
 

@@ -3,6 +3,7 @@ package au.org.scoutmaster.views;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
 import au.org.scoutmaster.validator.UsernameValidator;
 
 import com.vaadin.data.validator.AbstractValidator;
@@ -78,13 +79,13 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		HorizontalLayout buttons = new HorizontalLayout();
 
 		// Create login button
-		loginButton = new Button("Login", this);
+		loginButton = new Button("Login", new ClickAdaptorLogged(this));
 		loginButton.setClickShortcut(KeyCode.ENTER);
 		loginButton.addStyleName("default");
 		buttons.addComponent(loginButton);
 		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
 
-		forgottenButton = new Button("Forgotten Password", this);
+		forgottenButton = new Button("Forgotten Password", new ClickAdaptorLogged(this));
 		buttons.addComponent(forgottenButton);
 		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
 		fields.addComponent(buttons);
@@ -174,13 +175,14 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				{
 
 					// Wrong password clear the password field and refocuses it
-					this.password.setValue(null);
-					this.password.focus();
+					this.user.focus();
+					Notification.show("Invalid username or password!", Type.TRAY_NOTIFICATION);
 				}
 			}
 			else
 			{
 				// user.setComponentError(new UserError("I dont like you"));
+				this.user.focus();
 				Notification.show("Invalid username or password", Type.TRAY_NOTIFICATION);
 			}
 		}

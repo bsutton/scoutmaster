@@ -6,6 +6,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import au.org.scoutmaster.domain.accounting.MoneyWithTax;
 
@@ -14,7 +15,8 @@ import au.org.scoutmaster.domain.accounting.MoneyWithTax;
  * A youth member who are currently trying out to see if they would
  * like to join a Section.
  */
-@Entity
+@Entity(name="SectionTryout")
+@Table(name="SectionTryout")
 public class SectionTryout extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 
 import au.org.scoutmaster.domain.SectionType;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao<SectionType, Long>
 {
 
@@ -60,5 +62,11 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		DateTime endingAge = sectionType.getEndingAge().getBirthDate();
 		return (birthDate.equals(startingAge) || birthDate.isBefore(startingAge)) 
 				&& (birthDate.isAfter(endingAge) || birthDate.equals(endingAge));
+	}
+
+	@Override
+	public JPAContainer<SectionType> makeJPAContainer()
+	{
+		return super.makeJPAContainer(SectionType.class);
 	}
 }

@@ -8,6 +8,9 @@ import javax.persistence.Query;
 
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+
 public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 {
 	protected Class<E> entityClass;
@@ -17,7 +20,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	@SuppressWarnings("unchecked")
 	public JpaBaseDao()
 	{
-		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager(); 
+		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager();
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
 	}
@@ -25,7 +28,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	@SuppressWarnings("unchecked")
 	public JpaBaseDao(EntityManager em)
 	{
-		this.entityManager = em; 
+		this.entityManager = em;
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
 	}
@@ -40,7 +43,6 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 		return entityManager.merge(entity);
 	}
 
-
 	public void remove(E entity)
 	{
 		entityManager.remove(entity);
@@ -50,7 +52,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
-	
+
 	protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue)
 	{
 		E entity = null;
@@ -80,12 +82,20 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 		return list;
 	}
 
-
-	
 	public void flush()
 	{
 		this.entityManager.flush();
-		
+
 	}
+
+	public JPAContainer<E> makeJPAContainer(Class<E> clazz)
+	{
+		JPAContainer<E> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
+
+		return container;
+	}
+	
+	abstract public JPAContainer<E> makeJPAContainer();
+
 
 }

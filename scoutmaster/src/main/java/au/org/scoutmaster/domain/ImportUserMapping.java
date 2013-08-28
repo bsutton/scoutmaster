@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * Used to save the set of 'csv field' to 'Entity field' mappings that the user has
@@ -17,7 +19,8 @@ import javax.persistence.OneToMany;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="ImportUserMapping")
+@Table(name="ImportUserMapping")
 @NamedQueries(
 {
 		@NamedQuery(name = ImportUserMapping.FIND_ALL, query = "SELECT import FROM ImportUserMapping import"),
@@ -30,6 +33,7 @@ public class ImportUserMapping extends BaseEntity
 	public static final String FIND_BY_NAME = "ImportUserMapping.findByName";
 
 	// Name of this save import mapping
+	@Column(unique=true)
 	private String mappingName;
 
 	@OneToMany(mappedBy = "userMapping", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

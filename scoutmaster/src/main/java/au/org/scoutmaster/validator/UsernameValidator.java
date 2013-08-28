@@ -31,7 +31,7 @@ public final class UsernameValidator implements Validator
 		// printable characters only.
 		if (!value.matches("[a-zA-Z0-9]*"))
 		{
-			throw new InvalidValueException("The username only contain alphanumeric charaters.");
+			throw new InvalidValueException("The username may only contain alphanumeric charaters.");
 		}
 	}
 }

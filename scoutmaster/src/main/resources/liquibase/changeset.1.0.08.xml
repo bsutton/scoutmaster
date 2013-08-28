@@ -7,7 +7,7 @@
 
 	<!-- Add standard Activity Types -->
 	<changeSet author="bsutton" id="1.0.08">
-		<createTable catalogName="scoutmaster" tableName="EMAILSERVERSETTINGS">
+		<createTable catalogName="scoutmaster" tableName="EmailServerSettings">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
 			</column>

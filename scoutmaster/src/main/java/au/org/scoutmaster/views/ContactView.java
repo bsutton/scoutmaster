@@ -17,6 +17,7 @@ import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.fields.ClickListenerLogged;
 import au.org.scoutmaster.fields.GoogleField;
 import au.org.scoutmaster.util.FormHelper;
 import au.org.scoutmaster.util.MultiColumnFormLayout;
@@ -38,7 +39,6 @@ import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -141,6 +141,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 	private CheckBox primaryPhone2;
 	private CheckBox primaryPhone3;
 	private Tab youthTab;
+	@SuppressWarnings("unused")
 	private MultiColumnFormLayout<Contact> googleForm;
 
 	@Override
@@ -235,11 +236,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 	private void initButtons()
 	{
-		newButton.addClickListener(new ClickListener()
+		newButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				try
 				{
@@ -265,11 +266,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 
 		});
 
-		deleteButton.addClickListener(new ClickListener()
+		deleteButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				Object contactId = contactTable.getValue();
 				if (contactId != null)
@@ -297,11 +298,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			}
 		});
 
-		cancelButton.addClickListener(new ClickListener()
+		cancelButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				fieldGroup.discard();
 				if (inNew)
@@ -315,11 +316,11 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 			}
 		});
 
-		saveContactButton.addClickListener(new ClickListener()
+		saveContactButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				try
 				{
@@ -382,7 +383,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		medicalTab();
 
 		backgroundTab();
-		
+
 		googleTab();
 
 		tabs.setSizeFull();
@@ -420,7 +421,7 @@ public class ContactView extends VerticalLayout implements View, RowChangeListen
 		GoogleField googleField = new GoogleField();
 
 		tabs.addTab(googleField, "Map");
-			
+
 	}
 
 	private void backgroundTab()

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -17,7 +19,8 @@ import org.joda.money.Money;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="SectionTryoutType")
+@Table(name="SectionTryoutType")
 public class SectionTryoutType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -32,6 +35,7 @@ public class SectionTryoutType extends BaseEntity
 	 * The name used to identify this type of tryout. e.g. Three for free
 	 */
 	@NotBlank
+	@Column(unique=true)
 	String name;
 
 	/**

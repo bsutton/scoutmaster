@@ -2,6 +2,7 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Defines a relationship between two contacts or a contact
@@ -10,7 +11,8 @@ import javax.persistence.ManyToOne;
  * @author bsutton
  *
  */
-@Entity
+@Entity(name="Relationship")
+@Table(name="Relationship")
 public class Relationship extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import org.joda.time.DateTime;
 
@@ -21,19 +22,20 @@ import au.org.scoutmaster.domain.access.User;
  * 
  */
 
-@Entity
+@Entity(name="ForgottenPasswordReset")
+@Table(name="ForgottenPasswordReset")
 @NamedQueries(
 // We order the set just incase we get two identical random strings (but almost
 // impossible)
 {
-		@NamedQuery(name = ForgottenPasswordReset.FIND_ALL, query = "SELECT forgotten FROM ForgottenPasswordReset"),
-		@NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where resetid = :resetid order by created desc"), })
+		@NamedQuery(name = ForgottenPasswordReset.FIND_ALL, query = "SELECT Forgottenpasswordreset FROM ForgottenPasswordReset Forgottenpasswordreset"),
+		@NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
 public class ForgottenPasswordReset extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_ALL = "findAll";
-	public static final String FIND_BY_RESET_ID = "findByResetId";
+	public static final String FIND_ALL = "ForgottenPasswordReset.findAll";
+	public static final String FIND_BY_RESET_ID = "ForgottenPasswordReset.findByResetId";
 
 	/**
 	 * The date the reset record expires and the user can no longer reset their
@@ -71,7 +73,7 @@ public class ForgottenPasswordReset extends BaseEntity
 
 	public void setExpires(DateTime expires)
 	{
-		this.expires = (Date) expires.toDate();
+		this.expires = new Date(expires.toDate().getTime());
 	}
 
 	public DateTime getExpires()

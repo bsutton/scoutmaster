@@ -8,10 +8,9 @@
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.06">
 	
-		<insert tableName="SMSPROVIDER">
+		<insert tableName="SMSProvider">
 			<column name="providerName" value="ClickATell" />
 			<column name="DESCRIPTION" value="ClickATell SMS Provider" />
-			<column name="classPath" value="au.org.scoutmaster.smsproviders.ClickATellProvider" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 	</changeSet>

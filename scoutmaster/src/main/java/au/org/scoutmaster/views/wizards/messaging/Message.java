@@ -1,16 +1,18 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
+import au.org.scoutmaster.domain.Phone;
+
 public class Message
 {
 	private final String subject;
 	private final String body;
-	private final String sender;
+	private final Phone sender;
 
-	public Message(String subject, String body, String sender)
+	public Message(String subject, String body, Phone phone)
 	{
 		this.subject = subject;
 		this.body = body;
-		this.sender = sender;
+		this.sender = phone;
 	}
 
 	public String getSubject()
@@ -23,7 +25,7 @@ public class Message
 		return body;
 	}
 
-	public String getSender()
+	public Phone getSender()
 	{
 		return sender;
 	}

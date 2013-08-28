@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
          
 	<changeSet author="bsutton" id="1.0.01">
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Case Coordinator is " />
@@ -15,7 +15,7 @@
 			<column name="RHSTYPE" value="CONTACT" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Child of" />
@@ -24,7 +24,7 @@
 			<column name="RHSTYPE" value="CONTACT" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Employee of" />
@@ -33,7 +33,7 @@
 			<column name="RHSTYPE" value="ORGANISATION" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Gardian of" />
@@ -42,7 +42,7 @@
 			<column name="RHSTYPE" value="CONTACT" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Grandparent of" />
@@ -51,7 +51,7 @@
 			<column name="RHSTYPE" value="CONTACT" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Head of Household for" />
@@ -61,7 +61,7 @@
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
 
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Household Member of" />
@@ -71,7 +71,7 @@
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
 
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Sibling of" />
@@ -81,7 +81,7 @@
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
 
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Spouse of" />
@@ -91,7 +91,7 @@
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
 
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Step Parent of" />
@@ -101,7 +101,7 @@
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
 
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Supervised by" />
@@ -110,7 +110,7 @@
 			<column name="RHSTYPE" value="CONTACT" />
 			<column name="UPDATED" valueComputed="now()" />
 		</insert>
-		<insert tableName="RELATIONSHIPTYPE">
+		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="LHS" value="Within our catchment" />

@@ -33,6 +33,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -61,6 +62,19 @@ public class FormHelper implements Serializable
 	static public TextField bindTextField(AbstractLayout form, FieldGroup group, String fieldLabel, String fieldName)
 	{
 		TextField field = new TextField(fieldLabel);
+		field.setWidth("100%");
+		field.setImmediate(true);
+		field.setNullRepresentation("");
+		field.setNullSettingAllowed(false);
+		if (group != null)
+			group.bind(field, fieldName);
+		form.addComponent(field);
+		return field;
+	}
+
+	static public PasswordField bindPasswordField(AbstractLayout form, FieldGroup group, String fieldLabel, String fieldName)
+	{
+		PasswordField field = new PasswordField(fieldLabel);
 		field.setWidth("100%");
 		field.setImmediate(true);
 		field.setNullRepresentation("");

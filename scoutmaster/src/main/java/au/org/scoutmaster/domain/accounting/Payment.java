@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
+@Table(name="Payment")
 public class Payment extends BaseEntity
 {
 

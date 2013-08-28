@@ -5,6 +5,7 @@ import au.org.scoutmaster.application.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -17,6 +18,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Notification;
@@ -27,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 @Menu(display = "SMTP Settings")
-public class EMailServerSettingsView extends CustomComponent implements View, Button.ClickListener, ValueChangeListener
+public class EMailServerSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -102,10 +104,10 @@ public class EMailServerSettingsView extends CustomComponent implements View, Bu
 		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
 		fromEmailAddress.setImmediate(true);
 		fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
-		fromEmailAddress.setValue(settings.getFromAddress());
+		fromEmailAddress.setValue(settings.getFromEmailAddress());
 
 		// Create login button
-		saveButton = new Button("Save", this);
+		saveButton = new Button("Save", new ClickAdaptorLogged(this));
 		saveButton.setClickShortcut(KeyCode.ENTER);
 		saveButton.addStyleName("default");
 

@@ -1,17 +1,24 @@
 package au.org.scoutmaster.views.wizards.setup;
 
+import java.util.List;
+
+import org.apache.commons.mail.EmailException;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.editors.InputDialog;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
+import au.org.scoutmaster.util.MultiColumnFormLayout;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.util.ValidatingFieldGroup;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -23,9 +30,10 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.UI;
 
-public class SmtpStep implements WizardStep, ClickListener, ValueChangeListener
+public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements WizardStep, ValueChangeListener,
+		ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -41,119 +49,71 @@ public class SmtpStep implements WizardStep, ClickListener, ValueChangeListener
 
 	private TextField fromEmailAddress;
 
-	private Button saveButton;
+	private CheckBox useSSL;
+
+	private TextField bounceEmailAddress;
 
 	public SmtpStep(SetupWizardView setupWizardView)
 	{
+		super(setupWizardView, new DaoFactory().getEMailServerSettingsDao(), EMailServerSettings.class);
 	}
 
 	@Override
 	public String getCaption()
 	{
+
 		return "SMTP Settings";
 	}
 
 	@Override
-	public Component getContent()
+	public Component buildEditor(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
 	{
+		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setWidth("500px");
 
-		EMailServerSettingsDao daoEMailServerSettings = new DaoFactory().getEMailServerSettingsDao();
-		EMailServerSettings settings = daoEMailServerSettings.findSettings();
-
-		if (settings == null)
-			throw new IllegalStateException("The email Server Settings are missing from the database.");
+		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
+		label.setContentMode(ContentMode.HTML);
+		formLayout.bindLabel(label);
 
 		// Create the user input field
-		smtpFQDN = new TextField("SMTP FQDN:");
-		smtpFQDN.setWidth("300px");
-		smtpFQDN.setRequired(true);
+		smtpFQDN = formLayout.bindTextField("SMTP FQDN:", "smtpFQDN");
 		smtpFQDN.setDescription("SMTP Server FQDN or IP address");
-		smtpFQDN.setImmediate(true);
-		smtpFQDN.setValue(settings.getSmtpFQDN());
 
-		smtpPort = new TextField("SMTP Port:");
-		smtpPort.setWidth("300px");
-		smtpPort.setRequired(true);
+		smtpPort = formLayout.bindTextField("SMTP Port:", "smtpPort");
 		smtpPort.setDescription("SMTP Port No.");
-		smtpPort.setImmediate(true);
-		smtpPort.setValue(settings.getSmtpPort().toString());
 		smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535", 1,
 				65535));
 
-		authRequired = new CheckBox("SMTP Authentication Requried");
-		authRequired.setValue(settings.isAuthRequired());
+		authRequired = formLayout.bindBooleanField("SMTP Authentication Requried", "authRequired");
 		authRequired.addValueChangeListener(this);
 
-		username = new TextField("SMTP Username:");
-		username.setWidth("300px");
-		username.setRequired(true);
+		username = formLayout.bindTextField("SMTP Username:", "username");
 		username.setDescription("SMTP username if authentication is used");
-		username.setImmediate(true);
-		username.setValue(settings.getUsername());
-		username.setNullRepresentation("");
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
-		password.setRequired(true);
-		password.setNullRepresentation("");
+		password = formLayout.bindPasswordField("Password:", "password");
 		password.setDescription("SMS Provider Password");
-		password.setValue(settings.getPassword());
-
-		// Username and password fields must exist before we call this.
-		authRequired.setValue(settings.isAuthRequired());
-		username.setVisible(settings.isAuthRequired());
-		password.setVisible(settings.isAuthRequired());
-
-
-
-		// Create the user input field
-		fromEmailAddress = new TextField("From Email Address:");
-		fromEmailAddress.setWidth("300px");
-		fromEmailAddress.setRequired(true);
-		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
-		fromEmailAddress.setImmediate(true);
-		fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
-		fromEmailAddress.setValue(settings.getFromAddress());
-		fromEmailAddress.setNullRepresentation("");
-
-		// Create login button
-		saveButton = new Button("Save", this);
-		saveButton.setClickShortcut(KeyCode.ENTER);
-		saveButton.addStyleName("default");
-
-		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(smtpFQDN, smtpPort, authRequired, username, password, fromEmailAddress,
-				saveButton);
-		fields.setSpacing(true);
-		fields.setMargin(new MarginInfo(true, true, true, false));
-		fields.setSizeUndefined();
-
-		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout();
-		viewLayout.setMargin(true);
 		
-		Label title = new Label("<H1>Configure SMTP mail settings.</H1>");
-		title.setContentMode(ContentMode.HTML);
-		viewLayout.addComponent(title);
-		viewLayout.addComponents(fields);
+		useSSL = formLayout.bindBooleanField("Use SSL", "useSSL");
+		useSSL.setDescription("Enables an SSL connection to your SMTP server if it supports it.");
 
-		// focus the username field when user arrives to the login view
+
+		fromEmailAddress = formLayout.bindTextField("From Email Address:", "fromEmailAddress");
+		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
+		fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+
+		bounceEmailAddress = formLayout.bindTextField("Bounce Email Address:", "bounceEmailAddress");
+		bounceEmailAddress.setDescription("Email Address that bounced emails should be sent to.");
+		bounceEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+
+		Button test = new Button("Test");
+		formLayout.addComponent(test);
+		test.addClickListener(new ClickAdaptorLogged(this));
+
+		// focus the fqnd field when user arrives to the login view
 		smtpFQDN.focus();
 
-		return viewLayout;
-	}
-
-	@Override
-	public boolean onAdvance()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean onBack()
-	{
-		return true;
+		return formLayout;
 	}
 
 	@Override
@@ -169,24 +129,87 @@ public class SmtpStep implements WizardStep, ClickListener, ValueChangeListener
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	protected void initEntity(EMailServerSettings entity)
 	{
-		EMailServerSettingsDao daoEMailServerSettings = new DaoFactory().getEMailServerSettingsDao();
-		EMailServerSettings settings = daoEMailServerSettings.findSettings();
-
-		if (settings == null)
-			throw new IllegalStateException("The email Server Settings are missing from the database.");
-
-		settings.setSmtpFQDN(smtpFQDN.getValue());
-		settings.setSmtpPort(Integer.valueOf(smtpPort.getValue()));
-		settings.setAuthRequired(authRequired.getValue());
-		settings.setUsername(username.getValue());
-		settings.setPassword(password.getValue());
-		settings.setFromEmailAddress(fromEmailAddress.getValue());
-
-		daoEMailServerSettings.persist(settings);
-		Notification.show("SMTP Server details have been saved.", Type.TRAY_NOTIFICATION);
-
+		entity.setAuthRequired(false);
+		username.setVisible(false);
+		password.setVisible(false);
 	}
 
+	@Override
+	protected EMailServerSettings findEntity()
+	{
+		EMailServerSettings setting = null;
+		List<EMailServerSettings> settings = new DaoFactory().getEMailServerSettingsDao().findAll();
+		if (settings.size() > 1)
+			throw new IllegalStateException(
+					"More than one EmailServerSetting has been found which is not valid during initial setup.");
+		if (settings.size() == 1)
+			setting = settings.get(0);
+
+		if (setting != null)
+		{
+			username.setVisible(setting.isAuthRequired());
+			password.setVisible(setting.isAuthRequired());
+		}
+
+		return setting;
+	}
+
+	@Override
+	public void buttonClick(ClickEvent event)
+	{
+		// test that the SMS Provider configuration works.
+
+		// First check that the entered details are valid.
+		if (super.validate())
+		{
+			final EMailServerSettings settings = super.getEntity();
+			if (settings == null)
+				Notification.show(
+						"Can't find the SMTP Settings, this usually means the install did not complete correctly.",
+						Type.ERROR_MESSAGE);
+			else
+			{
+				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
+						"Enter your email address to recieve a test Email", new InputDialog.Recipient()
+						{
+							public void gotInput(String input)
+							{
+								String toEmailAddress = input;
+
+								EMailServerSettingsDao daoSMTPSettings = new DaoFactory().getEMailServerSettingsDao();
+
+								try
+								{
+									StringBuilder sb = new StringBuilder();
+									sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n");
+									sb.append("So welcome to Scoutmaster.\n");
+									sb.append("May you live long and recruit many");
+
+									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress,
+											"Test email from Scoutmaster setup", sb.toString());
+
+									SMNotification.show("An email has been sent to: " + toEmailAddress
+											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
+
+								}
+								catch (EmailException e)
+								{
+									SMNotification.show(e, Type.ERROR_MESSAGE);
+								}
+							}
+
+							@Override
+							public void cancelled()
+							{
+								// TODO Auto-generated method stub
+
+							}
+						}).addValidator(new EmailValidator("Please input your email address"));
+
+			}
+		}
+
+	}
 }

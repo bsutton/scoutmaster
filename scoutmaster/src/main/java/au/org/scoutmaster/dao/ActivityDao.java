@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 
 import au.org.scoutmaster.domain.Activity;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 public class ActivityDao extends JpaBaseDao<Activity, Long> implements Dao<Activity, Long>
 {
 
@@ -22,5 +24,10 @@ public class ActivityDao extends JpaBaseDao<Activity, Long> implements Dao<Activ
 	public List<Activity> findAll()
 	{
 		return super.findAll(Activity.FIND_ALL);
+	}
+	@Override
+	public JPAContainer<Activity> makeJPAContainer()
+	{
+		return super.makeJPAContainer(Activity.class);
 	}
 }

@@ -12,6 +12,7 @@ public class GoogleField extends VerticalLayout
 	 */
 	private static final long serialVersionUID = 1L;
 	//private GoogleMap googleMap;
+	@SuppressWarnings("unused")
 	private final String apiKey = "";
 
 	public GoogleField()

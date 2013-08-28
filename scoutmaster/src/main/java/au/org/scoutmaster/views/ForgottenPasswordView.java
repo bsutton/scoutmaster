@@ -12,8 +12,10 @@ import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
-import au.org.scoutmaster.validator.UsernameValidator;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
+import au.org.scoutmaster.util.SMNotification;
 
+import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServletService;
@@ -22,7 +24,6 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -51,11 +52,11 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 		emailAddress.setWidth("300px");
 		emailAddress.setRequired(true);
 		emailAddress.setInputPrompt("Your email address.");
-		emailAddress.addValidator(new UsernameValidator());
+		emailAddress.addValidator(new EmailValidator("Enter a valid email address."));
 		emailAddress.setInvalidAllowed(false);
 
 		// Create login button
-		retrieveButton = new Button("Retrieve", this);
+		retrieveButton = new Button("Retrieve", new ClickAdaptorLogged(this));
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(emailAddress, retrieveButton);
@@ -96,7 +97,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 		email.setSSLOnConnect(true);
 		try
 		{
-			email.setFrom(settings.getFromAddress());
+			email.setFrom(settings.getFromEmailAddress());
 			email.setSubject("[Scoutmaster] Password reset request");
 			
 			ForgottenPasswordResetDao forgottenPasswordResetDao= new DaoFactory().getForgottenPasswordResetDao();
@@ -114,10 +115,14 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 			email.addTo(emailAddressValue);
 			email.send();
 		}
+		catch (IllegalArgumentException e)
+		{
+			SMNotification.show(e, Type.ERROR_MESSAGE);
+		}
 		catch (EmailException e)
 		{
 			logger.error(e,e);
-			Notification.show("Error sending email", e.getMessage(), Type.ERROR_MESSAGE);
+			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
 	}
 }

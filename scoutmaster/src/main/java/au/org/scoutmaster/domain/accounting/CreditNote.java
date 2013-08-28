@@ -7,10 +7,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
+@Table(name="CreditNote")
 public class CreditNote  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -1,8 +1,10 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -12,7 +14,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="ActivityType")
+@Table(name="ActivityType")
 @NamedQueries(
 {
 		@NamedQuery(name = ActivityType.FIND_ALL, query = "SELECT activitytype FROM ActivityType activitytype"),
@@ -36,6 +39,7 @@ public class ActivityType extends BaseEntity
 	 * The name of the activity type
 	 */
 	@NotBlank
+	@Column(unique = true)
 	private String name;
 
 	/**

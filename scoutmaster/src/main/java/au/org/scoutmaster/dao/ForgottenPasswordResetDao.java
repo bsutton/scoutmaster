@@ -13,6 +13,9 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.RandomString;
 
+import com.google.gwt.thirdparty.guava.common.base.Preconditions;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements Dao<ForgottenPasswordReset, Long>
 {
 
@@ -54,11 +57,11 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 	}
 	public ForgottenPasswordReset createReset(String emailAddressValue)
 	{
+		Preconditions.checkArgument(emailAddressValue != null, "You must pass a valid email address.");
 		UserDao userDao = new DaoFactory().getUserDao();
 		User user = userDao.findByEmail(emailAddressValue);
 		
-		if (user == null)
-			throw new IllegalArgumentException("The email address: " + emailAddressValue + " does not exist");
+		Preconditions.checkArgument(user != null, "The email address: " + emailAddressValue + " does not exist");
 		RandomString rs = new RandomString(RandomString.Type.ALPHANUMERIC, 32);
 		String resetid = rs.nextString();
 		
@@ -68,9 +71,12 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 		reset.setExpires(now);
 		reset.setResetid(resetid);
 		
-
-		// TODO Auto-generated method stub
-		return null;
+		return reset;
+	}
+	@Override
+	public JPAContainer<ForgottenPasswordReset> makeJPAContainer()
+	{
+		return super.makeJPAContainer(ForgottenPasswordReset.class);
 	}
 
 }

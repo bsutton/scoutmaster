@@ -3,6 +3,7 @@ package au.org.scoutmaster.domain;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * Used to store a phone no.
@@ -10,7 +11,8 @@ import javax.persistence.NamedQuery;
  * @author bsutton
  *
  */
-@Entity
+@Entity(name="Phone")
+@Table(name="Phone")
 @NamedQueries(
 {
 	@NamedQuery(name = Phone.FIND_ALL, query = "SELECT phone FROM Phone phone"),
@@ -47,7 +49,8 @@ public class Phone extends BaseEntity
 	}
 	public Phone(String phoneNo)
 	{
-		this.phoneNo = phoneNo;
+		// Strip spaces from the phone no.
+		this.phoneNo = phoneNo.replaceAll("\\s","");
 	}
 
 	public Boolean getPrimaryPhone()

@@ -7,7 +7,7 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.04">
-			<insert tableName="SECTIONTYPE">
+			<insert tableName="SectionType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Too Young" />
@@ -20,7 +20,7 @@
 			<column name="endingAgeYears" value="5" />
 		</insert>
 	
-		<insert tableName="SECTIONTYPE">
+		<insert tableName="SectionType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
 			<column name="NAME" value="Leaders" />

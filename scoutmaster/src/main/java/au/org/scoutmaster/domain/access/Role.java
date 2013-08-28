@@ -3,8 +3,10 @@ package au.org.scoutmaster.domain.access;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -20,6 +22,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  *
  */
 @Entity
+@Table(name="Role")
 public class Role extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -28,6 +31,7 @@ public class Role extends BaseEntity
 	 * The name of the role
 	 */
 	@NotBlank
+	@Column(unique=true)
 	String name;
 	
 	/**

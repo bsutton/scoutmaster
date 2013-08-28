@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -25,7 +27,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="Organisation")
+@Table(name="Organisation")
 
 @NamedQueries(
 {
@@ -36,8 +39,8 @@ public class Organisation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_ALL = "findAll";
-	public static final String FIND_OUR_SCOUT_GROUP = "findOurScoutGroup";
+	public static final String FIND_ALL = "Organisation.findAll";
+	public static final String FIND_OUR_SCOUT_GROUP = "Organisation.findOurScoutGroup";
 
 	/**
 	 * If true then this organisation represents our local scout group. This
@@ -50,6 +53,7 @@ public class Organisation extends BaseEntity
 	 * The name of the organisation
 	 */
 	@NotBlank
+	@Column(unique=true)
 	private String name;
 
 	/**

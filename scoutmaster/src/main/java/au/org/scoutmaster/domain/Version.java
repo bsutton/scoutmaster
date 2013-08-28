@@ -1,6 +1,7 @@
 package au.org.scoutmaster.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.google.gwt.thirdparty.guava.common.base.Objects;
 
@@ -10,7 +11,8 @@ import com.google.gwt.thirdparty.guava.common.base.Objects;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="Version")
+@Table(name="Version")
 public class Version extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

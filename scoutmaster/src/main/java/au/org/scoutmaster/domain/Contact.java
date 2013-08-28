@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Past;
 
@@ -27,7 +28,8 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
 
-@Entity
+@Entity(name="Contact")
+@Table(name="Contact")
 @NamedQueries(
 {
 	@NamedQuery(name = Contact.FIND_ALL, query = "SELECT contact FROM Contact contact"),

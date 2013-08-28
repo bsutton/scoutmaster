@@ -7,7 +7,7 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.03">
-		<update tableName="SECTIONTYPE">
+		<update tableName="SectionType">
 			<column name="NAME" value="Rovers" />
 			<where>NAME="Rover"</where>
 		</update>

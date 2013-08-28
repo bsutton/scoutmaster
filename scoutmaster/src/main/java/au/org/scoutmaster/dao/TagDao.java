@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 {
 
@@ -36,5 +38,10 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	
 		return tag;
 	
+	}
+	@Override
+	public JPAContainer<Tag> makeJPAContainer()
+	{
+		return super.makeJPAContainer(Tag.class);
 	}
 }

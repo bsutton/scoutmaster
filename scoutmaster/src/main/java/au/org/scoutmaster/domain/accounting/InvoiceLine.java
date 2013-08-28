@@ -8,10 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
+@Table(name="InvoiceLine")
 public class InvoiceLine  extends BaseEntity
 {
 

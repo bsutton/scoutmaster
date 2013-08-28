@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Organisation;
@@ -19,6 +20,7 @@ import au.org.scoutmaster.domain.Organisation;
  * 
  */
 @Entity
+@Table(name="Product")
 public class Product extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

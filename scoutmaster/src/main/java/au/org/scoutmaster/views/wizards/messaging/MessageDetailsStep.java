@@ -6,6 +6,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
+import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.FormHelper;
 
@@ -101,7 +102,7 @@ public class MessageDetailsStep  implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), message.getValue(), from.getValue());
+		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
 	}
 
 	public SMSProvider getProvider()

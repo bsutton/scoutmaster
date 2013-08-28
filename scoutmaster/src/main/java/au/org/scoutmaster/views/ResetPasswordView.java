@@ -3,6 +3,7 @@ package au.org.scoutmaster.views;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.ClickAdaptorLogged;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.validator.UsernameValidator;
 
@@ -63,7 +64,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		confirm.setNullRepresentation("");
 
 		// Create login button
-		loginButton = new Button("Login", this);
+		loginButton = new Button("Login", new ClickAdaptorLogged(this));
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(user, password, confirm, loginButton);
@@ -121,7 +122,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 			User user = daoUser.findByName(username);
 			if (user != null)
 			{
-				user.updatePassword(username, password);
+				daoUser.updatePassword(user, username, password);
 				// Store the current user in the service session
 				getSession().setAttribute("user", username);
 

@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import au.org.scoutmaster.domain.BaseEntity;
@@ -16,6 +17,7 @@ import au.org.scoutmaster.domain.Contact;
 
 
 @Entity
+@Table(name="Invoice")
 public class Invoice  extends BaseEntity
 {
 	/**

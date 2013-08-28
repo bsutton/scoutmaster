@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * A scouts section such as Joeys or Cubs
@@ -17,11 +19,18 @@ import javax.persistence.OneToMany;
  * @author bsutton
  *
  */
-@Entity
+@Entity(name="Section")
+@Table(name="Section")
 public class Section extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Name of the section.
+	 */
+	@Column(unique=true)
+	String name;
+	
 	@ManyToOne
 	SectionType type;
 

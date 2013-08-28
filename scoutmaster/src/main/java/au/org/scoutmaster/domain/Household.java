@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -21,7 +23,8 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author bsutton
  * 
  */
-@Entity
+@Entity(name="Household")
+@Table(name="Household")
 public class Household extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -34,6 +37,7 @@ public class Household extends BaseEntity
 	 * e.g. Smith - Drive St.
 	 */
 	@NotBlank
+	@Column(unique=true)
 	private String name;
 
 	/**

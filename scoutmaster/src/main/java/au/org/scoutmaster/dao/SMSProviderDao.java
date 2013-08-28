@@ -18,6 +18,7 @@ import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.ui.UI;
 
 public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao<SMSProvider, Long>
@@ -84,7 +85,7 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 
 		// Number of sender (not supported on all transports)
 		smsSender.connect();
-		smsSender.sendTextSms(msg, reciever.getPhoneNo(), transmission.getMessage().getSender());
+		smsSender.sendTextSms(msg, reciever.getPhoneNo(), transmission.getMessage().getSender().getPhoneNo());
 		smsSender.disconnect();
 
 		// Log the activity
@@ -105,6 +106,12 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	{
 		smsSender = SmsSender.getClickatellSender(provider.getUsername(), provider.getPassword(), provider.getApiId());
 
+	}
+
+	@Override
+	public JPAContainer<SMSProvider> makeJPAContainer()
+	{
+		return super.makeJPAContainer(SMSProvider.class);
 	}
 
 }

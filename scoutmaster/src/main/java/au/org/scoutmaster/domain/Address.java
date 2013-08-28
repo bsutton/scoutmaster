@@ -8,12 +8,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Query;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.filter.EntityManagerProvider;
 
-@Entity
+@Entity(name="Address")
+@Table(name="Address")
 @NamedQueries(
 {
 		@NamedQuery(name = Address.FIND_ALL, query = "SELECT address FROM Address address"),

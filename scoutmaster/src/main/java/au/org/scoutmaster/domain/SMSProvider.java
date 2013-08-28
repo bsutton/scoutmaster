@@ -1,13 +1,15 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Transient;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-@Entity
+@Entity(name="SMSProvider")
+@Table(name="SMSProvider")
 @NamedQueries(
 {
 		@NamedQuery(name = SMSProvider.FIND_ALL, query = "SELECT smsprovider FROM SMSProvider smsprovider"),
@@ -26,29 +28,23 @@ public class SMSProvider extends BaseEntity
 	 * The name of the provider used to display the provider to th e user.
 	 */
 	@NotBlank
+	@Column(unique=true)
 	private String providerName;
 	
 	private String description;
 
+	@NotBlank
 	private String username;
 
+	@NotBlank
 	private String password;
 
+	@NotBlank
 	private String ApiId;
 
 	private Boolean active;
 
 	private Boolean defaultProvider;
-	
-	/**
-	 * Class path to the iSMSProvider
-	 */
-	String classPath;
-
-	@Transient
-	iSMSProvider provider;
-
-
 	
 	public String getUsername()
 	{
@@ -100,14 +96,9 @@ public class SMSProvider extends BaseEntity
 		this.defaultProvider = defaultProvider;
 	}
 
-	public void setProvider(iSMSProvider newInstance)
+	public void setProviderName(String providerName)
 	{
-		this.provider = newInstance;
-	}
-
-	public String getClassPath()
-	{
-		return this.classPath;
+		this.providerName = providerName;
 	}
 
 	public String getProviderName()

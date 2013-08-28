@@ -1,6 +1,5 @@
 package au.org.scoutmaster.util;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -9,21 +8,23 @@ import org.vaadin.tokenfield.TokenField;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.views.Selected;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 
 public class MultiColumnFormLayout<ENTITY> extends GridLayout
 {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(MultiColumnFormLayout.class);
 	private static final long serialVersionUID = 1L;
 	private final int columns;
@@ -32,18 +33,18 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 	private FieldGroup fieldGroup;
 	private ArrayList<AbstractComponent> fieldList = new ArrayList<>();
 
-	public MultiColumnFormLayout(int columns)
-	{
-		super(columns * 2, 1);
-		this.columns = columns * 2;
-		init();
-		this.fieldGroup = newBeanGroupInstance();
-		//
-		// for (int i = 0; i < columns; i+=2)
-		// {
-		// this.setColumnExpandRatio(i + 1, 1 / columns);
-		// }
-	}
+	// public MultiColumnFormLayout(int columns)
+	// {
+	// super(columns * 2, 1);
+	// this.columns = columns * 2;
+	// init();
+	// this.fieldGroup = newBeanGroupInstance();
+	// //
+	// // for (int i = 0; i < columns; i+=2)
+	// // {
+	// // this.setColumnExpandRatio(i + 1, 1 / columns);
+	// // }
+	// }
 
 	public MultiColumnFormLayout(int columns, FieldGroup fieldGroup)
 	{
@@ -76,27 +77,36 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		int fieldWidth = 1;
 		if (component.getCaption() != null)
 		{
-			Label label = new Label(component.getCaption());
-			//label.setSizeUndefined();
-			// maxLabelWidth = Math.max(lmaxLabelWidth, label.getWidth());
-			// label.setWidth("100%");
-			component.setCaption(null);
-			super.addComponent(label);
-			super.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
+			if (!(component instanceof Button))
+			{
+				Label label = new Label(component.getCaption());
+				component.setCaption(null);
+				super.addComponent(label);
+				super.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
+			}
+			else
+				setCursorX(getCursorX() + 1);
 		}
 		else
 		{
-			// Else if the label is null then we let the field take the full width that the label normally occupies
+			// Else if the label is null then we let the field take the full
+			// width that the label normally occupies
 			fieldWidth = 2;
 		}
 
 		if (colspan > 1)
-			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (fieldWidth - 1) + ((colspan - 1) * 2), getCursorY());
+			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (fieldWidth - 1)
+					+ ((colspan - 1) * 2), getCursorY());
 		else
 			super.addComponent(component, getCursorX(), getCursorY(), getCursorX() + (fieldWidth - 1), getCursorY());
 		super.setComponentAlignment(component, Alignment.MIDDLE_LEFT);
 
 		this.colspan = 1;
+		if (getCursorY() == getRows())
+		{
+			insertRow(getRows());
+			setCursorY(getCursorY() -1);
+		}
 	}
 
 	/**
@@ -128,6 +138,50 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		return field;
 	}
 
+	/** 
+	 * Adds a text field to the form without binding it to the FieldGroup
+	 * @param caption
+	 * @return
+	 */
+	public TextField addTextField(String caption)
+	{
+		TextField field = new TextField(caption);
+		field.setWidth("100%");
+		field.setImmediate(true);
+		field.setNullRepresentation("");
+		field.setNullSettingAllowed(false);
+		this.addComponent(field);
+		this.fieldList.add(field);
+		return field;
+	}
+
+
+	public PasswordField bindPasswordField(String fieldLabel, String fieldName)
+	{
+		PasswordField field = FormHelper.bindPasswordField(this, fieldGroup, fieldLabel, fieldName);
+
+		this.fieldList.add(field);
+		return field;
+	}
+	
+	/** 
+	 * Adds a text field to the form without binding it to the FieldGroup
+	 * @param caption
+	 * @return
+	 */
+	public PasswordField addPasswordField(String caption)
+	{
+		PasswordField field = new PasswordField(caption);
+		field.setWidth("100%");
+		field.setImmediate(true);
+		field.setNullRepresentation("");
+		field.setNullSettingAllowed(false);
+		this.addComponent(field);
+		this.fieldList.add(field);
+		return field;
+	}
+
+
 	public TextArea bindTextAreaField(String fieldLabel, String fieldName, int rows)
 	{
 		TextArea field = FormHelper.bindTextAreaField(this, fieldGroup, fieldLabel, fieldName, rows);
@@ -148,14 +202,13 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 		this.fieldList.add(field);
 		return field;
 	}
-	
+
 	public Label bindLabel(Label label)
 	{
 		Label field = FormHelper.bindLabel(this, fieldGroup, label);
 		this.fieldList.add(field);
 		return field;
 	}
-
 
 	public ComboBox bindEnumField(String fieldLabel, String fieldName, Class<?> clazz)
 	{
@@ -190,29 +243,6 @@ public class MultiColumnFormLayout<ENTITY> extends GridLayout
 	public ArrayList<AbstractComponent> getFieldList()
 	{
 		return this.fieldList;
-	}
-
-	/**
-	 * This is a bit of a nasty hack to determine the class of an generics
-	 * parameter.
-	 */
-	@SuppressWarnings("unchecked")
-	private BeanFieldGroup<ENTITY> newBeanGroupInstance()
-	{
-		BeanFieldGroup<ENTITY> fieldGroup = null;
-		try
-		{
-			ENTITY instance = (ENTITY) ((Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass())
-					.getActualTypeArguments()[0]).newInstance();
-			fieldGroup = new BeanFieldGroup<ENTITY>((Class<ENTITY>) instance.getClass());
-		}
-		catch (InstantiationException | IllegalAccessException e)
-		{
-			logger.error(e, e);
-		}
-		assert fieldGroup != null;
-
-		return fieldGroup;
 	}
 
 

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.vaadin.dialogs.ConfirmDialog;
 
 import au.org.scoutmaster.domain.BaseEntity;
+import au.org.scoutmaster.fields.ClickListenerLogged;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -190,11 +191,11 @@ public class BaseCrudView<T extends BaseEntity> extends HorizontalSplitPanel imp
 			}
 		});
 
-		cancelContactButton.addClickListener(new ClickListener()
+		cancelContactButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				fieldGroup.discard();
 				Notification.show("Changes discarded.", "Any changes you have made to this contact been discarded.",
@@ -202,11 +203,11 @@ public class BaseCrudView<T extends BaseEntity> extends HorizontalSplitPanel imp
 			}
 		});
 
-		saveContactButton.addClickListener(new ClickListener()
+		saveContactButton.addClickListener(new ClickListenerLogged()
 		{
 			private static final long serialVersionUID = 1L;
 
-			public void buttonClick(ClickEvent event)
+			public void clicked(ClickEvent event)
 			{
 				commit();
 

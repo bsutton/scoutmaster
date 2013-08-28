@@ -1,34 +1,32 @@
 package au.org.scoutmaster.views.wizards.setup;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.MultiColumnFormLayout;
+import au.org.scoutmaster.util.ValidatingFieldGroup;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.validator.UsernameValidator;
 
 import com.vaadin.data.validator.EmailValidator;
-import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
-public class NewAccountStep implements WizardStep, ClickListener
+public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 {
-	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
+	private static Logger logger = Logger.getLogger(NewAccountStep.class);
 
-	private TextField user;
+	private TextField username;
 
 	private PasswordField password;
 
@@ -38,69 +36,54 @@ public class NewAccountStep implements WizardStep, ClickListener
 
 	private TextField confirmEmailAddress;
 
-	private Button createButton;
-
-	private boolean created = false;
-
-	private VerticalLayout viewLayout;
-
 	public NewAccountStep(SetupWizardView setupWizardView)
 	{
-		// Create the user input field
-		user = new TextField("Username:");
-		user.setWidth("300px");
-		user.setRequired(true);
-		user.setInputPrompt("Your username");
-		user.addValidator(new UsernameValidator());
-		user.setImmediate(true);
-		user.setInvalidAllowed(false);
+		super(setupWizardView, new DaoFactory().getUserDao(), User.class);
+	}
+
+	@Override
+	protected Component buildEditor(ValidatingFieldGroup<User> fieldGroup)
+	{
+		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setWidth("600px");
+
+		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
+		label.setContentMode(ContentMode.HTML);
+		formLayout.bindLabel(label);
+
+		username = formLayout.bindTextField("Username:", "username");
+		username.setInputPrompt("Enter a username");
+		username.addValidator(new UsernameValidator());
+		username.setRequired(true);
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
+		password = formLayout.bindPasswordField("Password:", "password");
+		password.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
 		password.addValidator(new PasswordValidator("Password"));
 		password.setRequired(true);
-		password.setNullRepresentation("");
 
-		// Create the password input field
-		confirmPassword = new PasswordField("Confirm Password:");
-		confirmPassword.setWidth("300px");
+		// Create the confirm password input field but we don't bind it.
+		confirmPassword = formLayout.addPasswordField("Confirm Password:");
 		confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
 		confirmPassword.setRequired(true);
-		confirmPassword.setNullRepresentation("");
+		
 
-		// Create the password input field
-		emailAddress = new TextField("Email Address:");
-		emailAddress.setWidth("300px");
+		// Create the email address input field
+		emailAddress = formLayout.bindTextField("Email Address:", "emailAddress");
 		emailAddress.addValidator(new EmailValidator("Enter your email address."));
 		emailAddress.setRequired(true);
 		emailAddress.setNullRepresentation("");
 
-		// Create the password input field
-		confirmEmailAddress = new TextField("Confirm Email Address:");
-		confirmEmailAddress.setWidth("300px");
+		// Create the confirmEmail input field
+		confirmEmailAddress = formLayout.addTextField("Confirm Email Address:");
 		confirmEmailAddress.addValidator(new EmailValidator("Enter your email address."));
 		confirmEmailAddress.setRequired(true);
 		confirmEmailAddress.setNullRepresentation("");
 
-		createButton = new Button("Create", this);
-		createButton.setClickShortcut(KeyCode.ENTER);
-		createButton.addStyleName("default");
+		// focus the username field when user arrives to the login view
+		username.focus();
 
-		// Add both to a panel
-		Label label = new Label("<H1>Start by creating an account to login to Scoutmaster.</H1>");
-		label.setContentMode(ContentMode.HTML);
-
-		VerticalLayout fields = new VerticalLayout(label, user, password, confirmPassword);
-		fields.addComponent(createButton);
-		fields.setSpacing(true);
-		fields.setMargin(new MarginInfo(true, true, true, false));
-		fields.setSizeUndefined();
-
-		viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
-		viewLayout.setMargin(true);
-
+		return formLayout;
 	}
 
 	@Override
@@ -110,89 +93,53 @@ public class NewAccountStep implements WizardStep, ClickListener
 	}
 
 	@Override
-	public Component getContent()
+	public boolean validate()
 	{
-
-		// focus the username field when user arrives to the login view
-		user.focus();
-
-		return viewLayout;
-	}
-
-	@Override
-	public void buttonClick(ClickEvent event)
-	{
-		if (user.isValid() && password.isValid() && confirmPassword.isValid())
+		boolean valid = false;
+		if (confirmPassword.getValue().equals(password.getValue()))
 		{
-			String username = user.getValue();
-			String password = this.password.getValue();
-			String confirmPassword = this.confirmPassword.getValue();
-			String emailAddress = this.emailAddress.getValue();
-			String confirmEmailAddress = this.confirmEmailAddress.getValue();
-
-			UserDao daoUser = new DaoFactory().getUserDao();
-			if (daoUser.findByName(username) != null)
+			if (confirmEmailAddress.getValue().equals(emailAddress.getValue()))
 			{
-				// This should never happen on a first time setup!
-				Notification.show("The user " + username + " already exists. Choose another one.");
+				valid = super.validate();
 			}
 			else
 			{
-				if (confirmPassword.equals(password))
-				{
-					if (confirmEmailAddress.equals(emailAddress))
-					{
-
-						User user = new User(username, password);
-						user.setEmailAddress(emailAddress);
-						daoUser.persist(user);
-
-						// Store the current user in the service session
-						UI.getCurrent().getSession().setAttribute("user", user);
-						this.createButton.setVisible(false);
-						Notification.show("Your user account has been created.", Type.TRAY_NOTIFICATION);
-						created = true;
-					}
-					else
-					{
-						// Non matching email addresses clear the password field
-						// and refocuses it
-						this.confirmEmailAddress.setValue(null);
-						this.confirmEmailAddress.setValue(null);
-						this.confirmEmailAddress.focus();
-						Notification.show("The email and confirm email fields do not match.");
-					}
-
-				}
-				else
-				{
-
-					// Non matching password field
-					this.password.setValue(null);
-					this.confirmPassword.setValue(null);
-					this.password.focus();
-					Notification.show("The password and confirm password fields do not match.");
-
-				}
+				// Non matching email addresses clear the password field
+				// and refocuses it
+				this.confirmEmailAddress.focus();
+				Notification.show("The email and confirm email fields do not match.");
 			}
 		}
 		else
 		{
-			// user.setComponentError(new UserError("I dont like you"));
-			Notification.show("Invalid username or password");
+			// Non matching password field
+			this.password.setValue(null);
+			this.confirmPassword.setValue(null);
+			this.password.focus();
+			Notification.show("The password and confirm password fields do not match.");
+
 		}
+		return valid;
 	}
 
 	@Override
-	public boolean onAdvance()
+	protected void initEntity(User entity)
 	{
-		return created;
+		// No Op
+
 	}
 
 	@Override
-	public boolean onBack()
+	protected User findEntity()
 	{
-		return true;
+		User user = null;
+		List<User> users = new DaoFactory().getUserDao().findAll();
+		if (users.size() > 1)
+			throw new IllegalStateException(
+					"More than one user has been found which is not valid during initial setup.");
+		if (users.size() == 1)
+			user = users.get(0);
+		return user;
 	}
 
 }

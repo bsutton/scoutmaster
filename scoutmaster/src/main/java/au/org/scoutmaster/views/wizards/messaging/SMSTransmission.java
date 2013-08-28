@@ -6,11 +6,13 @@ import au.org.scoutmaster.domain.PhoneType;
 
 public class SMSTransmission
 {
-	Contact contact;
-	Message message;
-	Phone phone;
+	private Contact contact;
+	private Message message;
+	private Phone phone;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
+	
+	
 	public SMSTransmission(Contact contact, Message message, Phone phone)
 	{
 		this.contact = contact;

@@ -2,22 +2,13 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity
+@Entity(name="ImportColumnFieldMapping")
+@Table(name="ImportColumnFieldMapping")
 public class ImportColumnFieldMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-
-	public ImportColumnFieldMapping()
-	{
-
-	}
-
-	public ImportColumnFieldMapping(String csvColumnName, String dbFieldName)
-	{
-		this.csvColumnName = csvColumnName;
-		this.dbFieldName = dbFieldName;
-	}
 
 	@ManyToOne(optional = false)
 	private ImportUserMapping userMapping;
@@ -32,6 +23,18 @@ public class ImportColumnFieldMapping extends BaseEntity
 	 * column to.
 	 */
 	String dbFieldName;
+
+	public ImportColumnFieldMapping()
+	{
+
+	}
+
+	public ImportColumnFieldMapping(String csvColumnName, String dbFieldName)
+	{
+		this.csvColumnName = csvColumnName;
+		this.dbFieldName = dbFieldName;
+	}
+
 
 	@Override
 	public String toString()

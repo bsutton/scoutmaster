@@ -5,22 +5,25 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.BaseEntity;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.PasswordHash;
 
 @Entity
+@Table(name="User")
 @NamedQueries(
 {
 		@NamedQuery(name = User.FIND_ALL, query = "SELECT user FROM User user"),
@@ -33,33 +36,32 @@ public class User extends BaseEntity
 	@Transient
 	private static final Logger logger = Logger.getLogger(User.class);
 
-	public String getEmailAddress()
-	{
-		return emailAddress;
-	}
-
+	
 	public static final String FIND_ALL = "User.findAll";
 	public static final String FIND_BY_NAME = "User.findByName";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	@NotBlank
-	String username;
+	@Column(unique=true)
+	private String username;
 
 	/**
 	 * A salted hash of the users password.
 	 */
-	String saltedPassword;
-
+	@NotBlank
+	private String saltedPassword;
+	
 	/**
 	 * The users email address used when they forget their password.
 	 */
+	@Email
 	private String emailAddress;
-
+	
 	/**
 	 * Allows us to disable a user account. When a user is disabled they can't
 	 * log in.
 	 */
-	Boolean enabled;
+	private Boolean enabled;
 	/**
 	 * Given users are linked to lots of data it will be hard to delete one. As
 	 * such we just mark them as deleted and they will no longer be able to
@@ -67,13 +69,53 @@ public class User extends BaseEntity
 	 * we also need to mangle the username so it doesn't conflict with a
 	 * potential new user that wants to use the same username.
 	 */
-	Boolean deleted;
+	private Boolean deleted;
+
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+
+	public Boolean getEnabled()
+	{
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+
+	public Boolean getDeleted()
+	{
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted)
+	{
+		this.deleted = deleted;
+	}
+
+	public List<Role> getBelongsTo()
+	{
+		return belongsTo;
+	}
+
+	public void setBelongsTo(List<Role> belongsTo)
+	{
+		this.belongsTo = belongsTo;
+	}
 
 	/**
 	 * The set of roles the user undertakes.
 	 */
 	@ManyToMany
-	List<Role> belongsTo = new ArrayList<>();
+	private List<Role> belongsTo = new ArrayList<>();
 
 	public User()
 	{
@@ -90,15 +132,24 @@ public class User extends BaseEntity
 		this.deleted = false;
 
 	}
-
-	public void updatePassword(String username, String password)
+	
+	@Access(value = AccessType.PROPERTY)
+	/**
+	 * Takes a clear text password and hashes and salts it for storage.
+	 * @param password
+	 */
+	public void setPassword(String password)
 	{
-		UserDao daoUser = new UserDao();
-		User user = daoUser.findByName(username);
-		user.saltedPassword = generatePassword(password);
-
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-		em.merge(user);
+		this.saltedPassword = generatePassword(password);
+	}
+	
+	/*
+	 * returns a hashed and salted version of the password 
+	 */
+	public String getPassword()
+	{
+		// You can't really get the password.
+		return this.saltedPassword;
 	}
 
 	/**
@@ -141,4 +192,11 @@ public class User extends BaseEntity
 		this.emailAddress = emailAddress;
 
 	}
+	
+	public String getEmailAddress()
+	{
+		return emailAddress;
+	}
+
 }
+

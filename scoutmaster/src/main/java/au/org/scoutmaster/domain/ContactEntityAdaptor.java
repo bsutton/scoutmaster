@@ -1,6 +1,5 @@
 package au.org.scoutmaster.domain;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +31,13 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 
 				if (field.getName() == "address")
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, "street", new HackedFormField("Address.Street"));
+					FormFieldImpl formField = new FormFieldImpl(field, "street", singleAnnotation, "Address.Street");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "city", new HackedFormField("Address.City"));
+					formField = new FormFieldImpl(field, "city", singleAnnotation, "Address.City");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "state", new HackedFormField("Address.State"));
+					formField = new FormFieldImpl(field, "state", singleAnnotation, "Address.State");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "postcode", new HackedFormField("Address.Postcode"));
+					formField = new FormFieldImpl(field, "postcode", singleAnnotation, "Address.Postcode");
 					formFields.add(formField);
 				}
 				else
@@ -54,35 +53,35 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 		return formFields;
 	}
 	
-	class HackedFormField implements FormField
-	{
-		private String displayName;
-
-		HackedFormField(String displayName)
-		{
-			this.displayName = displayName;
-		}
-		
-		@Override
-		public Class<? extends Annotation> annotationType()
-		{
-			return null;
-		}
-
-		@Override
-		public boolean visible()
-		{
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public String displayName()
-		{
-			return this.displayName;
-		}
-		
-	}
+//	class HackedFormField implements FormField
+//	{
+//		private String displayName;
+//
+//		HackedFormField(String displayName)
+//		{
+//			this.displayName = displayName;
+//		}
+//		
+//		@Override
+//		public Class<? extends Annotation> annotationType()
+//		{
+//			return null;
+//		}
+//
+//		@Override
+//		public boolean visible()
+//		{
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+//
+//		@Override
+//		public String displayName()
+//		{
+//			return this.displayName;
+//		}
+//		
+//	}
 
 	public void save(EntityManager em, Contact entity, String[] csvHeaders, String[] fieldValues,
 			Hashtable<String, FormFieldImpl> fieldMap)

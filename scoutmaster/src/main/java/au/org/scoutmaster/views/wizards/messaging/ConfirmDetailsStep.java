@@ -2,6 +2,7 @@ package au.org.scoutmaster.views.wizards.messaging;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.util.FormHelper;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -102,7 +103,7 @@ public class ConfirmDetailsStep  implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), message.getValue(), from.getValue());
+		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
 	}
 
 	

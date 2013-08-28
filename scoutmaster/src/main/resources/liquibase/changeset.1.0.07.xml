@@ -7,43 +7,43 @@
 
 	<!-- Add standard Activity Types -->
 	<changeSet author="bsutton" id="1.0.07">
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Meeting" />
 			<column name="DESCRIPTION" value="" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Phone Call" />
 			<column name="DESCRIPTION" value="" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Email" />
 			<column name="DESCRIPTION" value="Email sent." />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Text Message (SMS)" />
 			<column name="DESCRIPTION" value="Text Message (SMS) sent." />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Bulk Email" />
 			<column name="DESCRIPTION" value="Bulk Email sent." />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Bulk Text Message (SMS)" />
 			<column name="DESCRIPTION" value="Bulk Text Message (SMS) sent."/>
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 		</insert>
 
-		<insert tableName="ACTIVITYTYPE">
+		<insert tableName="ActivityType">
 			<column name="name" value="Visit" />
 			<column name="DESCRIPTION" value="A leader or Adult Helper conducted a home visit." />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
