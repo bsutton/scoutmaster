@@ -2,12 +2,20 @@ package au.org.scoutmaster.application;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
@@ -33,11 +41,12 @@ public class ContextListener implements ServletContextListener
 		{
 			String masterPath = sce.getServletContext().getRealPath(new File("WEB-INF/classes/", MASTER_XML).getPath());
 			logger.info("Initialising liquibase");
-			
+
 			File masterFile = new File(masterPath);
 			File baseDir = masterFile.getParentFile().getParentFile();
 
-			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(baseDir.getCanonicalPath()), new JdbcConnection(getConnection()));
+			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(baseDir.getCanonicalPath()),
+					new JdbcConnection(getConnection()));
 			liquibase.update("");
 			logger.info("Liquibase has completed successfully");
 		}

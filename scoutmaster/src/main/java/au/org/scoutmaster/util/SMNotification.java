@@ -39,6 +39,6 @@ public class SMNotification extends Notification
 		while (rootCause.getCause() != null)
 			rootCause = rootCause.getCause();
 		
-		show(rootCause.getMessage(), type);
+		show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
 	}
 }

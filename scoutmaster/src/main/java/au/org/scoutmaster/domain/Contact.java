@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Past;
 
 import org.apache.log4j.Logger;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -100,9 +101,11 @@ public class Contact extends BaseEntity implements Importable
 	private Phone phone3= new Phone();
 
 	@FormField(displayName = "Home Email")
+	@Email
 	private String homeEmail = "";
 
 	@FormField(displayName = "Work Email")
+	@Email
 	private String workEmail = "";
 
 	@FormField(displayName = "Preferred Email")

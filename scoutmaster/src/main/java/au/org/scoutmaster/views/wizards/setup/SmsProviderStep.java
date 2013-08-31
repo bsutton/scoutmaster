@@ -51,7 +51,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
 		MultiColumnFormLayout<User> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
-		formLayout.setWidth("100%");
+		formLayout.setWidth("600px");
 
 		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");
 		label.setContentMode(ContentMode.HTML);
@@ -125,7 +125,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.", "Enter your Mobile No. to recieve a test SMS.",
 						new InputDialog.Recipient()
 						{
-							public void gotInput(String input)
+							public void onOK(String input)
 							{
 								Phone phone = new Phone(input);
 								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", phone);
@@ -152,7 +152,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 							}
 
 							@Override
-							public void cancelled()
+							public void onCancel()
 							{
 								Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
 								

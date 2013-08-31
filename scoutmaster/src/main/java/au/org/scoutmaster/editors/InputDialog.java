@@ -2,6 +2,7 @@ package au.org.scoutmaster.editors;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -17,12 +18,12 @@ import com.vaadin.ui.Window;
 @SuppressWarnings("serial")
 public class InputDialog extends Window
 {
-	Recipient r;
-	TextField tf = new TextField();
+	final Recipient recipient;
+	final TextField field = new TextField();
 
 	public InputDialog(final UI parent, String title, String question, Recipient recipient)
 	{
-		r = recipient;
+		this.recipient = recipient;
 		setCaption(title);
 		setModal(true);
 		this.setClosable(false);
@@ -33,8 +34,8 @@ public class InputDialog extends Window
 		layout.setSizeUndefined();
 		FormLayout form = new FormLayout();
 
-		tf.setCaption(question);
-		form.addComponent(tf);
+		field.setCaption(question);
+		form.addComponent(field);
 		layout.addComponent(form);
 
 		HorizontalLayout buttons = new HorizontalLayout();
@@ -44,18 +45,19 @@ public class InputDialog extends Window
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				r.cancelled();
+				InputDialog.this.recipient.onCancel();
 				InputDialog.this.close();
 			}
 		}));
-		buttons.addComponent(new Button("Ok", new Button.ClickListener()
+		
+		Button ok = new Button("Ok", new Button.ClickListener()
 		{
 			public void buttonClick(ClickEvent event)
 			{
 				try
 				{
-					tf.validate();
-					r.gotInput(tf.getValue());
+					field.validate();
+					InputDialog.this.recipient.onOK(field.getValue());
 					InputDialog.this.close();
 				}
 				catch (InvalidValueException e)
@@ -63,20 +65,26 @@ public class InputDialog extends Window
 					Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 				}
 			}
-		}));
+		});
+		
+		ok.setClickShortcut(KeyCode.ENTER);
+		ok.addStyleName("default");
+		buttons.addComponent(ok);
 
 		layout.addComponent(buttons);
 		layout.setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
 
 		this.setContent(layout);
 		parent.addWindow(this);
+		
+		field.focus();
 	}
 
 	public interface Recipient
 	{
-		public void gotInput(String input);
+		public void onOK(String input);
 
-		public void cancelled();
+		public void onCancel();
 	}
 
 	/**
@@ -88,6 +96,6 @@ public class InputDialog extends Window
 	 */
 	public void addValidator(Validator validator)
 	{
-		tf.addValidator(validator);
+		field.addValidator(validator);
 	}
 }

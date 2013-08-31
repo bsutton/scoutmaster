@@ -7,6 +7,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -57,23 +58,26 @@ public class EMailServerSettings extends BaseEntity
 	/**
 	 * A default from address which is used when the 'system' is sending out emails.
 	 */
+	@NotBlank
+	@Email
 	private String fromEmailAddress;
 
 	
 	/**
 	 * The email address to which the receiving SMTP server should send bounced emails.
 	 */
+	@Email
 	private String bounceEmailAddress;
 
 	/**
 	 * If true then the email server requires authentication.
 	 */
-	private Boolean authRequired;
+	private Boolean authRequired = false;
 	
 	/**
 	 * If set we will use SSL when connecting to the email server if it is supported.
 	 */
-	private Boolean useSSL;
+	private Boolean useSSL = false;
 
 	
 	public Integer getSmtpPort()

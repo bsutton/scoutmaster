@@ -42,6 +42,13 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 	}
 
 	@Override
+	public String getCaption()
+	{
+		return "Create Account";
+	}
+
+
+	@Override
 	protected Component buildEditor(ValidatingFieldGroup<User> fieldGroup)
 	{
 		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
@@ -84,12 +91,6 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 		username.focus();
 
 		return formLayout;
-	}
-
-	@Override
-	public String getCaption()
-	{
-		return "Create Account";
 	}
 
 	@Override

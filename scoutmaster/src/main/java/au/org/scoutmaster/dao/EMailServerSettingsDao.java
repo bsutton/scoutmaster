@@ -1,6 +1,8 @@
 package au.org.scoutmaster.dao;
 
+import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
@@ -11,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import au.org.scoutmaster.domain.EMailServerSettings;
 
+import com.sun.mail.util.MailSSLSocketFactory;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long> implements
@@ -71,23 +74,30 @@ public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long
 	 * @param toAddress
 	 * @param subject
 	 * @param body
-	 * @throws EmailException 
+	 * @throws EmailException
 	 */
 	public void sendEmail(EMailServerSettings settings, String fromAddress, String toAddress, String subject,
 			String body) throws EmailException
 	{
 		Email email = new SimpleEmail();
+	
+		email.setDebug(true);
 		email.setHostName(settings.getSmtpFQDN());
 		email.setSmtpPort(settings.getSmtpPort());
 		if (settings.isAuthRequired())
 			email.setAuthentication(settings.getUsername(), settings.getPassword());
 		if (settings.getUseSSL())
+		{
+			email.setSslSmtpPort(settings.getSmtpPort().toString());
 			email.setSSLOnConnect(true);
+			email.setSSLCheckServerIdentity(false);
+		}
 		email.setFrom(fromAddress);
 		email.setBounceAddress(settings.getBounceEmailAddress());
 		email.addTo(toAddress);
 		email.setSubject(subject);
 		email.setMsg(body);
+		
 		email.send();
 
 	}

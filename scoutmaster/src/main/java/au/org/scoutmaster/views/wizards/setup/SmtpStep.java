@@ -3,12 +3,12 @@ package au.org.scoutmaster.views.wizards.setup;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
-import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.editors.InputDialog;
 import au.org.scoutmaster.fields.ClickAdaptorLogged;
 import au.org.scoutmaster.util.MultiColumnFormLayout;
@@ -17,8 +17,10 @@ import au.org.scoutmaster.util.ValidatingFieldGroup;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.validator.CompositeValidator;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -35,6 +37,7 @@ import com.vaadin.ui.UI;
 public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements WizardStep, ValueChangeListener,
 		ClickListener
 {
+	private static Logger logger = Logger.getLogger(SmtpStep.class);
 	private static final long serialVersionUID = 1L;
 
 	private TextField smtpFQDN;
@@ -171,10 +174,13 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 						Type.ERROR_MESSAGE);
 			else
 			{
+				CompositeValidator validator = new CompositeValidator();
+				validator.addValidator(new EmailValidator("Please input your email address"));
+				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new InputDialog.Recipient()
 						{
-							public void gotInput(String input)
+							public void onOK(String input)
 							{
 								String toEmailAddress = input;
 
@@ -183,9 +189,9 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 								try
 								{
 									StringBuilder sb = new StringBuilder();
-									sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n");
-									sb.append("So welcome to Scoutmaster.\n");
-									sb.append("May you live long and recruit many");
+									sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
+									sb.append("So welcome to Scoutmaster.\n\n");
+									sb.append("May you live long and recruit many.\n");
 
 									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress,
 											"Test email from Scoutmaster setup", sb.toString());
@@ -196,17 +202,18 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 								}
 								catch (EmailException e)
 								{
+									logger.error(e,e);
 									SMNotification.show(e, Type.ERROR_MESSAGE);
 								}
 							}
 
 							@Override
-							public void cancelled()
+							public void onCancel()
 							{
 								// TODO Auto-generated method stub
 
 							}
-						}).addValidator(new EmailValidator("Please input your email address"));
+						}).addValidator(validator);
 
 			}
 		}
