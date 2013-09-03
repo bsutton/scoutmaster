@@ -9,7 +9,6 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.FormHelper;
 import au.org.scoutmaster.views.SearchableContactTable;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -26,7 +25,6 @@ public class SelectRecipientsStep implements WizardStep
 	private TextField subject;
 	private TextArea message;
 
-	FormHelper formHelper;
 	private TextField from;
 	private ComboBox providers;
 	private SearchableContactTable contactTable;

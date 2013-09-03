@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.fields.PoJoTable;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.fields.PoJoTable;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
 

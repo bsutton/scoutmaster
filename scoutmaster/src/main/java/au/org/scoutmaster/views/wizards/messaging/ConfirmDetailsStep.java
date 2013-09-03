@@ -3,7 +3,8 @@ package au.org.scoutmaster.views.wizards.messaging;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.util.FormHelper;
+import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.util.SMFormHelper;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -22,7 +23,7 @@ public class ConfirmDetailsStep  implements WizardStep
 	private TextArea message;
 	private Label remaining;
 	
-	FormHelper formHelper;
+	SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private TextField provider;
 	private MessagingWizardView messagingWizardView;
@@ -48,7 +49,7 @@ public class ConfirmDetailsStep  implements WizardStep
 		
 		layout.addComponent(new Label("Please review the details before clicking next as messages will be sent immediately."));
 		FormLayout formLayout = new FormLayout();
-		formHelper = new FormHelper(formLayout, null);
+		formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
 		provider = formHelper.bindTextField("Provider", "provider");
 		provider.setValue(details.getProvider().getProviderName());
 		provider.setReadOnly(true);

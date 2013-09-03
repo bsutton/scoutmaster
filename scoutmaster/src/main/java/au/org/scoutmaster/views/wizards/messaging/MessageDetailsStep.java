@@ -8,7 +8,7 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.FormHelper;
+import au.org.scoutmaster.util.SMFormHelper;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -28,7 +28,7 @@ public class MessageDetailsStep  implements WizardStep
 	private TextArea message;
 	private Label remaining;
 	
-	FormHelper formHelper;
+	SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private ComboBox providers;
 
@@ -50,7 +50,7 @@ public class MessageDetailsStep  implements WizardStep
 		
 		layout.addComponent(new Label("Enter the subject and message and then click next."));
 		FormLayout formLayout = new FormLayout();
-		formHelper = new FormHelper(formLayout, null);
+		formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
 		providers = formHelper.bindEntityField("Provider", "providerName", "providerName", SMSProvider.class);
 		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> list = daoSMSProvider.findAll();
