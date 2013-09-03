@@ -7,10 +7,10 @@ import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 import au.org.scoutmaster.util.RandomString;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
