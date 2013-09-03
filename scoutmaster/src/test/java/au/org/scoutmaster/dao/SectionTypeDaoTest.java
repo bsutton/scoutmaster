@@ -11,8 +11,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Age;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 
 public class SectionTypeDaoTest
 {
