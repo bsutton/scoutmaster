@@ -6,13 +6,13 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.log4j.Logger;
 
-import au.org.scoutmaster.application.Menu;
+import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
-import au.org.scoutmaster.fields.ClickAdaptorLogged;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.validator.EmailValidator;
