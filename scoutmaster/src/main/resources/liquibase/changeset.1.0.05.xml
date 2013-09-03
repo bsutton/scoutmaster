@@ -11,6 +11,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Joey" />
+			<column name="description" value = "Joey"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -19,6 +20,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Cub" />
+			<column name="description" value = "Cub"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -27,6 +29,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Scout" />
+			<column name="description" value = "Scout"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -35,6 +38,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Venturer" />
+			<column name="description" value = "Venturer"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -43,6 +47,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Rover" />
+			<column name="description" value = "Rover"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -51,6 +56,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Leader" />
+			<column name="description" value = "Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -59,6 +65,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Joey Leader" />
+			<column name="description" value = "Joey Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -67,6 +74,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Cub Leader" />
+			<column name="description" value = "Cub Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -75,6 +83,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Scout Leader" />
+			<column name="description" value = "Scout Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -83,6 +92,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Venturer Leader" />
+			<column name="description" value = "Venturer Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -91,6 +101,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Rover Leader" />
+			<column name="description" value = "Rover Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -99,6 +110,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Parent" />
+			<column name="description" value = "Parent"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -107,6 +119,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Gardian" />
+			<column name="description" value = "Gardian"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -115,6 +128,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Council Member" />
+			<column name="description" value = "Council Member"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -123,6 +137,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Committee Member" />
+			<column name="description" value = "Committee Member"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -131,6 +146,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Adult Helper" />
+			<column name="description" value = "Adult Helper"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -139,6 +155,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Volunteer" />
+			<column name="description" value = "Vounteer"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -147,6 +164,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="President" />
+			<column name="description" value = "President"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -155,6 +173,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Secretary" />
+			<column name="description" value = "Secretary"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -163,6 +182,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Treasurer" />
+			<column name="description" value = "Treasurer"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -171,6 +191,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Youth Member" />
+			<column name="description" value = "Youth Member"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -179,6 +200,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Prospect" />
+			<column name="description" value = "Prospect"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -187,6 +209,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Youth Trial" />
+			<column name="description" value = "Youth Trial"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -194,7 +217,8 @@
 		<insert tableName="Tag">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
-			<column name="NAME" value="Quarter Master" />
+			<column name="NAME" value="Quartermaster" />
+			<column name="description" value = "Equipment manager"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -203,6 +227,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Group Leader" />
+			<column name="description" value = "Group Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="0" />
 		</insert>
@@ -211,6 +236,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="District Leader" />
+			<column name="description" value = "District Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -219,6 +245,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Region Leader" />
+			<column name="description" value = "Region Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -227,6 +254,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Branch Leader" />
+			<column name="description" value = "Branch Leader"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
@@ -235,6 +263,7 @@
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" valueNumeric="1" />
 			<column name="NAME" value="Branch Staff" />
+			<column name="description" value = "Branch Staff"/>
 			<column name="builtin" valueNumeric="1" />
 			<column name="detachable" valueNumeric="1" />
 		</insert>
