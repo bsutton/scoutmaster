@@ -13,7 +13,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity
 @Table(name="Note")
