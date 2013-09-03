@@ -6,14 +6,14 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.editors.InputDialog;
+import au.com.vaadinutils.listener.ClickAdaptorLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
-import au.org.scoutmaster.editors.InputDialog;
-import au.org.scoutmaster.fields.ClickAdaptorLogged;
-import au.org.scoutmaster.util.MultiColumnFormLayout;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.util.ValidatingFieldGroup;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -71,7 +71,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
 	{
-		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<EMailServerSettings> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("500px");
 
 		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");

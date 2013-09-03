@@ -5,11 +5,11 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.BaseEntity;
-import au.org.scoutmaster.util.FormHelper;
+import au.org.scoutmaster.util.SMFormHelper;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.util.ValidatingFieldGroup;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.EntityItem;
@@ -23,7 +23,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 {
 	private static Logger logger = Logger.getLogger(SingleEntityStep.class);
 
-	private ValidatingFieldGroup<E> fieldGroup;
+	private au.com.vaadinutils.crud.ValidatingFieldGroup<E> fieldGroup;
 	private JPAContainer<E> container;
 	private E entity;
 
@@ -51,9 +51,6 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 	{
 		if (editor == null)
 		{
-			fieldGroup = new ValidatingFieldGroup<E>(entityClass);
-			editor = buildEditor(fieldGroup);
-
 			this.entity = findEntity();
 			EntityItem<E> entityItem;
 			if (entity == null)
@@ -76,16 +73,19 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 				isNew = false;
 				Long itemId = entity.getId();
 				entityItem = container.getItem(itemId);
-				// As we did a lookup the entity we retrieved during the lookup may not be
+				// As we did a lookup the entity we retrieved during the lookup
+				// may not be
 				// the one we retrieve from the container.
 				entity = entityItem.getEntity();
 			}
 			Preconditions.checkArgument(entityItem != null);
 			Preconditions.checkArgument(entity == entityItem.getEntity());
-			fieldGroup.setItemDataSource(entityItem);
+			
+			fieldGroup = new ValidatingFieldGroup<E>(entityItem, entityClass);
+			editor = buildEditor(fieldGroup);
 		}
 
-		Preconditions.checkArgument(((EntityItem<E>)fieldGroup.getItemDataSource()).getEntity() == entity);
+		Preconditions.checkArgument(((EntityItem<E>) fieldGroup.getItemDataSource()).getEntity() == entity);
 		return editor;
 	}
 
@@ -150,12 +150,15 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 		}
 		catch (ConstraintViolationException e)
 		{
-			FormHelper.showConstraintViolation(e);
+			SMFormHelper.showConstraintViolation(e);
 		}
 		catch (CommitException e)
 		{
 			logger.error(e, e);
-			Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+			if (e.getCause() instanceof ConstraintViolationException)
+				SMFormHelper.showConstraintViolation(((ConstraintViolationException) e.getCause()));
+			else
+				Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		return valid;
 	}

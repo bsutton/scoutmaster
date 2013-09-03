@@ -3,11 +3,11 @@ package au.org.scoutmaster.views.wizards.setup;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.util.MultiColumnFormLayout;
-import au.org.scoutmaster.util.ValidatingFieldGroup;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -34,7 +34,7 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<Organisation> fieldGroup)
 	{
-		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<Organisation> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("500px");
 
 		Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);

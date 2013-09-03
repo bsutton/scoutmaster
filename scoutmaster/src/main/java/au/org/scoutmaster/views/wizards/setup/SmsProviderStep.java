@@ -5,17 +5,16 @@ import java.util.List;
 import org.marre.sms.SmsException;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.editors.InputDialog;
+import au.com.vaadinutils.listener.ClickAdaptorLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.editors.InputDialog;
-import au.org.scoutmaster.fields.ClickAdaptorLogged;
-import au.org.scoutmaster.util.MultiColumnFormLayout;
 import au.org.scoutmaster.util.ProgressListener;
-import au.org.scoutmaster.util.ValidatingFieldGroup;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
@@ -50,7 +49,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
-		MultiColumnFormLayout<User> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<SMSProvider> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("600px");
 
 		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");

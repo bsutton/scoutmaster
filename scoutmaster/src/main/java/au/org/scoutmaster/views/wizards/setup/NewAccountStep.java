@@ -5,11 +5,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.util.MultiColumnFormLayout;
-import au.org.scoutmaster.util.ValidatingFieldGroup;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.validator.UsernameValidator;
 
@@ -51,7 +50,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 	@Override
 	protected Component buildEditor(ValidatingFieldGroup<User> fieldGroup)
 	{
-		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("600px");
 
 		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
