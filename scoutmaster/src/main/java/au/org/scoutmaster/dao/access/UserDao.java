@@ -5,10 +5,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
