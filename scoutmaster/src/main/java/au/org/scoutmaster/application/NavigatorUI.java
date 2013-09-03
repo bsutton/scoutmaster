@@ -1,12 +1,13 @@
 package au.org.scoutmaster.application;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
+import au.com.vaadinutils.menu.MenuBuilder;
+import au.com.vaadinutils.menu.ViewMap;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
@@ -23,7 +24,6 @@ import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
@@ -55,7 +55,7 @@ public class NavigatorUI extends UI
 
 	private MenuBar menubar;
 
-	private ArrayList<NavigatorUI.ViewMap> viewMap = new ArrayList<>();
+	private ArrayList<ViewMap> viewMap = new ArrayList<>();
 
 	private VerticalLayout mainLayout;
 
@@ -92,7 +92,7 @@ public class NavigatorUI extends UI
 		// Wire up the navigation
 		for (final ViewMap viewmap : this.viewMap)
 		{
-			navigator.addView(viewmap.viewName, viewmap.view);
+			navigator.addView(viewmap.getViewName(), viewmap.getView());
 		}
 
 		mainLayout.addComponent(viewContainer);
@@ -178,19 +178,6 @@ public class NavigatorUI extends UI
 			}
 		});
 
-	}
-
-	static class ViewMap implements Serializable
-	{
-		private static final long serialVersionUID = 1L;
-		String viewName;
-		Class<? extends View> view;
-
-		ViewMap(String viewName, Class<? extends View> class1)
-		{
-			this.viewName = viewName;
-			this.view = class1;
-		}
 	}
 
 	void styleConfirmDialog()
