@@ -5,8 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;

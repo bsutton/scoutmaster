@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
@@ -21,6 +21,8 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	public JpaBaseDao()
 	{
 		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager();
+		
+		// hack to get the derived classes Class type.
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
 	}
