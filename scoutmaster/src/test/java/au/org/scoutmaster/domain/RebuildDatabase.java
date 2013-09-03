@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import org.junit.Before;
 import org.junit.Test;
 
-import au.org.scoutmaster.filter.EntityManagerProvider;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 
 /**
  * Use this unit test to rebuild the database from the JPA domain entities.

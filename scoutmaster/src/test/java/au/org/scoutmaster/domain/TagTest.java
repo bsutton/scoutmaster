@@ -9,10 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.TagDao;
-import au.org.scoutmaster.filter.EntityManagerProvider;
 
 import com.vaadin.ui.Notification;
 

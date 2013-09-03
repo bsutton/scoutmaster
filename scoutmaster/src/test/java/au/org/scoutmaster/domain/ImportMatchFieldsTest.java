@@ -13,10 +13,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.Transaction;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
-import au.org.scoutmaster.filter.EntityManagerProvider;
-import au.org.scoutmaster.filter.Transaction;
 
 public class ImportMatchFieldsTest
 {
