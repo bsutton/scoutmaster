@@ -53,8 +53,8 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 			Class<? extends Set<? extends Object>> targetType, Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
-		Set<? extends Object> result;
-		if (targetType == Set.class)
+		Set<? extends Object> result = new HashSet<>();
+		if (targetType.getName().equals("java.util.Set"))
 		{
 			result = new HashSet<Tag>();
 
