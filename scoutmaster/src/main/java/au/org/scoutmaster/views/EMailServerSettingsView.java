@@ -1,11 +1,11 @@
 package au.org.scoutmaster.views;
 
 
-import au.org.scoutmaster.application.Menu;
+import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
-import au.org.scoutmaster.fields.ClickAdaptorLogged;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
