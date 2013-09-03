@@ -7,7 +7,7 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
-import au.org.scoutmaster.application.Menu;
+import au.com.vaadinutils.menu.Menu;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -131,7 +131,7 @@ public class ImportWizardView extends VerticalLayout implements View, WizardProg
 	{
 		this.endWizard("Import Cancelled!");
 		
-		if (this.file.getTempFile().exists())
+		if (this.file != null && this.file.getTempFile().exists())
 			this.file.getTempFile().delete();
 
 	}

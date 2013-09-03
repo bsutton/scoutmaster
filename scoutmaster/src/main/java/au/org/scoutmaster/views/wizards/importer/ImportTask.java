@@ -12,14 +12,14 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.vaadinutils.dao.Transaction;
 import au.org.scoutmaster.application.LocalEntityManagerFactory;
 import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.filter.Transaction;
-import au.org.scoutmaster.util.FormHelper;
 import au.org.scoutmaster.util.ProgressBarTask;
 import au.org.scoutmaster.util.ProgressTaskListener;
+import au.org.scoutmaster.util.SMFormHelper;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -135,7 +135,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 		}
 		catch (ConstraintViolationException e)
 		{
-			FormHelper.showConstraintViolation(e);
+			SMFormHelper.showConstraintViolation(e);
 		}
 		catch (Throwable e)
 		{

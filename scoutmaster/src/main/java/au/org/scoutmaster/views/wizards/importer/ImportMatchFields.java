@@ -16,6 +16,7 @@ import java.util.List;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.domain.EntityAdaptor;
@@ -23,9 +24,9 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.util.MultiColumnFormLayout;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -107,7 +108,7 @@ public class ImportMatchFields implements WizardStep
 		this.headers = null;
 		this.mappings = new ArrayList<ComboBox>();
 
-		MultiColumnFormLayout<Object> layout = new MultiColumnFormLayout<>(3, new FieldGroup());
+		SMMultiColumnFormLayout<Object> layout = new SMMultiColumnFormLayout<Object>(3, new ValidatingFieldGroup<Object>((EntityItem<?>)null, null));
 		this.selectedUserMapping = this.importView.getFile().getImportMapping();
 		
 		
