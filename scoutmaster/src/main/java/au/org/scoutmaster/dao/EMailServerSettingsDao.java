@@ -1,8 +1,6 @@
 package au.org.scoutmaster.dao;
 
-import java.security.GeneralSecurityException;
 import java.util.List;
-import java.util.Properties;
 
 import javax.persistence.EntityManager;
 
@@ -13,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import au.org.scoutmaster.domain.EMailServerSettings;
 
-import com.sun.mail.util.MailSSLSocketFactory;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long> implements
