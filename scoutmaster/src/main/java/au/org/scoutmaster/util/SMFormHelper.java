@@ -7,7 +7,7 @@ import org.vaadin.tokenfield.TokenField;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
-import au.org.scoutmaster.fields.ContactTokenField;
+import au.org.scoutmaster.fields.SplitContactTokenField;
 import au.org.scoutmaster.views.Selected;
 
 import com.vaadin.data.fieldgroup.FieldGroup;
@@ -37,7 +37,7 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 			Class<? extends BaseEntity> clazz)
 	{
 		VerticalLayout layout = new VerticalLayout();
-		TokenField field = new ContactTokenField<T>(selected, fieldLabel, layout);
+		TokenField field = new SplitContactTokenField<T>(selected, fieldLabel, layout);
 		field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake
 															// textfield look
 		field.setWidth("100%"); // width...
