@@ -27,6 +27,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
@@ -79,7 +80,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.colspan(2);
 		overviewForm.bindTextField("Lastname", Contact.LASTNAME);
 		overviewForm.newLine();
-		DateField birthDate = overviewForm.bindDateField("Birth Date", Contact.BIRTH_DATE);
+		DateField birthDate = overviewForm.bindDateField("Birth Date", Contact.BIRTH_DATE,"yyyy-MM-dd", Resolution.DAY);
 
 		final Label labelAge = overviewForm.bindLabel("Age");
 		overviewForm.bindEnumField("Gender", "gender", Gender.class);
@@ -141,7 +142,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindTextAreaField("Hobbies", "hobbies", 4);
 		background.newLine();
 		background.colspan(2);
-		background.bindDateField("Affiliated Since", "affiliatedSince");
+		background.bindDateField("Affiliated Since", "affiliatedSince","yyyy-MM-dd", Resolution.DAY);
 		background.newLine();
 		background.colspan(4);
 		background.bindTextField("Current Employer", "currentEmployer");
@@ -153,14 +154,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.colspan(1);
 		background.bindBooleanField("Has WWC", "hasWWC");
 		background.colspan(3);
-		background.bindDateField("WWC Expiry", "wwcExpiry");
+		background.bindDateField("WWC Expiry", "wwcExpiry","yyyy-MM-dd", Resolution.DAY);
 		background.colspan(4);
 		background.bindTextField("WWC No.", "wwcNo");
 		background.newLine();
 		background.colspan(1);
 		background.bindBooleanField("Has Police Check", "hasPoliceCheck");
 		background.colspan(3);
-		background.bindDateField("Police Check Expiry", "policeCheckExpiry");
+		background.bindDateField("Police Check Expiry", "policeCheckExpiry","yyyy-MM-dd", Resolution.DAY);
 		background.newLine();
 		background.colspan(2);
 		background.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
@@ -201,7 +202,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.bindTextField("Member No", "memberNo");
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberForm.bindDateField("Member Since", "memberSince");
+		memberForm.bindDateField("Member Since", "memberSince","yyyy-MM-dd", Resolution.DAY);
 	}
 
 	private Label youthTab()
@@ -342,13 +343,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	}
 
 	@Override
-	protected Filter getContainerFilter()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		JPAContainer<Contact> container = new DaoFactory().getContactDao().makeJPAContainer();
@@ -360,6 +354,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		super.init(Contact.class, container, builder.build());
 
+	}
+
+	@Override
+	protected Filter getContainerFilter(String string)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
