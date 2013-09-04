@@ -16,8 +16,8 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.dao.Transaction;
 import au.org.scoutmaster.application.LocalEntityManagerFactory;
+import au.org.scoutmaster.dao.Transaction;
 
 public class EntityManagerInjectorFilter implements Filter
 {
