@@ -3,6 +3,7 @@ package au.org.scoutmaster.views;
 import java.util.Map;
 import java.util.Set;
 
+import au.com.vaadinutils.crud.RowChangeListener;
 import au.org.scoutmaster.domain.Contact;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
