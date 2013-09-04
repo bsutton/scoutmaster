@@ -243,6 +243,24 @@
 			<artifactId>VaadinUtils</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
+	<dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-core</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>3.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>3.2.3</version>
+        </dependency> 
+		
 	</dependencies>
 	<build>
 		<plugins>
