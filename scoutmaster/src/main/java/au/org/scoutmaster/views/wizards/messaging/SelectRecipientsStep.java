@@ -1,9 +1,11 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.HeadingToPropertyId;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
@@ -50,9 +52,15 @@ public class SelectRecipientsStep implements WizardStep
 		ContactDao daoContact = new DaoFactory().getContactDao();
 		
 		JPAContainer<Contact> contactContainer = daoContact.makeJPAContainer();
+		List<HeadingToPropertyId> headings = new ArrayList<>();
+		
+		headings.add(new HeadingToPropertyId("First Name", Contact.FIRSTNAME));
+		headings.add(new HeadingToPropertyId("Lastname", Contact.LASTNAME));
+		headings.add(new HeadingToPropertyId("Birth Date", Contact.BIRTH_DATE));
+		headings.add(new HeadingToPropertyId("Section", Contact.SECTION));
+		headings.add(new HeadingToPropertyId("Mobile", Contact.MOBILE_PHONE));
 
-		contactTable = new SearchableContactTable(contactContainer, new String[]
-		{ Contact.FIRSTNAME, Contact.LASTNAME, Contact.BIRTH_DATE, Contact.SECTION, Contact.MOBILE_PHONE });
+		contactTable = new SearchableContactTable(contactContainer, headings);
 		layout.addComponent(contactTable);
 		return layout;
 	}
