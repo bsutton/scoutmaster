@@ -47,6 +47,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	public static final String NAME = "Contact";
 
+	private static final int LABEL_WIDTH = 120;
+
 	private CheckBox primaryPhone1;
 	private CheckBox primaryPhone2;
 	private CheckBox primaryPhone3;
@@ -57,13 +59,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
 	{
+		tabs.setSizeFull();
+
 		VerticalLayout layout = new VerticalLayout();
+		layout.setDescription("Editor");
+
 		// Overview tab
 
-		SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup, LABEL_WIDTH);
 		overviewForm.setSizeFull();
+
+		//overviewForm.setMargin(true);
 		tabs.addTab(overviewForm, "Overview");
-		overviewForm.setMargin(true);
 		overviewForm.bindBooleanField("Active", "active");
 		overviewForm.newLine();
 		overviewForm.colspan(2);
@@ -100,7 +107,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		googleTab();
 
-		tabs.setSizeFull();
 
 		layout.addComponent(tabs);
 
@@ -133,7 +139,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void backgroundTab()
 	{
 		// Background tab
-		SMMultiColumnFormLayout<Contact> background = new SMMultiColumnFormLayout<Contact>(4, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> background = new SMMultiColumnFormLayout<Contact>(4, this.fieldGroup, LABEL_WIDTH);
 		tabs.addTab(background, "Background");
 		background.setMargin(true);
 		background.setSizeFull();
@@ -172,7 +178,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void medicalTab()
 	{
 		// Medical Tab
-		SMMultiColumnFormLayout<Contact> medicalForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> medicalForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup, LABEL_WIDTH + 20);
 		tabs.addTab(medicalForm, "Medical");
 		medicalForm.setMargin(true);
 		medicalForm.setSizeFull();
@@ -189,7 +195,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void memberTab()
 	{
 		// Member tab
-		SMMultiColumnFormLayout<Contact> memberForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> memberForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup, LABEL_WIDTH);
 		tabs.addTab(memberForm, "Member");
 		memberForm.setMargin(true);
 		memberForm.setSizeFull();
@@ -208,7 +214,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private Label youthTab()
 	{
 		// Youth tab
-		SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup, LABEL_WIDTH);
 		youthTab = tabs.addTab(youthForm, "Youth");
 		youthForm.setSizeFull();
 		youthForm.setMargin(true);
@@ -226,7 +232,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void contactTab()
 	{
 		// Contact tab
-		SMMultiColumnFormLayout<Contact> contactForm = new SMMultiColumnFormLayout<Contact>(4, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> contactForm = new SMMultiColumnFormLayout<Contact>(4, this.fieldGroup, LABEL_WIDTH);
 		contactForm.setSizeFull();
 		tabs.addTab(contactForm, "Contact");
 		contactForm.setMargin(true);
