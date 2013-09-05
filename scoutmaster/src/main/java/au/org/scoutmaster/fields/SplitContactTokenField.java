@@ -15,7 +15,7 @@ public class SplitContactTokenField<T extends BaseEntity> extends ContactTokenFi
 
 	public SplitContactTokenField(Selected<T> selected, String fieldLabel, VerticalLayout layout)
 	{
-		super(selected, fieldLabel, layout);
+		super(selected, null, layout);
 		this.label = new Label(fieldLabel);
 
 	}
