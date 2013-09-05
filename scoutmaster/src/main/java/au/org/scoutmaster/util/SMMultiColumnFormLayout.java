@@ -12,9 +12,9 @@ public class SMMultiColumnFormLayout<E> extends MultiColumnFormLayout<E>
 {
 	private static final long serialVersionUID = 1L;
 
-	public SMMultiColumnFormLayout(int columns, ValidatingFieldGroup<E> fieldGroup)
+	public SMMultiColumnFormLayout(int columns, ValidatingFieldGroup<E> fieldGroup, int labelWidth)
 	{
-		super(columns, fieldGroup);
+		super(columns, fieldGroup, labelWidth);
 	}
 
 	public <T extends BaseEntity> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName,
