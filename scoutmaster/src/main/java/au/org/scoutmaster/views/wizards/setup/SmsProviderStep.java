@@ -49,7 +49,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
-		SMMultiColumnFormLayout<SMSProvider> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<SMSProvider> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
 		formLayout.setWidth("600px");
 
 		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");

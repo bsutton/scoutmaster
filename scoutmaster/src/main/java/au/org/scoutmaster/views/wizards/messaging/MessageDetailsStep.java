@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.SMFormHelper;
+import au.org.scoutmaster.domain.SMSProvider_;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
@@ -28,7 +28,7 @@ public class MessageDetailsStep  implements WizardStep
 	private TextArea message;
 	private Label remaining;
 	
-	SMFormHelper<SMSProvider> formHelper;
+	//SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private ComboBox providers;
 
@@ -47,27 +47,30 @@ public class MessageDetailsStep  implements WizardStep
 	public Component getContent()
 	{
 		VerticalLayout layout = new VerticalLayout();
+		layout.setDescription("MessageDetailsContent");
 		
 		layout.addComponent(new Label("Enter the subject and message and then click next."));
-		FormLayout formLayout = new FormLayout();
-		formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
-		providers = formHelper.bindEntityField("Provider", "providerName", "providerName", SMSProvider.class);
+		MultiColumnFormLayout formLayout = new MultiColumnFormLayout<>(1, null, 60);
+		formLayout.setSizeFull();
+		//formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
+		providers = formLayout.bindEntityField("Provider", SMSProvider_.providerName, SMSProvider.class, SMSProvider_.providerName);
 		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> list = daoSMSProvider.findAll();
 		if (list.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
 		providers.select(list.get(0).getId());
-		from = formHelper.bindTextField("From Mobile No.", "from");
+		from = formLayout.bindTextField("From Mobile No.", "from");
 		from.setDescription("Enter you mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
-		subject = formHelper.bindTextField("Subject", "subject");
+		subject = formLayout.bindTextField("Subject", "subject");
 		subject.setSizeFull();
-		message = formHelper.bindTextAreaField("Message", "message", 4);
-		remaining = formHelper.bindLabel("Characters remaining 160");
+		message = formLayout.bindTextAreaField("Message", "message", 4);
+		remaining = formLayout.bindLabel("Characters remaining 160");
+		//remaining.setCaption("Message");
 		remaining.setImmediate(true);
 		
-		formLayout.addComponent(message);
 		layout.addComponent(formLayout);
 		layout.setMargin(true);
+		//layout.setSizeFull();
 		
 		message.addTextChangeListener(new TextChangeListener()
 		{
@@ -76,7 +79,7 @@ public class MessageDetailsStep  implements WizardStep
 			@Override
 			public void textChange(TextChangeEvent event)
 			{
-				remaining.setCaption("Characters remaining " + (160 - event.getText().length()));
+				remaining.setValue("Characters remaining " + (160 - event.getText().length()));
 				
 			}
 		});

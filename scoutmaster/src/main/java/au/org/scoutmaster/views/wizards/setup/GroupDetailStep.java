@@ -34,7 +34,7 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<Organisation> fieldGroup)
 	{
-		SMMultiColumnFormLayout<Organisation> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<Organisation> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
 		formLayout.setWidth("500px");
 
 		Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);

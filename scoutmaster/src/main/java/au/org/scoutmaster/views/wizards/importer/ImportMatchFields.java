@@ -108,7 +108,7 @@ public class ImportMatchFields implements WizardStep
 		this.headers = null;
 		this.mappings = new ArrayList<ComboBox>();
 
-		SMMultiColumnFormLayout<Object> layout = new SMMultiColumnFormLayout<Object>(3, new ValidatingFieldGroup<Object>((EntityItem<?>)null, null));
+		SMMultiColumnFormLayout<Object> layout = new SMMultiColumnFormLayout<Object>(3, new ValidatingFieldGroup<Object>((EntityItem<?>)null, null), 60);
 		this.selectedUserMapping = this.importView.getFile().getImportMapping();
 		
 		

@@ -71,7 +71,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
 	{
-		SMMultiColumnFormLayout<EMailServerSettings> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<EMailServerSettings> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
 		formLayout.setWidth("500px");
 
 		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
