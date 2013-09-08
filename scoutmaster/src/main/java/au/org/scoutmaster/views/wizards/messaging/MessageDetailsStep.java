@@ -11,8 +11,10 @@ import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.SMSProvider_;
 
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -31,46 +33,46 @@ public class MessageDetailsStep  implements WizardStep
 	//SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private ComboBox providers;
+	private MessagingWizardView wizard;
+	private MultiColumnFormLayout<SMSProvider> formLayout;
+	private VerticalLayout layout;
+	private Label recipientCount;
 
 	public MessageDetailsStep(MessagingWizardView messagingWizardView)
 	{
+		wizard = messagingWizardView;
 		
-	}
-
-	@Override
-	public String getCaption()
-	{
-		return "Message Details";
-	}
-
-	@Override
-	public Component getContent()
-	{
-		VerticalLayout layout = new VerticalLayout();
+		layout = new VerticalLayout();
 		layout.setDescription("MessageDetailsContent");
 		
 		layout.addComponent(new Label("Enter the subject and message and then click next."));
-		MultiColumnFormLayout formLayout = new MultiColumnFormLayout<>(1, null, 60);
+		formLayout = new MultiColumnFormLayout<>(1, null);
+		formLayout.setColumnFieldWidth(0, 500);
 		formLayout.setSizeFull();
-		//formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
+
 		providers = formLayout.bindEntityField("Provider", SMSProvider_.providerName, SMSProvider.class, SMSProvider_.providerName);
 		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> list = daoSMSProvider.findAll();
 		if (list.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
 		providers.select(list.get(0).getId());
+		
+		recipientCount = new Label();
+		recipientCount.setContentMode(ContentMode.HTML);
+		layout.addComponent(recipientCount);
+
 		from = formLayout.bindTextField("From Mobile No.", "from");
+		from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
 		from.setDescription("Enter you mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		subject = formLayout.bindTextField("Subject", "subject");
-		subject.setSizeFull();
+		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
 		message = formLayout.bindTextAreaField("Message", "message", 4);
+		message.addValidator(new StringLengthValidator("'Message' must be supplied", 1, 160, false));
 		remaining = formLayout.bindLabel("Characters remaining 160");
-		//remaining.setCaption("Message");
 		remaining.setImmediate(true);
 		
 		layout.addComponent(formLayout);
 		layout.setMargin(true);
-		//layout.setSizeFull();
 		
 		message.addTextChangeListener(new TextChangeListener()
 		{
@@ -83,6 +85,19 @@ public class MessageDetailsStep  implements WizardStep
 				
 			}
 		});
+
+	}
+
+	@Override
+	public String getCaption()
+	{
+		return "Message Details";
+	}
+
+	@Override
+	public Component getContent()
+	{
+		recipientCount.setValue("<p><b>" + wizard.getRecipientStep().getRecipientCount() + " recipients have been selected to recieve the following SMS.</b></p>");
 		
 		return layout;
 	}
@@ -90,11 +105,18 @@ public class MessageDetailsStep  implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
-		boolean advance = this.subject.getValue() != null && this.message.getValue() != null;
+		
+		boolean advance = notEmpty("Message", message.getValue()) && notEmpty("From", from.getValue()) && notEmpty("Subject", subject.getValue());
+		
 		
 		if (!advance)
-			Notification.show("Please enter a Subject and a Message then click Next");
+			Notification.show("Please enter your Mobile, Subject and a Message then click Next");
 		return advance;
+	}
+
+	private boolean notEmpty(String label, String value)
+	{
+		return value != null && value.length() > 0;
 	}
 
 	@Override
