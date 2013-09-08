@@ -74,8 +74,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 		wizard.addStep(confirm, "confirm");
 		wizard.addStep(send, "send");
 		wizard.addStep(complete, "complete");
-//		wizard.setHeight("600px");
-//		wizard.setWidth("800px");
 		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
 		
@@ -106,14 +104,14 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	@Override
 	public void wizardCompleted(WizardCompletedEvent event)
 	{
-		this.endWizard("Import Completed!");
+		this.endWizard("Transmission Completed!");
 
 	}
 
 	@Override
 	public void wizardCancelled(WizardCancelledEvent event)
 	{
-		this.endWizard("Import Cancelled!");
+		this.endWizard("Transmission Cancelled!");
 		
 	}
 
