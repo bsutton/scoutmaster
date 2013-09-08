@@ -20,7 +20,7 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 
 	public ArrayList<FormFieldImpl> getFields()
 	{
-		ArrayList<FormFieldImpl> formFields = new ArrayList<FormFieldImpl>();
+		ArrayList<FormFieldImpl> formFields = new ArrayList<>();
 		Field[] fields = entity.getDeclaredFields();
 
 		for (Field field : fields)
@@ -29,15 +29,33 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 			{
 				FormField singleAnnotation = (FormField) field.getAnnotation(FormField.class);
 
-				if (field.getName() == "address")
+				if (field.getName().equals(Contact_.address.getName()))
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, "street", singleAnnotation, "Address.Street");
+					FormFieldImpl formField = new FormFieldImpl(field, Address_.street.getName(), singleAnnotation, "Address.Street");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "city", singleAnnotation, "Address.City");
+					formField = new FormFieldImpl(field, Address_.city.getName(), singleAnnotation, "Address.City");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "state", singleAnnotation, "Address.State");
+					formField = new FormFieldImpl(field, Address_.state.getName(), singleAnnotation, "Address.State");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, "postcode", singleAnnotation, "Address.Postcode");
+					formField = new FormFieldImpl(field, Address_.postcode.getName(), singleAnnotation, "Address.Postcode");
+					formFields.add(formField);
+				}
+				else if (field.getName().equals(Contact_.phone1.getName()))
+				{
+					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone1.getName(), singleAnnotation,
+							"Phone1.PhoneNo");
+					formFields.add(formField);
+				}
+				else if (field.getName().equals(Contact_.phone2.getName()))
+				{
+					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone2.getName(), singleAnnotation,
+							"Phone2.PhoneNo");
+					formFields.add(formField);
+				}
+				else if (field.getName().equals(Contact_.phone3.getName()))
+				{
+					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone3.getName(), singleAnnotation,
+							"Phone3.PhoneNo");
 					formFields.add(formField);
 				}
 				else
@@ -48,40 +66,10 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 			}
 		}
 
-		Collections.sort(formFields,  new CustomComparator<FormFieldImpl>()  );
+		Collections.sort(formFields, new CustomComparator<FormFieldImpl>());
 
 		return formFields;
 	}
-	
-//	class HackedFormField implements FormField
-//	{
-//		private String displayName;
-//
-//		HackedFormField(String displayName)
-//		{
-//			this.displayName = displayName;
-//		}
-//		
-//		@Override
-//		public Class<? extends Annotation> annotationType()
-//		{
-//			return null;
-//		}
-//
-//		@Override
-//		public boolean visible()
-//		{
-//			// TODO Auto-generated method stub
-//			return false;
-//		}
-//
-//		@Override
-//		public String displayName()
-//		{
-//			return this.displayName;
-//		}
-//		
-//	}
 
 	public void save(EntityManager em, Contact entity, String[] csvHeaders, String[] fieldValues,
 			Hashtable<String, FormFieldImpl> fieldMap)
@@ -91,38 +79,71 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 		{
 			try
 			{
-			String csvHeaderName = csvHeaders[i];
-			FormFieldImpl formField = fieldMap.get(csvHeaderName);
-			if (formField != null)
-			{
-				String fieldValue = fieldValues[i];
+				String csvHeaderName = csvHeaders[i];
+				FormFieldImpl formField = fieldMap.get(csvHeaderName);
+				if (formField != null)
+				{
+					String fieldValue = fieldValues[i];
 
-				if (formField.getFieldName() == "homePhone")
-					entity.setPhone1(fieldValue);
-				else if (formField.getFieldName() == "workPhone")
-					entity.setPhone2(new Phone(fieldValue));
-				else if (formField.getFieldName() == "mobile")
-					entity.setPhone3(new Phone(fieldValue));
-				else if (formField.getFieldName() == "street")
-					entity.setStreet(fieldValue);
-				else if (formField.getFieldName() == "city")
-					entity.setCity(fieldValue);
-				else if (formField.getFieldName() == "state")
-					entity.setState(fieldValue);
-				else if (formField.getFieldName() == "postcode")
-					entity.setPostcode(fieldValue);
-				else if (formField.getFieldName() == "birthDate")
-					entity.setBirthDate(fieldValue);
-				else
-					formField.setValue(entity, fieldValue);
-			}
+					if (formField.getFieldName().equals(Contact_.phone1.getName()))
+						entity.setPhone1(fieldValue);
+					else if (formField.getFieldName().equals(Contact_.phone2.getName()))
+						entity.setPhone2(new Phone(fieldValue));
+					else if (formField.getFieldName().equals(Contact_.phone3.getName()))
+						entity.setPhone3(new Phone(fieldValue));
+					else if (formField.getFieldName().equals(Contact_.gender.getName()))
+						entity.setGender(Gender.valueOf(fieldValue));
+					else if (formField.getFieldName().equals(Address_.street.getName()))
+						entity.setStreet(fieldValue);
+					else if (formField.getFieldName().equals(Address_.city.getName()))
+						entity.setCity(fieldValue);
+					else if (formField.getFieldName().equals(Address_.state.getName()))
+						entity.setState(fieldValue);
+					else if (formField.getFieldName().equals(Address_.postcode.getName()))
+						entity.setPostcode(fieldValue);
+					else if (formField.getFieldName().equals(Contact_.birthDate.getName()))
+						entity.setBirthDate(fieldValue);
+					else
+						formField.setValue(entity, fieldValue);
+				}
 			}
 			catch (Throwable e)
 			{
 				// For the moment just ignore non-parsable fields.
-				logger.error(e,e);
+				logger.error(e, e);
 			}
 		}
 
 	}
+
+	// class HackedFormField implements FormField
+	// {
+	// private String displayName;
+	//
+	// HackedFormField(String displayName)
+	// {
+	// this.displayName = displayName;
+	// }
+	//
+	// @Override
+	// public Class<? extends Annotation> annotationType()
+	// {
+	// return null;
+	// }
+	//
+	// @Override
+	// public boolean visible()
+	// {
+	// // TODO Auto-generated method stub
+	// return false;
+	// }
+	//
+	// @Override
+	// public String displayName()
+	// {
+	// return this.displayName;
+	// }
+	//
+	// }
+
 }
