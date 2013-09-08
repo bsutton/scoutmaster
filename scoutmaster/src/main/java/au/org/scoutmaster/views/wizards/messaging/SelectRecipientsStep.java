@@ -98,4 +98,8 @@ public class SelectRecipientsStep implements WizardStep
 		return contactTable.getFilteredContacts();
 	}
 
+	public int getRecipientCount()
+	{
+		return contactTable.size();
+	}
 }
