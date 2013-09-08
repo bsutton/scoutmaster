@@ -16,7 +16,6 @@ import java.util.List;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
 import au.org.scoutmaster.domain.EntityAdaptor;
@@ -24,11 +23,10 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -44,10 +42,35 @@ public class ImportMatchFields implements WizardStep
 
 	private String[] headers;
 	private TextField fieldMapping;
+	private boolean reset = true;
+	private GridLayout layout;
 
 	public ImportMatchFields(ImportWizardView importView)
 	{
 		this.importView = importView;
+
+
+		this.headers = null;
+		this.mappings = new ArrayList<ComboBox>();
+
+		// MultiColumnFormLayout<Object> layout = new
+		// MultiColumnFormLayout<Object>(3, new
+		// ValidatingFieldGroup<Object>((EntityItem<?>)null, null));
+
+		// this.selectedUserMapping =
+		// this.importView.getFile().getImportMapping();
+
+		// fieldMapping = new TextField("Import Mapping", selectedUserMapping);
+		// fl.addComponent(fieldMapping);
+		// row.addComponent(fl);
+		// row.addComponent(new Label(
+		// "Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
+
+		layout = null;
+		layout = new GridLayout(3, 1);
+		layout.setMargin(true);
+		layout.setSizeFull();
+
 	}
 
 	private String[] getHeaders() throws IOException
@@ -103,60 +126,59 @@ public class ImportMatchFields implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		Class<? extends Importable> importable = this.importView.getType().getEntityClass();
-
-		this.headers = null;
-		this.mappings = new ArrayList<ComboBox>();
-
-		SMMultiColumnFormLayout<Object> layout = new SMMultiColumnFormLayout<Object>(3, new ValidatingFieldGroup<Object>((EntityItem<?>)null, null), 60);
-		this.selectedUserMapping = this.importView.getFile().getImportMapping();
-		
-		
-//		fieldMapping = new TextField("Import Mapping", selectedUserMapping);
-//		fl.addComponent(fieldMapping);
-//		row.addComponent(fl);
-//		row.addComponent(new Label(
-//				"Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
-
-		layout.setMargin(true);
-		layout.setSizeFull();
 		try
 		{
-			String[] headers = getHeaders();
-			
-
-			EntityAdaptor<?> adaptor = EntityAdaptor.create(importable);
-			
-			ArrayList<FormFieldImpl> fields = adaptor.getFields();
-			for (String header : headers)
+			if (reset)
 			{
-				layout.addComponent(new Label(header));
-				layout.addComponent(new Label("--Maps to-->"));
-				ComboBox box = new ComboBox(null, fields);
-				box.setNullSelectionAllowed(true);
-				box.setInputPrompt("--Please Select--");
-				box.setNullSelectionItemId("--Please Select--");
-				box.setTextInputAllowed(false);
-				layout.addComponent(box);
-				this.mappings.add(box);
+				reset = false;
+				layout = new GridLayout(3, 1);
+				layout.setMargin(true);
+				layout.setSpacing(true);
+				//layout.setSizeFull();
+
+				String[] headers = getHeaders();
+
+				Class<? extends Importable> importable = this.importView.getType().getEntityClass();
+				EntityAdaptor<?> adaptor = EntityAdaptor.create(importable);
+
+				ArrayList<FormFieldImpl> fields = adaptor.getFields();
+				for (String header : headers)
+				{
+					Label headerLabel = new Label(header);
+					layout.addComponent(headerLabel);
+					headerLabel.setWidth("" + 160);
+
+					Label mapToLabel = new Label("--Maps to-->");
+					layout.addComponent(mapToLabel);
+					mapToLabel.setWidth("" + 100);
+
+					ComboBox box = new ComboBox(null, fields);
+					box.setNullSelectionAllowed(true);
+					box.setInputPrompt("--Please Select--");
+					box.setNullSelectionItemId("--Please Select--");
+					box.setTextInputAllowed(false);
+					// ComboBox box = layout.addComponent("", fields);
+					layout.addComponent(box);
+					this.mappings.add(box);
+					layout.newLine();
+				}
 			}
 		}
 		catch (IOException e)
 		{
 			Notification.show("An error occured trying to read the CSV file: " + e.getMessage(), Type.ERROR_MESSAGE);
 		}
+
 		return layout;
 	}
-
-	
 
 	@Override
 	public boolean onAdvance()
 	{
-//		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
-//		JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, em);
+		// EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		// JPAContainer<ImportUserMapping> userMappings =
+		// JPAContainerFactory.make(ImportUserMapping.class, em);
 
-		
 		// Save the user selected mappings
 		if (selectedUserMapping != null && !fieldMapping.getValue().equals(selectedUserMapping))
 		{
@@ -186,7 +208,7 @@ public class ImportMatchFields implements WizardStep
 			ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 
 			List<ImportUserMapping> results = daoImportUserMapping.findAll();
-			
+
 			if (results.size() == 1)
 			{
 				ImportUserMapping userMapping = results.get(0);
@@ -200,12 +222,14 @@ public class ImportMatchFields implements WizardStep
 			}
 		}
 
+		reset = false;
 		return true;
 	}
 
 	@Override
 	public boolean onBack()
 	{
+		reset = true;
 		return true;
 	}
 
