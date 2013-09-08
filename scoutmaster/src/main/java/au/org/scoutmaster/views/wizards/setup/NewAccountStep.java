@@ -50,7 +50,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 	@Override
 	protected Component buildEditor(ValidatingFieldGroup<User> fieldGroup)
 	{
-		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
+		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("600px");
 
 		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
