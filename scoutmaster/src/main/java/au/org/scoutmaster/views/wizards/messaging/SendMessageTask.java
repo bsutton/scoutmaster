@@ -42,7 +42,7 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 			super.taskException(e);
 		}
 
-		super.taskComplete();
+		super.taskComplete(1);
 
 	}
 
@@ -64,7 +64,7 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 	@Override
 	public void complete()
 	{
-		super.taskComplete();
+		super.taskComplete(1);
 	}
 
 	@Override
