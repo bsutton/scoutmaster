@@ -1,11 +1,14 @@
 package au.org.scoutmaster.domain;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 import org.apache.log4j.Logger;
 
 public class FormFieldImpl
 {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(FormFieldImpl.class);
 
 	private String fieldName;
@@ -51,18 +54,28 @@ public class FormFieldImpl
 
 	public String toString()
 	{
-		return formField.displayName();
+		return displayName();
 	}
 
-	public void setValue(Object entity, Object value)
+	public void setValue(Object entity, Object value) throws IllegalArgumentException, IllegalAccessException
 	{
-		try
+		if (value.getClass() != field.getType())
 		{
-			field.set(entity, value);
+			// we need to do some conversions by trying to instantiate an instance of of the field with the value as
+			// an argument
+			Constructor<?> ctor;
+			try
+			{
+				ctor = field.getType().getConstructor(value.getClass());
+				if (ctor != null)
+					value  = ctor.newInstance(value); 
+			}
+			catch (NoSuchMethodException | SecurityException | InstantiationException | InvocationTargetException e)
+			{
+				throw new IllegalArgumentException("Unable to convert value: " + value + " of type " + value.getClass() 
+						+ " to the field type of " + field.getType());
+			}
 		}
-		catch (IllegalArgumentException | IllegalAccessException e)
-		{
-			logger.error(e, e);
-		}
+		field.set(entity, value);
 	}
 }
