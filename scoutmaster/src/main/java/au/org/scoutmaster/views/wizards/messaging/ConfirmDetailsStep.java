@@ -2,36 +2,74 @@ package au.org.scoutmaster.views.wizards.messaging;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.SMFormHelper;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class ConfirmDetailsStep  implements WizardStep
+public class ConfirmDetailsStep implements WizardStep
 {
 
 	private TextField subject;
 	private TextArea message;
 	private Label remaining;
-	
-	SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private TextField provider;
 	private MessagingWizardView messagingWizardView;
+	private VerticalLayout layout;
+	private Label recipientCount;
+	private MessageDetailsStep details;
 
 	public ConfirmDetailsStep(MessagingWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
+		details = messagingWizardView.getDetails();
+
+		layout = new VerticalLayout();
+		layout.addComponent(new Label(
+				"Please review the details before clicking next as messages will be sent immediately."));
 		
+		recipientCount = new Label();
+		recipientCount.setContentMode(ContentMode.HTML);
+		layout.addComponent(recipientCount);
+
+		MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
+		provider = formLayout.bindTextField("Provider", "provider");
+		provider.setReadOnly(true);
+
+		from = formLayout.bindTextField("From", "from");
+		from.setReadOnly(true);
+
+		subject = formLayout.bindTextField("Subject", "subject");
+		subject.setSizeFull();
+		subject.setReadOnly(true);
+
+		message = formLayout.bindTextAreaField("Message", "message", 4);
+		message.setReadOnly(true);
+
+		layout.addComponent(formLayout);
+		layout.setMargin(true);
+
+		message.addTextChangeListener(new TextChangeListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void textChange(TextChangeEvent event)
+			{
+				remaining.setCaption("Characters remaining " + (160 - event.getText().length()));
+
+			}
+		});
+
 	}
 
 	@Override
@@ -43,46 +81,27 @@ public class ConfirmDetailsStep  implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
 		
-		MessageDetailsStep details = messagingWizardView.getDetails();
+		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
+				+ " recipients have been selected to recieve the following SMS.</b></p>");
 		
-		layout.addComponent(new Label("Please review the details before clicking next as messages will be sent immediately."));
-		FormLayout formLayout = new FormLayout();
-		formHelper = new SMFormHelper<SMSProvider>(formLayout, null);
-		provider = formHelper.bindTextField("Provider", "provider");
+		provider.setReadOnly(false);
 		provider.setValue(details.getProvider().getProviderName());
 		provider.setReadOnly(true);
-		
-		from = formHelper.bindTextField("From", "from");
+		from.setReadOnly(false);
 		from.setValue(details.getFrom());
 		from.setReadOnly(true);
-		
-		subject = formHelper.bindTextField("Subject", "subject");
+		subject.setReadOnly(false);
 		subject.setValue(details.getSubject());
-		subject.setSizeFull();
 		subject.setReadOnly(true);
-		
-		message = formHelper.bindTextAreaField("Message", "message", 4);
+		message.setReadOnly(false);
 		message.setValue(details.getMessage().getBody());
 		message.setReadOnly(true);
-		
-		formLayout.addComponent(message);
-		layout.addComponent(formLayout);
-		layout.setMargin(true);
-		
-		message.addTextChangeListener(new TextChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
 
-			@Override
-			public void textChange(TextChangeEvent event)
-			{
-				remaining.setCaption("Characters remaining " + (160 - event.getText().length()));
-				
-			}
-		});
-		
+
+
+
+
 		return layout;
 	}
 
@@ -90,7 +109,7 @@ public class ConfirmDetailsStep  implements WizardStep
 	public boolean onAdvance()
 	{
 		boolean advance = this.subject.getValue() != null && this.message.getValue() != null;
-		
+
 		if (!advance)
 			Notification.show("Please enter a Subject and a Message then click Next");
 		return advance;
@@ -107,6 +126,4 @@ public class ConfirmDetailsStep  implements WizardStep
 		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
 	}
 
-	
 }
-
