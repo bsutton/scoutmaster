@@ -11,40 +11,56 @@ public class SMSTransmission
 	private Phone phone;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
-	
-	
+
 	public SMSTransmission(Contact contact, Message message, Phone phone)
 	{
 		this.contact = contact;
 		this.message = message;
 		this.phone = phone;
-		
+
 		if (phone.getPhoneType() != PhoneType.MOBILE)
 			throw new IllegalArgumentException("The phone argument must be of type MOBILE");
 	}
+
+	public SMSTransmission(Contact contact, Message message, Exception exception)
+	{
+		this.contact = contact;
+		this.message = message;
+		this.exception = exception;
+	}
+
 	public Message getMessage()
 	{
 		return this.message;
 	}
+
 	public Phone getPhone()
 	{
 		return this.phone;
 	}
+
 	public String getPhoneNo()
 	{
-		return this.phone.getPhoneNo();
+		if (this.phone != null)
+			return this.phone.getPhoneNo();
+		else
+			return "";
 	}
 
 	public void setException(Exception e)
 	{
 		this.exception = e;
-		
+
 	}
-	public Exception getException()
+
+	public String getException()
 	{
-		return exception;
+		if (exception != null)
+			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
+		else
+			return "";
 	}
-	
+
 	public String getContactName()
 	{
 		return this.contact.getFirstname() + " " + this.contact.getLastname();
