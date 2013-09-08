@@ -1,6 +1,6 @@
 package au.org.scoutmaster.util;
 
-import com.vaadin.ui.UI;
+import au.com.vaadinutils.ui.UIUpdater;
 
 public abstract class ProgressBarTask<T>
 {
@@ -13,38 +13,65 @@ public abstract class ProgressBarTask<T>
 
 	abstract public void run();
 
-	protected void taskComplete()
+	protected void taskComplete(final int sent)
 	{
-		synchronized (UI.getCurrent())
+		new UIUpdater(new Runnable()
 		{
-			listener.taskComplete();
-		}
+
+			@Override
+			public void run()
+			{
+				listener.taskComplete(sent);
+			}
+
+		});
 
 	}
 
-	public void taskProgress(int count, int max, T status)
+	public void taskProgress(final int count, final int max, final T status)
 	{
-		synchronized (UI.getCurrent())
+		new UIUpdater(new Runnable()
 		{
-			listener.taskProgress(count++, max, status);
+
+			@Override
+			public void run()
+			{
+				listener.taskProgress(count, max, status);
+			}
 		}
+
+		);
 	}
 
-	public void taskItemError(T status)
+	public void taskItemError(final T status)
 	{
-		synchronized (UI.getCurrent())
+		new UIUpdater(new Runnable()
 		{
-			listener.taskItemError(status);
+
+			@Override
+			public void run()
+			{
+				listener.taskItemError(status);
+			}
 		}
-	
+
+		);
+
 	}
 
-	public void taskException(Exception e)
+	public void taskException(final Exception e)
 	{
-		synchronized (UI.getCurrent())
+		new UIUpdater(new Runnable()
 		{
-			listener.taskException(e);
+
+			@Override
+			public void run()
+			{
+				listener.taskException(e);
+			}
 		}
-	
+
+		);
+
 	}
 }
