@@ -14,33 +14,23 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.VerticalLayout;
 
-public class ImportSelectType  implements WizardStep
+public class ImportSelectType implements WizardStep
 {
 	ArrayList<ImportType> importTypes = new ArrayList<ImportType>();
 	private OptionGroup optionGroup;
-	
-	class ImportType
-	{
-		String name;
-		Class<? extends Importable> importable;
-		
-		public ImportType(String name, Class<? extends Importable> class1)
-		{
-			this.name = name;
-			this.importable = class1;
-		}
-		public String toString()
-		{
-			return name;
-		}
-	}
+	private VerticalLayout layout;
 
 	public ImportSelectType(ImportWizardView importView)
 	{
 		importTypes.add(new ImportType("Contacts", Contact.class));
-		
-		
-		
+
+		layout = new VerticalLayout();
+		layout.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
+		FormLayout formLayout = new FormLayout();
+		this.optionGroup = new OptionGroup("Type", importTypes);
+		formLayout.addComponent(optionGroup);
+		layout.addComponent(formLayout);
+		layout.setMargin(true);
 	}
 
 	@Override
@@ -52,14 +42,7 @@ public class ImportSelectType  implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
-		layout.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
-		FormLayout formLayout = new FormLayout();
-		this.optionGroup = new OptionGroup("Type", importTypes);
-		formLayout.addComponent(optionGroup);
-		layout.addComponent(formLayout);
-		layout.setMargin(true);
-		
+
 		return layout;
 	}
 
@@ -67,7 +50,7 @@ public class ImportSelectType  implements WizardStep
 	public boolean onAdvance()
 	{
 		boolean advance = this.optionGroup.getValue() != null;
-		
+
 		if (!advance)
 			Notification.show("Please select a Type to import and then click Next");
 		return advance;
@@ -81,7 +64,24 @@ public class ImportSelectType  implements WizardStep
 
 	public Class<? extends Importable> getEntityClass()
 	{
-		return ((ImportType)this.optionGroup.getValue()).importable;
+		return ((ImportType) this.optionGroup.getValue()).importable;
+	}
+
+	class ImportType
+	{
+		String name;
+		Class<? extends Importable> importable;
+
+		public ImportType(String name, Class<? extends Importable> class1)
+		{
+			this.name = name;
+			this.importable = class1;
+		}
+
+		public String toString()
+		{
+			return name;
+		}
 	}
 
 }
