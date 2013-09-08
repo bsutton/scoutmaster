@@ -1,15 +1,19 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.MutableInteger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
+import au.com.vaadinutils.ui.UIUpdater;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.ProgressBarWorker;
@@ -21,7 +25,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTransmission>
@@ -34,6 +37,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	private ProgressBar indicator;
 	private Label progressDescription;
 	private PoJoTable<SMSTransmission> progressTable;
+	private MutableInteger queued = new MutableInteger(0);
+	private MutableInteger rejected = new MutableInteger(0);
 
 	public ShowProgressStep(MessagingWizardView messagingWizardView)
 	{
@@ -43,15 +48,20 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public String getCaption()
 	{
-		return "Sending Message.";
+		return "Send Messages";
 	}
 
 	@Override
 	public Component getContent()
 	{
 		VerticalLayout layout = new VerticalLayout();
+		layout.setSizeFull();
 
-		progressTable = new PoJoTable<>(new String[]{"ContactName", "PhoneNo", "Exception"});
+		progressTable = new PoJoTable<>(SMSTransmission.class, new String[]
+		{ "ContactName", "PhoneNo", "Exception" });
+		progressTable.setColumnWidth("PhoneNo", 80);
+		progressTable.setColumnExpandRatio("Exception", 1);
+		progressTable.setSizeFull();
 		progressDescription = new Label();
 		layout.addComponent(progressDescription);
 		layout.setMargin(true);
@@ -62,12 +72,14 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		indicator.setSizeFull();
 		layout.addComponent(indicator);
 		layout.addComponent(this.progressTable);
-		this.progressTable.setSizeFull();
+		layout.setExpandRatio(progressTable, 1);
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
-		
+
 		MessageDetailsStep enter = messagingWizardView.getDetails();
 		ArrayList<SMSTransmission> transmissions = new ArrayList<>();
+
+		HashSet<String> dedupList = new HashSet<>();
 
 		for (Contact contact : recipients)
 		{
@@ -75,31 +87,36 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 			// Find if the contact has a mobile.
 			// Check the primary field first.
-			if (contact.getPrimaryPhone().getPhoneType() == PhoneType.MOBILE
-					&& !daoPhone.isEmpty(contact.getPrimaryPhone()))
+			Phone primaryPhone = contact.getPrimaryPhone();
+			if (primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
 			{
-				transmissions.add(new SMSTransmission(contact, enter.getMessage(), contact.getPrimaryPhone()));
+				queueTransmission(enter, transmissions, dedupList, contact, primaryPhone);
 				continue;
 			}
 
 			if (contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
 			{
-				transmissions.add(new SMSTransmission(contact, enter.getMessage(), contact.getPhone1()));
+				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone1());
 				continue;
 			}
 
 			if (contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
 			{
-				transmissions.add(new SMSTransmission(contact, enter.getMessage(), contact.getPhone2()));
+				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone2());
 				continue;
 			}
 
 			if (contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
 			{
-				transmissions.add(new SMSTransmission(contact, enter.getMessage(), contact.getPhone3()));
+				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone3());
 				continue;
 			}
 
+			// No mobile found
+			SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), new RecipientException(
+					"No mobile no.", contact));
+			ShowProgressStep.this.progressTable.addRow(transmission);
+			rejected.set(rejected.get() + 1);
 		}
 
 		if (transmissions.size() == 0)
@@ -108,7 +125,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		}
 		else
 		{
-			progressDescription.setValue("Initialising SMS Provider");
+			queued.set(transmissions.size());
+			progressDescription.setValue(queued + " messages queued. Initialising SMS Provider, ");
 
 			SMSProvider provider = messagingWizardView.getDetails().getProvider();
 
@@ -118,6 +136,23 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		}
 
 		return layout;
+	}
+
+	private void queueTransmission(MessageDetailsStep enter, ArrayList<SMSTransmission> transmissions,
+			HashSet<String> dedupList, Contact contact, Phone primaryPhone)
+	{
+		SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), primaryPhone);
+		String phone = primaryPhone.getPhoneNo();
+		if (!dedupList.contains(phone))
+		{
+			dedupList.add(phone);
+			transmissions.add(transmission);
+		}
+		else
+		{
+			transmission.setException(new RecipientException("Duplicate phone no.", contact));
+			ShowProgressStep.this.progressTable.addRow(transmission);
+		}
 	}
 
 	@Override
@@ -134,7 +169,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 	public final void taskProgress(final int count, final int max, final SMSTransmission status)
 	{
-		UI.getCurrent().access(new Runnable()
+		new UIUpdater(new Runnable()
 		{
 			@Override
 			public void run()
@@ -146,17 +181,24 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		});
 	}
 
-	public final void taskComplete()
+	public final void taskComplete(final int sent)
 	{
-		UI.getCurrent().access(new Runnable()
+		new UIUpdater(new Runnable()
 		{
 
 			@Override
 			public void run()
 			{
-				indicator.setValue(1.0f);
-				progressDescription.setValue("SMS Messages have been sent. Check the list below for any failures.");
 				sendComplete = true;
+				indicator.setValue(1.0f);
+
+				if (ShowProgressStep.this.rejected.get() == 0 && queued.get() == sent)
+					progressDescription.setValue("All SMS Messages have been sent successfully.");
+
+				else
+					progressDescription
+							.setValue(sent
+									+ " SMS Messages " + (sent == 1 ? "has" : "have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
 			}
 		});
 	}
