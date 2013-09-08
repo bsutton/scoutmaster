@@ -29,13 +29,12 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
 
-@Entity(name="Contact")
-@Table(name="Contact")
+@Entity(name = "Contact")
+@Table(name = "Contact")
 @NamedQueries(
 {
-	@NamedQuery(name = Contact.FIND_ALL, query = "SELECT contact FROM Contact contact"),
-	@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") 
-})
+		@NamedQuery(name = Contact.FIND_ALL, query = "SELECT contact FROM Contact contact"),
+		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
 public class Contact extends BaseEntity implements Importable
 {
 	static public final String FIND_ALL = "Contact.findAll";
@@ -62,7 +61,7 @@ public class Contact extends BaseEntity implements Importable
 	private String prefix = "";
 
 	@NotBlank
-	@javax.validation.constraints.Size(min=1,max=255)
+	@javax.validation.constraints.Size(min = 1, max = 255)
 	@FormField(displayName = "Firstname")
 	private String firstname = "";
 
@@ -70,7 +69,7 @@ public class Contact extends BaseEntity implements Importable
 	private String middlename = "";
 
 	@NotBlank
-	@javax.validation.constraints.Size(min=1,max=255)
+	@javax.validation.constraints.Size(min = 1, max = 255)
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
 
@@ -83,7 +82,7 @@ public class Contact extends BaseEntity implements Importable
 
 	@Transient
 	private Age age;
-	
+
 	@Transient
 	private Phone primaryPhone;
 
@@ -98,7 +97,7 @@ public class Contact extends BaseEntity implements Importable
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
-	private Phone phone3= new Phone();
+	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
 	@Email
@@ -240,14 +239,25 @@ public class Contact extends BaseEntity implements Importable
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Activity> activites = new ArrayList<>();
-	
+
 	/**
-	 * Id imported along with the contact.
-	 * Used to link the contact to an external data source generally the one it was imported from.
-	 * This can be used during susequent imports to link additional data entities to this contact.
+	 * Id imported along with the contact. Used to link the contact to an
+	 * external data source generally the one it was imported from. This can be
+	 * used during susequent imports to link additional data entities to this
+	 * contact.
 	 */
 	@FormField(displayName = "Import ID")
 	private String importId;
+
+	public String getImportId()
+	{
+		return importId;
+	}
+
+	public void setImportId(String importId)
+	{
+		this.importId = importId;
+	}
 
 	public Contact()
 	{
@@ -262,7 +272,6 @@ public class Contact extends BaseEntity implements Importable
 	{
 		return this.firstname + ", " + this.lastname;
 	}
-
 
 	public Tag getTag(String tagName)
 	{
@@ -378,6 +387,11 @@ public class Contact extends BaseEntity implements Importable
 		this.phone1.setPhoneNo(phoneNo);
 	}
 
+	public void setPhone1(Phone phone1)
+	{
+		this.phone1 = phone1;
+	}
+
 	public Phone getPhone1()
 	{
 		return phone1;
@@ -402,7 +416,7 @@ public class Contact extends BaseEntity implements Importable
 	{
 		return age;
 	}
-	
+
 	public Phone getPrimaryPhone()
 	{
 		Phone primary = null;
@@ -413,9 +427,9 @@ public class Contact extends BaseEntity implements Importable
 		else if (phone3.getPrimaryPhone())
 			primary = phone3;
 		return primary;
-			
+
 	}
-	
+
 	public void setPrimaryPhone(Phone phoneNo)
 	{
 		// No Op
@@ -739,19 +753,19 @@ public class Contact extends BaseEntity implements Importable
 	public void setStreet(String street)
 	{
 		this.address.setStreet(street);
-		
+
 	}
 
 	public void setCity(String city)
 	{
 		this.address.setCity(city);
-		
+
 	}
 
 	public void setState(String state)
 	{
 		this.address.setState(state);
-		
+
 	}
 
 	public void setPostcode(String postcode)
@@ -761,13 +775,15 @@ public class Contact extends BaseEntity implements Importable
 
 	public void setBirthDate(String fieldValue)
 	{
-		DateTimeParser[] parsers = { 
-		        DateTimeFormat.forPattern( "yyyy-MM-dd" ).getParser(),
-		        DateTimeFormat.forPattern( "yyyy/MM/dd" ).getParser() };
-		DateTimeFormatter formatter = new DateTimeFormatterBuilder().append( null, parsers ).toFormatter();
+		DateTimeParser[] parsers =
+		{ DateTimeFormat.forPattern("yyyy-MM-dd").getParser(), DateTimeFormat.forPattern("yyyy/MM/dd").getParser() };
+		DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
 
-		DateTime date1 = formatter.parseDateTime( fieldValue);
-		setBirthDate( new java.sql.Date(date1.toDate().getTime()));
+		if ((fieldValue != null && fieldValue.length() > 0))
+		{
+			DateTime date1 = formatter.parseDateTime(fieldValue);
+			setBirthDate(new java.sql.Date(date1.toDate().getTime()));
+		}
 	}
 
 }
