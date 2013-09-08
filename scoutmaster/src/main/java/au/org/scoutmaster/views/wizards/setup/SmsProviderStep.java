@@ -5,6 +5,7 @@ import java.util.List;
 import org.marre.sms.SmsException;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
 import au.com.vaadinutils.listener.ClickAdaptorLogged;
@@ -14,7 +15,6 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.ProgressListener;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
@@ -30,6 +30,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
 {
@@ -49,12 +50,15 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
-		SMMultiColumnFormLayout<SMSProvider> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
-		formLayout.setWidth("600px");
+		VerticalLayout layout = new VerticalLayout();
+		layout.setMargin(true);
+		MultiColumnFormLayout<SMSProvider> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setColumnFieldWidth(0, 250);
 
 		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");
 		label.setContentMode(ContentMode.HTML);
-		formLayout.bindLabel(label);
+		layout.addComponent(label);
+		layout.addComponent(formLayout);
 
 		// Create the user input field
 		TextField user = formLayout.bindTextField("Username:", "username");
@@ -72,13 +76,13 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 		//apiId.addValidator(new StringLengthValidator("Please enter an API Key.", 1, 32, false));
 
 		Button test = new Button("Test");
-		formLayout.addComponent(test);
+		layout.addComponent(test);
 		test.addClickListener(new ClickAdaptorLogged(this));
 
 		// focus the username field when user arrives to the login view
 		user.focus();
 
-		return formLayout;
+		return layout;
 	}
 
 	@Override
