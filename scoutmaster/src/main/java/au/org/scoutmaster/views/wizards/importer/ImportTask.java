@@ -19,12 +19,11 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.ProgressBarTask;
 import au.org.scoutmaster.util.ProgressTaskListener;
-import au.org.scoutmaster.util.SMFormHelper;
+import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
 public class ImportTask extends ProgressBarTask<ImportItemStatus>
@@ -55,19 +54,19 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 		{
 			reader = new FileReader(tempFile);
 
-			buildContainerFromCSV(clazz, reader);
+			int rows = buildContainerFromCSV(clazz, reader);
 
 			reader.close();
 			if (tempFile.exists())
 				tempFile.delete();
 
-			super.taskComplete();
+			super.taskComplete(rows);
 
 		}
 		catch (IOException | InstantiationException | IllegalAccessException e)
 		{
 			logger.error(e, e);
-			Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+			SMNotification.show(e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		finally
 		{
@@ -79,7 +78,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 				catch (IOException e)
 				{
 					logger.error(e, e);
-					Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+					SMNotification.show(e.getMessage(), Type.ERROR_MESSAGE);
 				}
 		}
 
@@ -95,12 +94,13 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	protected <T extends Importable> void buildContainerFromCSV(Class<T> entityClass, Reader reader)
-			throws IOException, InstantiationException, IllegalAccessException
+	protected <T extends Importable> int buildContainerFromCSV(Class<T> entityClass, Reader reader) throws IOException,
+			InstantiationException, IllegalAccessException
 	{
 		JPAContainer<T> container = JPAContainerFactory.make(entityClass, em);
 
 		CSVReader csvReader = null;
+		int count = 0;
 
 		try (Transaction t = new Transaction(em))
 		{
@@ -108,7 +108,6 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 
 			String[] columnHeaders = null;
 			String[] record;
-			int count = 0;
 			while ((record = csvReader.readNext()) != null)
 			{
 				if (columnHeaders == null)
@@ -119,35 +118,37 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 				{
 					try
 					{
-						++count;
 						addRow(container, entityClass, columnHeaders, record, fieldMap);
+						++count;
 						super.taskProgress(count, -1, null);
 					}
-					catch (Throwable e)
+					catch (ConstraintViolationException e)
 					{
-						Notification.show("Import for row " + count + " failed: " + e.getMessage(),
-								Type.TRAY_NOTIFICATION);
+						logger.warn(e, e);
+						ImportItemStatus status = new ImportItemStatus(count, e);
+						super.taskItemError(status);
+					}
+					catch (Exception e)
+					{
+						logger.warn(e, e);
+						ImportItemStatus status = new ImportItemStatus(count, e);
+						super.taskItemError(status);
 					}
 				}
 			}
 			t.commit();
-			// em.flush();
-		}
-		catch (ConstraintViolationException e)
-		{
-			SMFormHelper.showConstraintViolation(e);
 		}
 		catch (Throwable e)
 		{
 			logger.error(e, e);
-			Notification.show("Error during import", e.getMessage(), Type.ERROR_MESSAGE);
-
+			SMNotification.show("Import failed:", e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		finally
 		{
 			if (csvReader != null)
 				csvReader.close();
 		}
+		return count;
 	}
 
 	/**
