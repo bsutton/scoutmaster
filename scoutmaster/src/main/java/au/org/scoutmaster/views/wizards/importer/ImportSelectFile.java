@@ -7,17 +7,15 @@ import java.io.OutputStream;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.org.scoutmaster.domain.ImportUserMapping;
+import au.com.vaadinutils.ui.UIUpdater;
+import au.org.scoutmaster.util.SMNotification;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Upload;
@@ -38,15 +36,17 @@ public class ImportSelectFile implements WizardStep
 	protected String selectedFilename;
 	private Upload upload;
 	private ProgressBar progressBar;
+	private Label progress = new Label();
 	protected boolean uploadStarted;
 	private VerticalLayout content;
 	private ComboBox mapping;
+	private Label completionMessage;
 
 	public ImportSelectFile(ImportWizardView importView)
 	{
 		this.progressBar = new ProgressBar();
 		this.progressBar.setCaption("Progress");
-		this.progressBar.setWidth("50%");
+		this.progressBar.setWidth("100%");
 		this.progressBar.setHeight(100.0f, Unit.POINTS);
 
 	}
@@ -64,115 +64,174 @@ public class ImportSelectFile implements WizardStep
 		{
 			content = new VerticalLayout();
 
-			this.upload = new Upload("", new Upload.Receiver()
-			{
-				private static final long serialVersionUID = 1L;
+			initUpload();
 
-				@Override
-				public OutputStream receiveUpload(String filename, String mimeType)
-				{
-					try
-					{
-						/*
-						 * Here, we'll stored the uploaded file as a temporary
-						 * file. No doubt there's a way to use a
-						 * ByteArrayOutputStream, a reader around it, use
-						 * ProgressListener (and a progress bar) and a separate
-						 * reader thread to populate a container *during* the
-						 * update.
-						 * 
-						 * This is quick and easy example, though.
-						 */
-						tempFile = File.createTempFile("temp", ".csv");
-						return new FileOutputStream(tempFile);
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-						return null;
-					}
-				}
-			});
+			upload.setImmediate(true);
 
-			upload.addStartedListener(new StartedListener()
-			{
-				private static final long serialVersionUID = 1L;
+			startListener();
 
-				@Override
-				public void uploadStarted(StartedEvent event)
-				{
-					ImportSelectFile.this.uploadStarted = true;
-					ImportSelectFile.this.uploadComplete = false;
-				}
-			});
+			failedListener();
 
-			upload.addFailedListener(new FailedListener()
-			{
-				private static final long serialVersionUID = 1L;
+			progressListener();
 
-				@Override
-				public void uploadFailed(FailedEvent event)
-				{
-					Notification.show("The upload failed. " + event.getReason()
-							+ " Please fix the problem and try again.");
-					ImportSelectFile.this.uploadStarted = true;
-					ImportSelectFile.this.uploadComplete = false;
-				}
-			});
+			finishListener();
 
-			upload.addProgressListener(new ProgressListener()
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void updateProgress(long readBytes, long contentLength)
-				{
-					ImportSelectFile.this.progressBar.setValue(((float) (readBytes / contentLength)));
-					ImportSelectFile.this.progressBar.setVisible(true);
-				}
-			});
-
-			upload.addFinishedListener(new Upload.FinishedListener()
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void uploadFinished(Upload.FinishedEvent finishedEvent)
-				{
-					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
-					ImportSelectFile.this.uploadComplete = true;
-					ImportSelectFile.this.progressBar.setValue(1.0f);
-					ImportSelectFile.this.progressBar.setVisible(true);
-					ImportSelectFile.this.content.addComponent(new Label("File " + ImportSelectFile.this.selectedFilename + " has been uploaded."));
-
-					Notification.show("The upload has completed. Click 'Next'");
-				}
-			});
-
-			content.addComponent(new Label(
-					"Click the 'Browse...' button to select the file to import and then click the 'Upload' button."));
+			content.addComponent(new Label("Click the 'Upload' button to select the file to import."));
 
 			content.addComponent(upload);
 
 			content.addComponent(this.progressBar);
 			this.progressBar.setValue(0.0f);
 			this.progressBar.setVisible(false);
-			JPAContainer<ImportUserMapping> userMappings = JPAContainerFactory.make(ImportUserMapping.class, "scoutmaster");
-			// Display the set of import mappings
-			HorizontalLayout row = new HorizontalLayout();
-			FormLayout fl = new FormLayout();
-			mapping = new ComboBox("Field Mappings", userMappings);
-			mapping.setInputPrompt("--Please Select--");
-			mapping.setNullSelectionItemId("--Please Select--");
-			fl.addComponent(mapping);
-			fl.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
-			row.addComponent(fl);
-			//row.addComponent(new Label("If you have imported this type of file previously you can select a saved field mapping."));
-			content.addComponent(row);
+			
+			completionMessage = new Label("");
+			content.addComponent(completionMessage);
+
+			// JPAContainer<ImportUserMapping> userMappings =
+			// JPAContainerFactory.make(ImportUserMapping.class,
+			// "scoutmaster");
+			// // Display the set of import mappings
+			// HorizontalLayout row = new HorizontalLayout();
+			// FormLayout fl = new FormLayout();
+			// mapping = new ComboBox("Field Mappings", userMappings);
+			// mapping.setInputPrompt("--Please Select--");
+			// mapping.setNullSelectionItemId("--Please Select--");
+			// fl.addComponent(mapping);
+			// fl.addComponent(new
+			// Label("If you have imported this type of file previously you can select a saved field mapping."));
+			// row.addComponent(fl);
+			// //row.addComponent(new
+			// Label("If you have imported this type of file previously you can select a saved field mapping."));
+			// content.addComponent(row);
 			content.setMargin(true);
 		}
 
 		return content;
+	}
+
+	private void initUpload()
+	{
+		this.upload = new Upload("", new Upload.Receiver()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public OutputStream receiveUpload(String filename, String mimeType)
+			{
+				try
+				{
+					/*
+					 * Here, we'll stored the uploaded file as a temporary file.
+					 * No doubt there's a way to use a ByteArrayOutputStream, a
+					 * reader around it, use ProgressListener (and a progress
+					 * bar) and a separate reader thread to populate a container
+					 * *during* the update.
+					 * 
+					 * This is quick and easy example, though.
+					 */
+					tempFile = File.createTempFile("temp", ".csv");
+					return new FileOutputStream(tempFile);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+					return null;
+				}
+			}
+		});
+	}
+
+	private void finishListener()
+	{
+		upload.addFinishedListener(new Upload.FinishedListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void uploadFinished(final Upload.FinishedEvent finishedEvent)
+			{
+				new UIUpdater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
+						ImportSelectFile.this.uploadComplete = true;
+						progress.setVisible(false);
+						ImportSelectFile.this.progressBar.setValue(1.0f);
+						ImportSelectFile.this.progressBar.setVisible(true);
+						ImportSelectFile.this.completionMessage.setValue("The upload of File "
+								+ ImportSelectFile.this.selectedFilename + " has been completed.");
+
+						SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
+					}
+				});
+
+			}
+		});
+	}
+
+	private void progressListener()
+	{
+		upload.addProgressListener(new ProgressListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void updateProgress(final long readBytes, final long contentLength)
+			{
+				new UIUpdater(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						progress.setValue("Uploaded: " + ((float) readBytes / (float) contentLength) * 100 + "%");
+						ImportSelectFile.this.progressBar.setValue(((float) readBytes / (float) contentLength));
+						ImportSelectFile.this.progressBar.setVisible(true);
+					}
+				});
+			}
+		});
+	}
+
+	private void failedListener()
+	{
+		upload.addFailedListener(new FailedListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void uploadFailed(final FailedEvent event)
+			{
+				new UIUpdater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						SMNotification.show("The upload failed. " + event.getReason()
+								+ " Please fix the problem and try again.");
+						ImportSelectFile.this.uploadStarted = true;
+						ImportSelectFile.this.uploadComplete = false;
+					}
+				});
+			}
+		});
+	}
+
+	private void startListener()
+	{
+		upload.addStartedListener(new StartedListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void uploadStarted(StartedEvent event)
+			{
+				ImportSelectFile.this.uploadStarted = true;
+				ImportSelectFile.this.uploadComplete = false;
+			}
+		});
 	}
 
 	@Override
