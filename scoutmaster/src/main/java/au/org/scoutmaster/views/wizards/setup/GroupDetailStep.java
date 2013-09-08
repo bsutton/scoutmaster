@@ -3,17 +3,18 @@ package au.org.scoutmaster.views.wizards.setup;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
 public class GroupDetailStep extends SingleEntityStep<Organisation> implements WizardStep
 {
@@ -34,11 +35,17 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<Organisation> fieldGroup)
 	{
-		SMMultiColumnFormLayout<Organisation> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
-		formLayout.setWidth("500px");
+		VerticalLayout layout = new VerticalLayout();
+		layout.setMargin(true);
+		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setColumnFieldWidth(0, 250);
+		formLayout.setSizeFull();
 
 		Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);
-		formLayout.bindLabel(label);
+		label.setContentMode(ContentMode.HTML);
+
+		layout.addComponent(label);
+		layout.addComponent(formLayout);
 
 		TextField groupName = formLayout.bindTextField("Scout Group Name", "name");
 		formLayout.bindTextField("Phone No.", "primaryPhone");
@@ -49,7 +56,7 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 
 		groupName.addValidator(new StringLengthValidator("Scout Group Name", 6, 255, false));
 
-		return formLayout;
+		return layout;
 	}
 
 	@Override
