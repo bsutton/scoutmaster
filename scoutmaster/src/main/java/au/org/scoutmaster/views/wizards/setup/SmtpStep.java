@@ -6,13 +6,13 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
 import au.com.vaadinutils.listener.ClickAdaptorLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EMailServerSettingsDao;
 import au.org.scoutmaster.domain.EMailServerSettings;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -33,6 +33,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 
 public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements WizardStep, ValueChangeListener,
 		ClickListener
@@ -71,12 +72,16 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	@Override
 	public Component buildEditor(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
 	{
-		SMMultiColumnFormLayout<EMailServerSettings> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup, 60);
-		formLayout.setWidth("500px");
+		
+		VerticalLayout layout = new VerticalLayout();
+		layout.setMargin(true);
+		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		formLayout.setColumnFieldWidth(0, 250);
 
 		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
 		label.setContentMode(ContentMode.HTML);
-		formLayout.bindLabel(label);
+		layout.addComponent(label);
+		layout.addComponent(formLayout);
 
 		// Create the user input field
 		smtpFQDN = formLayout.bindTextField("SMTP FQDN:", "smtpFQDN");
@@ -87,15 +92,18 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 		smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535", 1,
 				65535));
 
-		authRequired = formLayout.bindBooleanField("SMTP Authentication Requried", "authRequired");
+		authRequired = formLayout.bindBooleanField("Authentication Requried", "authRequired");
 		authRequired.addValueChangeListener(this);
 
-		username = formLayout.bindTextField("SMTP Username:", "username");
+		username = formLayout.bindTextField("Username:", "username");
 		username.setDescription("SMTP username if authentication is used");
+		username.setVisible(false);
+
 
 		// Create the password input field
 		password = formLayout.bindPasswordField("Password:", "password");
 		password.setDescription("SMS Provider Password");
+		password.setVisible(false);
 		
 		useSSL = formLayout.bindBooleanField("Use SSL", "useSSL");
 		useSSL.setDescription("Enables an SSL connection to your SMTP server if it supports it.");
@@ -110,13 +118,13 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 		bounceEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
 
 		Button test = new Button("Test");
-		formLayout.addComponent(test);
+		layout.addComponent(test);
 		test.addClickListener(new ClickAdaptorLogged(this));
 
 		// focus the fqnd field when user arrives to the login view
 		smtpFQDN.focus();
 
-		return formLayout;
+		return layout;
 	}
 
 	@Override
@@ -135,8 +143,6 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	protected void initEntity(EMailServerSettings entity)
 	{
 		entity.setAuthRequired(false);
-		username.setVisible(false);
-		password.setVisible(false);
 	}
 
 	@Override
