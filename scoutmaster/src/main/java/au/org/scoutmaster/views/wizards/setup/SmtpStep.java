@@ -56,26 +56,15 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	private CheckBox useSSL;
 
 	private TextField bounceEmailAddress;
+	private VerticalLayout layout;
 
 	public SmtpStep(SetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getEMailServerSettingsDao(), EMailServerSettings.class);
-	}
-
-	@Override
-	public String getCaption()
-	{
-
-		return "SMTP Settings";
-	}
-
-	@Override
-	public Component buildEditor(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
-	{
 		
-		VerticalLayout layout = new VerticalLayout();
+		layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
 		formLayout.setColumnFieldWidth(0, 250);
 
 		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
@@ -83,7 +72,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 		layout.addComponent(label);
 		layout.addComponent(formLayout);
 
-		// Create the user input field
+		// Create the user input fields
 		smtpFQDN = formLayout.bindTextField("SMTP FQDN:", "smtpFQDN");
 		smtpFQDN.setDescription("SMTP Server FQDN or IP address");
 
@@ -124,7 +113,22 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 		// focus the fqnd field when user arrives to the login view
 		smtpFQDN.focus();
 
-		return layout;
+
+	}
+
+	
+	@Override
+	public String getCaption()
+	{
+
+		return "SMTP Settings";
+	}
+
+	@Override
+	public Component getContent(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
+	{
+		
+			return layout;
 	}
 
 	@Override
