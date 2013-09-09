@@ -130,6 +130,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 				progressDescription.setValue("Imported: " + count + " records.");
 				if (status != null)
 					ImportShowProgress.this.progressTable.addRow(status);
+				indicator.setValue(((float)count)/((float)max));
 			}
 
 		});
