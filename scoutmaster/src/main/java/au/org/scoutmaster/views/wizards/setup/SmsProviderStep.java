@@ -48,7 +48,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	}
 
 	@Override
-	public Component buildEditor(ValidatingFieldGroup<SMSProvider> fieldGroup)
+	public Component getContent(ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);

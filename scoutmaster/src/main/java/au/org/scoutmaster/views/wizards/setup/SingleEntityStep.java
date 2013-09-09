@@ -85,7 +85,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 			
 			fieldGroup.setItemDataSource(entityItem);
 			
-			editor = buildEditor(fieldGroup);
+			editor = getContent(fieldGroup);
 		}
 
 		Preconditions.checkArgument(((EntityItem<E>) fieldGroup.getItemDataSource()).getEntity() == entity);
@@ -115,7 +115,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 	 * @param fieldGroup
 	 * @return
 	 */
-	abstract protected Component buildEditor(ValidatingFieldGroup<E> fieldGroup);
+	abstract protected Component getContent(ValidatingFieldGroup<E> fieldGroup);
 
 	@Override
 	public boolean onAdvance()
