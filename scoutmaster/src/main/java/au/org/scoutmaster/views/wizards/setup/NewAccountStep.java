@@ -48,7 +48,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 
 
 	@Override
-	protected Component buildEditor(ValidatingFieldGroup<User> fieldGroup)
+	protected Component getContent(ValidatingFieldGroup<User> fieldGroup)
 	{
 		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("600px");

@@ -33,7 +33,7 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 	}
 
 	@Override
-	public Component buildEditor(ValidatingFieldGroup<Organisation> fieldGroup)
+	public Component getContent(ValidatingFieldGroup<Organisation> fieldGroup)
 	{
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
