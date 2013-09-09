@@ -1,12 +1,11 @@
 package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.EntityTable;
-import au.com.vaadinutils.crud.HeadingToPropertyId;
+import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.RowChangeListener;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
@@ -35,10 +34,10 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 	private Button clearButton = new Button("Clear");
 	private TagField tagField;
 
-	public SearchableContactTable(JPAContainer<Contact> contactContainer, List<HeadingToPropertyId> visibleColumns)
+	public SearchableContactTable(JPAContainer<Contact> contactContainer, HeadingPropertySet<Contact> headingPropertySet)
 	{
 		this.contactContainer = contactContainer;
-		this.contactTable = new EntityTable<Contact>(contactContainer, visibleColumns);
+		this.contactTable = new EntityTable<Contact>(contactContainer, headingPropertySet);
 		init();
 	}
 
