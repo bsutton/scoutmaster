@@ -17,6 +17,7 @@ import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.fields.GoogleField;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
@@ -111,27 +112,27 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// overviewForm.setMargin(true);
 		tabs.addTab(overviewForm, "Overview");
-		overviewForm.bindBooleanField("Active", "active");
+		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		final ComboBox role = overviewForm.bindEnumField("Role", "role", GroupRole.class);
+		final ComboBox role = overviewForm.bindEnumField("Role", Contact_.role, GroupRole.class);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		overviewForm.bindTokenField(this, "Tags", "tags", Tag.class);
+		overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
 		overviewForm.colspan(2);
-		overviewForm.bindTextField("Firstname", Contact.FIRSTNAME);
+		overviewForm.bindTextField("Firstname", Contact_.firstname);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		overviewForm.bindTextField("Middle name", "middlename");
+		overviewForm.bindTextField("Middle name", Contact_.middlename);
 		overviewForm.newLine();
 
 		overviewForm.colspan(2);
-		overviewForm.bindTextField("Lastname", Contact.LASTNAME);
+		overviewForm.bindTextField("Lastname", Contact_.lastname);
 
 		overviewForm.newLine();
-		birthDate = overviewForm.bindDateField("Birth Date", Contact.BIRTH_DATE, "yyyy-MM-dd", Resolution.DAY);
+		birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy-MM-dd", Resolution.DAY);
 		labelAge = overviewForm.bindLabel("Age");
-		overviewForm.bindEnumField("Gender", "gender", Gender.class);
+		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
 
 		role.addValueChangeListener(new ChangeListener(role, labelAge));
@@ -159,10 +160,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
 		contactForm.newLine();
 		contactForm.colspan(3);
-		contactForm.bindTextField("Home Email", "homeEmail");
+		contactForm.bindTextField("Home Email", Contact_.homeEmail);
 		contactForm.newLine();
 		contactForm.colspan(3);
-		contactForm.bindTextField("Work Email", "workEmail");
+		contactForm.bindTextField("Work Email", Contact_.workEmail);
 		contactForm.newLine();
 
 		contactForm.bindTextField("Phone 1", "phone1.phoneNo");
@@ -226,16 +227,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		tabs.addTab(memberForm, "Member");
 		memberForm.setMargin(true);
 		memberForm.setSizeFull();
-		memberForm.bindBooleanField("Member", "isMember");
+		memberForm.bindBooleanField("Member", Contact_.isMember);
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberForm.bindEntityField("Section ", "section", SectionType.class, "name");
+		memberForm.bindEntityField("Section", Contact_.section, SectionType.class, SectionType_.name);
+		
+
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberForm.bindTextField("Member No", "memberNo");
+		memberForm.bindTextField("Member No", Contact_.memberNo);
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberForm.bindDateField("Member Since", "memberSince", "yyyy-MM-dd", Resolution.DAY);
+		memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd", Resolution.DAY);
 	}
 
 	private void medicalTab()
@@ -251,11 +254,15 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		medicalForm.setSizeFull();
 		medicalForm.colspan(2);
 		medicalForm.bindTextAreaField("Allergies", "allergies", 4);
-		medicalForm.bindBooleanField("Ambulance Subscriber", "ambulanceSubscriber");
+		medicalForm.bindTextField("Medicare No.", Contact_.medicareNo);
 		medicalForm.newLine();
-		medicalForm.bindBooleanField("Private Medical Ins.", "privateMedicalInsurance");
+		medicalForm.bindBooleanField("Ambulance Subscriber", Contact_.ambulanceSubscriber);
 		medicalForm.newLine();
-		medicalForm.bindTextField("Private Medical Fund", "privateMedicalFundName");
+		medicalForm.bindBooleanField("Private Medical Ins.", Contact_.privateMedicalInsurance);
+		medicalForm.newLine();
+		medicalForm.bindTextField("Private Medical Fund", Contact_.privateMedicalFundName);
+		medicalForm.newLine();
+		medicalForm.bindTextField("Medical Fund No.", Contact_.medicalFundNo);
 	}
 
 	private void googleTab()
@@ -277,27 +284,28 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.setSizeFull();
 
 		background.colspan(2);
-		background.bindTextAreaField("Hobbies", "hobbies", 4);
+		background.bindTextAreaField("Hobbies", Contact_.hobbies, 4);
 		background.newLine();
 		background.colspan(2);
-		background.bindDateField("Affiliated Since", "affiliatedSince", "yyyy-MM-dd", Resolution.DAY);
+		background.bindDateField("Affiliated Since", Contact_.affiliatedSince, "yyyy-MM-dd", Resolution.DAY);
 		background.newLine();
 		background.colspan(2);
-		background.bindTextField("Current Employer", "currentEmployer");
+		background.bindTextField("Current Employer", Contact_.currentEmployer);
 		background.newLine();
 		background.colspan(2);
-		background.bindTextField("Job Title", "jobTitle");
+		background.bindTextField("Job Title", Contact_.jobTitle);
 		background.newLine();
-		// background.bindTextField("Assets", "assets");
-		background.bindBooleanField("Has WWC", "hasWWC");
-		background.bindDateField("WWC Expiry", "wwcExpiry", "yyyy-MM-dd", Resolution.DAY);
-		background.bindTextField("WWC No.", "wwcNo");
+		background.bindBooleanField("License", Contact_.hasLicense);
 		background.newLine();
-		background.bindBooleanField("Has Police Check", "hasPoliceCheck");
-		background.bindDateField("Police Check Expiry", "policeCheckExpiry", "yyyy-MM-dd", Resolution.DAY);
+		background.bindBooleanField("Has WWC", Contact_.hasWWC);
+		background.bindDateField("WWC Expiry", Contact_.wwcExpiry, "yyyy-MM-dd", Resolution.DAY);
+		background.bindTextField("WWC No.", Contact_.wwcNo);
 		background.newLine();
-		background.bindBooleanField("Has Food Handling", "hasFoodHandlingCertificate");
-		background.bindBooleanField("Has First Aid Certificate", "hasFirstAidCertificate");
+		background.bindBooleanField("Has Police Check", Contact_.hasPoliceCheck);
+		background.bindDateField("Police Check Expiry", Contact_.policeCheckExpiry, "yyyy-MM-dd", Resolution.DAY);
+		background.newLine();
+		background.bindBooleanField("Has Food Handling", Contact_.hasFoodHandlingCertificate);
+		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
 	}
 
 	private final class ChangeListener implements Property.ValueChangeListener
