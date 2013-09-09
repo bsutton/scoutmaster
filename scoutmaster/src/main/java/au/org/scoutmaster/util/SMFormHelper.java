@@ -2,6 +2,8 @@ package au.org.scoutmaster.util;
 
 import java.io.Serializable;
 
+import javax.persistence.metamodel.SetAttribute;
+
 import org.vaadin.tokenfield.TokenField;
 
 import au.com.vaadinutils.crud.FormHelper;
@@ -32,9 +34,19 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 		this.getFieldList().add(field);
 		return field;
 	}
+	
+	public <T extends BaseEntity, L, F> TokenField bindTokenField(AbstractLayout form, FieldGroup group, Selected<T> selected
+			, String fieldLabel, SetAttribute<T, L> entityField,
+			Class<L> clazz)
+	{
+		TokenField field = bindTokenField(form, group, selected, fieldLabel, entityField.getName(), clazz);
+		this.getFieldList().add(field);
+		return field;
+	}
 
-	static public <T extends BaseEntity> TokenField bindTokenField(AbstractLayout form, FieldGroup group, Selected<T> selected, String fieldLabel, String fieldName,
-			Class<? extends BaseEntity> clazz)
+
+	public <T extends BaseEntity, L> TokenField bindTokenField(AbstractLayout form, FieldGroup group, Selected<T> selected, String fieldLabel, String fieldName,
+			Class<L> clazz)
 	{
 		VerticalLayout layout = new VerticalLayout();
 		TokenField field = new SplitContactTokenField<T>(selected, fieldLabel, layout);

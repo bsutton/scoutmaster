@@ -1,14 +1,19 @@
 package au.org.scoutmaster.util;
 
+import javax.persistence.metamodel.SetAttribute;
+
 import org.vaadin.tokenfield.TokenField;
 
+import com.vaadin.ui.GridLayout;
+
+import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.views.Selected;
 
 
-public class SMMultiColumnFormLayout<E> extends MultiColumnFormLayout<E>
+public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFormLayout<E>
 {
 	private static final long serialVersionUID = 1L;
 
@@ -16,15 +21,27 @@ public class SMMultiColumnFormLayout<E> extends MultiColumnFormLayout<E>
 	{
 		super(columns, fieldGroup);
 	}
-
-	public <T extends BaseEntity> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName,
-			Class<? extends BaseEntity> clazz)
+	
+	protected FormHelper<E> getFormHelper(GridLayout grid, ValidatingFieldGroup<E> group)
 	{
-		TokenField field = SMFormHelper.bindTokenField(this, super.getFieldGroup(), selected, fieldLabel, fieldName, clazz);
+		return new SMFormHelper<>(grid, group);
+	}
+
+	public <L> TokenField bindTokenField(Selected<E> selected, String fieldLabel, SetAttribute<E, L> entityField,
+			Class<L> clazz)
+	{
+		TokenField field = ((SMFormHelper<E>)getFormHelper()).bindTokenField(this, super.getFieldGroup(), selected, fieldLabel, entityField, clazz);
 		this.getFieldList().add(field);
 		return field;
 	}
 
+	public <L> TokenField bindTokenField(Selected<E> selected, String fieldLabel, String fieldName,
+			Class<L> clazz)
+	{
+		TokenField field = ((SMFormHelper<E>)getFormHelper()).bindTokenField(this, super.getFieldGroup(), selected, fieldLabel, fieldName, clazz);
+		this.getFieldList().add(field);
+		return field;
+	}
 
 
 }
