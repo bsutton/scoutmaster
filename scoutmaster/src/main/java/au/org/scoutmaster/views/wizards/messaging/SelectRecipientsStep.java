@@ -1,14 +1,15 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.HeadingToPropertyId;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.views.SearchableContactTable;
@@ -52,15 +53,15 @@ public class SelectRecipientsStep implements WizardStep
 		ContactDao daoContact = new DaoFactory().getContactDao();
 		
 		JPAContainer<Contact> contactContainer = daoContact.makeJPAContainer();
-		List<HeadingToPropertyId> headings = new ArrayList<>();
 		
-		headings.add(new HeadingToPropertyId("First Name", Contact.FIRSTNAME));
-		headings.add(new HeadingToPropertyId("Lastname", Contact.LASTNAME));
-		headings.add(new HeadingToPropertyId("Birth Date", Contact.BIRTH_DATE));
-		headings.add(new HeadingToPropertyId("Section", Contact.SECTION));
-		headings.add(new HeadingToPropertyId("Mobile", Contact.MOBILE_PHONE));
+		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
+		builder.addColumn("First Name", Contact_.firstname)
+		.addColumn("Lastname", Contact_.lastname)
+		.addColumn("Birth Date", Contact_.birthDate)
+		.addColumn("Section", Contact_.section)
+		.addColumn("Mobile", Contact.PRIMARY_PHONE);
 
-		contactTable = new SearchableContactTable(contactContainer, headings);
+		contactTable = new SearchableContactTable(contactContainer, builder.build());
 		layout.addComponent(contactTable);
 		return layout;
 	}
