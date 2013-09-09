@@ -37,6 +37,8 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 	{
 		this.entityClass = entityClass;
 		this.container = entityDao.makeJPAContainer();
+		fieldGroup = new ValidatingFieldGroup<E>(entityClass);
+
 	}
 
 	@Override
@@ -81,7 +83,8 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 			Preconditions.checkArgument(entityItem != null);
 			Preconditions.checkArgument(entity == entityItem.getEntity());
 			
-			fieldGroup = new ValidatingFieldGroup<E>(entityItem, entityClass);
+			fieldGroup.setItemDataSource(entityItem);
+			
 			editor = buildEditor(fieldGroup);
 		}
 
@@ -172,6 +175,11 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 	public E getEntity()
 	{
 		return this.entity;
+	}
+
+	protected ValidatingFieldGroup<E> getFieldGroup()
+	{
+		return fieldGroup;
 	}
 
 }
