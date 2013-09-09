@@ -18,16 +18,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Past;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
+
+import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
 @Table(name = "Contact")
@@ -45,14 +49,7 @@ public class Contact extends BaseEntity implements Importable
 	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(Contact.class);
 
-	public static final String FIRSTNAME = "firstname";
-	public static final String LASTNAME = "lastname";
-	public static final String BIRTH_DATE = "birthDate";
-	public static final String ROLE = "role";
-	public static final String SECTION = "section";
 	public static final String PRIMARY_PHONE = "primaryPhone";
-	public static final String MEMBER = "isMember";
-	public static final String MOBILE_PHONE = "primaryPhone";
 
 	@FormField(displayName = "Active")
 	private Boolean active = true;
@@ -140,15 +137,17 @@ public class Contact extends BaseEntity implements Importable
 	 * Member fields
 	 */
 	@FormField(displayName = "Member")
+	@AssertTrue(groups=MemberChecks.class)
 	private Boolean isMember = false; // this should be derived from the
 										// member
 	// records.
 
 	@FormField(displayName = "Member No")
+	@NotEmpty(groups=MemberChecks.class)
 	private String memberNo = "";
 
 	@FormField(displayName = "Member Since")
-	@Past
+	@Past(groups=MemberChecks.class)
 	private Date memberSince = new Date(new java.util.Date().getTime()); // this
 																			// should
 	// be
@@ -189,6 +188,10 @@ public class Contact extends BaseEntity implements Importable
 
 	@FormField(displayName = "Private Medical Fund Name")
 	private String privateMedicalFundName = "";
+	
+	@FormField(displayName = "Medical Fund No.")
+	private String medicalFundNo = "";
+
 
 	/**
 	 * Affiliated Adults
@@ -198,6 +201,9 @@ public class Contact extends BaseEntity implements Importable
 
 	@FormField(displayName = "Job Title")
 	private String jobTitle = "";
+
+	@FormField(displayName = "Has License")
+	private Boolean hasLicense = false;
 
 	@FormField(displayName = "Has WWC")
 	private Boolean hasWWC = false;
