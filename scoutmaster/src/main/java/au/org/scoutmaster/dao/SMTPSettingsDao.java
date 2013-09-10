@@ -6,39 +6,39 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 
-import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSettings;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long> implements
-		Dao<EMailServerSettings, Long>
+public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements
+		Dao<SMTPServerSettings, Long>
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(EMailServerSettingsDao.class);
+	private static Logger logger = Logger.getLogger(SMTPSettingsDao.class);
 
-	public EMailServerSettingsDao()
+	public SMTPSettingsDao()
 	{
 		// inherit the default per request em.
 	}
 
-	public EMailServerSettingsDao(EntityManager em)
+	public SMTPSettingsDao(EntityManager em)
 	{
 		super(em);
 	}
 
 	@Override
-	public List<EMailServerSettings> findAll()
+	public List<SMTPServerSettings> findAll()
 	{
-		return super.findAll(EMailServerSettings.FIND_ALL);
+		return super.findAll(SMTPServerSettings.FIND_ALL);
 	}
 
-	public EMailServerSettings findSettings()
+	public SMTPServerSettings findSettings()
 	{
-		EMailServerSettings settings = null;
-		List<EMailServerSettings> list = findAll();
+		SMTPServerSettings settings = null;
+		List<SMTPServerSettings> list = findAll();
 
 		if (list.size() > 1)
 			throw new IllegalStateException("Found more than 1 EMailServerSetting");
@@ -47,7 +47,7 @@ public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long
 		else if (list.size() == 0)
 		{
 			// If not initialised before then do it now.
-			settings = new EMailServerSettings();
+			settings = new SMTPServerSettings();
 			settings.setAuthRequired(false);
 			settings.setSmtpPort(25);
 			settings.setSmtpFQDN("localhost");
@@ -58,9 +58,9 @@ public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long
 	}
 
 	@Override
-	public JPAContainer<EMailServerSettings> makeJPAContainer()
+	public JPAContainer<SMTPServerSettings> makeJPAContainer()
 	{
-		return super.makeJPAContainer(EMailServerSettings.class);
+		return super.makeJPAContainer(SMTPServerSettings.class);
 	}
 
 	/**
@@ -71,12 +71,13 @@ public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long
 	 * @param toAddress
 	 * @param subject
 	 * @param body
+	 * @param string 
 	 * @throws EmailException
 	 */
-	public void sendEmail(EMailServerSettings settings, String fromAddress, String toAddress, String subject,
+	public void sendEmail(SMTPServerSettings settings, String fromAddress, String toAddress, String ccAddress, String subject,
 			String body) throws EmailException
 	{
-		Email email = new SimpleEmail();
+		HtmlEmail email = new HtmlEmail();
 	
 		email.setDebug(true);
 		email.setHostName(settings.getSmtpFQDN());
@@ -92,9 +93,11 @@ public class EMailServerSettingsDao extends JpaBaseDao<EMailServerSettings, Long
 		email.setFrom(fromAddress);
 		email.setBounceAddress(settings.getBounceEmailAddress());
 		email.addTo(toAddress);
+		if (ccAddress != null && ccAddress.length() > 0)
+			email.addCc(ccAddress);
 		email.setSubject(subject);
-		email.setMsg(body);
-		
+		email.setHtmlMsg(body);
+		email.setTextMsg("Your email client does not support HTML messages");
 		email.send();
 
 	}

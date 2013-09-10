@@ -42,9 +42,9 @@ public class DaoFactory
 		return (ContactDao) instantiateDAO(ContactDao.class);
 	}
 	
-	public EMailServerSettingsDao getEMailServerSettingsDao()
+	public SMTPSettingsDao getSMTPSettingsDao()
 	{
-		return (EMailServerSettingsDao) instantiateDAO(EMailServerSettingsDao.class);
+		return (SMTPSettingsDao) instantiateDAO(SMTPSettingsDao.class);
 	}
 
 	public ForgottenPasswordResetDao getForgottenPasswordResetDao()

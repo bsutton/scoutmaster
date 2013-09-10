@@ -22,11 +22,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="EMailServerSettings")
 @NamedQueries(
 {
-	@NamedQuery(name = EMailServerSettings.FIND_ALL, query = "SELECT emailServerSettings FROM EMailServerSettings emailServerSettings"),
+	@NamedQuery(name = SMTPServerSettings.FIND_ALL, query = "SELECT emailServerSettings FROM EMailServerSettings emailServerSettings"),
 })
 
 
-public class EMailServerSettings extends BaseEntity
+public class SMTPServerSettings extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	static public final String FIND_ALL = "EMailServerSettings.findAll";
