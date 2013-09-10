@@ -1,6 +1,6 @@
 package au.org.scoutmaster.views;
 
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
@@ -80,13 +80,13 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		HorizontalLayout buttons = new HorizontalLayout();
 
 		// Create login button
-		loginButton = new Button("Login", new ClickAdaptorLogged(this));
+		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
 		loginButton.setClickShortcut(KeyCode.ENTER);
 		loginButton.addStyleName("default");
 		buttons.addComponent(loginButton);
 		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
 
-		forgottenButton = new Button("Forgotten Password", new ClickAdaptorLogged(this));
+		forgottenButton = new Button("Forgotten Password", new ClickEventLogged.ClickAdaptor(this));
 		buttons.addComponent(forgottenButton);
 		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
 		fields.addComponent(buttons);

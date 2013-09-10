@@ -6,12 +6,12 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.apache.log4j.Logger;
 
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.EMailServerSettingsDao;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
-import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
 import au.org.scoutmaster.util.SMNotification;
 
@@ -56,7 +56,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 		emailAddress.setInvalidAllowed(false);
 
 		// Create login button
-		retrieveButton = new Button("Retrieve", new ClickAdaptorLogged(this));
+		retrieveButton = new Button("Retrieve", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(emailAddress, retrieveButton);
@@ -86,8 +86,8 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 	{
 		String emailAddressValue = emailAddress.getValue();
 		
-		EMailServerSettingsDao settingsDao = new DaoFactory().getEMailServerSettingsDao();
-		EMailServerSettings settings = settingsDao.findSettings();
+		SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
+		SMTPServerSettings settings = settingsDao.findSettings();
 
 		Email email = new SimpleEmail();
 		email.setHostName(settings.getSmtpFQDN());

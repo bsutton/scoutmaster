@@ -1,6 +1,6 @@
 package au.org.scoutmaster.views;
 
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
@@ -64,7 +64,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		confirm.setNullRepresentation("");
 
 		// Create login button
-		loginButton = new Button("Login", new ClickAdaptorLogged(this));
+		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(user, password, confirm, loginButton);
