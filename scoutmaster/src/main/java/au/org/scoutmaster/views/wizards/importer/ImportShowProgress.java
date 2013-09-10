@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
-import au.com.vaadinutils.listener.ClickListenerLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.ui.UIUpdater;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.ProgressBarWorker;
@@ -75,7 +75,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 		Button errorExport = new Button("Export Errors");
 		layout.addComponent(errorExport);
 		layout.setComponentAlignment(errorExport, Alignment.BOTTOM_RIGHT);
-		errorExport.addClickListener(new ClickListenerLogged()
+		errorExport.addClickListener(new ClickEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 

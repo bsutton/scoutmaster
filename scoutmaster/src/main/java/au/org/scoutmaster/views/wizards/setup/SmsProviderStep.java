@@ -8,7 +8,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Contact;
@@ -77,7 +77,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 
 		Button test = new Button("Test");
 		layout.addComponent(test);
-		test.addClickListener(new ClickAdaptorLogged(this));
+		test.addClickListener(new ClickEventLogged.ClickAdaptor(this));
 
 		// focus the username field when user arrives to the login view
 		user.focus();

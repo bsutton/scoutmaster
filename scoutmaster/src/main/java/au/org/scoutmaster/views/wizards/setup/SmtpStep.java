@@ -9,10 +9,10 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.EMailServerSettingsDao;
-import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -35,7 +35,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements WizardStep, ValueChangeListener,
+public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
 		ClickListener
 {
 	private static Logger logger = Logger.getLogger(SmtpStep.class);
@@ -60,11 +60,11 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 
 	public SmtpStep(SetupWizardView setupWizardView)
 	{
-		super(setupWizardView, new DaoFactory().getEMailServerSettingsDao(), EMailServerSettings.class);
+		super(setupWizardView, new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
 		
 		layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<EMailServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
+		MultiColumnFormLayout<SMTPServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
 		formLayout.setColumnFieldWidth(0, 250);
 
 		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
@@ -108,7 +108,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 
 		Button test = new Button("Test");
 		layout.addComponent(test);
-		test.addClickListener(new ClickAdaptorLogged(this));
+		test.addClickListener(new ClickEventLogged.ClickAdaptor(this));
 
 		// focus the fqnd field when user arrives to the login view
 		smtpFQDN.focus();
@@ -125,7 +125,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	}
 
 	@Override
-	public Component getContent(ValidatingFieldGroup<EMailServerSettings> fieldGroup)
+	public Component getContent(ValidatingFieldGroup<SMTPServerSettings> fieldGroup)
 	{
 		
 			return layout;
@@ -144,16 +144,16 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 	}
 
 	@Override
-	protected void initEntity(EMailServerSettings entity)
+	protected void initEntity(SMTPServerSettings entity)
 	{
 		entity.setAuthRequired(false);
 	}
 
 	@Override
-	protected EMailServerSettings findEntity()
+	protected SMTPServerSettings findEntity()
 	{
-		EMailServerSettings setting = null;
-		List<EMailServerSettings> settings = new DaoFactory().getEMailServerSettingsDao().findAll();
+		SMTPServerSettings setting = null;
+		List<SMTPServerSettings> settings = new DaoFactory().getSMTPSettingsDao().findAll();
 		if (settings.size() > 1)
 			throw new IllegalStateException(
 					"More than one EmailServerSetting has been found which is not valid during initial setup.");
@@ -177,7 +177,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 		// First check that the entered details are valid.
 		if (super.validate())
 		{
-			final EMailServerSettings settings = super.getEntity();
+			final SMTPServerSettings settings = super.getEntity();
 			if (settings == null)
 				Notification.show(
 						"Can't find the SMTP Settings, this usually means the install did not complete correctly.",
@@ -194,7 +194,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 							{
 								String toEmailAddress = input;
 
-								EMailServerSettingsDao daoSMTPSettings = new DaoFactory().getEMailServerSettingsDao();
+								SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
 
 								try
 								{
@@ -203,7 +203,7 @@ public class SmtpStep extends SingleEntityStep<EMailServerSettings> implements W
 									sb.append("So welcome to Scoutmaster.\n\n");
 									sb.append("May you live long and recruit many.\n");
 
-									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress,
+									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress, null,
 											"Test email from Scoutmaster setup", sb.toString());
 
 									SMNotification.show("An email has been sent to: " + toEmailAddress
