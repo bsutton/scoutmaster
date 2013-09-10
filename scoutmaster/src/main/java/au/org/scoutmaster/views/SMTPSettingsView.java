@@ -1,11 +1,11 @@
 package au.org.scoutmaster.views;
 
 
-import au.com.vaadinutils.listener.ClickAdaptorLogged;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.EMailServerSettingsDao;
-import au.org.scoutmaster.domain.EMailServerSettings;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.domain.SMTPServerSettings;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -29,7 +29,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 @Menu(display = "SMTP Settings")
-public class EMailServerSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
+public class SMTPSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -50,12 +50,12 @@ public class EMailServerSettingsView extends CustomComponent implements View, Va
 
 	private final Button saveButton;
 
-	public EMailServerSettingsView()
+	public SMTPSettingsView()
 	{
 		setSizeFull();
 		
-		EMailServerSettingsDao daoEMailServerSettings = new DaoFactory().getEMailServerSettingsDao();
-		EMailServerSettings settings = daoEMailServerSettings.findSettings();
+		SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
+		SMTPServerSettings settings = daoEMailServerSettings.findSettings();
 
 		if (settings == null)
 			throw new IllegalStateException("The email Server Settings are missing from the database.");
@@ -107,7 +107,7 @@ public class EMailServerSettingsView extends CustomComponent implements View, Va
 		fromEmailAddress.setValue(settings.getFromEmailAddress());
 
 		// Create login button
-		saveButton = new Button("Save", new ClickAdaptorLogged(this));
+		saveButton = new Button("Save", new ClickEventLogged.ClickAdaptor(this));
 		saveButton.setClickShortcut(KeyCode.ENTER);
 		saveButton.addStyleName("default");
 
@@ -139,8 +139,8 @@ public class EMailServerSettingsView extends CustomComponent implements View, Va
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
-		EMailServerSettingsDao daoEMailServerSettings = new DaoFactory().getEMailServerSettingsDao();
-		EMailServerSettings settings = daoEMailServerSettings.findSettings();
+		SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
+		SMTPServerSettings settings = daoEMailServerSettings.findSettings();
 
 
 		if (settings == null)
