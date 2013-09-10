@@ -1,11 +1,14 @@
 package au.org.scoutmaster.views;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -19,9 +22,12 @@ import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.fields.GoogleField;
+import au.org.scoutmaster.forms.EmailForm;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
@@ -31,15 +37,21 @@ import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.Tab;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 @Menu(display = "Contact")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
@@ -63,6 +75,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private Label labelAge;
 
 	private Label fieldSectionEligibity;
+
+	private Image homeEmailImage;
+
+	private Image workEmailImage;
 
 	@Override
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -160,10 +176,46 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
 		contactForm.newLine();
 		contactForm.colspan(3);
-		contactForm.bindTextField("Home Email", Contact_.homeEmail);
+		final TextField homeEmail = contactForm.bindTextField("Home Email", Contact_.homeEmail);
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/email.png"));
+
+		homeEmailImage = new Image(null, resource);
+		homeEmailImage.setDescription("Click to send an email");
+		homeEmailImage.addClickListener(new MouseEventLogged.ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void clicked(com.vaadin.event.MouseEvents.ClickEvent event)
+			{
+				showMailForm(homeEmail);
+
+			}
+		});
+		contactForm.addComponent(homeEmailImage);
+		homeEmailImage.setVisible(false);
 		contactForm.newLine();
 		contactForm.colspan(3);
-		contactForm.bindTextField("Work Email", Contact_.workEmail);
+		final TextField workEmail = contactForm.bindTextField("Work Email", Contact_.workEmail);
+		workEmailImage = new Image(null, resource);
+		workEmailImage.setDescription("Click to send an email");
+		contactForm.addComponent(workEmailImage);
+		workEmailImage.addClickListener(new MouseEventLogged.ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void clicked(com.vaadin.event.MouseEvents.ClickEvent event)
+			{
+				showMailForm(workEmail);
+
+			}
+		});
+
+		workEmailImage.setVisible(false);
+
 		contactForm.newLine();
 
 		contactForm.bindTextField("Phone 1", "phone1.phoneNo");
@@ -231,7 +283,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.newLine();
 		memberForm.colspan(2);
 		memberForm.bindEntityField("Section", Contact_.section, SectionType.class, SectionType_.name);
-		
 
 		memberForm.newLine();
 		memberForm.colspan(2);
@@ -394,12 +445,44 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected Filter getContainerFilter(String filterString)
 	{
-//		return new Or(new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true, false),
-//				new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false)),
-//				new SimpleStringFilter(Contact_.section.getName() + "." + SectionType_.name.getName(), filterString, true, false));
+		// return new Or(new Or(new
+		// SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
+		// false),
+		// new SimpleStringFilter(Contact_.lastname.getName(), filterString,
+		// true, false)),
+		// new SimpleStringFilter(Contact_.section.getName() + "." +
+		// SectionType_.name.getName(), filterString, true, false));
 		return new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true, false),
-		new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false));
+				new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false));
 
+	}
+
+	private void showMailForm(TextField emailField)
+	{
+		Window mailWindow = new Window("Send Email");
+		mailWindow.setWidth("80%");
+		mailWindow.setHeight("80%");
+		User sender = (User) getSession().getAttribute("user");
+		mailWindow.setContent(new EmailForm(mailWindow, sender, this.getCurrent(), emailField.getValue()));
+		mailWindow.setVisible(true);
+		mailWindow.center();
+		UI.getCurrent().addWindow(mailWindow);
+
+	}
+
+	@Override
+	public void rowChanged(EntityItem<Contact> item)
+	{
+		super.rowChanged(item);
+		if (item != null)
+		{
+			Contact entity = item.getEntity();
+			if (entity != null)
+			{
+				homeEmailImage.setVisible((entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0));
+				workEmailImage.setVisible((entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0));
+			}
+		}
 	}
 
 }
