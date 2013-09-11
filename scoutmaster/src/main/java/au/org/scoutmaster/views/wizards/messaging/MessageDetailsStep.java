@@ -55,7 +55,8 @@ public class MessageDetailsStep  implements WizardStep
 		List<SMSProvider> list = daoSMSProvider.findAll();
 		if (list.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
-		providers.select(list.get(0).getId());
+		SMSProvider provider = list.get(0);
+		providers.select(provider.getId());
 		
 		recipientCount = new Label();
 		recipientCount.setContentMode(ContentMode.HTML);
@@ -63,7 +64,8 @@ public class MessageDetailsStep  implements WizardStep
 
 		from = formLayout.bindTextField("From Mobile No.", "from");
 		from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
-		from.setDescription("Enter you mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
+		from.setValue(provider.getDefaultSenderID());
+		from.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		subject = formLayout.bindTextField("Subject", "subject");
 		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
 		message = formLayout.bindTextAreaField("Message", "message", 4);

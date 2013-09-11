@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.wizards.messaging;
+package au.org.scoutmaster.views.wizards.mailing;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,18 +8,15 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.ui.UIUpdater;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.PhoneType;
-import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.MutableInteger;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -27,20 +24,20 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
 
-public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTransmission>
+public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailTransmission>
 {
 	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(ShowProgressStep.class);
 	JPAContainer<? extends Importable> entities;
-	private MessagingWizardView messagingWizardView;
+	private MailingWizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
-	private PoJoTable<SMSTransmission> progressTable;
+	private PoJoTable<EmailTransmission> progressTable;
 	private MutableInteger queued = new MutableInteger(0);
 	private MutableInteger rejected = new MutableInteger(0);
 
-	public ShowProgressStep(MessagingWizardView messagingWizardView)
+	public ShowProgressStep(MailingWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}
@@ -57,9 +54,9 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		progressTable = new PoJoTable<>(SMSTransmission.class, new String[]
-		{ "ContactName", "RecipientPhoneNo", "Exception" });
-		progressTable.setColumnWidth("RecipientPhoneNo", 80);
+		progressTable = new PoJoTable<>(EmailTransmission.class, new String[]
+		{ "ContactName", "Recipient", "Exception" });
+		progressTable.setColumnWidth("Recipient", 80);
 		progressTable.setColumnExpandRatio("Exception", 1);
 		progressTable.setSizeFull();
 		progressDescription = new Label();
@@ -76,44 +73,31 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 
-		MessageDetailsStep enter = messagingWizardView.getDetails();
-		ArrayList<SMSTransmission> transmissions = new ArrayList<>();
+		MailingDetailsStep enter = messagingWizardView.getDetails();
+		ArrayList<EmailTransmission> transmissions = new ArrayList<>();
 
 		HashSet<String> dedupList = new HashSet<>();
 
 		for (Contact contact : recipients)
 		{
-			PhoneDao daoPhone = new DaoFactory().getPhoneDao();
-
 			// Find if the contact has a mobile.
 			// Check the primary field first.
-			Phone primaryPhone = contact.getPrimaryPhone();
-			if (primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
+			String email = contact.getHomeEmail();
+			if (email != null && email.length() > 0)
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, primaryPhone);
+				queueTransmission(enter, transmissions, dedupList, contact, email);
 				continue;
 			}
 
-			if (contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
+			 email = contact.getWorkEmail();
+			if (email != null && email.length() > 0)
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone1());
-				continue;
-			}
-
-			if (contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
-			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone2());
-				continue;
-			}
-
-			if (contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
-			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone3());
+				queueTransmission(enter, transmissions, dedupList, contact, email);
 				continue;
 			}
 
 			// No mobile found
-			SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), new RecipientException(
+			EmailTransmission transmission = new EmailTransmission(contact, enter.getMessage(), new RecipientException(
 					"No mobile no.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
 			rejected.setValue(rejected.intValue() + 1);
@@ -121,36 +105,34 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 		if (transmissions.size() == 0)
 		{
-			Notification.show("None of the selected contacts have a mobile phone no.", Type.ERROR_MESSAGE);
+			Notification.show("None of the selected contacts have an Email address", Type.ERROR_MESSAGE);
 		}
 		else
 		{
 			queued.setValue(transmissions.size());
-			progressDescription.setValue(queued + " messages queued. Initialising SMS Provider, ");
+			progressDescription.setValue(queued + " messages queued.");
 
-			SMSProvider provider = messagingWizardView.getDetails().getProvider();
-
-			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(new SendMessageTask(
-					this, provider, enter.getMessage(), transmissions));
+			User user = (User) VaadinSession.getCurrent().getAttribute("user");
+			ProgressBarWorker<EmailTransmission> worker = new ProgressBarWorker<EmailTransmission>(new SendEmailTask(
+					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles()));
 			worker.start();
 		}
 
 		return layout;
 	}
 
-	private void queueTransmission(MessageDetailsStep enter, ArrayList<SMSTransmission> transmissions,
-			HashSet<String> dedupList, Contact contact, Phone primaryPhone)
+	private void queueTransmission(MailingDetailsStep enter, ArrayList<EmailTransmission> transmissions,
+			HashSet<String> dedupList, Contact contact, String toEmailAddress)
 	{
-		SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), primaryPhone);
-		String phone = primaryPhone.getPhoneNo();
-		if (!dedupList.contains(phone))
+		EmailTransmission transmission = new EmailTransmission(contact, enter.getMessage(), toEmailAddress);
+		if (!dedupList.contains(toEmailAddress))
 		{
-			dedupList.add(phone);
+			dedupList.add(toEmailAddress);
 			transmissions.add(transmission);
 		}
 		else
 		{
-			transmission.setException(new RecipientException("Duplicate phone no.", contact));
+			transmission.setException(new RecipientException("Duplicate email address.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
 		}
 	}
@@ -167,7 +149,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		return true;
 	}
 
-	public final void taskProgress(final int count, final int max, final SMSTransmission status)
+	public final void taskProgress(final int count, final int max, final EmailTransmission status)
 	{
 		new UIUpdater(new Runnable()
 		{
@@ -193,18 +175,18 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 				indicator.setValue(1.0f);
 
 				if (ShowProgressStep.this.rejected.intValue() == 0 && queued.intValue() == sent)
-					progressDescription.setValue("All SMS Messages have been sent successfully.");
+					progressDescription.setValue("All Email Messages have been sent successfully.");
 
 				else
 					progressDescription
 							.setValue(sent
-									+ " SMS Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
+									+ " Email Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
 			}
 		});
 	}
 
 	@Override
-	public void taskItemError(SMSTransmission transmission)
+	public void taskItemError(EmailTransmission transmission)
 	{
 		this.progressTable.addRow(transmission);
 

@@ -1,17 +1,14 @@
-package au.org.scoutmaster.views.wizards.messaging;
+package au.org.scoutmaster.views.wizards.mailing;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.domain.Phone;
+import au.org.scoutmaster.forms.StandardCKEditor;
 
-import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -19,16 +16,14 @@ public class ConfirmDetailsStep implements WizardStep
 {
 
 	private TextField subject;
-	private TextArea message;
-	private Label remaining;
+	private StandardCKEditor ckEditorTextField;
 	private TextField from;
-	private TextField provider;
-	private MessagingWizardView messagingWizardView;
+	private MailingWizardView messagingWizardView;
 	private VerticalLayout layout;
 	private Label recipientCount;
-	private MessageDetailsStep details;
+	private MailingDetailsStep details;
 
-	public ConfirmDetailsStep(MessagingWizardView messagingWizardView)
+	public ConfirmDetailsStep(MailingWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 		details = messagingWizardView.getDetails();
@@ -36,41 +31,29 @@ public class ConfirmDetailsStep implements WizardStep
 		layout = new VerticalLayout();
 		layout.addComponent(new Label(
 				"Please review the details before clicking next as messages will be sent immediately."));
-		layout.setWidth("100%");
-		
+		layout.setSizeFull();
+
 		recipientCount = new Label();
 		recipientCount.setContentMode(ContentMode.HTML);
 		layout.addComponent(recipientCount);
 
-		MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
-		provider = formLayout.bindTextField("Provider", "provider");
-		provider.setReadOnly(true);
-
-		from = formLayout.bindTextField("From", "from");
+		from = new TextField("From");
+		layout.addComponent(from);
 		from.setReadOnly(true);
+		from.setWidth("100%");
 
-		subject = formLayout.bindTextField("Subject", "subject");
-		subject.setSizeFull();
+		subject = new TextField("Subject");
+		layout.addComponent(subject);
+		subject.setWidth("100%");
 		subject.setReadOnly(true);
 
-		message = formLayout.bindTextAreaField("Message", "message", 4);
-		message.setReadOnly(true);
-		message.setWidth("100%");
+		ckEditorTextField = new StandardCKEditor();
+		layout.addComponent(ckEditorTextField);
+		ckEditorTextField.setReadOnly(true);
+		ckEditorTextField.setSizeFull();
 
-		layout.addComponent(formLayout);
+		layout.setExpandRatio(ckEditorTextField, 1.0f);
 		layout.setMargin(true);
-
-		message.addTextChangeListener(new TextChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void textChange(TextChangeEvent event)
-			{
-				remaining.setCaption("Characters remaining " + (160 - event.getText().length()));
-
-			}
-		});
 
 	}
 
@@ -83,26 +66,19 @@ public class ConfirmDetailsStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		
+
 		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following SMS.</b></p>");
-		
-		provider.setReadOnly(false);
-		provider.setValue(details.getProvider().getProviderName());
-		provider.setReadOnly(true);
+
 		from.setReadOnly(false);
 		from.setValue(details.getFrom());
 		from.setReadOnly(true);
 		subject.setReadOnly(false);
 		subject.setValue(details.getSubject());
 		subject.setReadOnly(true);
-		message.setReadOnly(false);
-		message.setValue(details.getMessage().getBody());
-		message.setReadOnly(true);
-
-
-
-
+		ckEditorTextField.setReadOnly(false);
+		ckEditorTextField.setValue(details.getMessage().getBody());
+		ckEditorTextField.setReadOnly(true);
 
 		return layout;
 	}
@@ -110,7 +86,7 @@ public class ConfirmDetailsStep implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
-		boolean advance = this.subject.getValue() != null && this.message.getValue() != null;
+		boolean advance = this.subject.getValue() != null && this.ckEditorTextField.getValue() != null;
 
 		if (!advance)
 			Notification.show("Please enter a Subject and a Message then click Next");
@@ -125,7 +101,8 @@ public class ConfirmDetailsStep implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
+		return new Message(subject.getValue(), ckEditorTextField.getValue(), new Phone(from.getValue()));
 	}
+
 
 }

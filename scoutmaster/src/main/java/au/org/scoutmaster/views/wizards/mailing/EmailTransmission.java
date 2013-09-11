@@ -1,28 +1,23 @@
-package au.org.scoutmaster.views.wizards.messaging;
+package au.org.scoutmaster.views.wizards.mailing;
 
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.PhoneType;
 
-public class SMSTransmission
+public class EmailTransmission
 {
 	private Contact contact;
 	private Message message;
-	private Phone recipient;
+	private String recipientEmailAddress;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
 
-	public SMSTransmission(Contact contact, Message message, Phone recipient)
+	public EmailTransmission(Contact contact, Message message, String recipient)
 	{
 		this.contact = contact;
 		this.message = message;
-		this.recipient = recipient;
-
-		if (recipient.getPhoneType() != PhoneType.MOBILE)
-			throw new IllegalArgumentException("The phone argument must be of type MOBILE");
+		this.recipientEmailAddress = recipient;
 	}
 
-	public SMSTransmission(Contact contact, Message message, Exception exception)
+	public EmailTransmission(Contact contact, Message message, Exception exception)
 	{
 		this.contact = contact;
 		this.message = message;
@@ -34,17 +29,14 @@ public class SMSTransmission
 		return this.message;
 	}
 
-	public Phone getRecipient()
+	public String getRecipient()
 	{
-		return this.recipient;
+		return this.recipientEmailAddress;
 	}
 
 	public String getRecipientPhoneNo()
 	{
-		if (this.recipient != null)
-			return this.recipient.getPhoneNo();
-		else
-			return "";
+		return this.recipientEmailAddress;
 	}
 
 	public void setException(Exception e)
@@ -64,6 +56,11 @@ public class SMSTransmission
 	public String getContactName()
 	{
 		return this.contact.getFirstname() + " " + this.contact.getLastname();
+	}
+
+	public Contact getContact()
+	{
+		return contact;
 	}
 
 }

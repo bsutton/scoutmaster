@@ -1,13 +1,19 @@
 package au.org.scoutmaster.views.wizards.messaging;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.org.scoutmaster.application.LocalEntityManagerFactory;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
+import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.ProgressBarTask;
 import au.org.scoutmaster.util.ProgressListener;
@@ -46,12 +52,26 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 
 	}
 
-	public void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException
+	private void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException, IOException
 	{
 
-		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		daoSMSProvider.send(provider, targets, message, this);
+		EntityManager em = LocalEntityManagerFactory.createEntityManager();
 
+		try (Transaction t = new Transaction(em))
+		{
+			// We are in a background thread so we have to get our own entity manager.
+			EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+
+			SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+			daoSMSProvider.send(provider, targets, message, this);
+
+			t.commit();
+		}
+		finally
+		{
+			// Reset the entity manager
+			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
+		}
 	}
 
 	@Override

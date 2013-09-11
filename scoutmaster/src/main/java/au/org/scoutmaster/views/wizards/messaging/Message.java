@@ -8,11 +8,11 @@ public class Message
 	private final String body;
 	private final Phone sender;
 
-	public Message(String subject, String body, Phone phone)
+	public Message(String subject, String body, Phone sender)
 	{
 		this.subject = subject;
 		this.body = body;
-		this.sender = phone;
+		this.sender = sender;
 	}
 
 	public String getSubject()
