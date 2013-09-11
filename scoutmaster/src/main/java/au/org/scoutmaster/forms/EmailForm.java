@@ -157,7 +157,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		try
 		{
 			SMNotification.show("Sending...", Type.TRAY_NOTIFICATION);
-			daoSMTPSettings.sendEmail(settings, this.sender.getEmailAddress(), this.toAddress.getValue(), this.ccAddress.getValue(), this.subject.getValue(), ckEditorTextField.getValue());
+			daoSMTPSettings.sendEmail(settings, this.sender.getEmailAddress(), this.toAddress.getValue(), this.ccAddress.getValue(), this.subject.getValue(), ckEditorTextField.getValue(), null);
 			
 			// Log the activity
 			ActivityDao daoActivity = new DaoFactory().getActivityDao();
