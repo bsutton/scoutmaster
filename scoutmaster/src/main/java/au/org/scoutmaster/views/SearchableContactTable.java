@@ -130,6 +130,8 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 			}
 
 		});
+		
+		searchField.focus();
 
 	}
 
