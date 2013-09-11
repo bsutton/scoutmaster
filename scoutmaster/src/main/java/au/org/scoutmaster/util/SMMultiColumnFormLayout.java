@@ -4,13 +4,13 @@ import javax.persistence.metamodel.SetAttribute;
 
 import org.vaadin.tokenfield.TokenField;
 
-import com.vaadin.ui.GridLayout;
-
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.views.Selected;
+
+import com.vaadin.ui.GridLayout;
 
 
 public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFormLayout<E>
