@@ -9,10 +9,10 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
+import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.validator.EmailValidator;
