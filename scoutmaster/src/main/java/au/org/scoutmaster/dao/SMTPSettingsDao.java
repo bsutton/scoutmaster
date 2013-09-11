@@ -1,15 +1,16 @@
 package au.org.scoutmaster.dao;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 
 import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.views.wizards.mailing.AttachedFile;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
@@ -71,11 +72,12 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	 * @param toAddress
 	 * @param subject
 	 * @param body
+	 * @param attachedFiles 
 	 * @param string 
 	 * @throws EmailException
 	 */
 	public void sendEmail(SMTPServerSettings settings, String fromAddress, String toAddress, String ccAddress, String subject,
-			String body) throws EmailException
+			String body, HashSet<AttachedFile> attachedFiles) throws EmailException
 	{
 		HtmlEmail email = new HtmlEmail();
 	
@@ -98,6 +100,14 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		email.setSubject(subject);
 		email.setHtmlMsg(body);
 		email.setTextMsg("Your email client does not support HTML messages");
+		if (attachedFiles != null)
+		{
+			for (AttachedFile attachedFile : attachedFiles)
+			{
+				email.attach(attachedFile.getFile());
+			}
+		}
+		
 		email.send();
 
 	}
