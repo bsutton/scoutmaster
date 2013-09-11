@@ -204,7 +204,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 									sb.append("May you live long and recruit many.\n");
 
 									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress, null,
-											"Test email from Scoutmaster setup", sb.toString());
+											"Test email from Scoutmaster setup", sb.toString(), null);
 
 									SMNotification.show("An email has been sent to: " + toEmailAddress
 											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
