@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.metamodel.SingularAttribute;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 
+import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 
@@ -21,10 +23,13 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	public JpaBaseDao()
 	{
 		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager();
+		Preconditions.checkNotNull(this.entityManager);
 		
 		// hack to get the derived classes Class type.
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+		Preconditions.checkNotNull(genericSuperclass);
 		this.entityClass = (Class<E>) genericSuperclass.getActualTypeArguments()[0];
+		Preconditions.checkNotNull(this.entityClass);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -54,6 +59,19 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
+	
+	protected E findSingleBySingleParameter(String queryName, SingularAttribute<E, String> paramName, String paramValue)
+	{
+		E entity = null;
+		Query query = entityManager.createNamedQuery(queryName);
+		query.setParameter(paramName.getName(), paramValue);
+		@SuppressWarnings("unchecked")
+		List<E> entities = query.getResultList();
+		if (entities.size() > 0)
+			entity = entities.get(0);
+		return entity;
+	}
+
 
 	protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue)
 	{
