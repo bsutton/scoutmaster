@@ -14,6 +14,7 @@ import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.SMSProvider_;
 import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
@@ -35,6 +36,7 @@ import com.vaadin.ui.VerticalLayout;
 public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
 {
 	private static final long serialVersionUID = 1L;
+	private TextField senderId;
 
 	public SmsProviderStep(SetupWizardView setupWizardView)
 	{
@@ -61,19 +63,22 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 		layout.addComponent(formLayout);
 
 		// Create the user input field
-		TextField user = formLayout.bindTextField("Username:", "username");
+		TextField user = formLayout.bindTextField("Username:", SMSProvider_.username);
 		user.setDescription("SMS Provider Username");
 		//user.addValidator(new StringLengthValidator("Please enter a username.", 1, 32, false));
 
 		// Create the password input field
-		PasswordField password = formLayout.bindPasswordField("Password:", "password");
+		PasswordField password = formLayout.bindPasswordField("Password:", SMSProvider_.password);
 		password.setDescription("SMS Provider Password");
 		//password.addValidator(new StringLengthValidator("Please enter a password.", 1, 32, false));
 
 		// Create the user input field
-		TextField apiId = formLayout.bindTextField("Api Id:", "ApiId");
+		TextField apiId = formLayout.bindTextField("Api Id:", SMSProvider_.ApiId);
 		apiId.setDescription("SMS Provider API key");
 		//apiId.addValidator(new StringLengthValidator("Please enter an API Key.", 1, 32, false));
+
+		senderId = formLayout.bindTextField("Sender ID", SMSProvider_.defaultSenderID);
+		apiId.setDescription("Mobile phone to send message from. Must include country code.");
 
 		Button test = new Button("Test");
 		layout.addComponent(test);
@@ -130,14 +135,14 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 						{
 							public void onOK(String input)
 							{
-								Phone phone = new Phone(input);
-								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", phone);
+								Phone recipient = new Phone(input);
+								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", new Phone(SmsProviderStep.this.senderId.getValue()));
 
 								Contact contact = new Contact();
 								contact.setFirstname("Test");
 								contact.setLastname("SMS");
 
-								SMSTransmission transmission = new SMSTransmission(contact, message, phone);
+								SMSTransmission transmission = new SMSTransmission(contact, message, recipient);
 								SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 
 								try
