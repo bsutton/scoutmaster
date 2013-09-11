@@ -6,7 +6,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.147+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.471+1000")
 @StaticMetamodel(ForgottenPasswordReset.class)
 public class ForgottenPasswordReset_ extends BaseEntity_ {
 	public static volatile SingularAttribute<ForgottenPasswordReset, Date> expires;

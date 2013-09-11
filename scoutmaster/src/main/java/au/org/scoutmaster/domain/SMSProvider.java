@@ -43,6 +43,29 @@ public class SMSProvider extends BaseEntity
 	private String ApiId;
 
 	private Boolean active;
+	
+	/**
+	 * The default sender id used when sending a text message.
+	 * The sender id is usually a mobile phone number but in some countries can be a test message e.g. 'Heidelberg Scouts'.
+	 * Clickatell require that the senderid is registered to stop spam/spoofing.
+	 * The mobile phone of the person who created the account will be registered by default.
+	 */
+	private String defaultSenderID;
+
+	public String getDefaultSenderID()
+	{
+		return defaultSenderID;
+	}
+
+	public void setDefaultSenderID(String defaultSenderID)
+	{
+		this.defaultSenderID = defaultSenderID;
+	}
+
+	public Boolean getActive()
+	{
+		return active;
+	}
 
 	private Boolean defaultProvider;
 	

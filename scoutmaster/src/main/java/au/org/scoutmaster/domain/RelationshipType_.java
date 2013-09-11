@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.160+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.487+1000")
 @StaticMetamodel(RelationshipType.class)
 public class RelationshipType_ extends BaseEntity_ {
 	public static volatile SingularAttribute<RelationshipType, String> lhs;

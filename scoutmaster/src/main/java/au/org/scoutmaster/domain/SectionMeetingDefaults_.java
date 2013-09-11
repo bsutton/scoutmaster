@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.167+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.494+1000")
 @StaticMetamodel(SectionMeetingDefaults.class)
 public class SectionMeetingDefaults_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SectionMeetingDefaults, Section> section;

@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import org.joda.money.Money;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.114+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.441+1000")
 @StaticMetamodel(MoneyWithTax.class)
 public class MoneyWithTax_ {
 	public static volatile SingularAttribute<MoneyWithTax, BigDecimal> taxPercentage;

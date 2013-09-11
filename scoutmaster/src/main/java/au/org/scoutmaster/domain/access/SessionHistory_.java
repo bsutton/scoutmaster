@@ -6,7 +6,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.092+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.423+1000")
 @StaticMetamodel(SessionHistory.class)
 public class SessionHistory_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SessionHistory, Date> start;

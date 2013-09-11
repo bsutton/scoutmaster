@@ -7,7 +7,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-03T22:05:10.117+1000")
+@Generated(value="Dali", date="2013-09-11T21:56:55.444+1000")
 @StaticMetamodel(Payment.class)
 public class Payment_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Payment, Date> paymentDate;

@@ -65,7 +65,7 @@ public class Phone extends BaseEntity
 
 	public void setPhoneNo(String phoneNo)
 	{
-		this.phoneNo = phoneNo;
+		this.phoneNo = phoneNo.replaceAll("\\s","");
 	}
 
 
@@ -81,7 +81,7 @@ public class Phone extends BaseEntity
 
 	public String getPhoneNo()
 	{
-		return phoneNo;
+		return phoneNo.replaceAll("\\s","");
 	}
 	
 	public String toString()
