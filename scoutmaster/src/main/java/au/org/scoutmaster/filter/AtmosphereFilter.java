@@ -14,7 +14,7 @@ import au.org.scoutmaster.application.LocalEntityManagerFactory;
  * Designed to inject the EntityManager into requests that arrive via websockets (Vaadin Push) as these
  * do not go through the standard servlet filter mechanism.
  * 
- * This class is installed by adding a paraeter to the VaadinServlet mapping in web.xml.
+ * This class is installed by adding a parameter to the VaadinServlet mapping in web.xml.
  * 
  */
 
