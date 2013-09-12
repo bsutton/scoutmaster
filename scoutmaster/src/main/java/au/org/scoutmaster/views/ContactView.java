@@ -8,6 +8,7 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
@@ -438,7 +439,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
 				.addColumn("Member", Contact_.isMember).addColumn("Role", Contact_.role);
 
-		super.init(Contact.class, container, builder.build());
+		super.init(Contact.class, container, builder.build(), EntityManagerProvider.INSTANCE);
 
 	}
 
