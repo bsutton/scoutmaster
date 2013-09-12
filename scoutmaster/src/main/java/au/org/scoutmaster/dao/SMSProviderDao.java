@@ -43,7 +43,7 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 			ProgressListener<SMSTransmission> listener) throws SmsException, IOException
 	{
 		int max = targets.size();
-		int count = 0;
+		int sent = 0;
 
 		try (SMSSession session = new SMSSession(provider))
 		{
@@ -51,9 +51,9 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 			{
 				try
 				{
-					count++;
-					listener.progress(count, max, transmission);
 					session.send(transmission);
+					sent++;
+					listener.progress(sent, max, transmission);
 				}
 				catch (SmsException | IOException e)
 				{
@@ -70,7 +70,7 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 			throw e;
 		}
 
-		listener.complete();
+		listener.complete(sent);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 
 			session.send(transmission);
 			listener.progress(1, 1, transmission);
-			listener.complete();
+			listener.complete(1);
 		}
 		catch (IOException e)
 		{

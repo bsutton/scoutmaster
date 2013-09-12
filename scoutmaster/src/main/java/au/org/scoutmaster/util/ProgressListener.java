@@ -22,7 +22,7 @@ public interface ProgressListener<T>
 	/**
 	 * Called when the job is complete.
 	 */
-	void complete();
+	void complete(int sent);
 
 	/**
 	 * Used to flag that an error occurred during a transmission.
