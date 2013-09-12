@@ -21,7 +21,7 @@ public class MailingWizardView extends VerticalLayout implements View, WizardPro
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String NAME = "Messaging";
+	public static final String NAME = "Mailing";
 
 	private Wizard wizard;
 	
@@ -29,7 +29,6 @@ public class MailingWizardView extends VerticalLayout implements View, WizardPro
 	private MailingDetailsStep details;
 	private ConfirmDetailsStep confirm;
 	private ShowProgressStep send;
-	private TransmissionCompleteStep complete;
 
 	public MailingDetailsStep getDetails()
 	{
@@ -43,11 +42,6 @@ public class MailingWizardView extends VerticalLayout implements View, WizardPro
 	}
 
 
-	public TransmissionCompleteStep getComplete()
-	{
-		return complete;
-	}
-	
 	public SelectRecipientsStep getRecipientStep()
 	{
 		return recipientStep;
@@ -62,7 +56,6 @@ public class MailingWizardView extends VerticalLayout implements View, WizardPro
 		details = new MailingDetailsStep(this);
 		send = new ShowProgressStep(this);
 		confirm = new ConfirmDetailsStep(this);
-		complete = new TransmissionCompleteStep(this);
 
 
 		// create the Wizard component and add the steps
@@ -73,7 +66,6 @@ public class MailingWizardView extends VerticalLayout implements View, WizardPro
 		wizard.addStep(details, "enter");
 		wizard.addStep(confirm, "confirm");
 		wizard.addStep(send, "send");
-		wizard.addStep(complete, "complete");
 		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
 		

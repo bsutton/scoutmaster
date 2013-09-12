@@ -180,7 +180,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	}
 
 	@Override
-	public void complete()
+	public void complete(int sent)
 	{
 		// TODO Auto-generated method stub
 		

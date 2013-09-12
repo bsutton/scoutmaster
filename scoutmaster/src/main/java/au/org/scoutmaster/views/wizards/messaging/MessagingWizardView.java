@@ -29,7 +29,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	private MessageDetailsStep details;
 	private ConfirmDetailsStep confirm;
 	private ShowProgressStep send;
-	private TransmissionCompleteStep complete;
 
 	public MessageDetailsStep getDetails()
 	{
@@ -43,11 +42,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 	}
 
 
-	public TransmissionCompleteStep getComplete()
-	{
-		return complete;
-	}
-	
 	public SelectRecipientsStep getRecipientStep()
 	{
 		return recipientStep;
@@ -62,7 +56,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 		details = new MessageDetailsStep(this);
 		send = new ShowProgressStep(this);
 		confirm = new ConfirmDetailsStep(this);
-		complete = new TransmissionCompleteStep(this);
 
 
 		// create the Wizard component and add the steps
@@ -73,7 +66,6 @@ public class MessagingWizardView extends VerticalLayout implements View, WizardP
 		wizard.addStep(details, "enter");
 		wizard.addStep(confirm, "confirm");
 		wizard.addStep(send, "send");
-		wizard.addStep(complete, "complete");
 		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
 		

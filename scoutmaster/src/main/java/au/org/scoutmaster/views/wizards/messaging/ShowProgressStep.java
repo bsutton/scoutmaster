@@ -15,6 +15,7 @@ import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.forms.WorkingDialog;
 import au.org.scoutmaster.util.MutableInteger;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
@@ -23,6 +24,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
@@ -39,6 +41,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	private PoJoTable<SMSTransmission> progressTable;
 	private MutableInteger queued = new MutableInteger(0);
 	private MutableInteger rejected = new MutableInteger(0);
+	private WorkingDialog workDialog;
 
 	public ShowProgressStep(MessagingWizardView messagingWizardView)
 	{
@@ -126,13 +129,19 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		else
 		{
 			queued.setValue(transmissions.size());
-			progressDescription.setValue(queued + " messages queued. Initialising SMS Provider, ");
+			progressDescription.setValue(queued.intValue() + " messages queued. Initialising SMS Provider, ");
 
 			SMSProvider provider = messagingWizardView.getDetails().getProvider();
+
+			workDialog = new WorkingDialog("Sending SMS messages", "Sending...");
 
 			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(new SendMessageTask(
 					this, provider, enter.getMessage(), transmissions));
 			worker.start();
+			
+
+			UI.getCurrent().addWindow(workDialog);
+
 		}
 
 		return layout;
@@ -174,8 +183,11 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 			@Override
 			public void run()
 			{
-				progressDescription.setValue("Sending: " + count + " of " + max + " messages.");
+				String message = "Sending: " + count + " of " + max + " messages.";
+				progressDescription.setValue(message);
 				indicator.setValue((float) count / max);
+				workDialog.progress(message);
+
 				ShowProgressStep.this.progressTable.addRow(status);
 			}
 		});
@@ -199,6 +211,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 					progressDescription
 							.setValue(sent
 									+ " SMS Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
+				workDialog.complete();
+
 			}
 		});
 	}

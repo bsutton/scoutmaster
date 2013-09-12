@@ -29,7 +29,7 @@ import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.ui.Notification.Type;
 
-public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements ProgressListener<EmailTransmission>
+public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implements ProgressListener<EmailTransmission>
 {
 	Logger logger = Logger.getLogger(SendEmailTask.class);
 	private Message message;
@@ -53,7 +53,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 	{
 		try
 		{
-			sendMessage(user, transmissions, message);
+			sendMessages(user, transmissions, message);
 		}
 		catch (Exception e)
 		{
@@ -61,15 +61,15 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			super.taskException(e);
 		}
 
-		super.taskComplete(1);
 
 	}
 
-	private void sendMessage(User user, List<EmailTransmission> targets, Message message)
+	private void sendMessages(User user, List<EmailTransmission> targets, Message message)
 			throws SmsException, IOException
 	{
 
 		EntityManager em = LocalEntityManagerFactory.createEntityManager();
+		int sent = 0;
 
 		try (Transaction t = new Transaction(em))
 		{
@@ -100,11 +100,15 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					activity.setType(type);
 
 					daoActivity.persist(activity);
-					SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
+					sent++;
+					super.taskProgress(sent, targets.size(), transmission);
+					//SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
 				}
 				catch (EmailException e)
 				{
 					logger.error(e, e);
+					transmission.setException(e);
+					super.taskItemError(transmission);
 					SMNotification.show(e, Type.ERROR_MESSAGE);
 				}
 			}
@@ -113,35 +117,11 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 		}
 		finally
 		{
+			super.taskComplete(sent);
+
 			// Reset the entity manager
 			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
 		}
 	}
 
-	@Override
-	public void progress(int count, int max, EmailTransmission transmission)
-	{
-		super.taskProgress(count, max, transmission);
-
-	}
-
-	@Override
-	public void complete()
-	{
-		super.taskComplete(1);
-	}
-
-	@Override
-	public void exception(Exception e)
-	{
-		super.taskException(e);
-
-	}
-
-	@Override
-	public void itemError(Exception e, EmailTransmission status)
-	{
-		super.taskItemError(status);
-
-	}
 }

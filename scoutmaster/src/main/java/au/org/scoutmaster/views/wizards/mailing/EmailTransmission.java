@@ -50,7 +50,7 @@ public class EmailTransmission
 		if (exception != null)
 			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
 		else
-			return "";
+			return "Success";
 	}
 
 	public String getContactName()

@@ -11,6 +11,7 @@ import au.com.vaadinutils.ui.UIUpdater;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.forms.WorkingDialog;
 import au.org.scoutmaster.util.MutableInteger;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
@@ -20,6 +21,7 @@ import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.VerticalLayout;
@@ -36,6 +38,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 	private PoJoTable<EmailTransmission> progressTable;
 	private MutableInteger queued = new MutableInteger(0);
 	private MutableInteger rejected = new MutableInteger(0);
+	private WorkingDialog workDialog;
 
 	public ShowProgressStep(MailingWizardView messagingWizardView)
 	{
@@ -110,12 +113,17 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 		else
 		{
 			queued.setValue(transmissions.size());
-			progressDescription.setValue(queued + " messages queued.");
+			progressDescription.setValue(queued.intValue() + " messages queued.");
 
+			workDialog = new WorkingDialog("Sending Emails", "Sending...");
 			User user = (User) VaadinSession.getCurrent().getAttribute("user");
 			ProgressBarWorker<EmailTransmission> worker = new ProgressBarWorker<EmailTransmission>(new SendEmailTask(
 					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles()));
 			worker.start();
+
+			UI.getCurrent().addWindow(workDialog);
+			
+			
 		}
 
 		return layout;
@@ -156,8 +164,10 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 			@Override
 			public void run()
 			{
-				progressDescription.setValue("Sending: " + count + " of " + max + " messages.");
+				String message = "Sending: " + count + " of " + max + " messages.";
+				progressDescription.setValue(message);
 				indicator.setValue((float) count / max);
+				workDialog.progress(message);
 				ShowProgressStep.this.progressTable.addRow(status);
 			}
 		});
@@ -181,6 +191,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 					progressDescription
 							.setValue(sent
 									+ " Email Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
+				workDialog.complete();
 			}
 		});
 	}

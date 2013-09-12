@@ -58,7 +58,7 @@ public class SMSTransmission
 		if (exception != null)
 			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
 		else
-			return "";
+			return "Success";
 	}
 
 	public String getContactName()
