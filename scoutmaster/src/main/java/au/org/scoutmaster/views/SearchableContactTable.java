@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.crud.EntityTable;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.RowChangeListener;
+import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.fields.TagChangeListener;
@@ -16,6 +17,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
@@ -129,6 +131,19 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 				resetFilter(SearchableContactTable.this.tagField.getTags(), event.getText());
 			}
 
+		});
+		
+		clearButton.addClickListener(new ClickEventLogged.ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public void clicked(ClickEvent event)
+			{
+				searchField.setValue("");
+				tagField.setValue((Object)null);
+			}
 		});
 		
 		searchField.focus();
