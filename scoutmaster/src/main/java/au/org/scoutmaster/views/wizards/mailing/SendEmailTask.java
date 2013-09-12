@@ -23,7 +23,6 @@ import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.ProgressBarTask;
-import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.util.ProgressTaskListener;
 import au.org.scoutmaster.util.SMNotification;
 

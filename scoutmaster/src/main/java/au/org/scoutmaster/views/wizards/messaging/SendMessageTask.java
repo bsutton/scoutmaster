@@ -25,7 +25,6 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 	private Message message;
 	private List<SMSTransmission> transmissions;
 	private SMSProvider provider;
-	private int sent;
 
 	public SendMessageTask(ProgressTaskListener<SMSTransmission> listener, SMSProvider provider, Message message,
 			ArrayList<SMSTransmission> transmissions)
@@ -78,7 +77,6 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 	@Override
 	public void progress(int count, int max, SMSTransmission transmission)
 	{
-		sent = count;
 		super.taskProgress(count, max, transmission);
 
 	}

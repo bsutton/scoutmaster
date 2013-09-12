@@ -19,6 +19,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
@@ -26,7 +27,6 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class MailingDetailsStep implements WizardStep
 {
@@ -177,11 +177,7 @@ public class MailingDetailsStep implements WizardStep
 			@Override
 			protected void handleFile(File file, String fileName, String mimeType, long length)
 			{
-				String msg = fileName + " attached to email. Saved to file " + file.getAbsolutePath() + " (size "
-						+ length + " bytes)";
 				attachFile(file);
-
-				// SMNotification.show(msg);
 			}
 
 			@Override
