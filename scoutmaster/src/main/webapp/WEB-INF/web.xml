@@ -18,6 +18,12 @@
 		<listener-class>au.org.scoutmaster.application.ContextListener
 		</listener-class>
 	</listener>
+	
+	<listener>
+		<listener-class>au.org.scoutmaster.application.LocalEntityManagerFactory
+		</listener-class>
+	</listener>
+	
 
 
 
