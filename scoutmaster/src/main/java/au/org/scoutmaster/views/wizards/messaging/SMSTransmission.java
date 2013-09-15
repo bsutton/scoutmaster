@@ -65,5 +65,10 @@ public class SMSTransmission
 	{
 		return this.contact.getFirstname() + " " + this.contact.getLastname();
 	}
+	
+	public Contact getContact()
+	{
+		return contact;
+	}
 
 }
