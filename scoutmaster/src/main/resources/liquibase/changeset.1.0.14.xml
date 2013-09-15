@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Set default values otherwise we get validation errors when trying to 
+		load the entity.. -->
+	<changeSet author="bsutton" id="1.0.14">
+		<update tableName="Tag">
+			<column name="name" value="Joeys" />
+			<where>NAME="Joey"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="name" value="Cubs" />
+			<where>NAME="Cub"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="name" value="Scouts" />
+			<where>NAME="Scout"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="name" value="Venturers" />
+			<where>NAME="Venturer"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="name" value="Rovers" />
+			<where>NAME="Rover"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="name" value="Leaders" />
+			<where>NAME="Leader"</where>
+		</update>
+
+
+		<insert tableName="Tag">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="BUILTIN" defaultValueNumeric="1" />
+			<column name="NAME" value="Assistant Leader" />
+			<column name="DESCRIPTION" value="Assistant Section Leader" />
+			<column name="DETACHABLE" defaultValueNumeric="0" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+
+
+		<insert tableName="Tag">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="BUILTIN" defaultValueNumeric="1" />
+			<column name="NAME" value="Recruitment Officer" />
+			<column name="DESCRIPTION" value="Responsible for group recruitment" />
+			<column name="DETACHABLE" defaultValueNumeric="0" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+
+
+
+	</changeSet>
+
+
+
+</databaseChangeLog>
