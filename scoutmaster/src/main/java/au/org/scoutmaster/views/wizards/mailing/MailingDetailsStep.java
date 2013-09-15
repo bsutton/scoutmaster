@@ -7,10 +7,10 @@ import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.forms.StandardCKEditor;
 
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -39,7 +39,7 @@ public class MailingDetailsStep implements WizardStep
 	private MailingWizardView wizard;
 	private VerticalLayout layout;
 	private Label recipientCount;
-	private StandardCKEditor ckEditorTextField;
+	private CKEditorEmailField ckEditorTextField;
 
 	VerticalLayout attachedFiles;
 	
@@ -75,7 +75,7 @@ public class MailingDetailsStep implements WizardStep
 		layout.addComponent(subject);
 		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
 
-		ckEditorTextField = new StandardCKEditor();
+		ckEditorTextField = new CKEditorEmailField(false);
 
 		layout.addComponent(ckEditorTextField);
 		layout.setExpandRatio(ckEditorTextField, 1.0f);
@@ -209,7 +209,7 @@ public class MailingDetailsStep implements WizardStep
 		line.addComponent(new Label(file.getName()));
 		MailingDetailsStep.this.attachedFiles.addComponent(line);
 		
-		AttachedFile attachedFile = new AttachedFile(this, file, line);
+		AttachedFile attachedFile = new AttachedFile(attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
 		

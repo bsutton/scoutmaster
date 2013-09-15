@@ -2,8 +2,8 @@ package au.org.scoutmaster.views.wizards.mailing;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.forms.StandardCKEditor;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
@@ -16,7 +16,7 @@ public class ConfirmDetailsStep implements WizardStep
 {
 
 	private TextField subject;
-	private StandardCKEditor ckEditorTextField;
+	private CKEditorEmailField ckEditorTextField;
 	private TextField from;
 	private MailingWizardView messagingWizardView;
 	private VerticalLayout layout;
@@ -47,7 +47,7 @@ public class ConfirmDetailsStep implements WizardStep
 		subject.setWidth("100%");
 		subject.setReadOnly(true);
 
-		ckEditorTextField = new StandardCKEditor();
+		ckEditorTextField = new CKEditorEmailField(false);
 		layout.addComponent(ckEditorTextField);
 		ckEditorTextField.setReadOnly(true);
 		ckEditorTextField.setSizeFull();
