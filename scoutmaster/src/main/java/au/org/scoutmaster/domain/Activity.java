@@ -58,7 +58,6 @@ public class Activity extends BaseEntity
 	/**
 	 * The activities details. May contain html for markup.
 	 */
-	@NotBlank
 	@Lob
 	@Column(name="DETAILS", columnDefinition="TEXT" )
 	private String details;
