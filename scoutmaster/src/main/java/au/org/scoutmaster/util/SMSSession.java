@@ -67,11 +67,11 @@ public class SMSSession implements Closeable
 		Activity activity = new Activity();
 		User user = (User) UI.getCurrent().getSession().getAttribute("user");
 		activity.setAddedBy(user);
+		activity.setWithContact(transmission.getContact());
 		activity.setSubject(transmission.getMessage().getSubject());
 		activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
 		activity.setActivityDate(new Date(new DateTime().toDate().getTime()));
-		activity.setDetails("Subject: " + transmission.getMessage().getSubject() + "Phone: " + reciever + " Message:"
-				+ transmission.getMessage().getBody());
+		activity.setDetails(transmission.getMessage().getBody());
 		daoActivity.persist(activity);
 	}
 }
