@@ -8,6 +8,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.ui.UIUpdater;
+import au.com.vaadinutils.ui.WorkingDialog;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.domain.Contact;
@@ -15,7 +16,6 @@ import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.forms.WorkingDialog;
 import au.org.scoutmaster.util.MutableInteger;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
@@ -133,10 +133,12 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 			SMSProvider provider = messagingWizardView.getDetails().getProvider();
 
-			workDialog = new WorkingDialog("Sending SMS messages", "Sending...");
+			
 
-			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(new SendMessageTask(
-					this, provider, enter.getMessage(), transmissions));
+			SendMessageTask task = new SendMessageTask(
+					this, provider, enter.getMessage(), transmissions);
+			workDialog = new WorkingDialog("Sending SMS messages", "Sending...", task);
+			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(task);
 			worker.start();
 			
 
@@ -186,7 +188,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 				String message = "Sending: " + count + " of " + max + " messages.";
 				progressDescription.setValue(message);
 				indicator.setValue((float) count / max);
-				workDialog.progress(message);
+				workDialog.progress(count, max, message);
 
 				ShowProgressStep.this.progressTable.addRow(status);
 			}
@@ -211,7 +213,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 					progressDescription
 							.setValue(sent
 									+ " SMS Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
-				workDialog.complete();
+				workDialog.complete(sent);
 
 			}
 		});
