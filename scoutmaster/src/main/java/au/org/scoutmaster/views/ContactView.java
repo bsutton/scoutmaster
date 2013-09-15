@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +14,8 @@ import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.Path;
+import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Gender;
@@ -87,7 +90,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		tabs.setSizeFull();
 
 		VerticalLayout layout = new VerticalLayout();
-		layout.setDescription("Editor");
 
 		overviewTab();
 		contactTab();
@@ -425,8 +427,109 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected void interceptSaveValues(Contact entity)
 	{
-		// TODO Auto-generated method stub
+		// Start by removing all non-detachable tags
+		// so we can re-attach the ones that still apply
+		
+		// add built-in tags
 
+		TagDao daoTag = new DaoFactory().getTagDao();
+		
+		Iterator<Tag> iter = entity.getTags().iterator();
+		while (iter.hasNext())
+		{
+			Tag tag = iter.next();
+			if (tag.getDetachable() == false)
+			{
+				// HACK: until we have child/parent relationships
+				if (!tag.getName().contains("Parent"))
+					iter.remove();
+			}
+		}
+		
+		// Section Tag
+		SectionType section = entity.getSection();
+		if (section != null)
+		{
+			Tag tag = daoTag.findByName(section.getName());
+			if (!entity.getTags().contains(tag))
+				entity.getTags().add(tag);
+		}
+
+		GroupRole role = entity.getRole();
+		switch (role)
+		{
+			case AdultHelper:
+				addTag(entity, "Adult Helper");
+				break;
+			case AssistantLeader:
+				addTag(entity, "Assistant Leader");
+				addTag(entity, "Council Member");
+				break;
+			case CommitteeMember:
+				addTag(entity, "Committee Member");
+				break;
+			case Gardian:
+				addTag(entity, role.name());
+				break;
+			case GroupLeader:
+				addTag(entity, "Group Leader");
+				addTag(entity, "Committee Member");
+				addTag(entity, "Council Member");
+				break;
+			case Leader:
+				addTag(entity, role.name());
+				addTag(entity, "Council Member");
+				break;
+			case Parent:
+				addTag(entity, role.name());
+				break;
+			case President:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+				break;
+			case QuarterMaster:
+				addTag(entity, "Quartermaster");
+				addTag(entity, "Committee Member");
+
+				break;
+			case RecruitmentOfficer:
+				addTag(entity, "Recruitment Officer");
+				addTag(entity, "Committee Member");
+
+				break;
+			case Secretary:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+
+				break;
+			case Treasurer:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+
+				break;
+			case Volunteer:
+				addTag(entity, role.name());
+
+				break;
+			case YouthMember:
+				addTag(entity, "Youth Member");
+				break;
+			default:
+				break;
+
+		}
+
+		//
+
+	}
+
+	private void addTag(Contact entity, String tagName)
+	{
+		TagDao daoTag = new DaoFactory().getTagDao();
+		
+		Tag tag = daoTag.findByName(tagName);
+		if (!entity.getTags().contains(tag))
+			entity.getTags().add(tag);
 	}
 
 	@Override
@@ -446,15 +549,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected Filter getContainerFilter(String filterString)
 	{
-		// return new Or(new Or(new
-		// SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
-		// false),
-		// new SimpleStringFilter(Contact_.lastname.getName(), filterString,
-		// true, false)),
-		// new SimpleStringFilter(Contact_.section.getName() + "." +
-		// SectionType_.name.getName(), filterString, true, false));
-		return new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true, false),
-				new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false));
+		return // new Or(
+		new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
+				false), new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false))
+		// , new SimpleStringFilter(Contact_.section.getName() + "." +
+		// SectionType_.name.getName(), filterString, true, false))
+				, new SimpleStringFilter(new Path(Contact_.phone1, Phone_.phoneNo).toString(), filterString, true,
+						false)), new SimpleStringFilter(new Path(Contact_.phone2, Phone_.phoneNo).toString(),
+				filterString, true, false)), new SimpleStringFilter(
+				new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString, true, false)),
+				new SimpleStringFilter(new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString, true, false));
+		// , new SimpleStringFilter(Contact_.role.getName(), filterString, true,
+		// false));
 
 	}
 
