@@ -198,5 +198,9 @@ public class User extends BaseEntity
 		return emailAddress;
 	}
 
+	public String toString()
+	{
+		return username;
+	}
 }
 
