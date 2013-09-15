@@ -6,17 +6,19 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
+import au.com.vaadinutils.listener.CancelListener;
+import au.com.vaadinutils.listener.ProgressListener;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.util.SMSSession;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao<SMSProvider, Long>
+public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao<SMSProvider, Long>, CancelListener
 {
 	Logger logger = Logger.getLogger(SMSProviderDao.class);
+	private boolean cancel = false;
 
 	@Override
 	public List<SMSProvider> findAll()
@@ -36,10 +38,11 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	 * @param targets
 	 * @param message
 	 * @param listener
+	 * @return
 	 * @throws SmsException
 	 * @throws IOException
 	 */
-	public void send(SMSProvider provider, List<SMSTransmission> targets, Message message,
+	public CancelListener send(SMSProvider provider, List<SMSTransmission> targets, Message message,
 			ProgressListener<SMSTransmission> listener) throws SmsException, IOException
 	{
 		int max = targets.size();
@@ -49,6 +52,8 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 		{
 			for (SMSTransmission transmission : targets)
 			{
+				if (cancel == true)
+					break;
 				try
 				{
 					session.send(transmission);
@@ -71,10 +76,12 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 		}
 
 		listener.complete(sent);
+		return this;
 	}
 
 	/**
 	 * Sends a single SMS messaging using its own session.
+	 * 
 	 * @param provider
 	 * @param transmission
 	 * @param listener
@@ -100,11 +107,17 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 
 	}
 
-	
 	@Override
 	public JPAContainer<SMSProvider> makeJPAContainer()
 	{
 		return super.makeJPAContainer(SMSProvider.class);
+	}
+
+	@Override
+	public void cancel()
+	{
+		this.cancel = true;
+
 	}
 
 }
