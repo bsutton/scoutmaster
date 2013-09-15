@@ -1,14 +1,22 @@
 package au.org.scoutmaster.forms;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
-import org.vaadin.openesignforms.ckeditor.CKEditorConfig;
-import org.vaadin.openesignforms.ckeditor.CKEditorTextField;
+import org.vaadin.easyuploads.FileBuffer;
+import org.vaadin.easyuploads.MultiFileUpload;
 
+import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.listener.CompleteListener;
+import au.com.vaadinutils.ui.WorkingDialog;
+import au.org.scoutmaster.application.LocalEntityManagerFactory;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -19,30 +27,40 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.views.wizards.mailing.AttachedFile;
 
-import com.vaadin.data.Property;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener
+public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, CompleteListener
 {
 	private static Logger logger = Logger.getLogger(EmailForm.class);
 	private static final long serialVersionUID = 1L;
-	
+	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
+
+
 	private User sender;
 	private TextField toAddress;
 	private TextField subject;
-	private CKEditorTextField ckEditorTextField;
+	private CKEditorEmailField ckEditor;
 	private Window owner;
 	private Button send;
 	private TextField ccAddress;
 	private Contact contact;
+	private VerticalLayout attachedFiles;
+	private HashSet<AttachedFile>fileList = new HashSet<>();
 
 	/**
 	 * 
@@ -54,11 +72,11 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		this.owner = owner;
 		this.sender = sender;
 		this.contact = contact;
-		
+
 		this.setSpacing(true);
 		this.setMargin(true);
 		this.setSizeFull();
-		
+
 		GridLayout grid = new GridLayout(3, 2);
 		grid.setWidth("100%");
 		grid.setColumnExpandRatio(1, (float) 1.0);
@@ -75,13 +93,13 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		toAddress.setWidth("100%");
 		grid.addComponent(toAddress);
 		grid.newLine();
-		
+
 		// CC
 		ComboBox targetTypeCC = new ComboBox(null, targetTypes);
 		targetTypeCC.setWidth("50");
 		targetTypeCC.select(targetTypes.get(1));
 		grid.addComponent(targetTypeCC);
-		
+
 		ccAddress = new TextField();
 		ccAddress.setInputPrompt("Enter email address");
 		ccAddress.setWidth("100%");
@@ -90,16 +108,31 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		send = new Button("Send", new ClickEventLogged.ClickAdaptor(this));
 		send.setImmediate(true);
 		grid.addComponent(send);
-		
+
 		this.addComponent(grid);
 		subject = new TextField("Subject");
 		subject.setWidth("100%");
-		
+
 		this.addComponent(subject);
-		CKEditorTextField ckEditor = getEditor();
+		ckEditor = new CKEditorEmailField(false);
 		this.addComponent(ckEditor);
 		this.setExpandRatio(ckEditor, 1.0f);
 		
+		HorizontalLayout uploadArea = new HorizontalLayout();
+		AbstractLayout uploadWidget = addUploadWidget();
+		uploadArea.addComponent(uploadWidget);
+		attachedFiles = new VerticalLayout();
+		Label attachedLabel = new Label("<b>Attached Files</b>");
+		attachedLabel.setContentMode(ContentMode.HTML);
+		attachedFiles.addComponent(attachedLabel);
+		uploadArea.addComponent(attachedFiles);
+		uploadArea.setWidth("100%");
+		uploadArea.setComponentAlignment(uploadWidget, Alignment.TOP_LEFT);
+		uploadArea.setComponentAlignment(attachedFiles, Alignment.TOP_RIGHT);
+
+		this.addComponent(uploadArea);
+
+
 		subject.focus();
 
 	}
@@ -114,72 +147,144 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		return targetTypes;
 	}
 
-	CKEditorTextField getEditor()
+	@Override
+	public void buttonClick(ClickEvent event)
 	{
 
-		CKEditorConfig config = new CKEditorConfig();
-		config.useCompactTags();
-		config.disableElementsPath();
-		//config.setResizeDir(CKEditorConfig.RESIZE_DIR.HORIZONTAL);
-		config.setResizeEnabled(false);
-		config.setToolbarCanCollapse(false);
-		config.disableResizeEditor();
+		send.setEnabled(false);
+		if (isEmpty(this.subject.getValue()))
+			SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
+		else if (isEmpty(this.toAddress.getValue()) && isEmpty(this.ccAddress.getValue()))
+			SMNotification.show("You must provide at least one email address", Type.WARNING_MESSAGE);
+		else if (isEmpty(this.ckEditor.getValue()))
+			SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
+		else
 
-		ckEditorTextField = new CKEditorTextField(config);
-		ckEditorTextField.setWidth("100%");
-		ckEditorTextField.setHeight("100%");
-
-		ckEditorTextField.addValueChangeListener(new Property.ValueChangeListener()
 		{
+			WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
+			UI.getCurrent().addWindow(working);
+			working.setWorker(new Runnable()
+			{
 
+
+				@Override
+				public void run()
+				{
+					try
+					{
+						EntityManager em = LocalEntityManagerFactory.createEntityManager();
+
+						SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
+						SMTPServerSettings settings = daoSMTPSettings.findSettings();
+
+						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(),
+								EmailForm.this.toAddress.getValue(), EmailForm.this.ccAddress.getValue(),
+								EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
+
+						// Log the activity
+						ActivityDao daoActivity = new DaoFactory(em).getActivityDao();
+						ActivityTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
+						ActivityType type = daoActivityType.findByName(ActivityType.EMAIL);
+						Activity activity = new Activity();
+						activity.setAddedBy(EmailForm.this.sender);
+						activity.setWithContact(EmailForm.this.contact);
+						activity.setSubject(EmailForm.this.subject.getValue());
+						activity.setDetails(EmailForm.this.ckEditor.getValue());
+						activity.setType(type);
+
+						daoActivity.persist(activity);
+					}
+					catch (EmailException e)
+					{
+						logger.error(e, e);
+						EmailForm.this.send.setEnabled(true);
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+
+				}
+			}, this);
+
+
+		}
+		this.send.setEnabled(true);
+
+	}
+
+	private boolean isEmpty(String value)
+	{
+		return value == null || value.length() == 0;
+	}
+
+	@Override
+	public void complete()
+	{
+		SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
+		// working.close();
+		this.owner.close();
+
+	}
+	
+	private AbstractLayout addUploadWidget()
+	{
+
+		MultiFileUpload multiFileUpload2 = new MultiFileUpload()
+		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void valueChange(com.vaadin.data.Property.ValueChangeEvent event)
+			protected void handleFile(File file, String fileName, String mimeType, long length)
 			{
-				// TODO Auto-generated method stub
+				attachFile(file);
+			}
+
+			@Override
+			protected FileBuffer createReceiver()
+			{
+				FileBuffer receiver = super.createReceiver();
+				/*
+				 * Make receiver not to delete files after they have been
+				 * handled by #handleFile().
+				 */
+				receiver.setDeleteFiles(false);
+				return receiver;
+			}
+		};
+		multiFileUpload2.setCaption("Attach files");
+		multiFileUpload2.setRootDirectory(TEMP_FILE_DIR);
+		return multiFileUpload2;
+	}
+
+	
+	private void attachFile(File file)
+	{
+		HorizontalLayout line = new HorizontalLayout();
+		line.setSpacing(true);
+		Button removeButton = new Button("x");
+		
+		removeButton.setStyleName("small");
+		
+		line.addComponent(removeButton);
+		line.addComponent(new Label(file.getName()));
+		EmailForm.this.attachedFiles.addComponent(line);
+		
+		AttachedFile attachedFile = new AttachedFile(attachedFiles, file, line);
+		this.fileList.add(attachedFile);
+		removeButton.setData(attachedFile);
+		
+		removeButton.addClickListener(new ClickEventLogged.ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void clicked(ClickEvent event)
+			{
+				AttachedFile file = (AttachedFile) event.getButton().getData();
+				file.remove();
+				EmailForm.this.fileList.remove(file);
 
 			}
 		});
 
-		return ckEditorTextField;
-
 	}
 
-	@Override
-	public void buttonClick(ClickEvent event)
-	{
-		this.send.setEnabled(false);
-		
-		SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-		SMTPServerSettings settings = daoSMTPSettings.findSettings();
-		
-		try
-		{
-			SMNotification.show("Sending...", Type.TRAY_NOTIFICATION);
-			daoSMTPSettings.sendEmail(settings, this.sender.getEmailAddress(), this.toAddress.getValue(), this.ccAddress.getValue(), this.subject.getValue(), ckEditorTextField.getValue(), null);
-			
-			// Log the activity
-			ActivityDao daoActivity = new DaoFactory().getActivityDao();
-			ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-			ActivityType type = daoActivityType.findByName(ActivityType.EMAIL);
-			Activity activity = new Activity();
-			activity.setAddedBy(this.sender);
-			activity.setWithContact(this.contact);
-			activity.setSubject(this.subject.getValue());
-			activity.setDetails(this.ckEditorTextField.getValue());
-			activity.setType(type);
-			
-			daoActivity.persist(activity);
-			SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
-			this.owner.close();
-		}
-		catch (EmailException e)
-		{
-			logger.error(e,e);
-			this.send.setEnabled(true);
-			SMNotification.show(e, Type.ERROR_MESSAGE);
-		}
-		
-	}
 }
