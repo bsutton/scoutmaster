@@ -3,26 +3,27 @@ package au.org.scoutmaster.views.wizards.mailing;
 import java.io.File;
 
 import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
 
 public class AttachedFile
 {
 	/**
 	 * 
 	 */
-	private final MailingDetailsStep mailingDetailsStep;
+	private final VerticalLayout attachedFilesLayout;
 	private File file;
 	private AbstractLayout line;
 
-	AttachedFile(MailingDetailsStep mailingDetailsStep, File file, AbstractLayout line)
+	public AttachedFile(VerticalLayout attachedFilesLayout, File file, AbstractLayout line)
 	{
-		this.mailingDetailsStep = mailingDetailsStep;
+		this.attachedFilesLayout = attachedFilesLayout;
 		this.file = file;
 		this.line = line;
 	}
 
 	public void remove()
 	{
-		this.mailingDetailsStep.attachedFiles.removeComponent(line);
+		this.attachedFilesLayout.removeComponent(line);
 		file.delete();
 	}
 
