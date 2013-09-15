@@ -64,11 +64,14 @@ public class Contact extends BaseEntity implements Importable
 
 	@FormField(displayName = "Middle Name")
 	private String middlename = "";
-
+	
 	@NotBlank
 	@javax.validation.constraints.Size(min = 1, max = 255)
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
+
+	@Transient
+	private String fullname;
 
 	@FormField(displayName = "Birth Date")
 	@Past
@@ -792,4 +795,13 @@ public class Contact extends BaseEntity implements Importable
 		}
 	}
 
+	public void setFullname(String value)
+	{
+		// we ignore the value. The full name is a transient.
+		this.fullname = firstname + " " + lastname;
+	}
+	public String getFullname()
+	{
+		return firstname + " " + lastname;
+	}
 }
