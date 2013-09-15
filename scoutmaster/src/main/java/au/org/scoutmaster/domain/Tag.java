@@ -33,6 +33,7 @@ public class Tag extends BaseEntity
 
 	private static final long serialVersionUID = 1L;
 	public static final String DESCRIPTION = "description";
+
 	public static final String NAME = "name";
 
 
@@ -48,7 +49,7 @@ public class Tag extends BaseEntity
 	/**
 	 * Indicates that this is a builtin tag and therefore it may not be deleted
 	 */
-	Boolean builtin;
+	Boolean builtin = new Boolean(false);
 	
 
 	/*
@@ -64,7 +65,7 @@ public class Tag extends BaseEntity
 	 * 
 	 * Only builtin tags may be NON-detachable.
 	 */
-	Boolean detachable;
+	Boolean detachable = new Boolean(true);
 
 	// @ManyToMany
 	// private final List<Contact> contacts = new ArrayList<>();
@@ -127,6 +128,26 @@ public class Tag extends BaseEntity
 		this.description = description;
 	}
 
+	public Boolean getBuiltin()
+	{
+		return builtin;
+	}
+
+	public void setBuiltin(Boolean builtin)
+	{
+		this.builtin = builtin;
+	}
+
+	public Boolean getDetachable()
+	{
+		return detachable;
+	}
+
+	public void setDetachable(Boolean detachable)
+	{
+		this.detachable = detachable;
+	}
+
 
 	// public List<Contact> getContacts()
 	// {
@@ -157,7 +178,7 @@ public class Tag extends BaseEntity
 	@Override
 	public String toString()
 	{
-		return Pojomatic.toString(this);
+		return this.name;
 	}
 
 	@Override
