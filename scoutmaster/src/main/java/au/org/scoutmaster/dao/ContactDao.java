@@ -15,8 +15,10 @@ import org.joda.time.DateTime;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.Section_;
 import au.org.scoutmaster.domain.Tag;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -176,6 +178,8 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		contactContainer.addNestedContainerProperty("address.city");
 		contactContainer.addNestedContainerProperty("address.postcode");
 		contactContainer.addNestedContainerProperty("address.state");
+		//contactContainer.addNestedContainerProperty(new Path(Contact_.role, Role_.name).toString());
+		contactContainer.addNestedContainerProperty(new Path(Contact_.section, Section_.name).toString());
 		
 		return contactContainer;
 	}
