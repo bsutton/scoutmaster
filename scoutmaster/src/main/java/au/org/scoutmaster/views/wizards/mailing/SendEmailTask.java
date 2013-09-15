@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.listener.CancelListener;
 import au.org.scoutmaster.application.LocalEntityManagerFactory;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
@@ -28,13 +29,14 @@ import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.ui.Notification.Type;
 
-public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implements ProgressListener<EmailTransmission>
+public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements CancelListener
 {
 	Logger logger = Logger.getLogger(SendEmailTask.class);
 	private Message message;
 	private List<EmailTransmission> transmissions;
 	private User user;
 	private HashSet<AttachedFile> attachedFiles;
+	private boolean cancel = false;
 
 	public SendEmailTask(ProgressTaskListener<EmailTransmission> listener, User user, Message message,
 			ArrayList<EmailTransmission> transmissions, HashSet<AttachedFile> attachedFiles)
@@ -44,7 +46,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implemen
 		this.transmissions = transmissions;
 		this.user = user;
 		this.attachedFiles = attachedFiles;
-		
+
 	}
 
 	@Override
@@ -60,11 +62,10 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implemen
 			super.taskException(e);
 		}
 
-
 	}
 
-	private void sendMessages(User user, List<EmailTransmission> targets, Message message)
-			throws SmsException, IOException
+	private void sendMessages(User user, List<EmailTransmission> targets, Message message) throws SmsException,
+			IOException
 	{
 
 		EntityManager em = LocalEntityManagerFactory.createEntityManager();
@@ -77,13 +78,14 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implemen
 			EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
 			SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
 			SMTPServerSettings settings = daoSMTPSettings.findSettings();
-			
 
 			for (EmailTransmission transmission : targets)
 			{
+				if (cancel == true)
+					break;
+
 				try
 				{
-					SMNotification.show("Sending to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
 					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(), transmission.getRecipient(),
 							null, message.getSubject(), message.getBody(), attachedFiles);
 
@@ -101,7 +103,10 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implemen
 					daoActivity.persist(activity);
 					sent++;
 					super.taskProgress(sent, targets.size(), transmission);
-					//SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
+					SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
+					
+					// SMNotification.show("Message sent",
+					// Type.TRAY_NOTIFICATION);
 				}
 				catch (EmailException e)
 				{
@@ -121,6 +126,13 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission>// implemen
 			// Reset the entity manager
 			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
 		}
+	}
+
+	@Override
+	public void cancel()
+	{
+		this.cancel = true;
+
 	}
 
 }
