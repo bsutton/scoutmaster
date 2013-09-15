@@ -12,10 +12,12 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
+import au.org.scoutmaster.views.ActivityView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
+import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
 import au.org.scoutmaster.views.wizards.mailing.MailingWizardView;
 import au.org.scoutmaster.views.wizards.messaging.MessagingWizardView;
@@ -80,6 +82,8 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(MessagingWizardView.NAME, MessagingWizardView.class));
 		viewMap.add(new ViewMap(MailingWizardView.NAME, MailingWizardView.class));
 		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
+		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
+		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
