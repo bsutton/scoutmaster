@@ -8,13 +8,14 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.ui.UIUpdater;
+import au.com.vaadinutils.ui.WorkingDialog;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.forms.WorkingDialog;
 import au.org.scoutmaster.util.MutableInteger;
 import au.org.scoutmaster.util.ProgressBarWorker;
 import au.org.scoutmaster.util.ProgressTaskListener;
+import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.server.VaadinSession;
@@ -99,9 +100,9 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 				continue;
 			}
 
-			// No mobile found
+			// No email address found
 			EmailTransmission transmission = new EmailTransmission(contact, enter.getMessage(), new RecipientException(
-					"No mobile no.", contact));
+					"No email address on contact.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
 			rejected.setValue(rejected.intValue() + 1);
 		}
@@ -115,10 +116,13 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 			queued.setValue(transmissions.size());
 			progressDescription.setValue(queued.intValue() + " messages queued.");
 
-			workDialog = new WorkingDialog("Sending Emails", "Sending...");
 			User user = (User) VaadinSession.getCurrent().getAttribute("user");
-			ProgressBarWorker<EmailTransmission> worker = new ProgressBarWorker<EmailTransmission>(new SendEmailTask(
-					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles()));
+			SendEmailTask task = new SendEmailTask(
+					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles());
+			
+			workDialog = new WorkingDialog("Sending Emails", "Sending...", task);
+			
+			ProgressBarWorker<EmailTransmission> worker = new ProgressBarWorker<EmailTransmission>(task);
 			worker.start();
 
 			UI.getCurrent().addWindow(workDialog);
@@ -167,7 +171,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 				String message = "Sending: " + count + " of " + max + " messages.";
 				progressDescription.setValue(message);
 				indicator.setValue((float) count / max);
-				workDialog.progress(message);
+				workDialog.progress(count, max, message);
 				ShowProgressStep.this.progressTable.addRow(status);
 			}
 		});
@@ -191,7 +195,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 					progressDescription
 							.setValue(sent
 									+ " Email Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
-				workDialog.complete();
+				SMNotification.show("Email batch send complete", Type.TRAY_NOTIFICATION);
+				workDialog.complete(sent);
 			}
 		});
 	}
