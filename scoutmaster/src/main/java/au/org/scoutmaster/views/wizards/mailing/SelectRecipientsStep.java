@@ -31,22 +31,11 @@ public class SelectRecipientsStep implements WizardStep
 	private TextField from;
 	private ComboBox providers;
 	private SearchableContactTable contactTable;
+	private VerticalLayout layout;
 
 	public SelectRecipientsStep(MailingWizardView messagingWizardView)
 	{
-
-	}
-
-	@Override
-	public String getCaption()
-	{
-		return "Select Recipients";
-	}
-
-	@Override
-	public Component getContent()
-	{
-		VerticalLayout layout = new VerticalLayout();
+		layout = new VerticalLayout();
 		layout.setMargin(true);
 		layout.setSizeFull();
 
@@ -63,6 +52,18 @@ public class SelectRecipientsStep implements WizardStep
 
 		contactTable = new SearchableContactTable(contactContainer, builder.build());
 		layout.addComponent(contactTable);
+
+	}
+
+	@Override
+	public String getCaption()
+	{
+		return "Select Recipients";
+	}
+
+	@Override
+	public Component getContent()
+	{
 		
 		
 		return layout;
