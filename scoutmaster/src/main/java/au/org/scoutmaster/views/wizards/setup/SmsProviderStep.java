@@ -9,13 +9,13 @@ import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
 import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.listener.ProgressListener;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.SMSProvider_;
-import au.org.scoutmaster.util.ProgressListener;
 import au.org.scoutmaster.views.wizards.messaging.Message;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
