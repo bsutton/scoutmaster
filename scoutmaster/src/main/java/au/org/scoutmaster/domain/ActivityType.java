@@ -79,4 +79,9 @@ public class ActivityType extends BaseEntity
 	{
 		this.description = description;
 	}
+	
+	public String toString()
+	{
+		return name;
+	}
 }
