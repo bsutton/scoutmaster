@@ -110,7 +110,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 
 	public JPAContainer<E> makeJPAContainer(Class<E> clazz)
 	{
-		JPAContainer<E> container = JPAContainerFactory.make(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
+		JPAContainer<E> container = JPAContainerFactory. makeBatchable(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 
 		return container;
 	}

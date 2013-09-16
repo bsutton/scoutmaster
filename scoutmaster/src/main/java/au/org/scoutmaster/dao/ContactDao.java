@@ -161,7 +161,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	}
 	public JPAContainer<Contact> makeJPAContainer()
 	{
-		JPAContainer<Contact> contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
+		JPAContainer<Contact> contactContainer = super.makeJPAContainer(Contact.class);
 		contactContainer.addNestedContainerProperty("phone1.phoneNo");
 		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
 		contactContainer.addNestedContainerProperty("phone1.phoneType");
