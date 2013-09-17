@@ -13,12 +13,12 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
+import au.com.vaadinutils.util.ProgressBarTask;
+import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.vaadinutil.util.ProgressBarTask;
-import au.org.vaadinutil.util.ProgressTaskListener;
 
 public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>, CancelListener
 {

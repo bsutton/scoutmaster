@@ -13,13 +13,13 @@ import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.vaadinutils.impl.LocalEntityManagerFactory;
+import au.com.vaadinutils.util.ProgressBarTask;
+import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.vaadinutil.util.ProgressBarTask;
-import au.org.vaadinutil.util.ProgressTaskListener;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;

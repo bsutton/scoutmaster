@@ -9,13 +9,13 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.ui.UIUpdater;
 import au.com.vaadinutils.ui.WorkingDialog;
+import au.com.vaadinutils.util.MutableInteger;
+import au.com.vaadinutils.util.ProgressBarWorker;
+import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.vaadinutil.util.MutableInteger;
-import au.org.vaadinutil.util.ProgressBarWorker;
-import au.org.vaadinutil.util.ProgressTaskListener;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.server.VaadinSession;

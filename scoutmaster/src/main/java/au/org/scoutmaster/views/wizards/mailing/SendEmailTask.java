@@ -14,6 +14,8 @@ import org.marre.sms.SmsException;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.CancelListener;
+import au.com.vaadinutils.util.ProgressBarTask;
+import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
@@ -24,8 +26,6 @@ import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.vaadinutil.util.ProgressBarTask;
-import au.org.vaadinutil.util.ProgressTaskListener;
 
 import com.vaadin.ui.Notification.Type;
 
