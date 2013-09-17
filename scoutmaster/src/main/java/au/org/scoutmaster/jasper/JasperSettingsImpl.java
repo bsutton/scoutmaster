@@ -3,7 +3,7 @@ package au.org.scoutmaster.jasper;
 import java.io.File;
 import java.util.Properties;
 
-import au.com.scoutmaster.jasper.JasperSettings;
+import au.com.vaadinutils.jasper.JasperSettings;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
