@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import org.joda.money.Money;
 
-@Generated(value="Dali", date="2013-09-11T21:56:55.503+1000")
+@Generated(value="Dali", date="2013-09-17T12:57:50.426+1000")
 @StaticMetamodel(SectionTryoutType.class)
 public class SectionTryoutType_ extends BaseEntity_ {
 	public static volatile ListAttribute<SectionTryoutType, Section> sections;

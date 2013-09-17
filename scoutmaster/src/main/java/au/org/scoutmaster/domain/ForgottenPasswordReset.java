@@ -28,13 +28,11 @@ import au.org.scoutmaster.domain.access.User;
 // We order the set just incase we get two identical random strings (but almost
 // impossible)
 {
-		@NamedQuery(name = ForgottenPasswordReset.FIND_ALL, query = "SELECT Forgottenpasswordreset FROM ForgottenPasswordReset Forgottenpasswordreset"),
 		@NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
 public class ForgottenPasswordReset extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_ALL = "ForgottenPasswordReset.findAll";
 	public static final String FIND_BY_RESET_ID = "ForgottenPasswordReset.findByResetId";
 
 	/**

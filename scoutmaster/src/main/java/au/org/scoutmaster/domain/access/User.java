@@ -26,7 +26,6 @@ import au.org.scoutmaster.util.PasswordHash;
 @Table(name="User")
 @NamedQueries(
 {
-		@NamedQuery(name = User.FIND_ALL, query = "SELECT user FROM User user"),
 		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
 public class User extends BaseEntity
@@ -37,7 +36,6 @@ public class User extends BaseEntity
 	private static final Logger logger = Logger.getLogger(User.class);
 
 	
-	public static final String FIND_ALL = "User.findAll";
 	public static final String FIND_BY_NAME = "User.findByName";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 

@@ -12,7 +12,6 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="SMSProvider")
 @NamedQueries(
 {
-		@NamedQuery(name = SMSProvider.FIND_ALL, query = "SELECT smsprovider FROM SMSProvider smsprovider"),
 		@NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name")
 })
 
@@ -21,7 +20,6 @@ public class SMSProvider extends BaseEntity
 	private static final long serialVersionUID = 1L;
 	
 	public static final String FIND_BY_NAME = "SMSProvider.findByName";
-	public static final String FIND_ALL = "SMSProvider.findAll";
 	
 
 	/**

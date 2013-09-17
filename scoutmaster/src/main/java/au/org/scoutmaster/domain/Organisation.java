@@ -32,14 +32,12 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @NamedQueries(
 {
-	@NamedQuery(name = Organisation.FIND_ALL, query = "SELECT organisation FROM Organisation organisation"),
 	@NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"),
 })
 public class Organisation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_ALL = "Organisation.findAll";
 	public static final String FIND_OUR_SCOUT_GROUP = "Organisation.findOurScoutGroup";
 
 	/**

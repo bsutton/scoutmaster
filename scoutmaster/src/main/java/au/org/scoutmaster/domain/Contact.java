@@ -37,11 +37,9 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @Table(name = "Contact")
 @NamedQueries(
 {
-		@NamedQuery(name = Contact.FIND_ALL, query = "SELECT contact FROM Contact contact"),
 		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
 public class Contact extends BaseEntity implements Importable
 {
-	static public final String FIND_ALL = "Contact.findAll";
 	static public final String FIND_BY_NAME = "Contact.findByName";
 
 	private static final long serialVersionUID = 1L;
@@ -794,6 +792,7 @@ public class Contact extends BaseEntity implements Importable
 			setBirthDate(new java.sql.Date(date1.toDate().getTime()));
 		}
 	}
+	
 
 	public void setFullname(String value)
 	{

@@ -18,13 +18,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="ActivityType")
 @NamedQueries(
 {
-		@NamedQuery(name = ActivityType.FIND_ALL, query = "SELECT activitytype FROM ActivityType activitytype"),
 		@NamedQuery(name = ActivityType.FIND_BY_NAME, query = "SELECT activitytype FROM ActivityType activitytype where activitytype.name = :name"), })
 public class ActivityType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	static public final String FIND_ALL = "ActivityType.findAll";
 	static public final String FIND_BY_NAME = "ActivityType.findByName";
 
 	public static final String MEETING = "Meeting";

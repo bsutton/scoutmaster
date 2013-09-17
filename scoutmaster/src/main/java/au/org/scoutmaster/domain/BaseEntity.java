@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import au.com.vaadinutils.crud.CrudEntity;
+
 /**
  * This class is an abstract superclass for all Entity classes in the
  * application. This class defines variables which are common for all entity
@@ -19,7 +21,7 @@ import javax.persistence.Version;
  * 
  */
 @MappedSuperclass
-abstract public class BaseEntity implements Serializable
+abstract public class BaseEntity implements Serializable, CrudEntity
 {
 
 	private static final long serialVersionUID = -7289994339186082141L;

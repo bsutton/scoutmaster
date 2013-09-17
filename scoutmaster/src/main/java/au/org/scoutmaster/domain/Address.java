@@ -16,12 +16,10 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 @Table(name="Address")
 @NamedQueries(
 {
-		@NamedQuery(name = Address.FIND_ALL, query = "SELECT address FROM Address address"),
 		@NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
 				+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
 public class Address extends BaseEntity
 {
-	public static final String FIND_ALL = "Address.findAll";
 	public static final String FIND_MATCHING = "Address.findMatching";
 	
 	private static final long serialVersionUID = 1L;
