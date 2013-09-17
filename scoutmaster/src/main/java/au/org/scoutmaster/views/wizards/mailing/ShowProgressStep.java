@@ -12,19 +12,19 @@ import au.com.vaadinutils.ui.WorkingDialog;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.util.MutableInteger;
-import au.org.scoutmaster.util.ProgressBarWorker;
-import au.org.scoutmaster.util.ProgressTaskListener;
 import au.org.scoutmaster.util.SMNotification;
+import au.org.vaadinutil.util.MutableInteger;
+import au.org.vaadinutil.util.ProgressBarWorker;
+import au.org.vaadinutil.util.ProgressTaskListener;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailTransmission>
