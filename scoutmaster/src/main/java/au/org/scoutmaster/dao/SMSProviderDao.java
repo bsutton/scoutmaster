@@ -20,11 +20,6 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	Logger logger = Logger.getLogger(SMSProviderDao.class);
 	private boolean cancel = false;
 
-	@Override
-	public List<SMSProvider> findAll()
-	{
-		return super.findAll(SMSProvider.FIND_ALL);
-	}
 
 	public List<SMSProvider> findByName(String name)
 	{

@@ -24,11 +24,6 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 		super(em);
 	}
 
-	@Override
-	public List<Organisation> findAll()
-	{
-		return super.findAll(Organisation.FIND_ALL);
-	}
 
 	public JPAContainer<Organisation> makeJPAContainer()
 	{

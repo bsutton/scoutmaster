@@ -26,11 +26,6 @@ public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> im
 		super(em);
 	}
 
-	@Override
-	public List<ImportUserMapping> findAll()
-	{
-		return super.findAll(ImportUserMapping.FIND_ALL);
-	}
 
 	public List<ImportUserMapping> findByName(String name)
 	{

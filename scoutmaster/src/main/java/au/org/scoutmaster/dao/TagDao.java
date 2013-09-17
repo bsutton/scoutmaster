@@ -1,7 +1,5 @@
 package au.org.scoutmaster.dao;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
@@ -21,11 +19,6 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 		super(em);
 	}
 
-	@Override
-	public List<Tag> findAll()
-	{
-		return super.findAll(Tag.FIND_ALL);
-	}
 	public Tag findByName(String name)
 	{
 		return super.findSingleBySingleParameter(Tag.FIND_BY_NAME, "tagName", name);

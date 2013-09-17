@@ -28,11 +28,6 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 		super(em);
 	}
 
-	@Override
-	public List<ForgottenPasswordReset> findAll()
-	{
-		return super.findAll(ForgottenPasswordReset.FIND_ALL);
-	}
 	
 	@SuppressWarnings("unchecked")
 	boolean hasExpired(String resetid)

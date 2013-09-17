@@ -30,11 +30,6 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		super(em);
 	}
 
-	@Override
-	public List<SMTPServerSettings> findAll()
-	{
-		return super.findAll(SMTPServerSettings.FIND_ALL);
-	}
 
 	public SMTPServerSettings findSettings()
 	{

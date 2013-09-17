@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
-import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -22,7 +21,6 @@ import au.org.scoutmaster.domain.Section_;
 import au.org.scoutmaster.domain.Tag;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 
 public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact, Long>
 {
@@ -37,12 +35,6 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		super(em);
 	}
 
-	@Override
-	public List<Contact> findAll()
-	{
-		return super.findAll(Contact.FIND_ALL);
-	}
-	
 	
 	@SuppressWarnings("unchecked")
 	public List<Contact> findByName(String firstname, String lastname)
@@ -161,7 +153,9 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	}
 	public JPAContainer<Contact> makeJPAContainer()
 	{
-		JPAContainer<Contact> contactContainer = JPAContainerFactory.make(Contact.class, EntityManagerProvider.INSTANCE.getEntityManager());
+		JPAContainer<Contact> contactContainer = super.makeJPAContainer(Contact.class);
+		
+
 		contactContainer.addNestedContainerProperty("phone1.phoneNo");
 		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
 		contactContainer.addNestedContainerProperty("phone1.phoneType");

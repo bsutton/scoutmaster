@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 
 import au.org.scoutmaster.dao.access.UserDao;
 
-
 public class DaoFactory
 {
 	private final EntityManager em;
@@ -19,13 +18,13 @@ public class DaoFactory
 
 	/**
 	 * Allows us to control the used em. This is normally used for unit testing.
+	 * 
 	 * @param em
 	 */
 	public DaoFactory(EntityManager em)
 	{
 		this.em = em;
 	}
-
 
 	public ActivityDao getActivityDao()
 	{
@@ -36,12 +35,12 @@ public class DaoFactory
 	{
 		return (ActivityTypeDao) instantiateDAO(ActivityTypeDao.class);
 	}
-	
+
 	public ContactDao getContactDao()
 	{
 		return (ContactDao) instantiateDAO(ContactDao.class);
 	}
-	
+
 	public SMTPSettingsDao getSMTPSettingsDao()
 	{
 		return (SMTPSettingsDao) instantiateDAO(SMTPSettingsDao.class);
@@ -56,12 +55,11 @@ public class DaoFactory
 	{
 		return (ImportUserMappingDao) instantiateDAO(ImportUserMappingDao.class);
 	}
-	
+
 	public OrganisationDao getOrganisationDao()
 	{
 		return (OrganisationDao) instantiateDAO(OrganisationDao.class);
 	}
-
 
 	public PhoneDao getPhoneDao()
 	{
@@ -83,25 +81,23 @@ public class DaoFactory
 		return (TagDao) instantiateDAO(TagDao.class);
 	}
 
-
 	public UserDao getUserDao()
 	{
 		return (UserDao) instantiateDAO(UserDao.class);
 	}
-	
 
-
-	private  JpaBaseDao<?, ?> instantiateDAO(Class<?> daoClass)
+	private JpaBaseDao<?, ?> instantiateDAO(Class<?> daoClass)
 	{
 		try
 		{
 			JpaBaseDao<?, ?> dao = null;
 			if (this.em != null)
 			{
-				dao = (JpaBaseDao<?, ?>) daoClass.getDeclaredConstructor(new Class[]{EntityManager.class}).newInstance(this.em);
+				dao = (JpaBaseDao<?, ?>) daoClass.getDeclaredConstructor(new Class[]
+				{ EntityManager.class }).newInstance(this.em);
 			}
 			else
-			dao = (JpaBaseDao<?, ?>) daoClass.newInstance();
+				dao = (JpaBaseDao<?, ?>) daoClass.newInstance();
 			return dao;
 		}
 		catch (Exception ex)

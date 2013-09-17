@@ -1,7 +1,5 @@
 package au.org.scoutmaster.dao;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 
 import au.org.scoutmaster.domain.Activity;
@@ -25,11 +23,6 @@ public class ActivityDao extends JpaBaseDao<Activity, Long> implements Dao<Activ
 		super(em);
 	}
 
-	@Override
-	public List<Activity> findAll()
-	{
-		return super.findAll(Activity.FIND_ALL);
-	}
 
 	@Override
 	public JPAContainer<Activity> makeJPAContainer()

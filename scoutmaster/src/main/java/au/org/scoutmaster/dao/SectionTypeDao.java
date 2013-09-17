@@ -23,11 +23,6 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		super(em);
 	}
 
-	@Override
-	public List<SectionType> findAll()
-	{
-		return super.findAll(SectionType.FIND_ALL);
-	}
 	public SectionType findByName(String name)
 	{
 		return super.findSingleBySingleParameter(SectionType.FIND_BY_NAME, "name", name);
