@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain.converter;
 
+import au.org.scoutmaster.domain.Activity;
+import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
@@ -19,10 +21,14 @@ public class ScoutmasterConverterFactory extends DefaultConverterFactory
 		// Handle one particular type conversion
 		if (SectionType.class == modelType)
 			return (Converter<PRESENTATION, MODEL>) new SectionTypeConverter();
-		if (Tag.class == modelType)
+		else if (Tag.class == modelType)
 			return (Converter<PRESENTATION, MODEL>) new TagConverter();
-		if (Phone.class == modelType)
+		else if (Phone.class == modelType)
 			return (Converter<PRESENTATION, MODEL>) new PhoneConverter();
+		else if (Activity.class == modelType)
+			return (Converter<PRESENTATION, MODEL>) new ActivityConverter();
+		else if (ActivityType.class == modelType)
+			return (Converter<PRESENTATION, MODEL>) new ActivityTypeConverter();
 
 		// Default to the supertype
 		return super.createConverter(presentationType, modelType);
