@@ -95,34 +95,34 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 				Tag_.description.getName(), filterString, true, false));
 	}
 
-//	@Override
-//	public void rowChanged(EntityItem<Tag> item)
-//	{
-//		if (item != null)
-//		{
-//			Tag entity = item.getEntity();
-//
-//			if (entity != null && entity.getBuiltin())
-//			{
-//
-//				// You can't edit builin tags.
-//	//			overviewForm.setReadOnly(true);
-//				detachable.setReadOnly(false);
-//				super.showDelete(false);
-//				super.showSaveCancel(false);
-//			}
-//			else
-//			{
-//				overviewForm.setReadOnly(false);
-//				detachable.setReadOnly(false);
-//				super.showDelete(true);
-//				super.showSaveCancel(true);
-//			}
-//			builtin.setReadOnly(true);
-//
-//			super.rowChanged(item);
-//
-//		}
-//	}
+	@Override
+	public void rowChanged(EntityItem<Tag> item)
+	{
+		if (item != null)
+		{
+			Tag entity = item.getEntity();
+
+			if (entity != null && entity.getBuiltin())
+			{
+
+				// You can't edit builin tags.
+	//			overviewForm.setReadOnly(true);
+				detachable.setReadOnly(false);
+				super.showDelete(false);
+				super.showSaveCancel(false);
+			}
+			else
+			{
+				overviewForm.setReadOnly(false);
+				detachable.setReadOnly(false);
+				super.showDelete(true);
+				super.showSaveCancel(true);
+			}
+			builtin.setReadOnly(true);
+
+			super.rowChanged(item);
+
+		}
+	}
 
 }
