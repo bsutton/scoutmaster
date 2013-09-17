@@ -13,10 +13,10 @@ import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 
 import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.ui.WorkingDialog;
-import au.org.scoutmaster.application.LocalEntityManagerFactory;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.DaoFactory;
