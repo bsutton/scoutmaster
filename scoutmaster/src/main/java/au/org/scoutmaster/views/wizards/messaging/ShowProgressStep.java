@@ -16,17 +16,17 @@ import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.MutableInteger;
-import au.org.scoutmaster.util.ProgressBarWorker;
-import au.org.scoutmaster.util.ProgressTaskListener;
+import au.org.vaadinutil.util.MutableInteger;
+import au.org.vaadinutil.util.ProgressBarWorker;
+import au.org.vaadinutil.util.ProgressTaskListener;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTransmission>
@@ -83,33 +83,33 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		ArrayList<SMSTransmission> transmissions = new ArrayList<>();
 
 		HashSet<String> dedupList = new HashSet<>();
+		PhoneDao daoPhone = new DaoFactory().getPhoneDao();
 
 		for (Contact contact : recipients)
 		{
-			PhoneDao daoPhone = new DaoFactory().getPhoneDao();
 
 			// Find if the contact has a mobile.
 			// Check the primary field first.
 			Phone primaryPhone = contact.getPrimaryPhone();
-			if (primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
+			if (primaryPhone != null && primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
 			{
 				queueTransmission(enter, transmissions, dedupList, contact, primaryPhone);
 				continue;
 			}
 
-			if (contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
+			if (contact.getPhone1() != null && contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
 			{
 				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone1());
 				continue;
 			}
 
-			if (contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
+			if (contact.getPhone2() != null && contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
 			{
 				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone2());
 				continue;
 			}
 
-			if (contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
+			if (contact.getPhone3() != null && contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
 			{
 				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone3());
 				continue;
