@@ -5,11 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Organisation;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 
 public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements Dao<Organisation, Long>
 {
@@ -27,8 +25,8 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 
 	public JPAContainer<Organisation> makeJPAContainer()
 	{
-		JPAContainer<Organisation> contactContainer = JPAContainerFactory.make(Organisation.class,
-				EntityManagerProvider.INSTANCE.getEntityManager());
+		
+		JPAContainer<Organisation> contactContainer = super.makeJPAContainer(Organisation.class);
 		contactContainer.addNestedContainerProperty("location.street");
 		contactContainer.addNestedContainerProperty("location.city");
 		contactContainer.addNestedContainerProperty("location.state");

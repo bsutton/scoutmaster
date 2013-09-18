@@ -6,7 +6,6 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Tag;
@@ -84,7 +83,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 		builder.addColumn("Contact", Tag_.name).addColumn("Description", Tag_.description)
 				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
 
-		super.init(Tag.class, container, builder.build(), EntityManagerProvider.INSTANCE);
+		super.init(Tag.class, container, builder.build());
 
 	}
 

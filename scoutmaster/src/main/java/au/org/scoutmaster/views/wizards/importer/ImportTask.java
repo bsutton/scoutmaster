@@ -12,7 +12,6 @@ import javax.validation.ConstraintViolationException;
 import org.apache.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.Transaction;
@@ -43,7 +42,6 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 		this.tempFile = tempFile;
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
-		this.em = LocalEntityManagerFactory.createEntityManager();
 	}
 
 	@Override
@@ -97,7 +95,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	protected <T extends Importable> int buildContainerFromCSV(Class<T> entityClass, Reader reader) throws IOException,
 			InstantiationException, IllegalAccessException
 	{
-		JPAContainer<T> container = JPAContainerFactory.make(entityClass, em);
+		JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, em);
 
 		CSVReader csvReader = null;
 		int count = 0;

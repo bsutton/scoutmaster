@@ -7,9 +7,10 @@ import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.EventDao;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Calendar;
@@ -37,10 +38,8 @@ public class AppointmentView extends VerticalLayout implements View
 	public void enter(ViewChangeEvent event)
 	{
 
-		final JPAContainer<au.org.scoutmaster.domain.Event> container = JPAContainerFactory.make(
-				au.org.scoutmaster.domain.Event.class, "scoutmaster");
-		// EntityProvider<au.com.noojee.scouts.domain.Event> ep =
-		// container.getEntityProvider();
+		EventDao eventDao = new DaoFactory().getEventDao();
+		JPAContainer<au.org.scoutmaster.domain.Event> container = eventDao.makeJPAContainer();
 
 		// // Customize the event provider for adding events
 		// // as entities

@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.fields.CKEditorEmailField;
-import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.ui.WorkingDialog;
@@ -172,7 +172,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 				{
 					try
 					{
-						EntityManager em = LocalEntityManagerFactory.createEntityManager();
+						EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
 
 						SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
 						SMTPServerSettings settings = daoSMTPSettings.findSettings();

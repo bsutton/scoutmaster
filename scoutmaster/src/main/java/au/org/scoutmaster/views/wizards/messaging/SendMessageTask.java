@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
 import au.com.vaadinutils.util.ProgressBarTask;
@@ -56,9 +55,7 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 
 	private void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException, IOException
 	{
-
-		EntityManager em = LocalEntityManagerFactory.createEntityManager();
-
+		EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
 		try (Transaction t = new Transaction(em))
 		{
 			// We are in a background thread so we have to get our own entity manager.
@@ -71,8 +68,6 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 		}
 		finally
 		{
-			// Reset the entity manager
-			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
 		}
 	}
 

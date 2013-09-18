@@ -19,9 +19,6 @@ import liquibase.resource.FileSystemResourceAccessor;
 
 import org.apache.log4j.Logger;
 
-import au.com.vaadinutils.crud.FormHelper;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-
 public class ContextListener implements ServletContextListener
 {
 	private static final String JNDI_SCOUTMASTER_DS = "java:comp/env/jdbc/scoutmaster-ds";
@@ -51,7 +48,6 @@ public class ContextListener implements ServletContextListener
 			logger.error(e, e);
 		}
 		
-		FormHelper.setEntityManagerFactory(EntityManagerProvider.INSTANCE);
 
 	}
 

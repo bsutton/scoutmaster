@@ -20,7 +20,7 @@
 	</listener>
 	
 	<listener>
-		<listener-class>au.org.scoutmaster.application.LocalEntityManagerFactory
+		<listener-class>au.org.scoutmaster.application.LocalEntityManagerContextListener
 		</listener-class>
 	</listener>
 	
@@ -30,7 +30,7 @@
 	<!-- per request Entity Manager injection -->
 	<filter>
 		<filter-name>EntityManagerInjectorFilter</filter-name>
-		<filter-class>au.org.scoutmaster.filter.EntityManagerInjectorFilter
+		<filter-class>au.com.vaadinutils.servlet.EntityManagerInjectorFilter
 		</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
@@ -51,7 +51,7 @@
 		<init-param>
 			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
 			<!-- comma-separated list of fully-qualified class names -->
-			<param-value>au.org.scoutmaster.filter.AtmosphereFilter</param-value>
+			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter</param-value>
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>

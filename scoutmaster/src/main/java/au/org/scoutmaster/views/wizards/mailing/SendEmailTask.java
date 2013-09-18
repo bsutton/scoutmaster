@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.impl.LocalEntityManagerFactory;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
@@ -68,7 +67,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			IOException
 	{
 
-		EntityManager em = LocalEntityManagerFactory.createEntityManager();
+		EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
 		int sent = 0;
 
 		try (Transaction t = new Transaction(em))
