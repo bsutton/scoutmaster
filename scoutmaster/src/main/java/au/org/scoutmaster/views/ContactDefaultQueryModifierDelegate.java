@@ -12,7 +12,7 @@ import javax.persistence.criteria.Subquery;
 
 import org.apache.log4j.Logger;
 
-import au.com.vaadinutils.filters.QueryModifierAdaptor;
+import au.com.vaadinutils.dao.QueryModifierAdaptor;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.SectionType_;

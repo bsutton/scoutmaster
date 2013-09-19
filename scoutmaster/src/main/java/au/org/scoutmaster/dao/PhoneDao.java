@@ -20,12 +20,7 @@ public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long
 		super(em);
 	}
 
-	@Override
-	public List<Phone> findAll()
-	{
-		return super.findAll(Phone.FIND_ALL);
-	}
-
+	
 	public boolean isEmpty(Phone phone)
 	{
 		return phone.getPhoneNo() == null || phone.getPhoneNo().trim().length() == 0;

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -24,13 +23,11 @@ import au.org.scoutmaster.domain.access.User;
 @Table(name="Activity")
 @NamedQueries(
 {
-	@NamedQuery(name = Activity.FIND_ALL, query = "SELECT activity FROM Activity activity"),
 })
 
 public class Activity extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	static public final String FIND_ALL = "Activity.findAll";
 
 	/**
 	 * The type of activity.

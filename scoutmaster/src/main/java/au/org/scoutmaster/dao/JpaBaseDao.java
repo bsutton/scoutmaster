@@ -5,15 +5,17 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.Table;
 import javax.persistence.metamodel.SingularAttribute;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.org.scoutmaster.domain.BaseEntity;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 
-public abstract class JpaBaseDao<E, K> implements Dao<E, K>
+public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 {
 	protected Class<E> entityClass;
 
@@ -94,13 +96,22 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 		return entities;
 	}
 
-	protected List<E> findAll(String queryName)
-	{
-		Query query = entityManager.createNamedQuery(queryName);
-		@SuppressWarnings("unchecked")
-		List<E> list = query.getResultList();
-		return list;
-	}
+	 public List<E> findAll()
+	   {
+	        String entityName = entityClass.getSimpleName();
+	        Table annotation = entityClass.getAnnotation(Table.class);
+	        String tableName;
+	        if (annotation != null)
+	        	tableName = annotation.name();
+	        	else
+	        		tableName = entityName;
+	        
+	        String qry = "select " + entityName + " from " + tableName + " "
+	                + entityName;
+	        return entityManager.createQuery(qry, entityClass).getResultList();
+
+	    } 
+
 
 	public void flush()
 	{
@@ -110,8 +121,7 @@ public abstract class JpaBaseDao<E, K> implements Dao<E, K>
 
 	public JPAContainer<E> makeJPAContainer(Class<E> clazz)
 	{
-		JPAContainer<E> container = JPAContainerFactory. makeBatchable(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
-
+		JPAContainer<E> container = JPAContainerFactory.makeBatchable(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
 		return container;
 	}
 	

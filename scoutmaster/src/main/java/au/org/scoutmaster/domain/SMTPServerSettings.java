@@ -2,7 +2,6 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -22,14 +21,12 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name="EMailServerSettings")
 @NamedQueries(
 {
-	@NamedQuery(name = SMTPServerSettings.FIND_ALL, query = "SELECT emailServerSettings FROM EMailServerSettings emailServerSettings"),
 })
 
 
 public class SMTPServerSettings extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	static public final String FIND_ALL = "EMailServerSettings.findAll";
 
 	/**
 	 * The FQDN or IP address of the SMTP server.

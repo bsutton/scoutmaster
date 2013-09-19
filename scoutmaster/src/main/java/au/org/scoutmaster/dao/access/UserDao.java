@@ -1,9 +1,6 @@
 package au.org.scoutmaster.dao.access;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.Dao;
@@ -30,16 +27,6 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	{
 		User user = entityManager.find(this.entityClass, id);
 		return user;
-	}
-
-	@Override
-	public List<User> findAll()
-	{
-		Query query = entityManager.createNamedQuery(User.FIND_ALL);
-		@SuppressWarnings("unchecked")
-		List<User> list = query.getResultList();
-
-		return list;
 	}
 
 	public User addUser(String username, String password)

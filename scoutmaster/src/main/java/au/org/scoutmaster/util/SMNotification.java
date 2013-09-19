@@ -66,4 +66,24 @@ public class SMNotification extends Notification
 			}
 		});
 	}
+	
+	public static void show(final Throwable e, final Type type)
+	{
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+
+				// find root cause.
+				Throwable rootCause = e;
+
+				while (rootCause.getCause() != null)
+					rootCause = rootCause.getCause();
+
+				show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
+			}
+		});
+	}
+
 }

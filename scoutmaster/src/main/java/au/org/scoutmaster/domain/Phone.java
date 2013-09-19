@@ -15,7 +15,6 @@ import javax.persistence.Table;
 @Table(name="Phone")
 @NamedQueries(
 {
-	@NamedQuery(name = Phone.FIND_ALL, query = "SELECT phone FROM Phone phone"),
 	@NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"),
 })
 
@@ -23,7 +22,6 @@ public class Phone extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	static public final String FIND_ALL = "Phone.findAll";
 
 	public static final String FIND_BY_NO = "Phone.findByNo";
 

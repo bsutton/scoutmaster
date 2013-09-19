@@ -8,9 +8,9 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.ui.UIUpdater;
+import au.com.vaadinutils.util.ProgressBarWorker;
+import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.util.ProgressBarWorker;
-import au.org.scoutmaster.util.ProgressTaskListener;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.tableexport.CsvExport;

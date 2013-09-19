@@ -23,13 +23,11 @@ import javax.persistence.Table;
 @Table(name="ImportUserMapping")
 @NamedQueries(
 {
-		@NamedQuery(name = ImportUserMapping.FIND_ALL, query = "SELECT import FROM ImportUserMapping import"),
 		@NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
 public class ImportUserMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	public static final String FIND_ALL = "ImportUserMapping.findAll";
 	public static final String FIND_BY_NAME = "ImportUserMapping.findByName";
 
 	// Name of this save import mapping

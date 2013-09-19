@@ -17,6 +17,7 @@ import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
+import au.org.scoutmaster.views.SectionBulkEmailWizard;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
 import au.org.scoutmaster.views.wizards.mailing.MailingWizardView;
@@ -84,6 +85,7 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
 		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
 		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
+		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);

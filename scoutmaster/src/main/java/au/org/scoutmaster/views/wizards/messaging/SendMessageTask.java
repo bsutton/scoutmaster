@@ -12,13 +12,12 @@ import org.marre.sms.SmsException;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
-import au.org.scoutmaster.application.LocalEntityManagerFactory;
+import au.com.vaadinutils.util.ProgressBarTask;
+import au.com.vaadinutils.util.ProgressTaskListener;
+import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
-import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.util.ProgressBarTask;
-import au.org.scoutmaster.util.ProgressTaskListener;
 
 public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>, CancelListener
 {
@@ -56,9 +55,7 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 
 	private void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException, IOException
 	{
-
-		EntityManager em = LocalEntityManagerFactory.createEntityManager();
-
+		EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
 		try (Transaction t = new Transaction(em))
 		{
 			// We are in a background thread so we have to get our own entity manager.
@@ -71,8 +68,6 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 		}
 		finally
 		{
-			// Reset the entity manager
-			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
 		}
 	}
 

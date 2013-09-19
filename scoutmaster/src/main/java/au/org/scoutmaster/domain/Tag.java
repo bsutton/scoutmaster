@@ -22,13 +22,12 @@ import org.pojomatic.annotations.AutoProperty;
 @Entity(name="Tag")
 @Table(name="Tag")
 @NamedQueries(
-{ @NamedQuery(name = Tag.FIND_ALL, query = "SELECT tag FROM Tag tag"),
+{
 		@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
 @AutoProperty
 public class Tag extends BaseEntity
 {
 
-	static public final String FIND_ALL = "Tag.findAll";
 	static public final String FIND_BY_NAME = "Tag.findByName";
 
 	private static final long serialVersionUID = 1L;

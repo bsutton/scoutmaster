@@ -6,7 +6,6 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
@@ -90,7 +89,7 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 				.addColumn("Type", Activity_.type).addColumn("Activity Date", Activity_.activityDate)
 				.addColumn("Added By", Activity_.addedBy);
 
-		super.init(Activity.class, container, builder.build(), EntityManagerProvider.INSTANCE);
+		super.init(Activity.class, container, builder.build());
 
 	}
 
