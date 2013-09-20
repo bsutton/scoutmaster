@@ -85,7 +85,7 @@ public class ConfirmDetailsStep implements WizardStep
 	{
 		
 		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
-				+ " recipients have been selected to recieve the following SMS.</b></p>");
+				+ " recipients have been selected to recieve the following Email.</b></p>");
 		
 		provider.setReadOnly(false);
 		provider.setValue(details.getProvider().getProviderName());
