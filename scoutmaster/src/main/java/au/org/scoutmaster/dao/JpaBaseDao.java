@@ -29,7 +29,7 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 	{
 		this.entityManager = EntityManagerProvider.getEntityManager();
 		Preconditions.checkNotNull(this.entityManager);
-		
+
 		// hack to get the derived classes Class type.
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		Preconditions.checkNotNull(genericSuperclass);
@@ -64,7 +64,7 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
-	
+
 	protected E findSingleBySingleParameter(String queryName, SingularAttribute<E, String> paramName, String paramValue)
 	{
 		E entity = null;
@@ -76,7 +76,6 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 			entity = entities.get(0);
 		return entity;
 	}
-
 
 	protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue)
 	{
@@ -99,22 +98,20 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 		return entities;
 	}
 
-	 public List<E> findAll()
-	   {
-	        String entityName = entityClass.getSimpleName();
-	        Table annotation = entityClass.getAnnotation(Table.class);
-	        String tableName;
-	        if (annotation != null)
-	        	tableName = annotation.name();
-	        	else
-	        		tableName = entityName;
-	        
-	        String qry = "select " + entityName + " from " + tableName + " "
-	                + entityName;
-	        return entityManager.createQuery(qry, entityClass).getResultList();
+	public List<E> findAll()
+	{
+		String entityName = entityClass.getSimpleName();
+		Table annotation = entityClass.getAnnotation(Table.class);
+		String tableName;
+		if (annotation != null)
+			tableName = annotation.name();
+		else
+			tableName = entityName;
 
-	    } 
+		String qry = "select " + entityName + " from " + tableName + " " + entityName;
+		return entityManager.createQuery(qry, entityClass).getResultList();
 
+	}
 
 	public void flush()
 	{
@@ -127,13 +124,13 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 		JPAContainer<E> container = JPAContainerFactory.makeBatchable(clazz, EntityManagerProvider.getEntityManager());
 		return container;
 	}
-	
+
 	abstract public JPAContainer<E> makeJPAContainer();
 
-	public <V> E findOneByAttribute(Class<E> type, SingularAttribute<E, V> vKey, V value)
+	public <V> E findOneByAttribute(SingularAttribute<E, V> vKey, V value)
 	{
 		E ret = null;
-		List<E> results = findByAttribute(type, vKey, value,null);
+		List<E> results = findByAttribute(vKey, value, null);
 		if (results.size() > 0)
 		{
 			ret = results.get(0);
@@ -142,16 +139,15 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 		return ret;
 	}
 
-	public <V> List<E> findByAttribute(Class<E> type, SingularAttribute<E, V> vKey, V value,
-			SingularAttribute<E, V> order)
+	public <V> List<E> findByAttribute(SingularAttribute<E, V> vKey, V value, SingularAttribute<E, V> order)
 	{
 
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 
-		CriteriaQuery<E> criteria = builder.createQuery(type);
+		CriteriaQuery<E> criteria = builder.createQuery(entityClass);
 
-		Root<E> root = criteria.from(type);
+		Root<E> root = criteria.from(entityClass);
 		criteria.select(root);
 		criteria.where(builder.equal(root.get(vKey), value));
 		if (order != null)
