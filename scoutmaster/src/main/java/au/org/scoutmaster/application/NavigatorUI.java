@@ -125,10 +125,12 @@ public class NavigatorUI extends UI
 				boolean isLoginView = event.getNewView() instanceof LoginView;
 				boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
 
+				// TODO: should we cache this?
+				// during dev its easier if we don't.
 				UserDao daoUser = new DaoFactory().getUserDao();
-				List<User> users = daoUser.findAll();
+				long userCount = daoUser.getCount();
 
-				if (users.size() == 0)
+				if (userCount == 0)
 				{
 					// Deal with recursion. When we navigateTo the setupwizard it comes back through
 					// beforeViewChange so we have to check that aren't aready on our way to the
