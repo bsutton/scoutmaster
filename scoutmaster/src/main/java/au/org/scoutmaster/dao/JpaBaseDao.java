@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 import javax.persistence.metamodel.SingularAttribute;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
@@ -96,23 +97,40 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 		return entities;
 	}
 
-	 public List<E> findAll()
-	   {
-	        String entityName = entityClass.getSimpleName();
-	        Table annotation = entityClass.getAnnotation(Table.class);
-	        String tableName;
-	        if (annotation != null)
-	        	tableName = annotation.name();
-	        	else
-	        		tableName = entityName;
-	        
-	        String qry = "select " + entityName + " from " + tableName + " "
-	                + entityName;
-	        return entityManager.createQuery(qry, entityClass).getResultList();
+	public List<E> findAll()
+	{
+		String entityName = entityClass.getSimpleName();
+		Table annotation = entityClass.getAnnotation(Table.class);
+		String tableName;
+		if (annotation != null)
+			tableName = annotation.name();
+		else
+			tableName = entityName;
 
-	    } 
+		String qry = "select " + entityName + " from " + tableName + " " + entityName;
+		return entityManager.createQuery(qry, entityClass).getResultList();
 
+	}
 
+	/**
+	 * @return the number of entities in the table.
+	 */
+	public long getCount()
+	{
+		String entityName = entityClass.getSimpleName();
+		Table annotation = entityClass.getAnnotation(Table.class);
+		String tableName;
+		if (annotation != null)
+			tableName = annotation.name();
+		else
+			tableName = entityName;
+
+		String qry = "select count(" + entityName + ") from " + tableName + " " + entityName;
+		Query query = entityManager.createQuery(qry);
+		Number countResult=(Number) query.getSingleResult();
+		return countResult.longValue();
+
+	}
 	public void flush()
 	{
 		this.entityManager.flush();
