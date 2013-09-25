@@ -61,9 +61,9 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		layout.setSizeFull();
 
 		progressTable = new PoJoTable<>(SMSTransmission.class, new String[]
-		{ "ContactName", "RecipientPhoneNo", "Exception" });
+		{ "ContactName", "RecipientPhoneNo", "Result" });
 		progressTable.setColumnWidth("RecipientPhoneNo", 80);
-		progressTable.setColumnExpandRatio("Exception", 1);
+		progressTable.setColumnExpandRatio("Result", 1);
 		progressTable.setSizeFull();
 		progressDescription = new Label();
 		layout.addComponent(progressDescription);

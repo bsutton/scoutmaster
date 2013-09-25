@@ -53,7 +53,7 @@ public class SMSTransmission
 
 	}
 
-	public String getException()
+	public String getResult()
 	{
 		if (exception != null)
 			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
