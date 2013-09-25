@@ -6,7 +6,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.Table;
-import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
@@ -25,9 +27,9 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 	@SuppressWarnings("unchecked")
 	public JpaBaseDao()
 	{
-		this.entityManager = EntityManagerProvider.INSTANCE.getEntityManager();
+		this.entityManager = EntityManagerProvider.getEntityManager();
 		Preconditions.checkNotNull(this.entityManager);
-		
+
 		// hack to get the derived classes Class type.
 		ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
 		Preconditions.checkNotNull(genericSuperclass);
@@ -62,7 +64,7 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 	{
 		return entityManager.find(entityClass, id);
 	}
-	
+
 	protected E findSingleBySingleParameter(String queryName, SingularAttribute<E, String> paramName, String paramValue)
 	{
 		E entity = null;
@@ -74,7 +76,6 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 			entity = entities.get(0);
 		return entity;
 	}
-
 
 	protected E findSingleBySingleParameter(String queryName, String paramName, String paramValue)
 	{
@@ -139,11 +140,43 @@ public abstract class JpaBaseDao<E extends BaseEntity, K> implements Dao<E, K>
 
 	public JPAContainer<E> makeJPAContainer(Class<E> clazz)
 	{
-		JPAContainer<E> container = JPAContainerFactory.makeBatchable(clazz, EntityManagerProvider.INSTANCE.getEntityManager());
+		JPAContainer<E> container = JPAContainerFactory.makeBatchable(clazz, EntityManagerProvider.getEntityManager());
 		return container;
 	}
-	
+
 	abstract public JPAContainer<E> makeJPAContainer();
 
+	public <V> E findOneByAttribute(SingularAttribute<E, V> vKey, V value)
+	{
+		E ret = null;
+		List<E> results = findByAttribute(vKey, value, null);
+		if (results.size() > 0)
+		{
+			ret = results.get(0);
+		}
+
+		return ret;
+	}
+
+	public <V> List<E> findByAttribute(SingularAttribute<E, V> vKey, V value, SingularAttribute<E, V> order)
+	{
+
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		CriteriaBuilder builder = em.getCriteriaBuilder();
+
+		CriteriaQuery<E> criteria = builder.createQuery(entityClass);
+
+		Root<E> root = criteria.from(entityClass);
+		criteria.select(root);
+		criteria.where(builder.equal(root.get(vKey), value));
+		if (order != null)
+		{
+			criteria.orderBy(builder.asc(root.get(order)));
+		}
+		List<E> results = em.createQuery(criteria).getResultList();
+
+		return results;
+
+	}
 
 }
