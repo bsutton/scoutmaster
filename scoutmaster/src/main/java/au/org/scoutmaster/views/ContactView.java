@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
 import java.io.File;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -443,100 +444,100 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected void interceptSaveValues(Contact entity)
 	{
-//		// Start by removing all non-detachable tags
-//		// so we can re-attach the ones that still apply
-//		
-//		// add built-in tags
-//
-//		TagDao daoTag = new DaoFactory().getTagDao();
-//		
-//		Iterator<Tag> iter = entity.getTags().iterator();
-//		while (iter.hasNext())
-//		{
-//			Tag tag = iter.next();
-//			if (tag.getDetachable() == false)
-//			{
-//				// HACK: until we have child/parent relationships
-//				if (!tag.getName().contains("Parent"))
-//					iter.remove();
-//			}
-//		}
-//		
-//		// Section Tag
-//		SectionType section = entity.getSection();
-//		if (section != null)
-//		{
-//			Tag tag = daoTag.findByName(section.getName());
-//			if (!entity.getTags().contains(tag))
-//				entity.getTags().add(tag);
-//		}
-//
-//		GroupRole role = entity.getRole();
-//		switch (role)
-//		{
-//			case AdultHelper:
-//				addTag(entity, "Adult Helper");
-//				break;
-//			case AssistantLeader:
-//				addTag(entity, "Assistant Leader");
-//				addTag(entity, "Council Member");
-//				break;
-//			case CommitteeMember:
-//				addTag(entity, "Committee Member");
-//				break;
-//			case Gardian:
-//				addTag(entity, role.name());
-//				break;
-//			case GroupLeader:
-//				addTag(entity, "Group Leader");
-//				addTag(entity, "Committee Member");
-//				addTag(entity, "Council Member");
-//				break;
-//			case Leader:
-//				addTag(entity, role.name());
-//				addTag(entity, "Council Member");
-//				break;
-//			case Parent:
-//				addTag(entity, role.name());
-//				break;
-//			case President:
-//				addTag(entity, role.name());
-//				addTag(entity, "Committee Member");
-//				break;
-//			case QuarterMaster:
-//				addTag(entity, "Quartermaster");
-//				addTag(entity, "Committee Member");
-//
-//				break;
-//			case RecruitmentOfficer:
-//				addTag(entity, "Recruitment Officer");
-//				addTag(entity, "Committee Member");
-//
-//				break;
-//			case Secretary:
-//				addTag(entity, role.name());
-//				addTag(entity, "Committee Member");
-//
-//				break;
-//			case Treasurer:
-//				addTag(entity, role.name());
-//				addTag(entity, "Committee Member");
-//
-//				break;
-//			case Volunteer:
-//				addTag(entity, role.name());
-//
-//				break;
-//			case YouthMember:
-//				addTag(entity, "Youth Member");
-//				break;
-//			default:
-//				break;
-//
-//		}
-//
-//		//
-//
+		// Start by removing all non-detachable tags
+		// so we can re-attach the ones that still apply
+		
+		// add built-in tags
+
+		TagDao daoTag = new DaoFactory().getTagDao();
+		
+		Iterator<Tag> iter = entity.getTags().iterator();
+		while (iter.hasNext())
+		{
+			Tag tag = iter.next();
+			if (tag.getDetachable() == false)
+			{
+				// HACK: until we have child/parent relationships
+				if (!tag.getName().contains("Parent"))
+					iter.remove();
+			}
+		}
+		
+		// Section Tag
+		SectionType section = entity.getSection();
+		if (section != null)
+		{
+			Tag tag = daoTag.findByName(section.getName());
+			if (!entity.getTags().contains(tag))
+				entity.getTags().add(tag);
+		}
+
+		GroupRole role = entity.getRole();
+		switch (role)
+		{
+			case AdultHelper:
+				addTag(entity, "Adult Helper");
+				break;
+			case AssistantLeader:
+				addTag(entity, "Assistant Leader");
+				addTag(entity, "Council Member");
+				break;
+			case CommitteeMember:
+				addTag(entity, "Committee Member");
+				break;
+			case Gardian:
+				addTag(entity, role.name());
+				break;
+			case GroupLeader:
+				addTag(entity, "Group Leader");
+				addTag(entity, "Committee Member");
+				addTag(entity, "Council Member");
+				break;
+			case Leader:
+				addTag(entity, role.name());
+				addTag(entity, "Council Member");
+				break;
+			case Parent:
+				addTag(entity, role.name());
+				break;
+			case President:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+				break;
+			case QuarterMaster:
+				addTag(entity, "Quartermaster");
+				addTag(entity, "Committee Member");
+
+				break;
+			case RecruitmentOfficer:
+				addTag(entity, "Recruitment Officer");
+				addTag(entity, "Committee Member");
+
+				break;
+			case Secretary:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+
+				break;
+			case Treasurer:
+				addTag(entity, role.name());
+				addTag(entity, "Committee Member");
+
+				break;
+			case Volunteer:
+				addTag(entity, role.name());
+
+				break;
+			case YouthMember:
+				addTag(entity, "Youth Member");
+				break;
+			default:
+				break;
+
+		}
+
+		//
+
 	}
 
 	private void addTag(Contact entity, String tagName)
