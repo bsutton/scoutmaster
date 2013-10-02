@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+<!-- 
+	<changeSet author="bsutton" id="1.0.18">
+
+		<dropTable tableName="Relationship"/>
+		
+				<addForeignKeyConstraint baseColumnNames="FIRST_ID"
+		
+				<addForeignKeyConstraint baseColumnNames="SECONDCONTACT_ID"
+			  baseTableName="Relationship"
+		
+		<
+		
+		<createTable tableName="Contact_Tag">
+			<column name="Contact_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="tags_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addPrimaryKey columnNames="Contact_ID, tags_ID"
+			constraintName="PRIMARY" tableName="Contact_Tag" />
+
+<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			  baseTableName="Relationship"
+			constraintName="FK_Relationship_TYPE_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID"  
+			referencedTableName="RelationshipType" />
+
+		<addForeignKeyConstraint baseColumnNames="Contact_ID"
+			baseTableName="Contact_Tag" constraintName="FK_Contact_Tag_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+
+		<createTable tableName="Tag">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column defaultValueNumeric="0" name="BUILTIN" type="BIT(1)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(250)" />
+			<column defaultValueNumeric="0" name="DETACHABLE" type="BIT(1)" />
+			<column name="NAME" type="VARCHAR(30)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+
+		<addForeignKeyConstraint baseColumnNames="tags_ID"
+			baseTableName="Contact_Tag" constraintName="FK_Contact_Tag_tags_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Tag" />
+
+		<createIndex indexName="NAME" tableName="Tag" unique="true">
+			<column name="NAME" />
+		</createIndex>
+
+
+
+
+	</changeSet>
+	-->
+
+</databaseChangeLog>
