@@ -42,7 +42,7 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	{
 		user.setPassword(password);
 
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		EntityManager em = EntityManagerProvider.getEntityManager();
 		em.merge(user);
 	}
 

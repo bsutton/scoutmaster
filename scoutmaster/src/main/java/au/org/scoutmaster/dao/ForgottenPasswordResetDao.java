@@ -35,7 +35,7 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 		boolean hasExpired = true;
 
 		List<ForgottenPasswordReset> resultReset = null;
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		EntityManager em = EntityManagerProvider.getEntityManager();
 
 		Query query = em.createNamedQuery("ForgottenPasswordReset.getByResetid");
 		query.setParameter("resetid", resetid);

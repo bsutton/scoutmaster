@@ -63,7 +63,7 @@ public class Note extends BaseEntity
 	static public List<Note> findNote(String subject)
 	{
 		List<Note> noteList = null;
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		EntityManager em = EntityManagerProvider.getEntityManager();
 
 		Query query = em.createNamedQuery("Note.findMatching");
 		query.setParameter("subject", subject);

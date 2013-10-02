@@ -3,10 +3,14 @@ package au.org.scoutmaster.domain;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
- * Defines a relationship between two contacts or a contact
- * and an Organisation, School or Household.
+ * Defines a relationship to an contact.
+ * 
+ * Several entities may have relationships to a contact. 
+ * e.g. 
+ * Contact, Organisation, School or Household.
  * 
  * @author bsutton
  *
@@ -18,30 +22,17 @@ public class Relationship extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * The first contact in the relationship.
-	 * 
-	 * Relationships are bi-directional so being the first
-	 * doesn't mean much.
+	 * The type of relationship
 	 */
 	@ManyToOne
-	Contact first;
-	
-	@ManyToOne
+	@NotNull
 	RelationshipType type;
 	
 	/**
-	 * The relationship must have ONE AND ONLY ONE
+	 * The contact this relation links to.
 	 * of the following.
 	 */
 	@ManyToOne
-	Contact secondContact;
+	Contact related;
 	
-	@ManyToOne
-	Organisation organisation;
-	
-	@ManyToOne
-	School school;
-	
-	@ManyToOne
-	Household household;
 }

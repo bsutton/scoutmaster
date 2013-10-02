@@ -172,7 +172,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 				{
 					try
 					{
-						EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
+						EntityManager em = EntityManagerProvider.createEntityManager();
 
 						SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
 						SMTPServerSettings settings = daoSMTPSettings.findSettings();

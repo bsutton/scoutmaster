@@ -39,4 +39,11 @@ public class SplitContactTokenField<T extends BaseEntity> extends ContactTokenFi
 		return label.getValue();
 	}
 
+	@Override
+	public void hideLabel()
+	{
+		label.setVisible(false);
+		
+	}
+
 }

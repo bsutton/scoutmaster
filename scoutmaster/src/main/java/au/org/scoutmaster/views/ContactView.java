@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views;
 
 import java.io.File;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -32,6 +31,7 @@ import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -96,6 +96,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberTab();
 		medicalTab();
 		backgroundTab();
+		relationshipTab();
 		googleTab();
 
 		// When a persons birth date changes recalculate their age.
@@ -118,6 +119,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		return layout;
 	}
+
 
 	private DateField overviewTab()
 	{
@@ -359,6 +361,21 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.newLine();
 		background.bindBooleanField("Has Food Handling", Contact_.hasFoodHandlingCertificate);
 		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
+	}
+
+	
+	private void relationshipTab()
+	{
+		// Background tab
+		SMMultiColumnFormLayout<Contact> relationship = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		relationship.setColumnLabelWidth(0, 120);
+		tabs.addTab(relationship, "Relationships");
+		relationship.setMargin(true);
+		relationship.setSizeFull();
+		
+		FieldFactory fieldFactory = new FieldFactory();
+		fieldFactory.setVisibleProperties(Contact.class, Contact_.relationships.getName());
+
 	}
 
 	private final class ChangeListener implements Property.ValueChangeListener

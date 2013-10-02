@@ -25,7 +25,7 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	}
 	public static Tag addTag(String name, String description)
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		EntityManager em = EntityManagerProvider.getEntityManager();
 		Tag tag = new Tag(name, description);
 		em.persist(tag);
 	

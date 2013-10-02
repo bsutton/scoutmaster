@@ -55,11 +55,11 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 
 	private void sendMessage(SMSProvider provider, List<SMSTransmission> targets, Message message) throws SmsException, IOException
 	{
-		EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
+		EntityManager em = EntityManagerProvider.createEntityManager();
 		try (Transaction t = new Transaction(em))
 		{
 			// We are in a background thread so we have to get our own entity manager.
-			EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+			EntityManagerProvider.setCurrentEntityManager(em);
 
 			SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 			listener = daoSMSProvider.send(provider, targets, message, this);

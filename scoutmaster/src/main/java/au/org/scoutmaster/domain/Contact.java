@@ -227,6 +227,13 @@ public class Contact extends BaseEntity implements Importable
 	@FormField(displayName = "Has First Aid Certificate")
 	private Boolean hasFirstAidCertificate = false;
 
+	
+	/**
+	 * Things this contact is related to.
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	private final Set<Relationship> relationships = new HashSet<>();
+
 	/**
 	 * List of tags used to describe this Contact.
 	 */

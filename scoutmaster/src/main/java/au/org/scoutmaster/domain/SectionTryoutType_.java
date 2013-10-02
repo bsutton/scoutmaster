@@ -4,6 +4,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
 import org.joda.money.Money;
 
 @Generated(value="Dali", date="2013-09-19T09:12:29.164+1000")

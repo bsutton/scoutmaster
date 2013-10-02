@@ -40,7 +40,7 @@ public class ContactTest
 		
 		entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
 		em = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+		EntityManagerProvider.setCurrentEntityManager(em);
 	}
 
 	@After

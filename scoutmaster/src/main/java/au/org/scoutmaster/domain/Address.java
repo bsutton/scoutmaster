@@ -95,7 +95,7 @@ public class Address extends BaseEntity
 	static public List<Address> findAddress(String street, String city, String state, String postcode)
 	{
 		List<Address> addressList = new ArrayList<Address>();
-		EntityManager em = EntityManagerProvider.INSTANCE.getEntityManager();
+		EntityManager em = EntityManagerProvider.getEntityManager();
 
 		Query query = em.createNamedQuery(Address.FIND_MATCHING);
 		query.setParameter("street", street);

@@ -1,12 +1,14 @@
 package au.org.scoutmaster.domain.accounting;
 
-import au.org.scoutmaster.domain.BaseEntity_;
-import au.org.scoutmaster.domain.Contact;
 import java.sql.Date;
+
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
+import au.org.scoutmaster.domain.BaseEntity_;
+import au.org.scoutmaster.domain.Contact;
 
 @Generated(value="Dali", date="2013-09-19T09:12:29.097+1000")
 @StaticMetamodel(Invoice.class)

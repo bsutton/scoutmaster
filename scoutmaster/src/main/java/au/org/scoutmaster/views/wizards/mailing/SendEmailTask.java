@@ -67,14 +67,14 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			IOException
 	{
 
-		EntityManager em = EntityManagerProvider.INSTANCE.createEntityManager();
+		EntityManager em = EntityManagerProvider.createEntityManager();
 		int sent = 0;
 
 		try (Transaction t = new Transaction(em))
 		{
 			// We are in a background thread so we have to get our own entity
 			// manager.
-			EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+			EntityManagerProvider.setCurrentEntityManager(em);
 			SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
 			SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
@@ -123,7 +123,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			super.taskComplete(sent);
 
 			// Reset the entity manager
-			EntityManagerProvider.INSTANCE.setCurrentEntityManager(null);
+			EntityManagerProvider.setCurrentEntityManager(null);
 		}
 	}
 

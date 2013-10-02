@@ -27,7 +27,7 @@ public class RebuildDatabase
 	{
 		entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
 		em = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+		EntityManagerProvider.setCurrentEntityManager(em);
 	}
 
 	@Test

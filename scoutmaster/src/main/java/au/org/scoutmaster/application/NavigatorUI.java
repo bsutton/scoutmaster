@@ -1,7 +1,6 @@
 package au.org.scoutmaster.application;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
@@ -10,7 +9,6 @@ import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.menu.ViewMap;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.views.ActivityView;
 import au.org.scoutmaster.views.ContactView;
