@@ -40,13 +40,16 @@ public class DaoFactory
 	{
 		return (ContactDao) instantiateDAO(ContactDao.class);
 	}
-	
 
 	public EventDao getEventDao()
 	{
 		return (EventDao) instantiateDAO(EventDao.class);
 	}
 
+	public GroupRoleDao getGroupRoleDao()
+	{
+		return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
+	}
 
 	public SMTPSettingsDao getSMTPSettingsDao()
 	{
