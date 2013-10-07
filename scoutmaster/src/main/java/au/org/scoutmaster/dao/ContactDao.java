@@ -170,6 +170,8 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		contactContainer.addNestedContainerProperty("address.city");
 		contactContainer.addNestedContainerProperty("address.postcode");
 		contactContainer.addNestedContainerProperty("address.state");
+		
+		contactContainer.addNestedContainerProperty("groupRole.name");
 		//contactContainer.addNestedContainerProperty(new Path(Contact_.role, Role_.name).toString());
 		contactContainer.addNestedContainerProperty(new Path(Contact_.section, Section_.name).toString());
 		
