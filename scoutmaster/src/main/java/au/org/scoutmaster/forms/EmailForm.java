@@ -21,6 +21,7 @@ import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.dao.SMTransaction;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Contact;
@@ -170,9 +171,9 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 				@Override
 				public void run()
 				{
-					try
+					EntityManager em = EntityManagerProvider.createEntityManager();
+					try (SMTransaction t = new SMTransaction(em))
 					{
-						EntityManager em = EntityManagerProvider.createEntityManager();
 
 						SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
 						SMTPServerSettings settings = daoSMTPSettings.findSettings();
@@ -193,6 +194,8 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 						activity.setType(type);
 
 						daoActivity.persist(activity);
+						t.commit();
+						
 					}
 					catch (EmailException e)
 					{
