@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -36,10 +38,16 @@ public class GroupRole extends BaseEntity
 	
 	static public final String FIND_BY_NAME = "GroupRole.findByName";
 
+	/**
+	 * Note: this enum is bound to the field 'enumName' changing any of these names will break the database linkage.
+	 * 
+	 * @author bsutton
+	 *
+	 */
 	
 	public enum BuiltIn
 	{
-		None, YouthMember, Parent, Gardian, SectionHelper, Volunteer, Leader, AssistantLeader, President, Secretary, Treasurer, QuarterMaster, GroupLeader, CommitteeMember, RecruitmentOfficer, Supplier, CommunitySupporter, Other
+		None, YouthMember, Parent, Gardian, SectionHelper, Volunteer, Leaders, AssistantLeader, President, Secretary, Treasurer, QuarterMaster, GroupLeader, CommitteeMember, CouncilMember, RecruitmentOfficer, Custom
 	
 	}
 
@@ -56,7 +64,8 @@ public class GroupRole extends BaseEntity
 	 * will provide a link between the role and the BuiltIn enum.
 	 * Non-builtin roles will use the Builtin type of 'Other'.
 	 */
-	private BuiltIn builtIn;
+	@Enumerated(EnumType.STRING)
+	private BuiltIn enumName;
 	
 
 	/**
@@ -87,13 +96,18 @@ public class GroupRole extends BaseEntity
 
 	public BuiltIn getBuiltIn()
 	{
-		return builtIn;
+		return enumName;
 	}
 
 
 	public String getDescription()
 	{
 		return description;
+	}
+	
+	public String toString()
+	{
+		return name;
 	}
 	
 }
