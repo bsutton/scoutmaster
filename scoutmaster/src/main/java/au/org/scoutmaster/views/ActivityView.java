@@ -96,12 +96,6 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	@Override
 	protected Filter getContainerFilter(String filterString)
 	{
-//		return new Or(new Or(new Or(new Or(new SimpleStringFilter(Activity_.activityDate.getName(), filterString, true,
-//				false), new SimpleStringFilter(Activity_.type.getName(), filterString, true, false)),
-//				new SimpleStringFilter(Activity_.withContact.getName(), filterString, true, false)),
-//				new SimpleStringFilter(Activity_.addedBy.getName(), filterString, true, false)),
-//				new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
-
 		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Activity_.activityDate.getName(), filterString, true,
 				false), new SimpleStringFilter(new Path(Activity_.type, ActivityType_.name).toString(), filterString, true, false)),
 				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.lastname).toString(), filterString, true, false)),
