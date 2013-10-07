@@ -1,16 +1,25 @@
 package au.org.scoutmaster.validator;
 
 import com.vaadin.data.Validator;
+import com.vaadin.ui.PasswordField;
 
 public class PasswordValidator implements Validator
 {
 	private static final long serialVersionUID = 1L;
 	private String label;
+	private PasswordField otherField;
 
 
 	public PasswordValidator(String label)
 	{
 		this.label = label;
+		this.otherField = null;
+	}
+
+	public PasswordValidator(String label, PasswordField otherField)
+	{
+		this.label = label;
+		this.otherField = otherField;
 	}
 
 	@Override
@@ -41,6 +50,10 @@ public class PasswordValidator implements Validator
 
 		if (specialChars < 2)
 			throw new InvalidValueException("Your  " + label + " must have at least 2 special chars e.g. !@#$%^&*().");
+		
+		if (this.otherField != null)
+			if (!this.otherField.getValue().equals(value))
+				throw new InvalidValueException("The two password fields must be identical.");
 	}
 
 }
