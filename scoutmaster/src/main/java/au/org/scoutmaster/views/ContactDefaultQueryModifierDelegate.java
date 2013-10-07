@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.dao.QueryModifierAdaptor;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
 
@@ -69,6 +71,8 @@ public class ContactDefaultQueryModifierDelegate extends  QueryModifierAdaptor
 			// Build main queries full text search
 			if (fullTextSearch != null && !fullTextSearch.isEmpty())
 			{
+				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
+
 				fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)), "%"
 						+ this.fullTextSearch.toUpperCase() + "%");
 				fullTextSearchPredicate = builder.or(
@@ -78,6 +82,12 @@ public class ContactDefaultQueryModifierDelegate extends  QueryModifierAdaptor
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.function("date_format", String.class, fromContact.get(Contact_.birthDate), builder.literal("%Y-%m-%d")),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+				
+				
+				fullTextSearchPredicate = builder.or(
+						builder.like(builder.upper(sectionJoin.get(SectionType_.name)), "%"
+								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+
 
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(fromContact.get(Contact_.section).get(SectionType_.name)),
