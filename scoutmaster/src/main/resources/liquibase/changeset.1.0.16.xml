@@ -5,62 +5,9 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-	<changeSet failOnError="false" author="bsutton" id="1.0.16">
 
-		<!-- deals with my test db which was a little screwed up -->
-
-		<insert tableName="Tag">
-			<column name="NAME" value="Joey Parent" />
-			<column name="DESCRIPTION" value="Parent of a Joey member" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="0" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
-
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.1">
-
-
-		<insert tableName="Tag">
-			<column name="NAME" value="Cub Parent" />
-			<column name="DESCRIPTION" value="Parent of a Cub member" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="0" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
-
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.2">
-
-		<insert tableName="Tag">
-			<column name="NAME" value="Scout Parent" />
-			<column name="DESCRIPTION" value="Parent of a Scout member" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="0" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
-
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.3">
-
-
-		<insert tableName="Tag">
-			<column name="NAME" value="Venturer Parent" />
-			<column name="DESCRIPTION" value="Parent of a Venturer member" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="0" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
-
+	
+	
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.4">
 
 
@@ -75,21 +22,7 @@
 		</insert>
 	</changeSet>
 
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.5">
-
-
-		<insert tableName="Tag">
-			<column name="NAME" value="Recruitment Officer" />
-			<column name="DESCRIPTION" value="Responsible for recruiting new members" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="1" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-
-	</changeSet>
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.6">
+		<changeSet failOnError="false" author="bsutton" id="1.0.16.6">
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -264,18 +197,7 @@
 		</update>
 	</changeSet>
 
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.27">
-		<insert tableName="Tag">
-			<column name="NAME" value="Assistant Leader" />
-			<column name="DESCRIPTION" value="Assistant to a section leader" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="1" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
-
+	
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.28">
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -284,17 +206,6 @@
 		</update>
 	</changeSet>
 
-	<changeSet failOnError="false" author="bsutton" id="1.0.16.29">
-		<insert tableName="Tag">
-			<column name="NAME" value="Gardener" />
-			<column name="DESCRIPTION" value="Responsible for upkeep of the hall gardens" />
-			<column name="BUILTIN" valueNumeric="1" />
-			<column name="DETACHABLE" valueNumeric="1" />
-			<column name="CREATED" valueComputed="now()" />
-			<column name="UPDATED" valueComputed="now()" />
-			<column name="CONSISTENCYVERSION" value="1" />
-		</insert>
-	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.30">
 		<insert tableName="Tag">
