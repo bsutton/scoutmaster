@@ -2,6 +2,14 @@ package au.org.scoutmaster.views;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
 
@@ -9,16 +17,18 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.layout.TopVerticalLayout;
 import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
+import au.org.scoutmaster.dao.GroupRoleDao;
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Gender;
 import au.org.scoutmaster.domain.GroupRole;
+import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.domain.PreferredCommunications;
@@ -31,20 +41,19 @@ import au.org.scoutmaster.forms.EmailForm;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
+import com.vaadin.addon.jpacontainer.util.DefaultQueryModifierDelegate;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -54,7 +63,6 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @Menu(display = "Contact")
@@ -76,7 +84,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private DateField birthDate;
 
-	private Label labelAge;
+	private Label ageField;
 
 	private Label fieldSectionEligibity;
 
@@ -85,11 +93,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private Image workEmailImage;
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
+	protected TopVerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
 	{
 		tabs.setSizeFull();
 
-		VerticalLayout layout = new VerticalLayout();
+		TopVerticalLayout layout = new TopVerticalLayout();
+		layout.setSizeFull();
 
 		overviewTab();
 		contactTab();
@@ -109,7 +118,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			{
 				DateField birthDate = (DateField) event.getProperty();
 				ContactDao daoContact = new DaoFactory().getContactDao();
-				labelAge.setValue(daoContact.getAge(birthDate.getValue()).toString());
+				ageField.setReadOnly(false);
+				ageField.setValue(daoContact.getAge(birthDate.getValue()).toString());
+				ageField.setReadOnly(true);
 				fieldSectionEligibity.setReadOnly(false);
 				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).toString());
 				fieldSectionEligibity.setReadOnly(true);
@@ -117,10 +128,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		});
 
 		layout.addComponent(tabs);
+		// VerticalLayout c = new VerticalLayout();
+		// layout.addComponent(c);
+		// layout.setExpandRatio(c, 1);
 
 		return layout;
 	}
-
 
 	private DateField overviewTab()
 	{
@@ -136,7 +149,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		final ComboBox role = overviewForm.bindEnumField("Role", Contact_.role, GroupRole.class);
+		final ComboBox role = overviewForm
+				.bindEntityField("Role", Contact_.groupRole, GroupRole.class, GroupRole_.name);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
 		overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
@@ -152,11 +166,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewForm.newLine();
 		birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy-MM-dd", Resolution.DAY);
-		labelAge = overviewForm.bindLabel("Age");
+		// ageField = overviewForm.bindTextField("Age", "age");
+		// ageField.setReadOnly(true);
+		ageField = overviewForm.bindLabel("Age");
 		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
 
-		role.addValueChangeListener(new ChangeListener(role, labelAge));
+		role.addValueChangeListener(new ChangeListener(role, ageField));
 
 		return birthDate;
 
@@ -364,7 +380,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
 	}
 
-	
 	private void relationshipTab()
 	{
 		// Background tab
@@ -373,7 +388,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		tabs.addTab(relationship, "Relationships");
 		relationship.setMargin(true);
 		relationship.setSizeFull();
-		
+
 		FieldFactory fieldFactory = new FieldFactory();
 		fieldFactory.setVisibleProperties(Contact.class, Contact_.relationships.getName());
 
@@ -381,19 +396,25 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
-		private final Label labelAge;
+		private final Label fieldAge;
 		private final ComboBox role;
 		private static final long serialVersionUID = 1L;
 
-		private ChangeListener(ComboBox role, Label labelAge)
+		private ChangeListener(ComboBox role, Label fieldAge)
 		{
-			this.labelAge = labelAge;
+			this.fieldAge = fieldAge;
 			this.role = role;
 		}
 
 		public void valueChange(ValueChangeEvent event)
 		{
-			switch ((GroupRole) this.role.getValue())
+			Long groupRoleId = (Long) this.role.getValue();
+
+			GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
+
+			GroupRole groupRole = daoGroupRole.findById(groupRoleId);
+
+			switch (groupRole.getBuiltIn())
 			{
 				case YouthMember:
 					showYouth(true);
@@ -403,7 +424,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 					break;
 			}
 			ContactDao daoContact = new DaoFactory().getContactDao();
-			labelAge.setValue(daoContact.getAge(ContactView.super.getCurrent()).toString());
+			fieldAge.setReadOnly(false);
+			fieldAge.setValue(daoContact.getAge(ContactView.super.getCurrent()).toString());
+			fieldAge.setReadOnly(true);
 		}
 
 		private void showYouth(boolean visible)
@@ -446,11 +469,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		// Start by removing all non-detachable tags
 		// so we can re-attach the ones that still apply
-		
+
 		// add built-in tags
 
 		TagDao daoTag = new DaoFactory().getTagDao();
-		
+
 		Iterator<Tag> iter = entity.getTags().iterator();
 		while (iter.hasNext())
 		{
@@ -462,7 +485,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 					iter.remove();
 			}
 		}
-		
+
 		// Section Tag
 		SectionType section = entity.getSection();
 		if (section != null)
@@ -473,80 +496,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		}
 
 		GroupRole role = entity.getRole();
-		switch (role)
+		for (Tag tag : role.getTags())
 		{
-			case AdultHelper:
-				addTag(entity, "Adult Helper");
-				break;
-			case AssistantLeader:
-				addTag(entity, "Assistant Leader");
-				addTag(entity, "Council Member");
-				break;
-			case CommitteeMember:
-				addTag(entity, "Committee Member");
-				break;
-			case Gardian:
-				addTag(entity, role.name());
-				break;
-			case GroupLeader:
-				addTag(entity, "Group Leader");
-				addTag(entity, "Committee Member");
-				addTag(entity, "Council Member");
-				break;
-			case Leader:
-				addTag(entity, role.name());
-				addTag(entity, "Council Member");
-				break;
-			case Parent:
-				addTag(entity, role.name());
-				break;
-			case President:
-				addTag(entity, role.name());
-				addTag(entity, "Committee Member");
-				break;
-			case QuarterMaster:
-				addTag(entity, "Quartermaster");
-				addTag(entity, "Committee Member");
-
-				break;
-			case RecruitmentOfficer:
-				addTag(entity, "Recruitment Officer");
-				addTag(entity, "Committee Member");
-
-				break;
-			case Secretary:
-				addTag(entity, role.name());
-				addTag(entity, "Committee Member");
-
-				break;
-			case Treasurer:
-				addTag(entity, role.name());
-				addTag(entity, "Committee Member");
-
-				break;
-			case Volunteer:
-				addTag(entity, role.name());
-
-				break;
-			case YouthMember:
-				addTag(entity, "Youth Member");
-				break;
-			default:
-				break;
-
+			entity.getTags().add(tag);
 		}
 
 		//
 
-	}
-
-	private void addTag(Contact entity, String tagName)
-	{
-		TagDao daoTag = new DaoFactory().getTagDao();
-		
-		Tag tag = daoTag.findByName(tagName);
-		if (!entity.getTags().contains(tag))
-			entity.getTags().add(tag);
 	}
 
 	@Override
@@ -557,27 +513,101 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-				.addColumn("Member", Contact_.isMember).addColumn("Role", Contact_.role);
+				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
 		super.init(Contact.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(final String filterString)
 	{
-		return // new Or(
-		new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
-				false), new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false))
-		// , new SimpleStringFilter(Contact_.section.getName() + "." +
-		// SectionType_.name.getName(), filterString, true, false))
-				, new SimpleStringFilter(new Path(Contact_.phone1, Phone_.phoneNo).toString(), filterString, true,
-						false)), new SimpleStringFilter(new Path(Contact_.phone2, Phone_.phoneNo).toString(),
-				filterString, true, false)), new SimpleStringFilter(
-				new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString, true, false)),
-				new SimpleStringFilter(new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString, true, false));
-		// , new SimpleStringFilter(Contact_.role.getName(), filterString, true,
-		// false));
+		setQueryModifier(filterString);
+		// return // new Or(
+		// new Or(new Or(new Or(new Or(new Or(new
+		// SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
+		// false), new SimpleStringFilter(Contact_.lastname.getName(),
+		// filterString, true, false))
+		// // , new SimpleStringFilter(Contact_.section.getName() + "." +
+		// // SectionType_.name.getName(), filterString, true, false))
+		// , new SimpleStringFilter(new Path(Contact_.phone1,
+		// Phone_.phoneNo).toString(), filterString, true,
+		// false)), new SimpleStringFilter(new Path(Contact_.phone2,
+		// Phone_.phoneNo).toString(),
+		// filterString, true, false)), new SimpleStringFilter(
+		// new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString,
+		// true, false)),
+		// new SimpleStringFilter(new Path(Contact_.phone3,
+		// Phone_.phoneNo).toString(), filterString, true, false));
+		// // , new SimpleStringFilter(Contact_.role.getName(), filterString,
+		// true,
+		// // false));
+
+		return null;
+
+	}
+
+	private void setQueryModifier(final String filterString)
+	{
+		EntityProvider<Contact> provider = container.getEntityProvider();
+
+		// hook the query delegate so we can fix the jpa query on the way
+		// through.
+		provider.setQueryModifierDelegate(new DefaultQueryModifierDelegate()
+		{
+			private static final long serialVersionUID = 1L;
+
+			/**
+			 * Where over-load the where clause so we can fix it.
+			 * 
+			 * Vaadin doesn't deal with outer joins.
+			 */
+			@Override
+			public void filtersWillBeAdded(CriteriaBuilder builder, CriteriaQuery<?> query, List<Predicate> predicates)
+			{
+				Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
+
+				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
+
+	
+				if (filterString != null && filterString.trim().length() >= 0)
+				{
+					Predicate fullTextSearchPredicate = null;
+
+					fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)), "%"
+							+ filterString.toUpperCase() + "%");
+
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(fromContact.get(Contact_.lastname)),
+									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(sectionJoin.get(SectionType_.name)), "%"
+									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+					
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(fromContact.get(Contact_.groupRole).get(GroupRole_.name)), "%"
+									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"
+									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(fromContact.get(Contact_.phone2).get(Phone_.phoneNo)), "%"
+									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+					fullTextSearchPredicate = builder.or(
+							builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)), "%"
+									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+
+					query.where(fullTextSearchPredicate);
+				}
+
+			}
+		});
 
 	}
 
