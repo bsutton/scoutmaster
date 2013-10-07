@@ -1,12 +1,11 @@
 package au.org.scoutmaster.domain;
 
 import java.sql.Time;
-
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-19T09:12:29.158+1000")
+@Generated(value="Dali", date="2013-10-03T10:29:32.724+1000")
 @StaticMetamodel(SectionMeetingDefaults.class)
 public class SectionMeetingDefaults_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SectionMeetingDefaults, Section> section;

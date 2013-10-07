@@ -159,7 +159,7 @@ public class Contact extends BaseEntity implements Importable
 
 	/** The actual section the Youth or Adult member is attached to. */
 	@FormField(displayName = "Section")
-	@ManyToOne
+	@ManyToOne(optional=true)
 	private SectionType section;
 
 	/**
@@ -176,7 +176,8 @@ public class Contact extends BaseEntity implements Importable
 	private Date affiliatedSince = new Date(new java.util.Date().getTime());
 
 	@FormField(displayName = "Group Role")
-	private GroupRole role = GroupRole.YouthMember;
+	@ManyToOne
+	private GroupRole groupRole;
 
 	@FormField(displayName = "Medicare No")
 	private String medicareNo = "";
@@ -551,7 +552,7 @@ public class Contact extends BaseEntity implements Importable
 
 	public void setRole(GroupRole role)
 	{
-		this.role = role;
+		this.groupRole = role;
 	}
 
 	public void setMedicareNo(String medicareNo)
@@ -686,7 +687,7 @@ public class Contact extends BaseEntity implements Importable
 
 	public GroupRole getRole()
 	{
-		return role;
+		return groupRole;
 	}
 
 	public String getMedicareNo()

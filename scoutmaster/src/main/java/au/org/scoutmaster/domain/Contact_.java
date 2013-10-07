@@ -1,14 +1,13 @@
 package au.org.scoutmaster.domain;
 
 import java.sql.Date;
-
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-28T17:09:39.129+1000")
+@Generated(value="Dali", date="2013-10-07T09:26:13.882+1100")
 @StaticMetamodel(Contact.class)
 public class Contact_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Contact, Boolean> active;
@@ -37,7 +36,7 @@ public class Contact_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Contact, SectionType> section;
 	public static volatile SingularAttribute<Contact, String> hobbies;
 	public static volatile SingularAttribute<Contact, Date> affiliatedSince;
-	public static volatile SingularAttribute<Contact, GroupRole> role;
+	public static volatile SingularAttribute<Contact, GroupRole> groupRole;
 	public static volatile SingularAttribute<Contact, String> medicareNo;
 	public static volatile SingularAttribute<Contact, Boolean> ambulanceSubscriber;
 	public static volatile SingularAttribute<Contact, Boolean> privateMedicalInsurance;

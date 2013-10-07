@@ -1,14 +1,12 @@
 package au.org.scoutmaster.domain;
 
+import au.org.scoutmaster.domain.accounting.MoneyWithTax;
 import java.sql.Date;
-
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-import au.org.scoutmaster.domain.accounting.MoneyWithTax;
-
-@Generated(value="Dali", date="2013-09-19T09:12:29.161+1000")
+@Generated(value="Dali", date="2013-10-03T10:29:32.727+1000")
 @StaticMetamodel(SectionTryout.class)
 public class SectionTryout_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SectionTryout, SectionTryoutType> type;

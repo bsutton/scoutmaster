@@ -30,6 +30,7 @@ import au.org.scoutmaster.util.PasswordHash;
 		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
 public class User extends BaseEntity
 {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Transient
