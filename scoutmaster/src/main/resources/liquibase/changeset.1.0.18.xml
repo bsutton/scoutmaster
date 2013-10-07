@@ -5,20 +5,35 @@
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-<!-- 
+
 	<changeSet author="bsutton" id="1.0.18">
 
-		<dropTable tableName="Relationship"/>
-		
-				<addForeignKeyConstraint baseColumnNames="FIRST_ID"
-		
-				<addForeignKeyConstraint baseColumnNames="SECONDCONTACT_ID"
-			  baseTableName="Relationship"
-		
-		<
-		
-		<createTable tableName="Contact_Tag">
-			<column name="Contact_ID" type="BIGINT(19)">
+		<addColumn tableName="Contact">
+			<column defaultValueNumeric="0" name="GroupRole_ID" type="BIGINT(19)" />
+		</addColumn>
+
+		<createTable tableName="GroupRole">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="enumName" type="varchar(32)" defaultValue="Custom"/>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+
+		<createIndex indexName="NAME" tableName="GroupRole"
+			unique="true">
+			<column name="NAME" />
+		</createIndex>
+
+		<createTable tableName="GroupRole_Tag">
+			<column name="GroupRole_ID" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
 			<column name="tags_ID" type="BIGINT(19)">
@@ -26,50 +41,455 @@
 			</column>
 		</createTable>
 
-		<addPrimaryKey columnNames="Contact_ID, tags_ID"
-			constraintName="PRIMARY" tableName="Contact_Tag" />
 
-<addForeignKeyConstraint baseColumnNames="TYPE_ID"
-			  baseTableName="Relationship"
-			constraintName="FK_Relationship_TYPE_ID" deferrable="false"
-			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
-			referencedColumnNames="ID"  
-			referencedTableName="RelationshipType" />
+		<addPrimaryKey columnNames="GroupRole_ID, tags_ID"
+			constraintName="PRIMARY" tableName="GroupRole_Tag" />
 
-		<addForeignKeyConstraint baseColumnNames="Contact_ID"
-			baseTableName="Contact_Tag" constraintName="FK_Contact_Tag_Contact_ID"
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.18.1">
+
+		<sql>update Tag set name = 'Joey Leaders' where name = 'Joey Leader'
+		</sql>
+
+		<sql>update Tag set name = 'Cub Leaders' where name = 'Cub Leader'
+		</sql>
+		<sql>update Tag set name = 'Scout Leaders' where name = 'Scout Leader'
+		</sql>
+		<sql>update Tag set name = 'Venturer Leaders' where name = 'Venturer Leader'
+		</sql>
+		<sql>update Tag set name = 'Rover Leaders' where name = 'Rover Leader'
+		</sql>
+		<sql>update Tag set name = 'District Leaders' where name = 'District Leader'
+		</sql>
+		<sql>update Tag set name = 'Region Leaders' where name = 'Region Leader'
+		</sql>
+		<sql>update Tag set name = 'Branch Leaders' where name = 'Branch Leader'
+		</sql>
+		<sql>update Tag set name = 'Assistant Leaders' where name = 'Assistant Leader'
+		</sql>
+
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="None" />
+			<column name="description"
+				value="Any contact that doesn't have a role within the Scout Group." />
+			<column name="enumName" value="None" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>update Contact set GroupRole_ID = (select id from GroupRole
+			where
+			name = 'None')
+		</sql>
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Section Helpers" />
+			<column name="description"
+				value="An adult that assists with delivering section programs but who is not a Leader." />
+			<column name="enumName" value="SectionHelper" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>update Tag set name = 'Section Helpers' where name = 'Adult Helper'</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Section Helpers'), (select id from Tag
+			where name='Section Helpers'))
+		</sql>
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Assistant Leaders" />
+			<column name="description"
+				value="An qualified Leader that assists the Section Leader in delivering programs." />
+			<column name="enumName" value="AssistantLeader" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Assistant Leaders'), (select id from
+			Tag
+			where name='Assistant Leaders'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Assistant Leaders'), (select id from
+			Tag
+			where name='Council Member'))
+		</sql>
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Committee Member" />
+			<column name="description" value="A member of the Group's organising committee." />
+			<column name="enumName" value="CommitteeMember" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Committee Member'), (select id from
+			Tag
+			where name='Committee Member'))
+		</sql>
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Council Member" />
+			<column name="description"
+				value="A member of the Group's Council, normally a Section Leader." />
+			<column name="enumName" value="CouncilMember" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Council Member'), (select id from Tag
+			where name='Council Member'))
+		</sql>
+
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Gardian" />
+			<column name="description" value="A Legal Gardian of a Youth Member." />
+			<column name="enumName" value="Gardian" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Gardian'), (select id from Tag
+			where
+			name='Parent'))
+		</sql>
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Group Leader" />
+			<column name="description" value="The Scout Group's CEO" />
+			<column name="enumName" value="GroupLeader" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Group Leader'), (select id from Tag
+			where name='Group Leader'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Group Leader'), (select id from Tag
+			where name='Council Member'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Group Leader'), (select id from
+			Tag
+			where name='Committee Member'))
+		</sql>
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Leaders" />
+			<column name="description" value="A leader of a Section" />
+			<column name="enumName" value="Leaders" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Leaders'), (select id from Tag
+			where
+			name='Leaders'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Leaders'), (select id from Tag
+			where
+			name='Council Member'))
+		</sql>
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Parent" />
+			<column name="description"
+				value="A Parent of a Youth Member or a Prospective Youth Member" />
+			<column name="enumName" value="Parent" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Parent'), (select id from Tag
+			where
+			name='Parent'))
+		</sql>
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="President" />
+			<column name="description"
+				value="The President of the Scout Group's organising Committee." />
+			<column name="enumName" value="President" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='President'), (select id from Tag
+			where
+			name='President'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='President'), (select id from
+			Tag
+			where
+			name='Committee Member'))
+		</sql>
+
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="QuarterMaster" />
+			<column name="description"
+				value="The QuarterMaster responsible for equipment management." />
+			<column name="enumName" value="QuarterMaster" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='QuarterMaster'), (select id from Tag
+			where name='QuarterMaster'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='QuarterMaster'), (select id from
+			Tag
+			where name='Committee Member'))
+		</sql>
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Recruitment Officer" />
+			<column name="description" value="The committee member responsible recruitment." />
+			<column name="enumName" value="RecruitmentOfficer" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Recruitment Officer'), (select id from
+			Tag
+			where name='Recruitment Officer'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Recruitment Officer'), (select id from
+			Tag
+			where name='Committee Member'))
+		</sql>
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Secretary" />
+			<column name="description"
+				value="The Secretary of the Scout Group's organising Committee." />
+			<column name="enumName" value="Secretary" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Secretary'), (select id from Tag
+			where
+			name='Secretary'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Secretary'), (select id from
+			Tag
+			where
+			name='Committee Member'))
+		</sql>
+
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Treasurer" />
+			<column name="description"
+				value="The Treasurer of the Scout Group's organising Committee." />
+			<column name="enumName" value="Treasurer" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Treasurer'), (select id from Tag
+			where
+			name='Treasurer'))
+		</sql>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Treasurer'), (select id from
+			Tag
+			where
+			name='Committee Member'))
+		</sql>
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Volunteer" />
+			<column name="description"
+				value="A person who Volunteers time within the Scout Group." />
+			<column name="enumName" value="Volunteer" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Volunteer'), (select id from Tag
+			where
+			name='Volunteer'))
+		</sql>
+
+
+
+		<insert tableName="GroupRole">
+			<column name="name" value="Youth Member" />
+			<column name="description" value="A youth who is an member of the Scout Group." />
+			<column name="enumName" value="YouthMember" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+		<sql>insert into GroupRole_Tag (GroupRole_ID, tags_ID) values ((select
+			id from GroupRole where name='Youth Member'), (select id from Tag
+			where name='Youth Member'))
+		</sql>
+
+		<sql>update Contact set GroupRole_ID = (select id from GroupRole where
+			name = 'Youth Member' ) where Role = 1
+		</sql>
+		<sql>update Contact set GroupRole_ID = (select id from GroupRole where
+			name = 'Parent' ) where Role = 2
+		</sql>
+		<sql>update Contact set GroupRole_ID = (select id from GroupRole where
+			name = 'Volunteer' ) where Role = 5
+		</sql>
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.18.2">
+
+		<addForeignKeyConstraint baseColumnNames="GROUPROLE_ID"
+			baseTableName="Contact" constraintName="FK_Contact_GROUPROLE_ID"
 			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="GroupRole" />
+		<addForeignKeyConstraint baseColumnNames="tags_ID"
+			baseTableName="GroupRole_Tag" constraintName="FK_GroupRole_Tag_tags_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Tag" />
+		<addForeignKeyConstraint baseColumnNames="GroupRole_ID"
+			baseTableName="GroupRole_Tag" constraintName="FK_GroupRole_Tag_GroupRole_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="GroupRole" />
 
 
-		<createTable tableName="Tag">
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.18.3">
+
+		<dropTable tableName="Household_Relationship"></dropTable>
+		<dropTable tableName="Relationship"></dropTable>
+
+		<createTable tableName="Relationship">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
 			</column>
-			<column defaultValueNumeric="0" name="BUILTIN" type="BIT(1)" />
+			<column name="RELATED_ID" type="BIGINT(19)" />
+			<column name="TYPE_ID" type="BIGINT(19)" />
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
 			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
 				<constraints nullable="false" />
 			</column>
-			<column name="CREATED" type="date" />
-			<column name="DESCRIPTION" type="VARCHAR(250)" />
-			<column defaultValueNumeric="0" name="DETACHABLE" type="BIT(1)" />
-			<column name="NAME" type="VARCHAR(30)" />
-			<column name="UPDATED" type="date" />
 		</createTable>
 
-		<addForeignKeyConstraint baseColumnNames="tags_ID"
-			baseTableName="Contact_Tag" constraintName="FK_Contact_Tag_tags_ID"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Tag" />
-
-		<createIndex indexName="NAME" tableName="Tag" unique="true">
-			<column name="NAME" />
-		</createIndex>
-
+		<createTable tableName="Contact_Relationship">
+			<column name="Contact_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="relationships_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
 
 
 	</changeSet>
-	-->
+	<changeSet author="bsutton" id="1.0.18.4">
+
+		<addPrimaryKey columnNames="Contact_ID, relationships_ID"
+			constraintName="PRIMARY" tableName="Contact_Relationship" />
+
+		<addForeignKeyConstraint baseColumnNames="RELATED_ID"
+			baseTableName="Relationship" constraintName="FK_Relationship_RELATED_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableName="Relationship" constraintName="FK_Relationship_TYPE_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="RelationshipType" />
+		<addForeignKeyConstraint baseColumnNames="Contact_ID"
+			baseTableName="Contact_Relationship" constraintName="FK_Contact_Relationship_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="relationships_ID"
+			baseTableName="Contact_Relationship" constraintName="FK_Contact_Relationship_relationships_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Relationship" />
+
+
+		<dropColumn tableName="Contact" columnName="ROLE" />
+
+
+	</changeSet>
 
 </databaseChangeLog>
