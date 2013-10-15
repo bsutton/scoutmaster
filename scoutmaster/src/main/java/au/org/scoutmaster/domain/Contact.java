@@ -34,6 +34,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
 
+import au.com.vaadinutils.crud.CrudEntity;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.validation.MemberChecks;
@@ -44,7 +45,7 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @NamedQueries(
 {
 		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
-public class Contact extends BaseEntity implements Importable
+public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
 

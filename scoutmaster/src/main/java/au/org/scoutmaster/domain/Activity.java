@@ -13,6 +13,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import au.com.vaadinutils.crud.CrudEntity;
 import au.org.scoutmaster.domain.access.User;
 
 /**
@@ -27,7 +28,7 @@ import au.org.scoutmaster.domain.access.User;
 {
 })
 
-public class Activity extends BaseEntity
+public class Activity extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
