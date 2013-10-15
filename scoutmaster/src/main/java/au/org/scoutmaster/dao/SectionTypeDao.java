@@ -13,11 +13,13 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao<SectionType, Long>
 {
 
+	static private List<SectionType> sectionTypes;
+
 	public SectionTypeDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	
+
 	public SectionTypeDao(EntityManager em)
 	{
 		super(em);
@@ -30,17 +32,26 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 
 	/**
 	 * Determines which section a youth member is elidgible for.
+	 * 
 	 * @param birthDate
 	 * @return
 	 */
 	public SectionType getEligibleSection(DateTime birthDate)
 	{
 		SectionType eligible = null;
-		
-		List<SectionType> sectionTypes = findAll();
+
+		/** 
+		 * We are caching the section types to get around a bug in jpa that causes 
+		 * the system to lock up when trying to fetch section types from the Contact during startup.
+		 * Remove the cache to see the problem :D
+		 */
+		if (sectionTypes == null)
+		{
+			sectionTypes = findAll();
+		}
 		for (SectionType sectionType : sectionTypes)
 		{
-			
+
 			if (this.isEligible(sectionType, birthDate))
 			{
 				eligible = sectionType;
@@ -55,7 +66,7 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	{
 		DateTime startingAge = sectionType.getStartingAge().getBirthDate();
 		DateTime endingAge = sectionType.getEndingAge().getBirthDate();
-		return (birthDate.equals(startingAge) || birthDate.isBefore(startingAge)) 
+		return (birthDate.equals(startingAge) || birthDate.isBefore(startingAge))
 				&& (birthDate.isAfter(endingAge) || birthDate.equals(endingAge));
 	}
 
