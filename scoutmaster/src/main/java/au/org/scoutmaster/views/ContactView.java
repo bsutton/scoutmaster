@@ -86,7 +86,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private Label ageField;
 
-	private Label fieldSectionEligibity;
+	private ComboBox fieldSectionEligibity;
 
 	private Image homeEmailImage;
 
@@ -122,7 +122,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				ageField.setValue(daoContact.getAge(birthDate.getValue()).toString());
 				ageField.setReadOnly(true);
 				fieldSectionEligibity.setReadOnly(false);
-				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).toString());
+				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
 				fieldSectionEligibity.setReadOnly(true);
 			}
 		});
@@ -271,7 +271,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.newLine();
 	}
 
-	private Label youthTab()
+	private void youthTab()
 	{
 		// Youth tab
 		SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(1, this.fieldGroup);
@@ -280,16 +280,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		youthTab = tabs.addTab(youthForm, "Youth");
 		youthForm.setSizeFull();
 		youthForm.setMargin(true);
-		// fieldSectionEligibity =
-		// youthForm.bindTextField("Section Eligibility", (String)null);
-		fieldSectionEligibity = youthForm.bindLabel("Section Eligibility");
-		// fieldSectionEligibity.setReadOnly(true);
 		youthForm.newLine();
 		youthForm.bindTextField("School", "school");
 		youthForm.bindBooleanField("Custody Order", Contact_.custodyOrder);
 		youthForm.newLine();
 		youthForm.bindTextAreaField("Custody Order Details", Contact_.custodyOrderDetails, 4);
-		return fieldSectionEligibity;
+		
 	}
 
 	private void memberTab()
@@ -302,10 +298,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.setSizeFull();
 		memberForm.bindBooleanField("Member", Contact_.isMember);
 		memberForm.newLine();
-		memberForm.colspan(2);
+		//memberForm.colspan(2);
+		
 		memberForm.bindEntityField("Section", Contact_.section, SectionType.class, SectionType_.name);
 
 		memberForm.newLine();
+		fieldSectionEligibity = memberForm.bindEntityField("Section Eligibility", Contact_.sectionEligibility, SectionType.class, SectionType_.name);
+		fieldSectionEligibity.setReadOnly(true);
+
 		memberForm.colspan(2);
 		memberForm.bindTextField("Member No", Contact_.memberNo);
 		memberForm.newLine();
@@ -409,20 +409,26 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		public void valueChange(ValueChangeEvent event)
 		{
 			Long groupRoleId = (Long) this.role.getValue();
-
-			GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
-
-			GroupRole groupRole = daoGroupRole.findById(groupRoleId);
-
-			switch (groupRole.getBuiltIn())
+			if (groupRoleId != null)
 			{
-				case YouthMember:
-					showYouth(true);
-					break;
-				default:
-					showYouth(false);
-					break;
+
+				GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
+
+				GroupRole groupRole = daoGroupRole.findById(groupRoleId);
+
+				switch (groupRole.getBuiltIn())
+				{
+					case YouthMember:
+						showYouth(true);
+						break;
+					default:
+						showYouth(false);
+						break;
+				}
 			}
+			else
+				showYouth(true);
+
 			ContactDao daoContact = new DaoFactory().getContactDao();
 			fieldAge.setReadOnly(false);
 			fieldAge.setValue(daoContact.getAge(ContactView.super.getCurrent()).toString());
@@ -523,26 +529,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	protected Filter getContainerFilter(final String filterString)
 	{
 		setQueryModifier(filterString);
-		// return // new Or(
-		// new Or(new Or(new Or(new Or(new Or(new
-		// SimpleStringFilter(Contact_.firstname.getName(), filterString, true,
-		// false), new SimpleStringFilter(Contact_.lastname.getName(),
-		// filterString, true, false))
-		// // , new SimpleStringFilter(Contact_.section.getName() + "." +
-		// // SectionType_.name.getName(), filterString, true, false))
-		// , new SimpleStringFilter(new Path(Contact_.phone1,
-		// Phone_.phoneNo).toString(), filterString, true,
-		// false)), new SimpleStringFilter(new Path(Contact_.phone2,
-		// Phone_.phoneNo).toString(),
-		// filterString, true, false)), new SimpleStringFilter(
-		// new Path(Contact_.phone3, Phone_.phoneNo).toString(), filterString,
-		// true, false)),
-		// new SimpleStringFilter(new Path(Contact_.phone3,
-		// Phone_.phoneNo).toString(), filterString, true, false));
-		// // , new SimpleStringFilter(Contact_.role.getName(), filterString,
-		// true,
-		// // false));
-
 		return null;
 
 	}
@@ -565,11 +551,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			@Override
 			public void filtersWillBeAdded(CriteriaBuilder builder, CriteriaQuery<?> query, List<Predicate> predicates)
 			{
+				@SuppressWarnings("unchecked")
 				Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
 
 				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
 
-	
 				if (filterString != null && filterString.trim().length() >= 0)
 				{
 					Predicate fullTextSearchPredicate = null;
@@ -581,12 +567,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 							builder.like(builder.upper(fromContact.get(Contact_.lastname)),
 									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
 
-
 					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(sectionJoin.get(SectionType_.name)), "%"
-									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+							builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
+									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
 
-					
 					fullTextSearchPredicate = builder.or(
 							builder.like(builder.upper(fromContact.get(Contact_.groupRole).get(GroupRole_.name)), "%"
 									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
