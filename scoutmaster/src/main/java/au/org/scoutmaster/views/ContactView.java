@@ -17,7 +17,6 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.layout.TopVerticalLayout;
 import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
@@ -92,8 +91,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private Image homeEmailImage;
 
 	private Image workEmailImage;
-
-	private Tab activityTab;
 
 	@Override
 	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -289,7 +286,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		activityView.setSizeFull();
 		super.addChildCrudListener(activityView);
 
-		activityTab = tabs.addTab(activityView, "Activity");
+		tabs.addTab(activityView, "Activity");
 
 		//contactTab.setExpandRatio(activityView, 1.0f);
 
