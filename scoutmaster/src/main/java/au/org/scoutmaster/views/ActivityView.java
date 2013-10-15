@@ -6,6 +6,7 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
@@ -43,10 +44,13 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<Activity> fieldGroup2)
 	{
 		VerticalLayout layout = new VerticalLayout();
+		layout.setSizeFull();
+		
 
 		SMMultiColumnFormLayout<Activity> overviewForm = new SMMultiColumnFormLayout<Activity>(2, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setColumnLabelWidth(0, 70);
+		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
 
@@ -61,8 +65,14 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 		overviewForm.bindTextField("Subject", Activity_.subject);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		overviewForm.bindEditorField(Activity_.details, true);
+		
+		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Activity_.details, true);
+		detailsEditor.setSizeFull();
+		overviewForm.setExpandRatio(1.0f);
+		
+		
 		layout.addComponent(overviewForm);
+		
 
 		super.showDelete(false);
 		super.showNew(false);
