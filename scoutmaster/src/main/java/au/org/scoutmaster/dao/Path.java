@@ -17,7 +17,7 @@ public class Path
 		this.rhsField = rhsField;
 	}
 	
-	public String toString()
+	public String getName()
 	{
 		return this.lhsEntity.getName() + "." + this.rhsField.getName();
 	}

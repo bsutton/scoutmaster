@@ -28,10 +28,10 @@ public class ActivityDao extends JpaBaseDao<Activity, Long> implements Dao<Activ
 	public JPAContainer<Activity> makeJPAContainer()
 	{
 		JPAContainer<Activity> container = super.makeJPAContainer(Activity.class);
-		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.lastname).toString());
-		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.firstname).toString());
-		container.addNestedContainerProperty(new Path(Activity_.addedBy, User_.username).toString());
-		container.addNestedContainerProperty(new Path(Activity_.type, ActivityType_.name).toString());
+		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.lastname).getName());
+		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.firstname).getName());
+		container.addNestedContainerProperty(new Path(Activity_.addedBy, User_.username).getName());
+		container.addNestedContainerProperty(new Path(Activity_.type, ActivityType_.name).getName());
 
 		return container;
 	}
