@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views;
 
 import org.apache.log4j.Logger;
-import org.hibernate.validator.internal.constraintvalidators.EmailValidator;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
