@@ -23,9 +23,6 @@
 		<listener-class>au.org.scoutmaster.application.LocalEntityManagerContextListener
 		</listener-class>
 	</listener>
-	
-
-
 
 	<!-- per request Entity Manager injection -->
 	<filter>
