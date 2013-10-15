@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Section Eligibility is transient so lets remove it. -->
+	<changeSet author="bsutton" id="1.0.19">
+		<addColumn tableName="Contact">
+			<column name="SECTIONELIGIBILITY_ID" type="BIGINT(19)" />
+		</addColumn>
+		<addForeignKeyConstraint baseColumnNames="SECTIONELIGIBILITY_ID"
+			baseTableName="Contact" constraintName="FK_Contact_SECTIONELIGIBILITY_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="SectionType" />
+	</changeSet>
+</databaseChangeLog>
+
+ 
