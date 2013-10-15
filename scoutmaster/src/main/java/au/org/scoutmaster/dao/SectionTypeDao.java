@@ -40,15 +40,7 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	{
 		SectionType eligible = null;
 
-		/** 
-		 * We are caching the section types to get around a bug in jpa that causes 
-		 * the system to lock up when trying to fetch section types from the Contact during startup.
-		 * Remove the cache to see the problem :D
-		 */
-		if (sectionTypes == null)
-		{
-			sectionTypes = findAll();
-		}
+		cacheSectionTypes();
 		for (SectionType sectionType : sectionTypes)
 		{
 
@@ -60,6 +52,19 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		}
 		assert eligible != null : "All dates should map to a valid SectionType";
 		return eligible;
+	}
+
+	public  void cacheSectionTypes()
+	{
+		/** 
+		 * We are caching the section types to get around a bug in jpa that causes 
+		 * the system to lock up when trying to fetch section types from the Contact during startup.
+		 * Remove the cache to see the problem :D
+		 */
+		if (sectionTypes == null)
+		{
+			sectionTypes = findAll();
+		}
 	}
 
 	private boolean isEligible(SectionType sectionType, DateTime birthDate)
