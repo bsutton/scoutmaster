@@ -107,10 +107,10 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	protected Filter getContainerFilter(String filterString)
 	{
 		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Activity_.activityDate.getName(), filterString, true,
-				false), new SimpleStringFilter(new Path(Activity_.type, ActivityType_.name).toString(), filterString, true, false)),
-				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.lastname).toString(), filterString, true, false)),
-				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.firstname).toString(), filterString, true, false)),
-				new SimpleStringFilter(new Path(Activity_.addedBy, User_.username).toString(), filterString, true, false)),
+				false), new SimpleStringFilter(new Path(Activity_.type, ActivityType_.name).getName(), filterString, true, false)),
+				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.lastname).getName(), filterString, true, false)),
+				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.firstname).getName(), filterString, true, false)),
+				new SimpleStringFilter(new Path(Activity_.addedBy, User_.username).getName(), filterString, true, false)),
 				new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
 	}
 
