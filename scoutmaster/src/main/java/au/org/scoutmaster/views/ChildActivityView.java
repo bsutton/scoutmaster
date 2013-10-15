@@ -8,20 +8,16 @@ import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Activity;
-import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.ActivityType_;
 import au.org.scoutmaster.domain.Activity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 
