@@ -14,6 +14,7 @@ import au.org.scoutmaster.domain.GroupRole;
 
 public class GroupRoleDao extends JpaBaseDao<GroupRole, Long> implements Dao<GroupRole, Long>
 {
+	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(GroupRoleDao.class);
 
 	public GroupRoleDao()
