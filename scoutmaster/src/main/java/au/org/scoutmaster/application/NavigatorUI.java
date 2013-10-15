@@ -8,6 +8,7 @@ import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.menu.ViewMap;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.views.ActivityView;
@@ -70,6 +71,9 @@ public class NavigatorUI extends UI
 	{
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
+		
+		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+		daoSectionType.cacheSectionTypes();
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
@@ -85,7 +89,8 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
 		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
 		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
-		
+		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
+				
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
