@@ -63,6 +63,7 @@ import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @Menu(display = "Contact")
@@ -92,12 +93,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private Image workEmailImage;
 
+	private Tab activityTab;
+
 	@Override
-	protected TopVerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
+	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
 	{
 		tabs.setSizeFull();
 
-		TopVerticalLayout layout = new TopVerticalLayout();
+		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
 		overviewTab();
@@ -106,6 +109,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberTab();
 		medicalTab();
 		backgroundTab();
+		activityTab();
 		relationshipTab();
 		googleTab();
 
@@ -180,6 +184,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private void contactTab()
 	{
+		VerticalLayout contactTab = new VerticalLayout();
+		contactTab.setSizeFull();
 		// Contact tab
 		SMMultiColumnFormLayout<Contact> contactForm = new SMMultiColumnFormLayout<Contact>(3, this.fieldGroup);
 		contactForm.setColumnLabelWidth(0, 100);
@@ -189,8 +195,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.setColumnFieldWidth(1, 100);
 		contactForm.setColumnFieldWidth(2, 20);
 
-		contactForm.setSizeFull();
-		tabs.addTab(contactForm, "Contact");
+		//contactForm.setSizeFull();
 		contactForm.setMargin(true);
 
 		contactForm.colspan(3);
@@ -269,8 +274,26 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.newLine();
 		contactForm.bindTextField("Postcode", "address.postcode");
 		contactForm.newLine();
+		
+		// Now add the child activity crud
+		contactTab.addComponent(contactForm);
+		
+		tabs.addTab(contactTab, "Contact");
+		
 	}
 
+	private void activityTab()
+	{
+		// Now add the child activity crud
+		ChildActivityView activityView = new ChildActivityView();
+		activityView.setSizeFull();
+		super.addChildCrudListener(activityView);
+
+		activityTab = tabs.addTab(activityView, "Activity");
+
+		//contactTab.setExpandRatio(activityView, 1.0f);
+
+	}
 	private void youthTab()
 	{
 		// Youth tab
