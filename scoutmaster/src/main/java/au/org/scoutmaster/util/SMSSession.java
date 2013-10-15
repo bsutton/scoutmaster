@@ -2,10 +2,8 @@ package au.org.scoutmaster.util;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.sql.Date;
 
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
@@ -70,7 +68,6 @@ public class SMSSession implements Closeable
 		activity.setWithContact(transmission.getContact());
 		activity.setSubject(transmission.getMessage().getSubject());
 		activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
-		activity.setActivityDate(new Date(new DateTime().toDate().getTime()));
 		activity.setDetails(transmission.getMessage().getBody());
 		daoActivity.persist(activity);
 	}
