@@ -1,6 +1,6 @@
 package au.org.scoutmaster.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +8,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -44,7 +46,10 @@ public class Activity extends BaseEntity
 	/**
 	 * The date/time the activity occurred.
 	 */
-	private Date activityDate = new Date(new java.util.Date().getTime());
+//	@Converter(name="DateTime", converterClass=org.joda.time.contrib.eclipselink.DateTimeConverter.class)
+//	@Convert(value="DateTime")
+	@Temporal(value=TemporalType.TIMESTAMP)
+	private Date activityDate = new Date(); // DateTime.now();
 	
 	/**
 	 * A short description of the activity
