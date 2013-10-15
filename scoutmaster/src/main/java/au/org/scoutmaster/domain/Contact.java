@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.AssertTrue;
@@ -31,10 +34,13 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeParser;
 
+import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
 @Table(name = "Contact")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
@@ -127,7 +133,7 @@ public class Contact extends BaseEntity implements Importable
 	private String school = "";
 
 	@FormField(displayName = "Section Eligibility")
-	@ManyToOne
+	@Transient
 	private SectionType sectionEligibility;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -252,7 +258,7 @@ public class Contact extends BaseEntity implements Importable
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="withContact")
 	private List<Activity> activites = new ArrayList<>();
 
 	/**
@@ -327,14 +333,18 @@ public class Contact extends BaseEntity implements Importable
 		this.middlename = middlename;
 	}
 
+	@Access(value=AccessType.PROPERTY)
 	public SectionType getSectionEligibility()
 	{
-		return sectionEligibility;
+		ContactDao daoContact = new DaoFactory().getContactDao();
+		SectionType eligibility = daoContact.getSectionEligibilty(this.birthDate);
+		this.sectionEligibility = eligibility;
+		
+		return this.sectionEligibility;
 	}
-
-	public void setSectionEligibility(SectionType sectionEligibility)
+	public void setSectionEligibility(SectionType sectionType)
 	{
-		this.sectionEligibility = sectionEligibility;
+		// do nothing as this is transient and readonly
 	}
 
 	public SectionType getSection()
@@ -465,6 +475,7 @@ public class Contact extends BaseEntity implements Importable
 		this.prefix = prefix;
 	}
 
+	
 	public void setBirthDate(Date birthDate)
 	{
 		this.birthDate = birthDate;
@@ -810,5 +821,14 @@ public class Contact extends BaseEntity implements Importable
 	public String getFullname()
 	{
 		return firstname + " " + lastname;
+	}
+	
+	@PreRemove
+	private void preRemove()
+	{
+		tags.clear();
+//		activites.isEmpty();
+//		activites.clear();
+		notes.clear();
 	}
 }
