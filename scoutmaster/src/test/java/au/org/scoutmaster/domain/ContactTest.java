@@ -16,6 +16,7 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.NoteDao;
 import au.org.scoutmaster.dao.TagDao;
 
 public class ContactTest
@@ -96,11 +97,12 @@ public class ContactTest
 		try (Transaction t = new Transaction(em))
 		{
 			TagDao daoTag = new DaoFactory(em).getTagDao();
+			NoteDao daoNote = new DaoFactory(em).getNoteDao();
 			Assert.assertFalse(contactExists(BRETT, SUTTON));
 			Assert.assertTrue(daoTag.findByName(TAG2) == null);
 			Assert.assertTrue(daoTag.findByName(TAG1) == null);
-			Assert.assertTrue(Note.findNote(MY_FIRST_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Note.findNote(MY_SECOND_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_FIRST_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_SECOND_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(Address.findAddress("10 smith drv", "Sometown", "Victoria", "3000").size() == 0);
 			t.commit();
 		}
@@ -203,10 +205,11 @@ public class ContactTest
 		{
 
 			TagDao daoTag = new DaoFactory(em).getTagDao();
+			NoteDao daoNote = new DaoFactory(em).getNoteDao();
 
 			Assert.assertTrue(!contactExists(STEPHEN, SUTTON));
-			Assert.assertTrue(Note.findNote(MY_FIRST_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Note.findNote(MY_SECOND_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_FIRST_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_SECOND_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(Address.findAddress("20 replacement drv", "Othertown", "Victoria", "3000").size() == 0);
 			// tags exists even after they are detached from the contact.
 			Assert.assertTrue(daoTag.findByName(TAG1) != null);
@@ -298,11 +301,12 @@ public class ContactTest
 		try (Transaction t = new Transaction(em))
 		{
 			TagDao daoTag = new DaoFactory(em).getTagDao();
+			NoteDao daoNote = new DaoFactory(em).getNoteDao();
 			Assert.assertFalse(contactExists("Rhiannon", SUTTON));
 			Assert.assertTrue(daoTag.findByName(TAG2) == null);
 			Assert.assertTrue(daoTag.findByName(TAG1) == null);
-			Assert.assertTrue(Note.findNote(MY_FIRST_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Note.findNote(MY_SECOND_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_FIRST_NOTE_GOES_HERE).size() == 0);
+			Assert.assertTrue(daoNote.findNoteBySubject(MY_SECOND_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(Address.findAddress("10 Mossman Drv", "Eaglemont", "Victoria", "3084").size() == 0);
 			t.commit();
 		}
