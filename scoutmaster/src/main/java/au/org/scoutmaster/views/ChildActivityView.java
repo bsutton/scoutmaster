@@ -27,7 +27,7 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 
 	public ChildActivityView()
 	{
-		super(Contact.class, Activity.class, Contact_.id, new Path(Activity_.withContact, Contact_.id).getName());
+		super(Contact.class, Activity.class, Contact_.id, Activity_.withContact.getName());
 
 		JPAContainer<Activity> container = new DaoFactory().getActivityDao().makeJPAContainer();
 		container.sort(new String[] {Activity_.activityDate.getName()},new boolean[] {false});
