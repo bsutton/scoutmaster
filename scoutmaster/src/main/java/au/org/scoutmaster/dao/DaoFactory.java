@@ -51,6 +51,11 @@ public class DaoFactory
 		return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
 	}
 
+	public NoteDao getNoteDao()
+	{
+		return (NoteDao) instantiateDAO(NoteDao.class);
+	}
+
 	public SMTPSettingsDao getSMTPSettingsDao()
 	{
 		return (SMTPSettingsDao) instantiateDAO(SMTPSettingsDao.class);
@@ -115,5 +120,6 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
+
 
 }
