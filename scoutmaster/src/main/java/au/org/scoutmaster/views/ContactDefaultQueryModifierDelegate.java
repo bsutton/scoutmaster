@@ -20,7 +20,7 @@ import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
 
-public class ContactDefaultQueryModifierDelegate extends  QueryModifierAdaptor
+public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ContactDefaultQueryModifierDelegate.class);
@@ -78,21 +78,15 @@ public class ContactDefaultQueryModifierDelegate extends  QueryModifierAdaptor
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(fromContact.get(Contact_.lastname)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.function("date_format", String.class, fromContact.get(Contact_.birthDate), builder.literal("%Y-%m-%d")),
-								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
-				
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(sectionJoin.get(SectionType_.name)), "%"
-								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
 
+				fullTextSearchPredicate = builder.or(builder.like(
+						builder.function("date_format", String.class, fromContact.get(Contact_.birthDate),
+								builder.literal("%Y-%m-%d")), "%" + this.fullTextSearch.toUpperCase() + "%"),
+						fullTextSearchPredicate);
 
 				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(fromContact.get(Contact_.section).get(SectionType_.name)),
+						builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
 			}
 
 			if (subquery != null && fullTextSearchPredicate != null)
