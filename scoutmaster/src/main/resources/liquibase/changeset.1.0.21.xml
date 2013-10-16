@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Add additional Note fields. -->
+	<changeSet author="bsutton" id="1.0.21">
+
+		<addColumn tableName="Note">
+			<column name="attachedContact_ID" type="BIGINT(19)" />
+			<column name="noteDate" type="date" />
+		</addColumn>
+
+		<addForeignKeyConstraint baseColumnNames="attachedContact_ID"
+			baseTableName="Note" constraintName="FK_Note_ATTACHEDCONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+
+		<!-- drop unused tables. -->
+		<dropTable cascadeConstraints="true" tableName="Contact_Activity" />
+		<dropTable cascadeConstraints="true" tableName="Contact_Note"/>
+
+	</changeSet>
+
+</databaseChangeLog>
+
+ 

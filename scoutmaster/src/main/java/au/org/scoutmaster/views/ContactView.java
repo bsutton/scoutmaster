@@ -107,6 +107,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		medicalTab();
 		backgroundTab();
 		activityTab();
+		noteTab();
 		relationshipTab();
 		googleTab();
 
@@ -291,6 +292,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		//contactTab.setExpandRatio(activityView, 1.0f);
 
 	}
+	
+
+	private void noteTab()
+	{
+		// Now add the child note crud
+		ChildNoteView noteView = new ChildNoteView();
+		noteView.setSizeFull();
+		super.addChildCrudListener(noteView);
+
+		tabs.addTab(noteView, "Note");
+	}
+
 	private void youthTab()
 	{
 		// Youth tab

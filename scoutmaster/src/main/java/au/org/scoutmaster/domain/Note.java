@@ -1,19 +1,19 @@
 package au.org.scoutmaster.domain;
 
+import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
-
-import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity
 @Table(name="Note")
@@ -27,6 +27,17 @@ public class Note extends BaseEntity
 	@Transient
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
+	/**
+	 * The contact that this note was made against.
+	 */
+	@NotNull
+	@ManyToOne
+	private Contact attachedContact;
+	
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date noteDate = new Date();
+	
 	@NotBlank
 	private String subject;
 
@@ -59,17 +70,5 @@ public class Note extends BaseEntity
 		return this.subject;
 	}
 
-	@SuppressWarnings("unchecked")
-	static public List<Note> findNote(String subject)
-	{
-		List<Note> noteList = null;
-		EntityManager em = EntityManagerProvider.getEntityManager();
-
-		Query query = em.createNamedQuery("Note.findMatching");
-		query.setParameter("subject", subject);
-		noteList = query.getResultList();
-
-		return noteList;
-	}
-
+	
 }

@@ -250,9 +250,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
-	// (mappedBy = "contact", cascade = CascadeType.ALL, fetch =
-	// FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="attachedContact")
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
