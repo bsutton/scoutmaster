@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,7 +21,6 @@ import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupRoleDao;
-import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Gender;
@@ -42,7 +40,6 @@ import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.fieldfactory.FieldFactory;
 import com.vaadin.addon.jpacontainer.util.DefaultQueryModifierDelegate;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
@@ -102,13 +99,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewTab();
 		contactTab();
+		relationshipTab();
 		youthTab();
 		memberTab();
 		medicalTab();
 		backgroundTab();
 		activityTab();
 		noteTab();
-		relationshipTab();
 		googleTab();
 
 		// When a persons birth date changes recalculate their age.
@@ -293,6 +290,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	}
 	
+	private void relationshipTab()
+	{
+		// Now add the child relationship crud
+		ChildRelationshipView relationshipView = new ChildRelationshipView();
+		relationshipView.setSizeFull();
+		super.addChildCrudListener(relationshipView);
+
+		tabs.addTab(relationshipView, "Relationship");
+
+	}
+
+	
 
 	private void noteTab()
 	{
@@ -413,19 +422,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
 	}
 
-	private void relationshipTab()
-	{
-		// Background tab
-		SMMultiColumnFormLayout<Contact> relationship = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
-		relationship.setColumnLabelWidth(0, 120);
-		tabs.addTab(relationship, "Relationships");
-		relationship.setMargin(true);
-		relationship.setSizeFull();
-
-		FieldFactory fieldFactory = new FieldFactory();
-		fieldFactory.setVisibleProperties(Contact.class, Contact_.relationships.getName());
-
-	}
 
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
@@ -503,46 +499,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	}
 
-	@Override
-	protected void interceptSaveValues(Contact entity)
-	{
-		// Start by removing all non-detachable tags
-		// so we can re-attach the ones that still apply
-
-		// add built-in tags
-
-		TagDao daoTag = new DaoFactory().getTagDao();
-
-		Iterator<Tag> iter = entity.getTags().iterator();
-		while (iter.hasNext())
-		{
-			Tag tag = iter.next();
-			if (tag.getDetachable() == false)
-			{
-				// HACK: until we have child/parent relationships
-				if (!tag.getName().contains("Parent"))
-					iter.remove();
-			}
-		}
-
-		// Section Tag
-		SectionType section = entity.getSection();
-		if (section != null)
-		{
-			Tag tag = daoTag.findByName(section.getName());
-			if (!entity.getTags().contains(tag))
-				entity.getTags().add(tag);
-		}
-
-		GroupRole role = entity.getRole();
-		for (Tag tag : role.getTags())
-		{
-			entity.getTags().add(tag);
-		}
-
-		//
-
-	}
 
 	@Override
 	public void enter(ViewChangeEvent event)
