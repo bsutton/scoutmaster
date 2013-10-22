@@ -68,7 +68,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 
 		// Add both to a panel
 		VerticalLayout fields = new VerticalLayout(user, password, confirm, loginButton);
-		fields.setCaption("Please enter your username and new password. (your username is your email address)");
+		fields.setCaption("Please enter your username and new password.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
@@ -94,8 +94,8 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 	{
 
 		//
-		// Validate the fields using the navigator. By using validors for the
-		// fields we reduce the amount of queries we have to use to the database
+		// Validate the fields using the navigator. By using validators for the
+		// fields we reduce the amount of queries we have to make to the database
 		// for wrongly entered passwords
 		//
 		if (!user.isValid() || !password.isValid())
