@@ -13,6 +13,7 @@ import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.fields.TagChangeListener;
 import au.org.scoutmaster.fields.TagField;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -59,7 +60,7 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 		this.setSizeFull();
 	}
 
-	public Contact getCurrent()
+	public EntityItem<Contact> getCurrent()
 	{
 		return contactTable.getCurrent();
 	}
