@@ -16,11 +16,13 @@ Check out the sites wiki at https://github.com/bsutton/scoutmaster/wiki for deta
 The aim of version one of Scout Master is the following:
 
 Version 1.0
-Allow the creation of a Contact database that hold member, leader, volenteer and prospect information.
+Allow the creation of a Contact database that hold member, leader, volenteer and prospect information. [complete]
 
-Provide email/sms tools to allow a leader to simply and easily communicate with their Patrol and the Patrol's parents.
+Provide email/sms tools to allow a leader to simply and easily communicate with their Patrol and the Patrol's parents. [complete]
 
 Create and publish event activities as a calendar including meeting times and places.
+
+Track Purchases and payments made by members [under way]
 
 Version 2.0
 Track membership and activity payments, including raising invoices, credit notes and reciepts.
