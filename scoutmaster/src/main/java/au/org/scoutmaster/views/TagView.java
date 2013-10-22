@@ -64,13 +64,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 		return layout;
 	}
 
-	@Override
-	protected void interceptSaveValues(Tag entity)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
@@ -106,14 +100,14 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 
 				// You can't edit builin tags.
 				detachable.setReadOnly(false);
-				super.showDelete(false);
+				super.showActions(false);
 				super.showSaveCancel(false);
 			}
 			else
 			{
 				overviewForm.setReadOnly(false);
 				detachable.setReadOnly(false);
-				super.showDelete(true);
+				super.showActions(true);
 				super.showSaveCancel(true);
 			}
 			builtin.setReadOnly(true);
