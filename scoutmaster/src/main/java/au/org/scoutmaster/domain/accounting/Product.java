@@ -62,4 +62,10 @@ public class Product extends BaseEntity
 	@ManyToOne
 	Organisation supplier;
 
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
 }

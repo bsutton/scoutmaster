@@ -13,36 +13,36 @@ import javax.persistence.Table;
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
-@Table(name="CreditNoteLine")
-public class CreditNoteLine  extends BaseEntity
+@Table(name="PurchaseLine")
+public class PurchaseLine  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * The invoice this InvoiceLine belongs to.
+	 * The purchase this PurchaseLine belongs to.
 	 */
 	@ManyToOne
-	CreditNote creditNote;
+	Purchase purchase;
 	
 	/**
-	 * Controls the order this line item appears in the invoice.
+	 * Controls the order this line item appears in the purchase.
 	 */
 	Integer ordinal; 	
 	
 	/**
-	 * The number of items that need are to be invoiced.
+	 * The number of items that where purchased. 
+	 * Defaults to 1
 	 */
-	BigDecimal quantity;
+	BigDecimal quantity = new BigDecimal(1.00);
 	
 	
 	/**
-	 * The product or service the person is being billed for.
+	 * A description of the item purchased.
 	 */
-	@ManyToOne
-	Product product; 
+	String description;
 	
 	/**
-	 * The cost of of one of the products.
+	 * The cost of of purchased item.
 	 */
 	@Embedded 
 	@AttributeOverrides({
@@ -62,7 +62,7 @@ public class CreditNoteLine  extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return creditNote.getName() + " " + this.ordinal;
+		return description;
 	}
 	
 }

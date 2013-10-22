@@ -9,9 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import au.org.scoutmaster.dao.InvoiceDao;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Contact;
 
@@ -20,17 +23,17 @@ import au.org.scoutmaster.domain.Contact;
 @Table(name="Invoice")
 public class Invoice  extends BaseEntity
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static String INVOICED_PREFIX = "V-";
+
 
 	/**
 	 * The date the invoice was created.
 	 */
 	Date created;
 	
-	String invoiceNo;
+	Long invoiceNo;
 	
 	/**
 	 * The contact the invoice has been raised against.
@@ -67,4 +70,18 @@ public class Invoice  extends BaseEntity
 	 * A descriptive note that appears on the invoice.
 	 */
 	String notes;
+
+	@Override
+	public String getName()
+	{
+		return INVOICED_PREFIX + invoiceNo;
+	}
+	
+	@PrePersist
+	private void prePersist()
+	{
+		InvoiceDao daoInvoice = new DaoFactory().getDao(InvoiceDao.class);
+		invoiceNo = daoInvoice.getNextInvoice();
+	}
+
 }

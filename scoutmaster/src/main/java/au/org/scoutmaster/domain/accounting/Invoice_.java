@@ -8,11 +8,11 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-10-03T10:29:32.666+1000")
+@Generated(value="Dali", date="2013-10-22T20:28:37.006+1100")
 @StaticMetamodel(Invoice.class)
 public class Invoice_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Invoice, Date> created;
-	public static volatile SingularAttribute<Invoice, String> invoiceNo;
+	public static volatile SingularAttribute<Invoice, Long> invoiceNo;
 	public static volatile SingularAttribute<Invoice, Contact> billTo;
 	public static volatile SingularAttribute<Invoice, Date> invoiceDate;
 	public static volatile SingularAttribute<Invoice, Integer> terms;

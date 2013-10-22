@@ -62,5 +62,12 @@ public class InvoiceLine  extends BaseEntity
 	@AttributeOverride(name="money", column=@Column(name="lineTotalMoney"))
 	, @AttributeOverride(name="taxPercentage", column=@Column(name="lineTotalTaxPercentage"))})
 	MoneyWithTax lineTotal;
+
+	@Override
+	public String getName()
+	{
+		// TODO Auto-generated method stub
+		return invoice.getName() + " " + ordinal;
+	}
 	
 }

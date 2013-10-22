@@ -45,4 +45,10 @@ public class Payment extends BaseEntity
 	 * A note that optionally describes the purpose of the payment.
 	 */
 	String note;
+
+	@Override
+	public String getName()
+	{
+		return paymentDate.toString() + note;
+	}
 }
