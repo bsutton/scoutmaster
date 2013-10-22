@@ -32,4 +32,10 @@ public class Feature extends BaseEntity
 	@NotBlank
 	String description;
 
+	@Override
+	public String getName()
+	{
+		return description;
+	}
+
 }

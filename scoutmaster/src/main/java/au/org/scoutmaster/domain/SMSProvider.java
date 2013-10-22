@@ -137,4 +137,10 @@ public class SMSProvider extends BaseEntity
 		this.description = description;
 	}
 
+	@Override
+	public String getName()
+	{
+		return providerName;
+	}
+
 }

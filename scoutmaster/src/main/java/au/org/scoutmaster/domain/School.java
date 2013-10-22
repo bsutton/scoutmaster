@@ -61,4 +61,11 @@ public class School extends BaseEntity
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Contact> youth = new ArrayList<>();
 
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
 }

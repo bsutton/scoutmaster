@@ -51,4 +51,10 @@ public class TransitionMember extends BaseEntity
 
 	Date expextedCompletionDate;
 
+	@Override
+	public String getName()
+	{
+		return youthMember.getFullname();
+	}
+
 }

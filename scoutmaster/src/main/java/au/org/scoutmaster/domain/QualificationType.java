@@ -39,6 +39,12 @@ public class QualificationType extends BaseEntity
 	 */
 	@Embedded
 	Period validFor;
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
 	
 
 }

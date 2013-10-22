@@ -59,4 +59,10 @@ public class SectionMeetingDefaults extends BaseEntity
 	@ManyToOne
 	Address location;
 
+	@Override
+	public String getName()
+	{
+		return section.getName() + " " + meetingNight.toString() + " " + meetingSubject;
+	}
+
 }

@@ -74,6 +74,12 @@ public class Section extends BaseEntity
 	 */
 	@ManyToOne
 	SectionMeetingDefaults meetingDefaults;
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
 	
 	
 }

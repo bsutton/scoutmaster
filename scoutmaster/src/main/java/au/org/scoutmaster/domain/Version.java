@@ -45,4 +45,10 @@ public class Version extends BaseEntity
 				.add("minorVersion", this.minorVersion).add("microVersion", this.microVersion).toString();
 	}
 
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
+
 }

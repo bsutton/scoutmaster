@@ -46,4 +46,10 @@ public class Role extends BaseEntity
 	@ManyToMany
 	List<Feature> permitted = new ArrayList<>();
 
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
 }

@@ -106,4 +106,10 @@ public class Address extends BaseEntity
 
 		return addressList;
 	}
+
+	@Override
+	public String getName()
+	{
+		return this.street + " " + this.city;
+	}
 }

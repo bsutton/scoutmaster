@@ -22,6 +22,14 @@ public class Relationship extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * The contact on the Left Hand Side (LHS) of the
+	 * relationship type.
+	 * 
+	 */
+	@ManyToOne
+	Contact lhs;
+	
+	/**
 	 * The type of relationship
 	 */
 	@ManyToOne
@@ -29,10 +37,27 @@ public class Relationship extends BaseEntity
 	RelationshipType type;
 	
 	/**
-	 * The contact this relation links to.
-	 * of the following.
+	 * The contact on the Right Hand Side (RHS) of the
+	 * relationship type.
 	 */
 	@ManyToOne
-	Contact related;
+	Contact rhs;
+	
+	
+	public void setLHS(Contact lhs)
+	{
+		this.lhs = lhs;
+	}
+	
+	public String toString()
+	{
+		return lhs.getFullname() + " " + type.lhs + " " + rhs.getFullname();
+	}
+
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
 	
 }

@@ -54,7 +54,7 @@ public class ImportUserMapping extends BaseEntity
 
 	public String getMappingName()
 	{
-		return mappingName;
+		return null;
 	}
 
 	public void setMappingName(String mappingName)
@@ -65,5 +65,11 @@ public class ImportUserMapping extends BaseEntity
 	public List<ImportColumnFieldMapping> getColumnFieldMappings()
 	{
 		return columnFieldMappings;
+	}
+
+	@Override
+	public String getName()
+	{
+		return mappingName;
 	}
 }

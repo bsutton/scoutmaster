@@ -112,4 +112,10 @@ public class Event extends BaseEntity
 		this.subject = subject;
 	}
 
+	@Override
+	public String getName()
+	{
+		return subject;
+	}
+
 }

@@ -70,5 +70,11 @@ public class Note extends BaseEntity
 		return this.subject;
 	}
 
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
+
 	
 }

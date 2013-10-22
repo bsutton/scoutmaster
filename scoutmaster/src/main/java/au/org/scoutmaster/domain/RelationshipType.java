@@ -45,6 +45,16 @@ public class RelationshipType extends BaseEntity
 		this.rhs = rhs;
 		this.rhsType = rhsType;
 	}
+	
+	public String toString()
+	{
+		return this.lhs;
+	}
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
 
 	
 }

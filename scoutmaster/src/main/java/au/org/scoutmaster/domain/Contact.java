@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,7 +19,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.AssertTrue;
@@ -37,14 +40,14 @@ import org.joda.time.format.DateTimeParser;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
+{ @NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
 public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
@@ -69,7 +72,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	@FormField(displayName = "Middle Name")
 	private String middlename = "";
-	
+
 	@NotBlank
 	@javax.validation.constraints.Size(min = 1, max = 255)
 	@FormField(displayName = "Lastname")
@@ -145,17 +148,17 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * Member fields
 	 */
 	@FormField(displayName = "Member")
-	@AssertTrue(groups=MemberChecks.class)
+	@AssertTrue(groups = MemberChecks.class)
 	private Boolean isMember = false; // this should be derived from the
 										// member
 	// records.
 
 	@FormField(displayName = "Member No")
-	@NotEmpty(groups=MemberChecks.class)
+	@NotEmpty(groups = MemberChecks.class)
 	private String memberNo = "";
 
 	@FormField(displayName = "Member Since")
-	@Past(groups=MemberChecks.class)
+	@Past(groups = MemberChecks.class)
 	private Date memberSince = new Date(new java.util.Date().getTime()); // this
 																			// should
 	// be
@@ -166,7 +169,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	/** The actual section the Youth or Adult member is attached to. */
 	@FormField(displayName = "Section")
-	@ManyToOne(optional=true)
+	@ManyToOne(optional = true)
 	private SectionType section;
 
 	/**
@@ -197,10 +200,9 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	@FormField(displayName = "Private Medical Fund Name")
 	private String privateMedicalFundName = "";
-	
+
 	@FormField(displayName = "Medical Fund No.")
 	private String medicalFundNo = "";
-
 
 	/**
 	 * Affiliated Adults
@@ -235,12 +237,28 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Has First Aid Certificate")
 	private Boolean hasFirstAidCertificate = false;
 
-	
 	/**
-	 * Things this contact is related to.
+	 * Contacts this contact is related to on the Left Hand Side (LHS)
+	 * of the relationship type.
+	 * 
+	 * e.g. Brett 'Parent Of' Tristan
+	 * 
+	 * Brett is  on the LHS of the relationship
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	private final Set<Relationship> relationships = new HashSet<>();
+	@OneToMany(mappedBy="lhs")
+	private final Set<Relationship> lhsrelationships = new HashSet<>();
+
+
+	/**
+	 * Contacts this contact is related to on the Right Hand Side (RHS)
+	 * of the relationship type.
+	 * 
+	 * e.g. Brett 'Parent Of' Tristan
+	 * 
+	 * Tristan is  on the RHS of the relationship
+	 */
+	@OneToMany(mappedBy="rhs")
+	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
 	 * List of tags used to describe this Contact.
@@ -250,14 +268,14 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="attachedContact")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "attachedContact")
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="withContact")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "withContact")
 	private List<Activity> activites = new ArrayList<>();
 
 	/**
@@ -332,15 +350,16 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.middlename = middlename;
 	}
 
-	@Access(value=AccessType.PROPERTY)
+	@Access(value = AccessType.PROPERTY)
 	public SectionType getSectionEligibility()
 	{
 		ContactDao daoContact = new DaoFactory().getContactDao();
 		SectionType eligibility = daoContact.getSectionEligibilty(this.birthDate);
 		this.sectionEligibility = eligibility;
-		
+
 		return this.sectionEligibility;
 	}
+
 	public void setSectionEligibility(SectionType sectionType)
 	{
 		// do nothing as this is transient and readonly
@@ -474,7 +493,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.prefix = prefix;
 	}
 
-	
 	public void setBirthDate(Date birthDate)
 	{
 		this.birthDate = birthDate;
@@ -810,24 +828,80 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 			setBirthDate(new java.sql.Date(date1.toDate().getTime()));
 		}
 	}
-	
 
 	public void setFullname(String value)
 	{
 		// we ignore the value. The full name is a transient.
 		this.fullname = firstname + " " + lastname;
 	}
+
 	public String getFullname()
 	{
 		return firstname + " " + lastname;
 	}
-	
+
 	@PreRemove
 	private void preRemove()
 	{
 		tags.clear();
-//		activites.isEmpty();
-//		activites.clear();
+		// activites.isEmpty();
+		// activites.clear();
 		notes.clear();
+	}
+	
+	@PrePersist
+	private void prePersist()
+	{
+		resetTags();
+	}
+	
+	@PreUpdate
+	private void preUpdate()
+	{
+		resetTags();
+	}
+	
+	private void resetTags()
+	{
+		// Start by removing all non-detachable tags
+		// so we can re-attach the ones that still apply
+
+		// add built-in tags
+
+		TagDao daoTag = new DaoFactory().getTagDao();
+
+		Iterator<Tag> iter = this.getTags().iterator();
+		while (iter.hasNext())
+		{
+			Tag tag = iter.next();
+			if (tag.getDetachable() == false)
+			{
+				// HACK: until we have child/parent relationships
+				if (!tag.getName().contains("Parent"))
+					iter.remove();
+			}
+		}
+
+		// Section Tag
+		SectionType section = this.getSection();
+		if (section != null)
+		{
+			Tag tag = daoTag.findByName(section.getName());
+			if (!this.getTags().contains(tag))
+				this.getTags().add(tag);
+		}
+
+		GroupRole role = this.getRole();
+		for (Tag tag : role.getTags())
+		{
+			this.getTags().add(tag);
+		}
+
+	}
+
+	@Override
+	public String getName()
+	{
+		return this.getFullname();
 	}
 }

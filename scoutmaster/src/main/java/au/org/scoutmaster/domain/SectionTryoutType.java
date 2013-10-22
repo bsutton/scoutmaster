@@ -60,4 +60,10 @@ public class SectionTryoutType extends BaseEntity
 	 */
 	Money cost;
 
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
 }

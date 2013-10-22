@@ -41,4 +41,10 @@ public class Qualification extends BaseEntity
 	 */
 	Date expires;
 
+	@Override
+	public String getName()
+	{
+		return leader.getFullname() + " " + type.getName();
+	}
+
 }

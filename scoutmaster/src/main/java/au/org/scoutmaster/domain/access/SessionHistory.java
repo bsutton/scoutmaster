@@ -26,4 +26,11 @@ public class SessionHistory  extends BaseEntity
 	
 	@ManyToOne
 	User user;
+
+	@Override
+	public String getName()
+	{
+		// TODO Auto-generated method stub
+		return user.getUsername() + " " + start.toString() + " - " + end.toString();
+	}
 }

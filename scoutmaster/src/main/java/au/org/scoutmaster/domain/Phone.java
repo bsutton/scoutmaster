@@ -86,4 +86,9 @@ public class Phone extends BaseEntity
 	{
 		return phoneNo;
 	}
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
 }

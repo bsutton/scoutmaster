@@ -79,5 +79,11 @@ public class ForgottenPasswordReset extends BaseEntity
 		return new DateTime(expires);
 	}
 
+	@Override
+	public String getName()
+	{
+		return userWithBadMemory.getUsername() + expires.toString();
+	}
+
 	
 }

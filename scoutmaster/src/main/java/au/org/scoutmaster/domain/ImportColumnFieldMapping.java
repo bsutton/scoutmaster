@@ -48,4 +48,10 @@ public class ImportColumnFieldMapping extends BaseEntity
 		this.userMapping = importUserMapping;
 	}
 
+	@Override
+	public String getName()
+	{
+		return toString();
+	}
+
 }

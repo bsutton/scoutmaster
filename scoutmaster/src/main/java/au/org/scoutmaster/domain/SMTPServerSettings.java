@@ -158,5 +158,11 @@ public class SMTPServerSettings extends BaseEntity
 	{
 		this.bounceEmailAddress = bounceEmailAddress;
 	}
+
+	@Override
+	public String getName()
+	{
+		return this.smtpFQDN;
+	}
 	
 }
