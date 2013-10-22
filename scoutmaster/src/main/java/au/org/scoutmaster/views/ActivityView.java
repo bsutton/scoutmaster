@@ -45,7 +45,6 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	{
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
-		
 
 		SMMultiColumnFormLayout<Activity> overviewForm = new SMMultiColumnFormLayout<Activity>(2, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
@@ -65,28 +64,20 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 		overviewForm.bindTextField("Subject", Activity_.subject);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		
+
 		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Activity_.details, true);
 		detailsEditor.setSizeFull();
 		overviewForm.setExpandRatio(1.0f);
 		
-		
 		layout.addComponent(overviewForm);
-		
 
-		super.showDelete(false);
+		super.showActions(false);
 		super.showNew(false);
 		super.showSaveCancel(false);
 
 		return layout;
 	}
 
-	@Override
-	protected void interceptSaveValues(Activity entity)
-	{
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void enter(ViewChangeEvent event)
