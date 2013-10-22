@@ -21,6 +21,8 @@
 		<class>au.org.scoutmaster.domain.ImportColumnFieldMapping</class>
 		<class>au.org.scoutmaster.domain.Note</class>
 		<class>au.org.scoutmaster.domain.Organisation</class>
+		<class>au.org.scoutmaster.domain.accounting.Purchase</class>
+		<class>au.org.scoutmaster.domain.accounting.PurchaseLine</class>
 		<class>au.org.scoutmaster.domain.Period</class>
 		<class>au.org.scoutmaster.domain.Phone</class>
 		<class>au.org.scoutmaster.domain.Qualification</class>
