@@ -41,6 +41,11 @@ public class DaoFactory
 		return (ContactDao) instantiateDAO(ContactDao.class);
 	}
 
+	public CreditNoteDao getCreditNoteDao()
+	{
+		return (CreditNoteDao) instantiateDAO(CreditNoteDao.class);
+	}
+
 	public EventDao getEventDao()
 	{
 		return (EventDao) instantiateDAO(EventDao.class);
@@ -49,6 +54,12 @@ public class DaoFactory
 	public GroupRoleDao getGroupRoleDao()
 	{
 		return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
+	}
+
+	
+	public InvoiceDao getInvoiceDao()
+	{
+		return (InvoiceDao) instantiateDAO(InvoiceDao.class);
 	}
 
 	public NoteDao getNoteDao()
@@ -81,6 +92,11 @@ public class DaoFactory
 		return (PhoneDao) instantiateDAO(PhoneDao.class);
 	}
 
+	public RelationshipDao getRelationshipDao()
+	{
+		return (RelationshipDao) instantiateDAO(RelationshipDao.class);
+	}
+
 	public SectionTypeDao getSectionTypeDao()
 	{
 		return (SectionTypeDao) instantiateDAO(SectionTypeDao.class);
@@ -99,6 +115,13 @@ public class DaoFactory
 	public UserDao getUserDao()
 	{
 		return (UserDao) instantiateDAO(UserDao.class);
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public <E> E getDao(Class<E> clazz)
+	{
+		return (E) instantiateDAO(clazz);
 	}
 
 	private JpaBaseDao<?, ?> instantiateDAO(Class<?> daoClass)
@@ -120,6 +143,5 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
-
 
 }
