@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
 import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
@@ -167,7 +168,8 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				if (user.isValidPassword(password))
 				{
 					// Store the current user in the service session
-					getSession().setAttribute("user", user);
+					SMSession.INSTANCE.setLoggedInUser(user);
+					
 
 					// Navigate to main view
 					getUI().getNavigator().navigateTo(ContactView.NAME);
