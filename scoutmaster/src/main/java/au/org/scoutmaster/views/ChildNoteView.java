@@ -6,7 +6,6 @@ import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Note;
@@ -75,9 +74,4 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 				new SimpleStringFilter(Note_.body.getName(), filterString, true, false)))));
 	}
 
-	@Override
-	protected void interceptSaveValues(Note entity)
-	{
-		
 	}
-}

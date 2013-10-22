@@ -7,11 +7,11 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
-import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType_;
 import au.org.scoutmaster.domain.Activity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.access.User_;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -48,37 +48,12 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-//		SMMultiColumnFormLayout<Activity> overviewForm = new SMMultiColumnFormLayout<Activity>(1, this.fieldGroup);
-//		overviewForm.setColumnFieldWidth(0, 180);
-////		overviewForm.setColumnLabelWidth(0, 70);
-////		overviewForm.setColumnExpandRatio(0, 1.0f);
-//		overviewForm.setSizeFull();
-//		overviewForm.getFieldGroup().setReadOnly(true);
-//
-//		//overviewForm.colspan(2);
-//		overviewForm.bindDateField("Activity Date", Activity_.activityDate, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
-//		overviewForm.newLine();
-//		overviewForm.bindEntityField("Type", Activity_.type, ActivityType.class, ActivityType_.name);
-//		overviewForm.bindEntityField("Added By", Activity_.addedBy, User.class, User_.username);
-//		overviewForm.newLine();
-//		overviewForm.bindTextField("Subject", Activity_.subject);
-//		overviewForm.newLine();
-//		//overviewForm.colspan(2);
+//		CKEditorEmailField detailsEditor = new CKEditorEmailField(true);
+//		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
+//		layout.addComponent(detailsEditor);
 
-//		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Activity_.details, true);
-//		detailsEditor.setSizeFull();
-//		overviewForm.setExpandRatio(1.0f);
-
-		CKEditorEmailField detailsEditor = new CKEditorEmailField(true);
-		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
-		
-//		layout.addComponent(overviewForm);
-		layout.addComponent(detailsEditor);
-		//layout.setExpandRatio(detailsEditor, 1.0f);
-
-		super.showDelete(false);
+		super.showActions(false);
 		super.showNew(false);
-		super.showSaveCancel(false);
 
 		return layout;
 	}
@@ -94,13 +69,6 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 				new Path(Activity_.withContact, Contact_.firstname).getName(), filterString, true, false)),
 				new SimpleStringFilter(new Path(Activity_.addedBy, User_.username).getName(), filterString, true,
 						false)), new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
-	}
-
-	@Override
-	protected void interceptSaveValues(Activity entity)
-	{
-		// TODO Auto-generated method stub
-
 	}
 
 }
