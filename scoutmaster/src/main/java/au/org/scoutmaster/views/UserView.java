@@ -1,8 +1,11 @@
 package au.org.scoutmaster.views;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -73,10 +76,10 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	}
 
 	@Override
-	protected void interceptSaveValues(User entity)
+	protected void interceptSaveValues(EntityItem<User> item)
 	{
 		if (passwordChanged)
-			entity.setPassword(password.getValue());
+			item.getEntity().setPassword(password.getValue());
 	}
 
 	@Override
@@ -156,6 +159,15 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		password.addValidator(new PasswordValidator("Password"));
 		confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
 
+	}
+
+	@Override
+	protected List<CrudAction<User>> getCrudActions()
+	{
+		List<CrudAction<User>> actions = super.getCrudActions();
+		
+		actions.add(new InviteUserAction());
+		return actions;
 	}
 
 	@Override
