@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Adjust relationship types.. -->
+	<changeSet author="bsutton" id="1.0.22">
+		<addColumn tableName="Relationship">
+			<column name="lhs_ID" type="BIGINT(19)" />
+			<column name="rhs_ID" type="BIGINT(19)" />
+		</addColumn>
+		
+		<addForeignKeyConstraint baseColumnNames="lhs_ID"
+			baseTableName="Relationship" constraintName="FK_Relationship__LHS_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+		<addForeignKeyConstraint baseColumnNames="rhs_ID"
+			baseTableName="Relationship" constraintName="FK_Relationship_RHS_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+			
+		<dropForeignKeyConstraint baseTableName="Relationship" constraintName="FK_Relationship_RELATED_ID"/>
+		
+		<dropColumn tableName="Relationship" columnName="RELATED_ID"/>
+	</changeSet>
+</databaseChangeLog>
+
+ 
