@@ -53,18 +53,19 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		relationshipForm.setColumnFieldWidth(0, 180);
 		relationshipForm.setSizeFull();
 
-//		ComboBox lhs = relationshipForm.bindEntityField("LHS", Relationship_.lhs.getName(), Contact.class, "fullname");
-//		JPAContainer<Relationship> lhscontainer = (JPAContainer<Relationship>) lhs.getContainerDataSource();
-//		lhscontainer.sort(new String[] {Contact_.lastname.getName(), Contact_.firstname.getName()},new boolean[] {true, true});
-//		lhs.setValue(super.getCurrent().get);
+		ComboBox lhs = relationshipForm.bindEntityField("LHS", Relationship_.lhs.getName(), Contact.class, "fullname");
+		//ComboBox lhs = relationshipForm.bindEntityField("LHS", Relationship_.lhs, Contact.class, Contact_.firstname);
+
+		JPAContainer<Relationship> lhscontainer = (JPAContainer<Relationship>) lhs.getContainerDataSource();
+		lhscontainer.sort(new String[] {Contact_.lastname.getName(), Contact_.firstname.getName()},new boolean[] {true, true});
 
 		relationshipForm.newLine();
 		relationshipForm.bindEntityField("Type", Relationship_.type.getName(), RelationshipType.class, RelationshipType_.lhs.getName());
 		ComboBox rhs = relationshipForm.bindEntityField("Related To:", Relationship_.rhs.getName(), Contact.class, "fullname");
+		
 		@SuppressWarnings("unchecked")
 		JPAContainer<Relationship> rhscontainer = (JPAContainer<Relationship>) rhs.getContainerDataSource();
 		rhscontainer.sort(new String[] {Contact_.lastname.getName(), Contact_.firstname.getName()},new boolean[] {true, true});
-		relationshipForm.newLine();
 		
 		layout.addComponent(relationshipForm);
 	
@@ -82,15 +83,15 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	@Override
 	protected void interceptSaveValues(EntityItem<Relationship> entityItem) 
 	{
-		try
-		{
-			entityItem.getEntity().setLHS(translateParentId(super.getParentId()));
-		}
-		catch (InstantiationException | IllegalAccessException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try
+//		{
+//			//entityItem.getEntity().setLHS(translateParentId(super.getParentId()));
+//		}
+//		catch (InstantiationException | IllegalAccessException e)
+//		{
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }
