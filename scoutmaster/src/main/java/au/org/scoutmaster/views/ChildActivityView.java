@@ -48,9 +48,9 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-//		CKEditorEmailField detailsEditor = new CKEditorEmailField(true);
-//		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
-//		layout.addComponent(detailsEditor);
+		CKEditorEmailField detailsEditor = new CKEditorEmailField(true);
+		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
+		layout.addComponent(detailsEditor);
 
 		super.showActions(false);
 		super.showNew(false);
