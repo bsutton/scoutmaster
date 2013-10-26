@@ -5,11 +5,13 @@ import java.util.List;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.SMSProvider_;
+import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -23,14 +25,14 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class MessageDetailsStep  implements WizardStep
+public class MessageDetailsStep implements WizardStep
 {
 
 	private TextField subject;
 	private TextArea message;
 	private Label remaining;
-	
-	//SMFormHelper<SMSProvider> formHelper;
+
+	// SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private ComboBox providers;
 	private MessagingWizardView wizard;
@@ -64,7 +66,11 @@ public class MessageDetailsStep  implements WizardStep
 
 		from = formLayout.bindTextField("From Mobile No.", "from");
 		from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
-		from.setValue(provider.getDefaultSenderID());
+		User user = SMSession.INSTANCE.getLoggedInUser();
+		String senderID = provider.getDefaultSenderID();
+		if (user.getSenderMobile()!= null && user.getSenderMobile().length() > 0)
+			senderID = user.getSenderMobile();
+		from.setValue(senderID);
 		from.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		subject = formLayout.bindTextField("Subject", "subject");
 		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
@@ -99,18 +105,19 @@ public class MessageDetailsStep  implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		recipientCount.setValue("<p><b>" + wizard.getRecipientStep().getRecipientCount() + " recipients have been selected to recieve the following SMS.</b></p>");
-		
+		recipientCount.setValue("<p><b>" + wizard.getRecipientStep().getRecipientCount()
+				+ " recipients have been selected to recieve the following SMS.</b></p>");
+
 		return layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
-		
-		boolean advance = notEmpty("Message", message.getValue()) && notEmpty("From", from.getValue()) && notEmpty("Subject", subject.getValue());
-		
-		
+
+		boolean advance = notEmpty("Message", message.getValue()) && notEmpty("From", from.getValue())
+				&& notEmpty("Subject", subject.getValue());
+
 		if (!advance)
 			Notification.show("Please enter your Mobile, Subject and a Message then click Next");
 		return advance;
@@ -148,4 +155,3 @@ public class MessageDetailsStep  implements WizardStep
 	}
 
 }
-

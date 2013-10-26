@@ -74,6 +74,22 @@ public class User extends BaseEntity
 	 * potential new user that wants to use the same username.
 	 */
 	private Boolean deleted;
+	
+	
+	/**
+	 * Used as the 'sender' mobile when sending bulk mobiles. 
+	 */
+	private String senderMobile;
+
+	public String getSenderMobile()
+	{
+		return senderMobile;
+	}
+
+	public void setSenderMobile(String senderMobile)
+	{
+		this.senderMobile = senderMobile;
+	}
 
 	public String getUsername()
 	{

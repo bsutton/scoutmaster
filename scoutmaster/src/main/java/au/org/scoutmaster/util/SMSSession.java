@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -18,7 +19,6 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
-import com.vaadin.ui.UI;
 
 public class SMSSession implements Closeable
 {
@@ -63,7 +63,7 @@ public class SMSSession implements Closeable
 		ActivityDao daoActivity = new DaoFactory().getActivityDao();
 		ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
 		Activity activity = new Activity();
-		User user = (User) UI.getCurrent().getSession().getAttribute("user");
+		User user = (User) SMSession.INSTANCE.getLoggedInUser();
 		activity.setAddedBy(user);
 		activity.setWithContact(transmission.getContact());
 		activity.setSubject(transmission.getMessage().getSubject());

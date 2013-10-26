@@ -10,6 +10,7 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.menu.Menu;
+import au.com.vaadinutils.validator.MobilePhoneValidator;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
@@ -71,6 +72,12 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		TextField emailAddress = overviewForm.bindTextField("Email Address", User_.emailAddress);
 		emailAddress.addValidator(new com.vaadin.data.validator.EmailValidator("Enter a valid Email Address."));
 		layout.addComponent(overviewForm);
+		overviewForm.bindTextField("Firstname", User_.firstname);
+		overviewForm.bindTextField("Surname", User_.surname);
+		TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
+		emailAddress.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
+		mobile.setDescription("Used when sending bulk emails as the sender phone no.");
+		
 
 		return layout;
 	}
