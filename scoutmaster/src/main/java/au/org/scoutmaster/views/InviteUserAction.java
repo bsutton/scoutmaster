@@ -47,7 +47,7 @@ public class InviteUserAction implements CrudAction<User>
 					@Override
 					public void onOK(final String emailAddress)
 					{
-						InputDialog dialog = new InputDialog(UI.getCurrent(), "Select Username",
+						new InputDialog(UI.getCurrent(), "Select Username",
 								"Enter the Username to assign this new user.", new Recipient()
 								{
 
@@ -114,11 +114,11 @@ public class InviteUserAction implements CrudAction<User>
 								
 								StringBuilder sb = new StringBuilder();
 								sb.append("You have been invited by " + loggedInUser.getFullname() + " to join the Scoutmaster Group management system for "
-										 + scoutGroup.getName() + "\n");
-								sb.append("Use the following link within the next 24 hours to activate your account.");
+										 + scoutGroup.getName() + ".\n\n");
+								sb.append("Use the following link within the next 24 hours to activate your account.\n\n");
 								
-								sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid() + "\n");
-								sb.append("You have been allocated the username '" + user.getUsername() + "which you will need to user each time you login.");
+								sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid() + "\n\n");
+								sb.append("You have been allocated the username '" + user.getUsername() + " which you will need to use each time you login.");
 								email.setMsg(sb.toString());
 								email.addTo(emailAddress);
 								email.send();
@@ -144,6 +144,11 @@ public class InviteUserAction implements CrudAction<User>
 					}
 				});
 		dialog.addValidator(new EmailValidator("You must enter a valid email address."));
+	}
+	
+	public String toString()
+	{
+		return "Invite User";
 	}
 
 }
