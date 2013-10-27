@@ -186,6 +186,12 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 			confirmPassword.setValue("");
 		}
 
+	}
+
+	@Override
+	protected String getTitleText()
+	{
+		return "Users";
 	};
 
 }

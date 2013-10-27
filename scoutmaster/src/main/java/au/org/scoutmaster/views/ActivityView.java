@@ -33,6 +33,7 @@ import com.vaadin.ui.VerticalLayout;
 @Menu(display = "Activity")
 public class ActivityView extends BaseCrudView<Activity> implements View, Selected<Activity>
 {
+
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
@@ -103,6 +104,12 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 				new SimpleStringFilter(new Path(Activity_.withContact, Contact_.firstname).getName(), filterString, true, false)),
 				new SimpleStringFilter(new Path(Activity_.addedBy, User_.username).getName(), filterString, true, false)),
 				new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
+	}
+
+	@Override
+	protected String getTitleText()
+	{
+		return "Activities";
 	}
 
 }

@@ -26,6 +26,7 @@ import com.vaadin.ui.VerticalLayout;
 @Menu(display = "Tag")
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 {
+
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
@@ -115,6 +116,12 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 			super.rowChanged(item);
 
 		}
+	}
+
+	@Override
+	protected String getTitleText()
+	{
+		return "Tags";
 	}
 
 }

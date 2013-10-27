@@ -65,6 +65,12 @@ import com.vaadin.ui.Window;
 @Menu(display = "Contact")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
 {
+	@Override
+	protected String getTitleText()
+	{
+		return "Contacts";
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
