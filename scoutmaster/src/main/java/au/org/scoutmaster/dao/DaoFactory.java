@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import javax.persistence.EntityManager;
 
 import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.domain.BaseEntity;
 
 public class DaoFactory
 {
@@ -119,9 +120,9 @@ public class DaoFactory
 
 	
 	@SuppressWarnings("unchecked")
-	public <E> E getDao(Class<E> clazz)
+	public <D extends JpaBaseDao<E,Long>, E extends BaseEntity>  D getDao(Class<D> clazz)
 	{
-		return (E) instantiateDAO(clazz);
+		return (D) instantiateDAO(clazz);
 	}
 
 	private JpaBaseDao<?, ?> instantiateDAO(Class<?> daoClass)
