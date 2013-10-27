@@ -22,15 +22,26 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 		super(em);
 	}
 
-
 	public JPAContainer<Organisation> makeJPAContainer()
 	{
-		
+
 		JPAContainer<Organisation> contactContainer = super.makeJPAContainer(Organisation.class);
 		contactContainer.addNestedContainerProperty("location.street");
 		contactContainer.addNestedContainerProperty("location.city");
 		contactContainer.addNestedContainerProperty("location.state");
 		contactContainer.addNestedContainerProperty("location.postcode");
+
+		contactContainer.addNestedContainerProperty("phone1.phoneNo");
+		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone1.phoneType");
+
+		contactContainer.addNestedContainerProperty("phone2.phoneNo");
+		contactContainer.addNestedContainerProperty("phone2.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone2.phoneType");
+
+		contactContainer.addNestedContainerProperty("phone3.phoneNo");
+		contactContainer.addNestedContainerProperty("phone3.primaryPhone");
+		contactContainer.addNestedContainerProperty("phone3.phoneType");
 
 		return contactContainer;
 	}

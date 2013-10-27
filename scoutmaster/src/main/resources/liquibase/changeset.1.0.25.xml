@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- add new phone fields. .. -->
+	<changeSet author="bsutton" id="1.0.25.1">
+		
+				<dropForeignKeyConstraint baseTableName="Organisation" constraintName="FK_Organisation_PRIMARYPHONE_ID"/>
+		
+		<renameColumn tableName="Organisation" oldColumnName="primaryPhone_ID"
+			newColumnName="phone1_id" columnDataType="bigint(19)"/>
+		<addColumn tableName="Organisation">
+			<column name="phone2_id" type="bigint(19)" />
+			<column name="phone3_id" type="bigint(19)" />
+		</addColumn>
+	</changeSet>
+	
+	
+	<changeSet author="bsutton" id="1.0.25.2">
+		<addForeignKeyConstraint baseColumnNames="phone1_id"
+			baseTableName="Organisation" constraintName="FK_Organisation__phone1_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Phone" />
+		<addForeignKeyConstraint baseColumnNames="phone2_id"
+			baseTableName="Organisation" constraintName="FK_Organisation__phone2_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Phone" />
+		<addForeignKeyConstraint baseColumnNames="phone3_id"
+			baseTableName="Organisation" constraintName="FK_Organisation__phone3_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Phone" />
+	</changeSet>
+
+</databaseChangeLog>
+
+ 

@@ -15,6 +15,8 @@ import au.org.scoutmaster.views.ActivityView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
+import au.org.scoutmaster.views.OrganisationTypeView;
+import au.org.scoutmaster.views.OrganisationView;
 import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.SectionBulkEmailWizard;
 import au.org.scoutmaster.views.TagView;
@@ -89,6 +91,8 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
 		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
 		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
+		viewMap.add(new ViewMap(OrganisationView.NAME, OrganisationView.class));
+		viewMap.add(new ViewMap(OrganisationTypeView.NAME, OrganisationTypeView.class));
 		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
 				
 

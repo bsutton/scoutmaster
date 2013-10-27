@@ -12,6 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -40,6 +41,8 @@ public class Organisation extends BaseEntity
 
 	public static final String FIND_OUR_SCOUT_GROUP = "Organisation.findOurScoutGroup";
 
+	public static final String PRIMARY_PHONE = "primaryPhone";
+
 	/**
 	 * If true then this organisation represents our local scout group. This
 	 * organisations should be created by the setup wizard.
@@ -53,6 +56,11 @@ public class Organisation extends BaseEntity
 	@NotBlank
 	@Column(unique=true)
 	private String name;
+	
+	/**
+	 * The primary role an organisation takes in connection to the group.
+	 */
+	private OrganisationType organisationType;
 
 	/**
 	 * A description of the organisation and how the group interacts with it.
@@ -70,9 +78,17 @@ public class Organisation extends BaseEntity
 	 */
 	@OneToOne
 	private Address location;
-
-	@OneToOne
+	
+	
+	@Transient
 	private Phone primaryPhone;
+
+
+	private Phone phone1 = new Phone();
+
+	private Phone phone2 = new Phone();
+
+	private Phone phone3 = new Phone();
 	
 
 	/**
@@ -112,16 +128,6 @@ public class Organisation extends BaseEntity
 		this.description = description;
 	}
 
-	public Phone getPrimaryPhone()
-	{
-		return primaryPhone;
-	}
-
-	public void setPrimaryPhone(Phone primaryPhone)
-	{
-		this.primaryPhone = primaryPhone;
-	}
-
 	public String getName()
 	{
 		return name;
@@ -147,5 +153,65 @@ public class Organisation extends BaseEntity
 	{
 		this.tags.add(tag);
 	}
+
+	public Phone getPhone1()
+	{
+		return phone1;
+	}
+
+	public void setPhone1(Phone phone1)
+	{
+		this.phone1 = phone1;
+	}
+
+	public Phone getPhone2()
+	{
+		return phone2;
+	}
+
+	public void setPhone2(Phone phone2)
+	{
+		this.phone2 = phone2;
+	}
+
+	public Phone getPhone3()
+	{
+		return phone3;
+	}
+
+	public void setPhone3(Phone phone3)
+	{
+		this.phone3 = phone3;
+	}
+	
+	public Phone getPrimaryPhone()
+	{
+		Phone primary = null;
+		if (phone1.getPrimaryPhone())
+			primary = phone1;
+		else if (phone2.getPrimaryPhone())
+			primary = phone2;
+		else if (phone3.getPrimaryPhone())
+			primary = phone3;
+		return primary;
+
+	}
+
+	public void setPrimaryPhone(Phone phoneNo)
+	{
+		// No Op
+	}
+
+	public OrganisationType getType()
+	{
+		return organisationType;
+	}
+
+	public void setType(OrganisationType type)
+	{
+		this.organisationType = type;
+	}
+
+
 
 }

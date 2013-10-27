@@ -6,10 +6,68 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<!-- add sendMobile .. -->
-	<changeSet author="bsutton" id="1.0.24">
+	<changeSet author="bsutton" id="1.0.24.1">
 		<addColumn tableName="User">
-			<column name="senderMobile" type="varchar(32)"  />
+			<column name="senderMobile" type="varchar(32)" />
 		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.24.2">
+		<createTable tableName="OrganisationType">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.24.3">
+
+		<createIndex indexName="NAME" tableName="OrganisationType"
+			unique="true">
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.24.4">
+
+		<addColumn tableName="Organisation">
+			<column name="OrganisationType_ID" type="BIGINT(19)" />
+		</addColumn>
+
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.24.5">
+
+		<addForeignKeyConstraint baseColumnNames="OrganisationType_ID"
+			baseTableName="Organisation" constraintName="FK_Organisation__organisationType_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="OrganisationType" />
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.24.6">
+		<insert tableName="OrganisationType">
+			<column name="name" value="Supplier" />
+			<column name="description"
+				value="Supplies goods and or services to the Scout Group at a cost." />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+		<insert tableName="OrganisationType">
+			<column name="name" value="Community Partner" />
+			<column name="description"
+				value="A community group or business that provide Goods or Services to the Scout Group free of charge." />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+
+
 	</changeSet>
 </databaseChangeLog>
 
