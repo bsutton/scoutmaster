@@ -95,7 +95,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private Phone primaryPhone;
 
 	/**
-	 * Adult fields
+	 * Contact fields
 	 */
 
 	@FormField(displayName = "Phone 1")
