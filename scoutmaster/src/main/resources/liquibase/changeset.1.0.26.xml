@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- add purchase table .. -->
+
+	<changeSet author="bsutton" id="1.0.26.1">
+		<createTable tableName="Purchase">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="VARCHAR(64)" />
+			<column name="reason" type="VARCHAR(1023)" />
+			<column name="purchasemethod_id" type="bigint(19)" />
+			<column name="purchasedFrom_id" type="bigint(19)" />
+			<column name="purchasedBy_id" type="bigint(19)" />
+			<column name="approvedBy_id" type="bigint(19)" />
+
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.26.2">
+		<addForeignKeyConstraint baseTableName="Purchase"
+			baseColumnNames="purchasemethod_id" constraintName="FK_Purchase__purchasemethod_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PurchaseMethod" />
+			
+		<addForeignKeyConstraint baseTableName="Purchase"
+			baseColumnNames="purchasedFrom_id" constraintName="FK_Purchase__purchasedFrom_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Organisation" />
+
+		<addForeignKeyConstraint baseTableName="Purchase"
+			baseColumnNames="purchasedBy_id" constraintName="FK_Purchase__purchasedBy_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+		<addForeignKeyConstraint baseTableName="Purchase"
+			baseColumnNames="approvedBy_id" constraintName="FK_Purchase__approvedBy_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+	
+	
+		<changeSet author="bsutton" id="1.0.26.3">
+		<createTable tableName="PurchaseLine">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="purchase_id" type="bigint(19)" />
+			<column name="ordinal" type="int(8)" />
+			<column name="quantity" type="decimal(8,2)" />
+			<column name="description" type="varchar(255)" />
+			<column name="itemCost" type="bigint(19)" />
+			<column name="lineTotal" type="bigint(19)" />
+
+		</createTable>
+	</changeSet>
+	
+</databaseChangeLog>
+
+ 
