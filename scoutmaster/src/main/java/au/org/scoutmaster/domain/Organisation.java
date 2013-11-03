@@ -77,7 +77,7 @@ public class Organisation extends BaseEntity
 	 * The location of the organisation.
 	 */
 	@OneToOne
-	private Address location;
+	private Address location = new Address();
 	
 	
 	@Transient
