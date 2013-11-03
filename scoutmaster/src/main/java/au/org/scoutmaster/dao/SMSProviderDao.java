@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.marre.sms.SmsException;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
 import au.org.scoutmaster.domain.SMSProvider;
@@ -103,9 +104,9 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	}
 
 	@Override
-	public JPAContainer<SMSProvider> makeJPAContainer()
+	public JPAContainer<SMSProvider> createVaadinContainer()
 	{
-		return super.makeJPAContainer(SMSProvider.class);
+		return super.createVaadinContainer();
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType_;
 import au.org.scoutmaster.domain.Activity_;
@@ -25,9 +26,9 @@ public class ActivityDao extends JpaBaseDao<Activity, Long> implements Dao<Activ
 
 
 	@Override
-	public JPAContainer<Activity> makeJPAContainer()
+	public JPAContainer<Activity> createVaadinContainer()
 	{
-		JPAContainer<Activity> container = super.makeJPAContainer(Activity.class);
+		JPAContainer<Activity> container = super.createVaadinContainer();
 		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.lastname).getName());
 		container.addNestedContainerProperty(new Path(Activity_.withContact, Contact_.firstname).getName());
 		container.addNestedContainerProperty(new Path(Activity_.addedBy, User_.username).getName());

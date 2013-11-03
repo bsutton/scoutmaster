@@ -2,6 +2,7 @@ package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.OrganisationType;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -19,10 +20,10 @@ public class OrganisationTypeDao extends JpaBaseDao<OrganisationType, Long> impl
 		super(em);
 	}
 
-	public JPAContainer<OrganisationType> makeJPAContainer()
+	public JPAContainer<OrganisationType> createVaadinContainer()
 	{
 
-		JPAContainer<OrganisationType> contactContainer = super.makeJPAContainer(OrganisationType.class);
+		JPAContainer<OrganisationType> contactContainer = super.createVaadinContainer();
 
 		return contactContainer;
 	}

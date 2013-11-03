@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Tag;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -33,8 +34,8 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	
 	}
 	@Override
-	public JPAContainer<Tag> makeJPAContainer()
+	public JPAContainer<Tag> createVaadinContainer()
 	{
-		return super.makeJPAContainer(Tag.class);
+		return super.createVaadinContainer();
 	}
 }

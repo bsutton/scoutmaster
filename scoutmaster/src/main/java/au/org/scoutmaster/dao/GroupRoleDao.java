@@ -7,10 +7,11 @@ import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.GroupRole;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class GroupRoleDao extends JpaBaseDao<GroupRole, Long> implements Dao<GroupRole, Long>
 {
@@ -37,8 +38,8 @@ public class GroupRoleDao extends JpaBaseDao<GroupRole, Long> implements Dao<Gro
 	}
 
 	@Override
-	public JPAContainer<GroupRole> makeJPAContainer()
+	public JPAContainer<GroupRole> createVaadinContainer()
 	{
-		return super.makeJPAContainer(GroupRole.class);
+		return super.createVaadinContainer();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Organisation;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -22,10 +23,10 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 		super(em);
 	}
 
-	public JPAContainer<Organisation> makeJPAContainer()
+	public JPAContainer<Organisation> createVaadinContainer()
 	{
 
-		JPAContainer<Organisation> contactContainer = super.makeJPAContainer(Organisation.class);
+		JPAContainer<Organisation> contactContainer = super.createVaadinContainer();
 		contactContainer.addNestedContainerProperty("location.street");
 		contactContainer.addNestedContainerProperty("location.city");
 		contactContainer.addNestedContainerProperty("location.state");

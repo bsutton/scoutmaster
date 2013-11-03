@@ -3,8 +3,8 @@ package au.org.scoutmaster.dao.access;
 import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.Dao;
-import au.org.scoutmaster.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -38,7 +38,7 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	}
 	
 	
-	public void updatePassword(User user, String username, String password)
+	public void updatePassword(User user, String password)
 	{
 		user.setPassword(password);
 
@@ -57,9 +57,9 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 		return super.findSingleBySingleParameter(User.FIND_BY_EMAIL, "emailAddress", emailAddressValue);
 	}
 	
-	public JPAContainer<User> makeJPAContainer()
+	public JPAContainer<User> createVaadinContainer()
 	{
-		return super.makeJPAContainer(User.class);
+		return super.createVaadinContainer();
 	}
 
 }

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -151,9 +152,9 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		SectionTypeDao daoSectionType = new SectionTypeDao();
 		return daoSectionType.getEligibleSection(date);
 	}
-	public JPAContainer<Contact> makeJPAContainer()
+	public JPAContainer<Contact> createVaadinContainer()
 	{
-		JPAContainer<Contact> contactContainer = super.makeJPAContainer(Contact.class);
+		JPAContainer<Contact> contactContainer = super.createVaadinContainer();
 		contactContainer.addNestedContainerProperty("phone1.phoneNo");
 		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
 		contactContainer.addNestedContainerProperty("phone1.phoneType");

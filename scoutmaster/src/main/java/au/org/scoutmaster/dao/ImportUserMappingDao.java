@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 
@@ -44,9 +45,9 @@ public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> im
 
 	}
 	@Override
-	public JPAContainer<ImportUserMapping> makeJPAContainer()
+	public JPAContainer<ImportUserMapping> createVaadinContainer()
 	{
-		return super.makeJPAContainer(ImportUserMapping.class);
+		return super.createVaadinContainer();
 	}
 
 

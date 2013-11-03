@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.accounting.CreditNote;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -21,9 +22,9 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 	}
 
 	@Override
-	public JPAContainer<CreditNote> makeJPAContainer()
+	public JPAContainer<CreditNote> createVaadinContainer()
 	{
-		return super.makeJPAContainer(CreditNote.class);
+		return super.createVaadinContainer();
 	}
 
 	public Long getNextCreditNote()

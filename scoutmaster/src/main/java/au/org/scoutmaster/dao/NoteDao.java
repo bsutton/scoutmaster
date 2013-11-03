@@ -2,6 +2,7 @@ package au.org.scoutmaster.dao;
 
 import java.util.List;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Note_;
 
@@ -11,9 +12,9 @@ public class NoteDao extends JpaBaseDao<Note, Long>
 {
 
 	@Override
-	public JPAContainer<Note> makeJPAContainer()
+	public JPAContainer<Note> createVaadinContainer()
 	{
-		return super.makeJPAContainer(Note.class);
+		return super.createVaadinContainer();
 	}
 	
 	

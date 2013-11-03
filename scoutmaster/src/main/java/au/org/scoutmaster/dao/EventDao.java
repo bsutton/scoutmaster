@@ -2,6 +2,7 @@ package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Event;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -20,8 +21,8 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 	}
 	
 	@Override
-	public JPAContainer<Event> makeJPAContainer()
+	public JPAContainer<Event> createVaadinContainer()
 	{
-		return super.makeJPAContainer(Event.class);
+		return super.createVaadinContainer();
 	}
 }

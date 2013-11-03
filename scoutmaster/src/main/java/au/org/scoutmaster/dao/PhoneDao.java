@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Phone;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -30,8 +31,8 @@ public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long
 		return super.findListBySingleParameter(Phone.FIND_BY_NO, "phoneNo", value);
 	}
 	@Override
-	public JPAContainer<Phone> makeJPAContainer()
+	public JPAContainer<Phone> createVaadinContainer()
 	{
-		return super.makeJPAContainer(Phone.class);
+		return super.createVaadinContainer();
 	}
 }

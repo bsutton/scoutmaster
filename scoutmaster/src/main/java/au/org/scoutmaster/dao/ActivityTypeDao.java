@@ -2,6 +2,7 @@ package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.ActivityType_;
 
@@ -25,8 +26,8 @@ public class ActivityTypeDao extends JpaBaseDao<ActivityType, Long> implements D
 		return super.findSingleBySingleParameter(ActivityType.FIND_BY_NAME, ActivityType_.name, name);
 	}
 	@Override
-	public JPAContainer<ActivityType> makeJPAContainer()
+	public JPAContainer<ActivityType> createVaadinContainer()
 	{
-		return super.makeJPAContainer(ActivityType.class);
+		return super.createVaadinContainer();
 	}
 }

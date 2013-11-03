@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
 import au.org.scoutmaster.domain.access.User;
@@ -69,9 +70,9 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 		return reset;
 	}
 	@Override
-	public JPAContainer<ForgottenPasswordReset> makeJPAContainer()
+	public JPAContainer<ForgottenPasswordReset> createVaadinContainer()
 	{
-		return super.makeJPAContainer(ForgottenPasswordReset.class);
+		return super.createVaadinContainer();
 	}
 
 }

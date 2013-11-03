@@ -9,6 +9,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.log4j.Logger;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.views.wizards.mailing.AttachedFile;
 
@@ -54,9 +55,9 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	}
 
 	@Override
-	public JPAContainer<SMTPServerSettings> makeJPAContainer()
+	public JPAContainer<SMTPServerSettings> createVaadinContainer()
 	{
-		return super.makeJPAContainer(SMTPServerSettings.class);
+		return super.createVaadinContainer();
 	}
 
 	/**

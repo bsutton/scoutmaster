@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 
 import org.joda.time.DateTime;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SectionType;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -76,8 +77,8 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	}
 
 	@Override
-	public JPAContainer<SectionType> makeJPAContainer()
+	public JPAContainer<SectionType> createVaadinContainer()
 	{
-		return super.makeJPAContainer(SectionType.class);
+		return super.createVaadinContainer();
 	}
 }
