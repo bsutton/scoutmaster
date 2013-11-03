@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import org.apache.log4j.Logger;
 
-import au.org.scoutmaster.dao.JpaBaseDao;
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.BaseEntity;
 
 import com.vaadin.data.util.converter.Converter;

@@ -2,8 +2,8 @@ package au.org.scoutmaster.domain.converter;
 
 import org.apache.log4j.Logger;
 
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.ActivityType;
 
 public class ActivityTypeConverter extends BaseConverter<ActivityType>
