@@ -12,6 +12,8 @@ import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.views.ActivityView;
+import au.org.scoutmaster.views.AppointmentView;
+import au.org.scoutmaster.views.ChangePasswordView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
@@ -22,8 +24,8 @@ import au.org.scoutmaster.views.SectionBulkEmailWizard;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
-import au.org.scoutmaster.views.wizards.mailing.MailingWizardView;
-import au.org.scoutmaster.views.wizards.messaging.MessagingWizardView;
+import au.org.scoutmaster.views.wizards.mailing.BulkEmailWizardView;
+import au.org.scoutmaster.views.wizards.messaging.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.setup.SetupWizardView;
 
 import com.vaadin.annotations.Push;
@@ -73,28 +75,28 @@ public class NavigatorUI extends UI
 	{
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
-		
+
 		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 		daoSectionType.cacheSectionTypes();
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
-		// viewMap.add(new ViewMap(AppointmentView.NAME,
-		// AppointmentView.class));
+		viewMap.add(new ViewMap(AppointmentView.NAME, AppointmentView.class));
+		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
+		viewMap.add(new ViewMap(BulkSMSWizardView.NAME, BulkSMSWizardView.class));
+		viewMap.add(new ViewMap(BulkEmailWizardView.NAME, BulkEmailWizardView.class));
+		viewMap.add(new ViewMap(ChangePasswordView.NAME, ChangePasswordView.class));
+		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
+		viewMap.add(new ViewMap(OrganisationView.NAME, OrganisationView.class));
+		viewMap.add(new ViewMap(OrganisationTypeView.NAME, OrganisationTypeView.class));
+		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
+		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
 		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
+		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
+
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
-		viewMap.add(new ViewMap(MessagingWizardView.NAME, MessagingWizardView.class));
-		viewMap.add(new ViewMap(MailingWizardView.NAME, MailingWizardView.class));
-		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
-		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
-		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
-		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
-		viewMap.add(new ViewMap(OrganisationView.NAME, OrganisationView.class));
-		viewMap.add(new ViewMap(OrganisationTypeView.NAME, OrganisationTypeView.class));
-		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
-				
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
@@ -141,8 +143,10 @@ public class NavigatorUI extends UI
 
 				if (userCount == 0)
 				{
-					// Deal with recursion. When we navigateTo the setupwizard it comes back through
-					// beforeViewChange so we have to check that aren't aready on our way to the
+					// Deal with recursion. When we navigateTo the setupwizard
+					// it comes back through
+					// beforeViewChange so we have to check that aren't aready
+					// on our way to the
 					// setupview.
 					if (event.getNewView() instanceof SetupWizardView)
 						return true;
@@ -182,6 +186,9 @@ public class NavigatorUI extends UI
 						NavigatorUI.this.menubar = new MenuBuilder(navigator, viewMap).build();
 						NavigatorUI.this.menubar.setWidth("100%");
 						mainLayout.addComponentAsFirst(menubar);
+
+						mainLayout.addComponentAsFirst(menubar);
+
 					}
 				}
 
