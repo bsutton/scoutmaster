@@ -36,7 +36,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Section")
+@Menu(display="Section", path="Test")
 public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, ContactRecipient> implements View
 {
 	private static final long serialVersionUID = 1L;
@@ -64,8 +64,8 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 
 	public SectionBulkEmailWizard()
 	{
-		super(new DaoFactory().getSectionTypeDao().makeJPAContainer(), new DaoFactory().getContactDao()
-				.makeJPAContainer());
+		super(new DaoFactory().getSectionTypeDao().createVaadinContainer(), new DaoFactory().getContactDao()
+				.createVaadinContainer());
 	}
 
 	@Override

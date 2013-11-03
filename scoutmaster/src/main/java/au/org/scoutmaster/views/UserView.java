@@ -34,7 +34,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "User")
+@Menu(display = "Users", path="Admin")
 public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener
 {
 
@@ -92,7 +92,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<User> container = new DaoFactory().getUserDao().makeJPAContainer();
+		JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
 		container.sort(new String[]
 		{ User_.username.getName() }, new boolean[]
 		{ true });

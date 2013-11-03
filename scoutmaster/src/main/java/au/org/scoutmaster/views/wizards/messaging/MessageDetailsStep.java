@@ -35,12 +35,12 @@ public class MessageDetailsStep implements WizardStep
 	// SMFormHelper<SMSProvider> formHelper;
 	private TextField from;
 	private ComboBox providers;
-	private MessagingWizardView wizard;
+	private BulkSMSWizardView wizard;
 	private MultiColumnFormLayout<SMSProvider> formLayout;
 	private VerticalLayout layout;
 	private Label recipientCount;
 
-	public MessageDetailsStep(MessagingWizardView messagingWizardView)
+	public MessageDetailsStep(BulkSMSWizardView messagingWizardView)
 	{
 		wizard = messagingWizardView;
 		

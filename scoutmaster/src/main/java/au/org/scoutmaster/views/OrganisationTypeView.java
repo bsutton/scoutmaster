@@ -21,7 +21,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Organisation Type")
+@Menu(display = "Organisation Types", path="Admin.Lists")
 public class OrganisationTypeView extends BaseCrudView<OrganisationType> implements View, Selected<OrganisationType>
 {
 
@@ -52,7 +52,7 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 		@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class).makeJPAContainer();
+		JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class).createVaadinContainer();
 		container.sort(new String[]
 		{ OrganisationType_.name.getName() }, new boolean[]
 		{ true });

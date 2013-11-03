@@ -33,7 +33,7 @@ public class SelectRecipientsStep implements WizardStep
 	private SearchableContactTable contactTable;
 	private VerticalLayout layout;
 
-	public SelectRecipientsStep(MailingWizardView messagingWizardView)
+	public SelectRecipientsStep(BulkEmailWizardView messagingWizardView)
 	{
 		layout = new VerticalLayout();
 		layout.setMargin(true);
@@ -41,7 +41,7 @@ public class SelectRecipientsStep implements WizardStep
 
 		ContactDao daoContact = new DaoFactory().getContactDao();
 		
-		JPAContainer<Contact> contactContainer = daoContact.makeJPAContainer();
+		JPAContainer<Contact> contactContainer = daoContact.createVaadinContainer();
 		
 		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("First Name", Contact_.firstname)

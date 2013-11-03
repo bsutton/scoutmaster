@@ -18,12 +18,12 @@ public class ConfirmDetailsStep implements WizardStep
 	private TextField subject;
 	private CKEditorEmailField ckEditorTextField;
 	private TextField from;
-	private MailingWizardView messagingWizardView;
+	private BulkEmailWizardView messagingWizardView;
 	private VerticalLayout layout;
 	private Label recipientCount;
 	private MailingDetailsStep details;
 
-	public ConfirmDetailsStep(MailingWizardView messagingWizardView)
+	public ConfirmDetailsStep(BulkEmailWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 		details = messagingWizardView.getDetails();

@@ -28,7 +28,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-@Menu(display = "SMTP Settings")
+@Menu(display = "SMTP Settings", path="Admin")
 public class SMTPSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
 {
 	private static final long serialVersionUID = 1L;

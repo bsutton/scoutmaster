@@ -23,7 +23,7 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Tag")
+@Menu(display = "Tags", path="Admin.Lists")
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 {
 
@@ -69,7 +69,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<Tag> container = new DaoFactory().getTagDao().makeJPAContainer();
+		JPAContainer<Tag> container = new DaoFactory().getTagDao().createVaadinContainer();
 		container.sort(new String[]
 		{ Tag_.name.getName() }, new boolean[]
 		{ true });

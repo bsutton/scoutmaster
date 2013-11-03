@@ -9,6 +9,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
+import au.com.vaadinutils.editors.Recipient;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
@@ -188,7 +189,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 				validator.addValidator(new EmailValidator("Please input your email address"));
 				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
-						"Enter your email address to recieve a test Email", new InputDialog.Recipient()
+						"Enter your email address to recieve a test Email", new Recipient()
 						{
 							public void onOK(String input)
 							{

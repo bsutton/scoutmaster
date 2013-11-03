@@ -36,7 +36,7 @@ public class MailingDetailsStep implements WizardStep
 
 	private TextField from;
 	private ComboBox providers;
-	private MailingWizardView wizard;
+	private BulkEmailWizardView wizard;
 	private VerticalLayout layout;
 	private Label recipientCount;
 	private CKEditorEmailField ckEditorTextField;
@@ -46,7 +46,7 @@ public class MailingDetailsStep implements WizardStep
 	private HashSet<AttachedFile>fileList = new HashSet<>();
 
 
-	public MailingDetailsStep(MailingWizardView messagingWizardView)
+	public MailingDetailsStep(BulkEmailWizardView messagingWizardView)
 	{
 		wizard = messagingWizardView;
 

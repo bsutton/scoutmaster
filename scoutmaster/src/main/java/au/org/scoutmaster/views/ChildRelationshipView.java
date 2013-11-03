@@ -31,7 +31,7 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	{
 		super(Contact.class, Relationship.class, Contact_.id, Relationship_.lhs.getName());
 
-		JPAContainer<Relationship> container = new DaoFactory().getRelationshipDao().makeJPAContainer();
+		JPAContainer<Relationship> container = new DaoFactory().getRelationshipDao().createVaadinContainer();
 		//container.sort(new String[] {new Path(Relationship_.lhs, Contact_.lastname).getName()},new boolean[] {true});
 
 		Builder<Relationship> builder = new HeadingPropertySet.Builder<Relationship>();
@@ -56,6 +56,7 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		ComboBox lhs = relationshipForm.bindEntityField("LHS", Relationship_.lhs.getName(), Contact.class, "fullname");
 		//ComboBox lhs = relationshipForm.bindEntityField("LHS", Relationship_.lhs, Contact.class, Contact_.firstname);
 
+		@SuppressWarnings("unchecked")
 		JPAContainer<Relationship> lhscontainer = (JPAContainer<Relationship>) lhs.getContainerDataSource();
 		lhscontainer.sort(new String[] {Contact_.lastname.getName(), Contact_.firstname.getName()},new boolean[] {true, true});
 

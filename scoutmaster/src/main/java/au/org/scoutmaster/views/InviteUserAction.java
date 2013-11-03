@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.editors.InputDialog;
-import au.com.vaadinutils.editors.InputDialog.Recipient;
+import au.com.vaadinutils.editors.Recipient;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
@@ -22,6 +22,7 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.RandomString;
 import au.org.scoutmaster.util.SMNotification;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.server.VaadinServletService;
 import com.vaadin.ui.Notification.Type;
@@ -38,7 +39,7 @@ public class InviteUserAction implements CrudAction<User>
 	}
 
 	@Override
-	public void exec(BaseCrudView<User> crud, User entity)
+	public void exec(BaseCrudView<User> crud, EntityItem<User> entity)
 	{
 		InputDialog dialog = new InputDialog(UI.getCurrent(), "Invite User",
 				"Enter user's email address to invite them:", new Recipient()

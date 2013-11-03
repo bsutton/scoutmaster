@@ -30,7 +30,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Activity")
+@Menu(display = "Activities")
 public class ActivityView extends BaseCrudView<Activity> implements View, Selected<Activity>
 {
 
@@ -83,7 +83,7 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<Activity> container = new DaoFactory().getActivityDao().makeJPAContainer();
+		JPAContainer<Activity> container = new DaoFactory().getActivityDao().createVaadinContainer();
 		container.sort(new String[] {Activity_.activityDate.getName()},new boolean[] {false});
 
 		Builder<Activity> builder = new HeadingPropertySet.Builder<Activity>();

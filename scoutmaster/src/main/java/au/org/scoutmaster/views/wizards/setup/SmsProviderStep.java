@@ -8,6 +8,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
+import au.com.vaadinutils.editors.Recipient;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.ProgressListener;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -131,7 +132,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 			{
 
 				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.", "Enter your Mobile No. to recieve a test SMS.",
-						new InputDialog.Recipient()
+						new Recipient()
 						{
 							public void onOK(String input)
 							{

@@ -20,6 +20,7 @@ import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.util.SMNotification;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -33,7 +34,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Organisation")
+@Menu(display = "Organisations", path="Admin.Lists")
 public class OrganisationView extends BaseCrudView<Organisation> implements View, Selected<Organisation>
 {
 
@@ -109,7 +110,7 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<Organisation> container = new DaoFactory().getOrganisationDao().makeJPAContainer();
+		JPAContainer<Organisation> container = new DaoFactory().getOrganisationDao().createVaadinContainer();
 		container.sort(new String[]
 		{ Organisation_.name.getName() }, new boolean[]
 		{ true });
@@ -123,16 +124,19 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	@Override
 	protected Filter getContainerFilter(String filterString)
 	{
-		return new Or(new SimpleStringFilter(Organisation_.name.getName(), filterString, true, false),
-				new SimpleStringFilter(Organisation.PRIMARY_PHONE, filterString, true, false));
+		return new Or(new Or(new Or(new SimpleStringFilter(Organisation_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(Organisation_.phone1, filterString, true, false)),
+		new SimpleStringFilter(Organisation_.phone2, filterString, true, false)),
+		new SimpleStringFilter(Organisation_.phone3, filterString, true, false));
 	}
 
-	protected boolean actionClicked(CrudAction<Organisation> action, Organisation entity)
+	@Override
+	protected boolean interceptAction(CrudAction<Organisation> action, EntityItem<Organisation> entity)
 	{
 		boolean allow = true;
 		if (action instanceof CrudActionDelete)
 		{
-			if (entity.isOurScoutGroup())
+			if (entity.getEntity().isOurScoutGroup())
 			{
 				allow = false;
 				SMNotification.show("You can't delete your own Scout Group.", Type.ERROR_MESSAGE);

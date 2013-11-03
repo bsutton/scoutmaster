@@ -62,7 +62,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-@Menu(display = "Contact")
+@Menu(display = "Contacts")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
 {
 	@Override
@@ -509,7 +509,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		JPAContainer<Contact> container = new DaoFactory().getContactDao().makeJPAContainer();
+		JPAContainer<Contact> container = new DaoFactory().getContactDao().createVaadinContainer();
 
 		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)

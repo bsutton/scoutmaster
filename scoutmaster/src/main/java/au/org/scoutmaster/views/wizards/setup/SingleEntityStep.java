@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.org.scoutmaster.dao.JpaBaseDao;
+import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.util.SMFormHelper;
 import au.org.scoutmaster.util.SMNotification;
@@ -36,7 +36,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 	public SingleEntityStep(SetupWizardView setupWizardView, JpaBaseDao<E, Long> entityDao, Class<E> entityClass)
 	{
 		this.entityClass = entityClass;
-		this.container = entityDao.makeJPAContainer();
+		this.container = entityDao.createVaadinContainer();
 		fieldGroup = new ValidatingFieldGroup<E>(entityClass);
 
 	}

@@ -28,7 +28,7 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	{
 		super(Contact.class, Note.class, Contact_.id, Note_.attachedContact.getName());
 
-		JPAContainer<Note> container = new DaoFactory().getNoteDao().makeJPAContainer();
+		JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
 		container.sort(new String[]
 		{ Note_.created.getName() }, new boolean[]
 		{ false });

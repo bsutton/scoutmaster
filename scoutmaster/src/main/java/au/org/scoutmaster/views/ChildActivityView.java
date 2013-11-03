@@ -29,7 +29,7 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 	{
 		super(Contact.class, Activity.class, Contact_.id, Activity_.withContact.getName());
 
-		JPAContainer<Activity> container = new DaoFactory().getActivityDao().makeJPAContainer();
+		JPAContainer<Activity> container = new DaoFactory().getActivityDao().createVaadinContainer();
 		container.sort(new String[] {Activity_.activityDate.getName()},new boolean[] {false});
 
 		Builder<Activity> builder = new HeadingPropertySet.Builder<Activity>();

@@ -16,12 +16,12 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Messaging")
-public class MessagingWizardView extends VerticalLayout implements View, WizardProgressListener
+@Menu(display="Bulk SMS", path="Communication")
+public class BulkSMSWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String NAME = "Messaging";
+	public static final String NAME = "BulkSMS";
 
 	private Wizard wizard;
 	

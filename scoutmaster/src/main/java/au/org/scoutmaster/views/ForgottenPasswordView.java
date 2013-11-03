@@ -7,7 +7,6 @@ import org.apache.commons.mail.SimpleEmail;
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.listener.ClickEventLogged;
-import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
@@ -29,8 +28,6 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-
-@Menu (display="Forgotten Password", path="MenuBar.Admin")
 public class ForgottenPasswordView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;

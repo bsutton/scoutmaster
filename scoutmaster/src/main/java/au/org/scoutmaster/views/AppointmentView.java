@@ -17,7 +17,7 @@ import com.vaadin.ui.Calendar;
 import com.vaadin.ui.VerticalLayout;
 
 /** A start view for navigating to the main view */
-@Menu(display="Appointment")
+@Menu(display="Appointments")
 public class AppointmentView extends VerticalLayout implements View
 {
 	public static final String NAME = "Appointment";
@@ -39,7 +39,7 @@ public class AppointmentView extends VerticalLayout implements View
 	{
 
 		EventDao eventDao = new DaoFactory().getEventDao();
-		JPAContainer<au.org.scoutmaster.domain.Event> container = eventDao.makeJPAContainer();
+		JPAContainer<au.org.scoutmaster.domain.Event> container = eventDao.createVaadinContainer();
 
 		// // Customize the event provider for adding events
 		// // as entities

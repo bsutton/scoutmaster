@@ -122,7 +122,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 			User user = daoUser.findByName(username);
 			if (user != null)
 			{
-				daoUser.updatePassword(user, username, password);
+				daoUser.updatePassword(user, password);
 				// Store the current user in the service session
 				getSession().setAttribute("user", username);
 

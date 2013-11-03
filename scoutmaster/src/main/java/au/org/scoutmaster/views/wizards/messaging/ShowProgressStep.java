@@ -34,7 +34,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@SuppressWarnings("unused")
 	static private Logger logger = Logger.getLogger(ShowProgressStep.class);
 	JPAContainer<? extends Importable> entities;
-	private MessagingWizardView messagingWizardView;
+	private BulkSMSWizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
@@ -43,7 +43,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	private MutableInteger rejected = new MutableInteger(0);
 	private WorkingDialog workDialog;
 
-	public ShowProgressStep(MessagingWizardView messagingWizardView)
+	public ShowProgressStep(BulkSMSWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}

@@ -23,12 +23,12 @@ public class ConfirmDetailsStep implements WizardStep
 	private Label remaining;
 	private TextField from;
 	private TextField provider;
-	private MessagingWizardView messagingWizardView;
+	private BulkSMSWizardView messagingWizardView;
 	private VerticalLayout layout;
 	private Label recipientCount;
 	private MessageDetailsStep details;
 
-	public ConfirmDetailsStep(MessagingWizardView messagingWizardView)
+	public ConfirmDetailsStep(BulkSMSWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 		details = messagingWizardView.getDetails();
