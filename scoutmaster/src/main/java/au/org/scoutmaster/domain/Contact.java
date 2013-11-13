@@ -78,8 +78,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
 
-	@Transient
-	private String fullname;
+//	@Transient
+//	private String fullname;
 
 	@FormField(displayName = "Birth Date")
 	@Past
@@ -238,26 +238,25 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private Boolean hasFirstAidCertificate = false;
 
 	/**
-	 * Contacts this contact is related to on the Left Hand Side (LHS)
-	 * of the relationship type.
+	 * Contacts this contact is related to on the Left Hand Side (LHS) of the
+	 * relationship type.
 	 * 
 	 * e.g. Brett 'Parent Of' Tristan
 	 * 
-	 * Brett is  on the LHS of the relationship
+	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy="lhs")
+	@OneToMany(mappedBy = "lhs")
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
-
 	/**
-	 * Contacts this contact is related to on the Right Hand Side (RHS)
-	 * of the relationship type.
+	 * Contacts this contact is related to on the Right Hand Side (RHS) of the
+	 * relationship type.
 	 * 
 	 * e.g. Brett 'Parent Of' Tristan
 	 * 
-	 * Tristan is  on the RHS of the relationship
+	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy="rhs")
+	@OneToMany(mappedBy = "rhs")
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
@@ -829,11 +828,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		}
 	}
 
-	public void setFullname(String value)
-	{
-		// we ignore the value. The full name is a transient.
-		this.fullname = firstname + " " + lastname;
-	}
+//	public void setFullname(String value)
+//	{
+//		// we ignore the value. The full name is a transient.
+//		this.fullname = firstname + " " + lastname;
+//	}
 
 	public String getFullname()
 	{
@@ -848,19 +847,19 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		// activites.clear();
 		notes.clear();
 	}
-	
+
 	@PrePersist
 	private void prePersist()
 	{
 		resetTags();
 	}
-	
+
 	@PreUpdate
 	private void preUpdate()
 	{
 		resetTags();
 	}
-	
+
 	private void resetTags()
 	{
 		// Start by removing all non-detachable tags
@@ -892,9 +891,12 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		}
 
 		GroupRole role = this.getRole();
-		for (Tag tag : role.getTags())
+		if (role != null)
 		{
-			this.getTags().add(tag);
+			for (Tag tag : role.getTags())
+			{
+				this.getTags().add(tag);
+			}
 		}
 
 	}
