@@ -10,10 +10,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.5</vaadin.version>
+		<vaadin.version>7.1.7</vaadin.version>
 		<liquibase.version>3.0.2</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 
+		<jasperreports.version>5.2.0</jasperreports.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -51,11 +52,6 @@
 	</pluginRepositories>
 	<dependencies>
 		<dependency>
-			<groupId>org.vaadin.addons</groupId>
-			<artifactId>tokenfield</artifactId>
-			<version>7.0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.21</version>
@@ -75,16 +71,17 @@
 			<artifactId>vaadin-client</artifactId>
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>validation-api</artifactId>
+					<groupId>javax.validation</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 			<version>${vaadin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin.addon</groupId>
-			<artifactId>jpacontainer</artifactId>
-			<version>3.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.javassist</groupId>
@@ -190,25 +187,14 @@
 			<version>1.0.0-20051126</version>
 		</dependency>
 
-		<!-- JPA API and RI -->
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>javax.persistence</artifactId>
-			<version>2.1.0</version>
-		</dependency>
-		
-		<!-- Bean Validation API and RI -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.1.0.Final</version>
-		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>5.0.1.Final</version>
 			<!--scope>runtime</scope -->
 		</dependency>
+
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
@@ -264,6 +250,12 @@
 			<artifactId>easyuploads</artifactId>
 			<version>7.0.1</version>
 		</dependency>
+
+		<!-- dependency>
+			<groupId>com.vaadin.addon</groupId>
+			<artifactId>vaadin-touchkit-agpl</artifactId>
+			<version>4.0.0.alpha1</version>
+		</dependency-->
 
 	</dependencies>
 	<build>
@@ -334,7 +326,7 @@
 			</plugin>
 
 
-			<plugin>
+			<!-- plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<version>${liquibase.version}</version>
@@ -354,7 +346,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -407,7 +399,7 @@
 											vaadin-maven-plugin
 										</artifactId>
 										<versionRange>
-											[7.1.0.beta1,)
+											[7.1.7,)
 										</versionRange>
 										<goals>
 											<goal>resources</goal>
