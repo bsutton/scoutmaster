@@ -16,7 +16,7 @@ import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
+import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 

@@ -28,7 +28,7 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.views.wizards.mailing.AttachedFile;
+import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractLayout;
