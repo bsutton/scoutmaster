@@ -12,9 +12,10 @@ import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.views.ActivityView;
-import au.org.scoutmaster.views.AppointmentView;
+import au.org.scoutmaster.views.CalendarView;
 import au.org.scoutmaster.views.ChangePasswordView;
 import au.org.scoutmaster.views.ContactView;
+import au.org.scoutmaster.views.EventView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.OrganisationTypeView;
@@ -23,9 +24,9 @@ import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.SectionBulkEmailWizard;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.UserView;
+import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
+import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
-import au.org.scoutmaster.views.wizards.mailing.BulkEmailWizardView;
-import au.org.scoutmaster.views.wizards.messaging.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.setup.SetupWizardView;
 
 import com.vaadin.annotations.Push;
@@ -81,7 +82,8 @@ public class NavigatorUI extends UI
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
-		viewMap.add(new ViewMap(AppointmentView.NAME, AppointmentView.class));
+		viewMap.add(new ViewMap(CalendarView.NAME, CalendarView.class));
+		viewMap.add(new ViewMap(EventView.NAME, EventView.class));
 		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
 		viewMap.add(new ViewMap(BulkSMSWizardView.NAME, BulkSMSWizardView.class));
 		viewMap.add(new ViewMap(BulkEmailWizardView.NAME, BulkEmailWizardView.class));
