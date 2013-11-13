@@ -1,36 +1,34 @@
 package au.org.scoutmaster.domain.accounting;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import javax.persistence.Basic;
 import javax.persistence.Embeddable;
-
-import org.joda.money.Money;
+import javax.persistence.Embedded;
 
 @Embeddable
 public class MoneyWithTax
 {
-	private final static BigDecimal PERCENTAGEDENOMINATOR = new BigDecimal(100);
-	private final static BigDecimal UNITY = new BigDecimal(1);
-	/**
-	 * The percentage of tax applied to this amount
-	 */
-	@Basic
-	private BigDecimal taxPercentage;
+	private final static FixedDouble PERCENTAGEDENOMINATOR = new FixedDouble(100, 0);
+	private final static FixedDouble UNITY = new FixedDouble(1, 0);
+	
 	
 	/**
 	 * The money without the tax included.
 	 */
-	@Basic
+	@Embedded
 	private Money money;
+	
+	/**
+	 * The percentage of tax applied to this amount
+	 */
+	@Embedded
+	private FixedDouble taxPercentage;
+
 	
 	MoneyWithTax()
 	{
 		
 	}
 	
-	MoneyWithTax(Money money, BigDecimal taxPercentage)
+	MoneyWithTax(Money money, FixedDouble taxPercentage)
 	{
 		this.money = money;
 		this.taxPercentage = taxPercentage;
@@ -38,6 +36,29 @@ public class MoneyWithTax
 
 	Money getAmountWithTax()
 	{
-		return money.multipliedBy(taxPercentage.add(UNITY).divide(PERCENTAGEDENOMINATOR), RoundingMode.HALF_EVEN);
+		return money.multiply(taxPercentage.add(UNITY).divide(PERCENTAGEDENOMINATOR));
 	}
+	
+//	public FixedDouble getTaxPercentage()
+//	{
+//		return taxPercentage;
+//	}
+//
+//	public void setTaxPercentage(FixedDouble taxPercentage)
+//	{
+//		this.taxPercentage = taxPercentage;
+//	}
+	
+//	public MyCurrency getMoney()
+//	{
+//		return money;
+//	}
+//
+//	public void setMoney(MyCurrency money)
+//	{
+//		this.money = money;
+//	}
+//
+
+
 }
