@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
-import au.org.scoutmaster.views.wizards.mailing.AttachedFile;
+import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 

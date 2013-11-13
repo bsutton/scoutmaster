@@ -11,8 +11,8 @@ import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.util.SMSSession;
-import au.org.scoutmaster.views.wizards.messaging.Message;
-import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
+import au.org.scoutmaster.views.wizards.bulkSMS.Message;
+import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
