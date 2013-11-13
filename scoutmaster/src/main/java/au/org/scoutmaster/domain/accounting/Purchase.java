@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,11 +22,25 @@ public class Purchase  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
+	
+	/**
+	 * A high level description of what was purchased.
+	 */
+	String description;
+	
+	/**
+	 * The reason the goods or services where purchases
+	 */
+	String reason;
+
+
 	/**
 	 * How the purchase was made. Either direct purchase or an expense claim.
 	 * 
 	 * For a direct purchase
 	 */
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "enum('DIRECT_PURCHASE', 'EXPENSE_CLAIM'")
 	PurchaseMethod method;
 
 	/**
@@ -48,16 +65,7 @@ public class Purchase  extends BaseEntity
 	 */
 	Contact approvedBy;
 	
-	/**
-	 * The reason the goods or services where purchases
-	 */
-	String reason;
-	
-	/**
-	 * A high level description of what was purchased.
-	 */
-	String description;
-	
+		
 	@OneToMany(cascade = CascadeType.ALL)
 	List<PurchaseLine> purchaseLines = new ArrayList<>();
 

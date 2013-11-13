@@ -20,7 +20,7 @@ import au.org.scoutmaster.domain.Organisation;
  * 
  */
 @Entity
-@Table(name="Product")
+@Table(name = "Product")
 public class Product extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -38,10 +38,14 @@ public class Product extends BaseEntity
 	/**
 	 * The cost of the product or service.
 	 */
-	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "money", column = @Column(name = "costtMoney")),
-			@AttributeOverride(name = "taxPercentage", column = @Column(name = "costTaxPercentage")) })
+	{
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue")),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision")),
+			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue")),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision")),
+
+	})
 	MoneyWithTax cost;
 
 	/**
@@ -49,8 +53,13 @@ public class Product extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "money", column = @Column(name = "chargeMoney")),
-			@AttributeOverride(name = "taxPercentage", column = @Column(name = "chargeTaxPercentage")) })
+	{
+			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "chargeMoneyValue")),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "chargeMoneyPrecision")),
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "chargeTaxPercentageValue")),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "chargeTaxPercentagePrecision"))
+
+	})
 	MoneyWithTax charge;
 
 	/**
