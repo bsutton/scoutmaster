@@ -8,7 +8,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.GroupRole;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -29,12 +28,12 @@ public class GroupRoleDao extends JpaBaseDao<GroupRole, Long> implements Dao<Gro
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Contact> findByName(String name)
+	public List<GroupRole> findByName(String name)
 	{
 		Query query = entityManager.createNamedQuery(GroupRole.FIND_BY_NAME);
 		query.setParameter("name", name);
-		List<Contact> resultContacts = query.getResultList();
-		return resultContacts;
+		List<GroupRole> results = query.getResultList();
+		return results;
 	}
 
 	@Override
