@@ -17,8 +17,8 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.SMSProvider_;
-import au.org.scoutmaster.views.wizards.messaging.Message;
-import au.org.scoutmaster.views.wizards.messaging.SMSTransmission;
+import au.org.scoutmaster.views.wizards.bulkSMS.Message;
+import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -134,7 +134,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.", "Enter your Mobile No. to recieve a test SMS.",
 						new Recipient()
 						{
-							public void onOK(String input)
+							public boolean onOK(String input)
 							{
 								Phone recipient = new Phone(input);
 								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", new Phone(SmsProviderStep.this.senderId.getValue()));
@@ -158,12 +158,14 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 								{
 									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
 								}
+								return true;
 							}
 
 							@Override
-							public void onCancel()
+							public boolean onCancel()
 							{
 								Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
+								return true;
 								
 							}
 						}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));

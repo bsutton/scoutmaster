@@ -191,7 +191,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new Recipient()
 						{
-							public void onOK(String input)
+							public boolean onOK(String input)
 							{
 								String toEmailAddress = input;
 
@@ -216,13 +216,13 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 									logger.error(e,e);
 									SMNotification.show(e, Type.ERROR_MESSAGE);
 								}
+								return true;
 							}
 
 							@Override
-							public void onCancel()
+							public boolean onCancel()
 							{
-								// TODO Auto-generated method stub
-
+								return true;
 							}
 						}).addValidator(validator);
 
