@@ -550,6 +550,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
 
 				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
+				Join<Contact, GroupRole> groupRoleJoin = fromContact.join(Contact_.groupRole, JoinType.LEFT);
 
 				if (filterString != null && filterString.trim().length() >= 0)
 				{
@@ -562,13 +563,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 							builder.like(builder.upper(fromContact.get(Contact_.lastname)),
 									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
 
+					// Section
 					fullTextSearchPredicate = builder.or(
 							builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
 									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
 
+					// Group Role
 					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(fromContact.get(Contact_.groupRole).get(GroupRole_.name)), "%"
-									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+							builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
+									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
+//					fullTextSearchPredicate = builder.or(
+//							builder.like(builder.upper(fromContact.get(Contact_.groupRole).get(GroupRole_.name)), "%"
+//									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
 
 					fullTextSearchPredicate = builder.or(
 							builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"

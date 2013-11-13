@@ -30,6 +30,7 @@ import com.vaadin.ui.UI;
 
 public class InviteUserAction implements CrudAction<User>
 {
+	private static final long serialVersionUID = 1L;
 	Logger logger = Logger.getLogger(InviteUserAction.class);
 	
 	@Override
@@ -46,25 +47,28 @@ public class InviteUserAction implements CrudAction<User>
 				{
 
 					@Override
-					public void onOK(final String emailAddress)
+					public boolean onOK(final String emailAddress)
 					{
 						new InputDialog(UI.getCurrent(), "Select Username",
 								"Enter the Username to assign this new user.", new Recipient()
 								{
 
 									@Override
-									public void onOK(final String username)
+									public boolean onOK(final String username)
 									{
 										// Email the user a token.
 										inviteUser(username, emailAddress);
+										return true;
 									}
 
 									@Override
-									public void onCancel()
+									public boolean onCancel()
 									{
+										return true;
 									}
 
 								});
+						return true;
 
 					}
 
@@ -138,10 +142,9 @@ public class InviteUserAction implements CrudAction<User>
 					}
 
 					@Override
-					public void onCancel()
+					public boolean onCancel()
 					{
-						// TODO Auto-generated method stub
-
+						return true;
 					}
 				});
 		dialog.addValidator(new EmailValidator("You must enter a valid email address."));
