@@ -47,8 +47,6 @@ public class Activity extends BaseEntity implements CrudEntity
 	/**
 	 * The date/time the activity occurred.
 	 */
-//	@Converter(name="DateTime", converterClass=org.joda.time.contrib.eclipselink.DateTimeConverter.class)
-//	@Convert(value="DateTime")
 	@Temporal(value=TemporalType.TIMESTAMP)
 	private Date activityDate = new Date(); // DateTime.now();
 	
