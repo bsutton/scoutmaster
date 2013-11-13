@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- create event_document table an link events to documents .. -->
+
+	<changeSet author="bsutton" id="1.0.28.1">
+		<createTable tableName="Event_Document">
+			<column name="event_id" type="bigint(19)" />
+			<column name="document_id" type="bigint(19)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.28.2">
+		<addPrimaryKey columnNames="event_id, document_id"
+			constraintName="pk_event_document" tableName="Event_Document" />
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.28.3">
+		<addForeignKeyConstraint baseTableName="Event_Document"
+			baseColumnNames="event_id" constraintName="FK_Event_Document__Event_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Event" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.28.4">
+		<addForeignKeyConstraint baseTableName="Event_Document"
+			baseColumnNames="document_id" constraintName="FK_Event_Document__Document_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Document" />
+	</changeSet>
+
+</databaseChangeLog>
+
+ 

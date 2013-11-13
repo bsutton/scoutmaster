@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- wrong column name -->
+
+	<changeSet author="bsutton" id="1.0.31.1">
+		<dropForeignKeyConstraint baseTableName="Event_Document"
+			constraintName="FK_Event_Document__Document_id" />
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.31.2">
+		<renameColumn tableName="Event_Document" oldColumnName="document_id"
+			newColumnName="documents_id" columnDataType="bigint(19)" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.31.3">
+		<addForeignKeyConstraint baseTableName="Event_Document"
+			baseColumnNames="documents_id" constraintName="FK_Event_Document__Document_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Document" />
+	</changeSet>
+
+
+</databaseChangeLog>
+
+ 

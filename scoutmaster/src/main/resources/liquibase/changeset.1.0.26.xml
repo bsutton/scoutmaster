@@ -26,12 +26,18 @@
 
 		</createTable>
 	</changeSet>
+	
+	<!--  change the purchasemethod to reflect that it is an enum -->
 	<changeSet author="bsutton" id="1.0.26.2">
-		<addForeignKeyConstraint baseTableName="Purchase"
-			baseColumnNames="purchasemethod_id" constraintName="FK_Purchase__purchasemethod_id"
-			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
-			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="PurchaseMethod" />
-			
+
+		<dropColumn tableName="Purchase" columnName="purchasemethod_id" />
+
+		<addColumn tableName="Purchase">
+			<column name="purchasemethod" type="varchar(32)" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.26.3">
 		<addForeignKeyConstraint baseTableName="Purchase"
 			baseColumnNames="purchasedFrom_id" constraintName="FK_Purchase__purchasedFrom_id"
 			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
@@ -47,9 +53,9 @@
 			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
 			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
 	</changeSet>
-	
-	
-		<changeSet author="bsutton" id="1.0.26.3">
+
+
+	<changeSet author="bsutton" id="1.0.26.4">
 		<createTable tableName="PurchaseLine">
 			<column autoIncrement="true" name="ID" type="BIGINT(19)">
 				<constraints primaryKey="true" />
@@ -68,7 +74,7 @@
 
 		</createTable>
 	</changeSet>
-	
+
 </databaseChangeLog>
 
  

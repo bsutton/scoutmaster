@@ -7,18 +7,19 @@
 
 	<!-- add new phone fields. .. -->
 	<changeSet author="bsutton" id="1.0.25.1">
-		
-				<dropForeignKeyConstraint baseTableName="Organisation" constraintName="FK_Organisation_PRIMARYPHONE_ID"/>
-		
+
+		<dropForeignKeyConstraint baseTableName="Organisation"
+			constraintName="FK_Organisation_PRIMARYPHONE_ID" />
+
 		<renameColumn tableName="Organisation" oldColumnName="primaryPhone_ID"
-			newColumnName="phone1_id" columnDataType="bigint(19)"/>
+			newColumnName="phone1_id" columnDataType="bigint(19)" />
 		<addColumn tableName="Organisation">
 			<column name="phone2_id" type="bigint(19)" />
 			<column name="phone3_id" type="bigint(19)" />
 		</addColumn>
 	</changeSet>
-	
-	
+
+
 	<changeSet author="bsutton" id="1.0.25.2">
 		<addForeignKeyConstraint baseColumnNames="phone1_id"
 			baseTableName="Organisation" constraintName="FK_Organisation__phone1_ID"

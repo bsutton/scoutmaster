@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- create document table an link events to it .. -->
+
+	<changeSet author="bsutton" id="1.0.27.1">
+		<createTable tableName="Document">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="addedBy_ID" type="bigint(19)" />
+			<column name="description" type="VARCHAR(64)" />
+			<column name="filename" type="varchar(256)" />
+			<column name="content" type="longblob" />
+		</createTable>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.27.2">
+		<addForeignKeyConstraint baseTableName="Document"
+			baseColumnNames="addedBy_id" constraintName="FK_Document__User_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="User" />
+	</changeSet>
+
+
+	<!-- link event to document and address tables. -->
+	<changeSet author="bsutton" id="1.0.27.3">
+
+		<addColumn tableName="Event">
+			<column name="location_id" type="bigint(19)" />
+			<column name="document_id" type="bigint(19)" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.27.4">
+		<addForeignKeyConstraint baseTableName="Event"
+			baseColumnNames="location_id" constraintName="FK_Event_Location_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Address" />
+		<addForeignKeyConstraint baseTableName="Event"
+			baseColumnNames="document_id" constraintName="FK_Event_Document_id"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Document" />
+	</changeSet>
+
+</databaseChangeLog>
+
+ 
