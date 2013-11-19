@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -10,6 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name="SMSProvider")
 @Table(name="SMSProvider")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name")

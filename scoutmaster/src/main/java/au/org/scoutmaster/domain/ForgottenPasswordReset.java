@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -24,6 +26,7 @@ import au.org.scoutmaster.domain.access.User;
 
 @Entity(name="ForgottenPasswordReset")
 @Table(name="ForgottenPasswordReset")
+@Access(AccessType.FIELD)
 @NamedQueries(
 // We order the set just incase we get two identical random strings (but almost
 // impossible)

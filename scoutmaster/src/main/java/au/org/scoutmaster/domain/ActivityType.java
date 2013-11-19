@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -16,6 +18,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="ActivityType")
 @Table(name="ActivityType")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = ActivityType.FIND_BY_NAME, query = "SELECT activitytype FROM ActivityType activitytype where activitytype.name = :name"), })

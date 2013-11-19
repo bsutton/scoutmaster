@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +23,7 @@ import org.joda.money.Money;
  */
 @Entity(name="SectionTryoutType")
 @Table(name="SectionTryoutType")
+@Access(AccessType.FIELD)
 public class SectionTryoutType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

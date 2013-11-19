@@ -1,11 +1,14 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="OrganisationType")
+@Access(AccessType.FIELD)
 public class OrganisationType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

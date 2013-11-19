@@ -83,11 +83,13 @@ public class Organisation extends BaseEntity
 	@Transient
 	private Phone primaryPhone;
 
-
+	@OneToOne
 	private Phone phone1 = new Phone();
 
+	@OneToOne
 	private Phone phone2 = new Phone();
 
+	@OneToOne
 	private Phone phone3 = new Phone();
 	
 

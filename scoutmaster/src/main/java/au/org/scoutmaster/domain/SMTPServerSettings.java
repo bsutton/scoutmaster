@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
@@ -19,6 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="EMailServerSettings")
 @Table(name="EMailServerSettings")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 })

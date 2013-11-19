@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name="RelationshipType")
 @Table(name="RelationshipType")
+@Access(AccessType.FIELD)
 public class RelationshipType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

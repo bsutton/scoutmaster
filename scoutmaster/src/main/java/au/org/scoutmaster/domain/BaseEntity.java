@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,7 @@ import au.com.vaadinutils.crud.CrudEntity;
  * 
  */
 @MappedSuperclass
+@Access(AccessType.FIELD)
 abstract public class BaseEntity implements Serializable, CrudEntity
 {
 

@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="QualificationType")
 @Table(name="QualificationType")
+@Access(AccessType.FIELD)
 public class QualificationType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

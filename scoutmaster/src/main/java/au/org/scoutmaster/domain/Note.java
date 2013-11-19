@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -17,6 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name="Note")
+@Access(AccessType.FIELD)
 @NamedQueries(
 { @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
 		@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })

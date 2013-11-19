@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +27,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="Household")
 @Table(name="Household")
+@Access(AccessType.FIELD)
 public class Household extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

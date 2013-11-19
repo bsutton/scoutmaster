@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -21,6 +23,7 @@ import org.pojomatic.annotations.AutoProperty;
  */
 @Entity(name="Tag")
 @Table(name="Tag")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })

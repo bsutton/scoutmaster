@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -17,6 +19,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name="Relationship")
 @Table(name="Relationship")
+@Access(AccessType.FIELD)
 public class Relationship extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

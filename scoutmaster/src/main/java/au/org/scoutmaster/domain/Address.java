@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.NamedQueries;
@@ -14,6 +16,7 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity(name="Address")
 @Table(name="Address")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "

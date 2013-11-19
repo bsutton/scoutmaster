@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +23,7 @@ import javax.persistence.Table;
  */
 @Entity(name="ImportUserMapping")
 @Table(name="ImportUserMapping")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 		@NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })

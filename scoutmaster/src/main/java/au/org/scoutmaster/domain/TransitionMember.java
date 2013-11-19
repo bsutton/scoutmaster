@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -15,7 +17,8 @@ import javax.persistence.Table;
  * 
  */
 @Entity(name="TransitionMember")
-@Table(name="Activity")
+@Table(name="TransitionMember")
+@Access(AccessType.FIELD)
 public class TransitionMember extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -13,6 +13,7 @@ import com.google.gwt.thirdparty.guava.common.base.Objects;
  */
 @Entity(name="Version")
 @Table(name="Version")
+TransitionMember
 public class Version extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -26,6 +28,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="SectionType")
 @Table(name="SectionType")
+@Access(AccessType.FIELD)
 @NamedQueries(
 
 { 

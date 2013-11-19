@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain;
 
 import java.util.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -24,6 +26,7 @@ import au.org.scoutmaster.domain.access.User;
  */
 @Entity
 @Table(name="Activity")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 })

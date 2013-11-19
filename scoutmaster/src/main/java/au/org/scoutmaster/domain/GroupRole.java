@@ -5,6 +5,8 @@ package au.org.scoutmaster.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,6 +28,7 @@ import javax.persistence.Table;
  */
 @Entity(name="GroupRole")
 @Table(name="GroupRole")
+@Access(AccessType.FIELD)
 
 @NamedQueries(
 {

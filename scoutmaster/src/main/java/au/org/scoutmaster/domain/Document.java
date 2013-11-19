@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
@@ -19,6 +21,7 @@ import au.org.scoutmaster.domain.access.User;
  */
 @Entity
 @Table(name="Document")
+@Access(AccessType.FIELD)
 @NamedQueries(
 {
 })

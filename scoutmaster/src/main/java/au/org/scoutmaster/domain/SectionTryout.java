@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -16,6 +18,7 @@ import au.org.scoutmaster.domain.accounting.MoneyWithTax;
  */
 @Entity(name = "SectionTryout")
 @Table(name = "SectionTryout")
+@Access(AccessType.FIELD)
 public class SectionTryout extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
