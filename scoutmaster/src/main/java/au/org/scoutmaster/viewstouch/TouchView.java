@@ -1,8 +1,5 @@
 package au.org.scoutmaster.viewstouch;
 
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.TextField;
 
 // Define a view
 public class TouchView //extends NavigationView
