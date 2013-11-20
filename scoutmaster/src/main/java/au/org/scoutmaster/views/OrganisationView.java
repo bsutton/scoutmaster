@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.CrudActionDelete;
+import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -63,14 +64,18 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 		overviewForm.setColumnFieldWidth(1, 100);
 		overviewForm.setColumnFieldWidth(2, 20);
 		overviewForm.setSizeFull();
+		
+		FormHelper<Organisation> formHelper = overviewForm.getFormHelper();
+
 
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Name", Organisation_.name);
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Description", Organisation_.description);
 		overviewForm.colspan(3);
-		overviewForm.bindEntityField("Type", Organisation_.organisationType, OrganisationType.class,
-				OrganisationType_.name);
+		formHelper.new EntityFieldBuilder<OrganisationType>()
+				.setLabel("Type").setField( Organisation_.organisationType).setListFieldName(OrganisationType_.name).build();
+
 		overviewForm.newLine();
 
 		overviewForm.bindTextField("Phone 1", "phone1.phoneNo");

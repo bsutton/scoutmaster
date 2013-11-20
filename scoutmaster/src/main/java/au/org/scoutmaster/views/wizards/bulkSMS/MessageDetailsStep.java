@@ -10,7 +10,6 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
-import au.org.scoutmaster.domain.SMSProvider_;
 import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.data.validator.StringLengthValidator;
@@ -51,13 +50,16 @@ public class MessageDetailsStep implements WizardStep
 		formLayout = new MultiColumnFormLayout<>(1, null);
 		formLayout.setColumnFieldWidth(0, 500);
 		formLayout.setSizeFull();
-
-		providers = formLayout.bindEntityField("Provider", SMSProvider_.providerName, SMSProvider.class, SMSProvider_.providerName);
+		
 		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 		List<SMSProvider> list = daoSMSProvider.findAll();
 		if (list.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
 		SMSProvider provider = list.get(0);
+
+		providers = new ComboBox("Provider");
+		providers.setContainerDataSource(daoSMSProvider.createVaadinContainer());
+		
 		providers.select(provider.getId());
 		
 		recipientCount = new Label();

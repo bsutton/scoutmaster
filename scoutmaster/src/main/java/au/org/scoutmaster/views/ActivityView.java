@@ -3,6 +3,7 @@ package au.org.scoutmaster.views;
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -53,14 +54,25 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
+		
+		FormHelper<Activity> formHelper = overviewForm.getFormHelper();
+
 
 		overviewForm.bindDateField("Activity Date", Activity_.activityDate, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
 		overviewForm.newLine();
-		overviewForm.bindEntityField("Type", Activity_.type, ActivityType.class, ActivityType_.name);
+		
+		formHelper.new EntityFieldBuilder<ActivityType>()
+				.setLabel("Type").setField(Activity_.type).setListFieldName(ActivityType_.name).build();
+
 		overviewForm.newLine();
-		overviewForm.bindEntityField("Added By", Activity_.addedBy, User.class, User_.username);
+		
+		formHelper.new EntityFieldBuilder<User>()
+			.setLabel("Added By").setField(Activity_.addedBy).setListFieldName(User_.username).build();
+		
 		overviewForm.newLine();
-		overviewForm.bindEntityField("With Contact", Activity_.withContact.getName(), Contact.class, "fullname");
+		formHelper.new EntityFieldBuilder<Contact>()
+			.setLabel("With Contact").setField(Activity_.withContact).setListFieldName("fullname").build();
+	
 		overviewForm.newLine();
 		overviewForm.bindTextField("Subject", Activity_.subject);
 		overviewForm.newLine();
@@ -72,7 +84,7 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 		
 		layout.addComponent(overviewForm);
 
-		super.showActions(false);
+		super.enableActions(false);
 		super.showNew(false);
 		super.showSaveCancel(false);
 

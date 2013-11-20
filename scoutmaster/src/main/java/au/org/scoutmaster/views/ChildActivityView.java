@@ -52,7 +52,7 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
 		layout.addComponent(detailsEditor);
 
-		super.showActions(false);
+		super.enableActions(false);
 		super.showNew(false);
 
 		return layout;

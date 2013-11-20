@@ -101,14 +101,14 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 
 				// You can't edit builin tags.
 				detachable.setReadOnly(false);
-				super.showActions(false);
+				super.enableActions(false);
 				super.showSaveCancel(false);
 			}
 			else
 			{
 				overviewForm.setReadOnly(false);
 				detachable.setReadOnly(false);
-				super.showActions(true);
+				super.enableActions(true);
 				super.showSaveCancel(true);
 			}
 			builtin.setReadOnly(true);

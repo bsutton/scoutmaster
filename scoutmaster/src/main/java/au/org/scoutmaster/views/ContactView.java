@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -148,14 +149,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.setColumnLabelWidth(1, 0);
 		overviewForm.setColumnFieldWidth(1, 200);
 		overviewForm.setSizeFull();
+		
+		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
+
 
 		// overviewForm.setMargin(true);
 		tabs.addTab(overviewForm, "Overview");
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
-		final ComboBox role = overviewForm
-				.bindEntityField("Role", Contact_.groupRole, GroupRole.class, GroupRole_.name);
+		final ComboBox role = formHelper.new EntityFieldBuilder<GroupRole>()
+				.setLabel("Rolet").setField( Contact_.groupRole).setListFieldName(GroupRole_.name).build();
+		
 		overviewForm.newLine();
 		overviewForm.colspan(2);
 		overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
@@ -348,10 +353,15 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.newLine();
 		//memberForm.colspan(2);
 		
-		memberForm.bindEntityField("Section", Contact_.section, SectionType.class, SectionType_.name);
+		FormHelper<Contact> formHelper = memberForm.getFormHelper();
+
+		formHelper.new EntityFieldBuilder<SectionType>()
+				.setLabel("Section").setField( Contact_.section).setListFieldName(SectionType_.name).build();
+
 
 		memberForm.newLine();
-		fieldSectionEligibity = memberForm.bindEntityField("Section Eligibility", Contact_.sectionEligibility, SectionType.class, SectionType_.name);
+		fieldSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>()
+				.setLabel("Section Eligibility").setField( Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
 		fieldSectionEligibity.setReadOnly(true);
 
 		memberForm.colspan(2);
