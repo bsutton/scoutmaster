@@ -1,7 +1,5 @@
 package au.org.scoutmaster.application;
 
-import au.org.scoutmaster.viewstouch.TouchView;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
