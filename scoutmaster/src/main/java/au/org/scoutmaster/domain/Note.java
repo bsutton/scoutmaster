@@ -34,7 +34,7 @@ public class Note extends BaseEntity
 	 * The contact that this note was made against.
 	 */
 	@NotNull
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	private Contact attachedContact;
 	
 	@NotNull

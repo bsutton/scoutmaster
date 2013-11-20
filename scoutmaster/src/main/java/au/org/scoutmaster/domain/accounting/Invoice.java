@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -21,6 +23,7 @@ import au.org.scoutmaster.domain.Contact;
 
 @Entity
 @Table(name="Invoice")
+@Access(AccessType.FIELD)
 public class Invoice  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +41,7 @@ public class Invoice  extends BaseEntity
 	/**
 	 * The contact the invoice has been raised against.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact billTo;
 	
 	/**
@@ -57,13 +60,13 @@ public class Invoice  extends BaseEntity
 	@Transient
 	Date dueDate;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=InvoiceLine.class)
 	List<InvoiceLine> invoiceLines = new ArrayList<>();
 	
 	/**
 	 * The set of payments attached to this invoice.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Payment.class)
 	List<Payment> payments = new ArrayList<>();
 	
 	/**

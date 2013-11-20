@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain.accounting;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -11,6 +13,7 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Table(name="Payment")
+@Access(AccessType.FIELD)
 public class Payment extends BaseEntity
 {
 
@@ -27,7 +30,7 @@ public class Payment extends BaseEntity
 	/**
 	 * The set of invoices this payment applies to.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Invoice.class)
 	List<Invoice> invoices;
 
 	/**

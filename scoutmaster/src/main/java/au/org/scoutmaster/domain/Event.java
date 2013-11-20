@@ -68,17 +68,17 @@ public class Event extends BaseEntity implements CrudEntity
 	@Temporal(value=TemporalType.TIMESTAMP)
 	private Date eventEndDateTime = new Date();
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity=Address.class)
 	private Address location = new Address();
 	
 	
 	/**
 	 * The list of contacts responsible for co-ordinating this event.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Contact.class)
 	private List<Contact> coordinators = new ArrayList<>();
 
-	@OneToMany
+	@OneToMany(targetEntity=Document.class)
 	private List<Document> documents = new ArrayList<>();
 	
 	public Event()

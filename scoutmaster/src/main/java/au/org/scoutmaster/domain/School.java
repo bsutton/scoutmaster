@@ -48,20 +48,20 @@ public class School extends BaseEntity
 	/**
 	 * The schools principle
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Contact.class)
 	Contact principle;
 	
 	/**
 	 * Advertising contact
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Contact.class)
 	Contact advertisingContact;
 	
 	
 	/**
 	 * The list of youth affiliated with our group (this includes prospects) that attend the school.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=Contact.class)
 	List<Contact> youth = new ArrayList<>();
 
 

@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain.accounting;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -14,6 +16,7 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Table(name = "PurchaseLine")
+@Access(AccessType.FIELD)
 public class PurchaseLine extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

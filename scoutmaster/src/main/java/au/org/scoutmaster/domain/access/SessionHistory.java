@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain.access;
 
 import java.sql.Date;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -16,6 +18,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  */
 @Entity
 @Table(name="SessionHistory")
+@Access(AccessType.FIELD)
 public class SessionHistory  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +27,7 @@ public class SessionHistory  extends BaseEntity
 	
 	Date end;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity=User.class)
 	User user;
 
 	@Override

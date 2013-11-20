@@ -21,7 +21,7 @@ public class CreditNoteLine extends BaseEntity
 	/**
 	 * The invoice this InvoiceLine belongs to.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=CreditNote.class)
 	CreditNote creditNote;
 
 	/**
@@ -37,7 +37,7 @@ public class CreditNoteLine extends BaseEntity
 	/**
 	 * The product or service the person is being billed for.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Product.class)
 	Product product;
 
 	/**

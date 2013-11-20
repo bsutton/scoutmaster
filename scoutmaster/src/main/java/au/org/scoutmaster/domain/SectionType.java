@@ -71,11 +71,11 @@ public class SectionType extends BaseEntity
 	/**
 	 * details the qualifications required by the section leader.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=QualificationType.class)
 	List<QualificationType> leaderRequirements = new ArrayList<>();
-	@ManyToMany
+	@ManyToMany(targetEntity=QualificationType.class)
 	List<QualificationType> assistentLeaderRequirements = new ArrayList<>();
-	@ManyToMany
+	@ManyToMany(targetEntity=QualificationType.class)
 	List<QualificationType> parentHelperRequirements = new ArrayList<>();
 	
 	public String getName()

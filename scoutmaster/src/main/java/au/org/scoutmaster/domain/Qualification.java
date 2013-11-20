@@ -24,13 +24,13 @@ public class Qualification extends BaseEntity
 	/**
 	 * Describes the qualification type held by this leader.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=QualificationType.class)
 	QualificationType type;
 	
 	/**
 	 * The leader that has this qualifications
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact leader;
 	
 	

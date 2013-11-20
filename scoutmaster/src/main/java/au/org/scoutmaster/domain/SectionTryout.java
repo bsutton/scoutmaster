@@ -26,13 +26,13 @@ public class SectionTryout extends BaseEntity
 	/**
 	 * The type of tryout.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=SectionTryoutType.class)
 	SectionTryoutType type;
 
 	/**
 	 * The youth who is doing a trial.
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Contact.class)
 	Contact trialYouthMember;
 
 	/**

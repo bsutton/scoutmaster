@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain.accounting;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import au.org.scoutmaster.domain.Organisation;
 
 @Entity
 @Table(name="Purchase")
+@Access(AccessType.FIELD)
 public class Purchase  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -48,7 +51,7 @@ public class Purchase  extends BaseEntity
 	 * 
 	 * This will generally 
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Organisation.class)
 	Organisation purchasedFrom;
 	
 	/**
@@ -56,17 +59,18 @@ public class Purchase  extends BaseEntity
 	 * 
 	 * If the method is EXPENSE_CLAIM then this is the person the group needs to pay.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact purchasedBy;
 	
 	
 	/**
 	 * The group member that approved the purchase.
 	 */
+	@ManyToOne(targetEntity=Contact.class)
 	Contact approvedBy;
 	
 		
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=PurchaseLine.class)
 	List<PurchaseLine> purchaseLines = new ArrayList<>();
 
 	@Override

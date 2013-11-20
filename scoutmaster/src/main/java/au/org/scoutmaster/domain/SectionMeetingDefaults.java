@@ -27,7 +27,7 @@ public class SectionMeetingDefaults extends BaseEntity
 	/** 
 	 * The section these defaults apply to
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Section.class)
 	Section section;
 	
 	/** 
@@ -59,7 +59,7 @@ public class SectionMeetingDefaults extends BaseEntity
 	/** 
 	 * The default location of the meeting.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Address.class)
 	Address location;
 
 	@Override

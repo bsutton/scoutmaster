@@ -44,7 +44,7 @@ public class ForgottenPasswordReset extends BaseEntity
 	 */
 	private Date expires;
 
-	@ManyToOne
+	@ManyToOne(targetEntity=User.class)
 	private User userWithBadMemory;
 
 	/**

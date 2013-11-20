@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain.accounting;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -21,6 +23,7 @@ import au.org.scoutmaster.domain.Organisation;
  */
 @Entity
 @Table(name = "Product")
+@Access(AccessType.FIELD)
 public class Product extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -68,7 +71,7 @@ public class Product extends BaseEntity
 	 * A supplier should be tagged with the built-in tag 'SUPPLIER'.
 	 * 
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Organisation.class)
 	Organisation supplier;
 
 	@Override

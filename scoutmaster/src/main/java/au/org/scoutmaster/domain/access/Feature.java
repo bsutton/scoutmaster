@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain.access;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,6 +19,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  */
 @Entity
 @Table(name="Feature")
+@Access(AccessType.FIELD)
 public class Feature extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
