@@ -26,7 +26,7 @@ public class TransitionMember extends BaseEntity
 	/**
 	 * The youth member that is currently transitioning.
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Contact.class)
 	Contact youthMember;
 
 	/**
@@ -35,19 +35,19 @@ public class TransitionMember extends BaseEntity
 	 * 
 	 * This may be null if no supervisor has been appointed.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact transitionSupervisor;
 
 	/**
 	 * The section they are transitioning from.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Section.class)
 	Section fromSection;
 
 	/**
 	 * The section they are transitioning too.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Section.class)
 	Section toSection;
 
 	Date expectedStartDate;

@@ -1,9 +1,12 @@
 package au.org.scoutmaster.domain.accounting;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class MoneyWithTax
 {
 	private final static FixedDouble PERCENTAGEDENOMINATOR = new FixedDouble(100, 0);

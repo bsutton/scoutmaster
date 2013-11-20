@@ -30,7 +30,7 @@ public class Document extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne
+	@ManyToOne(targetEntity=User.class)
 	private User addedBy;
 	
 	/**

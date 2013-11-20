@@ -99,12 +99,15 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 
 	@FormField(displayName = "Phone 1")
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
@@ -140,7 +143,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@Transient
 	private SectionType sectionEligibility;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity=Address.class)
 	@FormField(displayName = "Address")
 	private Address address = new Address();
 
@@ -169,7 +172,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	/** The actual section the Youth or Adult member is attached to. */
 	@FormField(displayName = "Section")
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, targetEntity=SectionType.class)
 	private SectionType section;
 
 	/**
@@ -186,7 +189,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private Date affiliatedSince = new Date(new java.util.Date().getTime());
 
 	@FormField(displayName = "Group Role")
-	@ManyToOne
+	@ManyToOne(targetEntity=GroupRole.class)
 	private GroupRole groupRole;
 
 	@FormField(displayName = "Medicare No")
@@ -245,7 +248,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy = "lhs")
+	@OneToMany(mappedBy = "lhs", targetEntity=Relationship.class)
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
@@ -256,7 +259,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy = "rhs")
+	@OneToMany(mappedBy = "rhs", targetEntity=Relationship.class)
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
@@ -264,7 +267,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity=Tag.class)
 	private Set<Tag> tags = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "attachedContact")
@@ -274,7 +277,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "withContact")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "withContact", targetEntity=Activity.class)
 	private List<Activity> activites = new ArrayList<>();
 
 	/**

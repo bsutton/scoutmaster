@@ -5,7 +5,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-10-28T13:13:58.616+1100")
+@Generated(value="Dali", date="2013-11-19T23:41:47.947+1100")
 @StaticMetamodel(Organisation.class)
 public class Organisation_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Organisation, Boolean> isOurScoutGroup;

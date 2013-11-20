@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Embeddable;
 
@@ -7,6 +9,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class Period
 {
 	@Basic

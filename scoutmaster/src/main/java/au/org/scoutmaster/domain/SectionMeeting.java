@@ -17,7 +17,7 @@ public class SectionMeeting extends Event
 	/**
 	 * The scout section holding the meeting.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=SectionType.class)
 	SectionType section;
 	
 	

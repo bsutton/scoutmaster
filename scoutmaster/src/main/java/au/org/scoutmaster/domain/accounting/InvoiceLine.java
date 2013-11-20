@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain.accounting;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,6 +14,7 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Table(name = "InvoiceLine")
+@Access(AccessType.FIELD)
 public class InvoiceLine extends BaseEntity
 {
 
@@ -23,7 +26,7 @@ public class InvoiceLine extends BaseEntity
 	/**
 	 * The invoice this InvoiceLine belongs to.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Invoice.class)
 	Invoice invoice;
 
 	/**
@@ -40,7 +43,7 @@ public class InvoiceLine extends BaseEntity
 	/**
 	 * The product or service the person is being billed for.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Product.class)
 	Product product;
 
 	/**

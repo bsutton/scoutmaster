@@ -33,14 +33,17 @@ abstract public class BaseEntity implements Serializable, CrudEntity
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
 	protected Long id;
 	
+	@Column(name="created")
 	private Date created = new Date(new java.util.Date().getTime());
 	
 	// TODO: how do we get this updated each time.
+	@Column(name="updated")
 	private Date updated = new Date(new java.util.Date().getTime());
 
-	@Column(nullable = false)
+	@Column(nullable = false, name="CONSISTENCYVERSION")
 	@Version
 	protected Long consistencyVersion;
 

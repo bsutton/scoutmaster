@@ -2,11 +2,15 @@ package au.org.scoutmaster.domain.accounting;
 
 import java.text.DecimalFormat;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import com.google.common.base.Preconditions;
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class FixedDouble
 {
 	static final int pMultiplier[] =
@@ -18,11 +22,13 @@ public class FixedDouble
 	 * it.
 	 * 
 	 */
+	@Column(name="fixedDoubleValue")
 	private final double fixedDoubleValue;
 
 	/**
 	 * The no. of decimal places to store the number to.
 	 */
+	@Column(name="precision")
 	private final int precision;
 
 	public FixedDouble()

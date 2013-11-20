@@ -29,13 +29,13 @@ public class Relationship extends BaseEntity
 	 * relationship type.
 	 * 
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact lhs;
 	
 	/**
 	 * The type of relationship
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=RelationshipType.class)
 	@NotNull
 	RelationshipType type;
 	
@@ -43,7 +43,7 @@ public class Relationship extends BaseEntity
 	 * The contact on the Right Hand Side (RHS) of the
 	 * relationship type.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	Contact rhs;
 	
 	

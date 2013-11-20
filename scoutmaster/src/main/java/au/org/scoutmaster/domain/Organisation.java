@@ -3,10 +3,13 @@ package au.org.scoutmaster.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -30,6 +33,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name="Organisation")
 @Table(name="Organisation")
+@Access(AccessType.FIELD)
 
 @NamedQueries(
 {
@@ -60,6 +64,7 @@ public class Organisation extends BaseEntity
 	/**
 	 * The primary role an organisation takes in connection to the group.
 	 */
+	@ManyToOne(targetEntity=OrganisationType.class)
 	private OrganisationType organisationType;
 
 	/**
@@ -70,42 +75,42 @@ public class Organisation extends BaseEntity
 	/**
 	 * The list of contacts at the organsiation that the group associates with.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=Contact.class)
 	private List<Contact> contacts = new ArrayList<>();
 
 	/**
 	 * The location of the organisation.
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Address.class)
 	private Address location = new Address();
 	
 	
 	@Transient
 	private Phone primaryPhone;
 
-	@OneToOne
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone1 = new Phone();
 
-	@OneToOne
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone2 = new Phone();
 
-	@OneToOne
+	@OneToOne(targetEntity=Phone.class)
 	private Phone phone3 = new Phone();
 	
 
 	/**
 	 * The list of tags used to describe the organisation.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Tag.class)
 	private List<Tag> tags = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=Note.class)
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany
+	@OneToMany(targetEntity=Activity.class)
 	private List<Activity> activites = new ArrayList<>();
 
 

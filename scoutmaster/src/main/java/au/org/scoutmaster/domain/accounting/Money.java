@@ -1,9 +1,12 @@
 package au.org.scoutmaster.domain.accounting;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 
 
 @Embeddable
+@Access(AccessType.FIELD)
 public class Money
 {
 	static final private int defaultPrecision = 2;

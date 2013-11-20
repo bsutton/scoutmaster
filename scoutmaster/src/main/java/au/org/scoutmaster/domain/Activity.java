@@ -38,13 +38,13 @@ public class Activity extends BaseEntity implements CrudEntity
 	/**
 	 * The type of activity.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=ActivityType.class)
 	private ActivityType type;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity=User.class)
 	private User addedBy;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity=Contact.class)
 	private Contact withContact;
 	
 	/**

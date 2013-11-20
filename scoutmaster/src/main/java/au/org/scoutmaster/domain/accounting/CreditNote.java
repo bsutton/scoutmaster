@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain.accounting;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -16,6 +18,7 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Table(name="CreditNote")
+@Access(AccessType.FIELD)
 public class CreditNote  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -24,13 +27,13 @@ public class CreditNote  extends BaseEntity
 
 	Long creditNoteNumber;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=CreditNoteLine.class)
 	List<CreditNoteLine> creditNoteLines = new ArrayList<>();
 	
 	/**
 	 * The invoice this CreditNote is attached to.
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Invoice.class)
 	Invoice associatedInvoice;
 
 	@Override

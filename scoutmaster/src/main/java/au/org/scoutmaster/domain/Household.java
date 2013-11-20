@@ -46,28 +46,28 @@ public class Household extends BaseEntity
 	/**
 	 * The address of the household.
 	 */
-	@OneToOne
+	@OneToOne(targetEntity=Address.class)
 	private Address location;
 
-	@OneToOne
+	@OneToOne(targetEntity=Contact.class)
 	private Contact primaryContact;
 
 	/**
 	 * Members of the household and their relationship to the household.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=Relationship.class)
 	private final List<Relationship> members = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=Note.class)
 	private final List<Note> notes = new ArrayList<>();
 
-	@ManyToMany
+	@ManyToMany(targetEntity=Tag.class)
 	private final List<Tag> tags = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=Activity.class)
 	private final List<Activity> activites = new ArrayList<>();
 
 	public String getName()

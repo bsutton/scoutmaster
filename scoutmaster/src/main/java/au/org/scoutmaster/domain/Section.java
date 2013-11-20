@@ -34,13 +34,13 @@ public class Section extends BaseEntity
 	@Column(unique=true)
 	String name;
 	
-	@ManyToOne
+	@ManyToOne(targetEntity=SectionType.class)
 	SectionType type;
 
 	/**
 	 * The list of leaders runnnig this Section.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Contact.class)
 	List<Contact> leaders = new ArrayList<>();
 	
 	/**
@@ -48,34 +48,34 @@ public class Section extends BaseEntity
 	 * 
 	 * A adult helper may be attached to multiple sections
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Contact.class)
 	List<Contact> adultHelpers = new ArrayList<>();
 	
 	/**
 	 * The list of youth members attached to this section.
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=Contact.class)
 	List<Contact>	youthMembers = new ArrayList<>();
 	
 	/**
 	 * The list of youth members that are currently transitioning from one section to another
 	 * e.g. moving from cubs to scouts.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=TransitionMember.class)
 	List<TransitionMember> transitioningYouthMembers = new ArrayList<>();
 	
 	/** 
 	 * A list of youth members who are currently trying out to see if they would
 	 * like to join this scout section.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL,targetEntity=SectionTryout.class)
 	List<SectionTryout> trialMembers = new ArrayList<>();
 	
 	/**
 	 * Describes the default times and locations that this section has its meetings.
 	 */
-	@ManyToOne
+	@ManyToOne(targetEntity=SectionMeetingDefaults.class)
 	SectionMeetingDefaults meetingDefaults;
 
 	@Override

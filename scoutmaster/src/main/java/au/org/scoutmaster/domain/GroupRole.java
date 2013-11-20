@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -82,6 +83,7 @@ public class GroupRole extends BaseEntity
 	 * The set of tags that should be added to a contact when this role is
 	 * assigned to the contact.
 	 */
+	@ManyToMany(targetEntity=Tag.class)
 	private Set<Tag> tags = new HashSet<Tag>();
 
 

@@ -3,6 +3,8 @@ package au.org.scoutmaster.domain.access;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -23,6 +25,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  */
 @Entity
 @Table(name="Role")
+@Access(AccessType.FIELD)
 public class Role extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +46,7 @@ public class Role extends BaseEntity
 	/**
 	 * The set of features this role is permitted to access.
 	 */
-	@ManyToMany
+	@ManyToMany(targetEntity=Feature.class)
 	List<Feature> permitted = new ArrayList<>();
 
 	@Override

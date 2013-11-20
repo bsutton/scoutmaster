@@ -31,7 +31,7 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The sections this tryout type applies to.
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=Section.class)
 	List<Section> sections = new ArrayList<>();
 
 	/**
