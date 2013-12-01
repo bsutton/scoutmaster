@@ -4,7 +4,6 @@ package au.org.scoutmaster.viewstouch;
 // Define a view
 public class TouchView //extends NavigationView
 {
-	private static final long serialVersionUID = 1L;
 //
 //	public TouchView()
 //	{
