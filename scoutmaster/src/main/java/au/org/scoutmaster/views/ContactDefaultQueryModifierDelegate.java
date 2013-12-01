@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import au.com.vaadinutils.dao.QueryModifierAdaptor;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.GroupRole;
+import au.org.scoutmaster.domain.GroupRole_;
+import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
@@ -72,6 +75,7 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 			if (fullTextSearch != null && !fullTextSearch.isEmpty())
 			{
 				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
+				Join<Contact, GroupRole> groupRoleJoin = fromContact.join(Contact_.groupRole, JoinType.LEFT);
 
 				fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)), "%"
 						+ this.fullTextSearch.toUpperCase() + "%");
@@ -84,9 +88,28 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 								builder.literal("%Y-%m-%d")), "%" + this.fullTextSearch.toUpperCase() + "%"),
 						fullTextSearchPredicate);
 
+				// Section
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+				
+				// Group Role
+				fullTextSearchPredicate = builder.or(
+						builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
+								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+				
+				fullTextSearchPredicate = builder.or(
+						builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"
+								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+
+				fullTextSearchPredicate = builder.or(
+						builder.like(builder.upper(fromContact.get(Contact_.phone2).get(Phone_.phoneNo)), "%"
+								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+
+				fullTextSearchPredicate = builder.or(
+						builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)), "%"
+								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+				
 			}
 
 			if (subquery != null && fullTextSearchPredicate != null)
