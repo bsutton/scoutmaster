@@ -10,8 +10,6 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.views.Selected;
 
-import com.vaadin.ui.GridLayout;
-
 
 public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFormLayout<E>
 {
@@ -22,10 +20,11 @@ public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFo
 		super(columns, fieldGroup);
 	}
 	
-	protected FormHelper<E> getFormHelper(GridLayout grid, ValidatingFieldGroup<E> group)
+	protected FormHelper<E> getFormHelper(MultiColumnFormLayout<E> layout, ValidatingFieldGroup<E> fieldGroup)
 	{
-		return new SMFormHelper<>(grid, group);
+		return new SMFormHelper<>(layout, fieldGroup);
 	}
+
 
 	public <L> TokenField bindTokenField(Selected<E> selected, String fieldLabel, SetAttribute<E, L> entityField,
 			Class<L> clazz)
@@ -42,6 +41,7 @@ public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFo
 		this.getFieldList().add(field);
 		return field;
 	}
+
 
 
 }
