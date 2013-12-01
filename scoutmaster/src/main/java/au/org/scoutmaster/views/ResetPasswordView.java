@@ -29,9 +29,9 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 
 	private final TextField user;
 
-	private final PasswordField password;
+	private final PasswordField passwordField;
 
-	private final PasswordField confirm;
+	private final PasswordField confirmField;
 
 	private final Button loginButton;
 
@@ -48,26 +48,26 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		user.setInvalidAllowed(false);
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
-		password.addValidator(new PasswordValidator("Password"));
-		password.setRequired(true);
-		password.setValue("");
-		password.setNullRepresentation("");
+		passwordField = new PasswordField("Password:");
+		passwordField.setWidth("300px");
+		passwordField.addValidator(new PasswordValidator("Password"));
+		passwordField.setRequired(true);
+		passwordField.setValue("");
+		passwordField.setNullRepresentation("");
 
 		// Create the password input field
-		confirm = new PasswordField("Confirm Password:");
-		confirm.setWidth("300px");
-		confirm.addValidator(new PasswordValidator("Confirm Password"));
-		confirm.setRequired(true);
-		confirm.setValue("");
-		confirm.setNullRepresentation("");
+		confirmField = new PasswordField("Confirm Password:");
+		confirmField.setWidth("300px");
+		confirmField.addValidator(new PasswordValidator("Confirm Password"));
+		confirmField.setRequired(true);
+		confirmField.setValue("");
+		confirmField.setNullRepresentation("");
 
 		// Create login button
 		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, password, confirm, loginButton);
+		VerticalLayout fields = new VerticalLayout(user, passwordField, confirmField, loginButton);
 		fields.setCaption("Please enter your username and new password.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
@@ -98,13 +98,14 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		// fields we reduce the amount of queries we have to make to the database
 		// for wrongly entered passwords
 		//
-		if (!user.isValid() || !password.isValid())
+		if (!user.isValid() || !passwordField.isValid())
 		{
 			return;
 		}
 
 		String username = user.getValue();
-		String password = this.password.getValue();
+		String password = this.passwordField.getValue();
+		String confirm = this.confirmField.getValue();
 
 		//
 		// Validate username and password with database here. For examples sake
@@ -113,7 +114,7 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		if (!password.equals(confirm))
 		{
 			Notification.show("The password and confirm passwords do not match", Type.ERROR_MESSAGE);
-			this.password.focus();
+			this.passwordField.focus();
 		}
 		else
 		{
