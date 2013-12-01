@@ -67,7 +67,7 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Note_.created.getName(), filterString, true,
 				false), new SimpleStringFilter(Note_.subject.getName(), filterString, true, false)),

@@ -59,7 +59,7 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Activity_.activityDate.getName(),
 				filterString, true, false), new SimpleStringFilter(

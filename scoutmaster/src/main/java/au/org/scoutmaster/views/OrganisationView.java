@@ -127,7 +127,7 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new SimpleStringFilter(Organisation_.name.getName(), filterString, true, false),
 				new SimpleStringFilter(Organisation_.phone1, filterString, true, false)),

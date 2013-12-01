@@ -105,7 +105,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new SimpleStringFilter(User_.username.getName(), filterString, true, false),
 				new SimpleStringFilter(User_.emailAddress, filterString, true, false));

@@ -91,7 +91,7 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new SimpleStringFilter(Relationship_.lhs.getName(), filterString, true, false),
 				new SimpleStringFilter(new Path(Relationship_.type, RelationshipType_.lhs).getName(), filterString,

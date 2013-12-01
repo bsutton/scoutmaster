@@ -149,7 +149,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new SimpleStringFilter(Event_.eventStartDateTime.getName(), filterString, true,
 				false), new SimpleStringFilter(Event_.eventEndDateTime.getName(), filterString, true, false)),

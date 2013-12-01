@@ -64,7 +64,7 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new SimpleStringFilter(OrganisationType_.name.getName(), filterString, true, false);
 	}

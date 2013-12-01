@@ -108,7 +108,7 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Activity_.activityDate.getName(), filterString, true,
 				false), new SimpleStringFilter(new Path(Activity_.type, ActivityType_.name).getName(), filterString, true, false)),
