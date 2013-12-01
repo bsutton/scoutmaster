@@ -83,7 +83,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString)
+	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new Or(new SimpleStringFilter(Tag_.name.getName(), filterString, true, false), new SimpleStringFilter(
 				Tag_.description.getName(), filterString, true, false));
