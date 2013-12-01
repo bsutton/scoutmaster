@@ -59,7 +59,7 @@ public class MessageDetailsStep implements WizardStep
 
 		providers = new ComboBox("Provider");
 		providers.setContainerDataSource(daoSMSProvider.createVaadinContainer());
-		
+		providers.setConverter(SMSProvider.class);
 		providers.select(provider.getId());
 		
 		recipientCount = new Label();
@@ -143,7 +143,10 @@ public class MessageDetailsStep implements WizardStep
 
 	public SMSProvider getProvider()
 	{
-		return (SMSProvider) providers.getConvertedValue();
+		Long providerId = (Long)providers.getValue();
+		
+		SMSProviderDao dao = new DaoFactory().getSMSProviderDao();
+		return dao.findById(providerId);
 	}
 
 	public String getFrom()
