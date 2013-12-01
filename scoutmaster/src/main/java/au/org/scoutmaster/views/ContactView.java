@@ -1,14 +1,7 @@
 package au.org.scoutmaster.views;
 
 import java.io.File;
-import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
@@ -35,13 +28,14 @@ import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.fields.GoogleField;
+import au.org.scoutmaster.fields.TagChangeListener;
+import au.org.scoutmaster.fields.TagField;
 import au.org.scoutmaster.forms.EmailForm;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.util.DefaultQueryModifierDelegate;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -51,9 +45,12 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
@@ -64,8 +61,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @Menu(display = "Contacts")
-public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
+public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, TagChangeListener
 {
+
 	@Override
 	protected String getTitleText()
 	{
@@ -90,11 +88,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private Label ageField;
 
-	private ComboBox fieldSectionEligibity;
+	// private ComboBox fieldSectionEligibity;
 
 	private Image homeEmailImage;
 
 	private Image workEmailImage;
+
+	private TagField tagField;
 
 	@Override
 	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -125,11 +125,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				DateField birthDate = (DateField) event.getProperty();
 				ContactDao daoContact = new DaoFactory().getContactDao();
 				ageField.setReadOnly(false);
-				ageField.setValue(daoContact.getAge(birthDate.getValue()).toString());
+				ageField.setValue("Age " + daoContact.getAge(birthDate.getValue()).toString());
 				ageField.setReadOnly(true);
-				fieldSectionEligibity.setReadOnly(false);
-				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
-				fieldSectionEligibity.setReadOnly(true);
+				// fieldSectionEligibity.setReadOnly(false);
+				// fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
+				// fieldSectionEligibity.setReadOnly(true);
 			}
 		});
 
@@ -145,33 +145,35 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		// Overview tab
 
-		SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(3, this.fieldGroup);
+		overviewForm.setColumnFieldWidth(0, 100);
 		overviewForm.setColumnLabelWidth(1, 0);
-		overviewForm.setColumnFieldWidth(1, 200);
+		overviewForm.setColumnFieldWidth(1, 120);
+		overviewForm.setColumnLabelWidth(2, 40);
+		overviewForm.setColumnFieldWidth(2, 80);
 		overviewForm.setSizeFull();
-		
-		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
 
+		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
 
 		// overviewForm.setMargin(true);
 		tabs.addTab(overviewForm, "Overview");
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
-		overviewForm.colspan(2);
-		final ComboBox role = formHelper.new EntityFieldBuilder<GroupRole>()
-				.setLabel("Rolet").setField( Contact_.groupRole).setListFieldName(GroupRole_.name).build();
-		
+		overviewForm.colspan(3);
+		final ComboBox role = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role")
+				.setField(Contact_.groupRole).setListFieldName(GroupRole_.name).build();
+
 		overviewForm.newLine();
-		overviewForm.colspan(2);
+		overviewForm.colspan(3);
 		overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
-		overviewForm.colspan(2);
+		overviewForm.colspan(3);
 		overviewForm.bindTextField("Firstname", Contact_.firstname);
 		overviewForm.newLine();
-		overviewForm.colspan(2);
+		overviewForm.colspan(3);
 		overviewForm.bindTextField("Middle name", Contact_.middlename);
 		overviewForm.newLine();
 
-		overviewForm.colspan(2);
+		overviewForm.colspan(3);
 		overviewForm.bindTextField("Lastname", Contact_.lastname);
 
 		overviewForm.newLine();
@@ -179,6 +181,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		// ageField = overviewForm.bindTextField("Age", "age");
 		// ageField.setReadOnly(true);
 		ageField = overviewForm.bindLabel("Age");
+		overviewForm.setComponentAlignment(ageField, Alignment.MIDDLE_LEFT);
+		overviewForm.newLine();
 		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
 
@@ -201,7 +205,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.setColumnFieldWidth(1, 100);
 		contactForm.setColumnFieldWidth(2, 20);
 
-		//contactForm.setSizeFull();
+		// contactForm.setSizeFull();
 		contactForm.setMargin(true);
 
 		contactForm.colspan(3);
@@ -280,12 +284,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.newLine();
 		contactForm.bindTextField("Postcode", "address.postcode");
 		contactForm.newLine();
-		
+
 		// Now add the child activity crud
 		contactTab.addComponent(contactForm);
-		
+
 		tabs.addTab(contactTab, "Contact");
-		
+
 	}
 
 	private void activityTab()
@@ -297,10 +301,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		tabs.addTab(activityView, "Activity");
 
-		//contactTab.setExpandRatio(activityView, 1.0f);
+		// contactTab.setExpandRatio(activityView, 1.0f);
 
 	}
-	
+
 	private void relationshipTab()
 	{
 		// Now add the child relationship crud
@@ -311,8 +315,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		tabs.addTab(relationshipView, "Relationship");
 
 	}
-
-	
 
 	private void noteTab()
 	{
@@ -338,7 +340,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		youthForm.bindBooleanField("Custody Order", Contact_.custodyOrder);
 		youthForm.newLine();
 		youthForm.bindTextAreaField("Custody Order Details", Contact_.custodyOrderDetails, 4);
-		
+
 	}
 
 	private void memberTab()
@@ -351,18 +353,19 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.setSizeFull();
 		memberForm.bindBooleanField("Member", Contact_.isMember);
 		memberForm.newLine();
-		//memberForm.colspan(2);
-		
+		// memberForm.colspan(2);
+
 		FormHelper<Contact> formHelper = memberForm.getFormHelper();
 
-		formHelper.new EntityFieldBuilder<SectionType>()
-				.setLabel("Section").setField( Contact_.section).setListFieldName(SectionType_.name).build();
-
+		formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section").setField(Contact_.section)
+				.setListFieldName(SectionType_.name).build();
 
 		memberForm.newLine();
-		fieldSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>()
-				.setLabel("Section Eligibility").setField( Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
-		fieldSectionEligibity.setReadOnly(true);
+		// fieldSectionEligibity = formHelper.new
+		// EntityFieldBuilder<SectionType>()
+		// .setLabel("Section Eligibility").setField(
+		// Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
+		// fieldSectionEligibity.setReadOnly(true);
 
 		memberForm.colspan(2);
 		memberForm.bindTextField("Member No", Contact_.memberNo);
@@ -437,7 +440,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindBooleanField("Has Food Handling", Contact_.hasFoodHandlingCertificate);
 		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
 	}
-
 
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
@@ -515,7 +517,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	}
 
-
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
@@ -531,10 +532,24 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	}
 
 	@Override
-	protected Filter getContainerFilter(final String filterString)
+	protected Filter getContainerFilter(final String filterString, boolean advancedSearchActive)
 	{
 		setQueryModifier(filterString);
 		return null;
+	}
+
+	@Override
+	protected void clearAdvancedFilters()
+	{
+		EntityProvider<Contact> provider = container.getEntityProvider();
+
+		ArrayList<Tag> tags = tagField.getTags();
+
+		for (Tag tag : tags)
+		{
+			tagField.removeToken(tag);
+		}
+		provider.setQueryModifierDelegate(null);
 
 	}
 
@@ -544,65 +559,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new DefaultQueryModifierDelegate()
-		{
-			private static final long serialVersionUID = 1L;
-
-			/**
-			 * Where over-load the where clause so we can fix it.
-			 * 
-			 * Vaadin doesn't deal with outer joins.
-			 */
-			@Override
-			public void filtersWillBeAdded(CriteriaBuilder builder, CriteriaQuery<?> query, List<Predicate> predicates)
-			{
-				@SuppressWarnings("unchecked")
-				Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
-
-				Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
-				Join<Contact, GroupRole> groupRoleJoin = fromContact.join(Contact_.groupRole, JoinType.LEFT);
-
-				if (filterString != null && filterString.trim().length() >= 0)
-				{
-					Predicate fullTextSearchPredicate = null;
-
-					fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)), "%"
-							+ filterString.toUpperCase() + "%");
-
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(fromContact.get(Contact_.lastname)),
-									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					// Section
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
-									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					// Group Role
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
-									"%" + filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-//					fullTextSearchPredicate = builder.or(
-//							builder.like(builder.upper(fromContact.get(Contact_.groupRole).get(GroupRole_.name)), "%"
-//									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"
-									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(fromContact.get(Contact_.phone2).get(Phone_.phoneNo)), "%"
-									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					fullTextSearchPredicate = builder.or(
-							builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)), "%"
-									+ filterString.toUpperCase() + "%"), fullTextSearchPredicate);
-
-					query.where(fullTextSearchPredicate);
-				}
-
-			}
-		});
+		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagField.getTags(), filterString));
 
 	}
 
@@ -634,4 +591,39 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		}
 	}
 
+	@Override
+	protected AbstractLayout getAdvancedSearchLayout()
+	{
+		VerticalLayout advancedSearchLayout = new VerticalLayout();
+		HorizontalLayout tagSearchLayout = new HorizontalLayout();
+		tagField = new TagField("Search Tags", true);
+		tagSearchLayout.addComponent(tagField);
+
+		tagField.addChangeListener(this);
+		tagSearchLayout.setSizeFull();
+		advancedSearchLayout.addComponent(tagSearchLayout);
+
+		HorizontalLayout stringSearchLayout = new HorizontalLayout();
+		stringSearchLayout.addComponent(searchField);
+		stringSearchLayout.setWidth("100%");
+
+		advancedSearchLayout.addComponent(stringSearchLayout);
+
+		return advancedSearchLayout;
+
+	}
+
+	public void onTagListChanged(ArrayList<Tag> tags)
+	{
+		triggerFilter();
+		//resetFilter(tags, super.getSearchFieldText());
+
+	}
+
+//	void resetFilter(ArrayList<Tag> tags, String fullTextSearch)
+//	{
+//		setQueryModifier(fullTextSearch);
+//
+//	}
+//
 }
