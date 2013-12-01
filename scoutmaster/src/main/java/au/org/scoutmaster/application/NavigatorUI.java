@@ -18,6 +18,7 @@ import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.EventView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
+import au.org.scoutmaster.views.LogoutView;
 import au.org.scoutmaster.views.OrganisationTypeView;
 import au.org.scoutmaster.views.OrganisationView;
 import au.org.scoutmaster.views.ResetPasswordView;
@@ -97,6 +98,7 @@ public class NavigatorUI extends UI
 		viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
 
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
+		viewMap.add(new ViewMap(LogoutView.NAME, LogoutView.class));
 		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
 		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
 
@@ -137,6 +139,7 @@ public class NavigatorUI extends UI
 				boolean isLoggedIn = getSession().getAttribute("user") != null;
 				boolean isLoginView = event.getNewView() instanceof LoginView;
 				boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
+				boolean isResetPasswordView = event.getNewView() instanceof ResetPasswordView;
 
 				// TODO: should we cache this?
 				// during dev its easier if we don't.
@@ -161,7 +164,7 @@ public class NavigatorUI extends UI
 					}
 				}
 
-				if (!isLoggedIn && !isLoginView && !isForgottenPasswordView)
+				if (!isLoggedIn && !isLoginView && !isForgottenPasswordView && !isResetPasswordView)
 				{
 					// Redirect to login view always if a user has not yet
 					// logged in
