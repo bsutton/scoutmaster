@@ -79,11 +79,12 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		
 		// Buttons
 		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);
 
 		// Create login button
 		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
 		loginButton.setClickShortcut(KeyCode.ENTER);
-		loginButton.addStyleName("default");
+		loginButton.addStyleName(Reindeer.BUTTON_DEFAULT);
 		buttons.addComponent(loginButton);
 		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
 
