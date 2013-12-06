@@ -71,4 +71,12 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 						false)), new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
 	}
 
+
+	@Override
+	public void associateChild(Contact newParent, Activity child)
+	{
+		newParent.addActivity(child);
+		
+	}
+
 }

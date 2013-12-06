@@ -112,4 +112,10 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		// }
 	}
 
+	@Override
+	public void associateChild(Contact newParent, Relationship child)
+	{
+		newParent.addRelationship(child);
+	}
+
 }

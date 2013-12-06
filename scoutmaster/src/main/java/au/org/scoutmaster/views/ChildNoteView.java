@@ -74,4 +74,9 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 				new SimpleStringFilter(Note_.body.getName(), filterString, true, false)))));
 	}
 
+	@Override
+	public void associateChild(Contact newParent, Note child)
+	{
+		newParent.addNote(child);
 	}
+}
