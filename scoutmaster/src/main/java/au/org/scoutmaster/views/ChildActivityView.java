@@ -1,5 +1,6 @@
 package au.org.scoutmaster.views;
 
+import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -25,9 +26,9 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 {
 	private static final long serialVersionUID = 1L;
 
-	public ChildActivityView()
+	public ChildActivityView(BaseCrudView<Contact> parentCrud)
 	{
-		super(Contact.class, Activity.class, Contact_.id, Activity_.withContact.getName());
+		super(parentCrud, Contact.class, Activity.class, Contact_.id, Activity_.withContact.getName());
 
 		JPAContainer<Activity> container = new DaoFactory().getActivityDao().createVaadinContainer();
 		container.sort(new String[] {Activity_.activityDate.getName()},new boolean[] {false});
@@ -69,6 +70,14 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 				new Path(Activity_.withContact, Contact_.firstname).getName(), filterString, true, false)),
 				new SimpleStringFilter(new Path(Activity_.addedBy, User_.username).getName(), filterString, true,
 						false)), new SimpleStringFilter(Activity_.subject.getName(), filterString, true, false));
+	}
+
+
+	@Override
+	public void associateChild(Contact newParent, Activity child)
+	{
+		newParent.addActivity(child);
+		
 	}
 
 }

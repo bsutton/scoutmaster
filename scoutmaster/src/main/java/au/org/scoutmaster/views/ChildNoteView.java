@@ -1,5 +1,6 @@
 package au.org.scoutmaster.views;
 
+import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -24,9 +25,9 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 {
 	private static final long serialVersionUID = 1L;
 
-	public ChildNoteView()
+	public ChildNoteView(BaseCrudView<Contact> parentCrud)
 	{
-		super(Contact.class, Note.class, Contact_.id, Note_.attachedContact.getName());
+		super(parentCrud, Contact.class, Note.class, Contact_.id, Note_.attachedContact.getName());
 
 		JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
 		container.sort(new String[]
@@ -74,4 +75,9 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 				new SimpleStringFilter(Note_.body.getName(), filterString, true, false)))));
 	}
 
+	@Override
+	public void associateChild(Contact newParent, Note child)
+	{
+		newParent.addNote(child);
 	}
+}

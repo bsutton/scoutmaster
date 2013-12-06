@@ -295,7 +295,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void activityTab()
 	{
 		// Now add the child activity crud
-		ChildActivityView activityView = new ChildActivityView();
+		ChildActivityView activityView = new ChildActivityView(this);
 		activityView.setSizeFull();
 		super.addChildCrudListener(activityView);
 
@@ -308,7 +308,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void relationshipTab()
 	{
 		// Now add the child relationship crud
-		ChildRelationshipView relationshipView = new ChildRelationshipView();
+		ChildRelationshipView relationshipView = new ChildRelationshipView(this);
 		relationshipView.setSizeFull();
 		super.addChildCrudListener(relationshipView);
 
@@ -319,7 +319,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void noteTab()
 	{
 		// Now add the child note crud
-		ChildNoteView noteView = new ChildNoteView();
+		ChildNoteView noteView = new ChildNoteView(this);
 		noteView.setSizeFull();
 		super.addChildCrudListener(noteView);
 

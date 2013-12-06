@@ -1,5 +1,6 @@
 package au.org.scoutmaster.views;
 
+import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -28,9 +29,9 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 {
 	private static final long serialVersionUID = 1L;
 
-	public ChildRelationshipView()
+	public ChildRelationshipView(BaseCrudView<Contact> parentCrud)
 	{
-		super(Contact.class, Relationship.class, Contact_.id, Relationship_.lhs.getName());
+		super(parentCrud, Contact.class, Relationship.class, Contact_.id, Relationship_.lhs.getName());
 
 		JPAContainer<Relationship> container = new DaoFactory().getRelationshipDao().createVaadinContainer();
 		// container.sort(new String[] {new Path(Relationship_.lhs,
@@ -110,6 +111,12 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
+	}
+
+	@Override
+	public void associateChild(Contact newParent, Relationship child)
+	{
+		newParent.addRelationship(child);
 	}
 
 }
