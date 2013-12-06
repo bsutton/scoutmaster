@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
-import org.marre.sms.SmsException;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CancelListener;
@@ -63,8 +62,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 
 	}
 
-	private void sendMessages(User user, List<EmailTransmission> targets, Message message) throws SmsException,
-			IOException
+	private void sendMessages(User user, List<EmailTransmission> targets, Message message) throws IOException
 	{
 
 		EntityManager em = EntityManagerProvider.createEntityManager();

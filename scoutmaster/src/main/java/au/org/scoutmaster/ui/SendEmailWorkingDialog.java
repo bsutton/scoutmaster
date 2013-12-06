@@ -17,11 +17,10 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.SMTransaction;
 import au.org.scoutmaster.domain.SMTPServerSettings;
-import au.org.scoutmaster.forms.EmailForm;
 import au.org.scoutmaster.util.SMNotification;
 
-import com.vaadin.ui.UI;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.UI;
 
 /**
  * Designed to show a 'working' dialog whilst sending a single email.
