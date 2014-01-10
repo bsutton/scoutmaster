@@ -13,10 +13,12 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Note;
+import au.org.scoutmaster.domain.Relationship;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Section_;
 import au.org.scoutmaster.domain.Tag;
@@ -81,6 +83,18 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 //		tag.addContact(this);
 		contact.getTags().add(tag);
 	}
+	
+	public void addRelationship(Contact contact, Relationship child)
+	{
+		contact.getLHSRelationships().add(child);
+		
+	}
+	public void addActivity(Contact contact, Activity activity)
+	{
+		contact.getActivites().add(activity);
+
+	}
+
 
 	/**
 	 * Detaches the tag from this contact. The tag entity is not actually deleted as
