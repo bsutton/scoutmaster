@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -13,15 +12,14 @@ import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.AssertTrue;
@@ -40,7 +38,6 @@ import org.joda.time.format.DateTimeParser;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
@@ -99,15 +96,18 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 
 	@FormField(displayName = "Phone 1")
-	@OneToOne(targetEntity = Phone.class)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "PHONE1_ID")
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
-	@OneToOne(targetEntity = Phone.class)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "PHONE2_ID")
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
-	@OneToOne(targetEntity = Phone.class)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "PHONE3_ID")
 	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
@@ -143,7 +143,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@Transient
 	private SectionType sectionEligibility;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
 	@FormField(displayName = "Address")
 	private Address address = new Address();
 
@@ -248,7 +248,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class)
+	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade = CascadeType.PERSIST)
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
@@ -259,7 +259,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class)
+	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade = CascadeType.PERSIST)
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
@@ -267,17 +267,17 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Tag.class)
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, targetEntity = Tag.class)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "attachedContact")
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "attachedContact")
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "withContact", targetEntity = Activity.class)
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "withContact", targetEntity = Activity.class)
 	private List<Activity> activites = new ArrayList<>();
 
 	/**
@@ -655,11 +655,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.activites = activites;
 	}
 
-	public void addActivity(Activity bmv)
-	{
-		this.activites.add(bmv);
-
-	}
 
 	public String getWorkEmail()
 	{
@@ -857,58 +852,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		notes.clear();
 	}
 
-	@PrePersist
-	private void prePersist()
-	{
-		resetTags();
-	}
-
-	@PreUpdate
-	private void preUpdate()
-	{
-		resetTags();
-	}
-
-	private void resetTags()
-	{
-		// Start by removing all non-detachable tags
-		// so we can re-attach the ones that still apply
-
-		// add built-in tags
-
-		TagDao daoTag = new DaoFactory().getTagDao();
-
-		Iterator<Tag> iter = this.getTags().iterator();
-		while (iter.hasNext())
-		{
-			Tag tag = iter.next();
-			if (tag.getDetachable() == false)
-			{
-				// HACK: until we have child/parent relationships
-				if (!tag.getName().contains("Parent"))
-					iter.remove();
-			}
-		}
-
-		// Section Tag
-		SectionType section = this.getSection();
-		if (section != null)
-		{
-			Tag tag = daoTag.findByName(section.getName());
-			if (!this.getTags().contains(tag))
-				this.getTags().add(tag);
-		}
-
-		GroupRole role = this.getRole();
-		if (role != null)
-		{
-			for (Tag tag : role.getTags())
-			{
-				this.getTags().add(tag);
-			}
-		}
-
-	}
 
 	@Override
 	public String getName()
@@ -922,10 +865,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	}
 
-	public void addRelationship(Relationship child)
+	public Set<Relationship> getLHSRelationships()
 	{
-		this.lhsrelationships.add(child);
-		
+		return this.lhsrelationships;
 	}
-
 }
