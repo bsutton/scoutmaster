@@ -6,6 +6,7 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.ActivityType_;
@@ -53,11 +54,26 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 		super.fieldGroup.bind(detailsEditor, Activity_.details.getName());
 		layout.addComponent(detailsEditor);
 
-		super.enableActions(false);
-		super.showNew(false);
+		super.activateEditMode(false);
+		showNew(false);
 
 		return layout;
 	}
+	
+	/**
+	 * Internal method to show hide the new button when editing.
+	 * 
+	 * If the user has called disallowNew then the new button will never
+	 * be displayed.
+	 */
+	private void showNew(boolean show)
+	{
+		if (isDisallowNew())
+			show = false;
+		
+		newButton.setVisible(show);
+	}
+
 
 	@Override
 	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
@@ -76,7 +92,8 @@ public class ChildActivityView extends ChildCrudView<Contact, Activity>
 	@Override
 	public void associateChild(Contact newParent, Activity child)
 	{
-		newParent.addActivity(child);
+		ContactDao daoContact = new DaoFactory().getContactDao();
+		daoContact.addActivity(newParent, child);
 		
 	}
 

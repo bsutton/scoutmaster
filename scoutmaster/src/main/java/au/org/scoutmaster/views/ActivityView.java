@@ -84,9 +84,8 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 		
 		layout.addComponent(overviewForm);
 
-		super.enableActions(false);
-		super.showNew(false);
-		super.showSaveCancel(false);
+		super.disallowEdit(true, true);
+		super.disallowNew(true);
 
 		return layout;
 	}
