@@ -7,6 +7,7 @@ import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
 import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.menu.ViewMap;
+import au.com.vaadinutils.util.DeadlockFinder;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
@@ -75,6 +76,9 @@ public class NavigatorUI extends UI
 	 */
 	protected void init(VaadinRequest request)
 	{
+		
+		new DeadlockFinder().start();
+		
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
 
