@@ -15,6 +15,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupRoleDao;
+import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Gender;
@@ -88,13 +89,19 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private Label ageField;
 
-	// private ComboBox fieldSectionEligibity;
+	private ComboBox fieldSectionEligibity;
 
 	private Image homeEmailImage;
 
 	private Image workEmailImage;
 
 	private TagField tagField;
+
+	private ComboBox groupRoleField;
+
+	private ComboBox sectionTypeField;
+
+	private ChangeListener changeListener;
 
 	@Override
 	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -103,6 +110,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
+
+		// this needs to be updated when the contact changes
+		this.changeListener = new ChangeListener();
 
 		overviewTab();
 		contactTab();
@@ -116,22 +126,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		googleTab();
 
 		// When a persons birth date changes recalculate their age.
-		birthDate.addValueChangeListener(new Property.ValueChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public void valueChange(ValueChangeEvent event)
-			{
-				DateField birthDate = (DateField) event.getProperty();
-				ContactDao daoContact = new DaoFactory().getContactDao();
-				ageField.setReadOnly(false);
-				ageField.setValue("Age " + daoContact.getAge(birthDate.getValue()).toString());
-				ageField.setReadOnly(true);
-				// fieldSectionEligibity.setReadOnly(false);
-				// fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
-				// fieldSectionEligibity.setReadOnly(true);
-			}
-		});
+		birthDate.addValueChangeListener(this.changeListener);
 
 		layout.addComponent(tabs);
 		// VerticalLayout c = new VerticalLayout();
@@ -160,8 +155,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(3);
-		final ComboBox role = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role")
-				.setField(Contact_.groupRole).setListFieldName(GroupRole_.name).build();
+		groupRoleField = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role").setField(Contact_.groupRole)
+				.setListFieldName(GroupRole_.name).build();
+		groupRoleField.addValueChangeListener(this.changeListener);
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
@@ -185,8 +181,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.newLine();
 		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
-
-		role.addValueChangeListener(new ChangeListener(role, ageField));
 
 		return birthDate;
 
@@ -357,15 +351,15 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		FormHelper<Contact> formHelper = memberForm.getFormHelper();
 
-		formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section").setField(Contact_.section)
-				.setListFieldName(SectionType_.name).build();
+		sectionTypeField = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section")
+				.setField(Contact_.section).setListFieldName(SectionType_.name).build();
+		sectionTypeField.addValueChangeListener(this.changeListener);
 
 		memberForm.newLine();
-		// fieldSectionEligibity = formHelper.new
-		// EntityFieldBuilder<SectionType>()
-		// .setLabel("Section Eligibility").setField(
-		// Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
-		// fieldSectionEligibity.setReadOnly(true);
+		fieldSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section Eligibility")
+				.setField(Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
+		fieldSectionEligibity.setReadOnly(true);
+		memberForm.newLine();
 
 		memberForm.colspan(2);
 		memberForm.bindTextField("Member No", Contact_.memberNo);
@@ -443,43 +437,116 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
-		private final Label fieldAge;
-		private final ComboBox role;
+		private GroupRole currentGroupRole;
+		private SectionType currentSectionType;
+
 		private static final long serialVersionUID = 1L;
 
-		private ChangeListener(ComboBox role, Label fieldAge)
+		private void reset(GroupRole initialRole, SectionType initialSectionType)
 		{
-			this.fieldAge = fieldAge;
-			this.role = role;
+			this.currentGroupRole = initialRole;
+			this.currentSectionType = initialSectionType;
 		}
 
 		public void valueChange(ValueChangeEvent event)
 		{
-			Long groupRoleId = (Long) this.role.getValue();
-			if (groupRoleId != null)
+			// Long groupRoleId = (Long) this.role.getValue();
+
+			@SuppressWarnings("rawtypes")
+			Property source = event.getProperty();
+
+			if (source == ContactView.this.groupRoleField)
+			{
+				Long newGroupRoleId = (Long) event.getProperty().getValue();
+				if (newGroupRoleId != null)
+				{
+
+					GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
+
+					GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
+					GroupRole oldGroupRole = this.currentGroupRole;
+
+					// Update the tag which represents this role
+					if (newGroupRole != oldGroupRole && newGroupRole != null)
+					{
+						Contact contact = ContactView.this.getCurrent();
+						// First remove the old set of tags associated with the
+						// group
+						if (oldGroupRole != null)
+						{
+							for (Tag tag : oldGroupRole.getTags())
+							{
+								contact.getTags().remove(tag);
+							}
+						}
+
+						// Now add the new set of tags associated with the new
+						// group role.
+						for (Tag tag : newGroupRole.getTags())
+						{
+							contact.getTags().add(tag);
+						}
+					}
+
+					switch (newGroupRole.getBuiltIn())
+					{
+						case YouthMember:
+							showYouth(true);
+							break;
+						default:
+							showYouth(false);
+							break;
+					}
+				}
+				else
+					showYouth(true);
+			}
+			else if (source == ContactView.this.birthDate)
 			{
 
-				GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
+				DateField birthDate = (DateField) event.getProperty();
+				ContactDao daoContact = new DaoFactory().getContactDao();
+				ageField.setReadOnly(false);
+				ageField.setValue("Age " + daoContact.getAge(birthDate.getValue()).toString());
+				ageField.setReadOnly(true);
+				fieldSectionEligibity.setReadOnly(false);
+				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
+				fieldSectionEligibity.setReadOnly(true);
+			}
+			else if (source == ContactView.this.sectionTypeField)
+			{
 
-				GroupRole groupRole = daoGroupRole.findById(groupRoleId);
+				// The change event may have been for the section type
+				// The Contacts section has just been changed so we need to
+				// reset
+				// the tag used to represent that section type.
+				@SuppressWarnings("unchecked")
+				Property<Long> property = event.getProperty();
+				Contact contact = ContactView.super.getCurrent();
 
-				switch (groupRole.getBuiltIn())
+				Long newSectionTypeId = property.getValue();
+				SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+				SectionType newValue = daoSectionType.findById(newSectionTypeId);
+
+				// both of these conditions should always be true.
+				if (currentSectionType != newValue && newValue != null)
 				{
-					case YouthMember:
-						showYouth(true);
-						break;
-					default:
-						showYouth(false);
-						break;
+					ContactDao daoContact = new DaoFactory().getContactDao();
+
+					if (currentSectionType != null)
+					{
+						Tag oldTag = contact.getTag(currentSectionType.getName());
+						if (oldTag != null)
+						{
+							daoContact.detachTag(contact, oldTag);
+						}
+					}
+
+					Tag newTag = daoSectionType.getTag(newValue);
+					daoContact.attachTag(contact, newTag);
 				}
 			}
-			else
-				showYouth(true);
 
-			ContactDao daoContact = new DaoFactory().getContactDao();
-			fieldAge.setReadOnly(false);
-			fieldAge.setValue(daoContact.getAge(ContactView.super.getCurrent()).toString());
-			fieldAge.setReadOnly(true);
 		}
 
 		private void showYouth(boolean visible)
@@ -587,6 +654,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			{
 				homeEmailImage.setVisible((entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0));
 				workEmailImage.setVisible((entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0));
+				this.changeListener.reset(entity.getRole(), entity.getSection());
 			}
 		}
 	}
@@ -616,14 +684,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	public void onTagListChanged(ArrayList<Tag> tags)
 	{
 		triggerFilter();
-		//resetFilter(tags, super.getSearchFieldText());
+		// resetFilter(tags, super.getSearchFieldText());
 
 	}
 
-//	void resetFilter(ArrayList<Tag> tags, String fullTextSearch)
-//	{
-//		setQueryModifier(fullTextSearch);
-//
-//	}
-//
+	// void resetFilter(ArrayList<Tag> tags, String fullTextSearch)
+	// {
+	// setQueryModifier(fullTextSearch);
+	//
+	// }
+	//
 }
