@@ -6,6 +6,7 @@ import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Contact;
@@ -116,7 +117,8 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	@Override
 	public void associateChild(Contact newParent, Relationship child)
 	{
-		newParent.addRelationship(child);
+		ContactDao daoContact = new DaoFactory().getContactDao();
+		daoContact.addRelationship(newParent, child);
 	}
 
 }
