@@ -75,7 +75,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		overviewForm.bindTextField("Firstname", User_.firstname);
 		overviewForm.bindTextField("Surname", User_.surname);
 		TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
-		emailAddress.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
+		mobile.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
 		mobile.setDescription("Used when sending bulk emails as the sender phone no.");
 		
 
