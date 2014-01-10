@@ -52,7 +52,7 @@ public class Organisation extends BaseEntity
 	 * organisations should be created by the setup wizard.
 	 * 
 	 */
-	private Boolean isOurScoutGroup;
+	private Boolean isOurScoutGroup = false;
 
 	/**
 	 * The name of the organisation
