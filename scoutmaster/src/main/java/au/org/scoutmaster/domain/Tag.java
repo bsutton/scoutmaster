@@ -61,7 +61,7 @@ public class Tag extends BaseEntity
 	 * For instance a Contact which is a Youth Member would
 	 * also be automatically assigned to the tag Youth Member.
 	 * This is some what redundant but the idea is to make searching
-	 * for entities by a tag all encompasing.
+	 * for entities by a tag all encompassing.
 	 * i.e. all major attributes of an entity are cross referenced
 	 * by a tag for the purposes of searching.
 	 * 
