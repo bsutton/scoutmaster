@@ -17,6 +17,7 @@ import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.NoteDao;
+import au.org.scoutmaster.dao.PhoneDao;
 import au.org.scoutmaster.dao.TagDao;
 
 public class ContactTest
@@ -59,6 +60,7 @@ public class ContactTest
 			Contact contact = new Contact();
 			contact.setFirstname(BRETT);
 			contact.setLastname(SUTTON);
+			contact.setPhone1(new Phone("83208100"));
 			daoContact.addNote(contact, MY_FIRST_NOTE_GOES_HERE, THE_NOTE_BODY_1_IS_HERE);
 			daoContact.addNote(contact, MY_SECOND_NOTE_GOES_HERE, THE_NOTE_BODY_2_IS_HERE);
 			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
@@ -140,6 +142,7 @@ public class ContactTest
 
 			// Check the contact notes and Tags exists
 			Assert.assertTrue(contactExists(BRETT, SUTTON));
+			Assert.assertTrue(phoneExists("83208100"));
 			Assert.assertTrue(noteExists(BRETT, SUTTON, MY_FIRST_NOTE_GOES_HERE));
 			Assert.assertTrue(noteExists(BRETT, SUTTON, MY_SECOND_NOTE_GOES_HERE));
 			Assert.assertTrue(addressExists(BRETT, SUTTON, "10 smith drv", "Sometown", "Victoria", "3000"));
@@ -153,6 +156,7 @@ public class ContactTest
 				Contact contact = list.get(0);
 				contact.setFirstname(STEPHEN);
 				contact.setMiddlename("Bret");
+				contact.getPhone1().setPhoneNo("83208111");
 				daoContact.addNote(contact, "Note 3", "Note 3 body");
 				daoContact.detachTag(contact, TAG2);
 				daoContact.attachTag(contact, new Tag("Tag3", "The Tag3"));
@@ -172,6 +176,7 @@ public class ContactTest
 			Assert.assertTrue(contactExists(STEPHEN, SUTTON));
 			Assert.assertTrue(noteExists(STEPHEN, SUTTON, MY_FIRST_NOTE_GOES_HERE));
 			Assert.assertTrue(noteExists(STEPHEN, SUTTON, MY_SECOND_NOTE_GOES_HERE));
+			Assert.assertTrue(phoneExists("83208111"));
 			Assert.assertTrue(addressExists(STEPHEN, SUTTON, "20 replacement drv", "Othertown", "Victoria", "3000"));
 			Assert.assertTrue(tagExists(STEPHEN, SUTTON, TAG1));
 			Assert.assertFalse(tagExists(STEPHEN, SUTTON, TAG2));
@@ -260,7 +265,6 @@ public class ContactTest
 			Assert.assertTrue(foundContacts.size() == 1);
 			contact = foundContacts.get(0);
 			Assert.assertTrue(contact.getNotes().size() == 0);
-			Assert.assertTrue(contact.getAddress() == null);
 			Assert.assertTrue(contact.getTags().size() == 0);
 
 			contact.setMiddlename("Paige");
@@ -330,7 +334,7 @@ public class ContactTest
 			Assert.assertTrue(contactExists(TRISTAN, SUTTON));
 			List<Contact> foundContacts = daoContact.findByName(TRISTAN, SUTTON);
 			Assert.assertTrue(contact.getNotes().size() == 0);
-			Assert.assertTrue(contact.getAddress() == null);
+			//Assert.assertTrue(contact.getAddress() == null);
 			Assert.assertTrue(contact.getTags().size() == 0);
 
 			List<Contact> result = daoContact.findByName(TRISTAN, SUTTON);
@@ -393,6 +397,23 @@ public class ContactTest
 		Address address = contact.getAddress();
 		if (address != null && address.getStreet().equals(street) && address.getCity().equals(suburb)
 				&& address.getState().equals(state) && address.getPostcode().equals(postcode))
+		{
+			exists = true;
+		}
+
+		return exists;
+	}
+
+	private boolean phoneExists(String phoneNo)
+	{
+		boolean exists = false;
+
+		PhoneDao daoPhone = new DaoFactory(em).getPhoneDao();
+
+		List<Phone> foundPhone = daoPhone.findByNo(phoneNo);
+		Assert.assertTrue(foundPhone.size() == 1);
+		Phone phone = foundPhone.get(0);
+		if (phone.getPhoneNo().equals(phoneNo))
 		{
 			exists = true;
 		}
