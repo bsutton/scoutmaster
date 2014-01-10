@@ -24,6 +24,7 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	{
 		return super.findSingleBySingleParameter(Tag.FIND_BY_NAME, "tagName", name);
 	}
+	
 	public static Tag addTag(String name, String description)
 	{
 		EntityManager em = EntityManagerProvider.getEntityManager();
@@ -31,8 +32,8 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 		em.persist(tag);
 	
 		return tag;
-	
 	}
+
 	@Override
 	public JPAContainer<Tag> createVaadinContainer()
 	{
