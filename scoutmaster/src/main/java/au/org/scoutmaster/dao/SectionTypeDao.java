@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.Tag;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
@@ -80,5 +81,26 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	public JPAContainer<SectionType> createVaadinContainer()
 	{
 		return super.createVaadinContainer();
+	}
+
+	/** 
+	 * Finds and returns the tag with the same name as this section types name.
+	 * 
+	 * @param sectionType
+	 * @return
+	 */
+	public Tag getTag(SectionType sectionType)
+	{
+		Tag tag = null;
+
+		// Section Tag
+		if (sectionType != null)
+		{
+			TagDao daoTag = new DaoFactory().getTagDao();
+			tag = daoTag.findByName(sectionType.getName());
+		}
+		assert tag != null : "Database problem. Tag for SectionType " + sectionType.getName() + " is missing";
+		
+		return tag;
 	}
 }
