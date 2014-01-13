@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -51,7 +52,7 @@ public class GroupRole extends BaseEntity
 	
 	public enum BuiltIn
 	{
-		None, YouthMember, Parent, Gardian, SectionHelper, Volunteer, Leaders, AssistantLeader, President, Secretary, Treasurer, QuarterMaster, GroupLeader, CommitteeMember, CouncilMember, RecruitmentOfficer, Custom
+		None, YouthMember, Parent, Guardian, SectionHelper, Volunteer, Leaders, AssistantLeader, President, Secretary, Treasurer, QuarterMaster, GroupLeader, CommitteeMember, CouncilMember, RecruitmentOfficer, Custom
 	
 	}
 
@@ -83,7 +84,7 @@ public class GroupRole extends BaseEntity
 	 * The set of tags that should be added to a contact when this role is
 	 * assigned to the contact.
 	 */
-	@ManyToMany(targetEntity=Tag.class)
+	@ManyToMany(targetEntity=Tag.class, fetch=FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<Tag>();
 
 
