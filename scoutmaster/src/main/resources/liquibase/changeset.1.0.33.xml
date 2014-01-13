@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author="bsutton" id="1.0.33">
+
+		<!-- Section tags are not detachable. -->
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Rovers"</where>
+		</update>
+
+		<insert tableName="Tag">
+			<column name="NAME" value="Too Young" />
+			<column name="DESCRIPTION" value="Too young to be a youth member." />
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<column name="CREATED" valueComputed="now()" />
+			<column name="UPDATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>
