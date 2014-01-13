@@ -77,7 +77,7 @@ public class NavigatorUI extends UI
 	protected void init(VaadinRequest request)
 	{
 		
-		new DeadlockFinder().start();
+		DeadlockFinder.SINGLETON.start();
 		
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
