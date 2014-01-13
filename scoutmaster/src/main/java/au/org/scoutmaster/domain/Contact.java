@@ -75,8 +75,13 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Lastname")
 	private String lastname = "";
 
-	// @Transient
-	// private String fullname;
+	/**
+	 * This is an amalgum of the firstname and lastname i.e firstname + " " + lastname
+	 * This is redundant but it makes it easier to create lists which are sorted by the full name
+	 * as the metamodel doesn't expose transient fields so we can filter or sort on a transient
+	 * field in many scenarios.
+	 */
+	private String fullname = "";
 
 	@FormField(displayName = "Birth Date")
 	@Past
@@ -832,15 +837,15 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		}
 	}
 
-	// public void setFullname(String value)
-	// {
-	// // we ignore the value. The full name is a transient.
-	// this.fullname = firstname + " " + lastname;
-	// }
-
 	public String getFullname()
 	{
 		return firstname + " " + lastname;
+	}
+
+	public void setFullname(String fullname)
+	{
+		// we ignore this argument as fullname is always an amalgam of the firstname and lastname;
+		this.fullname = firstname + " " + lastname;
 	}
 
 	@PreRemove
