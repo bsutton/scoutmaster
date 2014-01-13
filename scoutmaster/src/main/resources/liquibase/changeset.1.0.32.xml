@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author="bsutton" id="1.0.32">
+		
+		<!--  Section tags are not detachable. -->
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Joeys"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Cubs"</where>
+		</update>
+
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Scouts"</where>
+		</update>
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Venturers"</where>
+		</update>
+
+		<update tableName="Tag">
+			<column name="BUILTIN" valueNumeric="1" />
+			<column name="DETACHABLE" valueNumeric="0" />
+			<where>NAME="Robers"</where>
+		</update>
+
+
+	</changeSet>
+
+</databaseChangeLog>
