@@ -22,6 +22,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
@@ -39,8 +40,8 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		// Contact_.lastname).getName()},new boolean[] {true});
 
 		Builder<Relationship> builder = new HeadingPropertySet.Builder<Relationship>();
-		builder.addColumn("LHS", Relationship_.lhs.getName()).addColumn("Type", Relationship_.type.getName())
-				.addColumn("RHS", Relationship_.rhs.getName());
+		builder.addColumn("Relationship", Relationship_.type.getName())
+				.addColumn("Related To", Relationship_.rhs.getName());
 
 		super.init(Relationship.class, container, builder.build());
 	}
@@ -57,28 +58,20 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		relationshipForm.setSizeFull();
 
 		FormHelper<Relationship> formHelper = relationshipForm.getFormHelper();
-		ComboBox lhs = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("LHS").setField(Relationship_.lhs).setListFieldName("fullname").build();
-
 		// relationshipForm.bindEntityField("LHS", Relationship_.lhs.getName(),
 		// Contact.class, "fullname");
 		// ComboBox lhs = relationshipForm.bindEntityField("LHS",
 		// Relationship_.lhs, Contact.class, Contact_.firstname);
 
-		@SuppressWarnings("unchecked")
-		JPAContainer<Relationship> lhscontainer = (JPAContainer<Relationship>) lhs.getContainerDataSource();
-		lhscontainer.sort(new String[]
-		{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
-		{ true, true });
-
-		relationshipForm.newLine();
-
-		
-		formHelper.new EntityFieldBuilder<RelationshipType>()
-				.setLabel("Type").setField(Relationship_.type).setListFieldName(RelationshipType_.lhs).build();
+		ComboBox type = formHelper.new EntityFieldBuilder<RelationshipType>()
+				.setLabel("Relationship").setField(Relationship_.type).setListFieldName(RelationshipType_.lhs).build();
+		type.setFilteringMode(FilteringMode.CONTAINS);
+		type.setTextInputAllowed(true);
 
 		ComboBox rhs = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Related To").setField(Relationship_.rhs).setListFieldName("fullname").build();
+				.setLabel("Related To").setField(Relationship_.rhs).setListFieldName(Contact_.fullname).build();
+		rhs.setFilteringMode(FilteringMode.CONTAINS);
+		rhs.setTextInputAllowed(true);
 
 
 		@SuppressWarnings("unchecked")
@@ -109,7 +102,6 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		// }
 		// catch (InstantiationException | IllegalAccessException e)
 		// {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
 	}
