@@ -134,7 +134,6 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 	// @Override
 	// public boolean visible()
 	// {
-	// // TODO Auto-generated method stub
 	// return false;
 	// }
 	//
