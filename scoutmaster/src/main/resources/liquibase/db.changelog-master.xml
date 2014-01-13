@@ -38,4 +38,8 @@
 	<include file="changeset.1.0.29.xml" relativeToChangelogFile="true" />
 	<include file="changeset.1.0.30.xml" relativeToChangelogFile="true" />
 	<include file="changeset.1.0.31.xml" relativeToChangelogFile="true" />
+	<include file="changeset.1.0.32.xml" relativeToChangelogFile="true" />
+	<include file="changeset.1.0.33.xml" relativeToChangelogFile="true" />
+	<include file="changeset.1.0.34.xml" relativeToChangelogFile="true" />
+	<include file="changeset.1.0.35.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>
