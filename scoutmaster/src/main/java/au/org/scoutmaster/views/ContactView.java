@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
+import org.vaadin.tokenfield.TokenField;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.FormHelper;
@@ -95,13 +96,21 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private Image workEmailImage;
 
-	private TagField tagField;
+	private TagField tagSearchField;
 
 	private ComboBox groupRoleField;
 
 	private ComboBox sectionTypeField;
 
 	private ChangeListener changeListener;
+
+	private TokenField tagField;
+
+	private CheckBox isMemberField;
+
+	public TextField membershipNoField;
+
+	public DateField memberSinceField;
 
 	@Override
 	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -161,7 +170,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
-		overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
+		tagField = overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Firstname", Contact_.firstname);
 		overviewForm.newLine();
@@ -345,7 +354,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		tabs.addTab(memberForm, "Member");
 		memberForm.setMargin(true);
 		memberForm.setSizeFull();
-		memberForm.bindBooleanField("Member", Contact_.isMember);
+		isMemberField = memberForm.bindBooleanField("Member", Contact_.isMember);
+		isMemberField.addValueChangeListener(changeListener);
 		memberForm.newLine();
 		// memberForm.colspan(2);
 
@@ -354,6 +364,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		sectionTypeField = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section")
 				.setField(Contact_.section).setListFieldName(SectionType_.name).build();
 		sectionTypeField.addValueChangeListener(this.changeListener);
+		sectionTypeField.setNullSelectionAllowed(true);
 
 		memberForm.newLine();
 		fieldSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section Eligibility")
@@ -362,10 +373,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.newLine();
 
 		memberForm.colspan(2);
-		memberForm.bindTextField("Member No", Contact_.memberNo);
+		membershipNoField = memberForm.bindTextField("Member No", Contact_.memberNo);
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd", Resolution.DAY);
+		memberSinceField = memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd", Resolution.DAY);
 	}
 
 	private void medicalTab()
@@ -460,7 +471,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				Long newGroupRoleId = (Long) event.getProperty().getValue();
 				if (newGroupRoleId != null)
 				{
-
 					GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
 
 					GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
@@ -469,14 +479,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 					// Update the tag which represents this role
 					if (newGroupRole != oldGroupRole && newGroupRole != null)
 					{
-						Contact contact = ContactView.this.getCurrent();
+						// Contact contact = ContactView.this.getCurrent();
 						// First remove the old set of tags associated with the
 						// group
 						if (oldGroupRole != null)
 						{
 							for (Tag tag : oldGroupRole.getTags())
 							{
-								contact.getTags().remove(tag);
+								ContactView.this.tagField.removeToken(tag);
 							}
 						}
 
@@ -484,8 +494,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 						// group role.
 						for (Tag tag : newGroupRole.getTags())
 						{
-							contact.getTags().add(tag);
+							ContactView.this.tagField.addToken(tag);
 						}
+
 					}
 
 					switch (newGroupRole.getBuiltIn())
@@ -497,9 +508,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 							showYouth(false);
 							break;
 					}
+					this.currentGroupRole = newGroupRole;
+
 				}
 				else
+				{
 					showYouth(true);
+					this.currentGroupRole = null;
+				}
 			}
 			else if (source == ContactView.this.birthDate)
 			{
@@ -522,31 +538,78 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				// the tag used to represent that section type.
 				@SuppressWarnings("unchecked")
 				Property<Long> property = event.getProperty();
-				Contact contact = ContactView.super.getCurrent();
 
 				Long newSectionTypeId = property.getValue();
-				SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
-				SectionType newValue = daoSectionType.findById(newSectionTypeId);
+				SectionType newValue = updateSectionTags(newSectionTypeId);
+				currentSectionType = newValue;
+			}
+			else if (source == ContactView.this.isMemberField)
+			{
+				boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
+						: ContactView.this.isMemberField.getValue();
 
-				// both of these conditions should always be true.
-				if (currentSectionType != newValue && newValue != null)
-				{
-					ContactDao daoContact = new DaoFactory().getContactDao();
-
-					if (currentSectionType != null)
-					{
-						Tag oldTag = contact.getTag(currentSectionType.getName());
-						if (oldTag != null)
-						{
-							daoContact.detachTag(contact, oldTag);
-						}
-					}
-
-					Tag newTag = daoSectionType.getTag(newValue);
-					daoContact.attachTag(contact, newTag);
-				}
+				updateMembership(isMember);
 			}
 
+		}
+
+		/**
+		 * Only members belong to a section so add/remove section tags according
+		 * to the users membership.
+		 * 
+		 * @param isMember
+		 */
+		private void updateMembership(boolean isMember)
+		{
+			SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+			Tag tag = daoSectionType.getTag(currentSectionType);
+			if (isMember == false)
+			{
+				if (tag != null)
+					ContactView.this.tagField.removeToken(tag);
+				ContactView.this.sectionTypeField.select(null);
+				ContactView.this.sectionTypeField.setReadOnly(true);
+				ContactView.this.membershipNoField.setReadOnly(true);
+				ContactView.this.memberSinceField.setReadOnly(true);
+			}
+			else
+			{
+				ContactView.this.sectionTypeField.setReadOnly(false);
+				ContactView.this.membershipNoField.setReadOnly(false);
+				ContactView.this.memberSinceField.setReadOnly(false);
+				if (tag != null)
+					ContactView.this.tagField.addToken(tag);
+			}
+		}
+
+		private SectionType updateSectionTags(Long newSectionTypeId)
+		{
+			SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+
+			SectionType newValue = null;
+			if (newSectionTypeId != null)
+				newValue = daoSectionType.findById(newSectionTypeId);
+
+			boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
+					: ContactView.this.isMemberField.getValue();
+
+			// both of these conditions should always be true.
+			if (currentSectionType != newValue)
+			{
+				if (currentSectionType != null)
+				{
+					Tag oldTag = daoSectionType.getTag(currentSectionType);
+					ContactView.this.tagField.removeToken(oldTag);
+				}
+
+				// Only members belong to a section.
+				if (newValue != null && isMember == true)
+				{
+					Tag newTag = daoSectionType.getTag(newValue);
+					ContactView.this.tagField.addToken(newTag);
+				}
+			}
+			return newValue;
 		}
 
 		private void showYouth(boolean visible)
@@ -610,11 +673,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		EntityProvider<Contact> provider = container.getEntityProvider();
 
-		ArrayList<Tag> tags = tagField.getTags();
+		ArrayList<Tag> tags = tagSearchField.getTags();
 
 		for (Tag tag : tags)
 		{
-			tagField.removeToken(tag);
+			tagSearchField.removeToken(tag);
 		}
 		provider.setQueryModifierDelegate(null);
 
@@ -626,7 +689,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagField.getTags(), filterString));
+		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(),
+				filterString));
 
 	}
 
@@ -646,17 +710,28 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	public void rowChanged(EntityItem<Contact> item)
 	{
-		super.rowChanged(item);
 		if (item != null)
 		{
 			Contact entity = item.getEntity();
 			if (entity != null)
 			{
+				this.changeListener.reset(entity.getRole(), entity.getSection());
+				super.rowChanged(item);
 				homeEmailImage.setVisible((entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0));
 				workEmailImage.setVisible((entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0));
-				this.changeListener.reset(entity.getRole(), entity.getSection());
+			}
+			else
+			{
+				this.changeListener.reset(null, null);
+				super.rowChanged(item);
 			}
 		}
+		else
+		{
+			this.changeListener.reset(null, null);
+			super.rowChanged(item);
+		}
+
 	}
 
 	@Override
@@ -664,10 +739,10 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		VerticalLayout advancedSearchLayout = new VerticalLayout();
 		HorizontalLayout tagSearchLayout = new HorizontalLayout();
-		tagField = new TagField("Search Tags", true);
-		tagSearchLayout.addComponent(tagField);
+		tagSearchField = new TagField("Search Tags", true);
+		tagSearchLayout.addComponent(tagSearchField);
 
-		tagField.addChangeListener(this);
+		tagSearchField.addChangeListener(this);
 		tagSearchLayout.setSizeFull();
 		advancedSearchLayout.addComponent(tagSearchLayout);
 
