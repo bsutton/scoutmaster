@@ -288,7 +288,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	/**
 	 * Id imported along with the contact. Used to link the contact to an
 	 * external data source generally the one it was imported from. This can be
-	 * used during susequent imports to link additional data entities to this
+	 * used during subsequent imports to link additional data entities to this
 	 * contact.
 	 */
 	@FormField(displayName = "Import ID")
