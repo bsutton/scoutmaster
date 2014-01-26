@@ -129,8 +129,12 @@ public class Activity extends BaseEntity implements CrudEntity
 	@Override
 	public String getName()
 	{
-		return withContact.getFullname() + this.subject.substring(20);
+		return withContact.getFullname() + this.subject.substring(0, Math.min(20, this.subject.length()));
 	}
 	
+	public String toString()
+	{
+		return getName();
+	}
 	
 }
