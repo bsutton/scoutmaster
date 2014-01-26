@@ -91,7 +91,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	}
 	public void addActivity(Contact contact, Activity activity)
 	{
-		contact.getActivites().add(activity);
+		contact.getActivities().add(activity);
 
 	}
 
