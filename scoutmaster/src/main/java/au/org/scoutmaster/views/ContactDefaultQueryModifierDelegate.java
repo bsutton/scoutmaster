@@ -28,12 +28,19 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(ContactDefaultQueryModifierDelegate.class);
 
-	private ArrayList<Tag> tags;
+	private ArrayList<Tag> includedTags;
+	private ArrayList<Tag> excludedTags;
 	private String fullTextSearch;
 
-	public ContactDefaultQueryModifierDelegate(ArrayList<Tag> tags, String fullTextSearch)
+	public ContactDefaultQueryModifierDelegate(ArrayList<Tag> includledTags, ArrayList<Tag> excludedTags,
+			String fullTextSearch)
 	{
-		this.tags = tags;
+		if (includledTags == null)
+			this.includedTags = new ArrayList<>();
+		if (excludedTags == null)
+			this.excludedTags = new ArrayList<>();
+		this.includedTags = includledTags;
+		this.excludedTags = excludedTags;
 		this.fullTextSearch = fullTextSearch;
 	}
 
@@ -45,31 +52,6 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 
 		try
 		{
-			Subquery<Contact> subquery = null;
-			if (tags.size() > 0)
-			{
-				subquery = query.subquery(Contact.class);
-				Root<Contact> subqueryContact = subquery.from(Contact.class);
-				subqueryContact.alias("C");
-				Join<Contact, Tag> tagJoin = subqueryContact.join(Contact_.tags);
-
-				List<Predicate> tagPredicates = new ArrayList<>();
-				for (Tag tag : tags)
-				{
-
-					Predicate tagPredicate = builder.equal(tagJoin.get("id"), tag.getId());
-					tagPredicates.add(tagPredicate);
-				}
-				// Or all of the tag predicates together.
-				Predicate[] orPredicates = new Predicate[tagPredicates.size()];
-				Predicate or = builder.or((Predicate[]) tagPredicates.toArray(orPredicates));
-
-				// link the subquery to the outer contact
-				Predicate subqueryPredicate = builder.equal(subqueryContact.get("id"), fromContact.get("id"));
-				subquery.where(builder.and(subqueryPredicate, or));
-
-			}
-
 			Predicate fullTextSearchPredicate = null;
 			// Build main queries full text search
 			if (fullTextSearch != null && !fullTextSearch.isEmpty())
@@ -92,12 +74,12 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
+
 				// Group Role
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
+
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"
 								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
@@ -109,21 +91,72 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 				fullTextSearchPredicate = builder.or(
 						builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)), "%"
 								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-				
+
+
 			}
 
-			if (subquery != null && fullTextSearchPredicate != null)
-				query.where(builder.and(fullTextSearchPredicate, builder.exists(subquery)));
-			else if (subquery != null)
-				query.where(builder.exists(subquery));
-			else if (fullTextSearchPredicate != null)
-				query.where(fullTextSearchPredicate);
+			// builder.not(root.get({field_name}).in(seqs))
 
+			ArrayList<Predicate> finalAnds = new ArrayList<>();
+
+			if (includedTags != null && includedTags.size() != 0)
+			{
+				finalAnds.add(fromContact.get(Contact_.id).in(buildWhereIn(query, builder, includedTags)));
+
+			}
+			if (excludedTags != null && excludedTags.size() != 0)
+			{
+				finalAnds.add(builder.not(fromContact.get(Contact_.id).in(buildWhereIn(query, builder, excludedTags))));
+			}
+			if (fullTextSearchPredicate != null)
+				finalAnds.add(fullTextSearchPredicate);
+
+			if (finalAnds.size() == 1)
+				query.where(finalAnds.get(0));
+			else
+				query.where(builder.and(finalAnds.toArray(new Predicate[0])));
 		}
 		catch (Throwable e)
 		{
 			logger.error(e, e);
 		}
+	}
+
+	private Subquery<Long> buildWhereIn(CriteriaQuery<?> query, CriteriaBuilder builder, ArrayList<Tag> tags)
+	{
+		Subquery<Long> subquery = null;
+		
+		if (tags.size() > 0)
+		{
+			@SuppressWarnings("unchecked")
+			Root<Contact> fromContact = (Root<Contact>) query.getRoots().iterator().next();
+			
+			subquery = query.subquery(Long.class);
+			Root<Contact> subqueryContact = subquery.from(Contact.class);
+			subquery.select(subqueryContact.get(Contact_.id));
+
+			subqueryContact.alias("C");
+			Join<Contact, Tag> tagJoin = subqueryContact.join(Contact_.tags);
+
+			List<Predicate> tagPredicates = new ArrayList<>();
+
+			Predicate oredTags = null;
+			for (Tag tag : tags)
+			{
+
+				Predicate tagPredicate = builder.equal(tagJoin.get("id"), tag.getId());
+				tagPredicates.add(tagPredicate);
+			}
+			// Or all of the tag predicates together.
+			Predicate[] orPredicates = new Predicate[tagPredicates.size()];
+			oredTags = builder.or((Predicate[]) tagPredicates.toArray(orPredicates));
+
+			// link the ored tags to the outer contact
+			Predicate outerLinkingPredicate = builder.equal(subqueryContact.get("id"), fromContact.get("id"));
+			subquery.where(builder.and(outerLinkingPredicate, oredTags));
+
+		}
+		return subquery;
 	}
 
 }
