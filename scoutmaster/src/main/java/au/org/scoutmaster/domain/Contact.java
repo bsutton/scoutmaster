@@ -81,6 +81,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * as the metamodel doesn't expose transient fields so we can filter or sort on a transient
 	 * field in many scenarios.
 	 */
+	@SuppressWarnings("unused")
 	private String fullname = "";
 
 	@FormField(displayName = "Birth Date")
@@ -283,7 +284,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * List of interactions with this contact.
 	 */
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "withContact", targetEntity = Activity.class)
-	private List<Activity> activites = new ArrayList<>();
+	private List<Activity> activities = new ArrayList<>();
 
 	/**
 	 * Id imported along with the contact. Used to link the contact to an
@@ -331,14 +332,19 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		}
 		return found;
 	}
+	
 
 	public List<Note> getNotes()
 	{
+		// If some wants the list lets force it to be read from the db.
+		notes.isEmpty();
 		return this.notes;
 	}
 
 	public Set<Tag> getTags()
 	{
+		// If some wants the list lets force it to be read from the db.
+		this.tags.isEmpty();
 		return this.tags;
 	}
 
@@ -652,12 +658,14 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	public void setNotes(List<Note> notes)
 	{
+		// If some wants the list lets force it to be read from the db.
+		this.notes.isEmpty();
 		this.notes = notes;
 	}
 
 	public void setActivites(List<Activity> activites)
 	{
-		this.activites = activites;
+		this.activities = activites;
 	}
 
 
@@ -781,9 +789,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		return hasFirstAidCertificate;
 	}
 
-	public List<Activity> getActivites()
+	public List<Activity> getActivities()
 	{
-		return activites;
+		// If some wants the list lets force it to be read from the db.
+		activities.isEmpty();
+		return activities;
 	}
 
 	public void setAddress(Address address)
