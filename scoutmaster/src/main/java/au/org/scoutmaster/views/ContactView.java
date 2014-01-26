@@ -132,7 +132,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		backgroundTab();
 		activityTab();
 		noteTab();
-		googleTab();
+	//	googleTab();
 
 		// When a persons birth date changes recalculate their age.
 		birthDate.addValueChangeListener(this.changeListener);
@@ -689,7 +689,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(),
+		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(),null,
 				filterString));
 
 	}

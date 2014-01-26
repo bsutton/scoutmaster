@@ -24,7 +24,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class SearchableContactTable extends VerticalLayout implements TagChangeListener
+public class SearchableContactTable extends VerticalLayout
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(SearchableContactTable.class);
@@ -35,7 +35,8 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 	private JPAContainer<Contact> contactContainer;
 	private HorizontalLayout stringSearchLayout;
 	private Button clearButton = new Button("Clear");
-	private TagField tagField;
+	private TagField includeTagField;
+	private TagField excludeTagField;
 
 	public SearchableContactTable(JPAContainer<Contact> contactContainer, HeadingPropertySet<Contact> headingPropertySet)
 	{
@@ -69,10 +70,28 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 	{
 		searchLayout = new VerticalLayout();
 		HorizontalLayout tagSearchLayout = new HorizontalLayout();
-		tagField = new TagField("Search Tags", true);
-		tagSearchLayout.addComponent(tagField);
+		includeTagField = new TagField("Include Tags", true);
+		excludeTagField = new TagField("Exclude Tags", true);
+		tagSearchLayout.addComponent(includeTagField);
+		tagSearchLayout.addComponent(excludeTagField);
 
-		tagField.addChangeListener(this);
+		includeTagField.addChangeListener(new TagChangeListener()
+		{
+			public void onTagListChanged(ArrayList<Tag> tags)
+			{
+				resetFilter(tags, excludeTagField.getTags(), SearchableContactTable.this.searchField.getValue());
+
+			}
+		});
+		excludeTagField.addChangeListener(new TagChangeListener()
+		{
+			public void onTagListChanged(ArrayList<Tag> tags)
+			{
+				resetFilter(includeTagField.getTags(), tags, SearchableContactTable.this.searchField.getValue());
+
+			}
+		});
+
 		tagSearchLayout.setSizeFull();
 		searchLayout.addComponent(tagSearchLayout);
 
@@ -113,27 +132,11 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 
 			public void textChange(final TextChangeEvent event)
 			{
-				resetFilter(tagField.getTags(), event.getText());
+				resetFilter(includeTagField.getTags(), excludeTagField.getTags(), event.getText());
 			}
 		});
 
-		/*
-		 * When the event happens, we handle it in the anonymous inner class.
-		 * You may choose to use separate controllers (in MVC) or presenters (in
-		 * MVP) instead. In the end, the preferred application architecture is
-		 * up to you.
-		 */
-		searchField.addTextChangeListener(new TextChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			public void textChange(final TextChangeEvent event)
-			{
-				resetFilter(SearchableContactTable.this.tagField.getTags(), event.getText());
-			}
-
-		});
-		
+				
 		clearButton.addClickListener(new ClickEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
@@ -143,7 +146,8 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 			public void clicked(ClickEvent event)
 			{
 				searchField.setValue("");
-				tagField.setValue((Object)null);
+				includeTagField.setValue((Object)null);
+				excludeTagField.setValue((Object)null);
 			}
 		});
 		
@@ -151,17 +155,12 @@ public class SearchableContactTable extends VerticalLayout implements TagChangeL
 
 	}
 
-	public void onTagListChanged(ArrayList<Tag> tags)
-	{
-		resetFilter(tags, this.searchField.getValue());
 
-	}
-
-	void resetFilter(ArrayList<Tag> tags, String fullTextSearch)
+	void resetFilter(ArrayList<Tag> includeTags, ArrayList<Tag> excludeTags, String fullTextSearch)
 	{
 		contactContainer.removeAllContainerFilters();
 		contactContainer.getEntityProvider().setQueryModifierDelegate(
-				new ContactDefaultQueryModifierDelegate(tags, fullTextSearch));
+				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch));
 		contactTable.refreshRowCache();
 
 	}
