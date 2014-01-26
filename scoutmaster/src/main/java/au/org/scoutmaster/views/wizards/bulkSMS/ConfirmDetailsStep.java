@@ -1,9 +1,14 @@
 package au.org.scoutmaster.views.wizards.bulkSMS;
 
+import java.util.ArrayList;
+
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
+import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -87,6 +92,10 @@ public class ConfirmDetailsStep implements WizardStep
 		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following Email.</b></p>");
 		
+		
+		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
+		Contact sampleContact = recipients.get(0);
+		User user = (User) SMSession.INSTANCE.getLoggedInUser();
 		provider.setReadOnly(false);
 		provider.setValue(details.getProvider().getProviderName());
 		provider.setReadOnly(true);
@@ -97,7 +106,7 @@ public class ConfirmDetailsStep implements WizardStep
 		subject.setValue(details.getSubject());
 		subject.setReadOnly(true);
 		message.setReadOnly(false);
-		message.setValue(details.getMessage().getBody());
+		message.setValue(details.getMessage().expandBody(user, sampleContact).toString());
 		message.setReadOnly(true);
 
 

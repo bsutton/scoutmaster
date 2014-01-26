@@ -12,13 +12,13 @@ import au.com.vaadinutils.ui.WorkingDialog;
 import au.com.vaadinutils.util.MutableInteger;
 import au.com.vaadinutils.util.ProgressBarWorker;
 import au.com.vaadinutils.util.ProgressTaskListener;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -116,7 +116,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 			queued.setValue(transmissions.size());
 			progressDescription.setValue(queued.intValue() + " messages queued.");
 
-			User user = (User) VaadinSession.getCurrent().getAttribute("user");
+			User user = (User) SMSession.INSTANCE.getLoggedInUser();
 			SendEmailTask task = new SendEmailTask(
 					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles());
 			

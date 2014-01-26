@@ -1,9 +1,14 @@
 package au.org.scoutmaster.views.wizards.bulkEmail;
 
+import java.util.ArrayList;
+
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
+import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
@@ -70,14 +75,18 @@ public class ConfirmDetailsStep implements WizardStep
 		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following Email.</b></p>");
 
+		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
+		User user = (User) SMSession.INSTANCE.getLoggedInUser();
+		
+		Contact sampleContact = recipients.get(0);
 		from.setReadOnly(false);
 		from.setValue(details.getFrom());
 		from.setReadOnly(true);
 		subject.setReadOnly(false);
-		subject.setValue(details.getSubject());
+		subject.setValue(details.getMessage().expandSubject(user, sampleContact).toString());
 		subject.setReadOnly(true);
 		ckEditorTextField.setReadOnly(false);
-		ckEditorTextField.setValue(details.getMessage().getBody());
+		ckEditorTextField.setValue(details.getMessage().expandBody(user, sampleContact).toString());
 		ckEditorTextField.setReadOnly(true);
 
 		return layout;

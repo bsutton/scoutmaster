@@ -50,8 +50,10 @@ public class SMSSession implements Closeable
 
 	public void send(SMSTransmission transmission) throws SmsException, IOException
 	{
+		User user = (User) SMSession.INSTANCE.getLoggedInUser();
+		
 		// The message that you want to send.
-		String msg = transmission.getMessage().getBody();
+		String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
 
 		// International number to target without leading "+"
 		Phone reciever = transmission.getRecipient();
@@ -63,7 +65,6 @@ public class SMSSession implements Closeable
 		ActivityDao daoActivity = new DaoFactory().getActivityDao();
 		ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
 		Activity activity = new Activity();
-		User user = (User) SMSession.INSTANCE.getLoggedInUser();
 		activity.setAddedBy(user);
 		activity.setWithContact(transmission.getContact());
 		activity.setSubject(transmission.getMessage().getSubject());
