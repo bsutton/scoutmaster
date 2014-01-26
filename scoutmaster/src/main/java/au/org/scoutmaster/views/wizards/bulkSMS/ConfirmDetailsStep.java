@@ -9,6 +9,8 @@ import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
@@ -19,6 +21,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Notification.Type;
 
 public class ConfirmDetailsStep implements WizardStep
 {
@@ -42,7 +45,7 @@ public class ConfirmDetailsStep implements WizardStep
 		layout.addComponent(new Label(
 				"Please review the details before clicking next as messages will be sent immediately."));
 		layout.setWidth("100%");
-		
+
 		recipientCount = new Label();
 		recipientCount.setContentMode(ContentMode.HTML);
 		layout.addComponent(recipientCount);
@@ -88,30 +91,33 @@ public class ConfirmDetailsStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		
+
 		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following Email.</b></p>");
-		
-		
+
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 		Contact sampleContact = recipients.get(0);
 		User user = (User) SMSession.INSTANCE.getLoggedInUser();
-		provider.setReadOnly(false);
-		provider.setValue(details.getProvider().getProviderName());
-		provider.setReadOnly(true);
-		from.setReadOnly(false);
-		from.setValue(details.getFrom());
-		from.setReadOnly(true);
-		subject.setReadOnly(false);
-		subject.setValue(details.getSubject());
-		subject.setReadOnly(true);
-		message.setReadOnly(false);
-		message.setValue(details.getMessage().expandBody(user, sampleContact).toString());
-		message.setReadOnly(true);
 
-
-
-
+		try
+		{
+			provider.setReadOnly(false);
+			provider.setValue(details.getProvider().getProviderName());
+			provider.setReadOnly(true);
+			from.setReadOnly(false);
+			from.setValue(details.getFrom());
+			from.setReadOnly(true);
+			subject.setReadOnly(false);
+			subject.setValue(details.getSubject());
+			subject.setReadOnly(true);
+			message.setReadOnly(false);
+			message.setValue(details.getMessage().expandBody(user, sampleContact).toString());
+			message.setReadOnly(true);
+		}
+		catch (VelocityFormatException e)
+		{
+			SMNotification.show(e, Type.ERROR_MESSAGE);
+		}
 
 		return layout;
 	}

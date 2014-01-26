@@ -9,11 +9,14 @@ import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -77,17 +80,24 @@ public class ConfirmDetailsStep implements WizardStep
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 		User user = (User) SMSession.INSTANCE.getLoggedInUser();
-		
-		Contact sampleContact = recipients.get(0);
-		from.setReadOnly(false);
-		from.setValue(details.getFrom());
-		from.setReadOnly(true);
-		subject.setReadOnly(false);
-		subject.setValue(details.getMessage().expandSubject(user, sampleContact).toString());
-		subject.setReadOnly(true);
-		ckEditorTextField.setReadOnly(false);
-		ckEditorTextField.setValue(details.getMessage().expandBody(user, sampleContact).toString());
-		ckEditorTextField.setReadOnly(true);
+
+		try
+		{
+			Contact sampleContact = recipients.get(0);
+			from.setReadOnly(false);
+			from.setValue(details.getFrom());
+			from.setReadOnly(true);
+			subject.setReadOnly(false);
+			subject.setValue(details.getMessage().expandSubject(user, sampleContact).toString());
+			subject.setReadOnly(true);
+			ckEditorTextField.setReadOnly(false);
+			ckEditorTextField.setValue(details.getMessage().expandBody(user, sampleContact).toString());
+			ckEditorTextField.setReadOnly(true);
+		}
+		catch (VelocityFormatException e)
+		{
+			SMNotification.show(e, Type.ERROR_MESSAGE);
+		}
 
 		return layout;
 	}
@@ -112,6 +122,5 @@ public class ConfirmDetailsStep implements WizardStep
 	{
 		return new Message(subject.getValue(), ckEditorTextField.getValue(), new Phone(from.getValue()));
 	}
-
 
 }

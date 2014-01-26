@@ -19,6 +19,7 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
+import com.vaadin.ui.Notification.Type;
 
 public class SMSSession implements Closeable
 {
@@ -51,25 +52,34 @@ public class SMSSession implements Closeable
 	public void send(SMSTransmission transmission) throws SmsException, IOException
 	{
 		User user = (User) SMSession.INSTANCE.getLoggedInUser();
-		
-		// The message that you want to send.
-		String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
 
-		// International number to target without leading "+"
-		Phone reciever = transmission.getRecipient();
+		try
+		{
+			// The message that you want to send.
+			String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
 
-		// Number of sender (not supported on all transports)
-		smsSender.sendTextSms(msg, reciever.getPhoneNo().replaceAll("\\s",""), transmission.getMessage().getSender().getPhoneNo());
+			// International number to target without leading "+"
+			Phone reciever = transmission.getRecipient();
 
-		// Log the activity
-		ActivityDao daoActivity = new DaoFactory().getActivityDao();
-		ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-		Activity activity = new Activity();
-		activity.setAddedBy(user);
-		activity.setWithContact(transmission.getContact());
-		activity.setSubject(transmission.getMessage().getSubject());
-		activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
-		activity.setDetails(transmission.getMessage().getBody());
-		daoActivity.persist(activity);
+			// Number of sender (not supported on all transports)
+			smsSender.sendTextSms(msg, reciever.getPhoneNo().replaceAll("\\s", ""), transmission.getMessage()
+					.getSender().getPhoneNo());
+
+			// Log the activity
+			ActivityDao daoActivity = new DaoFactory().getActivityDao();
+			ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+			Activity activity = new Activity();
+			activity.setAddedBy(user);
+			activity.setWithContact(transmission.getContact());
+			activity.setSubject(transmission.getMessage().getSubject());
+			activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
+			activity.setDetails(transmission.getMessage().getBody());
+			daoActivity.persist(activity);
+		}
+		catch (VelocityFormatException e)
+		{
+			SMNotification.show(e, Type.ERROR_MESSAGE);
+		}
+
 	}
 }

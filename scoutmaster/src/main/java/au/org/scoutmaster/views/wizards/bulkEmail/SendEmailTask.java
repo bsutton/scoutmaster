@@ -24,6 +24,7 @@ import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 import com.vaadin.ui.Notification.Type;
 
@@ -83,7 +84,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 
 				try
 				{
-					StringBuffer expandedBody = message.expandBody(user, transmission.getContact());
+					String expandedBody = message.expandBody(user, transmission.getContact());
 					StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
 					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(), transmission.getRecipient(),
 							null, expandedSubject.toString(), expandedBody.toString(), attachedFiles);
@@ -103,7 +104,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					sent++;
 					super.taskProgress(sent, targets.size(), transmission);
 					SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
-					
+
 					// SMNotification.show("Message sent",
 					// Type.TRAY_NOTIFICATION);
 				}
@@ -114,6 +115,11 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					super.taskItemError(transmission);
 					SMNotification.show(e, Type.ERROR_MESSAGE);
 				}
+				catch (VelocityFormatException e)
+				{
+					SMNotification.show(e, Type.ERROR_MESSAGE);
+				}
+
 			}
 
 			t.commit();

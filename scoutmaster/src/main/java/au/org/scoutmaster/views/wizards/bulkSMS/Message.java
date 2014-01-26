@@ -8,6 +8,7 @@ import org.apache.velocity.app.VelocityEngine;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 public class Message
 {
@@ -36,20 +37,28 @@ public class Message
 	{
 		return sender;
 	}
-	
-	public StringBuffer expandBody(User user, Contact contact)
+
+	public StringBuffer expandBody(User user, Contact contact) throws VelocityFormatException
 	{
-			VelocityEngine velocityEngine = new VelocityEngine();
-			velocityEngine.init();
-		
-			StringWriter sw = new StringWriter();
-			VelocityContext context = new VelocityContext();
-			context.put("user", user);
-			context.put("contact", contact);
-			
+		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.init();
+
+		StringWriter sw = new StringWriter();
+		VelocityContext context = new VelocityContext();
+		context.put("user", user);
+		context.put("contact", contact);
+
+		try
+		{
 			if (!velocityEngine.evaluate(context, sw, user.getFullname(), this.body))
 				throw new RuntimeException("Error processing Velocity macro for SMS body. Check error log");
-			
-			return sw.getBuffer();
+		}
+		catch (Throwable e)
+		{
+			throw new VelocityFormatException(e);
+
+		}
+
+		return sw.getBuffer();
 	}
 }

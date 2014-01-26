@@ -2,12 +2,14 @@ package au.org.scoutmaster.views.wizards.bulkEmail;
 
 import java.io.StringWriter;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 public class Message
 {
@@ -46,42 +48,65 @@ public class Message
 	{
 		return this.senderPhone;
 	}
-	
+
 	public String getSenderEmailAddress()
 	{
 		return this.senderEmailAddress;
 	}
 
-	public StringBuffer expandBody(User user, Contact contact)
+	public String expandBody(User user, Contact contact) throws VelocityFormatException
 	{
-			VelocityEngine velocityEngine = new VelocityEngine();
-			velocityEngine.init();
-		
-			StringWriter sw = new StringWriter();
-			VelocityContext context = new VelocityContext();
-			context.put("user", user);
-			context.put("contact", contact);
-			
-			if (!velocityEngine.evaluate(context, sw, user.getFullname(), this.body))
+		String result= null;
+		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.init();
+
+		StringWriter sw = new StringWriter();
+		VelocityContext context = new VelocityContext();
+		context.put("user", user);
+		context.put("contact", contact);
+
+		try
+		{
+			// html escaping cause velocity problems so we need to unescape before we past the body to velocity.
+			String unescapedBody = StringEscapeUtils.unescapeHtml(this.body);
+			if (!velocityEngine.evaluate(context, sw, user.getFullname(), unescapedBody))
 				throw new RuntimeException("Error processing Velocity macro for email body. Check error log");
 			
-			return sw.getBuffer();
+			// now we need to re-escape the body.
+			//result = StringEscapeUtils.escapeHtml(sw.toString());
+			result = sw.toString();
+		}
+		catch (Throwable e)
+		{
+			throw new VelocityFormatException(e);
+
+		}
+
+		return result;
 	}
-	
-	public StringBuffer expandSubject(User user, Contact contact)
+
+	public StringBuffer expandSubject(User user, Contact contact) throws VelocityFormatException
 	{
-			VelocityEngine velocityEngine = new VelocityEngine();
-			velocityEngine.init();
-		
-			StringWriter sw = new StringWriter();
-			VelocityContext context = new VelocityContext();
-			context.put("user", user);
-			context.put("contact", contact);
-			
+		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.init();
+
+		StringWriter sw = new StringWriter();
+		VelocityContext context = new VelocityContext();
+		context.put("user", user);
+		context.put("contact", contact);
+
+		try
+		{
 			if (!velocityEngine.evaluate(context, sw, user.getFullname(), this.subject))
 				throw new RuntimeException("Error processing Velocity macro for email body. Check error log");
-			
-			return sw.getBuffer();
+		}
+		catch (Throwable e)
+		{
+			throw new VelocityFormatException(e);
+
+		}
+
+		return sw.getBuffer();
 	}
 
 }
