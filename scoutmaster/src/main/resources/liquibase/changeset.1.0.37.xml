@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- change the column name to the default name expected by the many to 
+		many join. -->
+
+	<changeSet author="bsutton" id="1.0.37">
+		<dropForeignKeyConstraint constraintName="FK_Contact_Tag_Contact_ID"
+			baseTableName="Contact_Tag" />
+		<renameColumn tableName="Contact_Tag" oldColumnName="Contact_ID"
+			newColumnName="Contacts_ID" columnDataType="bigint(19)" />
+		<addForeignKeyConstraint baseColumnNames="Contacts_ID"
+			baseTableName="Contact_Tag" constraintName="FK_Contact_Tag_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+
+	</changeSet>
+
+</databaseChangeLog>
+
+
