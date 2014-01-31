@@ -13,6 +13,8 @@ import au.org.scoutmaster.domain.Event_;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.server.Page;
+import com.vaadin.server.Page.Styles;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventResize;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.MoveEvent;
@@ -52,7 +54,7 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 	{
 		ScoutCalEvent calendarEvent = (ScoutCalEvent) event.getCalendarEvent();
 		Event eventEntity = calendarEvent.getEntity();
-		
+
 		Date newStart = event.getNewStart();
 
 		Date oldStart = eventEntity.getEventStartDateTime();
@@ -105,16 +107,22 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 		EventDao daoEvent = new DaoFactory().getDao(EventDao.class);
 		List<Event> entries = daoEvent.findBetween(startDate, endDate);
 
-		// Wrap work entries as CalendarEvents for the view
+		// Wrap Events as CalendarEvents for the view
 		ArrayList<CalendarEvent> arrayList = new ArrayList<CalendarEvent>();
 		for (Event event : entries)
 		{
 			arrayList.add(new ScoutCalEvent(event));
+
+			// Inject the color style required by each event into the page
+			Styles styles = Page.getCurrent().getStyles();
+
+			// Inject the style. We Use the colour name as the css name (sans the leading #
+			styles.add(".v-calendar-event-" + event.getColor().getCSS().substring(1) + " { background-color:" + event.getColor().getCSS() + "; }");
 		}
 
 		return arrayList;
 	}
-	
+
 	public class ScoutCalEvent implements CalendarEvent
 	{
 		private static final long serialVersionUID = 1L;
@@ -152,7 +160,10 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 		@Override
 		public String getStyleName()
 		{
-			return null;
+			// We use the colour name as part of the css style name
+			// as this makes it easy to match the style to the colour.
+			// But take out the leading # as css doesn't like it.
+			return this.eventEntity.getColor().getCSS().substring(1);
 		}
 
 		@Override
@@ -167,6 +178,5 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 		}
 
 	}
-
 
 }

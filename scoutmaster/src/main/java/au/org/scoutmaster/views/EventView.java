@@ -1,22 +1,24 @@
 package au.org.scoutmaster.views;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.fields.AutoCompleteParent;
 import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
-import au.org.scoutmaster.fields.AttachedDocuments;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.DateRangeValidator;
 
@@ -46,8 +48,10 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	private DateField endDateField;
 
 	private DateField startDateField;
+	
+	private ColorPickerField colourPickerField;
 
-	private AttachedDocuments attachedDocuments;
+//	private AttachedDocuments attachedDocuments;
 
 	private JPAContainer<au.org.scoutmaster.domain.Event> container;
 
@@ -61,7 +65,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 
 		Builder< au.org.scoutmaster.domain.Event> builder = new HeadingPropertySet.Builder< au.org.scoutmaster.domain.Event>();
 		builder.addColumn("Subject", Event_.subject)
-				.addColumn("Type", Event_.allDayEvent)
+				.addColumn("All Day", Event_.allDayEvent)
 				.addColumn("Start Date", Event_.eventStartDateTime)
 				.addColumn("End Date", Event_.eventEndDateTime);
 
@@ -89,8 +93,10 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
-
+		
+		colourPickerField = overviewForm.bindColorPicker("Colour", Event_.color);
 		overviewForm.newLine();
+		
 		overviewForm.bindBooleanField("All Day Event", Event_.allDayEvent);
 		overviewForm.newLine();
 		
@@ -133,8 +139,8 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		
 		layout.addComponent(overviewForm);
 		
-		attachedDocuments = new AttachedDocuments();
-		layout.addComponent(attachedDocuments);
+//		attachedDocuments = new AttachedDocuments();
+//		layout.addComponent(attachedDocuments);
 
 		return layout;
 	}
@@ -142,8 +148,8 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	@Override
 	public void rowChanged(EntityItem<au.org.scoutmaster.domain.Event> item)
 	{
-		if (item != null)
-			attachedDocuments.setDocuments(item.getEntity().getDocuments());
+//		if (item != null)
+//			attachedDocuments.setDocuments(item.getEntity().getDocuments());
 		super.rowChanged(item);
 	}
 
@@ -185,4 +191,16 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		EventDao daoEvent = new DaoFactory().getEventDao();
 		daoEvent.detachCoordinator(this.getCurrent(), entity);
 	}
+
+
+	@Override
+	protected List<CrudAction<au.org.scoutmaster.domain.Event>> getCrudActions()
+	{
+		List<CrudAction<au.org.scoutmaster.domain.Event>> actions = super.getCrudActions();
+		
+		actions.add(new CopyEventAction());
+		return actions;
+	}
+	
+	
 }
