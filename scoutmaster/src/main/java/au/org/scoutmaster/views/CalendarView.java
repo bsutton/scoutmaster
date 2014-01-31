@@ -33,7 +33,6 @@ public class CalendarView extends VerticalLayout implements View
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-
 		// Customize the event provider for adding events
 		// as entities
 		ContainerEventProvider cep = new ScoutsContainerEventProvider();
@@ -65,7 +64,7 @@ public class CalendarView extends VerticalLayout implements View
 
 		//HorizontalLayout controls = new HorizontalLayout();
 
-		// When an event has a section attached us this to filter the container
+		// When an event has a section attached use this to filter the container
 //		ComboBox section = new ComboBox("Section");
 //		section.setContainerDataSource(new DaoFactory().getDao(SectionTypeDao.class).createVaadinContainer());
 //		section.setImmediate(true);
