@@ -129,7 +129,7 @@ public class ContactTest
 			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
 			daoContact.attachTag(contact, new Tag(TAG1, "The Tag1"));
 			daoContact.attachTag(contact, new Tag(TAG2, "The Tag2"));
-			daoContact.merge(contact);
+			daoContact.persist(contact);
 			t.commit();
 		}
 		finally
@@ -161,7 +161,6 @@ public class ContactTest
 				daoContact.detachTag(contact, TAG2);
 				daoContact.attachTag(contact, new Tag("Tag3", "The Tag3"));
 				contact.setAddress(new Address("20 replacement drv", "Othertown", "Victoria", "3000"));
-				daoContact.merge(contact);
 			}
 			t.commit();
 		}
