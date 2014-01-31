@@ -1,16 +1,23 @@
 package au.org.scoutmaster.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
+import org.pojomatic.annotations.PojomaticPolicy;
+import org.pojomatic.annotations.Property;
 
 /**
  * Tags are used to group and identify certain attributes of a contact,
@@ -21,12 +28,11 @@ import org.pojomatic.annotations.AutoProperty;
  * @author bsutton
  * 
  */
-@Entity(name="Tag")
-@Table(name="Tag")
+@Entity(name = "Tag")
+@Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
 @AutoProperty
 public class Tag extends BaseEntity
 {
@@ -38,39 +44,38 @@ public class Tag extends BaseEntity
 
 	public static final String NAME = "name";
 
-
 	@Column(unique = true, length = 30)
 	@NotBlank
+	@Size(max=30)
 	String name;
 
-
 	@Column(length = 250)
+	@Size(max=250)
 	@NotBlank
 	String description;
-	
+
 	/**
 	 * Indicates that this is a builtin tag and therefore it may not be deleted
 	 */
 	Boolean builtin = new Boolean(false);
-	
 
 	/*
-	 * Non detachable tags are a special class of 
-	 * tags which are automatically assigned to an entity
-	 * based on some other entity property.
-	 * For instance a Contact which is a Youth Member would
-	 * also be automatically assigned to the tag Youth Member.
-	 * This is some what redundant but the idea is to make searching
-	 * for entities by a tag all encompassing.
-	 * i.e. all major attributes of an entity are cross referenced
-	 * by a tag for the purposes of searching.
+	 * Non detachable tags are a special class of tags which are automatically
+	 * assigned to an entity based on some other entities property. For instance
+	 * a Contact which is a Youth Member would also be automatically assigned to
+	 * the tag Youth Member. This is some what redundant but the idea is to make
+	 * searching for entities by a tag all encompassing. i.e. all major
+	 * attributes of an entity are cross referenced by a tag for the purposes of
+	 * searching.
 	 * 
 	 * Only builtin tags may be NON-detachable.
 	 */
 	Boolean detachable = new Boolean(true);
 
-	// @ManyToMany
-	// private final List<Contact> contacts = new ArrayList<>();
+	@ManyToMany(mappedBy = "tags")
+	@Property(policy = PojomaticPolicy.NONE) // stop pojomatic generating a circular reference.
+	private final Set<Contact> contacts = new HashSet<>();
+
 	//
 	// @ManyToMany
 	// private final List<School> schools = new ArrayList<>();
@@ -108,7 +113,6 @@ public class Tag extends BaseEntity
 		return this.name.equals(tagName);
 	}
 
-	
 	public String getName()
 	{
 		return this.name;
@@ -118,8 +122,7 @@ public class Tag extends BaseEntity
 	{
 		return this.description;
 	}
-	
-	
+
 	public void setName(String name)
 	{
 		this.name = name;
@@ -149,7 +152,6 @@ public class Tag extends BaseEntity
 	{
 		this.detachable = detachable;
 	}
-
 
 	// public List<Contact> getContacts()
 	// {
@@ -187,6 +189,11 @@ public class Tag extends BaseEntity
 	public int hashCode()
 	{
 		return Pojomatic.hashCode(this);
+	}
+
+	public Set<Contact> getContacts()
+	{
+		return this.contacts;
 	}
 
 }

@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -38,5 +39,12 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	public JPAContainer<Tag> createVaadinContainer()
 	{
 		return super.createVaadinContainer();
+	}
+	
+	public void addContact(Tag tag, Contact contact)
+	{
+		tag.getContacts().add(contact);
+		contact.getTags().add(tag);
+		
 	}
 }

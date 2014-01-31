@@ -80,8 +80,8 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 
 	public void attachTag(Contact contact, Tag tag)
 	{
-//		tag.addContact(this);
 		contact.getTags().add(tag);
+		tag.getContacts().add(contact);
 	}
 	
 	public void addRelationship(Contact contact, Relationship child)
