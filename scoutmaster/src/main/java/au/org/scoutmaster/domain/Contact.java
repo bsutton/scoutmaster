@@ -254,7 +254,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true)
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
@@ -265,7 +265,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true)
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
@@ -273,17 +273,17 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, targetEntity = Tag.class)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, targetEntity = Tag.class)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "attachedContact")
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "attachedContact", orphanRemoval=true)
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "withContact", targetEntity = Activity.class)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "withContact", targetEntity = Activity.class, orphanRemoval=true)
 	private List<Activity> activities = new ArrayList<>();
 
 	/**

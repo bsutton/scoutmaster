@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -21,6 +22,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.crud.splitFields.Color;
 
 /**
  * Used to describe an event such as a section meeting or a bbq.
@@ -80,6 +82,12 @@ public class Event extends BaseEntity implements CrudEntity
 
 	@OneToMany(targetEntity=Document.class)
 	private List<Document> documents = new ArrayList<>();
+
+	/** 
+	 * The Colour to display the event with.
+	 */
+	@Embedded
+	private Color color;
 	
 	public Event()
 	{
@@ -91,6 +99,19 @@ public class Event extends BaseEntity implements CrudEntity
 		this.setDetails(details);
 		this.setEventStartDateTime(start);
 		this.setEventEndDateTime(end);
+	}
+
+	public Event(Event rhs)
+	{
+		this.subject = rhs.subject;
+		this.allDayEvent = rhs.allDayEvent;
+		this.coordinators = new ArrayList<>();
+		this.coordinators.addAll(rhs.coordinators);
+		this.details = rhs.details;
+		this.documents = rhs.documents;
+		this.eventEndDateTime = rhs.eventEndDateTime;
+		this.eventStartDateTime = rhs.eventStartDateTime;
+		this.location = rhs.location;
 	}
 
 	public Boolean getAllDayEvent()
@@ -179,7 +200,14 @@ public class Event extends BaseEntity implements CrudEntity
 		this.coordinators = coordinators;
 	}
 
-	
-	
+	public String toString()
+	{
+		return this.getEventStartDateTime() + " " + this.subject; 
+	}
+
+	public Color getColor()
+	{
+		return this.color;
+	}
 
 }
