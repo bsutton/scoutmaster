@@ -1,8 +1,11 @@
 package au.org.scoutmaster.views.wizards.bulkSMS;
 
+import java.util.ArrayList;
+
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
+import au.org.scoutmaster.domain.Tag;
 
 public class SMSTransmission
 {
@@ -11,12 +14,14 @@ public class SMSTransmission
 	private Phone recipient;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
+	private ArrayList<Tag> activityTags;
 
-	public SMSTransmission(Contact contact, Message message, Phone recipient)
+	public SMSTransmission(ArrayList<Tag> activityTags, Contact contact, Message message, Phone recipient)
 	{
 		this.contact = contact;
 		this.message = message;
 		this.recipient = recipient;
+		this.activityTags = activityTags;
 
 		if (recipient.getPhoneType() != PhoneType.MOBILE)
 			throw new IllegalArgumentException("The phone argument must be of type MOBILE");
@@ -27,6 +32,7 @@ public class SMSTransmission
 		this.contact = contact;
 		this.message = message;
 		this.exception = exception;
+		this.activityTags = new ArrayList<>();
 	}
 
 	public Message getMessage()
@@ -69,6 +75,11 @@ public class SMSTransmission
 	public Contact getContact()
 	{
 		return contact;
+	}
+
+	public ArrayList<Tag> getActivityTags()
+	{
+		return this.activityTags;
 	}
 
 }

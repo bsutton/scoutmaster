@@ -143,7 +143,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 								contact.setFirstname("Test");
 								contact.setLastname("SMS");
 
-								SMSTransmission transmission = new SMSTransmission(contact, message, recipient);
+								SMSTransmission transmission = new SMSTransmission(null, contact, message, recipient);
 								SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
 
 								try

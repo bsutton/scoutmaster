@@ -1,5 +1,6 @@
 package au.org.scoutmaster.views.wizards.bulkSMS;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
@@ -10,7 +11,9 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -38,6 +41,7 @@ public class MessageDetailsStep implements WizardStep
 	private MultiColumnFormLayout<SMSProvider> formLayout;
 	private VerticalLayout layout;
 	private Label recipientCount;
+	private TagField tag;
 
 	public MessageDetailsStep(BulkSMSWizardView messagingWizardView)
 	{
@@ -52,19 +56,28 @@ public class MessageDetailsStep implements WizardStep
 		formLayout.setSizeFull();
 		
 		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		List<SMSProvider> list = daoSMSProvider.findAll();
-		if (list.size() == 0)
+		List<SMSProvider> providerList = daoSMSProvider.findAll();
+		if (providerList.size() == 0)
 			throw new IllegalStateException("You must first configure an SMS Provider");
-		SMSProvider provider = list.get(0);
+		SMSProvider provider = providerList.get(0);
 
 		providers = new ComboBox("Provider");
 		providers.setContainerDataSource(daoSMSProvider.createVaadinContainer());
 		providers.setConverter(SMSProvider.class);
 		providers.select(provider.getId());
 		
+		// Only give the user the option to select a provider if there is more than one of them.
+		if (providerList.size() > 1)
+			layout.addComponent(providers);
+		
 		recipientCount = new Label();
 		recipientCount.setContentMode(ContentMode.HTML);
 		layout.addComponent(recipientCount);
+
+		tag = new TagField("Activity Tag", false);
+		tag.setWidth("100%");
+		tag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
+		layout.addComponent(tag);
 
 		from = formLayout.bindTextField("From Mobile No.", "from");
 		from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
@@ -157,6 +170,11 @@ public class MessageDetailsStep implements WizardStep
 	public String getSubject()
 	{
 		return subject.getValue();
+	}
+
+	public ArrayList<Tag> getActivityTags()
+	{
+		return this.tag.getTags();
 	}
 
 }

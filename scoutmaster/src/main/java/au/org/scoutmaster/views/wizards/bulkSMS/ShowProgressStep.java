@@ -79,7 +79,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 
-		MessageDetailsStep enter = messagingWizardView.getDetails();
+		MessageDetailsStep detailsStep = messagingWizardView.getDetails();
 		ArrayList<SMSTransmission> transmissions = new ArrayList<>();
 
 		HashSet<String> dedupList = new HashSet<>();
@@ -93,30 +93,30 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 			Phone primaryPhone = contact.getPrimaryPhone();
 			if (primaryPhone != null && primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, primaryPhone);
+				queueTransmission(detailsStep, transmissions, dedupList, contact, primaryPhone);
 				continue;
 			}
 
 			if (contact.getPhone1() != null && contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone1());
+				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone1());
 				continue;
 			}
 
 			if (contact.getPhone2() != null && contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone2());
+				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone2());
 				continue;
 			}
 
 			if (contact.getPhone3() != null && contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, contact.getPhone3());
+				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone3());
 				continue;
 			}
 
 			// No mobile found
-			SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), new RecipientException(
+			SMSTransmission transmission = new SMSTransmission(contact, detailsStep.getMessage(), new RecipientException(
 					"No mobile no.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
 			rejected.setValue(rejected.intValue() + 1);
@@ -136,7 +136,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 			
 
 			SendMessageTask task = new SendMessageTask(
-					this, provider, enter.getMessage(), transmissions);
+					this, provider, detailsStep.getMessage(), transmissions);
 			workDialog = new WorkingDialog("Sending SMS messages", "Sending...", task);
 			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(task);
 			worker.start();
@@ -149,10 +149,10 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		return layout;
 	}
 
-	private void queueTransmission(MessageDetailsStep enter, ArrayList<SMSTransmission> transmissions,
+	private void queueTransmission(MessageDetailsStep detailsStep, ArrayList<SMSTransmission> transmissions,
 			HashSet<String> dedupList, Contact contact, Phone primaryPhone)
 	{
-		SMSTransmission transmission = new SMSTransmission(contact, enter.getMessage(), primaryPhone);
+		SMSTransmission transmission = new SMSTransmission(detailsStep.getActivityTags(), contact, detailsStep.getMessage(), primaryPhone);
 		String phone = primaryPhone.getPhoneNo();
 		if (!dedupList.contains(phone))
 		{
