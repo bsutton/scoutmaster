@@ -6,6 +6,7 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Tag;
@@ -75,7 +76,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 		{ true });
 
 		Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
-		builder.addColumn("Contact", Tag_.name).addColumn("Description", Tag_.description)
+		builder.addColumn("Tag", Tag_.name).addColumn("Description", Tag_.description)
 				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
 
 		super.init(Tag.class, container, builder.build());
@@ -113,7 +114,6 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 			builtin.setReadOnly(true);
 
 			super.rowChanged(item);
-
 		}
 	}
 
@@ -123,4 +123,14 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 		return "Tags";
 	}
 
+
+	@Override
+	protected void postDelete(Object entityId)
+	{
+		// need to flush the cache as a db cascade delete removed child records.
+		EntityManagerProvider.getEntityManager().getEntityManagerFactory().getCache().evictAll();
+		super.postDelete(entityId);
+	}
+
+	
 }
