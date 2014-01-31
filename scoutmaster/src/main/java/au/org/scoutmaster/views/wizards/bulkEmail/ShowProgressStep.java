@@ -77,7 +77,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 
-		BulkEmailDetailsStep enter = messagingWizardView.getDetails();
+		BulkEmailDetailsStep details = messagingWizardView.getDetails();
 		ArrayList<EmailTransmission> transmissions = new ArrayList<>();
 
 		HashSet<String> dedupList = new HashSet<>();
@@ -89,19 +89,19 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 			String email = contact.getHomeEmail();
 			if (email != null && email.length() > 0)
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, email);
+				queueTransmission(details, transmissions, dedupList, contact, email);
 				continue;
 			}
 
 			 email = contact.getWorkEmail();
 			if (email != null && email.length() > 0)
 			{
-				queueTransmission(enter, transmissions, dedupList, contact, email);
+				queueTransmission(details, transmissions, dedupList, contact, email);
 				continue;
 			}
 
 			// No email address found
-			EmailTransmission transmission = new EmailTransmission(contact, enter.getMessage(), new RecipientException(
+			EmailTransmission transmission = new EmailTransmission(contact, details.getMessage(), new RecipientException(
 					"No email address on contact.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
 			rejected.setValue(rejected.intValue() + 1);
@@ -118,7 +118,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 
 			User user = (User) SMSession.INSTANCE.getLoggedInUser();
 			SendEmailTask task = new SendEmailTask(
-					this, user, enter.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles());
+					this, user, details.getMessage(), transmissions, this.messagingWizardView.getDetails().getAttachedFiles());
 			
 			workDialog = new WorkingDialog("Sending Emails", "Sending...", task);
 			
@@ -133,10 +133,10 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 		return layout;
 	}
 
-	private void queueTransmission(BulkEmailDetailsStep enter, ArrayList<EmailTransmission> transmissions,
+	private void queueTransmission(BulkEmailDetailsStep details, ArrayList<EmailTransmission> transmissions,
 			HashSet<String> dedupList, Contact contact, String toEmailAddress)
 	{
-		EmailTransmission transmission = new EmailTransmission(contact, enter.getMessage(), toEmailAddress);
+		EmailTransmission transmission = new EmailTransmission(details.getActivityTags(), contact, details.getMessage(), toEmailAddress);
 		if (!dedupList.contains(toEmailAddress))
 		{
 			dedupList.add(toEmailAddress);

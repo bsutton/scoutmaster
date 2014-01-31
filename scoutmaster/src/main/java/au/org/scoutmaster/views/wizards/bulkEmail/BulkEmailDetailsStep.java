@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views.wizards.bulkEmail;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.vaadin.easyuploads.FileBuffer;
@@ -10,7 +11,9 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -45,6 +48,8 @@ public class BulkEmailDetailsStep implements WizardStep
 	
 	private HashSet<AttachedFile>fileList = new HashSet<>();
 
+	private TagField tag;
+
 
 	public BulkEmailDetailsStep(BulkEmailWizardView messagingWizardView)
 	{
@@ -60,6 +65,11 @@ public class BulkEmailDetailsStep implements WizardStep
 		recipientCount = new Label("Recipient Count");
 		recipientCount.setContentMode(ContentMode.HTML);
 		layout.addComponent(recipientCount);
+
+		tag = new TagField("Activity Tag", false);
+		tag.setWidth("100%");
+		tag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
+		layout.addComponent(tag);
 
 		from = new TextField("From Email Address");
 		layout.addComponent(from);
@@ -232,6 +242,11 @@ public class BulkEmailDetailsStep implements WizardStep
 	public HashSet<AttachedFile> getAttachedFiles()
 	{
 		return this.fileList;
+	}
+
+	public ArrayList<Tag> getActivityTags()
+	{
+		return tag.getTags();
 	}
 
 }

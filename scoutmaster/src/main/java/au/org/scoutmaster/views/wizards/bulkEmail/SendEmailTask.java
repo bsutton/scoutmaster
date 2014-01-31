@@ -17,11 +17,14 @@ import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.util.VelocityFormatException;
@@ -74,6 +77,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			// We are in a background thread so we have to get our own entity
 			// manager.
 			EntityManagerProvider.setCurrentEntityManager(em);
+			
 			SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
 			SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
@@ -99,8 +103,17 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					activity.setSubject(message.getSubject());
 					activity.setDetails(message.getBody());
 					activity.setType(type);
-
 					daoActivity.persist(activity);
+					
+					// Tag the contact
+					ContactDao daoContact = new DaoFactory().getContactDao();
+					TagDao daoTag = new DaoFactory().getTagDao();
+					for (Tag tag : transmission.getActivityTags())
+					{
+						tag = daoTag.merge(tag);
+						daoContact.attachTag(transmission.getContact(), tag);
+					}
+					daoContact.merge(transmission.getContact());
 					sent++;
 					super.taskProgress(sent, targets.size(), transmission);
 					SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);

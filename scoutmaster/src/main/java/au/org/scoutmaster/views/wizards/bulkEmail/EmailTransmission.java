@@ -1,6 +1,12 @@
 package au.org.scoutmaster.views.wizards.bulkEmail;
 
+import java.util.ArrayList;
+
+import com.vaadin.addon.jpacontainer.EntityProvider;
+
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Tag;
 
 public class EmailTransmission
 {
@@ -9,12 +15,19 @@ public class EmailTransmission
 	private String recipientEmailAddress;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
+	private ArrayList<Tag> activityTags;
 
-	public EmailTransmission(Contact contact, Message message, String recipient)
+	public EmailTransmission(ArrayList<Tag> activityTags, Contact contact, Message message, String recipient)
 	{
 		this.contact = contact;
 		this.message = message;
 		this.recipientEmailAddress = recipient;
+		this.activityTags = activityTags;
+		
+		// We are about to pass these to a new thread and em so we must detach them.
+		EntityManagerProvider.detach(contact);
+		for (Tag tag: this.activityTags)
+			EntityManagerProvider.detach(tag);
 	}
 
 	public EmailTransmission(Contact contact, Message message, Exception exception)
@@ -61,6 +74,11 @@ public class EmailTransmission
 	public Contact getContact()
 	{
 		return contact;
+	}
+
+	public ArrayList<Tag> getActivityTags()
+	{
+		return activityTags;
 	}
 
 }
