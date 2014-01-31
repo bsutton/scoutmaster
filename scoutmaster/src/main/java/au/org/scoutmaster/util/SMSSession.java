@@ -10,11 +10,14 @@ import org.marre.sms.SmsException;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
@@ -75,6 +78,16 @@ public class SMSSession implements Closeable
 			activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
 			activity.setDetails(transmission.getMessage().getBody());
 			daoActivity.persist(activity);
+			
+			
+			// Tag the contact
+			ContactDao daoContact = new DaoFactory().getContactDao();
+			TagDao daoTag = new DaoFactory().getTagDao();
+			for (Tag tag : transmission.getActivityTags())
+			{
+				daoContact.attachTag(transmission.getContact(), tag);
+			}
+
 		}
 		catch (VelocityFormatException e)
 		{
