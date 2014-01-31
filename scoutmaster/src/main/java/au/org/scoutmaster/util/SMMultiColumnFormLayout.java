@@ -41,7 +41,4 @@ public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFo
 		this.getFieldList().add(field);
 		return field;
 	}
-
-
-
 }
