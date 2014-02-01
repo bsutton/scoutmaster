@@ -2,8 +2,6 @@ package au.org.scoutmaster.views.wizards.bulkEmail;
 
 import java.util.ArrayList;
 
-import com.vaadin.addon.jpacontainer.EntityProvider;
-
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
