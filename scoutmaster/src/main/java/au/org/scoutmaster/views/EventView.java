@@ -12,7 +12,6 @@ import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.fields.AutoCompleteParent;
 import au.com.vaadinutils.fields.CKEditorEmailField;
-import au.com.vaadinutils.fields.ColorPickerField;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
@@ -49,8 +48,6 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 
 	private DateField startDateField;
 	
-	private ColorPickerField colourPickerField;
-
 //	private AttachedDocuments attachedDocuments;
 
 	private JPAContainer<au.org.scoutmaster.domain.Event> container;
@@ -94,7 +91,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
 		
-		colourPickerField = overviewForm.bindColorPicker("Colour", Event_.color);
+		overviewForm.bindColorPicker("Colour", Event_.color);
 		overviewForm.newLine();
 		
 		overviewForm.bindBooleanField("All Day Event", Event_.allDayEvent);
