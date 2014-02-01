@@ -1,6 +1,5 @@
 package au.org.scoutmaster.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,6 @@ import org.junit.Test;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.Transaction;
-import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
 
@@ -25,7 +23,7 @@ public class ContactTag
 		EntityManagerProvider.setEntityManagerFactory(emf);
 		
 		EntityManager em = EntityManagerProvider.createEntityManager();
-		EntityManagerProvider.INSTANCE.setCurrentEntityManager(em);
+		EntityManagerProvider.setCurrentEntityManager(em);
 		
 		Transaction t = new Transaction(em);
 		try 
