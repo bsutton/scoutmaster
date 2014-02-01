@@ -31,9 +31,10 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 	private ArrayList<Tag> includedTags;
 	private ArrayList<Tag> excludedTags;
 	private String fullTextSearch;
+	private boolean excludeDoNotSendBulkCommunications;
 
 	public ContactDefaultQueryModifierDelegate(ArrayList<Tag> includledTags, ArrayList<Tag> excludedTags,
-			String fullTextSearch)
+			String fullTextSearch, boolean excludeDoNotSendBulkCommunications)
 	{
 		if (includledTags == null)
 			this.includedTags = new ArrayList<>();
@@ -42,6 +43,7 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 		this.includedTags = includledTags;
 		this.excludedTags = excludedTags;
 		this.fullTextSearch = fullTextSearch;
+		this.excludeDoNotSendBulkCommunications = excludeDoNotSendBulkCommunications;
 	}
 
 	@Override
@@ -53,6 +55,8 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 		try
 		{
 			Predicate fullTextSearchPredicate = null;
+			
+			
 			// Build main queries full text search
 			if (fullTextSearch != null && !fullTextSearch.isEmpty())
 			{
@@ -110,6 +114,11 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 			}
 			if (fullTextSearchPredicate != null)
 				finalAnds.add(fullTextSearchPredicate);
+			
+			if (excludeDoNotSendBulkCommunications)
+			{
+				finalAnds.add(builder.equal(fromContact.get(Contact_.doNotSendBulkCommunications), false));
+			}
 
 			if (finalAnds.size() == 1)
 				query.where(finalAnds.get(0));

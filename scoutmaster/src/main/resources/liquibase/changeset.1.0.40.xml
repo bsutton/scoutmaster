@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<!--  oops default should be off. -->
+	<changeSet author="bsutton" id="1.0.40">
+		<dropColumn tableName="Contact" columnName="doNotSendBulkCommunications"/>
+		
+		<addColumn tableName="Contact">
+			<column defaultValueNumeric="0" name="doNotSendBulkCommunications" type="BIT(1)" />
+		</addColumn>
+	</changeSet>
+</databaseChangeLog>

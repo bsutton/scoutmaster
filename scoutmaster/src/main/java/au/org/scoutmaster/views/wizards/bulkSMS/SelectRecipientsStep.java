@@ -51,6 +51,7 @@ public class SelectRecipientsStep implements WizardStep
 		.addColumn("Mobile", Contact.PRIMARY_PHONE);
 
 		contactTable = new SearchableContactTable(contactContainer, builder.build());
+		contactTable.excludeDoNotSendBulkCommunications(true);
 		layout.addComponent(contactTable);
 
 	}

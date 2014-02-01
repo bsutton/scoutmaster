@@ -37,6 +37,7 @@ public class SearchableContactTable extends VerticalLayout
 	private Button clearButton = new Button("Clear");
 	private TagField includeTagField;
 	private TagField excludeTagField;
+	private boolean excludeDoNotSendBulkCommunications;
 
 	public SearchableContactTable(JPAContainer<Contact> contactContainer, HeadingPropertySet<Contact> headingPropertySet)
 	{
@@ -160,7 +161,7 @@ public class SearchableContactTable extends VerticalLayout
 	{
 		contactContainer.removeAllContainerFilters();
 		contactContainer.getEntityProvider().setQueryModifierDelegate(
-				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch));
+				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch, excludeDoNotSendBulkCommunications));
 		contactTable.refreshRowCache();
 
 	}
@@ -180,5 +181,15 @@ public class SearchableContactTable extends VerticalLayout
 			contacts.add(contact);
 		}
 		return contacts;
+	}
+
+	/**
+	 * if set to true then any contact that does not want bulk communications will be excluded from the list.
+	 * @param b
+	 */
+	public void excludeDoNotSendBulkCommunications(boolean exclude)
+	{
+		this.excludeDoNotSendBulkCommunications = exclude;
+		
 	}
 }

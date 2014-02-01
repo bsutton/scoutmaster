@@ -100,6 +100,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	/**
 	 * Contact fields
 	 */
+	
+	/**
+	 * If true then the contact is not to be included in any bulk communications.
+	 */
+	private Boolean doNotSendBulkCommunications;
 
 	@FormField(displayName = "Phone 1")
 	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
@@ -883,5 +888,15 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public Set<Relationship> getLHSRelationships()
 	{
 		return this.lhsrelationships;
+	}
+
+	public Boolean getDoNotSendBulkCommunications()
+	{
+		return doNotSendBulkCommunications;
+	}
+
+	public void setDoNotSendBulkCommunications(Boolean doNotSendBulkCommunications)
+	{
+		this.doNotSendBulkCommunications = doNotSendBulkCommunications;
 	}
 }

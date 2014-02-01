@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Add Friend of -->
+	<changeSet author="bsutton" id="1.0.39">
+		<insert tableName="RelationshipType">
+			<column name="CREATED" valueComputed="now()" />
+			<column name="CONSISTENCYVERSION" value="1" />
+			<column name="LHS" value="Friend of" />
+			<column name="LHSTYPE" value="CONTACT" />
+			<column name="RHS" value="Friend of" />
+			<column name="RHSTYPE" value="CONTACT" />
+			<column name="UPDATED" valueComputed="now()" />
+		</insert>
+
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.39.1">
+		<delete tableName="RelationshipType">
+			<where>ID="21"</where>
+		</delete>
+		<delete tableName="RelationshipType">
+			<where>ID="8"</where>
+		</delete>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.39.2">
+		<addColumn tableName="Contact">
+			<column defaultValueNumeric="1" name="doNotSendBulkCommunications" type="BIT(1)" />
+		</addColumn>
+	</changeSet>
+</databaseChangeLog>

@@ -207,13 +207,17 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.setColumnFieldWidth(0, 100);
 		contactForm.setColumnFieldWidth(1, 100);
 		contactForm.setColumnFieldWidth(2, 20);
-
-		// contactForm.setSizeFull();
 		contactForm.setMargin(true);
 
+		
 		contactForm.colspan(3);
-		contactForm.bindEnumField("Preferred Communications", "preferredCommunications", PreferredCommunications.class);
+		contactForm.bindBooleanField("Do Not Send Bulk Communications", Contact_.doNotSendBulkCommunications);
 		contactForm.newLine();
+		
+		contactForm.colspan(3);
+		contactForm.bindEnumField("Preferred Communications", Contact_.preferredCommunications, PreferredCommunications.class);
+		contactForm.newLine();
+		
 		contactForm.colspan(3);
 		final TextField homeEmail = contactForm.bindTextField("Home Email", Contact_.homeEmail);
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
@@ -690,7 +694,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
 		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(),null,
-				filterString));
+				filterString, false));
 
 	}
 

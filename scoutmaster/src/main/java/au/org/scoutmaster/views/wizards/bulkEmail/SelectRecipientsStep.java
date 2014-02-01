@@ -51,6 +51,7 @@ public class SelectRecipientsStep implements WizardStep
 		.addColumn("Email", Contact_.homeEmail);
 
 		contactTable = new SearchableContactTable(contactContainer, builder.build());
+		contactTable.excludeDoNotSendBulkCommunications(true);
 		layout.addComponent(contactTable);
 
 	}
