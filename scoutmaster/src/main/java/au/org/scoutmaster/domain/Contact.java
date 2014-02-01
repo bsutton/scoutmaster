@@ -102,17 +102,17 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 
 	@FormField(displayName = "Phone 1")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PHONE1_ID")
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PHONE2_ID")
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.PERSIST)
+	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PHONE3_ID")
 	private Phone phone3 = new Phone();
 
