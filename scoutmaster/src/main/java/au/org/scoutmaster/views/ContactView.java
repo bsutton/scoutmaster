@@ -2,6 +2,7 @@ package au.org.scoutmaster.views;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.vaadin.tokenfield.TokenField;
@@ -132,7 +133,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		backgroundTab();
 		activityTab();
 		noteTab();
-	//	googleTab();
+		// googleTab();
 
 		// When a persons birth date changes recalculate their age.
 		birthDate.addValueChangeListener(this.changeListener);
@@ -209,15 +210,15 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.setColumnFieldWidth(2, 20);
 		contactForm.setMargin(true);
 
-		
 		contactForm.colspan(3);
 		contactForm.bindBooleanField("Do Not Send Bulk Communications", Contact_.doNotSendBulkCommunications);
 		contactForm.newLine();
-		
+
 		contactForm.colspan(3);
-		contactForm.bindEnumField("Preferred Communications", Contact_.preferredCommunications, PreferredCommunications.class);
+		contactForm.bindEnumField("Preferred Communications", Contact_.preferredCommunications,
+				PreferredCommunications.class);
 		contactForm.newLine();
-		
+
 		contactForm.colspan(3);
 		final TextField homeEmail = contactForm.bindTextField("Home Email", Contact_.homeEmail);
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
@@ -361,7 +362,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		isMemberField = memberForm.bindBooleanField("Member", Contact_.isMember);
 		isMemberField.addValueChangeListener(changeListener);
 		memberForm.newLine();
-		// memberForm.colspan(2);
 
 		FormHelper<Contact> formHelper = memberForm.getFormHelper();
 
@@ -454,13 +454,27 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		private GroupRole currentGroupRole;
 		private SectionType currentSectionType;
+		private Date currentBirthDate;
+		private Boolean currentIsMember;
 
 		private static final long serialVersionUID = 1L;
 
-		private void reset(GroupRole initialRole, SectionType initialSectionType)
+		private void reset(Contact contact)
 		{
-			this.currentGroupRole = initialRole;
-			this.currentSectionType = initialSectionType;
+			if (contact != null)
+			{
+				this.currentGroupRole = contact.getRole();
+				this.currentSectionType = contact.getSection();
+				this.currentBirthDate = contact.getBirthDate();
+				this.currentIsMember = contact.getIsMember();
+			}
+			else
+			{
+				this.currentGroupRole = null;
+				this.currentSectionType = null;
+				this.currentBirthDate = null;
+				this.currentIsMember = null;
+			}
 		}
 
 		public void valueChange(ValueChangeEvent event)
@@ -473,7 +487,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			if (source == ContactView.this.groupRoleField)
 			{
 				Long newGroupRoleId = (Long) event.getProperty().getValue();
-				if (newGroupRoleId != null)
+				if (currentGroupRole != null && currentGroupRole.getId() != newGroupRoleId && newGroupRoleId != null)
 				{
 					GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
 
@@ -515,7 +529,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 					this.currentGroupRole = newGroupRole;
 
 				}
-				else
+
+				if (newGroupRoleId == null)
 				{
 					showYouth(true);
 					this.currentGroupRole = null;
@@ -523,15 +538,21 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			}
 			else if (source == ContactView.this.birthDate)
 			{
+				ContactDao daoContact = new DaoFactory().getContactDao();
 
 				DateField birthDate = (DateField) event.getProperty();
-				ContactDao daoContact = new DaoFactory().getContactDao();
-				ageField.setReadOnly(false);
-				ageField.setValue("Age " + daoContact.getAge(birthDate.getValue()).toString());
-				ageField.setReadOnly(true);
-				fieldSectionEligibity.setReadOnly(false);
-				fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(birthDate.getValue()).getId());
-				fieldSectionEligibity.setReadOnly(true);
+				Date newBirthDate = birthDate.getValue();
+				if (!currentBirthDate.equals(newBirthDate))
+				{
+					fieldSectionEligibity.setReadOnly(false);
+					fieldSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate).getId());
+					fieldSectionEligibity.setReadOnly(true);
+					currentBirthDate = newBirthDate;
+				}
+				if (currentBirthDate != null)
+				{
+					ageField.setValue("Age " + daoContact.getAge(newBirthDate).toString());
+				}
 			}
 			else if (source == ContactView.this.sectionTypeField)
 			{
@@ -544,15 +565,27 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				Property<Long> property = event.getProperty();
 
 				Long newSectionTypeId = property.getValue();
-				SectionType newValue = updateSectionTags(newSectionTypeId);
-				currentSectionType = newValue;
+				if (!(currentSectionType == null && newSectionTypeId != null) && currentSectionType != null
+						&& newSectionTypeId != currentSectionType.getId())
+				{
+					SectionType newValue = updateSectionTags(newSectionTypeId);
+					currentSectionType = newValue;
+				}
 			}
 			else if (source == ContactView.this.isMemberField)
 			{
-				boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
-						: ContactView.this.isMemberField.getValue();
+				Property<Boolean> property = event.getProperty();
 
-				updateMembership(isMember);
+				Boolean newIsMember = property.getValue();
+				if (currentIsMember != null && currentIsMember != newIsMember)
+				{
+
+					boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
+							: ContactView.this.isMemberField.getValue();
+
+					updateMembership(isMember);
+					currentIsMember = isMember;
+				}
 			}
 
 		}
@@ -693,7 +726,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(),null,
+		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(), null,
 				filterString, false));
 
 	}
@@ -719,20 +752,20 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			Contact entity = item.getEntity();
 			if (entity != null)
 			{
-				this.changeListener.reset(entity.getRole(), entity.getSection());
+				this.changeListener.reset(entity);
 				super.rowChanged(item);
 				homeEmailImage.setVisible((entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0));
 				workEmailImage.setVisible((entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0));
 			}
 			else
 			{
-				this.changeListener.reset(null, null);
+				this.changeListener.reset(null);
 				super.rowChanged(item);
 			}
 		}
 		else
 		{
-			this.changeListener.reset(null, null);
+			this.changeListener.reset(null);
 			super.rowChanged(item);
 		}
 
