@@ -48,7 +48,7 @@ public class BulkEmailDetailsStep implements WizardStep
 	
 	private HashSet<AttachedFile>fileList = new HashSet<>();
 
-	private TagField tag;
+	private TagField activityTag;
 
 
 	public BulkEmailDetailsStep(BulkEmailWizardView messagingWizardView)
@@ -66,10 +66,10 @@ public class BulkEmailDetailsStep implements WizardStep
 		recipientCount.setContentMode(ContentMode.HTML);
 		layout.addComponent(recipientCount);
 
-		tag = new TagField("Activity Tag", false);
-		tag.setWidth("100%");
-		tag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
-		layout.addComponent(tag);
+		activityTag = new TagField("Activity Tag", false);
+		activityTag.setWidth("100%");
+		activityTag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
+		layout.addComponent(activityTag);
 
 		from = new TextField("From Email Address");
 		layout.addComponent(from);
@@ -246,7 +246,7 @@ public class BulkEmailDetailsStep implements WizardStep
 
 	public ArrayList<Tag> getActivityTags()
 	{
-		return tag.getTags();
+		return activityTag.getTags();
 	}
 
 }
