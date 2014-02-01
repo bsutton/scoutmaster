@@ -12,7 +12,6 @@ import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Phone;
@@ -82,7 +81,6 @@ public class SMSSession implements Closeable
 			
 			// Tag the contact
 			ContactDao daoContact = new DaoFactory().getContactDao();
-			TagDao daoTag = new DaoFactory().getTagDao();
 			for (Tag tag : transmission.getActivityTags())
 			{
 				daoContact.attachTag(transmission.getContact(), tag);
