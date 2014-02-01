@@ -13,7 +13,6 @@
 		<vaadin.version>7.1.10</vaadin.version>
 		<liquibase.version>3.0.2</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
-
 		<jasperreports.version>5.2.0</jasperreports.version>
 	</properties>
 	<repositories>
@@ -31,8 +30,6 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
-		<!--repository> <id>JBoss Repo</id> <url>http://repository.jboss.com/maven2</url> 
-			</repository -->
 		<repository>
 			<id>EclipseLink Repo</id>
 			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
@@ -71,6 +68,15 @@
 			<artifactId>vaadin-client</artifactId>
 			<version>${vaadin.version}</version>
 			<scope>provided</scope>
+
+			<!-- ############# READ THIS TO COMPILE WIDGETS ######################### 
+			
+			To compile the widget set you need to remove this exclusion,
+			but when building the rest of the project you need have this exclusion in place. 
+			The problem is that vaadin relies on 1.0.0 GA whilst we are using the hibernate validation api which relies on 1.1.0 Final
+			At run time we need to excluded the version used by vaadin-client so we can use the 1.1.0 version.
+			However if you need to compile the widget set you need to remove this exclusion.
+			 -->
 			<exclusions>
 				<exclusion>
 					<artifactId>validation-api</artifactId>
@@ -80,7 +86,24 @@
 		</dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-push</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-shared</artifactId>
 			<version>${vaadin.version}</version>
 		</dependency>
 		<dependency>
@@ -140,11 +163,6 @@
 			<version>1.7.5</version>
 		</dependency>
 		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-push</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>${liquibase.version}</version>
@@ -154,17 +172,6 @@
 			<artifactId>liquibase-jul</artifactId>
 			<version>1.1</version>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client-compiler</artifactId>
-			<version>${vaadin.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-shared</artifactId>
-			<version>${vaadin.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.pojomatic</groupId>
@@ -251,11 +258,8 @@
 			<version>7.0.1</version>
 		</dependency>
 
-		<!-- dependency>
-			<groupId>com.vaadin.addon</groupId>
-			<artifactId>vaadin-touchkit-agpl</artifactId>
-			<version>4.0.0.alpha1</version>
-		</dependency-->
+		<!-- dependency> <groupId>com.vaadin.addon</groupId> <artifactId>vaadin-touchkit-agpl</artifactId> 
+			<version>4.0.0.alpha1</version> </dependency -->
 
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
@@ -331,27 +335,12 @@
 			</plugin>
 
 
-			<!-- plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>${liquibase.version}</version>
-				<configuration>
-					<outputChangeLogFile>src/main/resources/liquibase/db.changelog-update.xml</outputChangeLogFile>
-					<driver>com.mysql.jdbc.Driver</driver>
-					<url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url>
-					<username>scoutmaster</username>
-					<password>master$4scout</password>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>test</phase>
-						<goals>
-							<goal>update</goal>
-							<goal>updateSQL</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin-->
+			<!-- plugin> <groupId>org.liquibase</groupId> <artifactId>liquibase-maven-plugin</artifactId> 
+				<version>${liquibase.version}</version> <configuration> <outputChangeLogFile>src/main/resources/liquibase/db.changelog-update.xml</outputChangeLogFile> 
+				<driver>com.mysql.jdbc.Driver</driver> <url>jdbc:mysql://localhost/scoutmaster?sessionVariables=storage_engine=InnoDB</url> 
+				<username>scoutmaster</username> <password>master$4scout</password> </configuration> 
+				<executions> <execution> <phase>test</phase> <goals> <goal>update</goal> 
+				<goal>updateSQL</goal> </goals> </execution> </executions> </plugin -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -404,7 +393,7 @@
 											vaadin-maven-plugin
 										</artifactId>
 										<versionRange>
-											[7.1.7,)
+											[7.1.10,)
 										</versionRange>
 										<goals>
 											<goal>resources</goal>
