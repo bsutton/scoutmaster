@@ -1,5 +1,7 @@
 package au.org.scoutmaster.views;
 
+import java.io.File;
+
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -11,6 +13,9 @@ import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ClassResource;
+import com.vaadin.server.FileResource;
+import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -18,6 +23,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
@@ -50,6 +56,13 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		fields.setMargin(new MarginInfo(true, true, true, true));
 		fields.setSizeUndefined();
 
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/scoutmaster-logo.png"));
+
+		Image image = new Image(null, resource);
+		image.setAlternateText("Scoutmaster Logo");
+		fields.addComponent(image);
+
 		// Add both to a panel
 		Label label = new Label("<H1>Please login to Scoutmaster.</H1>");
 		label.setContentMode(ContentMode.HTML);
@@ -76,7 +89,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 		fields.addComponent(password);
 
-		
 		// Buttons
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.setSpacing(true);
@@ -170,7 +182,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				{
 					// Store the current user in the service session
 					SMSession.INSTANCE.setLoggedInUser(user);
-					
 
 					// Navigate to main view
 					getUI().getNavigator().navigateTo(ContactView.NAME);
