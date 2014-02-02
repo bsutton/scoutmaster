@@ -51,17 +51,18 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 	private static final long serialVersionUID = 1L;
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 
-
 	private User sender;
-	private TextField toAddress;
+	private TextField firstAddress;
 	private TextField subject;
 	private CKEditorEmailField ckEditor;
 	private Window owner;
 	private Button send;
-	private TextField ccAddress;
+	private TextField secondAddress;
 	private Contact contact;
 	private VerticalLayout attachedFiles;
-	private HashSet<AttachedFile>fileList = new HashSet<>();
+	private HashSet<AttachedFile> fileList = new HashSet<>();
+	private ComboBox firstTargetType;
+	private ComboBox secondTargetType;
 
 	/**
 	 * 
@@ -83,28 +84,27 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		grid.setColumnExpandRatio(1, (float) 1.0);
 		grid.setSpacing(true);
 
-		List<String> targetTypes = getTargetTypes();
-		ComboBox targetType = new ComboBox(null, targetTypes);
-		targetType.setWidth("50");
-		grid.addComponent(targetType);
-		targetType.select(targetTypes.get(0));
-		toAddress = new TextField();
-		toAddress.setInputPrompt("Enter email address");
-		toAddress.setValue(toEmailAddress);
-		toAddress.setWidth("100%");
-		grid.addComponent(toAddress);
+		List<EmailAddressType> targetTypes = getTargetTypes();
+		firstTargetType = new ComboBox(null, targetTypes);
+		firstTargetType.setWidth("50");
+		grid.addComponent(firstTargetType);
+		firstTargetType.select(targetTypes.get(0));
+		firstAddress = new TextField();
+		firstAddress.setInputPrompt("Enter email address");
+		firstAddress.setValue(toEmailAddress);
+		firstAddress.setWidth("100%");
+		grid.addComponent(firstAddress);
 		grid.newLine();
 
-		// CC
-		ComboBox targetTypeCC = new ComboBox(null, targetTypes);
-		targetTypeCC.setWidth("50");
-		targetTypeCC.select(targetTypes.get(1));
-		grid.addComponent(targetTypeCC);
+		secondTargetType = new ComboBox(null, targetTypes);
+		secondTargetType.setWidth("50");
+		secondTargetType.select(targetTypes.get(1));
+		grid.addComponent(secondTargetType);
 
-		ccAddress = new TextField();
-		ccAddress.setInputPrompt("Enter email address");
-		ccAddress.setWidth("100%");
-		grid.addComponent(ccAddress);
+		secondAddress = new TextField();
+		secondAddress.setInputPrompt("Enter email address");
+		secondAddress.setWidth("100%");
+		grid.addComponent(secondAddress);
 
 		send = new Button("Send", new ClickEventLogged.ClickAdaptor(this));
 		send.setImmediate(true);
@@ -118,7 +118,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		ckEditor = new CKEditorEmailField(false);
 		this.addComponent(ckEditor);
 		this.setExpandRatio(ckEditor, 1.0f);
-		
+
 		HorizontalLayout uploadArea = new HorizontalLayout();
 		AbstractLayout uploadWidget = addUploadWidget();
 		uploadArea.addComponent(uploadWidget);
@@ -133,18 +133,17 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 
 		this.addComponent(uploadArea);
 
-
 		subject.focus();
 
 	}
 
-	List<String> getTargetTypes()
+	List<EmailAddressType> getTargetTypes()
 	{
-		ArrayList<String> targetTypes = new ArrayList<>();
+		ArrayList<EmailAddressType> targetTypes = new ArrayList<>();
 
-		targetTypes.add("To");
-		targetTypes.add("CC");
-		targetTypes.add("BCC");
+		targetTypes.add(EmailAddressType.To);
+		targetTypes.add(EmailAddressType.CC);
+		targetTypes.add(EmailAddressType.BCC);
 		return targetTypes;
 	}
 
@@ -155,7 +154,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		send.setEnabled(false);
 		if (isEmpty(this.subject.getValue()))
 			SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
-		else if (isEmpty(this.toAddress.getValue()) && isEmpty(this.ccAddress.getValue()))
+		else if (isEmpty(this.firstAddress.getValue()) && isEmpty(this.secondAddress.getValue()))
 			SMNotification.show("You must provide at least one email address", Type.WARNING_MESSAGE);
 		else if (isEmpty(this.ckEditor.getValue()))
 			SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
@@ -166,7 +165,6 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 			UI.getCurrent().addWindow(working);
 			working.setWorker(new Runnable()
 			{
-
 
 				@Override
 				public void run()
@@ -179,7 +177,8 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 						SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
 						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(),
-								EmailForm.this.toAddress.getValue(), EmailForm.this.ccAddress.getValue(),
+								EmailForm.this.firstAddress.getValue(), (EmailAddressType)EmailForm.this.firstTargetType.getValue(),
+								EmailForm.this.secondAddress.getValue(), (EmailAddressType)EmailForm.this.secondTargetType.getValue(),
 								EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
 
 						// Log the activity
@@ -195,7 +194,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 
 						daoActivity.persist(activity);
 						t.commit();
-						
+
 					}
 					catch (EmailException e)
 					{
@@ -206,7 +205,6 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 
 				}
 			}, this);
-
 
 		}
 		this.send.setEnabled(true);
@@ -226,7 +224,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		this.owner.close();
 
 	}
-	
+
 	private AbstractLayout addUploadWidget()
 	{
 
@@ -257,23 +255,22 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		return multiFileUpload2;
 	}
 
-	
 	private void attachFile(File file)
 	{
 		HorizontalLayout line = new HorizontalLayout();
 		line.setSpacing(true);
 		Button removeButton = new Button("x");
-		
+
 		removeButton.setStyleName("small");
-		
+
 		line.addComponent(removeButton);
 		line.addComponent(new Label(file.getName()));
 		EmailForm.this.attachedFiles.addComponent(line);
-		
+
 		AttachedFile attachedFile = new AttachedFile(attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
-		
+
 		removeButton.addClickListener(new ClickEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;

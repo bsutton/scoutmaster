@@ -14,6 +14,7 @@ import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -62,7 +63,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 	public SmtpStep(SetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
-		
+
 		layout = new VerticalLayout();
 		layout.setMargin(true);
 		MultiColumnFormLayout<SMTPServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
@@ -89,15 +90,13 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 		username.setDescription("SMTP username if authentication is used");
 		username.setVisible(false);
 
-
 		// Create the password input field
 		password = formLayout.bindPasswordField("Password:", "password");
 		password.setDescription("SMS Provider Password");
 		password.setVisible(false);
-		
+
 		useSSL = formLayout.bindBooleanField("Use SSL", "useSSL");
 		useSSL.setDescription("Enables an SSL connection to your SMTP server if it supports it.");
-
 
 		fromEmailAddress = formLayout.bindTextField("From Email Address:", "fromEmailAddress");
 		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
@@ -114,10 +113,8 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 		// focus the fqnd field when user arrives to the login view
 		smtpFQDN.focus();
 
-
 	}
 
-	
 	@Override
 	public String getCaption()
 	{
@@ -128,8 +125,8 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 	@Override
 	public Component getContent(ValidatingFieldGroup<SMTPServerSettings> fieldGroup)
 	{
-		
-			return layout;
+
+		return layout;
 	}
 
 	@Override
@@ -204,8 +201,9 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 									sb.append("So welcome to Scoutmaster.\n\n");
 									sb.append("May you live long and recruit many.\n");
 
-									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress, null,
-											"Test email from Scoutmaster setup", sb.toString(), null);
+									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), toEmailAddress,
+											EmailAddressType.To, null, null, "Test email from Scoutmaster setup",
+											sb.toString(), null);
 
 									SMNotification.show("An email has been sent to: " + toEmailAddress
 											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
@@ -213,7 +211,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 								}
 								catch (EmailException e)
 								{
-									logger.error(e,e);
+									logger.error(e, e);
 									SMNotification.show(e, Type.ERROR_MESSAGE);
 								}
 								return true;

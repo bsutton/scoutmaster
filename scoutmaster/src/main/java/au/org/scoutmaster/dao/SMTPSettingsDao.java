@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -65,14 +66,16 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	 * 
 	 * @param settings
 	 * @param fromAddress
-	 * @param toAddress
+	 * @param firstAddress
+	 * @param object2 
+	 * @param object 
 	 * @param subject
 	 * @param body
 	 * @param attachedFiles 
 	 * @param string 
 	 * @throws EmailException
 	 */
-	public void sendEmail(SMTPServerSettings settings, String fromAddress, String toAddress, String ccAddress, String subject,
+	public void sendEmail(SMTPServerSettings settings, String fromAddress, String firstAddress, EmailAddressType firstType, String secondAddress, EmailAddressType secondType, String subject,
 			String body, HashSet<AttachedFile> attachedFiles) throws EmailException
 	{
 		HtmlEmail email = new HtmlEmail();
@@ -90,9 +93,13 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		}
 		email.setFrom(fromAddress);
 		email.setBounceAddress(settings.getBounceEmailAddress());
-		email.addTo(toAddress);
-		if (ccAddress != null && ccAddress.length() > 0)
-			email.addCc(ccAddress);
+		
+		addEmailAddress(firstAddress, firstType, email);
+		
+		if (secondAddress != null && secondAddress.length() > 0)
+		{
+			addEmailAddress(secondAddress, secondType, email);
+		}
 		email.setSubject(subject);
 		email.setHtmlMsg(body);
 		email.setTextMsg("Your email client does not support HTML messages");
@@ -106,6 +113,23 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		
 		email.send();
 
+	}
+
+	private void addEmailAddress(String firstAddress, EmailAddressType firstType, HtmlEmail email)
+			throws EmailException
+	{
+		switch (firstType)
+		{
+			case To:
+				email.addTo(firstAddress);
+				break;
+			case BCC:
+				email.addBcc(firstAddress);
+				break;
+			case CC:
+				email.addCc(firstAddress);
+				break;
+		}
 	}
 
 }
