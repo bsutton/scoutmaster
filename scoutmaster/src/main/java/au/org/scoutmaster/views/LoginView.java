@@ -64,7 +64,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		fields.addComponent(image);
 
 		// Add both to a panel
-		Label label = new Label("<H1>Please login to Scoutmaster.</H1>");
+		Label label = new Label("<H1>Login to Scoutmaster.</H1>");
 		label.setContentMode(ContentMode.HTML);
 
 		fields.addComponent(label);
