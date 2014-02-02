@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views;
+package au.org.scoutmaster.views.calendar;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,23 +15,29 @@ import au.org.scoutmaster.util.SMNotification;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.server.Page;
 import com.vaadin.server.Page.Styles;
+import com.vaadin.ui.Calendar;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventResize;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.MoveEvent;
-import com.vaadin.ui.components.calendar.ContainerEventProvider;
 import com.vaadin.ui.components.calendar.event.CalendarEvent;
+import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeEvent;
+import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener;
+import com.vaadin.ui.components.calendar.ContainerEventProvider;
 
-final class ScoutsContainerEventProvider extends ContainerEventProvider
+final class ScoutsContainerEventProvider extends ContainerEventProvider implements EventChangeListener 
 {
 	private Logger logger = Logger.getLogger(ScoutsContainerEventProvider.class);
 
 	private final JPAContainer<au.org.scoutmaster.domain.Event> container;
+
+	private Calendar calendar;
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
-	ScoutsContainerEventProvider()
+	ScoutsContainerEventProvider(Calendar calendar)
 	{
 		super(new DaoFactory().getEventDao().createVaadinContainer());
+		this.calendar = calendar;
 		this.container = (JPAContainer<Event>) super.getContainerDataSource();
 
 		this.setStartDateProperty(Event_.eventStartDateTime.getName());
@@ -111,7 +117,9 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 		ArrayList<CalendarEvent> arrayList = new ArrayList<CalendarEvent>();
 		for (Event event : entries)
 		{
-			arrayList.add(new ScoutCalEvent(event));
+			ScoutCalEvent scoutEvent = new ScoutCalEvent(event);
+			scoutEvent.addEventChangeListener(this);
+			arrayList.add(scoutEvent);
 
 			// Inject the color style required by each event into the page
 			Styles styles = Page.getCurrent().getStyles();
@@ -122,61 +130,11 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider
 
 		return arrayList;
 	}
-
-	public class ScoutCalEvent implements CalendarEvent
+	
+	@Override
+	public void eventChange(EventChangeEvent eventChangeEvent)
 	{
-		private static final long serialVersionUID = 1L;
-		private Event eventEntity;
-
-		public ScoutCalEvent(Event eventEntity)
-		{
-			this.eventEntity = eventEntity;
-		}
-
-		@Override
-		public Date getStart()
-		{
-			return this.eventEntity.getEventStartDateTime();
-		}
-
-		@Override
-		public Date getEnd()
-		{
-			return this.eventEntity.getEventEndDateTime();
-		}
-
-		@Override
-		public String getCaption()
-		{
-			return this.eventEntity.getSubject();
-		}
-
-		@Override
-		public String getDescription()
-		{
-			return this.eventEntity.getDetails();
-		}
-
-		@Override
-		public String getStyleName()
-		{
-			// We use the colour name as part of the css style name
-			// as this makes it easy to match the style to the colour.
-			// But take out the leading # as css doesn't like it.
-			return this.eventEntity.getColor().getCSS().substring(1);
-		}
-
-		@Override
-		public boolean isAllDay()
-		{
-			return this.eventEntity.getAllDayEvent();
-		}
-
-		public Event getEntity()
-		{
-			return this.eventEntity;
-		}
-
+		calendar.markAsDirty();
 	}
 
 }
