@@ -123,7 +123,7 @@ public class InviteUserAction implements CrudAction<User>
 								sb.append("Use the following link within the next 24 hours to activate your account.\n\n");
 								
 								sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid() + "\n\n");
-								sb.append("You have been allocated the username '" + user.getUsername() + " which you will need to use each time you login.");
+								sb.append("You have been allocated the username '" + user.getUsername() + "' which you will need to use each time you login.");
 								email.setMsg(sb.toString());
 								email.addTo(emailAddress);
 								email.send();
