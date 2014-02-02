@@ -48,6 +48,9 @@ public class BulkEmailDetailsStep implements WizardStep
 	
 	private HashSet<AttachedFile>fileList = new HashSet<>();
 
+	/**
+	 * Used to tag the set of contacts that we successfully send the email to.
+	 */
 	private TagField activityTag;
 
 
