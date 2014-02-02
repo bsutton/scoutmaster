@@ -2,6 +2,7 @@ package au.org.scoutmaster.views.wizards.bulkSMS;
 
 import java.util.ArrayList;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
@@ -25,6 +26,12 @@ public class SMSTransmission
 
 		if (recipient.getPhoneType() != PhoneType.MOBILE)
 			throw new IllegalArgumentException("The phone argument must be of type MOBILE");
+		
+		// We are about to pass these to a new thread and em so we must detach them.
+		EntityManagerProvider.detach(contact);
+		for (Tag tag: this.activityTags)
+			EntityManagerProvider.detach(tag);
+
 	}
 
 	public SMSTransmission(Contact contact, Message message, Exception exception)
@@ -33,6 +40,10 @@ public class SMSTransmission
 		this.message = message;
 		this.exception = exception;
 		this.activityTags = new ArrayList<>();
+		
+		// We are about to pass these to a new thread and em so we must detach them.
+		EntityManagerProvider.detach(contact);
+
 	}
 
 	public Message getMessage()
