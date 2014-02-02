@@ -85,6 +85,7 @@ public class SMSSession implements Closeable
 			{
 				daoContact.attachTag(transmission.getContact(), tag);
 			}
+			daoContact.merge(transmission.getContact());
 
 		}
 		catch (VelocityFormatException e)
