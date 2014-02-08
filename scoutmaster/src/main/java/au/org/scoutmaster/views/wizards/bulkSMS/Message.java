@@ -4,6 +4,7 @@ import java.io.StringWriter;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
@@ -41,7 +42,10 @@ public class Message
 	public StringBuffer expandBody(User user, Contact contact) throws VelocityFormatException
 	{
 		VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute" );
+		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger","velocity");
 		velocityEngine.init();
+
 
 		StringWriter sw = new StringWriter();
 		VelocityContext context = new VelocityContext();
