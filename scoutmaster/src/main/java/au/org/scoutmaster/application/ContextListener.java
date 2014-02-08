@@ -29,7 +29,7 @@ public class ContextListener implements ServletContextListener
 	public void contextInitialized(ServletContextEvent sce)
 	{
 		Liquibase liquibase;
-		try
+		try(Connection conn = getConnection())
 		{
 			String masterPath = sce.getServletContext().getRealPath(new File("WEB-INF/classes/", MASTER_XML).getPath());
 			logger.info("Initialising liquibase");
@@ -38,9 +38,13 @@ public class ContextListener implements ServletContextListener
 			File baseDir = masterFile.getParentFile().getParentFile();
 
 			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(baseDir.getCanonicalPath()),
-					new JdbcConnection(getConnection()));
+					new JdbcConnection(conn));
 			liquibase.update("");
+			
 			logger.info("Liquibase has completed successfully");
+			
+			
+			
 		}
 		catch (LiquibaseException | NamingException | SQLException | IOException e)
 		{
