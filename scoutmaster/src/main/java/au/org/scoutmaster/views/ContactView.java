@@ -574,6 +574,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			}
 			else if (source == ContactView.this.isMemberField)
 			{
+				@SuppressWarnings("unchecked")
 				Property<Boolean> property = event.getProperty();
 
 				Boolean newIsMember = property.getValue();

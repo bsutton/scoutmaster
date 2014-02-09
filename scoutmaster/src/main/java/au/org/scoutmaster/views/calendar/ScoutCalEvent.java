@@ -6,8 +6,6 @@ import java.util.HashSet;
 import au.org.scoutmaster.domain.Event;
 
 import com.vaadin.ui.components.calendar.event.CalendarEvent;
-import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeEvent;
-import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeNotifier;
 
 public class ScoutCalEvent implements CalendarEvent, EventChangeNotifier

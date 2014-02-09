@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views.calendar;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
 
 import au.org.scoutmaster.views.calendar.CalendarView.Interval;
