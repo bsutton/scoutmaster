@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -42,8 +43,10 @@ public class Note extends BaseEntity
 	private Date noteDate = new Date();
 	
 	@NotBlank
+	@Size(max=255)
 	private String subject;
 
+	@Size(max=4096)
 	private String body;
 
 	public String getBody()
