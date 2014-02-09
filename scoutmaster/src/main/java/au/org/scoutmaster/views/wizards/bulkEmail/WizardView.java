@@ -1,5 +1,6 @@
 package au.org.scoutmaster.views.wizards.bulkEmail;
 
+
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
 import org.vaadin.teemu.wizards.event.WizardCompletedEvent;
@@ -17,7 +18,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display="Bulk Email", path="Communication")
-public class BulkEmailWizardView extends VerticalLayout implements View, WizardProgressListener
+public class WizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -25,24 +26,24 @@ public class BulkEmailWizardView extends VerticalLayout implements View, WizardP
 
 	private Wizard wizard;
 	
-	private SelectRecipientsStep recipientStep;
-	private BulkEmailDetailsStep details;
-	private ConfirmDetailsStep confirm;
-	private ShowProgressStep send;
+	private StepSelectRecipients recipientStep;
+	private StepEnterDetails details;
+	private StepConfirmDetails confirm;
+	private StepShowProgress send;
 
-	public BulkEmailDetailsStep getDetails()
+	public StepEnterDetails getDetails()
 	{
 		return details;
 	}
 
 
-	public ShowProgressStep getSend()
+	public StepShowProgress getSend()
 	{
 		return send;
 	}
 
 
-	public SelectRecipientsStep getRecipientStep()
+	public StepSelectRecipients getRecipientStep()
 	{
 		return recipientStep;
 	}
@@ -52,15 +53,14 @@ public class BulkEmailWizardView extends VerticalLayout implements View, WizardP
 	public void enter(ViewChangeEvent event)
 	{
 
-		recipientStep = new SelectRecipientsStep(this);
-		details = new BulkEmailDetailsStep(this);
-		send = new ShowProgressStep(this);
-		confirm = new ConfirmDetailsStep(this);
+		recipientStep = new StepSelectRecipients(this);
+		details = new StepEnterDetails(this);
+		send = new StepShowProgress(this);
+		confirm = new StepConfirmDetails(this);
 
 
 		// create the Wizard component and add the steps
 		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
 		wizard.addStep(recipientStep, "select");
 		wizard.addStep(details, "enter");

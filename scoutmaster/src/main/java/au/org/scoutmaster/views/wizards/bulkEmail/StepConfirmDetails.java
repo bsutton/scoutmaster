@@ -20,18 +20,18 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class ConfirmDetailsStep implements WizardStep
+public class StepConfirmDetails implements WizardStep
 {
 
 	private TextField subject;
 	private CKEditorEmailField ckEditorTextField;
 	private TextField from;
-	private BulkEmailWizardView messagingWizardView;
+	private WizardView messagingWizardView;
 	private VerticalLayout layout;
 	private Label recipientCount;
-	private BulkEmailDetailsStep details;
+	private StepEnterDetails details;
 
-	public ConfirmDetailsStep(BulkEmailWizardView messagingWizardView)
+	public StepConfirmDetails(WizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 		details = messagingWizardView.getDetails();

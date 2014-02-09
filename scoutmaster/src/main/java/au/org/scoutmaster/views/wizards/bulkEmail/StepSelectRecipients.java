@@ -22,7 +22,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class SelectRecipientsStep implements WizardStep
+public class StepSelectRecipients implements WizardStep
 {
 
 	private TextField subject;
@@ -33,7 +33,7 @@ public class SelectRecipientsStep implements WizardStep
 	private SearchableContactTable contactTable;
 	private VerticalLayout layout;
 
-	public SelectRecipientsStep(BulkEmailWizardView messagingWizardView)
+	public StepSelectRecipients(WizardView messagingWizardView)
 	{
 		layout = new VerticalLayout();
 		layout.setMargin(true);

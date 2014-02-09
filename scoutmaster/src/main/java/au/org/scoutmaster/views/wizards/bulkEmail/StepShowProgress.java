@@ -27,12 +27,12 @@ import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailTransmission>
+public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailTransmission>
 {
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(ShowProgressStep.class);
+	static private Logger logger = Logger.getLogger(StepShowProgress.class);
 	JPAContainer<? extends Importable> entities;
-	private BulkEmailWizardView messagingWizardView;
+	private WizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
@@ -41,7 +41,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 	private MutableInteger rejected = new MutableInteger(0);
 	private WorkingDialog workDialog;
 
-	public ShowProgressStep(BulkEmailWizardView messagingWizardView)
+	public StepShowProgress(WizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}
@@ -77,7 +77,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 
 		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
 
-		BulkEmailDetailsStep details = messagingWizardView.getDetails();
+		StepEnterDetails details = messagingWizardView.getDetails();
 		ArrayList<EmailTransmission> transmissions = new ArrayList<>();
 
 		HashSet<String> dedupList = new HashSet<>();
@@ -103,7 +103,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 			// No email address found
 			EmailTransmission transmission = new EmailTransmission(contact, details.getMessage(), new RecipientException(
 					"No email address on contact.", contact));
-			ShowProgressStep.this.progressTable.addRow(transmission);
+			StepShowProgress.this.progressTable.addRow(transmission);
 			rejected.setValue(rejected.intValue() + 1);
 		}
 
@@ -133,7 +133,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 		return layout;
 	}
 
-	private void queueTransmission(BulkEmailDetailsStep details, ArrayList<EmailTransmission> transmissions,
+	private void queueTransmission(StepEnterDetails details, ArrayList<EmailTransmission> transmissions,
 			HashSet<String> dedupList, Contact contact, String toEmailAddress)
 	{
 		EmailTransmission transmission = new EmailTransmission(details.getActivityTags(), contact, details.getMessage(), toEmailAddress);
@@ -145,7 +145,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 		else
 		{
 			transmission.setException(new RecipientException("Duplicate email address.", contact));
-			ShowProgressStep.this.progressTable.addRow(transmission);
+			StepShowProgress.this.progressTable.addRow(transmission);
 		}
 	}
 
@@ -172,7 +172,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 				progressDescription.setValue(message);
 				indicator.setValue((float) count / max);
 				workDialog.progress(count, max, message);
-				ShowProgressStep.this.progressTable.addRow(status);
+				StepShowProgress.this.progressTable.addRow(status);
 			}
 		});
 	}
@@ -188,7 +188,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<EmailT
 				sendComplete = true;
 				indicator.setValue(1.0f);
 
-				if (ShowProgressStep.this.rejected.intValue() == 0 && queued.intValue() == sent)
+				if (StepShowProgress.this.rejected.intValue() == 0 && queued.intValue() == sent)
 					progressDescription.setValue("All Email Messages have been sent successfully.");
 
 				else
