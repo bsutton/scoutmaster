@@ -9,6 +9,7 @@ import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.validator.MobilePhoneValidator;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -57,7 +58,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		VerticalLayout layout = new VerticalLayout();
 
 		SMMultiColumnFormLayout<User> overviewForm = new SMMultiColumnFormLayout<User>(1, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 280);
+		overviewForm.setColumnFieldWidth(0, 480);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setSizeFull();
 
@@ -77,7 +78,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
 		mobile.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
 		mobile.setDescription("Used when sending bulk emails as the sender phone no.");
-		
+		CKEditorEmailField emailSignatureField = overviewForm.bindEditorField(User_.emailSignature, false);
 
 		return layout;
 	}

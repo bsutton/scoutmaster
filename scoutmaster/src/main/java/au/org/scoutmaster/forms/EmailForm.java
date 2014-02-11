@@ -118,6 +118,11 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		ckEditor = new CKEditorEmailField(false);
 		this.addComponent(ckEditor);
 		this.setExpandRatio(ckEditor, 1.0f);
+		
+		if (sender.getEmailSignature() != null)
+		{
+			ckEditor.setValue("</br></br>" + sender.getEmailSignature());
+		}
 
 		HorizontalLayout uploadArea = new HorizontalLayout();
 		AbstractLayout uploadWidget = addUploadWidget();

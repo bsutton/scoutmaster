@@ -92,6 +92,11 @@ public class StepEnterDetails implements WizardStep
 
 		layout.addComponent(ckEditorTextField);
 		layout.setExpandRatio(ckEditorTextField, 1.0f);
+		if (user.getEmailSignature() != null)
+		{
+			ckEditorTextField.setValue("</br></br>" + user.getEmailSignature());
+		}
+
 
 		HorizontalLayout uploadArea = new HorizontalLayout();
 		AbstractLayout uploadWidget = addUploadWidget();
