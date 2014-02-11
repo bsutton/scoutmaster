@@ -104,7 +104,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	/**
 	 * If true then the contact is not to be included in any bulk communications.
 	 */
-	private Boolean doNotSendBulkCommunications;
+	private Boolean doNotSendBulkCommunications = false;
 
 	@FormField(displayName = "Phone 1")
 	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
@@ -181,6 +181,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	// member
 	// records.
 
+	/**
+	 * The date the member was invested into the movement, null if they haven't been invested.
+	 */
+	private Date dateMemberInvested;
+	
 	/** The actual section the Youth or Adult member is attached to. */
 	@FormField(displayName = "Section")
 	@ManyToOne(optional = true, targetEntity = SectionType.class)
@@ -300,15 +305,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Import ID")
 	private String importId;
 
-	public String getImportId()
-	{
-		return importId;
-	}
-
-	public void setImportId(String importId)
-	{
-		this.importId = importId;
-	}
+	
 
 	public Contact()
 	{
@@ -338,6 +335,15 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		return found;
 	}
 	
+	public String getImportId()
+	{
+		return importId;
+	}
+
+	public void setImportId(String importId)
+	{
+		this.importId = importId;
+	}
 
 	public List<Note> getNotes()
 	{
@@ -426,6 +432,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public void setFirstname(String firstname)
 	{
 		this.firstname = firstname;
+		setFullname(this.firstname + " " + this.lastname);
 	}
 
 	public String getFirstname()
@@ -814,6 +821,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public void setLastname(String lastname)
 	{
 		this.lastname = lastname;
+		setFullname(this.firstname + " " + this.lastname);
 	}
 
 	public void setStreet(String street)
