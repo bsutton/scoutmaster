@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<!--  Date member was invested. -->
+	<changeSet author="bsutton" id="1.0.42.0">
+		<addColumn tableName="Contact">
+			<column name="dateMemberInvested" type="date" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.42.1">
+		<addColumn tableName="User">
+			<column name="emailSignature" type="varchar(1024)" />
+		</addColumn>
+	</changeSet>
+	
+	
+</databaseChangeLog>

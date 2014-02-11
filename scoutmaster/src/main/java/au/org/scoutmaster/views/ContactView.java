@@ -108,10 +108,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private TokenField tagField;
 
 	private CheckBox isMemberField;
-
+	
 	public TextField membershipNoField;
 
 	public DateField memberSinceField;
+	
+	public DateField dateMemberInvested;
 
 	@Override
 	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
@@ -381,7 +383,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.newLine();
 		memberForm.colspan(2);
 		memberSinceField = memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd", Resolution.DAY);
-	}
+
+		memberForm.newLine();
+		memberForm.colspan(2);
+		dateMemberInvested= memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested, "yyyy-MM-dd", Resolution.DAY);
+}
 
 	private void medicalTab()
 	{
