@@ -14,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
 import org.hibernate.validator.constraints.Email;
@@ -80,6 +81,14 @@ public class User extends BaseEntity
 	 * Used as the 'sender' mobile when sending bulk mobiles. 
 	 */
 	private String senderMobile;
+	
+	/** 
+	 * Email signature used by default when this user is sending an email
+	 */
+	@Size(max=1024)
+	private String emailSignature;
+	
+	
 
 	public String getSenderMobile()
 	{
@@ -252,6 +261,11 @@ public class User extends BaseEntity
 	public String getFullname()
 	{
 		return this.firstname + " " + this.surname;
+	}
+
+	public String getEmailSignature()
+	{
+		return emailSignature;
 	}
 }
 
