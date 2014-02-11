@@ -30,15 +30,15 @@ import com.vaadin.ui.VerticalLayout;
 public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 {
 	private static final long serialVersionUID = 1L;
+	private ComboBox relatedTo;
 
 	public ChildRelationshipView(BaseCrudView<Contact> parentCrud)
 	{
 		super(parentCrud, Contact.class, Relationship.class, Contact_.id, Relationship_.lhs.getName());
 
 		JPAContainer<Relationship> container = new DaoFactory().getRelationshipDao().createVaadinContainer();
-		// container.sort(new String[] {new Path(Relationship_.lhs,
-		// Contact_.lastname).getName()},new boolean[] {true});
 
+		// Control which fields are displayed in the list of relationships.
 		Builder<Relationship> builder = new HeadingPropertySet.Builder<Relationship>();
 		builder.addColumn("Relationship", Relationship_.type.getName())
 				.addColumn("Related To", Relationship_.rhs.getName());
@@ -58,24 +58,26 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		relationshipForm.setSizeFull();
 
 		FormHelper<Relationship> formHelper = relationshipForm.getFormHelper();
-		// relationshipForm.bindEntityField("LHS", Relationship_.lhs.getName(),
-		// Contact.class, "fullname");
-		// ComboBox lhs = relationshipForm.bindEntityField("LHS",
-		// Relationship_.lhs, Contact.class, Contact_.firstname);
 
+		/**
+		 * The type of relationship. e.g. Parent of
+		 */
 		ComboBox type = formHelper.new EntityFieldBuilder<RelationshipType>()
 				.setLabel("Relationship").setField(Relationship_.type).setListFieldName(RelationshipType_.lhs).build();
 		type.setFilteringMode(FilteringMode.CONTAINS);
 		type.setTextInputAllowed(true);
 
-		ComboBox rhs = formHelper.new EntityFieldBuilder<Contact>()
+		/**
+		 * The contact we are related to.
+		 */
+		relatedTo = formHelper.new EntityFieldBuilder<Contact>()
 				.setLabel("Related To").setField(Relationship_.rhs).setListFieldName(Contact_.fullname).build();
-		rhs.setFilteringMode(FilteringMode.CONTAINS);
-		rhs.setTextInputAllowed(true);
+		relatedTo.setFilteringMode(FilteringMode.CONTAINS);
+		relatedTo.setTextInputAllowed(true);
 
 
 		@SuppressWarnings("unchecked")
-		JPAContainer<Relationship> rhscontainer = (JPAContainer<Relationship>) rhs.getContainerDataSource();
+		JPAContainer<Relationship> rhscontainer = (JPAContainer<Relationship>) relatedTo.getContainerDataSource();
 		rhscontainer.sort(new String[]
 		{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
 		{ true, true });
@@ -83,6 +85,19 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		layout.addComponent(relationshipForm);
 
 		return layout;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void committed(Contact newParentId) throws Exception
+	{
+		super.committed(newParentId);
+		
+		// Whenever the list of contacts change we need to refresh
+		// our local list as jpacontainers don't seem to share.
+		// TODO: is there some way of optimising this.
+		((JPAContainer<Contact>)relatedTo.getContainerDataSource()).refresh();
+
 	}
 
 	@Override
@@ -93,18 +108,6 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 						true, false))));
 	}
 
-	@Override
-	protected void interceptSaveValues(EntityItem<Relationship> entityItem)
-	{
-		// try
-		// {
-		// //entityItem.getEntity().setLHS(translateParentId(super.getParentId()));
-		// }
-		// catch (InstantiationException | IllegalAccessException e)
-		// {
-		// e.printStackTrace();
-		// }
-	}
 
 	@Override
 	public void associateChild(Contact newParent, Relationship child)
