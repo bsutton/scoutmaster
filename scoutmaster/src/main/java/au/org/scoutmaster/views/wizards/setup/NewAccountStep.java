@@ -52,6 +52,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 	{
 		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setWidth("600px");
+		formLayout.setColumnFieldWidth(0, 400);
 
 		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
 		label.setContentMode(ContentMode.HTML);
