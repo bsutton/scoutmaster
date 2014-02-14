@@ -907,4 +907,14 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	{
 		this.doNotSendBulkCommunications = doNotSendBulkCommunications;
 	}
+
+	public Date getDateMemberInvested()
+	{
+		return dateMemberInvested;
+	}
+
+	public void setDateMemberInvested(Date dateMemberInvested)
+	{
+		this.dateMemberInvested = dateMemberInvested;
+	}
 }
