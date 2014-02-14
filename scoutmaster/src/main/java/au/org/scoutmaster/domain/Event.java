@@ -22,7 +22,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import au.com.vaadinutils.crud.CrudEntity;
-import au.com.vaadinutils.fields.Color;
+import au.com.vaadinutils.domain.Color;
 
 /**
  * Used to describe an event such as a section meeting or a bbq.
@@ -54,6 +54,16 @@ public class Event extends BaseEntity implements CrudEntity
 	 * A detailed description of the event. This may contain html for formatting purposes.
 	 */
 	private String  details;
+	
+	/**
+	 * This event is a meeting of a section
+	 */
+	private Boolean sectionMeeting = true;
+	
+	/**
+	 * If this is a section meeting then this is the specific section the meeting applies to.
+	 */
+	private SectionType sectionType;
 
 	/**
 	 * If true then this event runs all day in which case the 'time' component of the event Start and End dates
@@ -208,6 +218,26 @@ public class Event extends BaseEntity implements CrudEntity
 	public Color getColor()
 	{
 		return this.color;
+	}
+
+	public Boolean getSectionMeeting()
+	{
+		return sectionMeeting;
+	}
+
+	public void setSectionMeeting(Boolean sectionMeeting)
+	{
+		this.sectionMeeting = sectionMeeting;
+	}
+
+	public SectionType getSectionType()
+	{
+		return sectionType;
+	}
+
+	public void setSectionType(SectionType sectionType)
+	{
+		this.sectionType = sectionType;
 	}
 
 }
