@@ -148,6 +148,13 @@ public class CalendarView extends VerticalLayout implements View
 			CalendarView.this.calendar.addEvent(new ScoutCalEvent(event));
 
 		}
+
+		@Override
+		public void eventDeleted(au.org.scoutmaster.domain.Event event)
+		{
+			CalendarView.this.calendar.removeEvent(new ScoutCalEvent(event));
+			
+		}
 	}
 
 	class EventClickHander implements EventClickHandler, SaveEventListener
@@ -176,6 +183,13 @@ public class CalendarView extends VerticalLayout implements View
 		public void eventSaved(au.org.scoutmaster.domain.Event event)
 		{
 			e.updateEvent(event);
+		}
+
+		@Override
+		public void eventDeleted(au.org.scoutmaster.domain.Event event)
+		{
+			e.updateEvent(event);
+			
 		}
 	}
 
