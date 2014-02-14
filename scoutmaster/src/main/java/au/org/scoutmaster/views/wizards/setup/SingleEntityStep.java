@@ -138,7 +138,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 				fieldGroup.commit();
 				if (isNew)
 				{
-					Long id = (Long) container.addEntity(entity);
+					Object id = container.addEntity(entity);
 					EntityItem<E> entityItem = container.getItem(id);
 					entity = entityItem.getEntity();
 					fieldGroup.setItemDataSource(entityItem);
