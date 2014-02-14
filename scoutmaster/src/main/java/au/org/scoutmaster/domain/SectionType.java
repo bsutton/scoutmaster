@@ -1,7 +1,7 @@
 package au.org.scoutmaster.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import au.com.vaadinutils.domain.Color;
 
 /**
  * A section type is used to identify basic attributes about a section type.
@@ -67,16 +69,22 @@ public class SectionType extends BaseEntity
 			@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths")),
 			@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays")) })
 	private Age endingAge;
+	
+	/**
+	 * The default colour to use when representing this Section graphically.
+	 */
+	@Embedded
+	private Color colour;
 
 	/**
 	 * details the qualifications required by the section leader.
 	 */
 	@ManyToMany(targetEntity=QualificationType.class)
-	List<QualificationType> leaderRequirements = new ArrayList<>();
+	Set<QualificationType> leaderRequirements = new  TreeSet<>();
 	@ManyToMany(targetEntity=QualificationType.class)
-	List<QualificationType> assistentLeaderRequirements = new ArrayList<>();
+	Set<QualificationType> assistentLeaderRequirements = new TreeSet<>();
 	@ManyToMany(targetEntity=QualificationType.class)
-	List<QualificationType> parentHelperRequirements = new ArrayList<>();
+	Set<QualificationType> parentHelperRequirements = new TreeSet<>();
 	
 	public String getName()
 	{
@@ -113,22 +121,22 @@ public class SectionType extends BaseEntity
 		this.endingAge = endingAge;
 	}
 
-	public List<QualificationType> getLeaderRequirements()
+	public Set<QualificationType> getLeaderRequirements()
 	{
 		return leaderRequirements;
 	}
 
-	public void setLeaderRequirements(List<QualificationType> leaderRequirements)
+	public void setLeaderRequirements(Set<QualificationType> leaderRequirements)
 	{
 		this.leaderRequirements = leaderRequirements;
 	}
 
-	public List<QualificationType> getParentHelperRequirements()
+	public Set<QualificationType> getParentHelperRequirements()
 	{
 		return parentHelperRequirements;
 	}
 
-	public void setParentHelperRequirements(List<QualificationType> parentHelperRequirements)
+	public void setParentHelperRequirements(Set<QualificationType> parentHelperRequirements)
 	{
 		this.parentHelperRequirements = parentHelperRequirements;
 	}
