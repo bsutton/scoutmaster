@@ -15,6 +15,7 @@ import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
+import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
@@ -90,6 +91,22 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
+		
+//		overviewForm.bindBooleanField("Section Meeting", Event_.sectionMeeting);
+		
+		//SectionTypeDao daoSectionType = new DaoFactory().getDao(SectionTypeDao.class);
+
+		//overviewForm.bindEntityField("Section", fieldName, listClazz, listFieldName);
+		
+//		overviewForm.getFormHelper().new ListSelectBuilder<QualificationType>()
+//		.setField(Event_.sectionType)
+//		.setContainer(daoSectionType.createVaadinContainer())
+//		.setForm(overviewForm)
+//		.setListFieldName(QualificationType_.name)
+//		.setLabel("Leader Qualifications")
+//		.build();
+		overviewForm.newLine();
+
 		
 		overviewForm.bindColorPicker("Colour", Event_.color);
 		overviewForm.newLine();
