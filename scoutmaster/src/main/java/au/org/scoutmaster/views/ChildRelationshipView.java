@@ -17,7 +17,6 @@ import au.org.scoutmaster.domain.RelationshipType_;
 import au.org.scoutmaster.domain.Relationship_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
