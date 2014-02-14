@@ -43,6 +43,7 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 	private Button cancel;
 	private au.org.scoutmaster.domain.Event event;
 	private SaveEventListener newEventListener;
+	private Button delete;
 
 	/**
 	 * 
@@ -123,19 +124,31 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
-		buttonLayout.setMargin(true);
+		//buttonLayout.setMargin(true);
 		
 		save = new Button("Save");
 		save.addClickListener(this);
 		cancel = new Button("Cancel");
 		cancel.addClickListener(this);
 		
+		delete = new Button("Delete");
+		delete.addClickListener(this);
+		
 		buttonLayout.addComponent(cancel);
 		buttonLayout.addComponent(save);
 		buttonLayout.setComponentAlignment(cancel, Alignment.MIDDLE_LEFT);
 		buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_RIGHT);
 		
-		this.addComponent(buttonLayout);
+		HorizontalLayout buttonGroupLayout = new HorizontalLayout();
+		buttonGroupLayout.setMargin(true);
+		buttonGroupLayout.addComponent(delete);
+		buttonGroupLayout.addComponent(buttonLayout);
+		buttonGroupLayout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
+		buttonGroupLayout.setComponentAlignment(delete, Alignment.MIDDLE_LEFT);
+		buttonGroupLayout.setWidth("100%");
+		buttonGroupLayout.setExpandRatio(buttonLayout, 1.0f);
+		
+		this.addComponent(buttonGroupLayout);
 		
 		subject.focus();
 
@@ -160,19 +173,37 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 			}
 		}
 		
-		if (event.getButton() == cancel)
+		else if (event.getButton() == cancel)
 		{
 			this.owner.close();
 		}
+		else if (event.getButton() == delete)
+		{
+			EventDao daoEvent = new DaoFactory().getEventDao();
+			// we can't delete an unmanaged entity so merge and then delete it.
+			this.event = daoEvent.merge(this.event);
+			daoEvent.remove(this.event);
+			EventForm.this.newEventListener.eventDeleted(this.event);
+			this.owner.close();
+		}
+
 	}
 	
 	public interface SaveEventListener
 	{
 		/**
-		 * Called when the user clicks save to notify the listener that a new event was added.
+		 * Called when the user clicks save to notify the listener that a new event was added or an
+		 * existing event updated..
 		 * @param event
 		 */
 		void eventSaved(au.org.scoutmaster.domain.Event event);
+
+		/**
+		 * Called when the user clicks delete to notify the listener that the event was delete.
+		 * @param event
+		 */
+
+		void eventDeleted(au.org.scoutmaster.domain.Event event);
 	}
 
 }
