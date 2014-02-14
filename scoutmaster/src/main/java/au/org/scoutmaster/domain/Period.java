@@ -39,6 +39,79 @@ public class Period
 		this.days = interval.toPeriod().getDays();
 	}
 
+	/**
+	 * Takes an Period string and attempts to parse it. Expected format is YYy MMy
+	 * DDd
+	 * 
+	 * @param age
+	 */
+	public Period(String age)
+	{
+		if (age == null || age.trim().length() == 0)
+		{
+			this.years = 0;
+			this.months = 0;
+			this.days = 0;
+		}
+		else
+		{
+			// Strip spaces out before each of the component designators if the
+			// user has inserted them.
+			age = age.replace(" y", "y");
+			age = age.replace(" m", "m");
+			age = age.replace(" d", "d");
+			// strip comma's out.
+			age = age.replace(",", "");
+			String[] ageParts = age.trim().split(" ");
+
+			if (ageParts.length > 3)
+				throw new RuntimeException("An age must only contain three parts e.g. 10y 3m 31d");
+
+			if (ageParts.length > 0)
+			{
+				int index = 0;
+				String part = ageParts[index].trim().toLowerCase();
+				if (part.endsWith("y"))
+				{
+					// we have a year part.
+					String years = part.substring(0, part.length() - 1);
+					this.years = Integer.valueOf(years);
+					index++;
+				}
+				else
+					this.years = 0;
+
+				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("m"))
+				{
+					part = ageParts[index].trim().toLowerCase();
+					// we have a month part.
+					String month = part.substring(0, part.length() - 1);
+					this.months = Integer.valueOf(month);
+					index++;
+				}
+				else
+					this.months = 0;
+
+				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("d"))
+				{
+					part = ageParts[index].trim().toLowerCase();
+					// we have a day part.
+					String day = part.substring(0, part.length() - 1);
+					this.days = Integer.valueOf(day);
+					index++;
+				}
+				else
+					this.days = 0;
+
+				if (ageParts.length != index)
+				{
+					throw new RuntimeException("An age must only contain three parts e.g. 10y 3m 31d");
+				}
+			}
+
+		}
+	}
+
 	public Integer getYears()
 	{
 		return years;
@@ -80,6 +153,8 @@ public class Period
 		}
 		return sb.toString();
 	}
+	
+	
 
 	public DateTime getDateTime()
 	{
