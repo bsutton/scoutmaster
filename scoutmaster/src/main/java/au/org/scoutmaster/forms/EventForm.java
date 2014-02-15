@@ -223,7 +223,8 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		
 		DateTime startDate = new DateTime(startDateField.getValue());
 		
-		this.endDateField.setValue(startDate.plusHours(2).toDate());
+		if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDateField.getValue()))
+			this.endDateField.setValue(startDate.plusHours(2).toDate());
 		
 	}
 

@@ -231,7 +231,9 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		
 		DateTime startDate = new DateTime(startDateField.getValue());
 		
-		this.endDateField.setValue(startDate.plusHours(2).toDate());
+		
+		if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDateField.getValue()))
+			this.endDateField.setValue(startDate.plusHours(2).toDate());
 		
 	}
 	
