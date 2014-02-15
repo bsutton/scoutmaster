@@ -17,8 +17,6 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import au.com.vaadinutils.domain.Color;
-
 /**
  * A section type is used to identify basic attributes about a section type.
  * 

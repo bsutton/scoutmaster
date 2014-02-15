@@ -3,9 +3,12 @@ package au.org.scoutmaster.forms;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.domain.iColorFactory;
+import au.org.scoutmaster.dao.ColorDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
 import au.org.scoutmaster.domain.Event_;
@@ -15,6 +18,8 @@ import au.org.scoutmaster.validator.DateRangeValidator;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
@@ -27,7 +32,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener
+public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, ValueChangeListener
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(EventForm.class);
@@ -86,7 +91,8 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		TextField subject = overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
 
-		overviewForm.bindColorPicker("Colour", Event_.color);
+		iColorFactory factory = new ColorDao.ColorFactory();
+		overviewForm.bindColorPicker(factory, "Colour", Event_.color.getName());
 		overviewForm.newLine();
 
 		overviewForm.bindBooleanField("All Day Event", Event_.allDayEvent);
@@ -96,6 +102,7 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		startDateField = overviewForm.bindDateField("Start", Event_.eventStartDateTime, "yyyy-MM-dd hh:mm a",
 				Resolution.MINUTE);
 		startDateField.setRangeStart(new Date());
+		startDateField.addValueChangeListener(this);
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
@@ -204,6 +211,20 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		 */
 
 		void eventDeleted(au.org.scoutmaster.domain.Event event);
+	}
+
+	@Override
+	public void valueChange(ValueChangeEvent event)
+	{
+		// The start date has just changed so make certain the end date is in the future 
+		// by default we set it to two hours into the future.
+		
+		DateField startDateField = (DateField)event.getProperty();
+		
+		DateTime startDate = new DateTime(startDateField.getValue());
+		
+		this.endDateField.setValue(startDate.plusHours(2).toDate());
+		
 	}
 
 }

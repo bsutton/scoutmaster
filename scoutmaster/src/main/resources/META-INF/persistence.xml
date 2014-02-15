@@ -56,7 +56,7 @@
 		<class>au.org.scoutmaster.domain.accounting.InvoiceLine</class>
 		<class>au.org.scoutmaster.domain.accounting.Payment</class>
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
-		<class>au.com.vaadinutils.domain.Color</class>
+		<class>au.org.scoutmaster.domain.Color</class>
 
 		<properties>
 			<property name="eclipselink.session.customizer"

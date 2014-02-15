@@ -4,18 +4,20 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.domain.iColorFactory;
 import au.com.vaadinutils.fields.AutoCompleteParent;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.ColorDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
-import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
@@ -25,6 +27,8 @@ import au.org.scoutmaster.validator.DateRangeValidator;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.navigator.View;
@@ -35,7 +39,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Events")
-public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>
+public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>, ValueChangeListener
 {
 
 	private static final long serialVersionUID = 1L;
@@ -107,8 +111,8 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 //		.build();
 		overviewForm.newLine();
 
-		
-		overviewForm.bindColorPicker("Colour", Event_.color);
+		iColorFactory factory = new ColorDao.ColorFactory();
+		overviewForm.bindColorPicker(factory, "Colour", Event_.color.getName());
 		overviewForm.newLine();
 		
 		overviewForm.bindBooleanField("All Day Event", Event_.allDayEvent);
@@ -124,6 +128,8 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		endDateField.setRangeStart(new Date());
 		
 		startDateField.addValidator(new DateRangeValidator(startDateField.getCaption(), endDateField));
+		startDateField.addValueChangeListener(this);
+
 		
 		overviewForm.newLine();
 		
@@ -214,6 +220,19 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		
 		actions.add(new CopyEventAction());
 		return actions;
+	}
+	@Override
+	public void valueChange(ValueChangeEvent event)
+	{
+		// The start date has just changed so make certain the end date is in the future 
+		// by default we set it to two hours into the future.
+		
+		DateField startDateField = (DateField)event.getProperty();
+		
+		DateTime startDate = new DateTime(startDateField.getValue());
+		
+		this.endDateField.setValue(startDate.plusHours(2).toDate());
+		
 	}
 	
 	

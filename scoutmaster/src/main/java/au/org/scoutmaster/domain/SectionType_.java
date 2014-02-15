@@ -1,6 +1,5 @@
 package au.org.scoutmaster.domain;
 
-import au.com.vaadinutils.domain.Color;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;

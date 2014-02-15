@@ -22,7 +22,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import au.com.vaadinutils.crud.CrudEntity;
-import au.com.vaadinutils.domain.Color;
 
 /**
  * Used to describe an event such as a section meeting or a bbq.

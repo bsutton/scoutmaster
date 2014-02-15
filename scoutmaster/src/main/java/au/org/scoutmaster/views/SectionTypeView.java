@@ -6,7 +6,9 @@ import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.domain.iColorFactory;
 import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.ColorDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.QualificationTypeDao;
 import au.org.scoutmaster.domain.QualificationType;
@@ -59,8 +61,8 @@ public class SectionTypeView extends BaseCrudView<SectionType> implements View, 
 		overviewForm.bindTextField("Starting Age", SectionType_.endingAge);
 		overviewForm.newLine();
 
-		
-		overviewForm.bindColorPicker("Section Colour", SectionType_.colour);
+		iColorFactory factory = new ColorDao.ColorFactory();
+		overviewForm.bindColorPicker(factory, "Section Colour", SectionType_.colour.getName());
 		overviewForm.newLine();
 
 		QualificationTypeDao daoQualificationType = new DaoFactory().getDao(QualificationTypeDao.class);

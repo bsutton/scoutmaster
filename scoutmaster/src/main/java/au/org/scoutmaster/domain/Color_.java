@@ -1,4 +1,4 @@
-package au.com.vaadinutils.domain;
+package au.org.scoutmaster.domain;
 
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
