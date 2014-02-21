@@ -50,10 +50,12 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 	@Override
 	protected Component getContent(ValidatingFieldGroup<User> fieldGroup)
 	{
-		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(1, fieldGroup);
+		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(2, fieldGroup);
 		formLayout.setWidth("600px");
 		formLayout.setColumnFieldWidth(0, 400);
+		formLayout.setColumnFieldWidth(1, 20);
 
+		formLayout.colspan(2);
 		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
 		label.setContentMode(ContentMode.HTML);
 		formLayout.bindLabel(label);
