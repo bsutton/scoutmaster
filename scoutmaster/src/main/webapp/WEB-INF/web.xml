@@ -38,10 +38,10 @@
 
 	<!-- Vaadin servlet - where the action happens -->
 	<servlet>
-		<servlet-name>Vaadin Application Servlet</servlet-name>
+		<servlet-name>Scoutmaster Private Application Servlet</servlet-name>
 		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
 		<init-param>
-			<description>Vaadin UI to display</description>
+			<description>Scoutmaster Private UI</description>
 			<param-name>UI</param-name>
 			<param-value>au.org.scoutmaster.application.NavigatorUI</param-value>
 		</init-param>
@@ -52,8 +52,31 @@
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
+	
+	<!-- Vaadin servlet - this is the public interface -->
+	<servlet>
+		<servlet-name>Scoutmaster Public Application Servlet</servlet-name>
+		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+		<init-param>
+			<description>Scoutmaster Public UI</description>
+			<param-name>UI</param-name>
+			<param-value>au.org.scoutmaster.application.PublicUI</param-value>
+		</init-param>
+		<init-param>
+			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
+			<!-- comma-separated list of fully-qualified class names -->
+			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter</param-value>
+		</init-param>
+		<async-supported>true</async-supported>
+	</servlet>
+
 	<servlet-mapping>
-		<servlet-name>Vaadin Application Servlet</servlet-name>
+		<servlet-name>Scoutmaster Public Application Servlet</servlet-name>
+		<url-pattern>/public/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Scoutmaster Private Application Servlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
