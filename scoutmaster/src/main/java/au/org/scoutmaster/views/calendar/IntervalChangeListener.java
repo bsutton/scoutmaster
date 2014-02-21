@@ -5,30 +5,35 @@ import org.joda.time.LocalDate;
 
 import au.org.scoutmaster.views.calendar.CalendarView.Interval;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.themes.Reindeer;
 import com.vaadin.ui.Calendar;
 
-public class IntervalChangeListener implements Property.ValueChangeListener
+public class IntervalChangeListener implements ClickListener 
 {
 	private static final long serialVersionUID = 1L;
 
 	private Calendar calendar;
 
-	IntervalChangeListener(Calendar calendar)
+	private CalendarView view;
+
+	IntervalChangeListener(Calendar calendar, CalendarView view)
 	{
 		this.calendar = calendar;
+		this.view = view;
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void buttonClick(ClickEvent event)
 	{
-		Interval interval = (Interval) event.getProperty().getValue();
+		Interval interval = (Interval) event.getButton().getData();
 		setInterval(interval);
+		view.setActiveViewButton(event.getButton());
 
 	}
 
-	private void setInterval(Interval interval)
+	void setInterval(Interval interval)
 	{
 		DateTime calendarsFirstDate = new DateTime(calendar.getStartDate());
 
@@ -69,13 +74,14 @@ public class IntervalChangeListener implements Property.ValueChangeListener
 
 				monthField = calendarsFirstDate.dayOfMonth(); 
 				int lastDayOfMonth = monthField.getMaximumValue();
-//				calendar.setStartDate(calendarsFirstDate.minusDays(calendarsFirstDate.getDayOfMonth() - 1).toDate());
-//				calendar.setEndDate(calendarsFirstDate.plusDays(lastDayOfMonth - calendarsFirstDate.getDayOfMonth()).toDate());
+				calendar.setStartDate(calendarsFirstDate.minusDays(calendarsFirstDate.getDayOfMonth() - 1).toDate());
+				calendar.setEndDate(calendarsFirstDate.plusDays(lastDayOfMonth - calendarsFirstDate.getDayOfMonth()).toDate());
 				
-				calendar.setEndDate(calendarsFirstDate.plusDays(lastDayOfMonth).toDate());
+//				calendar.setEndDate(calendarsFirstDate.plusDays(lastDayOfMonth).toDate());
 				break;
 
 		}
 	}
+
 
 }

@@ -2,6 +2,7 @@ package au.org.scoutmaster.views.calendar;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,16 +20,18 @@ import com.vaadin.ui.Calendar;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.EventResize;
 import com.vaadin.ui.components.calendar.CalendarComponentEvents.MoveEvent;
+import com.vaadin.ui.components.calendar.ContainerEventProvider;
 import com.vaadin.ui.components.calendar.event.CalendarEvent;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeEvent;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener;
-import com.vaadin.ui.components.calendar.ContainerEventProvider;
 
-final class ScoutsContainerEventProvider extends ContainerEventProvider implements EventChangeListener 
+final class ScoutsContainerEventProvider extends ContainerEventProvider  implements EventChangeListener
 {
 	private Logger logger = Logger.getLogger(ScoutsContainerEventProvider.class);
 
 	private final JPAContainer<au.org.scoutmaster.domain.Event> container;
+
+	private final List<EventChangeListener> eventChangeListeners = new LinkedList<CalendarEvent.EventChangeListener>();
 
 	private Calendar calendar;
 	private static final long serialVersionUID = 1L;
@@ -70,6 +73,7 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider implemen
 
 		Date newEndTime = new Date(newStart.getTime() + duration);
 		eventEntity.setEventEndDateTime(newEndTime);
+		eventChange(new EventChangeEvent(calendarEvent));
 		try
 		{
 			EventDao daoEvent = new DaoFactory().getEventDao();
@@ -98,6 +102,7 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider implemen
 			EventDao daoEvent = new DaoFactory().getEventDao();
 			eventEntity = daoEvent.merge(eventEntity);
 			calendarEvent.eventEntity = eventEntity;
+			eventChange(new EventChangeEvent(calendarEvent));
 		}
 		catch (Exception e)
 		{
@@ -124,17 +129,34 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider implemen
 			// Inject the color style required by each event into the page
 			Styles styles = Page.getCurrent().getStyles();
 
-			// Inject the style. We Use the colour name as the css name (sans the leading #
-			styles.add(".v-calendar-event-" + event.getColor().getCSS().substring(1) + " { background-color:" + event.getColor().getCSS() + "; }");
+			// Inject the style. We Use the colour name as the css name (sans
+			// the leading #
+			styles.add(".v-calendar-event-" + event.getColor().getCSS().substring(1) + " { background-color:"
+					+ event.getColor().getCSS() + "; }");
 		}
 
 		return arrayList;
 	}
-	
-	@Override
+
+	@Override 
 	public void eventChange(EventChangeEvent eventChangeEvent)
 	{
+		for (EventChangeListener listener : eventChangeListeners)
+		{
+			listener.eventChange(eventChangeEvent);
+		}
 		calendar.markAsDirty();
 	}
 
+	/**
+	 * Over-ridden as the base implementation is broken.
+	 */
+	@Override
+	public void addEventChangeListener(EventChangeListener listener)
+	{
+		if (!eventChangeListeners.contains(listener))
+		{
+			eventChangeListeners.add(listener);
+		}
+	}
 }
