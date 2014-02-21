@@ -40,29 +40,14 @@
 
 	<inherits name="com.vaadin.addon.calendar.gwt.CalendarWidgetset" />
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
     <inherits name="org.vaadin.openesignforms.ckeditor.widgetset.VaadinCKEditorWidgetset" />
 
-    
-
     <inherits name="org.vaadin.easyuploads.Widgetset" />
-
-    
 
     <inherits name="org.vaadin.aceeditor.AceEditorWidgetSet" />
 
     <inherits name="org.vaadin.tokenfield.TokenfieldWidgetset" />
+    
+    <inherits name="org.vaadin.peter.buttongroup.ButtonGroupWidgetset" />
+    
 </module>
