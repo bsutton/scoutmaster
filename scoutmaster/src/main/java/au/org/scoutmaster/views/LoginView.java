@@ -38,9 +38,9 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 	public static final String NAME = "login";
 
-	private final TextField user;
+	private final TextField usernameField;
 
-	private final PasswordField password;
+	private final PasswordField passwordField;
 
 	private final Button loginButton;
 
@@ -69,24 +69,24 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		fields.addComponent(label);
 
 		// Create the user input field
-		user = new TextField("Username:");
-		user.setWidth("300px");
-		user.setRequired(true);
-		user.setInputPrompt("Your username");
-		user.setImmediate(true);
-		user.setInvalidAllowed(false);
-		user.addValidator(new UsernameValidator());
-		fields.addComponent(user);
+		usernameField = new TextField("Username:");
+		usernameField.setWidth("300px");
+		usernameField.setRequired(true);
+		usernameField.setInputPrompt("Your username");
+		usernameField.setImmediate(true);
+		usernameField.setInvalidAllowed(false);
+		usernameField.addValidator(new UsernameValidator());
+		fields.addComponent(usernameField);
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
+		passwordField = new PasswordField("Password:");
+		passwordField.setWidth("300px");
 
-		password.setRequired(true);
-		password.setNullRepresentation("");
-		password.addValidator(new PasswordValidator());
+		passwordField.setRequired(true);
+		passwordField.setNullRepresentation("");
+		passwordField.addValidator(new PasswordValidator());
 
-		fields.addComponent(password);
+		fields.addComponent(passwordField);
 
 		// Buttons
 		HorizontalLayout buttons = new HorizontalLayout();
@@ -116,7 +116,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	public void enter(ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		user.focus();
+		usernameField.focus();
 	}
 
 	//
@@ -169,15 +169,15 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			// database
 			// for wrongly entered passwords
 			//
-			if (user.isValid() && password.isValid())
+			if (this.usernameField.isValid() && this.passwordField.isValid())
 			{
-				String username = user.getValue();
-				String password = this.password.getValue();
+				String username = this.usernameField.getValue();
+				String password = this.passwordField.getValue();
 
 				UserDao daoUser = new DaoFactory().getUserDao();
 
 				User user = daoUser.findByName(username);
-				if (user.isValidPassword(password))
+				if (user!= null && user.isValidPassword(password))
 				{
 					// Store the current user in the service session
 					SMSession.INSTANCE.setLoggedInUser(user);
@@ -187,16 +187,15 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				}
 				else
 				{
-
 					// Wrong password clear the password field and refocuses it
-					this.user.focus();
+					this.usernameField.focus();
 					Notification.show("Invalid username or password!", Type.TRAY_NOTIFICATION);
 				}
 			}
 			else
 			{
 				// user.setComponentError(new UserError("I dont like you"));
-				this.user.focus();
+				this.usernameField.focus();
 				Notification.show("Invalid username or password", Type.TRAY_NOTIFICATION);
 			}
 		}
