@@ -131,7 +131,7 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		
 		HorizontalLayout buttonLayout = new HorizontalLayout();
 		buttonLayout.setSpacing(true);
-		//buttonLayout.setMargin(true);
+		buttonLayout.setWidth("100%");
 		
 		save = new Button("Save");
 		save.addClickListener(this);
@@ -147,7 +147,6 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_RIGHT);
 		
 		HorizontalLayout buttonGroupLayout = new HorizontalLayout();
-		buttonGroupLayout.setMargin(true);
 		buttonGroupLayout.addComponent(delete);
 		buttonGroupLayout.addComponent(buttonLayout);
 		buttonGroupLayout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
