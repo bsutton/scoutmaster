@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -47,11 +48,13 @@ public class Event extends BaseEntity implements CrudEntity
 	 * A short description of the event used when displaying a summary of the event.
 	 */
 	@NotEmpty
+	@Size(max=255)
 	private String subject;
 	
 	/**
 	 * A detailed description of the event. This may contain html for formatting purposes.
 	 */
+	@Size(max=1024)
 	private String  details;
 	
 	/**

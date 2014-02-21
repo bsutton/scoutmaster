@@ -11,6 +11,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Query;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 
@@ -27,12 +28,16 @@ public class Address extends BaseEntity
 	
 	private static final long serialVersionUID = 1L;
 	
+	@Size(max=255)
 	private String street= "";
 	
+	@Size(max=255)
 	private String city = "";
 	
+	@Size(max=255)
 	private String postcode= "";
 	
+	@Size(max=255)
 	private String state = "";
 
 	public void setStreet(String street)
