@@ -50,5 +50,6 @@
 	<include file="changeset.1.0.42.xml" relativeToChangelogFile="true" />
 	<include file="changeset.1.0.43.xml" relativeToChangelogFile="true" />
 	<include file="changeset.1.0.44.xml" relativeToChangelogFile="true" />
+	<include file="changeset.1.0.45.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>
 
