@@ -5,7 +5,7 @@
 	<groupId>org.scoutmaster</groupId>
 	<artifactId>scoutmaster</artifactId>
 	<packaging>war</packaging>
-	<version>0.6</version>
+	<version>0.7</version>
 	<name>Vaadin Web Application</name>
 
 	<properties>
@@ -70,13 +70,12 @@
 			<scope>provided</scope>
 
 			<!-- ############# READ THIS TO COMPILE WIDGETS ######################### 
-			
-			To compile the widget set you need to remove this exclusion,
-			but when building the rest of the project you need have this exclusion in place. 
-			The problem is that vaadin relies on 1.0.0 GA whilst we are using the hibernate validation api which relies on 1.1.0 Final
-			At run time we need to excluded the version used by vaadin-client so we can use the 1.1.0 version.
-			However if you need to compile the widget set you need to remove this exclusion.
-			 -->
+				To compile the widget set you need to remove this exclusion, but when building 
+				the rest of the project you need have this exclusion in place. The problem 
+				is that vaadin relies on 'javax.validation 1.0.0 GA' whilst we are using the hibernate validation 
+				api which relies on 'javax.validation 1.1.0 Final' At run time we need to excluded the version 
+				used by vaadin-client so we can use the 1.1.0 version. However if you need 
+				to compile the widget set you need to remove this exclusion. -->
 			<exclusions>
 				<exclusion>
 					<artifactId>validation-api</artifactId>
@@ -136,6 +135,13 @@
 			<artifactId>vaadin-calendar</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.vaadin.addons</groupId>
+			<artifactId>buttongroup</artifactId>
+			<version>2.3</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -149,7 +155,7 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
-			<version>2.5.0</version>
+			<version>2.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
