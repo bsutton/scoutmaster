@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.1.10</vaadin.version>
+		<vaadin.version>7.1.11</vaadin.version>
 		<liquibase.version>3.0.2</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jasperreports.version>5.2.0</jasperreports.version>
@@ -72,10 +72,11 @@
 			<!-- ############# READ THIS TO COMPILE WIDGETS ######################### 
 				To compile the widget set you need to remove this exclusion, but when building 
 				the rest of the project you need have this exclusion in place. The problem 
-				is that vaadin relies on 'javax.validation 1.0.0 GA' whilst we are using the hibernate validation 
-				api which relies on 'javax.validation 1.1.0 Final' At run time we need to excluded the version 
-				used by vaadin-client so we can use the 1.1.0 version. However if you need 
-				to compile the widget set you need to remove this exclusion. -->
+				is that vaadin relies on 'javax.validation 1.0.0 GA' whilst we are using 
+				the hibernate validation api which relies on 'javax.validation 1.1.0 Final' 
+				At run time we need to excluded the version used by vaadin-client so we can 
+				use the 1.1.0 version. However if you need to compile the widget set you 
+				need to remove this exclusion. -->
 			<exclusions>
 				<exclusion>
 					<artifactId>validation-api</artifactId>
@@ -141,7 +142,7 @@
 			<artifactId>buttongroup</artifactId>
 			<version>2.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
@@ -264,6 +265,11 @@
 			<version>7.0.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.vaadin.hezamu.rx</groupId>
+			<artifactId>rxvaadin</artifactId>
+			<version>0.0.5</version>
+		</dependency>
 		<!-- dependency> <groupId>com.vaadin.addon</groupId> <artifactId>vaadin-touchkit-agpl</artifactId> 
 			<version>4.0.0.alpha1</version> </dependency -->
 
