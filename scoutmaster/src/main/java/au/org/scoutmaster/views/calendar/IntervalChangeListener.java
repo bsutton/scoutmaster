@@ -7,7 +7,6 @@ import au.org.scoutmaster.views.calendar.CalendarView.Interval;
 
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.themes.Reindeer;
 import com.vaadin.ui.Calendar;
 
 public class IntervalChangeListener implements ClickListener 

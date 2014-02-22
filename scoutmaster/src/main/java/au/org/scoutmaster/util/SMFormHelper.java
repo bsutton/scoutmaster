@@ -15,7 +15,6 @@ import au.org.scoutmaster.views.Selected;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
 
 public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 {
@@ -48,8 +47,7 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 	public <T extends BaseEntity, L> TokenField bindTokenField(AbstractLayout form, FieldGroup group, Selected<T> selected, String fieldLabel, String fieldName,
 			Class<L> clazz)
 	{
-		VerticalLayout layout = new VerticalLayout();
-		TokenField field = new SplitContactTokenField<T>(selected, fieldLabel, layout);
+		TokenField field = new SplitContactTokenField<T>(fieldLabel);
 		field.setWidth("100%"); // width...
 		field.setInputWidth("100%"); // and input width separately
 		field.setFilteringMode(FilteringMode.CONTAINS); // suggest
