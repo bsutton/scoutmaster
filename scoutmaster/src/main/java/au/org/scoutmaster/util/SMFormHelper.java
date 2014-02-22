@@ -50,8 +50,6 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 	{
 		VerticalLayout layout = new VerticalLayout();
 		TokenField field = new SplitContactTokenField<T>(selected, fieldLabel, layout);
-		field.setStyleName(TokenField.STYLE_TOKENFIELD); // remove fake
-															// textfield look
 		field.setWidth("100%"); // width...
 		field.setInputWidth("100%"); // and input width separately
 		field.setFilteringMode(FilteringMode.CONTAINS); // suggest
