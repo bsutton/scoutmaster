@@ -91,8 +91,8 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 				{
 					String expandedBody = message.expandBody(user, transmission.getContact());
 					StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
-					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(), transmission.getRecipient(),
-							EmailAddressType.To, null, null, expandedSubject.toString(), expandedBody.toString(),
+					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(), new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
+							expandedSubject.toString(), expandedBody.toString(),
 							attachedFiles);
 
 					// Log the activity

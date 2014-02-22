@@ -1,5 +1,6 @@
 package au.org.scoutmaster.dao;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -19,6 +20,20 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements
 		Dao<SMTPServerSettings, Long>
 {
+	static public class EmailTarget
+	{
+
+		private String emailAddress;
+		private EmailAddressType type;
+
+		public EmailTarget(EmailAddressType type, String emailAddress)
+		{
+			this.type = type;
+			this.emailAddress = emailAddress;
+		}
+
+	}
+
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(SMTPSettingsDao.class);
 
@@ -61,6 +76,16 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		return super.createVaadinContainer();
 	}
 
+	public void sendEmail(SMTPServerSettings settings, String fromAddress, EmailTarget target, String subject,
+			String body, HashSet<AttachedFile> attachedFiles) throws EmailException
+	{
+		ArrayList<EmailTarget> list = new ArrayList<>();
+		list.add(target);
+		
+		sendEmail(settings, fromAddress, list, subject, body, attachedFiles);
+		
+	}
+
 	/**
 	 * Simple method to send a single email using the EMailServerSettings.
 	 * 
@@ -75,7 +100,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	 * @param string 
 	 * @throws EmailException
 	 */
-	public void sendEmail(SMTPServerSettings settings, String fromAddress, String firstAddress, EmailAddressType firstType, String secondAddress, EmailAddressType secondType, String subject,
+	public void sendEmail(SMTPServerSettings settings, String fromAddress, List<EmailTarget> targets, String subject,
 			String body, HashSet<AttachedFile> attachedFiles) throws EmailException
 	{
 		HtmlEmail email = new HtmlEmail();
@@ -94,12 +119,11 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		email.setFrom(fromAddress);
 		email.setBounceAddress(settings.getBounceEmailAddress());
 		
-		addEmailAddress(firstAddress, firstType, email);
-		
-		if (secondAddress != null && secondAddress.length() > 0)
+		for (EmailTarget target : targets)
 		{
-			addEmailAddress(secondAddress, secondType, email);
+			addEmailAddress(email, target.emailAddress, target.type);
 		}
+		
 		email.setSubject(subject);
 		email.setHtmlMsg(body);
 		email.setTextMsg("Your email client does not support HTML messages");
@@ -115,7 +139,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 
 	}
 
-	private void addEmailAddress(String firstAddress, EmailAddressType firstType, HtmlEmail email)
+	private void addEmailAddress(HtmlEmail email, String firstAddress, EmailAddressType firstType)
 			throws EmailException
 	{
 		switch (firstType)
@@ -132,4 +156,5 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		}
 	}
 
+	
 }
