@@ -49,6 +49,18 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		return resultContacts;
 	}
 
+	/**
+	 * Find all contacts that have an email address
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Contact> findByHasEmail()
+	{
+		Query query = entityManager.createNamedQuery(Contact.FIND_BY_HAS_EMAIL);
+		List<Contact> resultContacts = query.getResultList();
+		return resultContacts;
+	}
+
 	
 	public Long getAge(Contact contact)
 	{

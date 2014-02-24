@@ -44,10 +44,12 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname") })
+{ @NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname")
+, @NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
 public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
+	static public final String FIND_BY_HAS_EMAIL = "Contact.findByHasEmail";
 
 	private static final long serialVersionUID = 1L;
 
