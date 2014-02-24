@@ -157,6 +157,8 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	/**
 	 * One of the password fields has changed so we need to inject the
 	 * validators.
+	 * We only inject the validator is a user attempts to edit the password.
+	 * 
 	 */
 	@Override
 	public void textChange(TextChangeEvent event)
