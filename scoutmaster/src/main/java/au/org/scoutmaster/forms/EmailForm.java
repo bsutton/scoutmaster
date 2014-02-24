@@ -15,12 +15,15 @@ import org.vaadin.easyuploads.MultiFileUpload;
 import rx.Subscription;
 import rx.util.functions.Action1;
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.fields.AutoCompleteParent;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.ui.WorkingDialog;
+import au.com.vaadinutils.validator.EmailValidator;
 import au.org.scoutmaster.dao.ActivityDao;
 import au.org.scoutmaster.dao.ActivityTypeDao;
+import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.SMTransaction;
@@ -33,8 +36,11 @@ import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
+import com.vaadin.data.Item;
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.AbstractSelect.NewItemHandler;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -49,7 +55,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
-public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, CompleteListener
+public class EmailForm extends VerticalLayout
 {
 	private static Logger logger = Logger.getLogger(EmailForm.class);
 	private static final long serialVersionUID = 1L;
@@ -69,7 +75,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 	class TargetLine
 	{
 		ComboBox targetTypeCombo;
-		TextField targetAddress;
+		ComboBox targetAddress;
 		Button plusButton;
 		private Subscription buttonSubscription;
 		public int row;
@@ -99,12 +105,15 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 
 		TargetLine line = insertTargetLine(0);
 
-		line.targetAddress.setValue(toEmailAddress);
+		line.targetAddress.select(toEmailAddress);
 		line.targetTypeCombo.select(EmailAddressType.To);
 
-		send = new Button("Send", new ClickEventLogged.ClickAdaptor(this));
+		send = new Button("Send");
+		Action1<ClickEvent> sendClickAction = new SendClickAction();
+		ButtonEventSource.fromActionOf(send).subscribe(sendClickAction);
+
 		send.setImmediate(true);
-		
+
 		grid.newLine();
 		grid.addComponent(send);
 
@@ -150,106 +159,23 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		return targetTypes;
 	}
 
-	/**
-	 * User click send button
-	 */
-	@Override
-	public void buttonClick(ClickEvent event)
+	private boolean checkValidAddresses()
 	{
-
-		send.setEnabled(false);
-		if (isEmpty(this.subject.getValue()))
-			SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
-		else if (!oneValidAddress())
-			SMNotification.show("You must provide at least one email address", Type.WARNING_MESSAGE);
-		else if (isEmpty(this.ckEditor.getValue()))
-			SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
-		else
-
-		{
-			WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
-			UI.getCurrent().addWindow(working);
-			working.setWorker(new Runnable()
-			{
-
-				@Override
-				public void run()
-				{
-					EntityManager em = EntityManagerProvider.createEntityManager();
-					try (SMTransaction t = new SMTransaction(em))
-					{
-
-						SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
-						SMTPServerSettings settings = daoSMTPSettings.findSettings();
-
-						ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
-						
-						for (TargetLine line : lines)
-						{
-							if (!isEmpty(line.targetAddress.getValue()))
-								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo.getValue(), line.targetAddress.getValue()));
-						}
-						
-						assert targets.size() != 0 : "Empty list of email targets"; 
-						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
-								EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
-
-						// Log the activity
-						ActivityDao daoActivity = new DaoFactory(em).getActivityDao();
-						ActivityTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
-						ActivityType type = daoActivityType.findByName(ActivityType.EMAIL);
-						Activity activity = new Activity();
-						activity.setAddedBy(EmailForm.this.sender);
-						activity.setWithContact(EmailForm.this.contact);
-						activity.setSubject(EmailForm.this.subject.getValue());
-						activity.setDetails(EmailForm.this.ckEditor.getValue());
-						activity.setType(type);
-
-						daoActivity.persist(activity);
-						t.commit();
-
-					}
-					catch (EmailException e)
-					{
-						logger.error(e, e);
-						EmailForm.this.send.setEnabled(true);
-						SMNotification.show(e, Type.ERROR_MESSAGE);
-					}
-
-				}
-			}, this);
-
-		}
-		this.send.setEnabled(true);
-
-	}
-
-	private boolean oneValidAddress()
-	{
-		boolean found = false;
+		boolean valid = true;
 		for (TargetLine line : lines)
 		{
-			if (!isEmpty(line.targetAddress.getValue()))
+			if (!line.targetAddress.isValid())
 			{
-				found = true;
+				valid = false;
 				break;
 			}
 		}
-		return found;
+		return valid;
 	}
 
 	private boolean isEmpty(String value)
 	{
 		return value == null || value.length() == 0;
-	}
-
-	@Override
-	public void complete()
-	{
-		SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
-		// working.close();
-		this.owner.close();
-
 	}
 
 	private AbstractLayout addUploadWidget()
@@ -314,27 +240,137 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 
 	}
 
-	class PlusAction implements Action1<ClickEvent>
+	private TargetLine insertTargetLine(int row)
+	{
+		List<EmailAddressType> targetTypes = getTargetTypes();
+
+		EmailForm.this.grid.insertRow(row);
+		grid.setCursorY(row);
+		grid.setCursorX(0);
+
+		AutoCompleteParent<Contact> a;
+
+		final TargetLine line = new TargetLine();
+		line.row = row;
+
+		line.targetTypeCombo = new ComboBox(null, targetTypes);
+		line.targetTypeCombo.setWidth("60");
+		line.targetTypeCombo.select(targetTypes.get(0));
+		grid.addComponent(line.targetTypeCombo);
+		line.targetAddress = new ComboBox(null);
+		line.targetAddress.setContainerDataSource(getValidEmailContacts());
+		line.targetAddress.setImmediate(true);
+		line.targetAddress.setItemCaptionPropertyId("namedemail");
+		line.targetAddress.setTextInputAllowed(true);
+		line.targetAddress.setNewItemsAllowed(true);
+
+		line.targetAddress.setNewItemHandler(new NewItemHandler()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void addNewItem(String newItemCaption)
+			{
+				IndexedContainer container = (IndexedContainer) line.targetAddress.getContainerDataSource();
+				
+				Item item = addItem(container, "", newItemCaption);
+				if (item != null)
+				{
+					line.targetAddress.addItem(item.getItemProperty("id").getValue());
+					line.targetAddress.setValue(item.getItemProperty("id").getValue());
+				}
+			}
+		});
+
+		line.targetAddress.setInputPrompt("Enter email address");
+		line.targetAddress.setWidth("100%");
+		grid.addComponent(line.targetAddress);
+		line.plusButton = new Button("+");
+		line.plusButton.setData(line);
+		line.plusButton.setStyleName(Reindeer.BUTTON_SMALL);
+		grid.addComponent(line.plusButton);
+		Action1<ClickEvent> plusClickAction = new PlusClickAction();
+
+		line.buttonSubscription = ButtonEventSource.fromActionOf(line.plusButton).subscribe(plusClickAction);
+
+		lines.add(line);
+
+		return line;
+	}
+
+	private IndexedContainer getValidEmailContacts()
+	{
+		IndexedContainer container = new IndexedContainer();
+
+		ContactDao daoContact = new DaoFactory().getContactDao();
+		List<Contact> list = daoContact.findByHasEmail();
+
+		container.addContainerProperty("id", String.class, null);
+		container.addContainerProperty("email", String.class, null);
+		container.addContainerProperty("namedemail", String.class, null);
+
+		for (Contact contact : list)
+		{
+			String named = contact.getFirstname() + " " + contact.getLastname();
+			if (contact.getHomeEmail().trim().length() != 0)
+			{
+				addItem(container, named, contact.getHomeEmail());
+			}
+			if (contact.getWorkEmail().trim().length() != 0)
+			{
+				addItem(container, named, contact.getWorkEmail());
+			}
+		}
+		return container;
+	}
+
+	private Item addItem(IndexedContainer container, String named, String email)
+	{
+		// When we are editing an email (as second time) we can end up with 
+		// double brackets so we strip them off here.
+		if (email.startsWith("<"))
+			email = email.substring(1);
+		if (email.endsWith(">"))
+			email = email.substring(0, email.length() -1);
+
+		Item item = container.addItem(email);
+		if (item != null)
+		{
+			item.getItemProperty("id").setValue(email);
+			item.getItemProperty("email").setValue(email);
+			String namedEmail;
+			if (named != null && named.trim().length() > 0)
+				namedEmail = named + " <" + email + ">";
+			else
+				namedEmail = "<" + email + ">";
+			item.getItemProperty("namedemail").setValue(namedEmail);
+		}
+		return item;
+	}
+
+	class PlusClickAction implements Action1<ClickEvent>
 	{
 		@Override
 		public void call(ClickEvent event)
 		{
 			Button button = event.getButton();
 			TargetLine line = (TargetLine) button.getData();
-			insertTargetLine(line.row + 1);
+			TargetLine newLine = insertTargetLine(line.row + 1);
 			// switch the button to a minus action as only the last line can be
 			// used to add rows.
 			button.setCaption("-");
+			newLine.targetAddress.focus();
+			newLine.targetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
 
 			line.buttonSubscription.unsubscribe();
 
-			Action1<ClickEvent> minusClickAction = new MinusAction();
+			Action1<ClickEvent> minusClickAction = new MinusClickAction();
 
 			line.buttonSubscription = ButtonEventSource.fromActionOf(line.plusButton).subscribe(minusClickAction);
 		}
 	}
 
-	class MinusAction implements Action1<ClickEvent>
+	class MinusClickAction implements Action1<ClickEvent>
 	{
 		@Override
 		public void call(ClickEvent event)
@@ -344,7 +380,7 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 			EmailForm.this.grid.removeRow(line.row);
 			line.buttonSubscription.unsubscribe();
 			lines.remove(line.row);
-			
+
 			// recalculate rows
 			int row = 0;
 			for (TargetLine aLine : lines)
@@ -354,35 +390,86 @@ public class EmailForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		}
 	}
 
-	private TargetLine insertTargetLine(int row)
+	class SendClickAction implements Action1<ClickEvent>, CompleteListener
 	{
-		List<EmailAddressType> targetTypes = getTargetTypes();
+		@Override
+		public void call(ClickEvent t1)
+		{
+			send.setEnabled(false);
+			if (isEmpty(EmailForm.this.subject.getValue()))
+				SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
+			else if (!checkValidAddresses())
+				SMNotification.show("All Email adddresses must be valid", Type.WARNING_MESSAGE);
+			else if (isEmpty(EmailForm.this.ckEditor.getValue()))
+				SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
+			else
 
-		EmailForm.this.grid.insertRow(row);
-		grid.setCursorY(row);
-		grid.setCursorX(0);
+			{
+				WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
+				UI.getCurrent().addWindow(working);
+				working.setWorker(new Runnable()
+				{
 
-		TargetLine line = new TargetLine();
-		line.row = row;
-		line.targetTypeCombo = new ComboBox(null, targetTypes);
-		line.targetTypeCombo.setWidth("60");
-		line.targetTypeCombo.select(targetTypes.get(0));
-		grid.addComponent(line.targetTypeCombo);
-		line.targetAddress = new TextField();
-		line.targetAddress.setInputPrompt("Enter email address");
-		line.targetAddress.setWidth("100%");
-		grid.addComponent(line.targetAddress);
-		line.plusButton = new Button("+");
-		line.plusButton.setData(line);
-		line.plusButton.setStyleName(Reindeer.BUTTON_SMALL);
-		grid.addComponent(line.plusButton);
-		Action1<ClickEvent> plusClickAction = new PlusAction();
+					@Override
+					public void run()
+					{
+						EntityManager em = EntityManagerProvider.createEntityManager();
+						try (SMTransaction t = new SMTransaction(em))
+						{
 
-		line.buttonSubscription = ButtonEventSource.fromActionOf(line.plusButton).subscribe(plusClickAction);
-		
-		lines.add(line);
+							SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
+							SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
-		return line;
+							ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
+
+							for (TargetLine line : lines)
+							{
+								if (!isEmpty((String) line.targetAddress.getValue()))
+									targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
+											.getValue(), (String) line.targetAddress.getValue()));
+							}
+
+							assert targets.size() != 0 : "Empty list of email targets";
+							daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
+									EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
+
+							// Log the activity
+							ActivityDao daoActivity = new DaoFactory(em).getActivityDao();
+							ActivityTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
+							ActivityType type = daoActivityType.findByName(ActivityType.EMAIL);
+							Activity activity = new Activity();
+							activity.setAddedBy(EmailForm.this.sender);
+							activity.setWithContact(EmailForm.this.contact);
+							activity.setSubject(EmailForm.this.subject.getValue());
+							activity.setDetails(EmailForm.this.ckEditor.getValue());
+							activity.setType(type);
+
+							daoActivity.persist(activity);
+							t.commit();
+
+						}
+						catch (EmailException e)
+						{
+							logger.error(e, e);
+							EmailForm.this.send.setEnabled(true);
+							SMNotification.show(e, Type.ERROR_MESSAGE);
+						}
+
+					}
+				}, this);
+
+			}
+			EmailForm.this.send.setEnabled(true);
+
+		}
+
+		@Override
+		public void complete()
+		{
+			SMNotification.show("Message sent", Type.TRAY_NOTIFICATION);
+			EmailForm.this.owner.close();
+		}
+
 	}
 
 }
