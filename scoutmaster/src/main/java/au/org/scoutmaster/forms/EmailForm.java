@@ -15,7 +15,6 @@ import org.vaadin.easyuploads.MultiFileUpload;
 import rx.Subscription;
 import rx.util.functions.Action1;
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.fields.AutoCompleteParent;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
@@ -76,12 +75,15 @@ public class EmailForm extends VerticalLayout
 	{
 		ComboBox targetTypeCombo;
 		ComboBox targetAddress;
-		Button plusButton;
+		Button minusButton;
 		private Subscription buttonSubscription;
 		public int row;
 	}
 
 	ArrayList<TargetLine> lines = new ArrayList<>();
+	private ComboBox primaryTypeCombo;
+	private TextField primaryTargetAddress;
+	private Button primaryPlusButton;
 
 	/**
 	 * 
@@ -103,12 +105,30 @@ public class EmailForm extends VerticalLayout
 		grid.setColumnExpandRatio(1, (float) 1.0);
 		grid.setSpacing(true);
 
-		TargetLine line = insertTargetLine(0);
+		List<EmailAddressType> targetTypes = getTargetTypes();
 
-		line.targetAddress.select(toEmailAddress);
-		line.targetTypeCombo.select(EmailAddressType.To);
+		primaryTypeCombo = new ComboBox(null, targetTypes);
+		primaryTypeCombo.setWidth("60");
+		primaryTypeCombo.select(targetTypes.get(0));
+		primaryTypeCombo.select(EmailAddressType.To);
+		grid.addComponent(primaryTypeCombo);
+
+		primaryTargetAddress = new TextField(null, toEmailAddress);
+		primaryTargetAddress.setWidth("100%");
+		//primaryTargetAddress.setReadOnly(true);
+		primaryTargetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
+		primaryTargetAddress.setImmediate(true);
+		grid.addComponent(primaryTargetAddress);
+
+		primaryPlusButton = new Button("+");
+		primaryPlusButton.setDescription("Click to add another email address line.");
+		primaryPlusButton.setStyleName(Reindeer.BUTTON_SMALL);
+		grid.addComponent(primaryPlusButton);
+		Action1<ClickEvent> plusClickAction = new PlusClickAction();
+		ButtonEventSource.fromActionOf(primaryPlusButton).subscribe(plusClickAction);
 
 		send = new Button("Send");
+		send.setDescription("Click to send this email.");
 		Action1<ClickEvent> sendClickAction = new SendClickAction();
 		ButtonEventSource.fromActionOf(send).subscribe(sendClickAction);
 
@@ -248,8 +268,6 @@ public class EmailForm extends VerticalLayout
 		grid.setCursorY(row);
 		grid.setCursorX(0);
 
-		AutoCompleteParent<Contact> a;
-
 		final TargetLine line = new TargetLine();
 		line.row = row;
 
@@ -257,11 +275,17 @@ public class EmailForm extends VerticalLayout
 		line.targetTypeCombo.setWidth("60");
 		line.targetTypeCombo.select(targetTypes.get(0));
 		grid.addComponent(line.targetTypeCombo);
+
 		line.targetAddress = new ComboBox(null);
-		line.targetAddress.setContainerDataSource(getValidEmailContacts());
+		grid.addComponent(line.targetAddress);
 		line.targetAddress.setImmediate(true);
-		line.targetAddress.setItemCaptionPropertyId("namedemail");
 		line.targetAddress.setTextInputAllowed(true);
+		line.targetAddress.setInputPrompt("Enter Contact Name or email address");
+		line.targetAddress.setWidth("100%");
+		line.targetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
+
+		line.targetAddress.setContainerDataSource(getValidEmailContacts());
+		line.targetAddress.setItemCaptionPropertyId("namedemail");
 		line.targetAddress.setNewItemsAllowed(true);
 
 		line.targetAddress.setNewItemHandler(new NewItemHandler()
@@ -272,7 +296,7 @@ public class EmailForm extends VerticalLayout
 			public void addNewItem(String newItemCaption)
 			{
 				IndexedContainer container = (IndexedContainer) line.targetAddress.getContainerDataSource();
-				
+
 				Item item = addItem(container, "", newItemCaption);
 				if (item != null)
 				{
@@ -282,16 +306,14 @@ public class EmailForm extends VerticalLayout
 			}
 		});
 
-		line.targetAddress.setInputPrompt("Enter email address");
-		line.targetAddress.setWidth("100%");
-		grid.addComponent(line.targetAddress);
-		line.plusButton = new Button("+");
-		line.plusButton.setData(line);
-		line.plusButton.setStyleName(Reindeer.BUTTON_SMALL);
-		grid.addComponent(line.plusButton);
-		Action1<ClickEvent> plusClickAction = new PlusClickAction();
+		line.minusButton = new Button("-");
+		line.minusButton.setDescription("Click to remove this email address line.");
+		line.minusButton.setData(line);
+		line.minusButton.setStyleName(Reindeer.BUTTON_SMALL);
+		grid.addComponent(line.minusButton);
+		Action1<ClickEvent> minusClickAction = new MinusClickAction();
 
-		line.buttonSubscription = ButtonEventSource.fromActionOf(line.plusButton).subscribe(plusClickAction);
+		line.buttonSubscription = ButtonEventSource.fromActionOf(line.minusButton).subscribe(minusClickAction);
 
 		lines.add(line);
 
@@ -324,14 +346,15 @@ public class EmailForm extends VerticalLayout
 		return container;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Item addItem(IndexedContainer container, String named, String email)
 	{
-		// When we are editing an email (as second time) we can end up with 
+		// When we are editing an email (as second time) we can end up with
 		// double brackets so we strip them off here.
 		if (email.startsWith("<"))
 			email = email.substring(1);
 		if (email.endsWith(">"))
-			email = email.substring(0, email.length() -1);
+			email = email.substring(0, email.length() - 1);
 
 		Item item = container.addItem(email);
 		if (item != null)
@@ -353,20 +376,8 @@ public class EmailForm extends VerticalLayout
 		@Override
 		public void call(ClickEvent event)
 		{
-			Button button = event.getButton();
-			TargetLine line = (TargetLine) button.getData();
-			TargetLine newLine = insertTargetLine(line.row + 1);
-			// switch the button to a minus action as only the last line can be
-			// used to add rows.
-			button.setCaption("-");
+			TargetLine newLine = insertTargetLine(EmailForm.this.lines.size() + 1);
 			newLine.targetAddress.focus();
-			newLine.targetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
-
-			line.buttonSubscription.unsubscribe();
-
-			Action1<ClickEvent> minusClickAction = new MinusClickAction();
-
-			line.buttonSubscription = ButtonEventSource.fromActionOf(line.plusButton).subscribe(minusClickAction);
 		}
 	}
 
@@ -379,10 +390,10 @@ public class EmailForm extends VerticalLayout
 			TargetLine line = (TargetLine) button.getData();
 			EmailForm.this.grid.removeRow(line.row);
 			line.buttonSubscription.unsubscribe();
-			lines.remove(line.row);
+			lines.remove(line.row - 1);
 
 			// recalculate rows
-			int row = 0;
+			int row = 1;
 			for (TargetLine aLine : lines)
 			{
 				aLine.row = row++;
@@ -421,6 +432,12 @@ public class EmailForm extends VerticalLayout
 							SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
 							ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
+
+							
+							// First add in the primary address.
+							if (!isEmpty((String) primaryTargetAddress.getValue()))
+								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) primaryTypeCombo
+										.getValue(), (String) primaryTargetAddress.getValue()));
 
 							for (TargetLine line : lines)
 							{
