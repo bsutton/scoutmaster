@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.Tag;
@@ -13,7 +14,7 @@ import com.vaadin.data.util.converter.Converter;
 
 public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 {
-	private static Logger logger = Logger.getLogger(TagConverter.class);
+	private static Logger logger = LogManager.getLogger(TagConverter.class);
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -23,8 +24,8 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 		HashSet<Tag> result = null;
 		TagDao daoTag = new TagDao();
 
-		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
-				+ " targetType:" + targetType);
+		logger.debug("converToModel: value: {}  valueType: {} targetType: {}", value, (value != null ? value.getClass()
+				: "null"), targetType);
 
 		if (value instanceof Set)
 		{
@@ -43,7 +44,7 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 			}
 		}
 
-		logger.debug("result:" + result);
+		logger.debug("result: {}", result);
 		return result;
 	}
 
@@ -58,14 +59,14 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 		{
 			result = new HashSet<Tag>();
 
-			logger.debug("convertToPresentation: value" + value + " targetType:" + targetType);
+			logger.debug("convertToPresentation: value: {} targetType: {}", value, targetType);
 			if (value != null)
 				((HashSet<Tag>) result).addAll(value);
 		}
 		else
 			throw new UnsupportedOperationException("Conversion for Tag from type " + targetType + " not supported");
 
-		logger.debug("result: " + result.toString());
+		logger.debug("result: {}", result);
 		return result;
 	}
 

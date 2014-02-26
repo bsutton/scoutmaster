@@ -3,7 +3,8 @@ package au.org.scoutmaster.views.wizards.bulkEmail;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
@@ -30,7 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailTransmission>
 {
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(StepShowProgress.class);
+	static private Logger logger = LogManager.getLogger(StepShowProgress.class);
 	JPAContainer<? extends Importable> entities;
 	private WizardView messagingWizardView;
 	private boolean sendComplete = false;

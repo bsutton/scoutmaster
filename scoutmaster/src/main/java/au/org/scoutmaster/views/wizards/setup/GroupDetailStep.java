@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views.wizards.setup;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
@@ -19,7 +20,7 @@ import com.vaadin.ui.VerticalLayout;
 public class GroupDetailStep extends SingleEntityStep<Organisation> implements WizardStep
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(GroupDetailStep.class);
+	private static Logger logger = LogManager.getLogger(GroupDetailStep.class);
 
 	public GroupDetailStep(SetupWizardView setupWizardView)
 	{

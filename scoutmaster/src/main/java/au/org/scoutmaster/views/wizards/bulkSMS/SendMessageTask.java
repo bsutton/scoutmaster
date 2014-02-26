@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.marre.sms.SmsException;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
@@ -21,7 +22,7 @@ import au.org.scoutmaster.domain.SMSProvider;
 
 public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>, CancelListener
 {
-	Logger logger = Logger.getLogger(SendMessageTask.class);
+	Logger logger = LogManager.getLogger(SendMessageTask.class);
 	private Message message;
 	private List<SMSTransmission> transmissions;
 	private SMSProvider provider;

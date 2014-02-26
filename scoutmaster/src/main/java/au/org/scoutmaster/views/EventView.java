@@ -3,7 +3,8 @@ package au.org.scoutmaster.views;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.crud.BaseCrudView;
@@ -45,7 +46,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(EventView.class);
+	private static Logger logger = LogManager.getLogger(EventView.class);
 
 	public static final String NAME = "Event";
 

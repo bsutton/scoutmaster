@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -31,7 +32,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(TagView.class);
+	private static Logger logger = LogManager.getLogger(TagView.class);
 
 	public static final String NAME = "Tag";
 

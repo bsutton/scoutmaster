@@ -3,7 +3,8 @@ package au.org.scoutmaster.util;
 import java.io.Closeable;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
@@ -25,7 +26,7 @@ import com.vaadin.ui.Notification.Type;
 
 public class SMSSession implements Closeable
 {
-	static private Logger logger = Logger.getLogger(SMSSession.class);
+	static private Logger logger = LogManager.getLogger(SMSSession.class);
 
 	private SmsSender smsSender;
 

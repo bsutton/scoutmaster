@@ -1,7 +1,7 @@
 package au.org.scoutmaster.domain;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;

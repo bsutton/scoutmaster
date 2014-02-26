@@ -72,6 +72,12 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 				value="database" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />
 			<property name="eclipselink.logging.level" value="FINE" />
+			<!-- To make eclipse link log via log4j....
+			According to the EclipseLink logging documentation, you just need to make sure 
+			Commons Logging 1.1.x and the Log4j 2 Commons Logging Bridge 
+			(Maven artifact log4j-jcl) are on your classpath and add the following property 
+			to your persistence unit: -->
+			<!-- property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog"/ -->
 		</properties>
 	</persistence-unit>
 

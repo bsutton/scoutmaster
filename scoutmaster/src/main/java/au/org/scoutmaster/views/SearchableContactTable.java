@@ -2,7 +2,8 @@ package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.EntityTable;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -27,7 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 public class SearchableContactTable extends VerticalLayout
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(SearchableContactTable.class);
+	private static Logger logger = LogManager.getLogger(SearchableContactTable.class);
 	private static final long serialVersionUID = 1L;
 	private EntityTable<Contact> contactTable;
 	private TextField searchField = new TextField();

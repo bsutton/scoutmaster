@@ -2,7 +2,8 @@ package au.org.scoutmaster.views.calendar;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.vaadin.dialogs.ConfirmDialog;
 
@@ -42,7 +43,7 @@ import com.vaadin.ui.VerticalLayout;
 public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, ValueChangeListener
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(EventDetails.class);
+	private static Logger logger = LogManager.getLogger(EventDetails.class);
 	private static final long serialVersionUID = 1L;
 
 	private ValidatingFieldGroup<au.org.scoutmaster.domain.Event> fieldGroup;

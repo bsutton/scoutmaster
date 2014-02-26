@@ -8,7 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 
@@ -56,7 +57,7 @@ import com.vaadin.ui.themes.Reindeer;
 
 public class EmailForm extends VerticalLayout
 {
-	private static Logger logger = Logger.getLogger(EmailForm.class);
+	private static Logger logger = LogManager.getLogger(EmailForm.class);
 	private static final long serialVersionUID = 1L;
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 

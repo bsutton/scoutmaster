@@ -4,7 +4,8 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.domain.Contact;
@@ -13,18 +14,18 @@ import com.vaadin.data.util.converter.Converter;
 
 public class ContactSetConverter implements Converter<Set<? extends Object>, Set<Contact>>
 {
-	private static Logger logger = Logger.getLogger(ContactSetConverter.class);
+	private static Logger logger = LogManager.getLogger(ContactSetConverter.class);
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Set<Contact> convertToModel(Set<? extends Object> value, Class<? extends Set<Contact>> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
+	public Set<Contact> convertToModel(Set<? extends Object> value, Class<? extends Set<Contact>> targetType,
+			Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		HashSet<Contact> result = null;
 		ContactDao daoContact = new ContactDao();
 
-		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
-				+ " targetType:" + targetType);
+		logger.debug("converToModel: value: {} valueType:{} targetType: {}", value, (value != null ? value.getClass()
+				: "null"), targetType);
 
 		if (value instanceof Set)
 		{
@@ -43,7 +44,7 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 			}
 		}
 
-		logger.debug("result:" + result);
+		logger.debug("result: {}", result);
 		return result;
 	}
 
@@ -58,14 +59,14 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 		{
 			result = new HashSet<Contact>();
 
-			logger.debug("convertToPresentation: value" + value + " targetType:" + targetType);
+			logger.debug("convertToPresentation: value {} targetType: {}", value, targetType);
 			if (value != null)
 				((HashSet<Contact>) result).addAll(value);
 		}
 		else
 			throw new UnsupportedOperationException("Conversion for Contact from type " + targetType + " not supported");
 
-		logger.debug("result: " + result.toString());
+		logger.debug("result: {}", result);
 		return result;
 	}
 

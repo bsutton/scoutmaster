@@ -9,12 +9,13 @@ import java.util.Hashtable;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EntityAdaptor<T>
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(EntityAdaptor.class);
+	private static Logger logger = LogManager.getLogger(EntityAdaptor.class);
 
 	Class<?> entity;
 

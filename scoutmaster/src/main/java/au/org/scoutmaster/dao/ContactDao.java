@@ -8,7 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
@@ -27,7 +28,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact, Long>
 {
-	static private Logger logger = Logger.getLogger(ContactDao.class);
+	static private Logger logger = LogManager.getLogger(ContactDao.class);
 
 	public ContactDao()
 	{

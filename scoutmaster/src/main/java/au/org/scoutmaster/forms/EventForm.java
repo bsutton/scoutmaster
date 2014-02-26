@@ -2,7 +2,8 @@ package au.org.scoutmaster.forms;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -35,7 +36,7 @@ import com.vaadin.ui.Window;
 public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, ValueChangeListener
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(EventForm.class);
+	private static Logger logger = LogManager.getLogger(EventForm.class);
 	private static final long serialVersionUID = 1L;
 
 	private Window owner;

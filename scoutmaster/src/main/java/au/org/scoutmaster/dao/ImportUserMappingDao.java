@@ -4,7 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
@@ -16,7 +17,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> implements Dao<ImportUserMapping, Long>
 {
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(ImportUserMappingDao.class);
+	static private Logger logger = LogManager.getLogger(ImportUserMappingDao.class);
 
 	public ImportUserMappingDao()
 	{

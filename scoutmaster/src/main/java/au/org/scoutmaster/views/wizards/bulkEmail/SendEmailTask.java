@@ -8,7 +8,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CancelListener;
@@ -34,7 +35,7 @@ import com.vaadin.ui.Notification.Type;
 
 public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements CancelListener
 {
-	Logger logger = Logger.getLogger(SendEmailTask.class);
+	Logger logger = LogManager.getLogger(SendEmailTask.class);
 	private Message message;
 	private List<EmailTransmission> transmissions;
 	private User user;

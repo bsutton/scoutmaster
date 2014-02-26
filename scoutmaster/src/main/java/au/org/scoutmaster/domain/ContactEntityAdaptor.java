@@ -7,11 +7,12 @@ import java.util.Hashtable;
 
 import javax.persistence.EntityManager;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 {
-	private static Logger logger = Logger.getLogger(ContactEntityAdaptor.class);
+	private static Logger logger = LogManager.getLogger(ContactEntityAdaptor.class);
 
 	public ContactEntityAdaptor(Class<?> entity)
 	{

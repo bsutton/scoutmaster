@@ -2,7 +2,8 @@ package au.org.scoutmaster.domain.converter;
 
 import java.util.Locale;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.BaseEntity;
@@ -11,18 +12,18 @@ import com.vaadin.data.util.converter.Converter;
 
 public abstract class BaseConverter<E extends BaseEntity> implements Converter<Object, E>
 {
-	private static Logger logger = Logger.getLogger(BaseConverter.class);
+	private static Logger logger = LogManager.getLogger(BaseConverter.class);
 	private static final long serialVersionUID = 1L;
 
-	
 	@Override
 	public E convertToModel(Object value, Class<? extends E> targetType, Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		E result = null;
 		JpaBaseDao<E, Long> daoBaseEntity = getDao();
-		
-		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null") + " targetType:" + targetType);
+
+		logger.debug("converToModel: value: {}  valueType: {} targetType: {}", value, (value != null ? value.getClass()
+				: "null"), targetType);
 
 		if (value instanceof Long)
 		{
@@ -34,35 +35,33 @@ public abstract class BaseConverter<E extends BaseEntity> implements Converter<O
 			result = newInstance(value);
 		}
 
-		logger.debug("result:" + result);
+		logger.debug("result: {}");
 		return result;
 	}
 
-	abstract protected  E newInstance(Object value);
+	abstract protected E newInstance(Object value);
 
-	abstract protected  JpaBaseDao<E, Long> getDao();
+	abstract protected JpaBaseDao<E, Long> getDao();
 
 	@Override
 	public Object convertToPresentation(E entity, Class<? extends Object> targetType, Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
-		
-		logger.debug("convertToPresentation: value" + entity + " targetType:" + targetType);
+
+		logger.debug("convertToPresentation: value {} targetType:{}", entity, targetType);
 		if (entity != null)
 			result = entity.toString();
 		else
 			result = "";
-		logger.debug("result: " + result);
+		logger.debug("result: {}", result);
 		return result;
 	}
 
-	
 	@Override
 	public Class<Object> getPresentationType()
 	{
 		return Object.class;
 	}
-
 
 }

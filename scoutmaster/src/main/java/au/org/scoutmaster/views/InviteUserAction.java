@@ -4,7 +4,8 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
@@ -31,7 +32,7 @@ import com.vaadin.ui.UI;
 public class InviteUserAction implements CrudAction<User>
 {
 	private static final long serialVersionUID = 1L;
-	Logger logger = Logger.getLogger(InviteUserAction.class);
+	Logger logger = LogManager.getLogger(InviteUserAction.class);
 	
 	@Override
 	public boolean isDefault()

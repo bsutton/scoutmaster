@@ -2,7 +2,8 @@ package au.org.scoutmaster.views;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
@@ -41,7 +42,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(UserView.class);
+	private static Logger logger = LogManager.getLogger(UserView.class);
 
 	public static final String NAME = "User";
 

@@ -1,8 +1,8 @@
 package au.org.scoutmaster.application;
 
-import com.vaadin.ui.UI;
-
 import au.org.scoutmaster.domain.access.User;
+
+import com.vaadin.ui.UI;
 
 public enum SMSession
 {

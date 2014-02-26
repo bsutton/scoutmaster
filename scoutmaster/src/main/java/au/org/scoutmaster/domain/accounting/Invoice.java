@@ -15,8 +15,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import au.org.scoutmaster.dao.InvoiceDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.InvoiceDao;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Contact;
 

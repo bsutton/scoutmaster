@@ -25,7 +25,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Past;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -54,7 +55,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(Contact.class);
+	static private Logger logger = LogManager.getLogger(Contact.class);
 
 	public static final String PRIMARY_PHONE = "primaryPhone";
 

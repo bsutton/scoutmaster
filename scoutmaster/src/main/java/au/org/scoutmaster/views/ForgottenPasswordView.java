@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
@@ -36,7 +37,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(ForgottenPasswordView.class);
+	private static Logger logger = LogManager.getLogger(ForgottenPasswordView.class);
 
 	public static final String NAME = "Forgotten";
 

@@ -3,7 +3,8 @@ package au.org.scoutmaster.views.wizards.setup;
 import java.util.List;
 
 import org.apache.commons.mail.EmailException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
@@ -40,7 +41,7 @@ import com.vaadin.ui.VerticalLayout;
 public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
 		ClickListener
 {
-	private static Logger logger = Logger.getLogger(SmtpStep.class);
+	private static Logger logger = LogManager.getLogger(SmtpStep.class);
 	private static final long serialVersionUID = 1L;
 
 	private TextField smtpFQDN;
@@ -56,6 +57,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 	private TextField fromEmailAddress;
 
 	private CheckBox useSSL;
+	
 
 	private TextField bounceEmailAddress;
 	private VerticalLayout layout;

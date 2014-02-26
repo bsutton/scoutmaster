@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -33,7 +34,7 @@ public class SectionTypeView extends BaseCrudView<SectionType> implements View, 
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(SectionTypeView.class);
+	private static Logger logger = LogManager.getLogger(SectionTypeView.class);
 
 	public static final String NAME = "SectionType";
 

@@ -9,7 +9,8 @@ import java.util.Hashtable;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.vaadinutils.util.ProgressBarTask;
@@ -27,7 +28,7 @@ import com.vaadin.ui.Notification.Type;
 
 public class ImportTask extends ProgressBarTask<ImportItemStatus>
 {
-	private Logger logger = Logger.getLogger(ImportTask.class);
+	private Logger logger = LogManager.getLogger(ImportTask.class);
 
 	private File tempFile;
 	private Class<? extends Importable> clazz;

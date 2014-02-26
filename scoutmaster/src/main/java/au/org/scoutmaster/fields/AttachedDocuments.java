@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 
@@ -30,7 +31,7 @@ import com.vaadin.ui.Notification.Type;
 public class AttachedDocuments extends AbstractComponent
 {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = Logger.getLogger(AttachedDocuments.class);
+	private static final Logger logger = LogManager.getLogger(AttachedDocuments.class);
 	
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 

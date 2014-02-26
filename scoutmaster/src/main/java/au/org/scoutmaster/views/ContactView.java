@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.tokenfield.TokenField;
 
 import rx.util.functions.Action1;
@@ -78,7 +79,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(ContactView.class);
+	private static Logger logger = LogManager.getLogger(ContactView.class);
 
 	public static final String NAME = "Contact";
 

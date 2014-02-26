@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
@@ -42,7 +43,7 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(OrganisationView.class);
+	private static Logger logger = LogManager.getLogger(OrganisationView.class);
 
 	public static final String NAME = "Organisation";
 

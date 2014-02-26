@@ -2,7 +2,8 @@ package au.org.scoutmaster.views.wizards.setup;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -23,7 +24,7 @@ import com.vaadin.ui.TextField;
 public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(NewAccountStep.class);
+	private static Logger logger = LogManager.getLogger(NewAccountStep.class);
 
 	private TextField username;
 

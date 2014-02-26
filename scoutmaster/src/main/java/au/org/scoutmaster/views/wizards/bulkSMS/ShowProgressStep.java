@@ -3,7 +3,8 @@ package au.org.scoutmaster.views.wizards.bulkSMS;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
@@ -32,7 +33,7 @@ import com.vaadin.ui.VerticalLayout;
 public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTransmission>
 {
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(ShowProgressStep.class);
+	static private Logger logger = LogManager.getLogger(ShowProgressStep.class);
 	JPAContainer<? extends Importable> entities;
 	private BulkSMSWizardView messagingWizardView;
 	private boolean sendComplete = false;

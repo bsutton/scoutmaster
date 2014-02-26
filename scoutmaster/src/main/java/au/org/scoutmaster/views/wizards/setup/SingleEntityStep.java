@@ -2,7 +2,8 @@ package au.org.scoutmaster.views.wizards.setup;
 
 import javax.validation.ConstraintViolationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
@@ -21,7 +22,7 @@ import com.vaadin.ui.Notification.Type;
 
 public abstract class SingleEntityStep<E extends BaseEntity> implements WizardStep
 {
-	private static Logger logger = Logger.getLogger(SingleEntityStep.class);
+	private static Logger logger = LogManager.getLogger(SingleEntityStep.class);
 
 	private au.com.vaadinutils.crud.ValidatingFieldGroup<E> fieldGroup;
 	private JPAContainer<E> container;

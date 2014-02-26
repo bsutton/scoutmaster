@@ -11,7 +11,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.QueryModifierAdaptor;
 import au.org.scoutmaster.domain.Contact;
@@ -26,7 +27,7 @@ import au.org.scoutmaster.domain.Tag;
 public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 {
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = Logger.getLogger(ContactDefaultQueryModifierDelegate.class);
+	private static Logger logger = LogManager.getLogger(ContactDefaultQueryModifierDelegate.class);
 
 	private ArrayList<Tag> includedTags;
 	private ArrayList<Tag> excludedTags;

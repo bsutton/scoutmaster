@@ -17,12 +17,13 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ContextListener implements ServletContextListener
 {
 	private static final String JNDI_SCOUTMASTER_DS = "java:comp/env/jdbc/scoutmaster-ds";
-	private static final Logger logger = Logger.getLogger(ContextListener.class);
+	private static final Logger logger = LogManager.getLogger(ContextListener.class);
 	private static final String MASTER_XML = "liquibase/db.changelog-master.xml";
 
 	@Override

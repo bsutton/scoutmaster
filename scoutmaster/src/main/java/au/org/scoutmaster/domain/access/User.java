@@ -16,7 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -35,7 +36,7 @@ public class User extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private static final Logger logger = Logger.getLogger(User.class);
+	private static final Logger logger = LogManager.getLogger(User.class);
 
 	
 	public static final String FIND_BY_NAME = "User.findByName";

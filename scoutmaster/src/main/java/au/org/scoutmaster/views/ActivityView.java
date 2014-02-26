@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.FormHelper;
@@ -38,7 +39,7 @@ public class ActivityView extends BaseCrudView<Activity> implements View, Select
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(ActivityView.class);
+	private static Logger logger = LogManager.getLogger();
 
 	public static final String NAME = "Activity";
 

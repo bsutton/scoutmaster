@@ -8,7 +8,8 @@ import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
@@ -35,7 +36,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	}
 
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(SMTPSettingsDao.class);
+	private static Logger logger = LogManager.getLogger(SMTPSettingsDao.class);
 
 	public SMTPSettingsDao()
 	{

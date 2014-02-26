@@ -4,15 +4,16 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 
 import com.vaadin.data.util.converter.Converter;
 
-public class SetConverter<E, D extends JpaBaseDao<E,Long>> implements Converter<Set<? extends Object>, Set<E>>
+public class SetConverter<E, D extends JpaBaseDao<E, Long>> implements Converter<Set<? extends Object>, Set<E>>
 {
-	private static Logger logger = Logger.getLogger(SetConverter.class);
+	private static Logger logger = LogManager.getLogger(SetConverter.class);
 	private static final long serialVersionUID = 1L;
 	private D dao;
 
@@ -20,6 +21,7 @@ public class SetConverter<E, D extends JpaBaseDao<E,Long>> implements Converter<
 	{
 		this.dao = dao;
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<E> convertToModel(Set<? extends Object> value, Class<? extends Set<E>> targetType, Locale locale)
@@ -27,8 +29,8 @@ public class SetConverter<E, D extends JpaBaseDao<E,Long>> implements Converter<
 	{
 		HashSet<E> result = null;
 
-		logger.debug("converToModel: value=" + value + "valueType:" + (value != null ? value.getClass() : "null")
-				+ " targetType:" + targetType);
+		logger.debug("converToModel: value: {} valueType: {} targetType: {}", value, (value != null ? value.getClass()
+				: "null"), targetType);
 
 		if (value instanceof Set)
 		{
@@ -46,29 +48,28 @@ public class SetConverter<E, D extends JpaBaseDao<E,Long>> implements Converter<
 			}
 		}
 
-		logger.debug("result:" + result);
+		logger.debug("result: {}", result);
 		return result;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<? extends Object> convertToPresentation(Set<E> value,
-			Class<? extends Set<? extends Object>> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
+	public Set<? extends Object> convertToPresentation(Set<E> value, Class<? extends Set<? extends Object>> targetType,
+			Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		Set<? extends Object> result = new HashSet<>();
 		if (targetType.getName().equals("java.util.Set"))
 		{
 			result = new HashSet<E>();
 
-			logger.debug("convertToPresentation: value" + value + " targetType:" + targetType);
+			logger.debug("convertToPresentation: value: {}  targetType: {}", value, targetType);
 			if (value != null)
 				((HashSet<E>) result).addAll(value);
 		}
 		else
 			throw new UnsupportedOperationException("Conversion for E from type " + targetType + " not supported");
 
-		logger.debug("result: " + result.toString());
+		logger.debug("result: {}", result);
 		return result;
 	}
 

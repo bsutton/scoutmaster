@@ -10,14 +10,15 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 
 public class DatabaseProvider
 {
 	private static final String SCOUTMASTERTEST_DB_NAME = "scoutmastertest";
 	private static final String MASTER_XML = "src/main/resources/liquibase/db.changelog-master.xml";
-	private static Logger logger = Logger.getLogger(DatabaseProvider.class);
+	private static Logger logger = LogManager.getLogger(DatabaseProvider.class);
 	private static String connectionString;
 	private static String username;
 	private static String password;

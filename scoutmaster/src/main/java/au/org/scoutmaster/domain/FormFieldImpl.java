@@ -4,12 +4,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FormFieldImpl
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(FormFieldImpl.class);
+	private static Logger logger = LogManager.getLogger(FormFieldImpl.class);
 
 	private String fieldName;
 	private FormField formField;

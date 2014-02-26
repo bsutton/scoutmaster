@@ -2,7 +2,8 @@ package au.org.scoutmaster.views.wizards.importer;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.PoJoTable;
@@ -27,7 +28,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 {
 
 	@SuppressWarnings("unused")
-	static private Logger logger = Logger.getLogger(ImportShowProgress.class);
+	static private Logger logger = LogManager.getLogger(ImportShowProgress.class);
 	private ImportWizardView importView;
 	private PoJoTable<ImportItemStatus> progressTable;
 

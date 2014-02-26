@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -25,7 +26,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class ImportShowSample implements WizardStep
 {
-	Logger logger = Logger.getLogger(ImportShowSample.class.getName());
+	Logger logger = LogManager.getLogger(ImportShowSample.class.getName());
 
 	private ImportWizardView importView;
 

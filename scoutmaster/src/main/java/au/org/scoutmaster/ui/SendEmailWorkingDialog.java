@@ -8,7 +8,8 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CompleteListener;
@@ -33,9 +34,10 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 {
 	private static final long serialVersionUID = 1L;
 
-	private static Logger logger = Logger.getLogger(SendEmailWorkingDialog.class);
+	private static Logger logger = LogManager.getLogger(SendEmailWorkingDialog.class);
 
 	private String subject;
+	
 	private ArrayList<String> toEmailAddresses = new ArrayList<>();
 	private String message;
 	private String fromEmailAddress;
