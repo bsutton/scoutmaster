@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.vaadin.tokenfield.TokenField;
 
+import rx.util.functions.Action1;
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -30,10 +31,9 @@ import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.fields.GoogleField;
-import au.org.scoutmaster.fields.TagChangeListener;
 import au.org.scoutmaster.fields.TagField;
 import au.org.scoutmaster.forms.EmailForm;
+import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
@@ -50,6 +50,8 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
@@ -64,7 +66,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @Menu(display = "Contacts")
-public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, TagChangeListener
+public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
 {
 
 	@Override
@@ -413,14 +415,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		medicalForm.bindTextField("Medical Fund No.", Contact_.medicalFundNo);
 	}
 
-	private void googleTab()
-	{
-		// Medical Tab
-		GoogleField googleField = new GoogleField();
-
-		tabs.addTab(googleField, "Map");
-
-	}
+//	private void googleTab()
+//	{
+//		// Medical Tab
+//		GoogleField googleField = new GoogleField();
+//
+//		tabs.addTab(googleField, "Map");
+//
+//	}
 
 	private void backgroundTab()
 	{
@@ -782,11 +784,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	protected AbstractLayout getAdvancedSearchLayout()
 	{
 		VerticalLayout advancedSearchLayout = new VerticalLayout();
+		advancedSearchLayout.setSpacing(true);
+		
 		HorizontalLayout tagSearchLayout = new HorizontalLayout();
 		tagSearchField = new TagField("Search Tags", true);
 		tagSearchLayout.addComponent(tagSearchField);
 
-		tagSearchField.addChangeListener(this);
 		tagSearchLayout.setSizeFull();
 		advancedSearchLayout.addComponent(tagSearchLayout);
 
@@ -795,22 +798,24 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		stringSearchLayout.setWidth("100%");
 
 		advancedSearchLayout.addComponent(stringSearchLayout);
-
+		
+		Button searchButton = new Button("Search");
+		Action1<ClickEvent> searchClickAction = new SearchClickAction();
+		ButtonEventSource.fromActionOf(searchButton).subscribe(searchClickAction);
+		
+		advancedSearchLayout.addComponent(searchButton);
+		advancedSearchLayout.setComponentAlignment(searchButton, Alignment.MIDDLE_RIGHT);
+		
 		return advancedSearchLayout;
 
 	}
-
-	public void onTagListChanged(ArrayList<Tag> tags)
+	
+	public class SearchClickAction implements Action1<ClickEvent>
 	{
-		triggerFilter();
-		// resetFilter(tags, super.getSearchFieldText());
-
+		@Override
+		public void call(ClickEvent t1)
+		{
+			ContactView.super.triggerFilter();
+		}
 	}
-
-	// void resetFilter(ArrayList<Tag> tags, String fullTextSearch)
-	// {
-	// setQueryModifier(fullTextSearch);
-	//
-	// }
-	//
 }
