@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-	version="2.0">
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2_1.xsd">
+
 	<persistence-unit name="scoutmaster" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<non-jta-data-source>java:comp/env/jdbc/scoutmaster-ds</non-jta-data-source>
@@ -64,7 +65,8 @@
 			<!-- Following property should create the database schema automatically -->
 			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables" 
 				/ -->
-			<!-- property name="eclipselink.ddl-generation" value="create-or-extend-tables" /-->
+			<!-- property name="eclipselink.ddl-generation" value="create-or-extend-tables" 
+				/ -->
 			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
@@ -137,8 +139,9 @@
 
 			<!-- EclipseLink should create the database schema automatically -->
 			<property name="eclipselink.ddl-generation" value="none" />
-			
-			<!--  property name="eclipselink.ddl-generation" value="drop-and-create-tables" /-->
+
+			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables" 
+				/ -->
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />
