@@ -1,4 +1,4 @@
-package au.org.scoutmaster.application;
+package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
