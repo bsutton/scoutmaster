@@ -14,9 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.org.scoutmaster.application.Transaction;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
+import au.org.scoutmaster.dao.Transaction;
 
 public class ImportMatchFieldsTest
 {

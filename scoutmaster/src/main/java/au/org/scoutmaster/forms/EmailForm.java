@@ -25,7 +25,7 @@ import au.org.scoutmaster.dao.ActivityTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.dao.SMTransaction;
+import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.Contact;
@@ -425,9 +425,8 @@ public class EmailForm extends VerticalLayout
 					public void run()
 					{
 						EntityManager em = EntityManagerProvider.createEntityManager();
-						try (SMTransaction t = new SMTransaction(em))
+						try (Transaction t = new Transaction(em))
 						{
-
 							SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
 							SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
@@ -450,6 +449,8 @@ public class EmailForm extends VerticalLayout
 							daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
 									EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
 
+//							em.detach(EmailForm.this.sender);
+//							em.detach(EmailForm.this.contact);
 							// Log the activity
 							ActivityDao daoActivity = new DaoFactory(em).getActivityDao();
 							ActivityTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();

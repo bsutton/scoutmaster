@@ -15,7 +15,7 @@ import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.ui.WorkingDialog;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.dao.SMTransaction;
+import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.util.SMNotification;
 
@@ -90,7 +90,7 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 			public void run()
 			{
 				EntityManager em = EntityManagerProvider.createEntityManager();
-				try (SMTransaction t = new SMTransaction(em))
+				try (Transaction t = new Transaction(em))
 				{
 
 					SMTPSettingsDao settingsDao = new DaoFactory(em).getSMTPSettingsDao();
