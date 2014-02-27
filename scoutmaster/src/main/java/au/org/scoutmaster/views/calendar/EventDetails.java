@@ -36,6 +36,8 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.RichTextArea;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -60,6 +62,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 	private boolean readonly;
 	private CKEditorEmailField detailsEditor;
 	private Label clickToViewLabel;
+	private RichTextArea message;
 
 	/**
 	 * 
@@ -96,7 +99,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		{
 			clickToViewLabel.setVisible(false);
 			// we are going to manipulate the event on a different thread.
-			//EntityManagerProvider.detach(event);
+			// EntityManagerProvider.detach(event);
 			entityItem = container.createEntityItem(event);
 
 			// startDateField.removeValueChangeListener(this);
@@ -201,14 +204,19 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 		overviewForm.colspan(3);
 
-		detailsEditor = overviewForm.bindEditorField(Event_.details, true);
-		detailsEditor.setHeight("100%");
-		overviewForm.setExpandRatio(1.0f);
-
+		if (!readonly)
+		{
+			detailsEditor = overviewForm.bindEditorField(Event_.details, true);
+			detailsEditor.setHeight("100%");
+		}
+		//overviewForm.setExpandRatio(1.0f);
 		details.addComponent(overviewForm);
 		details.setExpandRatio(overviewForm, 1.0f);
+		details.setComponentAlignment(overviewForm, Alignment.TOP_RIGHT);
 		this.addComponent(details);
+		this.setComponentAlignment(details, Alignment.TOP_RIGHT);
 
+		
 		if (!readonly)
 		{
 			HorizontalLayout buttonLayout = new HorizontalLayout();
@@ -237,6 +245,25 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 			details.addComponent(buttonGroupLayout);
 		}
+		else
+		{
+			VerticalLayout messageLayout = new VerticalLayout();
+			messageLayout.setMargin(true);
+			messageLayout.setSizeFull();
+			message = new RichTextArea();
+			message.setNullRepresentation("");
+			message.setReadOnly(true);
+			//message.setContentMode(ContentMode.HTML);
+			message.setSizeFull();
+			this.fieldGroup.bind(message, Event_.details.getName());
+			
+			messageLayout.addComponent(message);
+			messageLayout.setComponentAlignment(message, Alignment.TOP_RIGHT);
+			this.addComponent(messageLayout);
+			this.setComponentAlignment(messageLayout, Alignment.TOP_RIGHT);
+			//this.setExpandRatio(messageLayout, 1.0f);
+
+		}
 
 		subject.focus();
 		this.setSizeFull();
@@ -254,8 +281,9 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 				this.fieldGroup.commit();
 				EntityManagerProvider.getEntityManager().detach(this.event);
 				this.event = daoEvent.merge(this.event);
-				
-				// the merge returns a new event so we have to reattach it to the field group.
+
+				// the merge returns a new event so we have to reattach it to
+				// the field group.
 				this.setEvent(this.event, newEvent);
 				newEventListener.eventSaved(this.event, newEvent);
 				newEvent = false;
