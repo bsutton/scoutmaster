@@ -128,7 +128,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		if (tagToRemove != null)
 			detachTag(contact, tagToRemove);
 		else
-			logger.warn("Attempt to detach non-existant tag. tagName=" + tagName);
+			logger.warn("Attempt to detach non-existant tag. tagName={}", tagName);
 	}
 
 	public void detachTag(Contact contact, Tag tag)
