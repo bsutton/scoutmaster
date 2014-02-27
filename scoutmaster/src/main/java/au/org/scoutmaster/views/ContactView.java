@@ -176,7 +176,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
-		tagField = overviewForm.bindTokenField(this, "Tags", Contact_.tags, Tag.class);
+		tagField = overviewForm.bindTagField(this, "Tags", Contact_.tags);
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Firstname", Contact_.firstname);
 		overviewForm.newLine();
