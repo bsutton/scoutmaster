@@ -98,8 +98,6 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		if (event != null)
 		{
 			clickToViewLabel.setVisible(false);
-			// we are going to manipulate the event on a different thread.
-			// EntityManagerProvider.detach(event);
 			entityItem = container.createEntityItem(event);
 
 			// startDateField.removeValueChangeListener(this);
@@ -208,8 +206,8 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		{
 			detailsEditor = overviewForm.bindEditorField(Event_.details, true);
 			detailsEditor.setHeight("100%");
+			overviewForm.setExpandRatio(1.0f);
 		}
-		//overviewForm.setExpandRatio(1.0f);
 		details.addComponent(overviewForm);
 		details.setExpandRatio(overviewForm, 1.0f);
 		details.setComponentAlignment(overviewForm, Alignment.TOP_RIGHT);
