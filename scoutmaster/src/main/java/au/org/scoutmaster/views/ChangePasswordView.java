@@ -11,10 +11,12 @@ import au.org.scoutmaster.validator.PasswordValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
@@ -32,7 +34,7 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 
 	private final PasswordField confirm;
 
-	private final Button loginButton;
+	private final Button resetButton;
 
 	public ChangePasswordView()
 	{
@@ -55,11 +57,13 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 		confirm.setNullRepresentation("");
 
 		// Create login button
-		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
+		resetButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(password, confirm, loginButton);
-		fields.setCaption("Please enter your new password.");
+		Label title = new Label("<b>Please enter your new password.</b>");
+		title.setContentMode(ContentMode.HTML);
+		VerticalLayout fields = new VerticalLayout(title, password, confirm, resetButton);
+		
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
