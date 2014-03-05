@@ -4,26 +4,20 @@ import java.io.File;
 import java.util.Properties;
 
 import au.com.vaadinutils.jasper.JasperSettings;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
 
 import com.vaadin.server.VaadinSession;
 
 public class JasperSettingsImpl implements JasperSettings
 {
-	private SMTPServerSettings smtpSettings;
 
 	public JasperSettingsImpl()
 	{
-		SMTPSettingsDao stmpDao = new DaoFactory().getSMTPSettingsDao();
-		smtpSettings = stmpDao.findSettings();
 	}
 
 	@Override
 	public String getReportDir()
 	{
-		return null;
+		return "jasperreports";
 	}
 
 	@Override
@@ -43,45 +37,9 @@ public class JasperSettingsImpl implements JasperSettings
 	}
 
 	@Override
-	public String getSmtpFQDN()
+	public File getReportFile(String reportName)
 	{
-		return smtpSettings.getSmtpFQDN();
-	}
-
-	@Override
-	public Integer getSmtpPort()
-	{
-		return smtpSettings.getSmtpPort();
-	}
-
-	@Override
-	public boolean isAuthRequired()
-	{
-		return smtpSettings.isAuthRequired();
-	}
-
-	@Override
-	public String getUsername()
-	{
-		return smtpSettings.getUsername();
-	}
-
-	@Override
-	public String getPassword()
-	{
-		return smtpSettings.getPassword();
-	}
-
-	@Override
-	public boolean getUseSSL()
-	{
-		return smtpSettings.getUseSSL();
-	}
-
-	@Override
-	public String getBounceEmailAddress()
-	{
-		return smtpSettings.getBounceEmailAddress();
+		return new File(new File(getDocumentBase(), getReportDir()), reportName);
 	}
 
 }

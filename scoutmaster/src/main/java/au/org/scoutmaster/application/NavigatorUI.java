@@ -1,6 +1,7 @@
 package au.org.scoutmaster.application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
@@ -22,15 +23,23 @@ import au.org.scoutmaster.views.LogoutView;
 import au.org.scoutmaster.views.OrganisationTypeView;
 import au.org.scoutmaster.views.OrganisationView;
 import au.org.scoutmaster.views.QualificationTypeView;
+import au.org.scoutmaster.views.RaffleView;
 import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.SectionTypeView;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.calendar.CalendarView;
-import au.org.scoutmaster.views.wizards.bulkEmail.WizardView;
+import au.org.scoutmaster.views.reports.CalendarReport;
+import au.org.scoutmaster.views.reports.ExternalProspectsReport;
+import au.org.scoutmaster.views.reports.MemberAddressReport;
+import au.org.scoutmaster.views.reports.MemberReport;
+import au.org.scoutmaster.views.reports.MembershipInvoiceReport;
+import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
 import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
-import au.org.scoutmaster.views.wizards.setup.SetupWizardView;
+import au.org.scoutmaster.views.wizards.raffle.allocateBooks.RaffleBookAllocationWizardView;
+import au.org.scoutmaster.views.wizards.raffle.importBooks.RaffleBookImportWizardView;
+import au.org.scoutmaster.views.wizards.setup.GroupSetupWizardView;
 
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Title;
@@ -77,9 +86,9 @@ public class NavigatorUI extends UI
 	 */
 	protected void init(VaadinRequest request)
 	{
-		
+
 		DeadlockFinder.SINGLETON.start();
-		
+
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
 
@@ -88,21 +97,37 @@ public class NavigatorUI extends UI
 
 		viewMap.add(new ViewMap("", ContactView.class));
 		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
+		viewMap.add(new ViewMap(BulkEmailWizardView.NAME, BulkEmailWizardView.class));
+		viewMap.add(new ViewMap(BulkSMSWizardView.NAME, BulkSMSWizardView.class));
 		viewMap.add(new ViewMap(CalendarView.NAME, CalendarView.class));
 		viewMap.add(new ViewMap(EventView.NAME, EventView.class));
+		viewMap.add(new ViewMap(CalendarReport.NAME, CalendarReport.class));
+		viewMap.add(new ViewMap(ExternalProspectsReport.NAME, ExternalProspectsReport.class));
+		viewMap.add(new ViewMap(MemberReport.NAME, MemberReport.class));
+		viewMap.add(new ViewMap(MemberAddressReport.NAME, MemberAddressReport.class));
+		
+		// Wizards
+		viewMap.add(new ViewMap(GroupSetupWizardView.NAME, GroupSetupWizardView.class));
+		viewMap.add(new ViewMap(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class));
+		viewMap.add(new ViewMap(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class));
+		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
+
+		
+		// Admin menu
 		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
-		viewMap.add(new ViewMap(BulkSMSWizardView.NAME, BulkSMSWizardView.class));
-		viewMap.add(new ViewMap(WizardView.NAME, WizardView.class));
-		viewMap.add(new ViewMap(ChangePasswordView.NAME, ChangePasswordView.class));
 		viewMap.add(new ViewMap(OrganisationView.NAME, OrganisationView.class));
 		viewMap.add(new ViewMap(OrganisationTypeView.NAME, OrganisationTypeView.class));
-		viewMap.add(new ViewMap(SectionTypeView.NAME, SectionTypeView.class));
 		viewMap.add(new ViewMap(QualificationTypeView.NAME, QualificationTypeView.class));
+		viewMap.add(new ViewMap(RaffleView.NAME, RaffleView.class));
+		viewMap.add(new ViewMap(SectionTypeView.NAME, SectionTypeView.class));
+		viewMap.add(new ViewMap(ChangePasswordView.NAME, ChangePasswordView.class));
 		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
 		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
-		viewMap.add(new ViewMap(SetupWizardView.NAME, SetupWizardView.class));
-		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
-		//viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME, SectionBulkEmailWizard.class));
+		
+
+		
+		// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
+		// SectionBulkEmailWizard.class));
 
 		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
 		viewMap.add(new ViewMap(LogoutView.NAME, LogoutView.class));
@@ -160,13 +185,13 @@ public class NavigatorUI extends UI
 					// beforeViewChange so we have to check that aren't aready
 					// on our way to the
 					// setupview.
-					if (event.getNewView() instanceof SetupWizardView)
+					if (event.getNewView() instanceof GroupSetupWizardView)
 						return true;
 					else
 					{
 						// Must be a first time login so lets go and run the
 						// setup wizard.
-						getNavigator().navigateTo(SetupWizardView.NAME);
+						getNavigator().navigateTo(GroupSetupWizardView.NAME);
 						return false;
 					}
 				}
@@ -198,18 +223,35 @@ public class NavigatorUI extends UI
 						NavigatorUI.this.menubar = new MenuBuilder(navigator, viewMap).build();
 						NavigatorUI.this.menubar.setWidth("100%");
 						mainLayout.addComponentAsFirst(menubar);
-
-						mainLayout.addComponentAsFirst(menubar);
-
 					}
 				}
-
 				return true;
 			}
 
 			@Override
 			public void afterViewChange(ViewChangeEvent event)
 			{
+				if (event.getNewView() instanceof URIParameterListener)
+				{
+					HashMap<String, String> paramMap = new HashMap<>();
+
+					String parameters = event.getParameters();
+					if (parameters.trim().length() > 0)
+					{
+						// split at "/", and look for key value pairs.
+						String[] params = parameters.split("/");
+						for (String param : params)
+						{
+							String[] pair = param.split("=");
+							if (pair.length != 2)
+								throw new IllegalArgumentException("The URI contained an invalid parameter (" + param
+										+ ") which did not confirm to the required pattern of 'key=value'");
+
+							paramMap.put(pair[0], pair[1]);
+						}
+						((URIParameterListener) event.getNewView()).setParameters(paramMap);
+					}
+				}
 				// For some reason the page title is set to null after each
 				// navigation transition.
 				getPage().setTitle("Scoutmaster");
