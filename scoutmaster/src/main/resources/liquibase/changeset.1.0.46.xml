@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Expand size of details column in Event. -->
+
+	<changeSet author="bsutton" id="1.0.46.1">
+		<createTable tableName="Raffle">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="name" type="varchar(255)" />
+			<column name="notes" type="varchar(4096)" />
+			<column name="startDate" type="date" />
+			<column name="collectionsDate" type="date" />
+			<column name="returnDate" type="date" />
+			<column name="groupRaffleManager_ID" type="BIGINT(19))" />
+			<column name="branchRaffleContact_ID" type="BIGINT(19))" />
+			<column name="raffleNoPrefix" type="varchar(255)" />
+			<column name="ticketsPerBook" type="INT(8))" />
+			<column name="totalTicketsSold" type="INT(16))" />
+			<column name="ticketsOutstanding" type="INT(16))" />
+			<column name="salePricePerTicketMoneyValue" type="float" />
+			<column name="salePricePerTicketMoneyPrecision" type="int(8)" />
+			<column name="revenueTargetMoneyValue" type="float" />
+			<column name="revenueTargetMoneyPrecision" type="int(8)" />
+			<column name="reveueRaisedMoneyValue" type="float" />
+			<column name="reveueRaisedMoneyPrecision" type="int(8)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.2">
+		<createTable tableName="RaffleBook">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="raffle_ID" type="BIGINT(19)" />
+			<column name="ticketCount" type="INT(16))" />
+			<column name="firstNo" type="INT(16))" />
+			<column name="allocatedTo_ID" type="BIGINT(19)" />
+			<column name="dateAllocated" type="date" />
+			<column name="issuedBy_ID" type="BIGINT(19)" />
+			<column name="dateIssued" type="date" />
+			<column name="ticketsReturned" type="INT(16))" />
+			<column name="amountReturnedMoneyValue" type="float" />
+			<column name="amountReturnedMoneyPrecision" type="int(8)" />
+			<column name="dateReturned" type="date" />
+			<column name="collectedBy_ID" type="BIGINT(19)" />
+			<column name="receiptIssued" type="BIT(1)" />
+			<column name="notes" type="varchar(4096)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.3">
+		<addForeignKeyConstraint baseColumnNames="raffle_ID"
+			baseTableName="RaffleBook" constraintName="FK_RaffleBook_raffle_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Raffle" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.4">
+		<addForeignKeyConstraint baseColumnNames="allocatedTo_ID"
+			baseTableName="RaffleBook" constraintName="FK_RaffleBook_allocatedTo_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.5">
+		<addForeignKeyConstraint baseColumnNames="issuedBy_ID"
+			baseTableName="RaffleBook" constraintName="FK_RaffleBook_issuedBy_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.46.6">
+		<addForeignKeyConstraint baseColumnNames="collectedBy_ID"
+			baseTableName="RaffleBook" constraintName="FK_RaffleBook_collectedBy_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.46.7">
+		<addForeignKeyConstraint baseColumnNames="groupRaffleManager_ID"
+			baseTableName="Raffle" constraintName="FK_Raffle_groupRaffleManager_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.8">
+		<addForeignKeyConstraint baseColumnNames="branchRaffleContact_ID"
+			baseTableName="Raffle" constraintName="FK_Raffle_branchRaffleContact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+	<!-- Fix the Invoice lines quantity field. -->
+	<changeSet author="bsutton" id="1.0.46.9">
+		<dropColumn columnName="quantity" tableName="InvoiceLine" />
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.46.10">
+		<addColumn tableName="InvoiceLine">
+			<column name="quantityFixedDoubleValue" type="float" />
+			<column name="quantityPrecision" type="int(8)" />
+		</addColumn>
+	</changeSet>
+
+	<!-- Fix the Payment amount field. -->
+	<changeSet author="bsutton" id="1.0.46.11">
+		<dropColumn columnName="taxpercentage" tableName="Payment" />
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.46.12">
+		<addColumn tableName="Payment">
+			<column name="amountMoneyValue" type="float" />
+			<column name="amountMoneyPrecision" type="int(8)" />
+			<column name="amountTaxPrecentageValue" type="float" />
+			<column name="amountTaxPercentagePrecision" type="int(8)" />
+		</addColumn>
+	</changeSet>
+
+	<!-- Fix the Purchase join -->
+	<changeSet author="bsutton" id="1.0.46.13">
+		<createTable tableName="Purchase_PurchaseLine">
+			<column name="Purchase_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="PurchaseLines_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<!-- Fix Purchase Line -->
+	<changeSet author="bsutton" id="1.0.46.14">
+		<dropColumn columnName="itemCost" tableName="PurchaseLine" />
+		<dropColumn columnName="lineTotal" tableName="PurchaseLine" />
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.46.15">
+		<addColumn tableName="PurchaseLine">
+			<column name="itemCostMoneyValue" type="float" />
+			<column name="itemCostMoneyPrecision" type="int(8)" />
+			<column name="itemCostTaxPrecentageValue" type="float" />
+			<column name="itemCostTaxPercentagePrecision" type="int(8)" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.46.16">
+		<addColumn tableName="PurchaseLine">
+			<column name="lineTotalMoneyValue" type="float" />
+			<column name="lineTotalMoneyPrecision" type="int(8)" />
+			<column name="lineTotalTaxPrecentageValue" type="float" />
+			<column name="lineTotalTaxPercentagePrecision" type="int(8)" />
+		</addColumn>
+	</changeSet>
+
+</databaseChangeLog>

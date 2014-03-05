@@ -94,6 +94,24 @@ public class DaoFactory
 		return (PhoneDao) instantiateDAO(PhoneDao.class);
 	}
 
+	public RaffleDao getRaffleDao()
+	{
+		return (RaffleDao) instantiateDAO(RaffleDao.class);
+	}
+	
+	public RaffleAllocationDao getRaffleAllocationDao()
+	{
+		return (RaffleAllocationDao) instantiateDAO(RaffleAllocationDao.class);
+
+	}
+
+	
+	public RaffleBookDao getRaffleBookDao()
+	{
+		return (RaffleBookDao) instantiateDAO(RaffleBookDao.class);
+	}
+
+
 	public RelationshipDao getRelationshipDao()
 	{
 		return (RelationshipDao) instantiateDAO(RelationshipDao.class);
@@ -145,5 +163,8 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
+
+
+	
 
 }

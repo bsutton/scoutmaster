@@ -30,6 +30,8 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.Phone</class>
 		<class>au.org.scoutmaster.domain.Qualification</class>
 		<class>au.org.scoutmaster.domain.QualificationType</class>
+		<class>au.org.scoutmaster.domain.Raffle</class>
+		<class>au.org.scoutmaster.domain.RaffleBook</class>
 		<class>au.org.scoutmaster.domain.Relationship</class>
 		<class>au.org.scoutmaster.domain.RelationshipType</class>
 		<class>au.org.scoutmaster.domain.School</class>
@@ -58,15 +60,24 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.accounting.Payment</class>
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
 		<class>au.org.scoutmaster.domain.Color</class>
+		<class>au.org.scoutmaster.domain.RaffleAllocation</class>
 
 		<properties>
 			<property name="eclipselink.session.customizer"
 				value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer" />
-			<!-- Following property should create the database schema automatically -->
-			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables" 
-				/ -->
-			<!-- property name="eclipselink.ddl-generation" value="create-or-extend-tables" 
-				/ -->
+			<!-- Following property should create the database schema automatically 
+			You probably want to do this in an alternate db so as not to destroy your test data.
+			Change the ds at the top of this persistence-unit to scoutmaster-test-ds 
+			and create an additional resource in tomcats server.xml (/var/lib/tomcat7/conf/server.xml) similar to:
+			 
+			<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="40" maxIdle="4" 
+			name="jdbc/scoutmaster-test-ds" password="XXXXXX" 
+			type="javax.sql.DataSource" url="jdbc:mysql://localhost/scoutmaster-test?sessionVariables=storage_engine=InnoDB" username="scoutmaster"/>
+			-->
+			
+			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables"/ -->
+			<!--property name="eclipselink.ddl-generation" value="create-or-extend-tables" /-->
+			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.ddl-generation" value="none" />
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />

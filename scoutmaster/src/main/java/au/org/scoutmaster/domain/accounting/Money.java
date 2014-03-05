@@ -25,20 +25,33 @@ public class Money
 		this.fixedDoubleValue = 0.0;
 	}
 
-	Money(final double dValue)
+	public Money(final double dValue)
 	{
 		this.precision = defaultPrecision;
 		this.fixedDoubleValue = FixedDouble.Round(dValue, precision);
 	}
 	
-	Money(final FixedDouble rhs)
+	public Money(final FixedDouble rhs)
 	{
 		this.precision = rhs.getPrecision();
 		this.fixedDoubleValue = FixedDouble.Round(rhs.getFixedDoubleValue(), rhs.getPrecision());
 	}
+	
+	/**
+	 * Casts a string to a money value.
+	 * @param value
+	 */
+	public Money(String amount)
+	{
+		if (amount == null || amount.trim().length() == 0)
+			amount = "0.00";
+		this.precision = defaultPrecision;
+		// TODO internationalise this.
+		this.fixedDoubleValue = org.joda.money.Money.parse("AUD " + amount).getAmount().doubleValue();
+	}
 
 
-	Money add(final Money rhs)
+	public Money add(final Money rhs)
 	{
 		return new Money(getFixedDoubleValue() + rhs.getFixedDoubleValue());
 	}
@@ -54,22 +67,22 @@ public class Money
 	}
 
 
-	Money subtract(final Money rhs)
+	public Money subtract(final Money rhs)
 	{
 		return new Money(getFixedDoubleValue() - rhs.getFixedDoubleValue());
 	}
 
-	Money multiply(final Money rhs)
+	public Money multiply(final Money rhs)
 	{
 		return new Money(getFixedDoubleValue() * rhs.getFixedDoubleValue());
 	}
 
-	Money multiply(final FixedDouble rhs)
+	public Money multiply(final FixedDouble rhs)
 	{
 		return new Money(getFixedDoubleValue() * rhs.getFixedDoubleValue());
 	}
 
-	Money multiply(final int rhs)
+	public Money multiply(final int rhs)
 	{
 		return new Money(getFixedDoubleValue() * rhs);
 	}
@@ -79,37 +92,37 @@ public class Money
 		return new Money(getFixedDoubleValue() * rhs);
 	}
 
-	Money divide(final Money rhs)
+	public Money divide(final Money rhs)
 	{
 		return new Money(getFixedDoubleValue() / rhs.getFixedDoubleValue());
 	}
 
-	boolean equals(final Money rhs)
+	public boolean equals(final Money rhs)
 	{
 		return (Math.abs(getFixedDoubleValue() - rhs.getFixedDoubleValue()) < HalfAPrecision());
 	}
 
-	boolean lessThan(final Money rhs)
+	public boolean lessThan(final Money rhs)
 	{
 		return ((rhs.getFixedDoubleValue() - getFixedDoubleValue()) >= HalfAPrecision());
 	}
 
-	boolean lessThan(final int rhs)
+	public boolean lessThan(final int rhs)
 	{
 		return ((rhs - getFixedDoubleValue()) >= HalfAPrecision());
 	}
 
-	boolean greaterThan(final Money rhs) 
+	public boolean greaterThan(final Money rhs) 
 	{
 	    return !(getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
 	}
 
-	boolean lessThanOrEqual(final Money rhs) 
+	public boolean lessThanOrEqual(final Money rhs) 
 	{
 	    return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
 	}
 
-	boolean greaterThanOrEqual(final Money rhs) 
+	public boolean greaterThanOrEqual(final Money rhs) 
 	{
 	    return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() > rhs.getFixedDoubleValue());
 	}
@@ -120,31 +133,29 @@ public class Money
 	}
 
 
-	
-
-	double HalfAPrecision()
+	private double HalfAPrecision()
 	{
 		return FixedDouble.HalfAPrecision(getPrecision());
 	}
 
 	
-	Money multiply(double lhs, final Money rhs)
+	public Money multiply(double lhs, final Money rhs)
 	{
 		return new Money(lhs * rhs.getFixedDoubleValue());
 	}
 
-	Money add(double lhs, final Money rhs)
+	public Money add(double lhs, final Money rhs)
 	{
 		return new Money(lhs + rhs.getFixedDoubleValue());
 	}
 
-	Money subtract(double lhs, final Money rhs)
+	public Money subtract(double lhs, final Money rhs)
 	{
 		return new Money(lhs - rhs.getFixedDoubleValue());
 	}
 
 	// returns the absolute value of the currency.
-	Money abs(final Money val)
+	public Money abs(final Money val)
 	{
 		return (val.lessThan(0)) ? val.multiply(-1) : val;
 	}
