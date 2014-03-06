@@ -13,7 +13,6 @@ import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.domain.iColorFactory;
-import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.org.scoutmaster.dao.ColorDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
@@ -27,6 +26,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.fieldgroup.FieldGroup.CommitException;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
@@ -37,7 +37,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -60,7 +59,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 	private Button delete;
 	private boolean newEvent;
 	private boolean readonly;
-	private CKEditorEmailField detailsEditor;
+	private RichTextArea detailsEditor;
 	private Label clickToViewLabel;
 	private RichTextArea message;
 
@@ -88,6 +87,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 			cancel.setEnabled(false);
 			save.setEnabled(false);
 		}
+		
 	}
 
 	void setEvent(au.org.scoutmaster.domain.Event event, boolean newEvent)
@@ -137,14 +137,11 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 	void buildForm()
 	{
-		VerticalLayout details = new VerticalLayout();
-		// this.setMargin(true);
 		clickToViewLabel = new Label("<b>Click an event in the Calendar to view its details.</b>");
 		clickToViewLabel.setContentMode(ContentMode.HTML);
 		clickToViewLabel.setWidth(null);
-		details.addComponent(clickToViewLabel);
-		details.setComponentAlignment(clickToViewLabel, Alignment.MIDDLE_RIGHT);
-		details.setSizeFull();
+		this.addComponent(clickToViewLabel);
+		this.setComponentAlignment(clickToViewLabel, Alignment.MIDDLE_RIGHT);
 
 		SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event> overviewForm = new SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event>(
 				3, this.fieldGroup);
@@ -155,9 +152,6 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		overviewForm.setColumnFieldWidth(1, 100);
 		overviewForm.setColumnFieldWidth(2, 20);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
-		overviewForm.setSizeFull();
-		// overviewForm.setWidth("500px");
-
 		overviewForm.colspan(3);
 		TextField subject = overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
@@ -201,23 +195,39 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
+		this.addComponent(overviewForm);
 
 		if (!readonly)
 		{
-			detailsEditor = overviewForm.bindEditorField(Event_.details, true);
-			detailsEditor.setHeight("100%");
-			overviewForm.setExpandRatio(1.0f);
-		}
-		details.addComponent(overviewForm);
-		details.setExpandRatio(overviewForm, 1.0f);
-		details.setComponentAlignment(overviewForm, Alignment.TOP_RIGHT);
-		this.addComponent(details);
-		this.setComponentAlignment(details, Alignment.TOP_RIGHT);
+			VerticalLayout detailsEditorLayout = new VerticalLayout();
+			detailsEditorLayout.setMargin(new MarginInfo(false, false, false, true));
+			detailsEditorLayout.setSizeFull();
+			detailsEditor = new RichTextArea();
+			detailsEditor.setNullRepresentation("");
+			detailsEditor.setSizeFull();
+			this.fieldGroup.bind(detailsEditor, Event_.details.getName());
+			
+			detailsEditorLayout.addComponent(detailsEditor);
+			this.addComponent(detailsEditorLayout);
+			this.setComponentAlignment(detailsEditorLayout, Alignment.MIDDLE_RIGHT);
+		}		
+		else
+		{
+			message = new RichTextArea();
+			message.setNullRepresentation("");
+			message.setReadOnly(true);
+			
+			this.setMargin(true);
+			this.fieldGroup.bind(message, Event_.details.getName());
+			this.addComponent(message);
+			this.setExpandRatio(message, 1.0f);
 
-		
+		}
+
 		if (!readonly)
 		{
 			HorizontalLayout buttonLayout = new HorizontalLayout();
+			buttonLayout.setMargin(new MarginInfo(false, false, false, true));
 			buttonLayout.setSpacing(true);
 			save = new Button("Save");
 			save.addClickListener(this);
@@ -241,30 +251,12 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 			buttonGroupLayout.setWidth("100%");
 			buttonGroupLayout.setExpandRatio(buttonLayout, 1.0f);
 
-			details.addComponent(buttonGroupLayout);
-		}
-		else
-		{
-			VerticalLayout messageLayout = new VerticalLayout();
-			messageLayout.setMargin(true);
-			messageLayout.setSizeFull();
-			message = new RichTextArea();
-			message.setNullRepresentation("");
-			message.setReadOnly(true);
-			//message.setContentMode(ContentMode.HTML);
-			message.setSizeFull();
-			this.fieldGroup.bind(message, Event_.details.getName());
-			
-			messageLayout.addComponent(message);
-			messageLayout.setComponentAlignment(message, Alignment.TOP_RIGHT);
-			this.addComponent(messageLayout);
-			this.setComponentAlignment(messageLayout, Alignment.TOP_RIGHT);
-			//this.setExpandRatio(messageLayout, 1.0f);
-
+			this.addComponent(buttonGroupLayout);
+			this.setComponentAlignment(buttonGroupLayout, Alignment.BOTTOM_RIGHT);
 		}
 
 		subject.focus();
-		this.setSizeFull();
+		
 
 	}
 

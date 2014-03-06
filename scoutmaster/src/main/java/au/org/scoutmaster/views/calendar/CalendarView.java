@@ -104,12 +104,17 @@ public class CalendarView extends VerticalLayout implements View,
 		calendarArea.setSpacing(false);
 
 		horizontalLayout.addComponent(calendarArea);
+		buildEditor(horizontalLayout);
+		horizontalLayout.setExpandRatio(calendarArea, 1.0f);
+
+	}
+
+	private void buildEditor(HorizontalLayout horizontalLayout)
+	{
 		eventDetails = new EventDetails(this, isPublic);
 		eventDetails.setWidth("400px");
 		// eventDetails.setHeight("100%");
 		horizontalLayout.addComponent(eventDetails);
-		horizontalLayout.setExpandRatio(calendarArea, 1.0f);
-
 	}
 
 	private HorizontalLayout buildTitleArea()
