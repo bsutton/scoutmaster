@@ -32,7 +32,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Activities")
+@Menu(display = "Activities", path="Admin.Lists")
 public class ActivityView extends BaseCrudView<Activity> implements View, Selected<Activity>
 {
 
