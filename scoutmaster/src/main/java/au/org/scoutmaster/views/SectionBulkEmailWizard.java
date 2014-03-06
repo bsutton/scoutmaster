@@ -1,6 +1,5 @@
 package au.org.scoutmaster.views;
 
-import java.io.File;
 import java.util.List;
 
 import javax.persistence.metamodel.SingularAttribute;
@@ -20,11 +19,12 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
+import au.org.scoutmaster.jasper.JasperEmailSettingsImpl;
+import au.org.scoutmaster.jasper.JasperSettingsImpl;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.SectionBulkEmailWizard.ContactRecipient;
 
 import com.vaadin.navigator.View;
-import com.vaadin.server.VaadinService;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
@@ -103,11 +103,9 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 
 	}
 
-	public File getJasperReport()
+	public String getJasperReport()
 	{
-		File baseDirectory = VaadinService.getCurrent()
-                .getBaseDirectory();
-		return new File(new File(baseDirectory, "jasperreports"), "MemberReport.jasper");
+		return "MemberReport.jasper";
 	}
 
 	@Override
@@ -149,7 +147,8 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public JasperProxy getJasperProxy() throws JRException
 	{
-		return new JasperProxy(getJasperReport(), subjectField.getValue(), "support@noojee.com.au");
+		return new JasperProxy(getJasperReport(), subjectField.getValue(), "support@noojee.com.au", new JasperSettingsImpl(),
+				new JasperEmailSettingsImpl());
 	}
 
 	@Override
