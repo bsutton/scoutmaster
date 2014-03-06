@@ -6,12 +6,12 @@ import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.jasper.JasperManager;
 import au.com.vaadinutils.menu.Menu;
-import au.com.vaadinutils.reportFilter.FilterReport;
 import au.com.vaadinutils.reportFilter.ReportParameter;
+import au.com.vaadinutils.reportFilter.ReportView;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
 @Menu(display = "External Prospects", path="Reports")
-public class ExternalProspectsReport extends FilterReport
+public class ExternalProspectsReport extends ReportView
 {
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "ExternalProspects";
@@ -27,5 +27,11 @@ public class ExternalProspectsReport extends FilterReport
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public String getDescription()
+	{
+		return "Generates a list of Contacts that have been Tagged as External Prospects";
+	}
+
 
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Event Calendar" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="209"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="StartDate" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new Date("2014/1/1")]]></defaultValueExpression>
@@ -106,7 +106,7 @@ order by month(EventStartDateTime), EventStartDateTime;]]>
 					<textFieldExpression><![CDATA[$F{OurGroupName}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="398" y="44" width="159" height="20" forecolor="#FFFFFF"/>
+					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="390" y="45" width="159" height="20" forecolor="#FFFFFF"/>
 					<textElement textAlignment="Right">
 						<font size="14" isBold="false"/>
 					</textElement>
@@ -151,9 +151,6 @@ order by month(EventStartDateTime), EventStartDateTime;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{EventEndDateTime}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement uuid="3c8db8e1-6677-472f-adfe-50cd7edafd4c" positionType="FixRelativeToBottom" x="0" y="49" width="557" height="1" forecolor="#666666"/>
-			</line>
 		</band>
 	</detail>
 	<columnFooter>
@@ -161,21 +158,24 @@ order by month(EventStartDateTime), EventStartDateTime;]]>
 	</columnFooter>
 	<pageFooter>
 		<band height="17">
-			<textField>
-				<reportElement uuid="c1e2a3f4-e340-4afc-842b-f0db7728e74d" mode="Opaque" x="382" y="4" width="175" height="13" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="1d4a52b4-d7c3-4467-b178-b90a7b967746" mode="Opaque" x="0" y="4" width="179" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
+			<line>
+				<reportElement uuid="cd02c161-7c57-4c29-9229-87902ec617df" positionType="FixRelativeToBottom" x="0" y="3" width="557" height="1"/>
+			</line>
 			<staticText>
-				<reportElement uuid="5b6d746d-2416-44e1-9750-e43cbcc8d68d" mode="Opaque" x="179" y="4" width="203" height="13" backcolor="#E6E6E6"/>
+				<reportElement uuid="ff511ad8-3f33-4ff8-8f69-297ee93c5dc2" mode="Opaque" x="176" y="4" width="203" height="13" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Scoutmaster By S. Brett Sutton]]></text>
 			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="1cab5e01-20b5-4e1a-b6b9-51a43bc33d16" mode="Opaque" x="0" y="4" width="176" height="13" backcolor="#E6E6E6"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f6eebc0d-ad58-40aa-8df9-babdd4d74982" mode="Opaque" x="379" y="4" width="178" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>

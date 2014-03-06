@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MemberReport" pageWidth="555" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
-	<property name="ireport.zoom" value="1.5"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MemberReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -40,7 +40,7 @@ order by lastname]]>
 	<title>
 		<band height="72">
 			<frame>
-				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#006699"/>
+				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="0" y="-20" width="557" height="92" backcolor="#006699"/>
 				<staticText>
 					<reportElement uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab" x="20" y="20" width="375" height="43" forecolor="#FFFFFF"/>
 					<textElement>
@@ -49,7 +49,7 @@ order by lastname]]>
 					<text><![CDATA[External Prospects]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="395" y="43" width="180" height="20" forecolor="#FFFFFF"/>
+					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="364" y="63" width="180" height="20" forecolor="#FFFFFF"/>
 					<textElement textAlignment="Right">
 						<font size="14" isBold="false"/>
 					</textElement>
@@ -59,17 +59,10 @@ order by lastname]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="13"/>
+		<band/>
 	</pageHeader>
 	<columnHeader>
 		<band height="21">
-			<staticText>
-				<reportElement uuid="68cd501b-dae9-460b-8313-33581de94bbd" mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
 			<staticText>
 				<reportElement uuid="1a7807b3-122b-4d06-bed6-619f9d102885" mode="Opaque" x="0" y="0" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center">
@@ -78,10 +71,10 @@ order by lastname]]>
 				<text><![CDATA[Firstname]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="dc15ead7-8987-4773-a705-53667133eef0" x="-20" y="20" width="595" height="1" forecolor="#666666"/>
+				<reportElement uuid="dc15ead7-8987-4773-a705-53667133eef0" x="0" y="20" width="557" height="1" forecolor="#666666"/>
 			</line>
 			<staticText>
-				<reportElement uuid="322a78c5-acba-4bba-8f17-e58ed58a3468" mode="Opaque" x="83" y="0" width="83" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+				<reportElement uuid="322a78c5-acba-4bba-8f17-e58ed58a3468" mode="Opaque" x="82" y="0" width="160" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -95,7 +88,7 @@ order by lastname]]>
 				<text><![CDATA[Phone]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558" mode="Opaque" x="314" y="0" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+				<reportElement uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558" mode="Opaque" x="313" y="0" width="244" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -105,11 +98,8 @@ order by lastname]]>
 	</columnHeader>
 	<detail>
 		<band height="46">
-			<line>
-				<reportElement uuid="b74e8b05-6f82-4e08-ab05-f6ed944eb57f" positionType="FixRelativeToBottom" x="0" y="43" width="555" height="1"/>
-			</line>
 			<textField>
-				<reportElement uuid="f9772005-5534-4d67-9f47-87341a16c13a" x="82" y="0" width="83" height="20"/>
+				<reportElement uuid="f9772005-5534-4d67-9f47-87341a16c13a" x="82" y="0" width="160" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{lastname}]]></textFieldExpression>
 			</textField>
@@ -124,7 +114,7 @@ order by lastname]]>
 				<textFieldExpression><![CDATA[$F{phoneno}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a1aa9008-f1e2-4520-8778-12717042a038" x="314" y="1" width="241" height="20"/>
+				<reportElement uuid="a1aa9008-f1e2-4520-8778-12717042a038" x="313" y="1" width="244" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
@@ -134,7 +124,7 @@ order by lastname]]>
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="7af367cf-d23b-475a-8a0b-ef6497222b83" x="242" y="20" width="313" height="20"/>
+				<reportElement uuid="7af367cf-d23b-475a-8a0b-ef6497222b83" x="242" y="20" width="315" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{body}]]></textFieldExpression>
 			</textField>
@@ -144,21 +134,24 @@ order by lastname]]>
 		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band height="58">
-			<textField>
-				<reportElement uuid="c1e2a3f4-e340-4afc-842b-f0db7728e74d" mode="Opaque" x="0" y="27" width="515" height="13" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA["aPage "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
-			</textField>
-			<textField evaluationTime="Report">
-				<reportElement uuid="ed0105e5-1635-43ad-8b6c-dc0258ff160c" mode="Opaque" x="515" y="27" width="40" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
+		<band height="14">
+			<line>
+				<reportElement uuid="fb293cab-d548-4116-93f2-631b3ce1bc48" positionType="FixRelativeToBottom" x="0" y="0" width="557" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="b05116cd-842d-4623-873b-81ab85a12eb8" mode="Opaque" x="176" y="1" width="203" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Scoutmaster By S. Brett Sutton]]></text>
+			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="1d4a52b4-d7c3-4467-b178-b90a7b967746" x="0" y="27" width="100" height="13"/>
+				<reportElement uuid="f24a1be4-a547-4d1b-ac9e-1ddba73900bd" mode="Opaque" x="0" y="1" width="176" height="13" backcolor="#E6E6E6"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="699e7c18-6d19-49f5-bdaf-10b97d377e60" mode="Opaque" x="379" y="1" width="178" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
