@@ -17,6 +17,7 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.PasswordValidator;
+import au.org.scoutmaster.views.actions.UserActionInviteUser;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -176,7 +177,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	{
 		List<CrudAction<User>> actions = super.getCrudActions();
 		
-		actions.add(new InviteUserAction());
+		actions.add(new UserActionInviteUser());
 		return actions;
 	}
 
