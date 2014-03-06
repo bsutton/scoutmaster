@@ -18,7 +18,7 @@
 		<listener-class>au.org.scoutmaster.application.ContextListener
 		</listener-class>
 	</listener>
-	
+
 	<listener>
 		<listener-class>au.org.scoutmaster.application.LocalEntityManagerContextListener
 		</listener-class>
@@ -48,11 +48,12 @@
 		<init-param>
 			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
 			<!-- comma-separated list of fully-qualified class names -->
-			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter</param-value>
+			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
+			</param-value>
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
-	
+
 	<!-- Vaadin servlet - this is the public interface -->
 	<servlet>
 		<servlet-name>Scoutmaster Public Application Servlet</servlet-name>
@@ -65,10 +66,22 @@
 		<init-param>
 			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
 			<!-- comma-separated list of fully-qualified class names -->
-			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter</param-value>
+			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
+			</param-value>
 		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>ImageServlet</servlet-name>
+		<servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet
+		</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ImageServlet</servlet-name>
+		<url-pattern>/images</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Scoutmaster Public Application Servlet</servlet-name>
