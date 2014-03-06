@@ -33,7 +33,6 @@ import au.org.scoutmaster.views.reports.CalendarReport;
 import au.org.scoutmaster.views.reports.ExternalProspectsReport;
 import au.org.scoutmaster.views.reports.MemberAddressReport;
 import au.org.scoutmaster.views.reports.MemberReport;
-import au.org.scoutmaster.views.reports.MembershipInvoiceReport;
 import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
 import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
