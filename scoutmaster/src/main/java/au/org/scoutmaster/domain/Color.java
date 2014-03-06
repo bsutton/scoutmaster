@@ -21,6 +21,7 @@ public class Color implements iColor
 
 	public Color()
 	{
+		/** Default to White **/
 		red = 255;
 		green = 255;
 		blue = 255;
