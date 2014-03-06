@@ -161,7 +161,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.setColumnFieldWidth(1, 120);
 		overviewForm.setColumnLabelWidth(2, 40);
 		overviewForm.setColumnFieldWidth(2, 80);
-		overviewForm.setSizeFull();
+		//overviewForm.setSizeFull();
 
 		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
 
@@ -203,8 +203,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private void contactTab()
 	{
-		VerticalLayout contactTab = new VerticalLayout();
-		contactTab.setSizeFull();
 		// Contact tab
 		SMMultiColumnFormLayout<Contact> contactForm = new SMMultiColumnFormLayout<Contact>(3, this.fieldGroup);
 		contactForm.setColumnLabelWidth(0, 100);
@@ -298,10 +296,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		contactForm.bindTextField("Postcode", "address.postcode");
 		contactForm.newLine();
 
-		// Now add the child activity crud
-		contactTab.addComponent(contactForm);
-
-		tabs.addTab(contactTab, "Contact");
+		tabs.addTab(contactForm, "Contact");
 
 	}
 
@@ -345,8 +340,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(1, this.fieldGroup);
 		youthForm.setColumnLabelWidth(0, 120);
 		youthForm.setColumnFieldWidth(0, 400);
-		youthTab = tabs.addTab(youthForm, "Youth");
-		youthForm.setSizeFull();
 		youthForm.setMargin(true);
 		youthForm.newLine();
 		youthForm.bindTextField("School", "school");
@@ -354,6 +347,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		youthForm.newLine();
 		youthForm.bindTextAreaField("Custody Order Details", Contact_.custodyOrderDetails, 4);
 
+		youthTab = tabs.addTab(youthForm, "Youth");
 	}
 
 	private void memberTab()
@@ -361,9 +355,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		// Member tab
 		SMMultiColumnFormLayout<Contact> memberForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
 		memberForm.setColumnLabelWidth(0, 120);
-		tabs.addTab(memberForm, "Member");
 		memberForm.setMargin(true);
-		memberForm.setSizeFull();
 		isMemberField = memberForm.bindBooleanField("Member", Contact_.isMember);
 		isMemberField.addValueChangeListener(changeListener);
 		memberForm.newLine();
@@ -390,6 +382,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberForm.newLine();
 		memberForm.colspan(2);
 		dateMemberInvested= memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested, "yyyy-MM-dd", Resolution.DAY);
+		
+		tabs.addTab(memberForm, "Member");
+
 }
 
 	private void medicalTab()
@@ -402,7 +397,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		medicalForm.setColumnFieldWidth(1, 100);
 		tabs.addTab(medicalForm, "Medical");
 		medicalForm.setMargin(true);
-		medicalForm.setSizeFull();
 		medicalForm.colspan(2);
 		medicalForm.bindTextAreaField("Allergies", "allergies", 4);
 		medicalForm.bindTextField("Medicare No.", Contact_.medicareNo);
@@ -432,7 +426,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.setColumnLabelWidth(0, 120);
 		tabs.addTab(background, "Background");
 		background.setMargin(true);
-		background.setSizeFull();
 
 		background.colspan(2);
 		background.bindTextAreaField("Hobbies", Contact_.hobbies, 4);

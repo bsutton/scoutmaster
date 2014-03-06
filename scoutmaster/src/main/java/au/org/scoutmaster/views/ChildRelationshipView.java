@@ -24,7 +24,6 @@ import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
 
 public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 {
@@ -48,13 +47,9 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	@Override
 	protected Component buildEditor(ValidatingFieldGroup<Relationship> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
-		layout.setSizeFull();
-
 		SMMultiColumnFormLayout<Relationship> relationshipForm = new SMMultiColumnFormLayout<Relationship>(1,
 				this.fieldGroup);
 		relationshipForm.setColumnFieldWidth(0, 180);
-		relationshipForm.setSizeFull();
 
 		FormHelper<Relationship> formHelper = relationshipForm.getFormHelper();
 
@@ -81,9 +76,8 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
 		{ true, true });
 
-		layout.addComponent(relationshipForm);
 
-		return layout;
+		return relationshipForm;
 	}
 
 	@SuppressWarnings("unchecked")
