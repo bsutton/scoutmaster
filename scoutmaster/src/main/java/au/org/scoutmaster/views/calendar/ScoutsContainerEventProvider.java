@@ -26,7 +26,7 @@ import com.vaadin.ui.components.calendar.event.CalendarEvent;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeEvent;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener;
 
-final class ScoutsContainerEventProvider extends ContainerEventProvider  implements EventChangeListener
+final class ScoutsContainerEventProvider extends ContainerEventProvider implements EventChangeListener
 {
 	private Logger logger = LogManager.getLogger(ScoutsContainerEventProvider.class);
 
@@ -42,7 +42,7 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider  impleme
 	{
 		super(new DaoFactory().getEventDao().createVaadinContainer());
 		this.calendar = calendar;
-		
+
 		this.container = (JPAContainer<Event>) super.getContainerDataSource();
 
 		this.setStartDateProperty(Event_.eventStartDateTime.getName());
@@ -128,19 +128,23 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider  impleme
 			scoutEvent.addEventChangeListener(this);
 			arrayList.add(scoutEvent);
 
-			// Inject the color style required by each event into the page
-			Styles styles = Page.getCurrent().getStyles();
+			if (event.getColor() != null)
+			{
+				// Inject the color style required by each event into the page
+				Styles styles = Page.getCurrent().getStyles();
 
-			// Inject the style. We Use the colour name as the css name (sans
-			// the leading #
-			styles.add(".v-calendar-event-" + event.getColor().getCSS().substring(1) + " { background-color:"
-					+ event.getColor().getCSS() + "; }");
+				// Inject the style. We Use the colour name as the css name
+				// (sans
+				// the leading #
+				styles.add(".v-calendar-event-" + event.getColor().getCSS().substring(1) + " { background-color:"
+						+ event.getColor().getCSS() + "; }");
+			}
 		}
 
 		return arrayList;
 	}
 
-	@Override 
+	@Override
 	public void eventChange(EventChangeEvent eventChangeEvent)
 	{
 		for (EventChangeListener listener : eventChangeListeners)
