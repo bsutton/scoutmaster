@@ -26,12 +26,12 @@ public class StepConfirmDetails implements WizardStep
 	private TextField subject;
 	private CKEditorEmailField ckEditorTextField;
 	private TextField from;
-	private WizardView messagingWizardView;
+	private BulkEmailWizardView messagingWizardView;
 	private VerticalLayout layout;
 	private Label recipientCount;
 	private StepEnterDetails details;
 
-	public StepConfirmDetails(WizardView messagingWizardView)
+	public StepConfirmDetails(BulkEmailWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 		details = messagingWizardView.getDetails();

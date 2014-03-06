@@ -33,7 +33,7 @@ public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailT
 	@SuppressWarnings("unused")
 	static private Logger logger = LogManager.getLogger(StepShowProgress.class);
 	JPAContainer<? extends Importable> entities;
-	private WizardView messagingWizardView;
+	private BulkEmailWizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
@@ -42,7 +42,7 @@ public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailT
 	private MutableInteger rejected = new MutableInteger(0);
 	private WorkingDialog workDialog;
 
-	public StepShowProgress(WizardView messagingWizardView)
+	public StepShowProgress(BulkEmailWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}

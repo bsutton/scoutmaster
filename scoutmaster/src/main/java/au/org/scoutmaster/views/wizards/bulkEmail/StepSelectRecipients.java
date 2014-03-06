@@ -33,7 +33,7 @@ public class StepSelectRecipients implements WizardStep
 	private SearchableContactTable contactTable;
 	private VerticalLayout layout;
 
-	public StepSelectRecipients(WizardView messagingWizardView)
+	public StepSelectRecipients(BulkEmailWizardView messagingWizardView)
 	{
 		layout = new VerticalLayout();
 		layout.setMargin(true);

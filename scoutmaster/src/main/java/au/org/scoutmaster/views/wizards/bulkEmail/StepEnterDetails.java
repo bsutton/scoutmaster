@@ -39,7 +39,7 @@ public class StepEnterDetails implements WizardStep
 
 	private TextField from;
 	private ComboBox providers;
-	private WizardView wizard;
+	private BulkEmailWizardView wizard;
 	private VerticalLayout layout;
 	private Label recipientCount;
 	private CKEditorEmailField ckEditorTextField;
@@ -54,7 +54,7 @@ public class StepEnterDetails implements WizardStep
 	private TagField activityTag;
 
 
-	public StepEnterDetails(WizardView messagingWizardView)
+	public StepEnterDetails(BulkEmailWizardView messagingWizardView)
 	{
 		wizard = messagingWizardView;
 
