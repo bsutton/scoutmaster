@@ -38,6 +38,11 @@ public class InvoiceLine extends BaseEntity
 	 * The number of items that need are to be invoiced.
 	 */
 	@Embedded
+	@AttributeOverrides(
+	{
+			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "quantityFixedDoubleValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "quantityPrecision"))
+	})
 	FixedDouble quantity;
 
 	/**

@@ -8,6 +8,7 @@ import au.org.scoutmaster.domain.Period;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.accounting.Money;
 
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.DefaultConverterFactory;
@@ -38,6 +39,8 @@ public class ScoutmasterConverterFactory extends DefaultConverterFactory
 			return (Converter<PRESENTATION, MODEL>) new AgeConverter();
 		else if (Period.class == modelType)
 			return (Converter<PRESENTATION, MODEL>) new PeriodConverter();
+		else if (Money.class == modelType)
+			return (Converter<PRESENTATION, MODEL>) new MoneyConverter();
 
 		// Default to the supertype
 		return super.createConverter(presentationType, modelType);

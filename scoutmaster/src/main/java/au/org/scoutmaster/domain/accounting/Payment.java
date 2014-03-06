@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -36,6 +40,15 @@ public class Payment extends BaseEntity
 	/**
 	 * The amount paid
 	 */
+	@Embedded
+	@AttributeOverrides(
+	{
+			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) 
+			})
+
 	MoneyWithTax amount;
 
 	/**

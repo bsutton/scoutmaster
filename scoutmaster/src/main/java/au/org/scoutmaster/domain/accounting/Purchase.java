@@ -44,7 +44,7 @@ public class Purchase  extends BaseEntity
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "enum('DIRECT_PURCHASE', 'EXPENSE_CLAIM'")
-	PurchaseMethod method;
+	PurchaseMethod purchaseMethod;
 
 	/**
 	 * The organisation/supplier this purchase was made from.
