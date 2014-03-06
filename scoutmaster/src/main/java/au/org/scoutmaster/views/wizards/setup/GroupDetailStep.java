@@ -22,7 +22,7 @@ public class GroupDetailStep extends SingleEntityStep<Organisation> implements W
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(GroupDetailStep.class);
 
-	public GroupDetailStep(SetupWizardView setupWizardView)
+	public GroupDetailStep(GroupSetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getOrganisationDao(), Organisation.class);
 	}

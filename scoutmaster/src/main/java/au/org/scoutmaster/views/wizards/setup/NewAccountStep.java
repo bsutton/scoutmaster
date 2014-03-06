@@ -36,7 +36,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 
 	private TextField confirmEmailAddress;
 
-	public NewAccountStep(SetupWizardView setupWizardView)
+	public NewAccountStep(GroupSetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getUserDao(), User.class);
 	}

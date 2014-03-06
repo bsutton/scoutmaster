@@ -39,7 +39,7 @@ public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements Wi
 	private static final long serialVersionUID = 1L;
 	private TextField senderId;
 
-	public SmsProviderStep(SetupWizardView setupWizardView)
+	public SmsProviderStep(GroupSetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getSMSProviderDao(), SMSProvider.class);
 	}

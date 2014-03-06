@@ -34,7 +34,7 @@ public abstract class SingleEntityStep<E extends BaseEntity> implements WizardSt
 
 	private Component editor = null;
 
-	public SingleEntityStep(SetupWizardView setupWizardView, JpaBaseDao<E, Long> entityDao, Class<E> entityClass)
+	public SingleEntityStep(GroupSetupWizardView setupWizardView, JpaBaseDao<E, Long> entityDao, Class<E> entityClass)
 	{
 		this.entityClass = entityClass;
 		this.container = entityDao.createVaadinContainer();

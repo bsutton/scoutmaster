@@ -18,8 +18,8 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Setup", path="Admin")
-public class SetupWizardView extends VerticalLayout implements View, WizardProgressListener
+@Menu(display = "Group Setup", path="Wizards")
+public class GroupSetupWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
 

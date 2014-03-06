@@ -14,7 +14,7 @@ public class FinalStep implements WizardStep
 {
 
 
-	public FinalStep(SetupWizardView setupWizardView)
+	public FinalStep(GroupSetupWizardView setupWizardView)
 	{
 	}
 

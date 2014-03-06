@@ -62,7 +62,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 	private TextField bounceEmailAddress;
 	private VerticalLayout layout;
 
-	public SmtpStep(SetupWizardView setupWizardView)
+	public SmtpStep(GroupSetupWizardView setupWizardView)
 	{
 		super(setupWizardView, new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
 

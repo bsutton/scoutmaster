@@ -11,7 +11,7 @@ public class WelcomeStep implements WizardStep
 {
 
 
-	public WelcomeStep(SetupWizardView setupWizardView)
+	public WelcomeStep(GroupSetupWizardView setupWizardView)
 	{
 	}
 
