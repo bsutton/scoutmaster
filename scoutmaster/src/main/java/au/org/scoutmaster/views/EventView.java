@@ -24,6 +24,7 @@ import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.DateRangeValidator;
+import au.org.scoutmaster.views.actions.EventActionCopy;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -219,7 +220,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	{
 		List<CrudAction<au.org.scoutmaster.domain.Event>> actions = super.getCrudActions();
 		
-		actions.add(new CopyEventAction());
+		actions.add(new EventActionCopy());
 		return actions;
 	}
 	@Override
