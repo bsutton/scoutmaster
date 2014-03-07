@@ -5,7 +5,7 @@
 	<groupId>org.scoutmaster</groupId>
 	<artifactId>scoutmaster</artifactId>
 	<packaging>war</packaging>
-	<version>0.7.2</version>
+	<version>0.8</version>
 	<name>Vaadin Web Application</name>
 
 	<properties>
@@ -71,7 +71,7 @@
 
 			<!-- ############# READ THIS TO COMPILE WIDGETS ######################### 
 				To compile the widget set you need to remove this exclusion, but when building 
-				the rest of the project you need have this exclusion in place. The problem 
+				the rest of the project you need to have this exclusion in place. The problem 
 				is that vaadin relies on 'javax.validation 1.0.0 GA' whilst we are using 
 				the hibernate validation api which relies on 'javax.validation 1.1.0 Final' 
 				At run time we need to excluded the version used by vaadin-client so we can 
@@ -369,7 +369,7 @@
 					</includes>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jasperreports-maven-plugin</artifactId>
 				<version>1.0-beta-2</version>
@@ -381,16 +381,16 @@
 					</execution>
 				</executions>
 
-				<dependencies>
+				<dependencies-->
 					<!--note this must be repeated here to pick up correct xml validation -->
-					<dependency>
+					<!-- dependency>
 						<groupId>net.sf.jasperreports</groupId>
 						<artifactId>jasperreports</artifactId>
 						<version>${jasperreports.version}</version>
 					</dependency>
 				</dependencies>
 
-			</plugin>
+			</plugin-->
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -443,7 +443,7 @@
 									</action>
 								</pluginExecution>
 
-								<pluginExecution>
+								<!-- pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
 											org.codehaus.mojo
@@ -461,7 +461,7 @@
 									<action>
 										<ignore></ignore>
 									</action>
-								</pluginExecution>
+								</pluginExecution-->
 							</pluginExecutions>
 
 						</lifecycleMappingMetadata>
