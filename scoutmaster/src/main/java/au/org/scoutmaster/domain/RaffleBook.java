@@ -211,7 +211,7 @@ public class RaffleBook extends BaseEntity
 
 	public RaffleAllocation getRaffleAllocation()
 	{
-		return this.getRaffleAllocation();
+		return this.raffleAllocation;
 	}
 
 	public void setRaffleAllocation(RaffleAllocation allocation)
