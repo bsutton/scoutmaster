@@ -9,7 +9,6 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
-import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.URIParameterListener;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleDao;
@@ -24,7 +23,6 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Setup", path="Admin")
 public class RaffleBookImportWizardView extends VerticalLayout implements View, WizardProgressListener, URIParameterListener
 {
 	private static final long serialVersionUID = 1L;
