@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Event Calendar" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Event Calendar" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="209"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="StartDate" class="java.util.Date">
 		<defaultValueExpression><![CDATA[new Date("2014/1/1")]]></defaultValueExpression>
 	</parameter>
 	<parameter name="EndDate" class="java.util.Date">
-		<defaultValueExpression><![CDATA[new Date("2014/7/1")]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[new Date("2016/7/30")]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select Subject, ifnull(Details, "") Details, EventStartDateTime
@@ -181,4 +181,18 @@ order by month(EventStartDateTime), EventStartDateTime;]]>
 	<summary>
 		<band/>
 	</summary>
+	<noData>
+		<band height="50">
+			<frame>
+				<reportElement uuid="57adc326-315d-49ab-b056-e3f8a8b43f69" mode="Opaque" x="0" y="0" width="557" height="50" backcolor="#006699"/>
+				<staticText>
+					<reportElement uuid="aaebf4dc-00fb-48bd-8a02-95bf46e83964" x="0" y="12" width="557" height="28" forecolor="#FFFFFF"/>
+					<textElement textAlignment="Center">
+						<font size="22"/>
+					</textElement>
+					<text><![CDATA[No results were found for the selected Filter.]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</noData>
 </jasperReport>
