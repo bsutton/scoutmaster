@@ -68,7 +68,9 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 		ComboBox allocatedTo = formHelper.new EntityFieldBuilder<Contact>()
 				.setLabel("Allocated By")
 				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
-				.setListFieldName(Contact_.fullname).build();
+				.setListFieldName(Contact_.fullname)
+				.setListClass(Contact.class)
+				.build();
 		allocatedTo.setFilteringMode(FilteringMode.CONTAINS);
 		allocatedTo.setTextInputAllowed(true);
 		allocatedTo.setNullSelectionAllowed(true);
