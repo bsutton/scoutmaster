@@ -80,6 +80,7 @@ public class PurchaseLine extends BaseEntity
 	}
 
 	@Override
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public String getName()
 	{
 		return description;

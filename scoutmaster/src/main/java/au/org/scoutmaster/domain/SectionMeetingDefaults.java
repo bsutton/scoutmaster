@@ -63,6 +63,7 @@ public class SectionMeetingDefaults extends BaseEntity
 	Address location;
 
 	@Override
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = {"NP_UNWRITTEN_FIELD","UWF_UNWRITTEN_FIELD"}, justification = "JPA injection")
 	public String getName()
 	{
 		return section.getName() + " " + meetingNight.toString() + " " + meetingSubject;

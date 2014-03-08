@@ -65,6 +65,7 @@ public class CreditNoteLine extends BaseEntity
 	MoneyWithTax lineTotal;
 
 	@Override
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public String getName()
 	{
 		return creditNote.getName() + " " + this.ordinal;

@@ -11,7 +11,6 @@ import au.com.vaadinutils.ui.UIUpdater;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.server.Sizeable.Unit;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -39,7 +38,7 @@ public class ImportSelectFile implements WizardStep
 	private Label progress = new Label();
 	protected boolean uploadStarted;
 	private VerticalLayout content;
-	private ComboBox mapping;
+//	private ComboBox mapping;
 	private Label completionMessage;
 
 	public ImportSelectFile(ImportWizardView importView)
@@ -261,9 +260,9 @@ public class ImportSelectFile implements WizardStep
 		return selectedFilename;
 	}
 
-	public String getImportMapping()
-	{
-		return (String) mapping.getValue();
-	}
+//	public String getImportMapping()
+//	{
+//		return (String) mapping.getValue();
+//	}
 
 }

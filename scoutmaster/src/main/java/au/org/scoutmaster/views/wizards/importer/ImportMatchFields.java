@@ -30,18 +30,17 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextField;
 
 public class ImportMatchFields implements WizardStep
 {
 
 	private ImportWizardView importView;
-	private String selectedUserMapping = null;
+//	private String selectedUserMapping = null;
 	private ArrayList<ComboBox> mappings;
 	private ArrayList<ImportUserMapping> userMapping;
 
 	private String[] headers;
-	private TextField fieldMapping;
+//	private TextField fieldMapping;
 	private boolean reset = true;
 	private GridLayout layout;
 
@@ -180,23 +179,23 @@ public class ImportMatchFields implements WizardStep
 		// JPAContainerFactory.make(ImportUserMapping.class, em);
 
 		// Save the user selected mappings
-		if (selectedUserMapping != null && !fieldMapping.getValue().equals(selectedUserMapping))
-		{
-			// the name has changed so we need to save a new one
-
-			ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
-			ImportUserMapping userMapping = new ImportUserMapping(fieldMapping.getValue());
-
-			for (ComboBox mapping : mappings)
-			{
-				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
-						(String) mapping.getValue());
-				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
-			}
-			daoImportUserMapping.persist(userMapping);
-		}
-		else
-		{
+//		if (selectedUserMapping != null && !fieldMapping.getValue().equals(selectedUserMapping))
+//		{
+//			// the name has changed so we need to save a new one
+//
+//			ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
+//			ImportUserMapping userMapping = new ImportUserMapping(fieldMapping.getValue());
+//
+//			for (ComboBox mapping : mappings)
+//			{
+//				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping.getCaption(),
+//						(String) mapping.getValue());
+//				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
+//			}
+//			daoImportUserMapping.persist(userMapping);
+//		}
+//		else
+//		{
 			// The name hasn't changed so save over the existing one.
 			// userMappings.addContainerFilter("mappingName",
 			// fieldMapping.getValue(), true, false);
@@ -220,7 +219,7 @@ public class ImportMatchFields implements WizardStep
 					daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 				}
 			}
-		}
+//		}
 
 		reset = false;
 		return true;
@@ -260,20 +259,27 @@ public class ImportMatchFields implements WizardStep
 		this.userMapping = userMapping;
 	}
 
-	class FieldMap
-	{
-		String csvHeader;
-		FormFieldImpl formField;
-
-		public String displayName()
-		{
-			return formField.displayName();
-		}
-
-		public boolean visible()
-		{
-			return formField.visible();
-		}
-	}
+//	class FieldMap
+//	{
+//		private String csvHeader;
+//		private FormFieldImpl formField;
+//
+//		public FieldMap(String csvHeader, FormFieldImpl formField)
+//		{
+//			this.csvHeader = csvHeader;
+//			this.formField = formField;
+//		}
+//
+//
+//		public String displayName()
+//		{
+//			return formField.displayName();
+//		}
+//
+//		public boolean visible()
+//		{
+//			return formField.visible();
+//		}
+//	}
 
 }

@@ -104,7 +104,7 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 		// Validate username and password with database here. For examples sake
 		// I use a dummy username and password.
 		//
-		if (!password.equals(confirm))
+		if (!password.equals(confirm.getValue()))
 		{
 			Notification.show("The password and confirm passwords do not match", Type.ERROR_MESSAGE);
 			this.password.focus();

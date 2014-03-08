@@ -326,7 +326,7 @@ public class CalendarView extends VerticalLayout implements View,
 	{
 		ScoutCalEvent changedEvent = (ScoutCalEvent) eventChangeEvent.getCalendarEvent();
 
-		if (changedEvent.getEntity().getId() == this.currentEvent.getEntity().getId())
+		if (changedEvent.getEntity().getId().equals(this.currentEvent.getEntity().getId()))
 		{
 			this.eventDetails.setEvent(changedEvent.getEntity(), false);
 		}

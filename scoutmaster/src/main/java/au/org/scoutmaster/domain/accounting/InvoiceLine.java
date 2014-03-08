@@ -76,6 +76,7 @@ public class InvoiceLine extends BaseEntity
 	MoneyWithTax lineTotal;
 
 	@Override
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public String getName()
 	{
 		// TODO Auto-generated method stub

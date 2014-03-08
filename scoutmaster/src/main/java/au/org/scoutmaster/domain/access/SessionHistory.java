@@ -1,6 +1,6 @@
 package au.org.scoutmaster.domain.access;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -23,9 +23,9 @@ public class SessionHistory  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	Date start;
+	Date start = new Date();
 	
-	Date end;
+	Date end = new Date();
 	
 	@ManyToOne(targetEntity=User.class)
 	User user;

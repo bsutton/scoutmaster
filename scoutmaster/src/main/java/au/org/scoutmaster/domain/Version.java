@@ -13,8 +13,8 @@ import com.google.gwt.thirdparty.guava.common.base.Objects;
  * @author bsutton
  * 
  */
-@Entity(name="Version")
-@Table(name="Version")
+@Entity(name = "Version")
+@Table(name = "Version")
 @Access(AccessType.FIELD)
 public class Version extends BaseEntity
 {
@@ -26,16 +26,19 @@ public class Version extends BaseEntity
 
 	private Integer microVersion;
 
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public Integer getMajorVersion()
 	{
 		return this.majorVersion;
 	}
 
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public Integer getMinorVersion()
 	{
 		return this.minorVersion;
 	}
 
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public Integer getMicroVersion()
 	{
 		return this.microVersion;

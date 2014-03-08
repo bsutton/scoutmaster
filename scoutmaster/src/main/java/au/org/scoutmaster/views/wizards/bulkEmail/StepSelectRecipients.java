@@ -10,26 +10,16 @@ import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.views.SearchableContactTable;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 public class StepSelectRecipients implements WizardStep
 {
 
-	private TextField subject;
-	private TextArea message;
-
-	private TextField from;
-	private ComboBox providers;
 	private SearchableContactTable contactTable;
 	private VerticalLayout layout;
 
@@ -88,16 +78,6 @@ public class StepSelectRecipients implements WizardStep
 		return true;
 	}
 
-	public Message getMessage()
-	{
-		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
-	}
-
-	public SMSProvider getProvider()
-	{
-		return (SMSProvider) providers.getConvertedValue();
-	}
-	
 	public ArrayList<Contact> getRecipients()
 	{
 		return contactTable.getFilteredContacts();

@@ -10,7 +10,6 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
-import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.fields.TagField;
@@ -23,7 +22,6 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -38,7 +36,6 @@ public class StepEnterDetails implements WizardStep
 	private TextField subject;
 
 	private TextField from;
-	private ComboBox providers;
 	private BulkEmailWizardView wizard;
 	private VerticalLayout layout;
 	private Label recipientCount;
@@ -168,11 +165,6 @@ public class StepEnterDetails implements WizardStep
 	public Message getMessage()
 	{
 		return new Message(subject.getValue(), ckEditorTextField.getValue(), from.getValue());
-	}
-
-	public SMSProvider getProvider()
-	{
-		return (SMSProvider) providers.getConvertedValue();
 	}
 
 	public String getFrom()

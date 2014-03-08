@@ -12,8 +12,6 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.util.VelocityFormatException;
 
-import com.vaadin.event.FieldEvents.TextChangeEvent;
-import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -28,7 +26,6 @@ public class ConfirmDetailsStep implements WizardStep
 
 	private TextField subject;
 	private TextArea message;
-	private Label remaining;
 	private TextField from;
 	private TextField provider;
 	private BulkSMSWizardView messagingWizardView;
@@ -67,19 +64,6 @@ public class ConfirmDetailsStep implements WizardStep
 
 		layout.addComponent(formLayout);
 		layout.setMargin(true);
-
-		message.addTextChangeListener(new TextChangeListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void textChange(TextChangeEvent event)
-			{
-				remaining.setCaption("Characters remaining " + (160 - event.getText().length()));
-
-			}
-		});
-
 	}
 
 	@Override

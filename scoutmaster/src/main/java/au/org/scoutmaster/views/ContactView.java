@@ -111,11 +111,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private TokenField tagField;
 
 	private CheckBox isMemberField;
-	
+
 	public TextField membershipNoField;
 
 	public DateField memberSinceField;
-	
+
 	public DateField dateMemberInvested;
 
 	@Override
@@ -161,7 +161,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.setColumnFieldWidth(1, 120);
 		overviewForm.setColumnLabelWidth(2, 40);
 		overviewForm.setColumnFieldWidth(2, 80);
-		//overviewForm.setSizeFull();
+		// overviewForm.setSizeFull();
 
 		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
 
@@ -381,11 +381,12 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		memberForm.newLine();
 		memberForm.colspan(2);
-		dateMemberInvested= memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested, "yyyy-MM-dd", Resolution.DAY);
-		
+		dateMemberInvested = memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested, "yyyy-MM-dd",
+				Resolution.DAY);
+
 		tabs.addTab(memberForm, "Member");
 
-}
+	}
 
 	private void medicalTab()
 	{
@@ -410,14 +411,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		medicalForm.bindTextField("Medical Fund No.", Contact_.medicalFundNo);
 	}
 
-//	private void googleTab()
-//	{
-//		// Medical Tab
-//		GoogleField googleField = new GoogleField();
-//
-//		tabs.addTab(googleField, "Map");
-//
-//	}
+	// private void googleTab()
+	// {
+	// // Medical Tab
+	// GoogleField googleField = new GoogleField();
+	//
+	// tabs.addTab(googleField, "Map");
+	//
+	// }
 
 	private void backgroundTab()
 	{
@@ -489,46 +490,56 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			if (source == ContactView.this.groupRoleField)
 			{
 				Long newGroupRoleId = (Long) event.getProperty().getValue();
-				if (currentGroupRole != null && currentGroupRole.getId() != newGroupRoleId && newGroupRoleId != null)
+				if (newGroupRoleId != null && currentGroupRole != null
+						&& currentGroupRole.getId().equals(newGroupRoleId))
 				{
 					GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
 
 					GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
-					GroupRole oldGroupRole = this.currentGroupRole;
 
-					// Update the tag which represents this role
-					if (newGroupRole != oldGroupRole && newGroupRole != null)
+					if (newGroupRole != null)
 					{
-						// Contact contact = ContactView.this.getCurrent();
-						// First remove the old set of tags associated with the
-						// group
-						if (oldGroupRole != null)
+
+						GroupRole oldGroupRole = this.currentGroupRole;
+
+						// Update the tag which represents this role
+						if (newGroupRole != oldGroupRole && newGroupRole != null)
 						{
-							for (Tag tag : oldGroupRole.getTags())
+							// Contact contact = ContactView.this.getCurrent();
+							// First remove the old set of tags associated with
+							// the
+							// group
+							if (oldGroupRole != null)
 							{
-								ContactView.this.tagField.removeToken(tag);
+								for (Tag tag : oldGroupRole.getTags())
+								{
+									ContactView.this.tagField.removeToken(tag);
+								}
 							}
+
+							// Now add the new set of tags associated with the
+							// new
+							// group role.
+							for (Tag tag : newGroupRole.getTags())
+							{
+								ContactView.this.tagField.addToken(tag);
+							}
+
 						}
 
-						// Now add the new set of tags associated with the new
-						// group role.
-						for (Tag tag : newGroupRole.getTags())
+						switch (newGroupRole.getBuiltIn())
 						{
-							ContactView.this.tagField.addToken(tag);
+							case YouthMember:
+								showYouth(true);
+								break;
+							default:
+								showYouth(false);
+								break;
 						}
-
+						this.currentGroupRole = newGroupRole;
 					}
-
-					switch (newGroupRole.getBuiltIn())
-					{
-						case YouthMember:
-							showYouth(true);
-							break;
-						default:
-							showYouth(false);
-							break;
-					}
-					this.currentGroupRole = newGroupRole;
+					else
+						throw new IllegalStateException("No group role found for : " + newGroupRoleId);
 
 				}
 
@@ -568,7 +579,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 				Long newSectionTypeId = property.getValue();
 				if (!(currentSectionType == null && newSectionTypeId != null) && currentSectionType != null
-						&& newSectionTypeId != currentSectionType.getId())
+						&& newSectionTypeId.equals(currentSectionType.getId()))
 				{
 					SectionType newValue = updateSectionTags(newSectionTypeId);
 					currentSectionType = newValue;
@@ -779,7 +790,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		VerticalLayout advancedSearchLayout = new VerticalLayout();
 		advancedSearchLayout.setSpacing(true);
-		
+
 		HorizontalLayout tagSearchLayout = new HorizontalLayout();
 		tagSearchField = new TagField("Search Tags", true);
 		tagSearchLayout.addComponent(tagSearchField);
@@ -792,18 +803,18 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		stringSearchLayout.setWidth("100%");
 
 		advancedSearchLayout.addComponent(stringSearchLayout);
-		
+
 		Button searchButton = new Button("Search");
 		Action1<ClickEvent> searchClickAction = new SearchClickAction();
 		ButtonEventSource.fromActionOf(searchButton).subscribe(searchClickAction);
-		
+
 		advancedSearchLayout.addComponent(searchButton);
 		advancedSearchLayout.setComponentAlignment(searchButton, Alignment.MIDDLE_RIGHT);
-		
+
 		return advancedSearchLayout;
 
 	}
-	
+
 	public class SearchClickAction implements Action1<ClickEvent>
 	{
 		@Override

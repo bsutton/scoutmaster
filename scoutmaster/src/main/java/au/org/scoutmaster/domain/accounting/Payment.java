@@ -63,6 +63,7 @@ public class Payment extends BaseEntity
 	String note;
 
 	@Override
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = {"NP_UNWRITTEN_FIELD","UWF_UNWRITTEN_FIELD"}, justification = "JPA injection")
 	public String getName()
 	{
 		return paymentDate.toString() + note;

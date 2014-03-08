@@ -59,11 +59,6 @@ public class TagTest
 				daoContact.persist((Contact) contact);
 			}
 		}
-		else
-		{
-			tag = new Tag(tokenName);
-			// TagEditor<T> editor = new TagEditor<>(contact, tag, this);
-		}
 
 	}
 

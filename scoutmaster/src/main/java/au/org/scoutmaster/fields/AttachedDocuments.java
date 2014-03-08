@@ -91,7 +91,7 @@ public class AttachedDocuments extends AbstractComponent
 			{
 				AttachedDocument attachedDocument = (AttachedDocument) event.getButton().getData();
 				attachedDocument.deleteFile();
-				attachedDocuments.remove(attachedDocument.getDocument());
+				attachedDocuments.remove(attachedDocument);
 				int row = attachedDocument.getRow();
 				documentLayout.removeRow(row);
 				entitiesDocuments.remove(attachedDocument.getDocument());

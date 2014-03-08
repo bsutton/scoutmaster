@@ -4,20 +4,18 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 
-
 @Embeddable
 @Access(AccessType.FIELD)
 public class Money
 {
 	static final private int defaultPrecision = 2;
-	
+
 	private final double fixedDoubleValue;
 
 	/**
 	 * The no. of decimal places to store the number to.
 	 */
 	private final int precision;
-
 
 	Money()
 	{
@@ -30,15 +28,16 @@ public class Money
 		this.precision = defaultPrecision;
 		this.fixedDoubleValue = FixedDouble.Round(dValue, precision);
 	}
-	
+
 	public Money(final FixedDouble rhs)
 	{
 		this.precision = rhs.getPrecision();
 		this.fixedDoubleValue = FixedDouble.Round(rhs.getFixedDoubleValue(), rhs.getPrecision());
 	}
-	
+
 	/**
 	 * Casts a string to a money value.
+	 * 
 	 * @param value
 	 */
 	public Money(String amount)
@@ -50,7 +49,6 @@ public class Money
 		this.fixedDoubleValue = org.joda.money.Money.parse("AUD " + amount).getAmount().doubleValue();
 	}
 
-
 	public Money add(final Money rhs)
 	{
 		return new Money(getFixedDoubleValue() + rhs.getFixedDoubleValue());
@@ -60,12 +58,11 @@ public class Money
 	{
 		return fixedDoubleValue;
 	}
-	
+
 	private int getPrecision()
 	{
 		return precision;
 	}
-
 
 	public Money subtract(final Money rhs)
 	{
@@ -86,7 +83,7 @@ public class Money
 	{
 		return new Money(getFixedDoubleValue() * rhs);
 	}
-	
+
 	public Money multiply(double rhs)
 	{
 		return new Money(getFixedDoubleValue() * rhs);
@@ -99,7 +96,20 @@ public class Money
 
 	public boolean equals(final Money rhs)
 	{
-		return (Math.abs(getFixedDoubleValue() - rhs.getFixedDoubleValue()) < HalfAPrecision());
+		return rhs != null && (Math.abs(getFixedDoubleValue() - rhs.getFixedDoubleValue()) < HalfAPrecision());
+	}
+
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
+	{ "HE_EQUALS_USE_HASHCODE" }, justification = "Explicit implementation of equals as above.")
+	public boolean equals(final Object rhs)
+	{
+		return rhs != null && equals((Money) rhs);
+	}
+
+	public int hashCode()
+	{
+		assert false : "You can't put money into a map/hashtable as a key.";
+		return 42; // any arbitrary constant will do
 	}
 
 	public boolean lessThan(final Money rhs)
@@ -112,19 +122,20 @@ public class Money
 		return ((rhs - getFixedDoubleValue()) >= HalfAPrecision());
 	}
 
-	public boolean greaterThan(final Money rhs) 
+	public boolean greaterThan(final Money rhs)
 	{
-	    return !(getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
+		return !(getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs
+				.getFixedDoubleValue());
 	}
 
-	public boolean lessThanOrEqual(final Money rhs) 
+	public boolean lessThanOrEqual(final Money rhs)
 	{
-	    return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
+		return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
 	}
 
-	public boolean greaterThanOrEqual(final Money rhs) 
+	public boolean greaterThanOrEqual(final Money rhs)
 	{
-	    return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() > rhs.getFixedDoubleValue());
+		return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() > rhs.getFixedDoubleValue());
 	}
 
 	public String toString()
@@ -132,13 +143,11 @@ public class Money
 		return FixedDouble.toString(getFixedDoubleValue(), getPrecision());
 	}
 
-
 	private double HalfAPrecision()
 	{
 		return FixedDouble.HalfAPrecision(getPrecision());
 	}
 
-	
 	public Money multiply(double lhs, final Money rhs)
 	{
 		return new Money(lhs * rhs.getFixedDoubleValue());
@@ -165,5 +174,4 @@ public class Money
 		return defaultPrecision;
 	}
 
-	
 }
