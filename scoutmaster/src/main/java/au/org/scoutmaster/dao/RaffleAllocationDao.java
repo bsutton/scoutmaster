@@ -4,7 +4,6 @@ import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.RaffleAllocation;
-import au.org.scoutmaster.domain.RaffleAllocation_;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
@@ -26,9 +25,9 @@ public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> impl
 	{
 		JPAContainer<RaffleAllocation> container = super.createVaadinContainer();
 
-		container.sort(new Object[]
-		{ RaffleAllocation_.dateAllocated.getName(), RaffleAllocation_.allocatedTo.getName()}, new boolean[]
-		{ true, true });
+//		container.sort(new Object[]
+//		{ RaffleAllocation_.dateAllocated.getName(), new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName()}, new boolean[]
+//		{ true, true });
 		
 
 		return container;
