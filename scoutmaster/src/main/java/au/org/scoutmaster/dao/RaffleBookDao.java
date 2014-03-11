@@ -42,10 +42,19 @@ public class RaffleBookDao extends JpaBaseDao<RaffleBook, Long> implements Dao<R
 		return container;
 	}
 
-	public List<RaffleBook> findFirstUnallocated(Raffle raffle)
+	/**
+	 * returns a list of unallocated books ordered by their first book no.
+	 * @param raffle
+	 * @return
+	 */
+	public List<RaffleBook> findAllUnallocated(Raffle raffle)
 	{
-		return super.findAllByAttribute(RaffleBook_.raffle, raffle, RaffleBook_.firstNo);
-		//super.findListBySingleParameter(RaffleBook.FIND_FIRST_UNALLOCATED, RaffleBook_.raffle, raffle);
+		return super.findListBySingleParameter(RaffleBook.FIND_ALL_UNALLOCATED, RaffleBook_.raffle.getName(), raffle);
 		
+	}
+
+	public List<RaffleBook> findByAllocation(Long allocationId)
+	{
+		return super.findListBySingleParameter(RaffleBook.FIND_BY_ALLOCATION, "raffleAllocationId", allocationId);
 	}
 }
