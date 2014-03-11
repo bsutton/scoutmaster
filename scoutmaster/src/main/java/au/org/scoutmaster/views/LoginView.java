@@ -7,9 +7,7 @@ import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.validator.UsernameValidator;
 
-import com.vaadin.data.validator.AbstractValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -75,7 +73,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		usernameField.setInputPrompt("Your username");
 		usernameField.setImmediate(true);
 		usernameField.setInvalidAllowed(false);
-		usernameField.addValidator(new UsernameValidator());
 		fields.addComponent(usernameField);
 
 		// Create the password input field
@@ -84,7 +81,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 		passwordField.setRequired(true);
 		passwordField.setNullRepresentation("");
-		passwordField.addValidator(new PasswordValidator());
 
 		fields.addComponent(passwordField);
 
@@ -119,38 +115,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		usernameField.focus();
 	}
 
-	//
-	// Validator for validating the passwords
-	//
-	private static final class PasswordValidator extends AbstractValidator<String>
-	{
-		private static final long serialVersionUID = 1L;
-
-		public PasswordValidator()
-		{
-			super("The password provided is not valid");
-		}
-
-		@Override
-		protected boolean isValidValue(String value)
-		{
-			//
-			// Password must be at least 8 characters long and contain at least
-			// one number
-			//
-			if (value != null && (value.length() < 8 || !value.matches(".*")))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public Class<String> getType()
-		{
-			return String.class;
-		}
-	}
 
 	@Override
 	public void buttonClick(ClickEvent event)
