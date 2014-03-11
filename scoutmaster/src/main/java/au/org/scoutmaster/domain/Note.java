@@ -79,7 +79,7 @@ public class Note extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return toString();
+		return "Note: " + toString();
 	}
 
 	
