@@ -49,7 +49,7 @@ public class Raffle extends BaseEntity
 	/**
 	 * Date the raffle commences
 	 */
-	Date startDate;
+	Date startDate= new Date(new java.util.Date().getTime());
 	
 	
 	/**
