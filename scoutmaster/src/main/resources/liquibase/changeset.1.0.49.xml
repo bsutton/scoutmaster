@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<changeSet author="bsutton" id="1.0.49.1">
+		<addColumn tableName="Contact">
+			<column name="phone1PhoneNo" type="VARCHAR(255)" />
+			<column name="phone1PhoneType" type="INT(10)" />
+			<column name="phone1PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.2">
+		<addColumn tableName="Contact">
+			<column name="phone2PhoneNo" type="VARCHAR(255)" />
+			<column name="phone2PhoneType" type="INT(10)" />
+			<column name="phone2PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.3">
+		<addColumn tableName="Contact">
+			<column name="phone3PhoneNo" type="VARCHAR(255)" />
+			<column name="phone3PhoneType" type="INT(10)" />
+			<column name="phone3PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.4">
+		<addColumn tableName="Organisation">
+			<column name="phone1PhoneNo" type="VARCHAR(255)" />
+			<column name="phone1PhoneType" type="INT(10)" />
+			<column name="phone1PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.5">
+		<addColumn tableName="Organisation">
+			<column name="phone2PhoneNo" type="VARCHAR(255)" />
+			<column name="phone2PhoneType" type="INT(10)" />
+			<column name="phone2PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.6">
+		<addColumn tableName="Organisation">
+			<column name="phone3PhoneNo" type="VARCHAR(255)" />
+			<column name="phone3PhoneType" type="INT(10)" />
+			<column name="phone3PrimaryPhone" type="BIT(1)"  defaultValueNumeric="0" />
+		</addColumn>
+	</changeSet>
+
+	<!-- move the phone data to its now home -->
+	<changeSet author="bsutton" id="1.0.49.7">
+		<sql>update Contact c
+			join Phone p
+			on c.phone1_id = p.id
+			set
+			c.phone1PhoneNo = p.PhoneNo, c.phone1PhoneType = p.PhoneType,
+			c.phone1PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.8">
+		<sql>update Contact c
+			join Phone p
+			on c.phone2_id = p.id
+			set
+			c.phone2PhoneNo = p.PhoneNo, c.phone2PhoneType = p.PhoneType,
+			c.phone2PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.9">
+		<sql>update Contact c
+			join Phone p
+			on c.phone3_id = p.id
+			set
+			c.phone3PhoneNo = p.PhoneNo, c.phone3PhoneType = p.PhoneType,
+			c.phone3PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.10">
+		<sql>update Organisation c
+			join Phone p
+			on c.phone1_id = p.id
+			set
+			c.phone1PhoneNo = p.PhoneNo, c.phone1PhoneType = p.PhoneType,
+			c.phone1PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.11">
+		<sql>update Organisation c
+			join Phone p
+			on c.phone2_id = p.id
+			set
+			c.phone2PhoneNo = p.PhoneNo, c.phone2PhoneType = p.PhoneType,
+			c.phone2PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.12">
+		<sql>update Organisation c
+			join Phone p
+			on c.phone3_id = p.id
+			set
+			c.phone3PhoneNo = p.PhoneNo, c.phone3PhoneType = p.PhoneType,
+			c.phone3PrimaryPhone = p.PrimaryPhone
+		</sql>
+	</changeSet>
+
+	<!-- remove the old fields -->
+	
+	<changeSet author="bsutton" id="1.0.49.13">
+		<dropForeignKeyConstraint baseTableName="Contact"
+			constraintName="FK_Contact_PHONE1_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.14">
+		<dropForeignKeyConstraint baseTableName="Contact"
+			constraintName="FK_Contact_PHONE2_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.15">
+		<dropForeignKeyConstraint baseTableName="Contact"
+			constraintName="FK_Contact_PHONE3_ID" />
+	</changeSet>
+	
+
+	<changeSet author="bsutton" id="1.0.49.16">
+		<dropForeignKeyConstraint baseTableName="Organisation"
+			constraintName="FK_Organisation__phone1_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.17">
+		<dropForeignKeyConstraint baseTableName="Organisation"
+			constraintName="FK_Organisation__phone2_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.18">
+		<dropForeignKeyConstraint baseTableName="Organisation"
+			constraintName="FK_Organisation__phone3_ID" />
+	</changeSet>
+	
+	
+	<changeSet author="bsutton" id="1.0.49.19">
+		<dropColumn columnName="phone1_id" tableName="Contact" />
+		<dropColumn columnName="phone2_id" tableName="Contact" />
+		<dropColumn columnName="phone3_id" tableName="Contact" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.49.20">
+		<dropColumn columnName="phone1_id" tableName="Organisation" />
+		<dropColumn columnName="phone2_id" tableName="Organisation" />
+		<dropColumn columnName="phone3_id" tableName="Organisation" />
+	</changeSet>
+
+	<!-- Now remove the phone table -->
+	<changeSet author="bsutton" id="1.0.49.21">
+		<dropTable cascadeConstraints="true" tableName="Phone" />
+	</changeSet>
+	
+</databaseChangeLog>
