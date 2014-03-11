@@ -7,6 +7,8 @@ import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
@@ -23,8 +25,10 @@ public class SessionHistory  extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
+	@Temporal(value=TemporalType.TIMESTAMP)
 	Date start = new Date();
 	
+	@Temporal(value=TemporalType.TIMESTAMP)
 	Date end = new Date();
 	
 	@ManyToOne(targetEntity=User.class)
