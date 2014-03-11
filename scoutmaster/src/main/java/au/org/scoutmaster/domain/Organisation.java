@@ -5,8 +5,11 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -88,13 +91,31 @@ public class Organisation extends BaseEntity
 	@Transient
 	private Phone primaryPhone;
 
-	@OneToOne(targetEntity=Phone.class)
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+
+	})
 	private Phone phone1 = new Phone();
 
-	@OneToOne(targetEntity=Phone.class)
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+
+	})
 	private Phone phone2 = new Phone();
 
-	@OneToOne(targetEntity=Phone.class)
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+
+	})
 	private Phone phone3 = new Phone();
 	
 

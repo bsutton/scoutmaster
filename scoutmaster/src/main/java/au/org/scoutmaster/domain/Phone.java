@@ -2,10 +2,9 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.Table;
 
 /**
  * Used to store a phone no.
@@ -13,19 +12,15 @@ import javax.persistence.Table;
  * @author bsutton
  *
  */
-@Entity(name="Phone")
-@Table(name="Phone")
+@Embeddable
 @Access(AccessType.FIELD)
 @NamedQueries(
 {
 	@NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"),
 })
 
-public class Phone extends BaseEntity
+public class Phone 
 {
-	private static final long serialVersionUID = 1L;
-
-
 	public static final String FIND_BY_NO = "Phone.findByNo";
 
 	/**
@@ -89,7 +84,6 @@ public class Phone extends BaseEntity
 	{
 		return phoneNo;
 	}
-	@Override
 	public String getName()
 	{
 		return toString();
