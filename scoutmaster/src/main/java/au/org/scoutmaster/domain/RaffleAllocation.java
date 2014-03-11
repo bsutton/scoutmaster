@@ -8,6 +8,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -39,7 +40,7 @@ public class RaffleAllocation extends BaseEntity
 	/**
 	 * The date the book was allocated to a Contact.
 	 */
-	private Date dateAllocated;
+	private Date dateAllocated = new Date(new java.util.Date().getTime());
 
 	/**
 	 * The contact that issued the book to the 'allocatedTo' contact.
@@ -49,7 +50,7 @@ public class RaffleAllocation extends BaseEntity
 	/**
 	 * The date the book was actually given to the Contact.
 	 */
-	private Date dateIssued;
+	private Date dateIssued = new Date(new java.util.Date().getTime());
 	
 	/**
 	 * Any special notes about the allocation
@@ -59,6 +60,7 @@ public class RaffleAllocation extends BaseEntity
 	/**
 	 * The set of raffle books allocated by this allocation.
 	 */
+	@OneToMany(mappedBy="raffleAllocation")
 	private Set<RaffleBook> books = new HashSet<>();
 	
 	public String getName()
