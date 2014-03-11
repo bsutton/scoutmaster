@@ -20,94 +20,91 @@ import au.org.scoutmaster.domain.accounting.Money;
  * Represents a Raffle ticket Book that has been sent from Branch to be sold.
  * 
  * @author bsutton
- *
+ * 
  */
-@Entity(name="RaffleBook")
-@Table(name="RaffleBook")
+@Entity(name = "RaffleBook")
+@Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
-
 @NamedQueries(
-{ @NamedQuery(name = RaffleBook.FIND_FIRST_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation is null order by rafflebook.firstNo")
-})
-
-
+{
+		@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
+		@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
 public class RaffleBook extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
-	public static final String FIND_FIRST_UNALLOCATED = "RaffleBook.findFirstUnallocated";
-	
+
+	public static final String FIND_ALL_UNALLOCATED = "RaffleBook.findAllUnallocated";
+
+	public static final String FIND_BY_ALLOCATION = "RaffleBook.findByAllocation";
+
 	/**
 	 * The raffle this book is attached to.
 	 */
-	@ManyToOne(targetEntity=Raffle.class)
+	@ManyToOne(targetEntity = Raffle.class)
 	Raffle raffle;
-	
+
 	/**
-	 * The allocation that this book was issued to a Contact under.
-	 * Will be null if the book hasn't been issued.
+	 * The allocation that this book was issued to a Contact under. Will be null
+	 * if the book hasn't been issued.
 	 */
+	@ManyToOne(optional = true)
 	RaffleAllocation raffleAllocation;
-	
+
 	/**
 	 * The no. of tickets in the book.
 	 */
 	private Integer ticketCount = new Integer(10);
-	
 
 	/**
 	 * The first ticket no in the book.
 	 */
 	private Integer firstNo = new Integer(0);
-	
+
 	/**
 	 * The contact the book was allocated to.
 	 */
-//	@ManyToOne(targetEntity=Contact.class)
-//	private Contact allocatedTo;
-//	
-//	/**
-//	 * The date the book was allocated to a Contact.
-//	 */
-//	private Date dateAllocated;
-//
-//	/**
-//	 * The contact that issued the book to the 'allocatedTo' contact.
-//	 */
-//	private Contact issuedBy;
-//
-//	/**
-//	 * The date the book was actually given to the Contact.
-//	 */
-//	private Date dateIssued;
-	
+	// @ManyToOne(targetEntity=Contact.class)
+	// private Contact allocatedTo;
+	//
+	// /**
+	// * The date the book was allocated to a Contact.
+	// */
+	// private Date dateAllocated;
+	//
+	// /**
+	// * The contact that issued the book to the 'allocatedTo' contact.
+	// */
+	// private Contact issuedBy;
+	//
+	// /**
+	// * The date the book was actually given to the Contact.
+	// */
+	// private Date dateIssued;
+
 	/**
 	 * The no. of tickets that have been returned.
 	 */
 	private Integer ticketsReturned = new Integer(0);
-	
+
 	/**
 	 * The amount of money returned (in $) for this book.
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision"))
-	})
-	
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
 	private Money amountReturned = new Money(0);
-	
+
 	/**
 	 * The date the money and tickets stubs were returned.
 	 */
 	private Date dateReturned;
-	
+
 	/**
 	 * The contact that collected the money/tickets
 	 */
 	private Contact collectedBy;
-	
+
 	/**
 	 * True if a receipt has been issued.
 	 */
@@ -117,13 +114,14 @@ public class RaffleBook extends BaseEntity
 	 * Any special notes about the book
 	 */
 	private String notes;
-	
-	
+
 	public String getName()
 	{
-		return this.firstNo + (this.raffleAllocation == null ? " Available" : " Allocated To: " + this.raffleAllocation.getAllocatedTo().getFullname());
+		return this.firstNo
+				+ (this.raffleAllocation == null ? " Available" : " Allocated To: "
+						+ this.raffleAllocation.getAllocatedTo().getFullname());
 	}
-	
+
 	public Integer getTicketCount()
 	{
 		return ticketCount;
@@ -217,7 +215,7 @@ public class RaffleBook extends BaseEntity
 	public void setRaffleAllocation(RaffleAllocation allocation)
 	{
 		this.raffleAllocation = allocation;
-		
+
 	}
 
 }
