@@ -26,16 +26,7 @@ public class JasperSettingsImpl implements JasperSettings
 		return VaadinSession.getCurrent().getService().getBaseDirectory();
 	}
 
-	@Override
-	public File getInitParameterRealPath(String paramName)
-	{
-		 Properties parameters = VaadinSession.getCurrent().getConfiguration().getInitParameters();
-		 
-		 String value = (String) parameters.get(paramName);
-		 
-		 return new File(VaadinSession.getCurrent().getService().getBaseDirectory(), value);
-	}
-
+	
 	@Override
 	public File getReportFile(String reportName)
 	{
