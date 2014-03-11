@@ -9,10 +9,13 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -45,8 +48,9 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname")
-, @NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
+{
+		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname"),
+		@NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
 public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
@@ -79,10 +83,10 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private String lastname = "";
 
 	/**
-	 * This is an amalgum of the firstname and lastname i.e firstname + " " + lastname
-	 * This is redundant but it makes it easier to create lists which are sorted by the full name
-	 * as the metamodel doesn't expose transient fields so we can filter or sort on a transient
-	 * field in many scenarios.
+	 * This is an amalgum of the firstname and lastname i.e firstname + " " +
+	 * lastname This is redundant but it makes it easier to create lists which
+	 * are sorted by the full name as the metamodel doesn't expose transient
+	 * fields so we can filter or sort on a transient field in many scenarios.
 	 */
 	@SuppressWarnings("unused")
 	private String fullname = "";
@@ -103,25 +107,41 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	/**
 	 * Contact fields
 	 */
-	
+
 	/**
-	 * If true then the contact is not to be included in any bulk communications.
+	 * If true then the contact is not to be included in any bulk
+	 * communications.
 	 */
 	private Boolean doNotSendBulkCommunications = false;
 
 	@FormField(displayName = "Phone 1")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "PHONE1_ID")
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+
+	})
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "PHONE2_ID")
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+
+	})
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
-	@OneToOne(targetEntity = Phone.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "PHONE3_ID")
+	@Embedded
+	@AttributeOverrides(
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+
+	})
 	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
@@ -185,10 +205,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	// records.
 
 	/**
-	 * The date the member was invested into the movement, null if they haven't been invested.
+	 * The date the member was invested into the movement, null if they haven't
+	 * been invested.
 	 */
 	private Date dateMemberInvested;
-	
+
 	/** The actual section the Youth or Adult member is attached to. */
 	@FormField(displayName = "Section")
 	@ManyToOne(optional = true, targetEntity = SectionType.class)
@@ -267,7 +288,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true)
+	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade =
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
@@ -278,7 +300,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * 
 	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval=true)
+	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade =
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
@@ -286,17 +309,20 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
 	// FetchType.EAGER)
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, targetEntity = Tag.class)
+	@ManyToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER, targetEntity = Tag.class)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "attachedContact", orphanRemoval=true)
+	@OneToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "attachedContact", orphanRemoval = true)
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "withContact", targetEntity = Activity.class, orphanRemoval=true)
+	@OneToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "withContact", targetEntity = Activity.class, orphanRemoval = true)
 	private List<Activity> activities = new ArrayList<>();
 
 	/**
@@ -307,8 +333,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 */
 	@FormField(displayName = "Import ID")
 	private String importId;
-
-	
 
 	public Contact()
 	{
@@ -337,7 +361,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		}
 		return found;
 	}
-	
+
 	public String getImportId()
 	{
 		return importId;
@@ -683,7 +707,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.activities = activites;
 	}
 
-
 	public String getWorkEmail()
 	{
 		return workEmail;
@@ -870,7 +893,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	public void setFullname(String fullname)
 	{
-		// we ignore this argument as fullname is always an amalgam of the firstname and lastname;
+		// we ignore this argument as fullname is always an amalgam of the
+		// firstname and lastname;
 		this.fullname = firstname + " " + lastname;
 	}
 
@@ -882,7 +906,6 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		// activites.clear();
 		notes.clear();
 	}
-
 
 	@Override
 	public String getName()
