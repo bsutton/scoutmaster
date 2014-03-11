@@ -1,22 +1,34 @@
 package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
+import au.com.vaadinutils.crud.CrudAction;
+import au.com.vaadinutils.crud.CrudActionDelete;
+import au.com.vaadinutils.crud.CrudActionPrint;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.jasper.JasperManager;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.RaffleBookDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.RaffleAllocation;
 import au.org.scoutmaster.domain.RaffleAllocation_;
+import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.Raffle_;
+import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -35,18 +47,63 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 		super(parentCrud, Raffle.class, RaffleAllocation.class, Raffle_.id, RaffleAllocation_.raffle.getName());
 
 		JPAContainer<RaffleAllocation> container = new DaoFactory().getRaffleAllocationDao().createVaadinContainer();
-		container.sort(new String[]
-		{ RaffleAllocation_.dateAllocated.getName(), RaffleAllocation_.allocatedTo.getName() }, new boolean[]
-		{ true, true });
+//		container.sort(new String[]
+//		{ RaffleAllocation_.dateAllocated.getName(), RaffleAllocation_.allocatedTo.getName() }, new boolean[]
+//		{ true, true });
 
 		Builder<RaffleAllocation> builder = new HeadingPropertySet.Builder<RaffleAllocation>();
 		builder.addColumn("Allocated To", RaffleAllocation_.allocatedTo)
 		.addColumn("Date Allocated",RaffleAllocation_.dateAllocated)
-		.addColumn("Issued To", RaffleAllocation_.allocatedTo)
+		.addColumn("Issued By", RaffleAllocation_.issuedBy)
 		.addColumn("Date Issued",RaffleAllocation_.dateIssued);
 		
 		super.init(RaffleAllocation.class, container, builder.build());
+	}
 
+	class AllocationCrudActionPrint extends CrudActionPrint<RaffleAllocation>
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected JasperManager prepareReport(EntityItem<RaffleAllocation> entity) throws JRException
+		{
+			RaffleAllocation allocation =  entity.getEntity();
+			JasperManager manager = new JasperManager(EntityManagerProvider.getEntityManager(), "RaffleAllocation.jasper"
+					, new JasperSettingsImpl());
+			manager.bindParameter("allocationId", allocation.getId());
+			
+			return manager;
+		}
+	}
+	
+	@Override
+	protected List<CrudAction<RaffleAllocation>> getCrudActions()
+	{
+		List<CrudAction<RaffleAllocation>> actions = new LinkedList<CrudAction<RaffleAllocation>>();
+		CrudAction<RaffleAllocation> crudAction = new CrudActionDelete<RaffleAllocation>();
+		actions.add(crudAction);
+		
+		actions.add(new AllocationCrudActionPrint());
+		
+
+		return actions;
+	}
+
+
+	@Override
+	protected void preChildDelete(Object entityId)
+	{
+		// If the allocation is being deleted then we need to detach all RaffleBooks from this allocation.
+		
+		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
+		
+		List<RaffleBook> books = daoRaffleBook.findByAllocation((Long)entityId);
+		
+		for (RaffleBook book : books)
+		{
+			book.setRaffleAllocation(null);
+		}
+		
 	}
 
 	@Override
@@ -63,7 +120,7 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 		
 
 		ComboBox allocatedTo = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Allocated By")
+				.setLabel("Allocated To")
 				.setField(RaffleAllocation_.allocatedTo)
 				.setListFieldName(Contact_.fullname).build();
 		allocatedTo.setFilteringMode(FilteringMode.CONTAINS);
