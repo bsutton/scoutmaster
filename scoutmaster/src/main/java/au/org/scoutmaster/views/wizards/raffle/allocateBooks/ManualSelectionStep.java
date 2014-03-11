@@ -1,5 +1,9 @@
 package au.org.scoutmaster.views.wizards.raffle.allocateBooks;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
@@ -9,6 +13,7 @@ import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.RaffleBook_;
@@ -20,14 +25,19 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.VerticalLayout;
 
-public class SelectContactStep  implements WizardStep
+/**
+ * Select a non-contiguous 
+ * @author bsutton
+ *
+ */
+public class ManualSelectionStep  implements WizardStep, SelectStep
 {
 	@SuppressWarnings("unused")
-	private static Logger logger = LogManager.getLogger(SelectContactStep.class);
+	private static Logger logger = LogManager.getLogger(ManualSelectionStep.class);
 
-	@SuppressWarnings("unused")
 	private RaffleBookAllocationWizardView setupWizardView;
 
 	private ComboBox allocatedToContact;
@@ -36,7 +46,11 @@ public class SelectContactStep  implements WizardStep
 
 	private ComboBox issuedBy;
 
-	public SelectContactStep(RaffleBookAllocationWizardView setupWizardView)
+	private List<Allocation> allocations = new ArrayList<>();
+
+	private TwinColSelect twinCol;
+
+	public ManualSelectionStep(RaffleBookAllocationWizardView setupWizardView)
 	{
 		this.setupWizardView = setupWizardView;
 	}
@@ -63,32 +77,38 @@ public class SelectContactStep  implements WizardStep
 		overviewForm.setColumnFieldWidth(0, 200);
 		FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
 
+		issuedBy= formHelper.new EntityFieldBuilder<Contact>()
+				.setLabel("Issued By")
+				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.issuedBy).getName())
+				.setListClass(Contact.class)
+				.setListFieldName(Contact_.fullname).build();
+		issuedBy.setFilteringMode(FilteringMode.CONTAINS);
+		issuedBy.setTextInputAllowed(true);
+
 		allocatedToContact = formHelper.new EntityFieldBuilder<Contact>()
 				.setLabel("Allocate To")
 				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
+				.setListClass(Contact.class)
 				.setListFieldName(Contact_.fullname).build();
 		allocatedToContact.setFilteringMode(FilteringMode.CONTAINS);
 		allocatedToContact.setTextInputAllowed(true);
 		allocatedToContact.setDescription("The Contact to issue tickets to.");
-		
-		noOfBooksField = overviewForm.addTextField("No. of Books");
-		noOfBooksField.setDescription("The no. of books to allocate to this Contact");
-		
-		issuedBy= formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Issued By")
-				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.issuedBy).getName())
-				.setListFieldName(Contact_.fullname).build();
-		issuedBy.setFilteringMode(FilteringMode.CONTAINS);
-		issuedBy.setTextInputAllowed(true);
-		allocatedToContact.setDescription("The Contact that issue tickets.");
 
-		
+		twinCol = new TwinColSelect();
+
+		List<RaffleBook> availableBooks = new ArrayList<>();
+		for (RaffleBook book : availableBooks)
+		{
+			twinCol.addItem(book);
+		}
+
 		layout.addComponent(overviewForm);
 		
 		Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
 
 		layout.addComponent(labelAllocate);
-
+		
+		allocatedToContact.focus();
 
 		return layout;
 	}
@@ -96,10 +116,30 @@ public class SelectContactStep  implements WizardStep
 	@Override
 	public boolean onAdvance()
 	{
+		Raffle raffle = setupWizardView.getRaffle();
+		
+		@SuppressWarnings("unchecked")
+		Collection<RaffleBook> selectedIds = (Collection<RaffleBook>) twinCol.getVisibleItemIds();
+		preAllocateBooks(raffle, getAllocatedContact(), selectedIds);
+		
+		
 		return true;
 	}
 
-	@Override
+
+	private void preAllocateBooks(Raffle raffle, Contact allocatedTo, Collection<RaffleBook> books)
+	{
+		List<RaffleBook> bookAllocation = new ArrayList<>();
+		
+		for (RaffleBook book: books)
+		{
+			bookAllocation.add(book);
+		}
+		Allocation allocation = new Allocation(allocatedTo, bookAllocation);
+		this.allocations .add(allocation);
+		
+	}
+
 	public boolean onBack()
 	{
 		return true;
@@ -120,6 +160,12 @@ public class SelectContactStep  implements WizardStep
 	public Contact getIssuedByContact()
 	{
 		return (Contact) ((EntityItem<Contact>)issuedBy.getItem(issuedBy.getValue())).getEntity();
+	}
+
+	@Override
+	public List<Allocation> getAllocations()
+	{
+		return this.allocations;
 	}
 
 }

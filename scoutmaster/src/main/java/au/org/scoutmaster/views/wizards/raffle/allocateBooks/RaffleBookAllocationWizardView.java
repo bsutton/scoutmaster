@@ -29,11 +29,15 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 
 	public static final String NAME = "RaffleBookAllocationWizardView";
 
+	private static final String SELECTION_STEP = "SelectionStep";
+
+	private static final String ALLOCATION_STEP = "AllocationStep";
+
 	private Wizard wizard;
 
 	private WelcomeStep welcomeStep;
-	private SelectContactStep selectContactStep;
-	private BooksAllocatedStep booksAllocatedStep;
+	private SelectStep selectStep;
+	private AllocationStep allocationStep;
 	private FinalStep finalStep;
 
 	/**
@@ -61,14 +65,14 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		return welcomeStep;
 	}
 
-	public BooksAllocatedStep getBooksAllocatedStep()
+	public AllocationStep getAllocatedStep()
 	{
-		return booksAllocatedStep;
+		return allocationStep;
 	}
 
-	public SelectContactStep getSelectContactStep()
+	public SelectStep getSelectStep()
 	{
-		return selectContactStep;
+		return selectStep;
 	}
 
 
@@ -77,8 +81,8 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	{
 
 		welcomeStep = new WelcomeStep(this);
-		selectContactStep = new SelectContactStep(this);
-		booksAllocatedStep = new BooksAllocatedStep(this);
+		selectStep = new BulkSelectionStep(this);
+		allocationStep = new BulkAllocationStep(this);
 		finalStep = new FinalStep(this);
 
 		// create the Wizard component and add the steps
@@ -86,9 +90,10 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
 		wizard.addStep(welcomeStep, "Welcome");
-		wizard.addStep(selectContactStep, "SelectContact");
-		wizard.addStep(booksAllocatedStep, "AllocateBooks");
+		wizard.addStep(selectStep, SELECTION_STEP);
+		wizard.addStep(allocationStep, ALLOCATION_STEP);
 		wizard.addStep(finalStep, "Final");
+
 		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
 
@@ -118,14 +123,14 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	@Override
 	public void wizardCompleted(WizardCompletedEvent event)
 	{
-		this.endWizard("Setup Completed!");
+		this.endWizard("Allocation Completed");
 
 	}
 
 	@Override
 	public void wizardCancelled(WizardCancelledEvent event)
 	{
-		this.endWizard("Setup Cancelled!");
+		this.endWizard("Allocation Cancelled!");
 
 	}
 
@@ -141,6 +146,13 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		return this.raffle;
 	}
 
-
-
+	public void addAllocationStep(SelectStep selectionStep, AllocationStep allocationStep)
+	{
+		wizard.removeStep(SELECTION_STEP);
+		wizard.removeStep(ALLOCATION_STEP);
+		wizard.addStep(selectionStep, SELECTION_STEP, 1);
+		wizard.addStep(allocationStep, ALLOCATION_STEP, 2);
+		this.selectStep = selectionStep;
+		this.allocationStep = allocationStep;
+	}
 }
