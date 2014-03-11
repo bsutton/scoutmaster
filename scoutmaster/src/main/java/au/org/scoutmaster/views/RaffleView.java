@@ -53,6 +53,7 @@ public class RaffleView extends BaseCrudView<Raffle> implements View
 		buildOverviewTab();
 		
 		buildRaffleBookTab();
+		buildRaffleAllocationTab();
 
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
@@ -68,6 +69,17 @@ public class RaffleView extends BaseCrudView<Raffle> implements View
 		super.addChildCrudListener(raffleBookView);
 
 		tabs.addTab(raffleBookView, "Books");
+		
+	}
+
+	private void buildRaffleAllocationTab()
+	{
+		// Now add the child raffle book crud
+		RaffleAllocationChildView raffleAllocationView = new RaffleAllocationChildView(this);
+		raffleAllocationView.setSizeFull();
+		super.addChildCrudListener(raffleAllocationView);
+
+		tabs.addTab(raffleAllocationView, "Allocations");
 		
 	}
 
@@ -124,7 +136,7 @@ public class RaffleView extends BaseCrudView<Raffle> implements View
 
 		Builder<Raffle> builder = new HeadingPropertySet.Builder<Raffle>();
 		builder.addColumn("Name", Raffle_.name).addColumn("Start Date", Raffle_.startDate)
-				.addColumn("Collections Date", Raffle_.collectionsDate);
+				.addColumn("Collection Date", Raffle_.collectionsDate);
 
 		super.init(Raffle.class, container, builder.build());
 	}
