@@ -12,12 +12,12 @@ import au.com.vaadinutils.reportFilter.ReportView;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
 @Menu(display = "Calendar Report", path = "Reports")
-public class CalendarReport extends ReportView
+public class CalendarReportView extends ReportView
 {
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "CalendarReport";
 
-	public CalendarReport() throws JRException
+	public CalendarReportView() throws JRException
 	{
 		super("Calendar", new JasperManager(EntityManagerProvider.getEntityManager(), "EventCalendar.jasper",
 				new JasperSettingsImpl()));

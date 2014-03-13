@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import au.com.noojee.vaadin.help.HelpSplitPanel;
-
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
@@ -38,9 +36,9 @@ public class HelpWrappingViewProvider implements ViewProvider
 	/**
 	 * The list of views is automatically retrieved from the VaadinPageEnum enum
 	 */
-	HelpWrappingViewProvider()
+	public HelpWrappingViewProvider()
 	{
-		for (VaadinPageEnum page : VaadinPageEnum.values())
+		for (ScoutmasterViewEnum page : ScoutmasterViewEnum.values())
 		{
 			addView(page);
 		}
@@ -97,15 +95,15 @@ public class HelpWrappingViewProvider implements ViewProvider
 		return helpPanel;
 	}
 
-	private void addView(VaadinPageEnum page2)
+	private void addView(ScoutmasterViewEnum view)
 	{
-		if (page2.noHelp())
+		if (view.noHelp())
 		{
-			viewsWithoutHelp.put(page2.getTitle(), page2.getViewClass());
+			viewsWithoutHelp.put(view.getTitle(), view.getViewClass());
 		}
 		else
 		{
-			views.put(page2.getTitle(), page2.getViewClass());
+			views.put(view.getTitle(), view.getViewClass());
 		}
 
 	}

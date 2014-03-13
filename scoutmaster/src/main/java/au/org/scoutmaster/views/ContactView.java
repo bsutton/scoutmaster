@@ -34,6 +34,8 @@ import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.fields.TagField;
 import au.org.scoutmaster.forms.EmailForm;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
@@ -67,7 +69,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @Menu(display = "Contacts")
-public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>
+public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
 	@Override
@@ -820,5 +822,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		{
 			ContactView.super.triggerFilter();
 		}
+	}
+
+	@Override
+	public HelpPageIdentifier getHelpId()
+	{
+		return HelpPageIdentifier.ContactView;
 	}
 }

@@ -1,43 +1,21 @@
 package au.org.scoutmaster.application;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
 import au.com.vaadinutils.menu.MenuBuilder;
-import au.com.vaadinutils.menu.ViewMap;
 import au.com.vaadinutils.util.DeadlockFinder;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
-import au.org.scoutmaster.views.ActivityView;
-import au.org.scoutmaster.views.ChangePasswordView;
-import au.org.scoutmaster.views.ContactView;
-import au.org.scoutmaster.views.EventView;
+import au.org.scoutmaster.help.HelpWrappingViewProvider;
+import au.org.scoutmaster.help.ScoutmasterViewEnum;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
-import au.org.scoutmaster.views.LogoutView;
-import au.org.scoutmaster.views.OrganisationTypeView;
-import au.org.scoutmaster.views.OrganisationView;
-import au.org.scoutmaster.views.QualificationTypeView;
-import au.org.scoutmaster.views.RaffleView;
 import au.org.scoutmaster.views.ResetPasswordView;
-import au.org.scoutmaster.views.SectionTypeView;
-import au.org.scoutmaster.views.TagView;
-import au.org.scoutmaster.views.UserView;
-import au.org.scoutmaster.views.calendar.CalendarView;
-import au.org.scoutmaster.views.reports.CalendarReport;
-import au.org.scoutmaster.views.reports.ExternalProspectsReport;
-import au.org.scoutmaster.views.reports.MemberAddressReport;
-import au.org.scoutmaster.views.reports.MemberReport;
-import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
-import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
-import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
-import au.org.scoutmaster.views.wizards.raffle.allocateBooks.RaffleBookAllocationWizardView;
-import au.org.scoutmaster.views.wizards.raffle.importBooks.RaffleBookImportWizardView;
 import au.org.scoutmaster.views.wizards.setup.GroupSetupWizardView;
 
 import com.vaadin.annotations.Push;
@@ -75,8 +53,6 @@ public class NavigatorUI extends UI
 
 	private MenuBar menubar;
 
-	private ArrayList<ViewMap> viewMap = new ArrayList<>();
-
 	private VerticalLayout mainLayout;
 
 	/*
@@ -94,45 +70,7 @@ public class NavigatorUI extends UI
 		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 		daoSectionType.cacheSectionTypes();
 
-		viewMap.add(new ViewMap("", ContactView.class));
-		viewMap.add(new ViewMap(ContactView.NAME, ContactView.class));
-		viewMap.add(new ViewMap(BulkEmailWizardView.NAME, BulkEmailWizardView.class));
-		viewMap.add(new ViewMap(BulkSMSWizardView.NAME, BulkSMSWizardView.class));
-		viewMap.add(new ViewMap(CalendarView.NAME, CalendarView.class));
-		viewMap.add(new ViewMap(EventView.NAME, EventView.class));
-		viewMap.add(new ViewMap(CalendarReport.NAME, CalendarReport.class));
-		viewMap.add(new ViewMap(ExternalProspectsReport.NAME, ExternalProspectsReport.class));
-		viewMap.add(new ViewMap(MemberReport.NAME, MemberReport.class));
-		viewMap.add(new ViewMap(MemberAddressReport.NAME, MemberAddressReport.class));
-		
-		// Wizards
-		viewMap.add(new ViewMap(GroupSetupWizardView.NAME, GroupSetupWizardView.class));
-		viewMap.add(new ViewMap(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class));
-		viewMap.add(new ViewMap(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class));
-		viewMap.add(new ViewMap(ImportWizardView.NAME, ImportWizardView.class));
-
-		
-		// Admin menu
-		viewMap.add(new ViewMap(ActivityView.NAME, ActivityView.class));
-		viewMap.add(new ViewMap(OrganisationView.NAME, OrganisationView.class));
-		viewMap.add(new ViewMap(OrganisationTypeView.NAME, OrganisationTypeView.class));
-		viewMap.add(new ViewMap(QualificationTypeView.NAME, QualificationTypeView.class));
-		viewMap.add(new ViewMap(RaffleView.NAME, RaffleView.class));
-		viewMap.add(new ViewMap(SectionTypeView.NAME, SectionTypeView.class));
-		viewMap.add(new ViewMap(ChangePasswordView.NAME, ChangePasswordView.class));
-		viewMap.add(new ViewMap(TagView.NAME, TagView.class));
-		viewMap.add(new ViewMap(UserView.NAME, UserView.class));
-		
-
-		
-		// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
-		// SectionBulkEmailWizard.class));
-
-		viewMap.add(new ViewMap(LoginView.NAME, LoginView.class));
-		viewMap.add(new ViewMap(LogoutView.NAME, LogoutView.class));
-		viewMap.add(new ViewMap(ForgottenPasswordView.NAME, ForgottenPasswordView.class));
-		viewMap.add(new ViewMap(ResetPasswordView.NAME, ResetPasswordView.class));
-
+	
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
 		mainLayout.setSpacing(true);
@@ -143,11 +81,16 @@ public class NavigatorUI extends UI
 
 		final Navigator navigator = new Navigator(this, viewContainer);
 
-		// Wire up the navigation
-		for (final ViewMap viewmap : this.viewMap)
-		{
-			navigator.addView(viewmap.getViewName(), viewmap.getView());
-		}
+		// create our custom provider which will wrap all views in a helpSplitPannel
+		HelpWrappingViewProvider provider = new HelpWrappingViewProvider();
+		navigator.addProvider(provider);
+
+//
+//		// Wire up the navigation
+//		for (final ViewMapping viewmap : this.viewMap)
+//		{
+//			navigator.addView(viewmap.getViewName(), viewmap.getView());
+//		}
 
 		mainLayout.addComponent(viewContainer);
 		mainLayout.setExpandRatio(viewContainer, 1.0f);
@@ -219,7 +162,7 @@ public class NavigatorUI extends UI
 					// it.
 					if (NavigatorUI.this.menubar == null)
 					{
-						NavigatorUI.this.menubar = new MenuBuilder(navigator, viewMap).build();
+						NavigatorUI.this.menubar = new MenuBuilder(navigator, ScoutmasterViewEnum.getViewMap()).build();
 						NavigatorUI.this.menubar.setWidth("100%");
 						mainLayout.addComponentAsFirst(menubar);
 					}
