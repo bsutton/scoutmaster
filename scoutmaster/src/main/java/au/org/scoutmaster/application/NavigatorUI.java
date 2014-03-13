@@ -80,6 +80,7 @@ public class NavigatorUI extends UI
 		viewContainer.setHeight("100%");
 
 		final Navigator navigator = new Navigator(this, viewContainer);
+		navigator.addView("", ScoutmasterViewEnum.getDefaultView());
 
 		// create our custom provider which will wrap all views in a helpSplitPannel
 		HelpWrappingViewProvider provider = new HelpWrappingViewProvider();

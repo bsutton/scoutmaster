@@ -114,4 +114,18 @@ public enum ScoutmasterViewEnum
 		return mappings;
 	}
 
+	public static Class<? extends View> getDefaultView()
+	{
+		ScoutmasterViewEnum defaultView = null;
+		for ( ScoutmasterViewEnum value : values())
+		{
+			if (value.defaultView)
+			{
+				defaultView = value;
+				break;
+			}
+		}
+		return defaultView.clazz;
+	}
+
 }

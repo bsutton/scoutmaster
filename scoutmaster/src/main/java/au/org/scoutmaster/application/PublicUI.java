@@ -2,7 +2,7 @@ package au.org.scoutmaster.application;
 
 import java.util.ArrayList;
 
-import au.com.vaadinutils.menu.ViewMap;
+import au.com.vaadinutils.menu.ViewMapping;
 import au.org.scoutmaster.views.calendar.PublicCalendarView;
 
 import com.vaadin.annotations.Push;
@@ -35,7 +35,7 @@ public class PublicUI extends UI
 {
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<ViewMap> viewMap = new ArrayList<>();
+	private ArrayList<ViewMapping> viewMap = new ArrayList<>();
 
 	private VerticalLayout mainLayout;
 
@@ -51,8 +51,8 @@ public class PublicUI extends UI
 //		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 //		daoSectionType.cacheSectionTypes();
 
-		viewMap.add(new ViewMap("", PublicCalendarView.class));
-		viewMap.add(new ViewMap(PublicCalendarView.NAME, PublicCalendarView.class));
+		viewMap.add(new ViewMapping("", PublicCalendarView.class));
+		viewMap.add(new ViewMapping(PublicCalendarView.NAME, PublicCalendarView.class));
 
 		mainLayout = new VerticalLayout();
 		mainLayout.setMargin(false);
@@ -65,7 +65,7 @@ public class PublicUI extends UI
 		final Navigator navigator = new Navigator(this, viewContainer);
 
 		// Wire up the navigation
-		for (final ViewMap viewmap : this.viewMap)
+		for (final ViewMapping viewmap : this.viewMap)
 		{
 			navigator.addView(viewmap.getViewName(), viewmap.getView());
 		}

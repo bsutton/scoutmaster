@@ -1,7 +1,6 @@
 package au.org.scoutmaster.jasper;
 
 import java.io.File;
-import java.util.Properties;
 
 import au.com.vaadinutils.jasper.JasperSettings;
 
