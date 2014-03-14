@@ -81,7 +81,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unused")
-	private static Logger logger = LogManager.getLogger(ContactView.class);
+	private static Logger logger = LogManager.getLogger();
 
 	public static final String NAME = "Contact";
 
