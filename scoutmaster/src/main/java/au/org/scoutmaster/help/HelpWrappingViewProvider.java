@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
+
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;

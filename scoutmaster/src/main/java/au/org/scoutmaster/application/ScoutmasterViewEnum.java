@@ -1,13 +1,15 @@
-package au.org.scoutmaster.help;
+package au.org.scoutmaster.application;
 
 import java.util.ArrayList;
 
 import au.com.vaadinutils.menu.ViewMapping;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.views.ActivityView;
 import au.org.scoutmaster.views.ChangePasswordView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.EventView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
+import au.org.scoutmaster.views.LoginAttemptView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.LogoutView;
 import au.org.scoutmaster.views.OrganisationTypeView;
@@ -16,6 +18,7 @@ import au.org.scoutmaster.views.QualificationTypeView;
 import au.org.scoutmaster.views.RaffleView;
 import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.SectionTypeView;
+import au.org.scoutmaster.views.SessionHistoryView;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.calendar.CalendarView;
@@ -61,6 +64,8 @@ public enum ScoutmasterViewEnum
 	ChangePassword(ChangePasswordView.NAME, ChangePasswordView.class, false),
 	Tag(TagView.NAME, TagView.class, false),
 	User(UserView.NAME, UserView.class, false),
+	SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class, false),
+	LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class, false),
 	
 
 	

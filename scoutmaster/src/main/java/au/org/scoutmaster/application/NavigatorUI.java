@@ -12,7 +12,6 @@ import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.help.HelpWrappingViewProvider;
-import au.org.scoutmaster.help.ScoutmasterViewEnum;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
@@ -29,13 +28,6 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-/**
- * Check this out.
- * http://www.aceevo.com/reusable-patterns-for-vaadin-custom-form-layout/
- * 
- * @author bsutton
- * 
- */
 /*
  * UI class is the starting point for your app. You may deploy it with
  * VaadinServlet or VaadinPortlet by giving your UI class name a parameter. When
@@ -66,7 +58,7 @@ public class NavigatorUI extends UI
 
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
-
+		
 		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 		daoSectionType.cacheSectionTypes();
 
