@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Create RaffleAllocation and remove redundant fields from RaffleBook -->
+
+	<changeSet author="bsutton" id="1.0.50">
+		<createTable tableName="LoginAttempt">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="loginAttempt_ID" type="BIGINT(19)" />
+			<column name="user_ID" type="BIGINT(19)" />
+			<column name="dateOfAttempt" type="date" />
+			<column name="succeeded" type="BIT(1)" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.50.1">
+		<addForeignKeyConstraint baseColumnNames="user_ID"
+			baseTableName="LoginAttempt" constraintName="FK_LoginAttempt_User_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="User" />
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.50.2">
+		<modifyDataType tableName="LoginAttempt" columnName="dateOfAttempt"
+			newDataType="datetime" />
+		
+	</changeSet>
+
+</databaseChangeLog>

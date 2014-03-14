@@ -36,7 +36,7 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Users", path="Admin")
+@Menu(display = "Users", path="Admin.Security")
 public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener
 {
 

@@ -2,10 +2,14 @@ package au.org.scoutmaster.views;
 
 import java.io.File;
 
+import org.joda.time.DateTime;
+
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.access.LoginAttemptDao;
 import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.domain.access.LoginAttempt;
 import au.org.scoutmaster.domain.access.User;
 
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -115,7 +119,6 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		usernameField.focus();
 	}
 
-
 	@Override
 	public void buttonClick(ClickEvent event)
 	{
@@ -126,31 +129,32 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		}
 		else
 		{
-			//
-			// Validate the fields using the navigator. By using validors for
-			// the
-			// fields we reduce the amount of queries we have to use to the
-			// database
-			// for wrongly entered passwords
-			//
-			if (this.usernameField.isValid() && this.passwordField.isValid())
+			String username = this.usernameField.getValue();
+			String password = this.passwordField.getValue();
+
+			UserDao daoUser = new DaoFactory().getUserDao();
+			LoginAttemptDao daoLoginAttempt = new DaoFactory().getLoginAttemptDao();
+
+			// check the user hasn't exceed there login attempts.
+			if (!daoLoginAttempt.hasExceededAttempts(username))
 			{
-				String username = this.usernameField.getValue();
-				String password = this.passwordField.getValue();
-
-				UserDao daoUser = new DaoFactory().getUserDao();
-
 				User user = daoUser.findByName(username);
-				if (user!= null && user.isValidPassword(password))
+				if (user != null && user.isValidPassword(password))
 				{
 					// Store the current user in the service session
 					SMSession.INSTANCE.setLoggedInUser(user);
 
+					LoginAttempt attempt = new LoginAttempt(user, true);
+					daoLoginAttempt.persist(attempt);
+
 					// Navigate to main view
-					getUI().getNavigator().navigateTo(ContactView.NAME);
+					getUI().getNavigator().navigateTo("");
 				}
 				else
 				{
+					LoginAttempt attempt = new LoginAttempt(user, false);
+					daoLoginAttempt.persist(attempt);
+
 					// Wrong password clear the password field and refocuses it
 					this.usernameField.focus();
 					Notification.show("Invalid username or password!", Type.TRAY_NOTIFICATION);
@@ -158,9 +162,13 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			}
 			else
 			{
-				// user.setComponentError(new UserError("I dont like you"));
 				this.usernameField.focus();
-				Notification.show("Invalid username or password", Type.TRAY_NOTIFICATION);
+				DateTime blockedUntil = daoLoginAttempt.blockedUtil(username);
+				// round up to the nearest minute.
+				blockedUntil = blockedUntil.plusMinutes(1);
+				blockedUntil = blockedUntil.minusSeconds(blockedUntil.getSecondOfMinute());
+				Notification.show("Login Attempts have been exceed."
+						,  "You are now blocked until " + blockedUntil.toString("h:mm") + ".", Type.TRAY_NOTIFICATION);
 			}
 		}
 	}

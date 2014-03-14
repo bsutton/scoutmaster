@@ -24,6 +24,11 @@
 		</listener-class>
 	</listener>
 
+	<listener>
+		<listener-class>au.org.scoutmaster.application.SessionListener
+		</listener-class>
+	</listener>
+
 	<!-- per request Entity Manager injection -->
 	<filter>
 		<filter-name>EntityManagerInjectorFilter</filter-name>

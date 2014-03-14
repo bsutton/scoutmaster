@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 import au.org.scoutmaster.domain.BaseEntity;
 
 /**
- * When a user logs out we write a record of their login session and its stored here.
+ * When a user logs out or their session expires we write a record of their login session and its stored here.
  * 
  * @author bsutton
  *
@@ -26,18 +26,47 @@ public class SessionHistory  extends BaseEntity
 	private static final long serialVersionUID = 1L;
 
 	@Temporal(value=TemporalType.TIMESTAMP)
-	Date start = new Date();
+	private Date start = new Date();
 	
 	@Temporal(value=TemporalType.TIMESTAMP)
-	Date end = new Date();
+	private Date end = new Date();
 	
 	@ManyToOne(targetEntity=User.class)
-	User user;
+	private User user;
+
+	public Date getStart()
+	{
+		return start;
+	}
+
+	public void setStart(Date start)
+	{
+		this.start = start;
+	}
+
+	public Date getEnd()
+	{
+		return end;
+	}
+
+	public void setEnd(Date end)
+	{
+		this.end = end;
+	}
+
+	public User getUser()
+	{
+		return user;
+	}
+
+	public void setUser(User user)
+	{
+		this.user = user;
+	}
 
 	@Override
 	public String getName()
 	{
-		// TODO Auto-generated method stub
 		return user.getUsername() + " " + start.toString() + " - " + end.toString();
 	}
 }

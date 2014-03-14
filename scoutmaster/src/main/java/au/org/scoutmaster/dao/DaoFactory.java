@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.dao.access.LoginAttemptDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.BaseEntity;
 
@@ -63,6 +64,13 @@ public class DaoFactory
 	{
 		return (InvoiceDao) instantiateDAO(InvoiceDao.class);
 	}
+
+	
+	public LoginAttemptDao getLoginAttemptDao()
+	{
+		return (LoginAttemptDao) instantiateDAO(LoginAttemptDao.class);
+	}
+
 
 	public NoteDao getNoteDao()
 	{
@@ -138,6 +146,12 @@ public class DaoFactory
 	}
 
 	
+	 public static <E> JpaBaseDao<E, Long> getGenericDao(Class<E> class1)
+	    {
+	        return new JpaBaseDao<E,Long>(class1);
+
+	    } 
+
 	@SuppressWarnings("unchecked")
 	public <D extends JpaBaseDao<E,Long>, E extends BaseEntity>  D getDao(Class<D> clazz)
 	{
@@ -163,7 +177,8 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
-
+	
+   
 
 	
 

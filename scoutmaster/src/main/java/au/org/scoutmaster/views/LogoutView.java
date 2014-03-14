@@ -52,6 +52,7 @@ public class LogoutView extends CustomComponent implements View
 	{
 		SMSession.INSTANCE.setLoggedInUser(null);
 		getUI().getSession().close();
+		getUI().getSession().getSession().invalidate();
 		getUI().getPage().setLocation( "/scoutmaster/" );
 	}
 }
