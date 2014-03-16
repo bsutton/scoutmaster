@@ -68,7 +68,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-@Menu(display = "Contacts")
+@Menu(display = "Contacts", path="Members")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
