@@ -6,10 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Represents an Allocation of Raffle Books to a contact from a Raffle.
@@ -131,6 +133,22 @@ public class RaffleAllocation extends BaseEntity
 	public void setBooks(Set<RaffleBook> books)
 	{
 		this.books = books;
+	}
+	
+	public String toString()
+	{
+		return "To: " + this.allocatedTo.getFullname() + " By:" + this.issuedBy.getFullname() + " On: " + this.dateAllocated + " Books: " + books.size(); 
+	}
+
+	public void addBook(RaffleBook book)
+	{
+		this.books.add(book);
+		
+	}
+	@Transient
+	public Long getBookCount()
+	{
+		return new Long(this.books.size());
 	}
 
 }
