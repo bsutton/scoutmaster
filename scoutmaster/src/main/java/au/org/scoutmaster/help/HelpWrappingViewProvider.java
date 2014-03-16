@@ -55,6 +55,9 @@ public class HelpWrappingViewProvider implements ViewProvider
 		if (viewAndParameters.contains("&"))
 			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("&"));
 
+		if (viewAndParameters.contains("/"))
+			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("/"));
+
 		if (!views.containsKey(viewAndParameters)&& !viewsWithoutHelp.containsKey(viewAndParameters))
 		{
 			logger.error("Couldn't match view " + viewAndParameters);
