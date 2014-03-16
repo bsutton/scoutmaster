@@ -6,6 +6,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -216,6 +217,11 @@ public class RaffleBook extends BaseEntity
 	{
 		this.raffleAllocation = allocation;
 
+	}
+	
+	public String toString()
+	{
+		return "First Ticket No.: " + this.firstNo + ", Last Ticket No: " + (this.firstNo + this.ticketCount);
 	}
 
 }
