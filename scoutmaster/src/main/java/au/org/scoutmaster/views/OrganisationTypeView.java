@@ -20,7 +20,6 @@ import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Organisation Types", path="Admin.Lists")
 public class OrganisationTypeView extends BaseCrudView<OrganisationType> implements View, Selected<OrganisationType>

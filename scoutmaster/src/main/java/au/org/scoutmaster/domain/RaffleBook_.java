@@ -1,10 +1,12 @@
 package au.org.scoutmaster.domain;
 
-import au.org.scoutmaster.domain.accounting.Money;
 import java.sql.Date;
+
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
+import au.org.scoutmaster.domain.accounting.Money;
 
 @Generated(value="Dali", date="2014-03-11T19:38:06.391+1100")
 @StaticMetamodel(RaffleBook.class)

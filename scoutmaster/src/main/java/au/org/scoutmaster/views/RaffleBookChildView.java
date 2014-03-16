@@ -2,11 +2,8 @@ package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
 
-import javax.persistence.metamodel.SingularAttribute;
-
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
-import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;

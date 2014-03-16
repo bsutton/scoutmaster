@@ -1,10 +1,11 @@
 package au.org.scoutmaster.domain;
 
-import au.org.scoutmaster.domain.GroupRole.BuiltIn;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
+import au.org.scoutmaster.domain.GroupRole.BuiltIn;
 
 @Generated(value="Dali", date="2014-02-26T22:43:35.142+1100")
 @StaticMetamodel(GroupRole.class)

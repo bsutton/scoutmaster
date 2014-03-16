@@ -1,10 +1,12 @@
 package au.org.scoutmaster.domain.access;
 
-import au.org.scoutmaster.domain.BaseEntity_;
 import java.util.Date;
+
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
+import au.org.scoutmaster.domain.BaseEntity_;
 
 @Generated(value="Dali", date="2014-03-14T06:32:56.584+1100")
 @StaticMetamodel(LoginAttempt.class)
