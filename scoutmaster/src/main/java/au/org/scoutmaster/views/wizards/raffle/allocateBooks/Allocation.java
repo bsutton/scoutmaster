@@ -32,4 +32,9 @@ public class Allocation
 	{
 		return books;
 	}
+	
+	public String toString()
+	{
+		return allocatedTo.getFullname() + ", Book Count:" + books.size();
+	}
 }

@@ -1,7 +1,10 @@
 package au.org.scoutmaster.views.wizards.raffle.allocateBooks;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -14,13 +17,14 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.jasper.JasperManager;
 import au.com.vaadinutils.jasper.PrintWindow;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.dao.RaffleAllocationDao;
 import au.org.scoutmaster.dao.RaffleBookDao;
+import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.Raffle;
@@ -31,7 +35,9 @@ import au.org.scoutmaster.domain.RaffleBook_;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 import au.org.scoutmaster.util.SMNotification;
 
+import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.util.filter.Compare;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -49,7 +55,7 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(ManualAllocationStep.class);
 	private RaffleBookAllocationWizardView wizard;
-	private RaffleAllocation allocation;
+	private RaffleAllocation raffleAllocation;
 
 	public ManualAllocationStep(RaffleBookAllocationWizardView setupWizardView)
 	{
@@ -85,9 +91,8 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 		allocateBooks(raffle, issuedByContact, allocations);
 
 		JPAContainer<RaffleBook> container = new DaoFactory().getRaffleBookDao().createVaadinContainer();
-		// container.addContainerFilter(new Compare.Equal(new
-		// Path(RaffleBook_.raffleAllocation,
-		// RaffleAllocation_.allocatedTo).getName(), allocatedContact));
+		container.addContainerFilter(new Compare.Equal(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.id)
+				.getName(), this.raffleAllocation.getId()));
 		container.sort(new Object[]
 		{ RaffleBook_.firstNo.getName() }, new boolean[]
 		{ true });
@@ -122,31 +127,85 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 		return layout;
 	}
 
-	private void allocateBooks(Raffle raffle, Contact issuedByContact, List<Allocation> allocations)
+	// private void allocateBooks(Raffle raffle, Contact issuedByContact,
+	// List<Allocation> allocations)
+	// {
+	// RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
+	// RaffleAllocationDao daoRaffleAllocation = new
+	// DaoFactory().getRaffleAllocationDao();
+	//
+	// assert allocations.size() == 0 : "Only a single allocation is expected.";
+	//
+	// Allocation allocation = allocations.get(0);
+	// RaffleAllocation raffleAllocation = new RaffleAllocation();
+	// raffleAllocation.setRaffle(raffle);
+	// raffleAllocation.setAllocatedTo(allocation.getAllocatedTo());
+	// raffleAllocation.setDateAllocated(new Date(new
+	// java.util.Date().getTime()));
+	// raffleAllocation.setDateIssued(new Date(new java.util.Date().getTime()));
+	// raffleAllocation.setIssuedBy(issuedByContact);
+	// daoRaffleAllocation.persist(raffleAllocation);
+	//
+	// for (RaffleBook book : allocation.getBooks())
+	// {
+	// if (book.getRaffleAllocation() == null)
+	// {
+	// book.setRaffleAllocation(raffleAllocation);
+	// daoRaffleBook.merge(book);
+	// }
+	// }
+	// this.raffleAllocation = raffleAllocation;
+	// }
+
+	private void allocateBooks(Raffle raffle, Contact issuedByContact, List<Allocation> preallocation)
 	{
 		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
-		RaffleAllocationDao daoRaffleAllocation = new DaoFactory().getRaffleAllocationDao();
 
-		assert allocations.size() == 0 : "Only a single allocation is expected.";
+		Preconditions.checkArgument(preallocation.size() == 1, "Only one Allocations should have been made");
 
-		Allocation allocation = allocations.get(0);
-		RaffleAllocation raffleAllocation = new RaffleAllocation();
-		raffleAllocation.setRaffle(raffle);
-		raffleAllocation.setAllocatedTo(allocation.getAllocatedTo());
-		raffleAllocation.setDateAllocated(new Date(new java.util.Date().getTime()));
-		raffleAllocation.setDateIssued(new Date(new java.util.Date().getTime()));
-		raffleAllocation.setIssuedBy(issuedByContact);
-		daoRaffleAllocation.persist(raffleAllocation);
+		EntityManager em = EntityManagerProvider.createEntityManager();
+		RaffleAllocationDao daoLocalRaffleAllocation = new DaoFactory(em).getRaffleAllocationDao();
+		RaffleBookDao daoLocalRaffleBook = new DaoFactory(em).getRaffleBookDao();
 
-		for (RaffleBook book : allocation.getBooks())
+		Allocation allocation = preallocation.get(0);
+		// Placed this in its own transaction as I need the allocation id
+		// which is only available after we commit.
+		try (Transaction t = new Transaction(em))
 		{
-			if (book.getRaffleAllocation() == null)
+			List<RaffleBook> books = new ArrayList<>();
+			// Move the books from the request em to our local em.
+			for (RaffleBook book : allocation.getBooks())
 			{
-				book.setRaffleAllocation(raffleAllocation);
-				daoRaffleBook.merge(book);
+				daoRaffleBook.detach(book);
+				books.add(daoLocalRaffleBook.merge(book));
 			}
+
+			RaffleAllocation raffleAllocation = new RaffleAllocation();
+			raffleAllocation.setRaffle(raffle);
+			raffleAllocation.setAllocatedTo(allocation.getAllocatedTo());
+			raffleAllocation.setDateAllocated(new Date(new java.util.Date().getTime()));
+			raffleAllocation.setDateIssued(new Date(new java.util.Date().getTime()));
+			raffleAllocation.setIssuedBy(issuedByContact);
+			daoLocalRaffleAllocation.persist(raffleAllocation);
+
+			for (RaffleBook book : books)
+			{
+				if (book.getRaffleAllocation() == null)
+				{
+					book.setRaffleAllocation(raffleAllocation);
+					book = daoLocalRaffleBook.merge(book);
+					raffleAllocation.addBook(book);
+				}
+			}
+			raffleAllocation = daoLocalRaffleAllocation.merge(raffleAllocation);
+			this.raffleAllocation = raffleAllocation;
+			t.commit();
+			daoLocalRaffleAllocation.detach(raffleAllocation);
 		}
-		this.allocation = raffleAllocation;
+		finally
+		{
+
+		}
 	}
 
 	@Override
@@ -169,7 +228,7 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 		{
 			manager = new JasperManager(EntityManagerProvider.getEntityManager(), "RaffleAllocation.jasper",
 					new JasperSettingsImpl());
-			manager.bindParameter("allocationId", this.allocation.getId());
+			manager.bindParameter("allocationIds", this.raffleAllocation.getId());
 			PrintWindow window = new PrintWindow(manager);
 			UI.getCurrent().addWindow(window);
 		}

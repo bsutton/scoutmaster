@@ -9,8 +9,8 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.dao.RaffleBookDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -102,7 +102,7 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 
 		layout.addComponent(labelAllocate);
 		
-		allocatedToContact.focus();
+		issuedBy.focus();
 
 
 		return layout;
@@ -140,7 +140,7 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 		{
 			bookAllocation.add(books.get(i));
 		}
-		Allocation allocation = new Allocation(allocatedTo, books);
+		Allocation allocation = new Allocation(allocatedTo, bookAllocation);
 		this.allocations .add(allocation);
 		
 	}

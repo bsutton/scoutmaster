@@ -12,9 +12,9 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.SearchableSelectableEntityTable;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.dao.RaffleBookDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -25,9 +25,12 @@ import au.org.scoutmaster.domain.RaffleBook_;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.EntityProvider;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.ComboBox;
@@ -92,25 +95,37 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
 				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
-		selectableTable = new SearchableSelectableEntityTable<Contact>(new DaoFactory().getContactDao()
-				.createVaadinContainer(), builder.build())
+		final JPAContainer<Contact> container = new DaoFactory().getContactDao()
+				.createVaadinContainer();
+		selectableTable = new SearchableSelectableEntityTable<Contact>(container, builder.build())
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 			{
+				EntityProvider<Contact> provider = container.getEntityProvider();
+
+				// hook the query delegate so we can fix the jpa query on the way
+				// through.
+//				provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(new ArrayList<Tag>(), new ArrayList<Tag>(),
+//						filterString, false));
+
+				
 				if (filterString.length() > 0)
 				{
-					String likeMatch = filterString + "%";
-					return new Or(new Like(Contact_.firstname.getName(), likeMatch, false), new Like(
-							Contact_.lastname.getName(), likeMatch, false), new Like(Contact.PRIMARY_PHONE, likeMatch,
-							false), new Like(Contact_.isMember.getName(), likeMatch, false), new Like(
-							Contact_.groupRole.getName(), likeMatch, false));
+					return new Or(new SimpleStringFilter(Contact_.firstname.getName(), filterString, true, false)
+					, new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false)
+					, new SimpleStringFilter(Contact.PRIMARY_PHONE, filterString,true, false)
+					, new SimpleStringFilter(Contact_.isMember.getName(), filterString, true, false)
+					, new SimpleStringFilter(Contact_.groupRole.getName(), filterString, true, false)
+					, new SimpleStringFilter(Contact_.section.getName(), filterString, true, false)
+					);
 				}
 				else
 					return null;
 
+//				return null;
 			}
 		};
 
@@ -122,8 +137,8 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 		Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
 
 		layout.addComponent(labelAllocate);
-
-		issuedBy.focus();
+		
+		//issuedBy.focus();
 
 		return layout;
 	}
