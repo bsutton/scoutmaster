@@ -7,7 +7,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.reportFilter.ReportView;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
-@Menu(display = "Members", path="Reports")
+@Menu(display = "Phone List", path="Members")
 public class MemberReport extends ReportView
 {
 	private static final long serialVersionUID = 1L;

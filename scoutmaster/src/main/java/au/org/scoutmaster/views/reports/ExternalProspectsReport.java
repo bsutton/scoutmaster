@@ -7,7 +7,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.reportFilter.ReportView;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
-@Menu(display = "External Prospects", path="Reports")
+@Menu(display = "External Prospects", path="Members")
 public class ExternalProspectsReport extends ReportView
 {
 	private static final long serialVersionUID = 1L;

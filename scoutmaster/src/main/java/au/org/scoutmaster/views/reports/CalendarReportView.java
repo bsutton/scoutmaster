@@ -11,7 +11,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.reportFilter.ReportView;
 import au.org.scoutmaster.jasper.JasperSettingsImpl;
 
-@Menu(display = "Calendar Report", path = "Reports")
+@Menu(display = "Calendar Report", path = "Calendar")
 public class CalendarReportView extends ReportView
 {
 	private static final long serialVersionUID = 1L;

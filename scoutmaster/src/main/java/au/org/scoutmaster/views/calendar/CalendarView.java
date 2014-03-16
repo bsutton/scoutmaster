@@ -31,7 +31,7 @@ import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener
 import com.vaadin.ui.themes.Reindeer;
 
 /** A start view for navigating to the main view */
-@Menu(display = "Calendar")
+@Menu(display = "Month View", path="Calendar")
 public class CalendarView extends VerticalLayout implements View,
 		au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeListener
 {
