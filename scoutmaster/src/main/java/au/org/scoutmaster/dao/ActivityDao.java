@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType_;
 import au.org.scoutmaster.domain.Activity_;

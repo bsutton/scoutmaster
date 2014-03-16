@@ -14,6 +14,7 @@ import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
