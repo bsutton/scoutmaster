@@ -15,6 +15,8 @@ import au.com.vaadinutils.validator.MobilePhoneValidator;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.views.actions.UserActionInviteUser;
@@ -37,7 +39,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Users", path="Admin.Security")
-public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener
+public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener , HelpProvider
 {
 
 	private static final long serialVersionUID = 1L;
@@ -59,7 +61,7 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 		VerticalLayout layout = new VerticalLayout();
 
 		SMMultiColumnFormLayout<User> overviewForm = new SMMultiColumnFormLayout<User>(1, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 480);
+		overviewForm.setColumnFieldWidth(0, 380);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setSizeFull();
 
@@ -128,6 +130,8 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 
 			if (super.isNew())
 			{
+				password.removeAllValidators();
+				confirmPassword.removeAllValidators();
 				password.addValidator(new PasswordValidator("Password"));
 				confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
 				password.setValue("");
@@ -167,6 +171,8 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	{
 		this.passwordChanged = true;
 
+		password.removeAllValidators();
+		confirmPassword.removeAllValidators();
 		password.addValidator(new PasswordValidator("Password"));
 		confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
 
@@ -196,6 +202,12 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	protected String getTitleText()
 	{
 		return "Users";
+	}
+
+	@Override
+	public HelpPageIdentifier getHelpId()
+	{
+		return HelpPageIdentifier.UserView;
 	};
 
 }
