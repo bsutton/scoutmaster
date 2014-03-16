@@ -34,7 +34,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Raffle", path = "Admin")
+@Menu(display = "Raffle", path = "Raffle")
 public class RaffleView extends BaseCrudView<Raffle> implements View
 {
 	private static final long serialVersionUID = 1L;
@@ -144,9 +144,9 @@ public class RaffleView extends BaseCrudView<Raffle> implements View
 	@Override
 	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
-		return new Or(new Or(new SimpleStringFilter(Raffle_.name.getName(), filterString, true, false),
-				new SimpleStringFilter(Raffle_.startDate, filterString, true, false))
-		, new SimpleStringFilter(Raffle_.startDate, filterString, true, false));
+		return new Or(new SimpleStringFilter(Raffle_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(Raffle_.startDate.getName(), filterString, true, false));
+		
 	}
 
 
