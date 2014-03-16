@@ -22,6 +22,7 @@ import au.org.scoutmaster.views.SessionHistoryView;
 import au.org.scoutmaster.views.TagView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.calendar.CalendarView;
+import au.org.scoutmaster.views.calendar.PublicCalendarView;
 import au.org.scoutmaster.views.reports.CalendarReportView;
 import au.org.scoutmaster.views.reports.ExternalProspectsReport;
 import au.org.scoutmaster.views.reports.MemberAddressReport;
@@ -37,32 +38,42 @@ import com.vaadin.navigator.View;
 
 public enum ScoutmasterViewEnum
 {
+	// Memebers
 	Contact(ContactView.NAME, ContactView.class,  true),
+	Member(MemberReport.NAME, MemberReport.class, false),
+	MemberAddress(MemberAddressReport.NAME, MemberAddressReport.class, false),
+	Tag(TagView.NAME, TagView.class, false),
+	Activity(ActivityView.NAME, ActivityView.class, false),
+	ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class, false),
+	ImportWizard(ImportWizardView.NAME, ImportWizardView.class, false),
+	
+	// Communications
 	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class, false),
 	BulkSMSWizard(BulkSMSWizardView.NAME, BulkSMSWizardView.class, false),
+	
+	// Calendar
 	Calendar(CalendarView.NAME, CalendarView.class, false),
 	Event(EventView.NAME, EventView.class, false),
 	CalendarReport(CalendarReportView.NAME, CalendarReportView.class, false),
-	ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class, false),
-	Member(MemberReport.NAME, MemberReport.class, false),
-	MemberAddress(MemberAddressReport.NAME, MemberAddressReport.class, false),
+	PublicCalendar(PublicCalendarView.NAME, PublicCalendarView.class, false),
+
+	// Raffle
+	Raffle(RaffleView.NAME, RaffleView.class, false),
+	RaffleBookImportWizard(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class, false),
+	RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class, false),
 	
 	// Wizards
 	GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class, false),
-	RaffleBookImportWizard(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class, false),
-	RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class, false),
-	ImportWizard(ImportWizardView.NAME, ImportWizardView.class, false),
 
 	
 	// Admin menu
-	Activity(ActivityView.NAME, ActivityView.class, false),
 	Organisation(OrganisationView.NAME, OrganisationView.class, false),
 	OrganisationType(OrganisationTypeView.NAME, OrganisationTypeView.class, false),
 	QualificationType(QualificationTypeView.NAME, QualificationTypeView.class, false),
-	Raffle(RaffleView.NAME, RaffleView.class, false),
 	SectionType(SectionTypeView.NAME, SectionTypeView.class, false),
 	ChangePassword(ChangePasswordView.NAME, ChangePasswordView.class, false),
-	Tag(TagView.NAME, TagView.class, false),
+	
+	// Admin Security
 	User(UserView.NAME, UserView.class, false),
 	SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class, false),
 	LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class, false),
