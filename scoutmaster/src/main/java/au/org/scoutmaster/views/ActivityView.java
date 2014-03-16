@@ -8,10 +8,10 @@ import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Activity;
 import au.org.scoutmaster.domain.ActivityType;
 import au.org.scoutmaster.domain.ActivityType_;
@@ -32,7 +32,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Activities", path="Admin.Lists")
+@Menu(display = "Activities", path="Members")
 public class ActivityView extends BaseCrudView<Activity> implements View, Selected<Activity>
 {
 

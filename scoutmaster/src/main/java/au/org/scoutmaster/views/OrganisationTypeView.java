@@ -36,18 +36,14 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 	@Override
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<OrganisationType> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
-
 		SMMultiColumnFormLayout<OrganisationType> overviewForm = new SMMultiColumnFormLayout<OrganisationType>(1, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setColumnLabelWidth(0, 100);
-		overviewForm.setSizeFull();
 
 		overviewForm.bindTextField("Name", OrganisationType_.name);
 		overviewForm.bindTextAreaField("Description", OrganisationType_.description, 4);
-		layout.addComponent(overviewForm);
 
-		return layout;
+		return overviewForm;
 	}
 
 		@Override

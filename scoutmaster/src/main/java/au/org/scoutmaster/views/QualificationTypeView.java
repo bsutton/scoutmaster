@@ -38,7 +38,6 @@ public class QualificationTypeView extends BaseCrudView<QualificationType> imple
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<QualificationType> fieldGroup2)
 	{
 		VerticalLayout layout = new VerticalLayout();
-		layout.setSizeFull();
 
 		SMMultiColumnFormLayout<QualificationType> overviewForm = new SMMultiColumnFormLayout<>(2, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 600);

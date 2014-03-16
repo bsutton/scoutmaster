@@ -25,7 +25,7 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Tags", path="Admin.Lists")
+@Menu(display = "Tags", path="Members")
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 {
 

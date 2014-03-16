@@ -40,7 +40,7 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Events")
+@Menu(display = "Events", path="Calendar")
 public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>, ValueChangeListener
 {
 
