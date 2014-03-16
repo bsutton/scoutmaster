@@ -16,6 +16,7 @@ import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.jasper.JasperManager;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleBookDao;
@@ -37,6 +38,7 @@ import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.TextField;
 
 public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAllocation>
 {
@@ -55,7 +57,8 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 		builder.addColumn("Allocated To", RaffleAllocation_.allocatedTo)
 		.addColumn("Date Allocated",RaffleAllocation_.dateAllocated)
 		.addColumn("Issued By", RaffleAllocation_.issuedBy)
-		.addColumn("Date Issued",RaffleAllocation_.dateIssued);
+		.addColumn("Date Issued",RaffleAllocation_.dateIssued)
+		.addColumn("Books","bookCount");
 		
 		super.init(RaffleAllocation.class, container, builder.build());
 	}
@@ -70,7 +73,7 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 			RaffleAllocation allocation =  entity.getEntity();
 			JasperManager manager = new JasperManager(EntityManagerProvider.getEntityManager(), "RaffleAllocation.jasper"
 					, new JasperSettingsImpl());
-			manager.bindParameter("allocationId", allocation.getId());
+			manager.bindParameter("allocationIds", allocation.getId());
 			
 			return manager;
 		}
@@ -102,6 +105,7 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 		for (RaffleBook book : books)
 		{
 			book.setRaffleAllocation(null);
+			daoRaffleBook.merge(book);
 		}
 		
 	}
@@ -138,6 +142,9 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 		issuedBy.setNullSelectionAllowed(true);
 
 		overviewForm.bindDateField("Date Issued", RaffleAllocation_.dateIssued, "yyyy-MM-dd", Resolution.DAY);
+	
+		TextField bookCountField = overviewForm.bindTextField("Book Count", "bookCount");
+		bookCountField.setReadOnly(true);
 
 		overviewForm.bindTextAreaField("Notes", RaffleAllocation_.notes, 6);
 	
@@ -149,8 +156,8 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 	{
 		return new FilterBuilder()
-		.or(new SimpleStringFilter(RaffleAllocation_.issuedBy.getName(), filterString, true,false))
-		.or(new SimpleStringFilter(RaffleAllocation_.allocatedTo.getName(), filterString, true, false))
+		.or(new SimpleStringFilter(new Path(RaffleAllocation_.issuedBy, Contact_.fullname).getName(), filterString, true,false))
+		.or(new SimpleStringFilter(new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName(), filterString, true, false))
 		.or(new SimpleStringFilter(RaffleAllocation_.dateIssued.getName(), filterString, true, false))
 		.or(new SimpleStringFilter(RaffleAllocation_.dateAllocated.getName(), filterString, true, false))
 		.build();
