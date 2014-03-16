@@ -139,7 +139,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 			if (!daoLoginAttempt.hasExceededAttempts(username))
 			{
 				User user = daoUser.findByName(username);
-				if (user != null && user.isValidPassword(password))
+				if (user != null && user.isEnabled() && user.isValidPassword(password))
 				{
 					// Store the current user in the service session
 					SMSession.INSTANCE.setLoggedInUser(user);
