@@ -1,5 +1,7 @@
 package au.org.scoutmaster.views.wizards.raffle.importBooks;
 
+import java.util.Set;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
@@ -7,6 +9,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.data.validator.IntegerRangeValidator;
@@ -63,9 +66,7 @@ public class TicketRangeStep implements WizardStep
 		firstTicketNoField.addValidator(new IntegerRangeValidator("First Ticket No", 0, 6000000));
 		noOfBooksField.addValidator(new IntegerRangeValidator("First Ticket No", 1, 1000));
 
-		
-		Label labelImport = new Label("<h1>Clicking Next will import the books!</h1>",
-				ContentMode.HTML);
+		Label labelImport = new Label("<h1>Clicking Next will import the books!</h1>", ContentMode.HTML);
 
 		layout.addComponent(labelImport);
 
@@ -83,17 +84,45 @@ public class TicketRangeStep implements WizardStep
 		int noOfBooks = Long.valueOf(noOfBooksField.getValue()).intValue();
 		int ticketsPerBook = raffle.getTicketsPerBook();
 
-		if (firstTicketNo + (noOfBooks * ticketsPerBook) - 1 != lastTicketNo)
+		RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
+
+		if (book != null)
+		{
+			SMNotification.show("Please check book no.s as the book: " + book.toString()
+					+ " has already been imported.", Type.WARNING_MESSAGE);
+
+		}
+		else if (firstTicketNo + (noOfBooks * ticketsPerBook) != lastTicketNo)
 		{
 			int expectedLast = firstTicketNo + (noOfBooks * ticketsPerBook);
 			SMNotification
-					.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: " + expectedLast,
-							Type.WARNING_MESSAGE);
+					.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
+							+ expectedLast, Type.WARNING_MESSAGE);
 		}
 		else
 			advance = true;
-		
+
 		return advance;
+	}
+
+	private RaffleBook findFirstDuplicateBook(Raffle raffle, int firstTicketNo, int lastTicketNo)
+	{
+		RaffleBook first = null;
+		Set<RaffleBook> books = raffle.getImportedBooks();
+
+		for (RaffleBook book : books)
+		{
+			int firstTicket = book.getFirstNo().intValue();
+			int lastTicket = book.getFirstNo() + book.getTicketCount();
+
+			if (firstTicket >= firstTicketNo && firstTicket <= lastTicketNo
+					|| (lastTicket >= firstTicketNo && lastTicket <= lastTicketNo))
+			{
+				first = book;
+				break;
+			}
+		}
+		return first;
 	}
 
 	@Override

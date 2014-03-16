@@ -34,7 +34,6 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 	private WelcomeStep welcomeStep;
 	private ConfirmRaffleDetails confirmRaffleStep;
 	private TicketRangeStep ticketRangeStep;
-	private ImportStep importStep;
 	private FinalStep finalStep;
 
 	/**
@@ -72,9 +71,9 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		return confirmRaffleStep;
 	}
 
-	public ImportStep getImportStep()
+	public FinalStep getImportStep()
 	{
-		return importStep;
+		return finalStep;
 	}
 
 
@@ -85,7 +84,6 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		welcomeStep = new WelcomeStep(this);
 		confirmRaffleStep = new ConfirmRaffleDetails(this);
 		ticketRangeStep = new TicketRangeStep(this);
-		importStep = new ImportStep(this);
 		finalStep = new FinalStep(this);
 
 		// create the Wizard component and add the steps
@@ -95,7 +93,6 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		wizard.addStep(welcomeStep, "Welcome");
 		wizard.addStep(confirmRaffleStep, "Confirm");
 		wizard.addStep(ticketRangeStep, "TicketRange");
-		wizard.addStep(importStep, "Import");
 		wizard.addStep(finalStep, "Final");
 		wizard.setSizeFull();
 		wizard.setUriFragmentEnabled(true);
@@ -126,14 +123,14 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 	@Override
 	public void wizardCompleted(WizardCompletedEvent event)
 	{
-		this.endWizard("Setup Completed!");
+		this.endWizard("Import Completed!");
 
 	}
 
 	@Override
 	public void wizardCancelled(WizardCancelledEvent event)
 	{
-		this.endWizard("Setup Cancelled!");
+		this.endWizard("Import Cancelled!");
 
 	}
 
@@ -143,6 +140,7 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		UI.getCurrent().getNavigator().navigateTo(RaffleView.NAME);
+
 	}
 	public Raffle getRaffle()
 	{
