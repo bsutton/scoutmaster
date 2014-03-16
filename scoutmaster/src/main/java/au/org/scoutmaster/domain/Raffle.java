@@ -172,4 +172,10 @@ public class Raffle extends BaseEntity
 	}
 
 
+	public Set<RaffleBook> getImportedBooks()
+	{
+		return this.available;
+	}
+
+
 }
