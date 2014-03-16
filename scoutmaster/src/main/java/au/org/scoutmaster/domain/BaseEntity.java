@@ -33,7 +33,7 @@ abstract public class BaseEntity implements Serializable, CrudEntity
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="id" , updatable=false)
 	protected Long id;
 	
 	@Column(name="created")
