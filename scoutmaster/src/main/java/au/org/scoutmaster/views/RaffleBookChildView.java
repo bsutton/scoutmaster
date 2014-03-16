@@ -2,15 +2,18 @@ package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
+import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.Path;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Raffle;
@@ -107,7 +110,7 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	{
 		return new FilterBuilder()
 		.or(new SimpleStringFilter(RaffleBook_.firstNo.getName(), filterString, true,false))
-		.or(new SimpleStringFilter(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName(), filterString, true, false))
+		.or(new SimpleStringFilter(new Path().add(RaffleBook_.raffleAllocation).add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName(), filterString, true, false))
 		.or(new SimpleStringFilter(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated).getName(), filterString, true, false))
 		.build();
 	}
