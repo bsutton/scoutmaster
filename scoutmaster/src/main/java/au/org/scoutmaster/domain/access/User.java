@@ -111,7 +111,7 @@ public class User extends BaseEntity
 		this.username = username;
 	}
 
-	public Boolean getEnabled()
+	public Boolean isEnabled()
 	{
 		return enabled;
 	}
