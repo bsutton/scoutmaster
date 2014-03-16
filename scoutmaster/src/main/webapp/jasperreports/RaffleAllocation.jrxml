@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Raffle Allocation Acknowledgement" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="63"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="allocationIds" class="java.lang.String">
-		<defaultValueExpression><![CDATA["18,19"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["147"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select b.firstNo, b.ticketCount, cTo.fullname allocatedTo, cBy.fullname issuedBy,
@@ -41,13 +41,135 @@ order by b.firstNo
 	<field name="collectionsDate" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<group name="Allocation" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{allocationId}]]></groupExpression>
+		<groupHeader>
+			<band height="69">
+				<staticText>
+					<reportElement uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558" mode="Opaque" x="297" y="48" width="99" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="322a78c5-acba-4bba-8f17-e58ed58a3468" mode="Opaque" x="82" y="48" width="83" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tickets]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1a7807b3-122b-4d06-bed6-619f9d102885" mode="Opaque" x="0" y="48" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[First No.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="fe1f5b6e-d5ea-4a3d-83f1-b67620cfa86e" mode="Opaque" x="229" y="48" width="68" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f901d658-110c-452a-8d3d-33381f23c5a1" mode="Opaque" x="396" y="48" width="161" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="8d655159-37b6-449b-814f-d1ec570ca740" mode="Opaque" x="165" y="48" width="64" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<textElement textAlignment="Center">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4635ae97-4b7c-430e-9629-007d0107c563" x="250" y="1" width="129" height="20"/>
+					<textElement/>
+					<text><![CDATA[Issued By]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="0d9dd1e9-5c42-4a18-9c51-ff34124b0e48" x="250" y="22" width="129" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{issuedBy}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="26c387ab-441b-400e-89e0-1f38ff32739a" x="445" y="1" width="100" height="20"/>
+					<textElement/>
+					<text><![CDATA[Collection Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="07ee89cb-f5e9-4545-8900-30a110f19aee" x="141" y="1" width="100" height="20"/>
+					<textElement/>
+					<text><![CDATA[Date Allocated]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="792f2035-1ff9-494d-9d63-6591b0871dfc" x="141" y="22" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{dateAllocated}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="4761b95c-1005-4a9f-b84b-08779a666b49" x="0" y="1" width="129" height="20"/>
+					<textElement/>
+					<text><![CDATA[Allocated To]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="a7553fd0-f05a-415e-8052-c4902cb23ab6" x="445" y="22" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{collectionsDate}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="24c7339c-c509-47f9-80a5-bcb45730d87f" x="0" y="22" width="129" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="dc15ead7-8987-4773-a705-53667133eef0" x="0" y="68" width="557" height="1" forecolor="#666666"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="149">
+				<line>
+					<reportElement uuid="935bf83c-f757-4361-8938-5732d47392e0" x="73" y="137" width="437" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="743197e1-71b6-4965-b7fa-534896ba40ef" x="3" y="13" width="554" height="26"/>
+					<textElement/>
+					<text><![CDATA[I acknowledged that I have taken the above Raffle Books and understand that the books or equivalent value in money must be returned by the Collection Date.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="a5b62ccb-eea4-4937-8483-c7b55abe53d0" x="0" y="112" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[Signed:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="7114fe76-8596-45c9-9fd7-1801fc6c6194" x="0" y="71" width="73" height="20"/>
+					<textElement/>
+					<text><![CDATA[Name:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="b1c3b1c2-5b89-4faf-bf36-2a88febf538f" x="73" y="71" width="336" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
 	<background>
 		<band/>
 	</background>
 	<title>
-		<band height="135">
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="73">
 			<frame>
-				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="0" y="0" width="557" height="72" backcolor="#006699"/>
+				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="0" y="1" width="557" height="72" backcolor="#006699"/>
 				<staticText>
 					<reportElement uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab" x="14" y="10" width="531" height="43" forecolor="#FFFFFF"/>
 					<textElement>
@@ -56,99 +178,10 @@ order by b.firstNo
 					<text><![CDATA[Raffle Allocation Acknowledgement]]></text>
 				</staticText>
 			</frame>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="792f2035-1ff9-494d-9d63-6591b0871dfc" x="141" y="98" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{dateAllocated}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement uuid="a7553fd0-f05a-415e-8052-c4902cb23ab6" x="445" y="98" width="100" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{collectionsDate}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="24c7339c-c509-47f9-80a5-bcb45730d87f" x="0" y="98" width="129" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="07ee89cb-f5e9-4545-8900-30a110f19aee" x="141" y="77" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Date Allocated]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="4635ae97-4b7c-430e-9629-007d0107c563" x="250" y="77" width="129" height="20"/>
-				<textElement/>
-				<text><![CDATA[Issued By]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="0d9dd1e9-5c42-4a18-9c51-ff34124b0e48" x="250" y="98" width="129" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{issuedBy}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement uuid="26c387ab-441b-400e-89e0-1f38ff32739a" x="445" y="77" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[Collection Date]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="4761b95c-1005-4a9f-b84b-08779a666b49" x="0" y="77" width="129" height="20"/>
-				<textElement/>
-				<text><![CDATA[Allocated To]]></text>
-			</staticText>
 		</band>
-	</title>
-	<pageHeader>
-		<band/>
 	</pageHeader>
 	<columnHeader>
-		<band height="21">
-			<staticText>
-				<reportElement uuid="f901d658-110c-452a-8d3d-33381f23c5a1" mode="Opaque" x="396" y="0" width="161" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="1a7807b3-122b-4d06-bed6-619f9d102885" mode="Opaque" x="0" y="0" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[First No.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558" mode="Opaque" x="297" y="0" width="99" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="fe1f5b6e-d5ea-4a3d-83f1-b67620cfa86e" mode="Opaque" x="229" y="0" width="68" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="8d655159-37b6-449b-814f-d1ec570ca740" mode="Opaque" x="165" y="0" width="64" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="322a78c5-acba-4bba-8f17-e58ed58a3468" mode="Opaque" x="82" y="0" width="83" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
-				<textElement>
-					<font size="14" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Ticket Count]]></text>
-			</staticText>
-			<line>
-				<reportElement uuid="dc15ead7-8987-4773-a705-53667133eef0" x="0" y="20" width="557" height="1" forecolor="#666666"/>
-			</line>
-		</band>
+		<band/>
 	</columnHeader>
 	<detail>
 		<band height="19">
@@ -190,31 +223,7 @@ order by b.firstNo
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="219">
-			<line>
-				<reportElement uuid="935bf83c-f757-4361-8938-5732d47392e0" x="73" y="140" width="437" height="1"/>
-			</line>
-			<staticText>
-				<reportElement uuid="743197e1-71b6-4965-b7fa-534896ba40ef" x="3" y="16" width="554" height="26"/>
-				<textElement/>
-				<text><![CDATA[I acknowledged that I have taken the above Raffle Books and understand that the books or equivalent value in money must be returned by the Collection Date.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="a5b62ccb-eea4-4937-8483-c7b55abe53d0" x="0" y="115" width="73" height="20"/>
-				<textElement/>
-				<text><![CDATA[Signed:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="7114fe76-8596-45c9-9fd7-1801fc6c6194" x="0" y="74" width="73" height="20"/>
-				<textElement/>
-				<text><![CDATA[Name:]]></text>
-			</staticText>
-			<textField>
-				<reportElement uuid="b1c3b1c2-5b89-4faf-bf36-2a88febf538f" x="73" y="74" width="336" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
-			</textField>
-		</band>
+		<band/>
 	</summary>
 	<noData>
 		<band height="50">

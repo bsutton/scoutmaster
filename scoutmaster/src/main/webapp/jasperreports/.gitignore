@@ -1,2 +1,7 @@
 *.pdf
 /EventCalendar.jasper
+/EventCalendar.html
+/ExternalProspects.html
+/MemberAddress.html
+/MemberReport.html
+/RaffleAllocation.html

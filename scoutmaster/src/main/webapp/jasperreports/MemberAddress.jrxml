@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MemberAddressListing" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Member Address List" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[select firstname,lastname, phoneno,  sect.name as section
+		<![CDATA[select firstname,lastname, phone1PhoneNo phoneno,  sect.name as section
 , concat(a.street, ", ", a.city) as address
  from Contact c
 join SectionType sect
 	on c.section_id = sect.id
-join Phone p
- on phone1_id = p.id
 join Address a
  on c.address_id = a.id
 order by sect.name, lastname]]>
@@ -34,14 +32,14 @@ order by sect.name, lastname]]>
 			<frame>
 				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="0" y="0" width="557" height="72" backcolor="#006699"/>
 				<staticText>
-					<reportElement uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab" x="18" y="10" width="359" height="43" forecolor="#FFFFFF"/>
+					<reportElement uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab" x="18" y="10" width="371" height="43" forecolor="#FFFFFF"/>
 					<textElement>
 						<font size="34" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Member Address]]></text>
+					<text><![CDATA[Member Addresses]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="377" y="33" width="180" height="20" forecolor="#FFFFFF"/>
+					<reportElement uuid="432095f6-a75d-4e66-9e94-fb7952ac1402" x="389" y="33" width="168" height="20" forecolor="#FFFFFF"/>
 					<textElement textAlignment="Right">
 						<font size="14" isBold="false"/>
 					</textElement>

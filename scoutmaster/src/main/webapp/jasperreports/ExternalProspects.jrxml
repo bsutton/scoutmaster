@@ -4,11 +4,9 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
-		<![CDATA[select firstname,lastname, phoneno
+		<![CDATA[select firstname,lastname, phone1phoneno phoneno
 , concat(a.street, ", ", a.city) as address, n.subject as subject, n.body as body
 from Contact c
-join Phone p
- on phone1_id = p.id
 join Address a
  on c.address_id = a.id
 join Contact_Tag ct
