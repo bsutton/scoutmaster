@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.access.LoginAttemptDao;
+import au.org.scoutmaster.dao.access.SessionHistoryDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.BaseEntity;
 
@@ -59,18 +60,15 @@ public class DaoFactory
 		return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
 	}
 
-	
 	public InvoiceDao getInvoiceDao()
 	{
 		return (InvoiceDao) instantiateDAO(InvoiceDao.class);
 	}
 
-	
 	public LoginAttemptDao getLoginAttemptDao()
 	{
 		return (LoginAttemptDao) instantiateDAO(LoginAttemptDao.class);
 	}
-
 
 	public NoteDao getNoteDao()
 	{
@@ -106,19 +104,17 @@ public class DaoFactory
 	{
 		return (RaffleDao) instantiateDAO(RaffleDao.class);
 	}
-	
+
 	public RaffleAllocationDao getRaffleAllocationDao()
 	{
 		return (RaffleAllocationDao) instantiateDAO(RaffleAllocationDao.class);
 
 	}
 
-	
 	public RaffleBookDao getRaffleBookDao()
 	{
 		return (RaffleBookDao) instantiateDAO(RaffleBookDao.class);
 	}
-
 
 	public RelationshipDao getRelationshipDao()
 	{
@@ -128,6 +124,11 @@ public class DaoFactory
 	public SectionTypeDao getSectionTypeDao()
 	{
 		return (SectionTypeDao) instantiateDAO(SectionTypeDao.class);
+	}
+
+	public SessionHistoryDao getSessionHistoryDao()
+	{
+		return (SessionHistoryDao) instantiateDAO(SessionHistoryDao.class);
 	}
 
 	public SMSProviderDao getSMSProviderDao()
@@ -145,15 +146,14 @@ public class DaoFactory
 		return (UserDao) instantiateDAO(UserDao.class);
 	}
 
-	
-	 public static <E> JpaBaseDao<E, Long> getGenericDao(Class<E> class1)
-	    {
-	        return new JpaBaseDao<E,Long>(class1);
+	public static <E> JpaBaseDao<E, Long> getGenericDao(Class<E> class1)
+	{
+		return new JpaBaseDao<E, Long>(class1);
 
-	    } 
+	}
 
 	@SuppressWarnings("unchecked")
-	public <D extends JpaBaseDao<E,Long>, E extends BaseEntity>  D getDao(Class<D> clazz)
+	public <D extends JpaBaseDao<E, Long>, E extends BaseEntity> D getDao(Class<D> clazz)
 	{
 		return (D) instantiateDAO(clazz);
 	}
@@ -177,9 +177,5 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
-	
-   
-
-	
 
 }
