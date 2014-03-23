@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.DateTime;
 import org.vaadin.tokenfield.TokenField;
 
 import rx.util.functions.Action1;
@@ -68,14 +69,14 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-@Menu(display = "Contacts", path="Members")
+@Menu(display = "Contact Management", path="Members")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
 	@Override
 	protected String getTitleText()
 	{
-		return "Contacts";
+		return "Contact Management";
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -138,7 +139,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		memberTab();
 		medicalTab();
 		backgroundTab();
-		activityTab();
+		logTab();
 		noteTab();
 		// googleTab();
 
@@ -297,16 +298,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	}
 
-	private void activityTab()
+	private void logTab()
 	{
-		// Now add the child activity crud
-		ChildActivityView activityView = new ChildActivityView(this);
-		activityView.setSizeFull();
-		super.addChildCrudListener(activityView);
+		// Now add the child log crud
+		ChildCommunicationView logView = new ChildCommunicationView(this);
+		logView.setSizeFull();
+		super.addChildCrudListener(logView);
 
-		tabs.addTab(activityView, "Activity");
-
-		// contactTab.setExpandRatio(activityView, 1.0f);
+		tabs.addTab(logView, "Log");
 
 	}
 
@@ -440,11 +439,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindBooleanField("License", Contact_.hasLicense);
 		background.newLine();
 		background.bindBooleanField("Has WWC", Contact_.hasWWC);
-		background.bindDateField("WWC Expiry", Contact_.wwcExpiry, "yyyy-MM-dd", Resolution.DAY);
+		DateField wwcExpiryDate = background.bindDateField("WWC Expiry", Contact_.wwcExpiry, "yyyy-MM-dd", Resolution.DAY);
+		// WWC expiry is five years.
+		wwcExpiryDate.setValue(new DateTime().plusYears(5).toDate());
 		background.bindTextField("WWC No.", Contact_.wwcNo);
 		background.newLine();
 		background.bindBooleanField("Has Police Check", Contact_.hasPoliceCheck);
-		background.bindDateField("Police Check Expiry", Contact_.policeCheckExpiry, "yyyy-MM-dd", Resolution.DAY);
+		DateField policeCheckExpiry = background.bindDateField("Police Check Expiry", Contact_.policeCheckExpiry, "yyyy-MM-dd", Resolution.DAY);
+		policeCheckExpiry.setValue(new DateTime().plusYears(5).toDate());
 		background.newLine();
 		background.bindBooleanField("Has Food Handling", Contact_.hasFoodHandlingCertificate);
 		background.bindBooleanField("Has First Aid Certificate", Contact_.hasFirstAidCertificate);
