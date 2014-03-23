@@ -1,14 +1,12 @@
 package au.org.scoutmaster.domain;
 
+import au.org.scoutmaster.domain.access.User;
 import java.sql.Date;
-
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-import au.org.scoutmaster.domain.access.User;
-
-@Generated(value="Dali", date="2014-02-26T22:43:35.137+1100")
+@Generated(value="Dali", date="2014-03-16T17:00:13.884+1100")
 @StaticMetamodel(ForgottenPasswordReset.class)
 public class ForgottenPasswordReset_ extends BaseEntity_ {
 	public static volatile SingularAttribute<ForgottenPasswordReset, Date> expires;
