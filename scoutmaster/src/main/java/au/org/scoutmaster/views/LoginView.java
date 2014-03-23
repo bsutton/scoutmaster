@@ -52,20 +52,32 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 	{
 		setSizeFull();
 
-		VerticalLayout fields = new VerticalLayout();
-		fields.setSpacing(true);
-		fields.setMargin(new MarginInfo(true, true, true, true));
-		fields.setSizeUndefined();
+		// The view root layout
+		VerticalLayout viewLayout = new VerticalLayout();
+		viewLayout.setSizeFull();
+		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
+
+		HorizontalLayout logo = new HorizontalLayout();
+		logo.setWidth("100%");
 
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/scoutmaster-logo.png"));
 
 		Image image = new Image(null, resource);
 		image.setAlternateText("Scoutmaster Logo");
-		fields.addComponent(image);
+		logo.addComponent(image);
+		logo.setComponentAlignment(image, Alignment.TOP_RIGHT);
+		viewLayout.addComponent(logo);
+
+		VerticalLayout fields = new VerticalLayout();
+		fields.setSpacing(true);
+		fields.setMargin(new MarginInfo(true, true, true, true));
+		fields.setSizeUndefined();
+
+
 
 		// Add both to a panel
-		Label label = new Label("<H1>Login to Scoutmaster.</H1>");
+		Label label = new Label("<H1>Login to Scoutmaster</H1>");
 		label.setContentMode(ContentMode.HTML);
 
 		fields.addComponent(label);
@@ -104,12 +116,13 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
 		fields.addComponent(buttons);
 
-		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
+		viewLayout.addComponent(fields);
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
-		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
+
+
 		setCompositionRoot(viewLayout);
+		
+		viewLayout.addComponent(fields);
 	}
 
 	@Override
