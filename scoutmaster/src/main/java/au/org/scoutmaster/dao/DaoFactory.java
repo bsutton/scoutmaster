@@ -30,14 +30,14 @@ public class DaoFactory
 		this.em = em;
 	}
 
-	public ActivityDao getActivityDao()
+	public CommunicationLogDao getCommunicationLogDao()
 	{
-		return (ActivityDao) instantiateDAO(ActivityDao.class);
+		return (CommunicationLogDao) instantiateDAO(CommunicationLogDao.class);
 	}
 
-	public ActivityTypeDao getActivityTypeDao()
+	public CommunicationTypeDao getActivityTypeDao()
 	{
-		return (ActivityTypeDao) instantiateDAO(ActivityTypeDao.class);
+		return (CommunicationTypeDao) instantiateDAO(CommunicationTypeDao.class);
 	}
 
 	public ContactDao getContactDao()

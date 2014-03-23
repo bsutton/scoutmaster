@@ -15,7 +15,7 @@ import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
-import au.org.scoutmaster.domain.Activity;
+import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.Age;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -103,9 +103,9 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		contact.getLHSRelationships().add(child);
 		
 	}
-	public void addActivity(Contact contact, Activity activity)
+	public void addCommunication(Contact contact, CommunicationLog communication)
 	{
-		contact.getActivities().add(activity);
+		contact.getCommunicationsLog().add(communication);
 
 	}
 
