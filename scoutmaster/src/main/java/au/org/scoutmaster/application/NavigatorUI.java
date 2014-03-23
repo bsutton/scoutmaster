@@ -22,6 +22,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.MenuBar;
@@ -166,32 +167,12 @@ public class NavigatorUI extends UI
 			@Override
 			public void afterViewChange(ViewChangeEvent event)
 			{
-				if (event.getNewView() instanceof URIParameterListener)
-				{
-					HashMap<String, String> paramMap = new HashMap<>();
-
-					String parameters = event.getParameters();
-					if (parameters.trim().length() > 0)
-					{
-						// split at "/", and look for key value pairs.
-						String[] params = parameters.split("/");
-						for (String param : params)
-						{
-							String[] pair = param.split("=");
-							if (pair.length != 2)
-								throw new IllegalArgumentException("The URI contained an invalid parameter (" + param
-										+ ") which did not confirm to the required pattern of 'key=value'");
-
-							paramMap.put(pair[0], pair[1]);
-						}
-						((URIParameterListener) event.getNewView()).setParameters(paramMap);
-					}
-				}
 				// For some reason the page title is set to null after each
 				// navigation transition.
 				getPage().setTitle("Scoutmaster");
 			}
-		});
+
+			});
 
 	}
 
@@ -216,5 +197,28 @@ public class NavigatorUI extends UI
 		ConfirmDialog.setFactory(df);
 
 	}
+	
+	public static HashMap<String, String>  extractParameterMap(ViewChangeEvent event)
+	{
+		HashMap<String, String> paramMap = new HashMap<>();
+
+		String parameters = event.getParameters();
+		if (parameters.trim().length() > 0)
+		{
+			// split at "/", and look for key value pairs.
+			String[] params = parameters.split("/");
+			for (String param : params)
+			{
+				String[] pair = param.split("=");
+				if (pair.length != 2)
+					throw new IllegalArgumentException("The URI contained an invalid parameter (" + param
+							+ ") which did not confirm to the required pattern of 'key=value'");
+
+				paramMap.put(pair[0], pair[1]);
+			}
+		}
+		return paramMap;
+	}
+
 
 }
