@@ -5,7 +5,6 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 import com.vaadin.ui.Label;
 
-@SuppressWarnings("unchecked")
 public class SplitContactTokenField<T extends BaseEntity> extends ContactTokenField<T> implements SplitField
 {
 	private static final long serialVersionUID = 7753660388792217050L;
