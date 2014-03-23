@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import au.com.vaadinutils.menu.ViewMapping;
 import au.org.scoutmaster.help.HelpProvider;
-import au.org.scoutmaster.views.ActivityView;
 import au.org.scoutmaster.views.ChangePasswordView;
+import au.org.scoutmaster.views.CommunicationLogView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.EventView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
@@ -20,6 +20,9 @@ import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.SectionTypeView;
 import au.org.scoutmaster.views.SessionHistoryView;
 import au.org.scoutmaster.views.TagView;
+import au.org.scoutmaster.views.TaskStatusView;
+import au.org.scoutmaster.views.TaskTypeView;
+import au.org.scoutmaster.views.TaskView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.calendar.CalendarView;
 import au.org.scoutmaster.views.calendar.PublicCalendarView;
@@ -40,53 +43,56 @@ public enum ScoutmasterViewEnum
 {
 	// Memebers
 	Contact(ContactView.NAME, ContactView.class,  true),
-	Member(MemberReport.NAME, MemberReport.class, false),
-	MemberAddress(MemberAddressReport.NAME, MemberAddressReport.class, false),
-	Tag(TagView.NAME, TagView.class, false),
-	Activity(ActivityView.NAME, ActivityView.class, false),
-	ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class, false),
-	ImportWizard(ImportWizardView.NAME, ImportWizardView.class, false),
+	Member(MemberReport.NAME, MemberReport.class),
+	MemberAddress(MemberAddressReport.NAME, MemberAddressReport.class),
+	Tag(TagView.NAME, TagView.class),
+	ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class),
+	ImportWizard(ImportWizardView.NAME, ImportWizardView.class),
 	
 	// Communications
-	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class, false),
-	BulkSMSWizard(BulkSMSWizardView.NAME, BulkSMSWizardView.class, false),
+	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class),
+	BulkSMSWizard(BulkSMSWizardView.NAME, BulkSMSWizardView.class),
+	CommunicationLog(CommunicationLogView.NAME, CommunicationLogView.class),
 	
 	// Calendar
-	Calendar(CalendarView.NAME, CalendarView.class, false),
-	Event(EventView.NAME, EventView.class, false),
-	CalendarReport(CalendarReportView.NAME, CalendarReportView.class, false),
-	PublicCalendar(PublicCalendarView.NAME, PublicCalendarView.class, false),
+	Calendar(CalendarView.NAME, CalendarView.class),
+	Event(EventView.NAME, EventView.class),
+	CalendarReport(CalendarReportView.NAME, CalendarReportView.class),
+	PublicCalendar(PublicCalendarView.NAME, PublicCalendarView.class),
 
 	// Raffle
-	Raffle(RaffleView.NAME, RaffleView.class, false),
-	RaffleBookImportWizard(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class, false),
-	RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class, false),
+	Raffle(RaffleView.NAME, RaffleView.class),
+	RaffleBookImportWizard(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class),
+	RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class),
 	
 	// Wizards
-	GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class, false),
+	GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class),
 
 	
 	// Admin menu
-	Organisation(OrganisationView.NAME, OrganisationView.class, false),
-	OrganisationType(OrganisationTypeView.NAME, OrganisationTypeView.class, false),
-	QualificationType(QualificationTypeView.NAME, QualificationTypeView.class, false),
-	SectionType(SectionTypeView.NAME, SectionTypeView.class, false),
-	ChangePassword(ChangePasswordView.NAME, ChangePasswordView.class, false),
+	Organisation(OrganisationView.NAME, OrganisationView.class),
+	OrganisationType(OrganisationTypeView.NAME, OrganisationTypeView.class),
+	QualificationType(QualificationTypeView.NAME, QualificationTypeView.class),
+	SectionType(SectionTypeView.NAME, SectionTypeView.class),
+	Task(TaskView.NAME, TaskView.class),
+	TaskType(TaskTypeView.NAME, TaskTypeView.class),
+	TaskStatus(TaskStatusView.NAME, TaskStatusView.class),
+	ChangePassword(ChangePasswordView.NAME, ChangePasswordView.class),
 	
 	// Admin Security
-	User(UserView.NAME, UserView.class, false),
-	SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class, false),
-	LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class, false),
+	User(UserView.NAME, UserView.class),
+	SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class),
+	LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class),
 	
 
 	
 	// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
 	// SectionBulkEmailWizard.class));
 
-	Login(LoginView.NAME, LoginView.class, false),
-	Logout(LogoutView.NAME, LogoutView.class, false),
-	ForgottenPassword(ForgottenPasswordView.NAME, ForgottenPasswordView.class, false),
-	ResetPassword(ResetPasswordView.NAME, ResetPasswordView.class, false);
+	Login(LoginView.NAME, LoginView.class),
+	Logout(LogoutView.NAME, LogoutView.class),
+	ForgottenPassword(ForgottenPasswordView.NAME, ForgottenPasswordView.class),
+	ResetPassword(ResetPasswordView.NAME, ResetPasswordView.class);
 
 	
 	
@@ -100,6 +106,14 @@ public enum ScoutmasterViewEnum
 		this.title = title;
 		this.clazz = clazz;
 		this.defaultView = defaultView;
+				
+		
+	}
+	ScoutmasterViewEnum(String title, Class<? extends View> clazz)
+	{
+		this.title = title;
+		this.clazz = clazz;
+		this.defaultView = false;
 				
 		
 	}
