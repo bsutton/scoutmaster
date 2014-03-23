@@ -48,6 +48,7 @@ public class ConfirmDetailsStep implements WizardStep
 		layout.addComponent(recipientCount);
 
 		MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
+		formLayout.setColumnFieldWidth(0, 500);
 		provider = formLayout.bindTextField("Provider", "provider");
 		provider.setReadOnly(true);
 
