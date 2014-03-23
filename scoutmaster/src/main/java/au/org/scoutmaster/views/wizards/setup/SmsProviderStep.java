@@ -11,6 +11,7 @@ import au.com.vaadinutils.editors.InputDialog;
 import au.com.vaadinutils.editors.Recipient;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.ProgressListener;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Contact;
@@ -34,14 +35,14 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SmsProviderStep extends SingleEntityStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
+public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
 {
 	private static final long serialVersionUID = 1L;
 	private TextField senderId;
 
 	public SmsProviderStep(GroupSetupWizardView setupWizardView)
 	{
-		super(setupWizardView, new DaoFactory().getSMSProviderDao(), SMSProvider.class);
+		super(new DaoFactory().getSMSProviderDao(), SMSProvider.class);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
@@ -21,7 +22,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
-public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
+public class NewAccountStep extends SingleEntityWizardStep<User> implements WizardStep
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(NewAccountStep.class);
@@ -38,7 +39,7 @@ public class NewAccountStep extends SingleEntityStep<User> implements WizardStep
 
 	public NewAccountStep(GroupSetupWizardView setupWizardView)
 	{
-		super(setupWizardView, new DaoFactory().getUserDao(), User.class);
+		super(new DaoFactory().getUserDao(), User.class);
 	}
 
 	@Override

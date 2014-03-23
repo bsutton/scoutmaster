@@ -6,6 +6,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Organisation;
@@ -17,14 +18,14 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class GroupDetailStep extends SingleEntityStep<Organisation> implements WizardStep
+public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implements WizardStep
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(GroupDetailStep.class);
 
 	public GroupDetailStep(GroupSetupWizardView setupWizardView)
 	{
-		super(setupWizardView, new DaoFactory().getOrganisationDao(), Organisation.class);
+		super(new DaoFactory().getOrganisationDao(), Organisation.class);
 	}
 
 	@Override

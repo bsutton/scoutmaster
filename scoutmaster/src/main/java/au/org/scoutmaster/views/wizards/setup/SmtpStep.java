@@ -12,6 +12,7 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.editors.InputDialog;
 import au.com.vaadinutils.editors.Recipient;
 import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
@@ -38,7 +39,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
+public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
 		ClickListener
 {
 	private static Logger logger = LogManager.getLogger(SmtpStep.class);
@@ -64,7 +65,7 @@ public class SmtpStep extends SingleEntityStep<SMTPServerSettings> implements Wi
 
 	public SmtpStep(GroupSetupWizardView setupWizardView)
 	{
-		super(setupWizardView, new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
+		super(new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
 
 		layout = new VerticalLayout();
 		layout.setMargin(true);
