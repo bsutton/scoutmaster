@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Create Task tables. -->
+
+
+	<changeSet author="bsutton" id="1.0.52">
+		<createTable tableName="Task">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="TASKTYPE_ID" type="BIGINT(19)" />
+			<column name="ADDEDBY_ID" type="BIGINT(19)" />
+			<column name="TASKSTATUS_ID" type="BIGINT(19)" />
+			<column name="PRIVATETASK" type="BIT(1)" />
+			<column name="WITHCONTACT_ID" type="BIGINT(19)" />
+			<column name="DUEDATE" type="date" />
+			<column name="COMPLETIONDATE" type="date" />
+			<column name="SUBJECT" type="VARCHAR(255)" />
+			<column name="DETAILS" type="VARCHAR(255)" />
+			<column name="SECTION_ID" type="BIGINT(19)" />
+
+			<column name="UPDATED" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+		</createTable>
+	</changeSet>
+
+
+
+	<changeSet author="bsutton" id="1.0.52.1">
+		<createTable tableName="TaskType">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.52.2">
+		<createTable tableName="TaskStatus">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="DESCRIPTION" type="VARCHAR(255)" />
+			<column name="NAME" type="VARCHAR(255)" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.52.3">
+		<insert tableName="TaskType">
+			<column name="name" value="Working Bee" />
+			<column name="DESCRIPTION" value="Working Bee" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="Fund Raising" />
+			<column name="DESCRIPTION" value="Fund Raising" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="Capital Works" />
+			<column name="DESCRIPTION" value="Capital Works" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="Sectional" />
+			<column name="DESCRIPTION" value="Sectional" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="General" />
+			<column name="DESCRIPTION" value="General" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="Maintenance" />
+			<column name="DESCRIPTION" value="Maintenance" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskType">
+			<column name="name" value="Communication" />
+			<column name="DESCRIPTION" value="Communication" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.52.4">
+		<insert tableName="TaskStatus">
+			<column name="name" value="Not Started" />
+			<column name="DESCRIPTION" value="Not Started" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="In Progress" />
+			<column name="DESCRIPTION" value="In Progress" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="Awaiting Responses" />
+			<column name="DESCRIPTION" value="Awaiting Response" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="Complete" />
+			<column name="DESCRIPTION" value="Complete" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="Cancelled" />
+			<column name="DESCRIPTION" value="Cancelled" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="On Hold" />
+			<column name="DESCRIPTION" value="On Hold" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+
+		<insert tableName="TaskStatus">
+			<column name="name" value="Awaiting Funding" />
+			<column name="DESCRIPTION" value="Awaiting Funding" />
+			<column name="CONSISTENCYVERSION" valueNumeric="1" />
+		</insert>
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.52.5">
+		<createIndex indexName="NAME" tableName="TaskType"
+			unique="true">
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.52.6">
+		<createIndex indexName="NAME" tableName="TaskStatus"
+			unique="true">
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.52.7">
+		<addForeignKeyConstraint baseColumnNames="TASKTYPE_ID"
+			baseTableName="Task" constraintName="FK_Task_TYPE_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="TaskType" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.52.8">
+		<addForeignKeyConstraint baseColumnNames="TASKSTATUS_ID"
+			baseTableName="Task" constraintName="FK_Task_STATUS_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="TaskStatus" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.52.9">
+		<addForeignKeyConstraint baseColumnNames="ADDEDBY_ID"
+			baseTableName="Task" constraintName="FK_Task_User_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="User" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.52.10">
+		<addForeignKeyConstraint baseColumnNames="WITHCONTACT_ID"
+			baseTableName="Task" constraintName="FK_Task_Contact_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+	
+		<changeSet author="bsutton (generated)" id="1.0.52.11">
+		<addForeignKeyConstraint baseColumnNames="SECTION_ID"
+			baseTableName="Task" constraintName="FK_Task_Section_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+	</changeSet>
+
+</databaseChangeLog>
