@@ -17,6 +17,8 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.Raffle_;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.views.actions.RaffleActionAllocateBooks;
 import au.org.scoutmaster.views.actions.RaffleActionImportBooks;
@@ -34,8 +36,8 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Raffle", path = "Raffle")
-public class RaffleView extends BaseCrudView<Raffle> implements View
+@Menu(display = "Raffle Management", path = "Raffle")
+public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -163,7 +165,13 @@ public class RaffleView extends BaseCrudView<Raffle> implements View
 	@Override
 	protected String getTitleText()
 	{
-		return "Raffle";
+		return "Raffle Management";
+	}
+
+	@Override
+	public HelpPageIdentifier getHelpId()
+	{
+		return HelpPageIdentifier.RaffleView;
 	};
 
 }
