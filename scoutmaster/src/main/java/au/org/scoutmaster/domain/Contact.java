@@ -177,7 +177,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@Transient
 	private SectionType sectionEligibility;
 
-	@OneToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
 	@FormField(displayName = "Address")
 	private Address address = new Address();
 
@@ -322,8 +322,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * List of interactions with this contact.
 	 */
 	@OneToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "withContact", targetEntity = Activity.class, orphanRemoval = true)
-	private List<Activity> activities = new ArrayList<>();
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "withContact", targetEntity = CommunicationLog.class, orphanRemoval = true)
+	private List<CommunicationLog> activities = new ArrayList<>();
 
 	/**
 	 * Id imported along with the contact. Used to link the contact to an
@@ -702,7 +702,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.notes = notes;
 	}
 
-	public void setActivites(List<Activity> activites)
+	public void setActivites(List<CommunicationLog> activites)
 	{
 		this.activities = activites;
 	}
@@ -827,7 +827,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		return hasFirstAidCertificate;
 	}
 
-	public List<Activity> getActivities()
+	public List<CommunicationLog> getCommunicationsLog()
 	{
 		// If some wants the list lets force it to be read from the db.
 		activities.isEmpty();

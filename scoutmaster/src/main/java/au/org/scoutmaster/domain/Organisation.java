@@ -131,8 +131,8 @@ public class Organisation extends BaseEntity
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(targetEntity=Activity.class)
-	private List<Activity> activites = new ArrayList<>();
+	@OneToMany(targetEntity=CommunicationLog.class)
+	private List<CommunicationLog> activites = new ArrayList<>();
 
 
 

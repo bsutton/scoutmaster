@@ -5,7 +5,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-10-17T21:23:50.790+1100")
+@Generated(value="Dali", date="2014-03-23T00:36:52.348+1100")
 @StaticMetamodel(Household.class)
 public class Household_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Household, String> name;
@@ -14,5 +14,5 @@ public class Household_ extends BaseEntity_ {
 	public static volatile ListAttribute<Household, Relationship> members;
 	public static volatile ListAttribute<Household, Note> notes;
 	public static volatile ListAttribute<Household, Tag> tags;
-	public static volatile ListAttribute<Household, Activity> activites;
+	public static volatile ListAttribute<Household, CommunicationLog> activites;
 }

@@ -16,17 +16,17 @@ import org.hibernate.validator.constraints.NotBlank;
  * @author bsutton
  * 
  */
-@Entity(name="ActivityType")
-@Table(name="ActivityType")
+@Entity(name="CommunicationType")
+@Table(name="CommunicationType")
 @Access(AccessType.FIELD)
 @NamedQueries(
 {
-		@NamedQuery(name = ActivityType.FIND_BY_NAME, query = "SELECT activitytype FROM ActivityType activitytype where activitytype.name = :name"), })
-public class ActivityType extends BaseEntity
+		@NamedQuery(name = CommunicationType.FIND_BY_NAME, query = "SELECT communicationtype FROM CommunicationType communicationtype where communicationtype.name = :name"), })
+public class CommunicationType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	static public final String FIND_BY_NAME = "ActivityType.findByName";
+	static public final String FIND_BY_NAME = "CommunicationType.findByName";
 
 	public static final String MEETING = "Meeting";
 	public static final String PHONE_CALL = "Phone Call";
@@ -49,12 +49,12 @@ public class ActivityType extends BaseEntity
 	@NotBlank
 	private String description;
 
-	public ActivityType()
+	public CommunicationType()
 	{
 
 	}
 
-	public ActivityType(String name, String description)
+	public CommunicationType(String name, String description)
 	{
 		this.setName(name);
 		this.setDescription(description);

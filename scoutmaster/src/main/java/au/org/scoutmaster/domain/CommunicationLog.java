@@ -25,21 +25,21 @@ import au.org.scoutmaster.domain.access.User;
  *
  */
 @Entity
-@Table(name="Activity")
+@Table(name="CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(
 {
 })
 
-public class Activity extends BaseEntity implements CrudEntity
+public class CommunicationLog extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The type of activity.
 	 */
-	@ManyToOne(targetEntity=ActivityType.class)
-	private ActivityType type;
+	@ManyToOne(targetEntity=CommunicationType.class)
+	private CommunicationType type;
 	
 	@ManyToOne(targetEntity=User.class)
 	private User addedBy;
@@ -66,12 +66,12 @@ public class Activity extends BaseEntity implements CrudEntity
 	@Column(name="DETAILS", columnDefinition="TEXT" )
 	private String details;
 
-	public ActivityType getType()
+	public CommunicationType getType()
 	{
 		return type;
 	}
 
-	public void setType(ActivityType type)
+	public void setType(CommunicationType type)
 	{
 		this.type = type;
 	}
@@ -129,7 +129,7 @@ public class Activity extends BaseEntity implements CrudEntity
 	@Override
 	public String getName()
 	{
-		return withContact.getFullname() + " Activity:" + this.subject.substring(0, Math.min(20, this.subject.length()));
+		return withContact.getFullname() + " CommunicationLog:" + this.subject.substring(0, Math.min(20, this.subject.length()));
 	}
 	
 	public String toString()

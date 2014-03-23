@@ -9,12 +9,12 @@ import org.marre.SmsSender;
 import org.marre.sms.SmsException;
 
 import au.org.scoutmaster.application.SMSession;
-import au.org.scoutmaster.dao.ActivityDao;
-import au.org.scoutmaster.dao.ActivityTypeDao;
+import au.org.scoutmaster.dao.CommunicationLogDao;
+import au.org.scoutmaster.dao.CommunicationTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.Activity;
-import au.org.scoutmaster.domain.ActivityType;
+import au.org.scoutmaster.domain.CommunicationLog;
+import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.Tag;
@@ -69,13 +69,13 @@ public class SMSSession implements Closeable
 					.getSender().getPhoneNo());
 
 			// Log the activity
-			ActivityDao daoActivity = new DaoFactory().getActivityDao();
-			ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-			Activity activity = new Activity();
+			CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
+			CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+			CommunicationLog activity = new CommunicationLog();
 			activity.setAddedBy(user);
 			activity.setWithContact(transmission.getContact());
 			activity.setSubject(transmission.getMessage().getSubject());
-			activity.setType(daoActivityType.findByName(ActivityType.BULK_SMS));
+			activity.setType(daoActivityType.findByName(CommunicationType.BULK_SMS));
 			activity.setDetails(transmission.getMessage().getBody());
 			daoActivity.persist(activity);
 			

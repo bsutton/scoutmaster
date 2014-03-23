@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<!-- Rename Activity to CommunicationLog -->
+
+	<!-- drop constraints -->
+
+	<changeSet author="bsutton" id="1.0.51.1">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_TYPE_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.2">
+		<dropForeignKeyConstraint baseTableName="Household_Activity"
+			constraintName="FK_Household_Activity_activites_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.3">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_TOSECTION_ID" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.51.4">
+		<dropForeignKeyConstraint baseTableName="Section_Activity"
+			constraintName="FK_Section_Activity_transitioningYouthMembers_ID" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.51.5">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_WITHCONTACT_ID" />
+	</changeSet>
+
+
+
+	<changeSet author="bsutton" id="1.0.51.6">
+		<dropForeignKeyConstraint baseTableName="Organisation_Activity"
+			constraintName="FK_Organisation_Activity_Organisation_ID" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.51.7">
+		<dropForeignKeyConstraint baseTableName="Organisation_Activity"
+			constraintName="FK_Organisation_Activity_activites_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.8">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_ADDEDBY_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_YOUTHMEMBER_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.9">
+		<dropForeignKeyConstraint baseTableName="Section_Activity"
+			constraintName="FK_Section_Activity_Section_ID" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.51.10">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_FROMSECTION_ID" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.51.12">
+		<dropForeignKeyConstraint baseTableName="Household_Activity"
+			constraintName="FK_Household_Activity_Household_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.13">
+		<dropForeignKeyConstraint baseTableName="Activity"
+			constraintName="FK_Activity_TRANSITIONSUPERVISOR_ID" />
+	</changeSet>
+	
+
+	<!-- rename tables -->
+
+	<changeSet author="bsutton" id="1.0.51.16">
+		<renameTable oldTableName="Activity" newTableName="CommunicationLog" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.17">
+		<renameTable oldTableName="ActivityType" newTableName="CommunicationType" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.17.2">
+		<renameTable oldTableName="Household_Activity" newTableName="Household_CommunicationLog" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.17.3">
+		<renameTable oldTableName="Section_Activity" newTableName="Section_CommunicationLog" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.51.17.4">
+		<renameTable oldTableName="Organisation_Activity" newTableName="Organisation_CommunicationLog" />
+	</changeSet>
+
+	<!-- re-add contraints -->
+
+	<changeSet author="bsutton" id="1.0.51.18">
+		<addForeignKeyConstraint baseColumnNames="TYPE_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_TYPE_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CommunicationType" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.19">
+		<addForeignKeyConstraint baseColumnNames="activites_ID"
+			baseTableName="Household_CommunicationLog" constraintName="FK_Household_CommunicationLog_activites_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CommunicationLog" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.20">
+		<addForeignKeyConstraint baseColumnNames="TOSECTION_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_TOSECTION_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.21">
+		<addForeignKeyConstraint baseColumnNames="transitioningYouthMembers_ID"
+			baseTableName="Section_CommunicationLog" constraintName="FK_Section_CommunicationLog_transitioningYouthMembers_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CommunicationLog" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.51.22">
+		<addForeignKeyConstraint baseColumnNames="WITHCONTACT_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_WITHCONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.23">
+		<addForeignKeyConstraint baseColumnNames="Organisation_ID"
+			baseTableName="Organisation_CommunicationLog" constraintName="FK_Organisation_CommunicationLog_Organisation_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Organisation" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.24">
+		<addForeignKeyConstraint baseColumnNames="activites_ID"
+			baseTableName="Organisation_CommunicationLog" constraintName="FK_Organisation_CommunicationLog_activites_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="CommunicationLog" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.51.25">
+		<addForeignKeyConstraint baseColumnNames="ADDEDBY_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_ADDEDBY_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="User" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.26">
+		<addForeignKeyConstraint baseColumnNames="YOUTHMEMBER_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_YOUTHMEMBER_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.27">
+		<addForeignKeyConstraint baseColumnNames="Section_ID"
+			baseTableName="Section_CommunicationLog" constraintName="FK_Section_CommunicationLog_Section_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+	</changeSet>
+
+
+	<changeSet author="bsutton (generated)" id="1.0.51.28">
+		<addForeignKeyConstraint baseColumnNames="FROMSECTION_ID"
+			baseTableName="CommunicationLog" constraintName="FK_CommunicationLog_FROMSECTION_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+	</changeSet>
+
+	<changeSet author="bsutton (generated)" id="1.0.51.30">
+		<addForeignKeyConstraint baseColumnNames="Household_ID"
+			  baseTableName="Household_CommunicationLog"
+			constraintName="FK_Household_CommunicationLog_Household_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID"  
+			referencedTableName="Household" />
+	</changeSet>
+	
+		<changeSet author="bsutton (generated)" id="1.0.51.31">
+		<addForeignKeyConstraint baseColumnNames="TRANSITIONSUPERVISOR_ID"
+			  baseTableName="CommunicationLog"
+			constraintName="FK_CommunicationLog_TRANSITIONSUPERVISOR_ID" deferrable="false"
+			initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+			referencedColumnNames="ID"  
+			referencedTableName="Contact" />
+	</changeSet>
+	
+
+</databaseChangeLog>

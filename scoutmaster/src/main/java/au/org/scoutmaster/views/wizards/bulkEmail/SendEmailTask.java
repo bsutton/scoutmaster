@@ -15,15 +15,15 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
-import au.org.scoutmaster.dao.ActivityDao;
-import au.org.scoutmaster.dao.ActivityTypeDao;
+import au.org.scoutmaster.dao.CommunicationLogDao;
+import au.org.scoutmaster.dao.CommunicationTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.dao.Transaction;
-import au.org.scoutmaster.domain.Activity;
-import au.org.scoutmaster.domain.ActivityType;
+import au.org.scoutmaster.domain.CommunicationLog;
+import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
@@ -97,10 +97,10 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 							attachedFiles);
 
 					// Log the activity
-					ActivityDao daoActivity = new DaoFactory().getActivityDao();
-					ActivityTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-					ActivityType type = daoActivityType.findByName(ActivityType.BULK_EMAIL);
-					Activity activity = new Activity();
+					CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
+					CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+					CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
+					CommunicationLog activity = new CommunicationLog();
 					activity.setAddedBy(user);
 					activity.setWithContact(transmission.getContact());
 					activity.setSubject(message.getSubject());

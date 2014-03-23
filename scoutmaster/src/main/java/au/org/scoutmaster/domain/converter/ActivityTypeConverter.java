@@ -5,28 +5,28 @@ import org.apache.logging.log4j.Logger;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.ActivityType;
+import au.org.scoutmaster.domain.CommunicationType;
 
-public class ActivityTypeConverter extends BaseConverter<ActivityType>
+public class ActivityTypeConverter extends BaseConverter<CommunicationType>
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger();
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Class<ActivityType> getModelType()
+	public Class<CommunicationType> getModelType()
 	{
-		return ActivityType.class;
+		return CommunicationType.class;
 	}
 
 	@Override
-	protected ActivityType newInstance(Object value)
+	protected CommunicationType newInstance(Object value)
 	{
-		return new ActivityType((String)value, null);
+		return new CommunicationType((String)value, null);
 	}
 
 	@Override
-	protected JpaBaseDao<ActivityType, Long> getDao()
+	protected JpaBaseDao<CommunicationType, Long> getDao()
 	{
 		return new DaoFactory().getActivityTypeDao();
 	}

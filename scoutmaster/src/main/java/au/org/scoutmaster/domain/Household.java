@@ -67,8 +67,8 @@ public class Household extends BaseEntity
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity=Activity.class)
-	private final List<Activity> activites = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, targetEntity=CommunicationLog.class)
+	private final List<CommunicationLog> activites = new ArrayList<>();
 
 	public String getName()
 	{
