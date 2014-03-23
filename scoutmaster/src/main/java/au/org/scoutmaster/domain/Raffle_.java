@@ -1,15 +1,13 @@
 package au.org.scoutmaster.domain;
 
+import au.org.scoutmaster.domain.accounting.Money;
 import java.sql.Date;
-
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-import au.org.scoutmaster.domain.accounting.Money;
-
-@Generated(value="Dali", date="2014-03-03T08:16:39.825+1100")
+@Generated(value="Dali", date="2014-03-16T17:00:13.907+1100")
 @StaticMetamodel(Raffle.class)
 public class Raffle_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Raffle, String> name;
