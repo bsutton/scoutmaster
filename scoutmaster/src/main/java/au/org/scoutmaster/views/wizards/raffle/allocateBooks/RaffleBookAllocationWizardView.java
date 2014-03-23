@@ -1,6 +1,6 @@
 package au.org.scoutmaster.views.wizards.raffle.allocateBooks;
 
-import java.util.Map;
+import java.util.HashMap;
 
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
@@ -9,10 +9,13 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
-import au.org.scoutmaster.application.URIParameterListener;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.NavigatorUI;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleDao;
 import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.views.RaffleView;
 
 import com.vaadin.navigator.View;
@@ -23,7 +26,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener, URIParameterListener
+@Menu(display = "Allocate Books", path = "Raffle")
+public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener, HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -36,6 +40,8 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	private Wizard wizard;
 
 	private WelcomeStep welcomeStep;
+	private AllocationMethodStep allocationMethodStep;
+	private SelectRaffleStep raffleStep;
 	private SelectStep selectStep;
 	private AllocationStep allocationStep;
 	private FinalStep finalStep;
@@ -49,17 +55,6 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	{
 	}
 
-	@Override
-	public void setParameters(Map<String, String> parameters)
-	{
-		String value = parameters.get("ID");
-		
-		RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
-		
-		this.raffle = daoRaffle.findById(Long.valueOf(value));
-	}
-
-	
 	public WelcomeStep getWelcomeStep()
 	{
 		return welcomeStep;
@@ -75,13 +70,23 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		return selectStep;
 	}
 
-
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 
+		HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
+
+		String value = parameters.get("ID");
+		if (value != null)
+		{
+			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+			this.raffle = daoRaffle.findById(Long.valueOf(value));
+		}
+
 		welcomeStep = new WelcomeStep(this);
+		allocationMethodStep = new AllocationMethodStep(this);
 		selectStep = new BulkSelectionStep(this);
+		raffleStep = new SelectRaffleStep(this);
 		allocationStep = new BulkAllocationStep(this);
 		finalStep = new FinalStep(this);
 
@@ -90,6 +95,9 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
 		wizard.addStep(welcomeStep, "Welcome");
+		if (raffle == null)
+			wizard.addStep(raffleStep, "Raffle");
+		wizard.addStep(allocationMethodStep);
 		wizard.addStep(selectStep, SELECTION_STEP);
 		wizard.addStep(allocationStep, ALLOCATION_STEP);
 		wizard.addStep(finalStep, "Final");
@@ -141,6 +149,7 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		Page.getCurrent().setTitle(message);
 		UI.getCurrent().getNavigator().navigateTo(RaffleView.NAME);
 	}
+
 	public Raffle getRaffle()
 	{
 		return this.raffle;
@@ -154,5 +163,17 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		wizard.addStep(allocationStep, ALLOCATION_STEP, 2);
 		this.selectStep = selectionStep;
 		this.allocationStep = allocationStep;
+	}
+
+	public void setRaffle(Raffle raffle)
+	{
+		this.raffle = raffle;
+
+	}
+
+	@Override
+	public HelpPageIdentifier getHelpId()
+	{
+		return HelpPageIdentifier.RaffleAllocationWizard;
 	}
 }

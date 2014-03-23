@@ -1,6 +1,6 @@
 package au.org.scoutmaster.views.wizards.raffle.importBooks;
 
-import java.util.Map;
+import java.util.HashMap;
 
 import org.vaadin.teemu.wizards.Wizard;
 import org.vaadin.teemu.wizards.event.WizardCancelledEvent;
@@ -9,10 +9,13 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
-import au.org.scoutmaster.application.URIParameterListener;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.NavigatorUI;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleDao;
 import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.help.HelpProvider;
 import au.org.scoutmaster.views.RaffleView;
 
 import com.vaadin.navigator.View;
@@ -23,7 +26,8 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class RaffleBookImportWizardView extends VerticalLayout implements View, WizardProgressListener, URIParameterListener
+@Menu(display = "Import Books", path = "Raffle")
+public class RaffleBookImportWizardView extends VerticalLayout implements View, WizardProgressListener, HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -32,6 +36,7 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 	private Wizard wizard;
 
 	private WelcomeStep welcomeStep;
+	private SelectRaffleStep raffleStep;
 	private ConfirmRaffleDetails confirmRaffleStep;
 	private TicketRangeStep ticketRangeStep;
 	private FinalStep finalStep;
@@ -45,17 +50,6 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 	{
 	}
 
-	@Override
-	public void setParameters(Map<String, String> parameters)
-	{
-		String value = parameters.get("ID");
-		
-		RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
-		
-		this.raffle = daoRaffle.findById(Long.valueOf(value));
-	}
-
-	
 	public WelcomeStep getWelcomeStep()
 	{
 		return welcomeStep;
@@ -76,12 +70,21 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		return finalStep;
 	}
 
-
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 
+		HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
+		
+		String value = parameters.get("ID");
+		if (value != null)
+		{
+			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+			this.raffle = daoRaffle.findById(Long.valueOf(value));
+		}
+
 		welcomeStep = new WelcomeStep(this);
+		raffleStep = new SelectRaffleStep(this);
 		confirmRaffleStep = new ConfirmRaffleDetails(this);
 		ticketRangeStep = new TicketRangeStep(this);
 		finalStep = new FinalStep(this);
@@ -91,6 +94,8 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
 		wizard.addStep(welcomeStep, "Welcome");
+		if (raffle == null)
+			wizard.addStep(raffleStep, "Raffle");
 		wizard.addStep(confirmRaffleStep, "Confirm");
 		wizard.addStep(ticketRangeStep, "TicketRange");
 		wizard.addStep(finalStep, "Final");
@@ -142,11 +147,21 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		UI.getCurrent().getNavigator().navigateTo(RaffleView.NAME);
 
 	}
+
 	public Raffle getRaffle()
 	{
 		return this.raffle;
 	}
 
+	public void setRaffle(Raffle raffle)
+	{
+		this.raffle = raffle;
 
+	}
+	@Override
+	public HelpPageIdentifier getHelpId()
+	{
+		return HelpPageIdentifier.RaffleImportWizard;
+	}
 
 }

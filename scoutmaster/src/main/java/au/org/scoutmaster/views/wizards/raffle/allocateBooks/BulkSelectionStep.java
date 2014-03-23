@@ -25,7 +25,6 @@ import au.org.scoutmaster.domain.RaffleBook_;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -103,13 +102,6 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 			@Override
 			protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
 			{
-				EntityProvider<Contact> provider = container.getEntityProvider();
-
-				// hook the query delegate so we can fix the jpa query on the way
-				// through.
-//				provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(new ArrayList<Tag>(), new ArrayList<Tag>(),
-//						filterString, false));
-
 				
 				if (filterString.length() > 0)
 				{
@@ -124,7 +116,6 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 				else
 					return null;
 
-//				return null;
 			}
 		};
 
@@ -137,8 +128,6 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 
 		layout.addComponent(labelAllocate);
 		
-		//issuedBy.focus();
-
 		return layout;
 	}
 

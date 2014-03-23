@@ -127,36 +127,6 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 		return layout;
 	}
 
-	// private void allocateBooks(Raffle raffle, Contact issuedByContact,
-	// List<Allocation> allocations)
-	// {
-	// RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
-	// RaffleAllocationDao daoRaffleAllocation = new
-	// DaoFactory().getRaffleAllocationDao();
-	//
-	// assert allocations.size() == 0 : "Only a single allocation is expected.";
-	//
-	// Allocation allocation = allocations.get(0);
-	// RaffleAllocation raffleAllocation = new RaffleAllocation();
-	// raffleAllocation.setRaffle(raffle);
-	// raffleAllocation.setAllocatedTo(allocation.getAllocatedTo());
-	// raffleAllocation.setDateAllocated(new Date(new
-	// java.util.Date().getTime()));
-	// raffleAllocation.setDateIssued(new Date(new java.util.Date().getTime()));
-	// raffleAllocation.setIssuedBy(issuedByContact);
-	// daoRaffleAllocation.persist(raffleAllocation);
-	//
-	// for (RaffleBook book : allocation.getBooks())
-	// {
-	// if (book.getRaffleAllocation() == null)
-	// {
-	// book.setRaffleAllocation(raffleAllocation);
-	// daoRaffleBook.merge(book);
-	// }
-	// }
-	// this.raffleAllocation = raffleAllocation;
-	// }
-
 	private void allocateBooks(Raffle raffle, Contact issuedByContact, List<Allocation> preallocation)
 	{
 		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();

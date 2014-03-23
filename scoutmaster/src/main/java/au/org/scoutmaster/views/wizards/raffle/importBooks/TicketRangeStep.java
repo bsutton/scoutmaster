@@ -7,11 +7,14 @@ import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
-import au.org.scoutmaster.domain.Organisation;
+import au.com.vaadinutils.fields.FieldValidator;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.util.SMNotification;
 
+import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
@@ -28,6 +31,10 @@ public class TicketRangeStep implements WizardStep
 	private TextField firstTicketNoField;
 	private TextField noOfBooksField;
 	private TextField lastTicketNoField;
+	private MultiColumnFormLayout<Integer> formLayout;
+
+	FieldGroup fieldGroup = new FieldGroup();
+	private FieldValidator fieldValidator;
 
 	public TicketRangeStep(RaffleBookImportWizardView setupWizardView)
 	{
@@ -45,7 +52,10 @@ public class TicketRangeStep implements WizardStep
 	{
 		VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, null);
+
+		fieldValidator = new FieldValidator();
+		formLayout = new MultiColumnFormLayout<Integer>(1, null); // new
+																	// ValidatingFieldGroup(dynamicFieldItem));
 		formLayout.setColumnLabelWidth(0, 150);
 		formLayout.setColumnFieldWidth(0, 250);
 		formLayout.setSizeFull();
@@ -57,14 +67,26 @@ public class TicketRangeStep implements WizardStep
 		layout.addComponent(formLayout);
 
 		firstTicketNoField = formLayout.addTextField("First Book Ticket No.");
-		noOfBooksField = formLayout.addTextField("No. of contiguous Books");
-		noOfBooksField.setDescription("The no of Books to be imported. They must be in a contiguous number range!");
+		noOfBooksField = formLayout.addTextField("No. of consecutive Books");
+		noOfBooksField.setDescription("The no of Books to be imported. They must be in a consecutive number range!");
 		lastTicketNoField = formLayout.addTextField("Last Ticket No. of Last Book");
 		lastTicketNoField
 				.setDescription("Enter the ticket no of the 'last' ticket of the 'last' book. This is used to check that all of the details are correct.");
 
-		firstTicketNoField.addValidator(new IntegerRangeValidator("First Ticket No", 0, 6000000));
-		noOfBooksField.addValidator(new IntegerRangeValidator("First Ticket No", 1, 1000));
+		firstTicketNoField.addValidator(new IntegerRangeValidator("First Ticket No must be an integer", 0, 6000000));
+		firstTicketNoField.setConverter(new StringToIntegerConverter());
+		firstTicketNoField.setRequired(true);
+		fieldValidator.addField(firstTicketNoField);
+
+		noOfBooksField.addValidator(new IntegerRangeValidator("No. of Books must be an integer", 1, 1000));
+		noOfBooksField.setConverter(new StringToIntegerConverter());
+		noOfBooksField.setRequired(true);
+		fieldValidator.addField(noOfBooksField);
+
+		lastTicketNoField.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 1000));
+		lastTicketNoField.setConverter(new StringToIntegerConverter());
+		lastTicketNoField.setRequired(true);
+		fieldValidator.addField(lastTicketNoField);
 
 		Label labelImport = new Label("<h1>Clicking Next will import the books!</h1>", ContentMode.HTML);
 
@@ -79,28 +101,41 @@ public class TicketRangeStep implements WizardStep
 		boolean advance = false;
 		Raffle raffle = wizard.getRaffle();
 
-		int firstTicketNo = Long.valueOf(firstTicketNoField.getValue()).intValue();
-		int lastTicketNo = Long.valueOf(lastTicketNoField.getValue()).intValue();
-		int noOfBooks = Long.valueOf(noOfBooksField.getValue()).intValue();
-		int ticketsPerBook = raffle.getTicketsPerBook();
-
-		RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
-
-		if (book != null)
+		try
 		{
-			SMNotification.show("Please check book no.s as the book: " + book.toString()
-					+ " has already been imported.", Type.WARNING_MESSAGE);
+			fieldValidator.validate();
 
+			int firstTicketNo = Long.valueOf(firstTicketNoField.getValue()).intValue();
+			int lastTicketNo = Long.valueOf(lastTicketNoField.getValue()).intValue();
+			int noOfBooks = Long.valueOf(noOfBooksField.getValue()).intValue();
+			int ticketsPerBook = raffle.getTicketsPerBook();
+
+			RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
+
+			if (book != null)
+			{
+				SMNotification.show("Please check book no.s as the book: " + book.toString()
+						+ " has already been imported.", Type.WARNING_MESSAGE);
+
+			}
+			else
+			{
+				int calcLastTicket = firstTicketNo + (noOfBooks * ticketsPerBook) - 1;
+				if (calcLastTicket != lastTicketNo)
+				{
+					int expectedLast = firstTicketNo + (noOfBooks * ticketsPerBook) - 1;
+					SMNotification
+							.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
+									+ expectedLast, Type.WARNING_MESSAGE);
+				}
+				else
+					advance = true;
+			}
 		}
-		else if (firstTicketNo + (noOfBooks * ticketsPerBook) != lastTicketNo)
+		catch (InvalidValueException e)
 		{
-			int expectedLast = firstTicketNo + (noOfBooks * ticketsPerBook);
-			SMNotification
-					.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
-							+ expectedLast, Type.WARNING_MESSAGE);
+			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
-		else
-			advance = true;
 
 		return advance;
 	}
@@ -113,7 +148,7 @@ public class TicketRangeStep implements WizardStep
 		for (RaffleBook book : books)
 		{
 			int firstTicket = book.getFirstNo().intValue();
-			int lastTicket = book.getFirstNo() + book.getTicketCount();
+			int lastTicket = book.getFirstNo() + book.getTicketCount() - 1;
 
 			if (firstTicket >= firstTicketNo && firstTicket <= lastTicketNo
 					|| (lastTicket >= firstTicketNo && lastTicket <= lastTicketNo))
