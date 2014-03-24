@@ -44,6 +44,8 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	private RaffleBookImportWizardView setupWizardView;
 
 	private ComboBox raffleField;
+	
+	private Raffle newRaffle = null;
 
 	private VerticalLayout layout;
 
@@ -95,18 +97,20 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 			label.setContentMode(ContentMode.HTML);
 
 			layout.addComponent(label);
-			
+
 			options = new OptionGroup();
 			options.addItem(RaffleType.New);
 			options.addItem(RaffleType.Existing);
 			options.setImmediate(true);
-			options.addValueChangeListener( this);
+			options.addValueChangeListener(this);
 			layout.addComponent(options);
 
 			Raffle raffle = null;
 			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			@SuppressWarnings("unchecked")
-			List<Raffle> list = daoRaffle.findAll(new SingularAttribute []{Raffle_.startDate}, new boolean[] {false});
+			List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
+			{ Raffle_.startDate }, new boolean[]
+			{ false });
 			if (list.size() > 0)
 			{
 				raffle = list.get(0);
@@ -117,13 +121,11 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 					raffle = null;
 			}
 
-
-			
 			existingLayout = buildExistingRaffleLayout(raffle);
 			newLayout = buildNewRaffleLayout(fieldGroup);
 			layout.addComponent(existingLayout);
 			layout.addComponent(newLayout);
-			
+
 			if (raffle == null)
 				options.setValue(RaffleType.New);
 			else
@@ -145,14 +147,14 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 		raffleField.setItemCaptionPropertyId(Raffle_.name.getName());
 		raffleField.setRequired(true);
 		raffleField.setNullSelectionAllowed(false);
-		
+
 		raffleField.setValue(raffle.getId());
-		
+
 		layout.addComponent(raffleField);
 		return layout;
-		
+
 	}
-	
+
 	AbstractLayout buildNewRaffleLayout(ValidatingFieldGroup<Raffle> fieldGroup)
 	{
 		SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<Raffle>(1, fieldGroup);
@@ -160,28 +162,26 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 		overviewForm.setSizeFull();
 
 		overviewForm.bindTextField("Name", Raffle_.name);
-		 overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
+		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
 				.setDescription("The date the raffle ticksets need to be collected by.");
 		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
 				"The date the raffle ticksets need to be returned to Branch.");
-		
-		
 
 		FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
-		ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Group Raffle Manager").setField(Raffle_.groupRaffleManager).setListFieldName(Contact_.fullname).build();
+		ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>().setLabel("Group Raffle Manager")
+				.setField(Raffle_.groupRaffleManager).setListFieldName(Contact_.fullname).build();
 		groupRaffleManager.setFilteringMode(FilteringMode.CONTAINS);
 		groupRaffleManager.setTextInputAllowed(true);
 		groupRaffleManager.setDescription("The Group member responsible for organising the Raffle.");
-		
-		ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Branch Raffle Contact").setField(Raffle_.branchRaffleContact).setListFieldName(Contact_.fullname).build();
+
+		ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>().setLabel("Branch Raffle Contact")
+				.setField(Raffle_.branchRaffleContact).setListFieldName(Contact_.fullname).build();
 		branchRaffleConact.setFilteringMode(FilteringMode.CONTAINS);
 		branchRaffleConact.setTextInputAllowed(true);
 		branchRaffleConact.setDescription("The Branch person who is a main contact for Raffle issues.");
-		
+
 		overviewForm.bindTextField("Book No. Prefix", Raffle_.raffleNoPrefix).setDescription(
 				"If raffle books have a non-numeric prefix for the ticket no's enter it here.");
 		overviewForm.bindTextField("Tickets per Book", Raffle_.ticketsPerBook);
@@ -193,11 +193,11 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 				"The amount the Group is aiming to raise via the Raffle.");
 
 		overviewForm.bindTextField("Revenue Raised", Raffle_.revenueRaised).setReadOnly(true);
-		
+
 		return overviewForm;
-		
+
 	}
-	
+
 	@Override
 	public void valueChange(ValueChangeEvent event)
 	{
@@ -216,21 +216,31 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 
 	}
 
-
 	@Override
 	public boolean onAdvance()
 	{
 		boolean advance = false;
-		if (raffleField.isValid())
+		if (options.getValue() == RaffleType.Existing)
 		{
-			Long id = (Long) raffleField.getValue();
-			JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
-			Raffle raffle = raffleDao.findById(id);
-			setupWizardView.setRaffle(raffle);
-			advance = true;
+			if (raffleField.isValid())
+			{
+				Long id = (Long) raffleField.getValue();
+				JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
+				Raffle raffle = raffleDao.findById(id);
+				setupWizardView.setRaffle(raffle);
+				advance = true;
+			}
+			else
+				SMNotification.show("Please select a Raffle", Type.WARNING_MESSAGE);
 		}
 		else
-			SMNotification.show("Please select a Raffle", Type.WARNING_MESSAGE);
+		{
+			// call super to create the new raffle
+			advance = super.onAdvance();
+			newRaffle = super.getEntity();
+			
+			setupWizardView.setRaffle(newRaffle);
+		}
 
 		return advance;
 	}
@@ -249,11 +259,9 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	@Override
 	protected Raffle findEntity()
 	{
-		// We only ever create a new entity.
-		return null;
+		// If we create a raffle we need to return it when someone clicks
+		// back so we don't keep adding new raffles.
+		return newRaffle;
 	}
 
-	
-
 }
-
