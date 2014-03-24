@@ -37,7 +37,6 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Tasks", path = "Admin")
@@ -51,7 +50,6 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 
 	public static final String NAME = "Tasks";
 
-	private ComboBox status;
 
 	@Override
 	protected AbstractLayout buildEditor(ValidatingFieldGroup<Task> fieldGroup2)
@@ -84,7 +82,7 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.bindDateField("Date Completed", Task_.completionDate, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
 		overviewForm.newLine();
 
-		status = formHelper.new EntityFieldBuilder<TaskStatus>().setLabel("Status").setField(Task_.taskStatus)
+		formHelper.new EntityFieldBuilder<TaskStatus>().setLabel("Status").setField(Task_.taskStatus)
 				.setListFieldName(TaskStatus_.name).build();
 		overviewForm.newLine();
 
