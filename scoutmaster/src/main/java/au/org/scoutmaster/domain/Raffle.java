@@ -141,7 +141,7 @@ public class Raffle extends BaseEntity
 	/**
 	 * The set of allocations. Allocations represent a set of books that have been allocated to contacts.
 	 */
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "raffle", orphanRemoval=true)
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "raffle", orphanRemoval=true)
 	private Set<RaffleAllocation> allocated = new HashSet<>();
 
 
