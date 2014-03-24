@@ -48,7 +48,7 @@ public class RaffleBook extends BaseEntity
 	 * if the book hasn't been issued.
 	 */
 	@ManyToOne(optional = true)
-	RaffleAllocation raffleAllocation = new RaffleAllocation();
+	RaffleAllocation raffleAllocation;
 
 	/**
 	 * The no. of tickets in the book.
