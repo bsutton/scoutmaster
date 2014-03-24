@@ -85,7 +85,7 @@ public class TicketRangeStep implements WizardStep
 		noOfBooksField.setRequired(true);
 		fieldValidator.addField(noOfBooksField);
 
-		lastTicketNoField.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 1000));
+		lastTicketNoField.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 6000000));
 		lastTicketNoField.setConverter(new StringToIntegerConverter());
 		lastTicketNoField.setRequired(true);
 		fieldValidator.addField(lastTicketNoField);
@@ -107,9 +107,9 @@ public class TicketRangeStep implements WizardStep
 		{
 			fieldValidator.validate();
 
-			int firstTicketNo = Long.valueOf(firstTicketNoField.getValue()).intValue();
-			int lastTicketNo = Long.valueOf(lastTicketNoField.getValue()).intValue();
-			int noOfBooks = Long.valueOf(noOfBooksField.getValue()).intValue();
+			int firstTicketNo = (Integer)firstTicketNoField.getConvertedValue();
+			int lastTicketNo = (Integer)lastTicketNoField.getConvertedValue();
+			int noOfBooks = (Integer)noOfBooksField.getConvertedValue();
 			int ticketsPerBook = raffle.getTicketsPerBook();
 
 			RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
@@ -180,17 +180,17 @@ public class TicketRangeStep implements WizardStep
 
 	public int getFirstBookNo()
 	{
-		return Long.valueOf(firstTicketNoField.getValue()).intValue();
+		return ((Integer)firstTicketNoField.getConvertedValue()).intValue();
 	}
 
 	public int getLastBookNo()
 	{
-		return Long.valueOf(lastTicketNoField.getValue()).intValue();
+		return ((Integer)lastTicketNoField.getConvertedValue()).intValue();
 	}
 
 	public int getBookCount()
 	{
-		return Long.valueOf(noOfBooksField.getValue()).intValue();
+		return ((Integer)noOfBooksField.getConvertedValue()).intValue();
 	}
 
 }
