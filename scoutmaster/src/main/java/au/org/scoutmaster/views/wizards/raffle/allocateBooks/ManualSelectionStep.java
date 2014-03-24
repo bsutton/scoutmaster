@@ -11,6 +11,7 @@ import org.vaadin.teemu.wizards.WizardStep;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleAllocationDao;
 import au.org.scoutmaster.dao.RaffleBookDao;
@@ -21,10 +22,13 @@ import au.org.scoutmaster.domain.RaffleAllocation;
 import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.RaffleBook_;
+import au.org.scoutmaster.domain.Raffle_;
 import au.org.scoutmaster.util.SMNotification;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.util.filter.And;
+import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.IsNull;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -81,6 +85,8 @@ public class ManualSelectionStep implements WizardStep, SelectStep
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);
+		
+		Raffle raffle = setupWizardView.getRaffle();
 
 		// The container just lets us use a fieldgroup which we need to bind the
 		// twincol selection to.
@@ -113,7 +119,7 @@ public class ManualSelectionStep implements WizardStep, SelectStep
 
 		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
 		JPAContainer<RaffleBook> container = daoRaffleBook.createVaadinContainer();
-		container.addContainerFilter(new IsNull(RaffleBook_.raffleAllocation.getName()));
+		container.addContainerFilter(new And(new IsNull(RaffleBook_.raffleAllocation.getName()), new Compare.Equal(new Path(RaffleBook_.raffle, Raffle_.id).getName(), raffle.getId())));
 
 		this.bookSelectionField = formHelper.new TwinColSelectBuilder<RaffleBook>().setLabel("Books")
 				.setField(RaffleAllocation_.books).setListFieldName(RaffleBook_.firstNo).setContainer(container)
