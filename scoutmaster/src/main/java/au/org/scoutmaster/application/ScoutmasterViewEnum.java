@@ -114,8 +114,11 @@ public enum ScoutmasterViewEnum
 		this.title = title;
 		this.clazz = clazz;
 		this.defaultView = false;
-				
-		
+	}
+	
+	public boolean isDefaultView()
+	{
+		return this.defaultView;
 	}
 
 	public boolean noHelp()
