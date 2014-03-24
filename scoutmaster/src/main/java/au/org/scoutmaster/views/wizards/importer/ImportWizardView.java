@@ -73,7 +73,6 @@ public class ImportWizardView extends VerticalLayout implements View, WizardProg
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-
 		type = new ImportSelectType(this);
 		file = new ImportSelectFile(this);
 		match = new ImportMatchFields(this);
@@ -85,6 +84,7 @@ public class ImportWizardView extends VerticalLayout implements View, WizardProg
 		// create the Wizard component and add the steps
 		wizard = new Wizard();
 		wizard.setUriFragmentEnabled(true);
+		wizard.setSizeFull();
 		wizard.addListener(this);
 		wizard.addStep(type, "type");
 		wizard.addStep(file, "file");
@@ -92,15 +92,18 @@ public class ImportWizardView extends VerticalLayout implements View, WizardProg
 		wizard.addStep(sample, "sample");
 		wizard.addStep(progress, "progress");
 		wizard.addStep(complete, "complete");
-		wizard.setHeight("600px");
-		wizard.setWidth("800px");
-		wizard.setUriFragmentEnabled(true);
 		
 		/* Main layout */
 		this.setMargin(true);
 		this.setSpacing(true);
 		this.addComponent(wizard);
 		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
+		
+		
+
+		/* Main layout */
+		this.setSizeFull();
+
 
 	}
 
