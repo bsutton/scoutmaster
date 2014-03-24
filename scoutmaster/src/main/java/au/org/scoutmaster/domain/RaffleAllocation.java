@@ -136,7 +136,8 @@ public class RaffleAllocation extends BaseEntity
 	
 	public String toString()
 	{
-		return "To: " + this.allocatedTo.getFullname() + " By:" + this.issuedBy.getFullname() + " On: " + this.dateAllocated + " Books: " + books.size(); 
+		return "To: " + (this.allocatedTo == null ? "(none)" : this.allocatedTo.getFullname()) + " By:" + (this.issuedBy == null ? "none" : this.issuedBy.getFullname()) 
+				+ " On: " + this.dateAllocated + " Books: " + books.size(); 
 	}
 
 	public void addBook(RaffleBook book)
