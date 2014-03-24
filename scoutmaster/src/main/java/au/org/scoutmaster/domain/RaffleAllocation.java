@@ -36,7 +36,7 @@ public class RaffleAllocation extends BaseEntity
 	 * The contact the book was allocated to.
 	 */
 	@ManyToOne(targetEntity=Contact.class)
-	private Contact allocatedTo;
+	private Contact allocatedTo = new Contact();
 	
 	/**
 	 * The date the book was allocated to a Contact.

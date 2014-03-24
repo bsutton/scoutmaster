@@ -48,7 +48,7 @@ public class RaffleBook extends BaseEntity
 	 * if the book hasn't been issued.
 	 */
 	@ManyToOne(optional = true)
-	RaffleAllocation raffleAllocation;
+	RaffleAllocation raffleAllocation = new RaffleAllocation();
 
 	/**
 	 * The no. of tickets in the book.
@@ -218,9 +218,13 @@ public class RaffleBook extends BaseEntity
 
 	}
 	
+	public int getLastTicketNo()
+	{
+		return this.firstNo + this.ticketCount - 1;		
+	}
 	public String toString()
 	{
-		return "First Ticket No.: " + this.firstNo + ", Last Ticket No: " + (this.firstNo + this.ticketCount);
+		return "First Ticket No.: " + this.firstNo + ", Last Ticket No: " + getLastTicketNo();
 	}
 
 }
