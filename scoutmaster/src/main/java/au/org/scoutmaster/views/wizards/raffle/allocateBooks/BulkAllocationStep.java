@@ -66,7 +66,7 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	@Override
 	public String getCaption()
 	{
-		return "Books Allocation";
+		return "Books Allocated";
 	}
 
 	@Override
