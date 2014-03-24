@@ -5,7 +5,6 @@
 	<groupId>org.scoutmaster</groupId>
 	<artifactId>scoutmaster</artifactId>
 	<packaging>war</packaging>
-	<version>0.9</version>
 	<name>Vaadin Web Application</name>
 
 	<properties>
@@ -429,4 +428,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<version>1.0</version>
 </project>
