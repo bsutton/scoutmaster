@@ -27,7 +27,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Allocate Books", path = "Raffle")
-public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener, HelpProvider
+public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener,
+		HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +51,8 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	 * The raffle we are importing the books into.
 	 */
 	private Raffle raffle = null;
+
+	private boolean hasRaffleSelectionStep = true;
 
 	public RaffleBookAllocationWizardView()
 	{
@@ -81,6 +84,7 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		{
 			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			this.raffle = daoRaffle.findById(Long.valueOf(value));
+			hasRaffleSelectionStep = false;
 		}
 
 		welcomeStep = new WelcomeStep(this);
@@ -95,7 +99,7 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		wizard.setUriFragmentEnabled(true);
 		wizard.addListener(this);
 		wizard.addStep(welcomeStep, "Welcome");
-		if (raffle == null)
+		if (hasRaffleSelectionStep)
 			wizard.addStep(raffleStep, "Raffle");
 		wizard.addStep(allocationMethodStep);
 		wizard.addStep(selectStep, SELECTION_STEP);
@@ -159,8 +163,16 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 	{
 		wizard.removeStep(SELECTION_STEP);
 		wizard.removeStep(ALLOCATION_STEP);
-		wizard.addStep(selectionStep, SELECTION_STEP, 1);
-		wizard.addStep(allocationStep, ALLOCATION_STEP, 2);
+		if (hasRaffleSelectionStep)
+		{
+			wizard.addStep(selectionStep, SELECTION_STEP, 3);
+			wizard.addStep(allocationStep, ALLOCATION_STEP, 4);
+		}
+		else
+		{
+			wizard.addStep(selectionStep, SELECTION_STEP, 2);
+			wizard.addStep(allocationStep, ALLOCATION_STEP, 3);
+		}
 		this.selectStep = selectionStep;
 		this.allocationStep = allocationStep;
 	}

@@ -1,5 +1,9 @@
 package au.org.scoutmaster.views.wizards.raffle.allocateBooks;
 
+import java.util.List;
+
+import javax.persistence.metamodel.SingularAttribute;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
@@ -55,6 +59,19 @@ public class SelectRaffleStep implements WizardStep
 		raffleField.setNullSelectionAllowed(false);
 
 		raffleField.setRequired(true);
+		
+		Raffle raffle = null;
+		@SuppressWarnings("unchecked")
+		List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
+		{ Raffle_.startDate }, new boolean[]
+		{ false });
+		
+		if (list.size() > 0)
+		{
+			raffle = list.get(0);
+		}
+		raffleField.setValue(raffle.getId());
+
 
 		layout.addComponent(raffleField);
 
