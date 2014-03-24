@@ -32,6 +32,8 @@ public class HelpWrappingViewProvider implements ViewProvider
 	private Map<String, Class<? extends View>> views = new HashMap<String, Class<? extends View>>();
 
 	private Map<String, Class<? extends View>> viewsWithoutHelp = new HashMap<String, Class<? extends View>>();
+	
+	ScoutmasterViewEnum defaultView = null;
 
 	Logger logger = Logger.getLogger(HelpWrappingViewProvider.class);
 
@@ -57,6 +59,9 @@ public class HelpWrappingViewProvider implements ViewProvider
 
 		if (viewAndParameters.contains("/"))
 			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("/"));
+		
+		if (viewAndParameters.length() == 0)
+			viewAndParameters = defaultView.getTitle();
 
 		if (!views.containsKey(viewAndParameters)&& !viewsWithoutHelp.containsKey(viewAndParameters))
 		{
@@ -111,6 +116,8 @@ public class HelpWrappingViewProvider implements ViewProvider
 			views.put(view.getTitle(), view.getViewClass());
 		}
 
+		if (view.isDefaultView())
+			defaultView = view;
 	}
 
 }
