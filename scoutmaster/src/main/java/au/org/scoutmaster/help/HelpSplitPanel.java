@@ -16,6 +16,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPageListener
@@ -32,7 +33,7 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 	Logger logger = Logger.getLogger(HelpSplitPanel.class);
 
 	HelpPageCache page = new HelpPageCache();
-	
+
 	View component;
 	private VerticalLayout helpContainer;
 
@@ -42,7 +43,7 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 		this.component = component;
 		if (component instanceof HelpPageListener)
 		{
-			((HelpPageListener)component).setHelpPageListener(this);
+			((HelpPageListener) component).setHelpPageListener(this);
 		}
 
 		setSplitPosition(75, Unit.PERCENTAGE, false);
@@ -51,21 +52,20 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 
 		buildMainLayout();
 		setSizeFull();
-		((Component)component).setSizeFull();
-		componentPane.addComponent((Component)component);
-		setHelpPageId(((HelpProvider)component).getHelpId());
-		
-
+		((Component) component).setSizeFull();
+		componentPane.addComponent((Component) component);
+		setHelpPageId(((HelpProvider) component).getHelpId());
 
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
-		// allow the View we are wrapping to process the enter event in the normal way
+		// allow the View we are wrapping to process the enter event in the
+		// normal way
 		component.enter(event);
-	} 
-	
+	}
+
 	public void setHelpPageId(HelpPageIdentifier helpId)
 	{
 		setHelp(helpId);
@@ -106,64 +106,71 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 		throw new RuntimeException("Cant add components this way");
 	}
 
-	public void setHelp(HelpPageIdentifier helpId)
+	public void setHelp(final HelpPageIdentifier helpId)
 	{
-	//	helpPane.removeAllComponents();
-
-		String pageSource = null;
-		try
+		Thread loadPage = new Thread(new Runnable()
 		{
-			pageSource = page.lookupHelpPage(helpId);
-		}
-		catch (ExecutionException e)
-		{
-			logger.error(e,e);
-		}
 
-		if (pageSource != null)
-		{
-			helpContainer.removeAllComponents();
-			
-			helpContainer.addComponent(new Label("Help page is 'Help-" + helpId + "'"));
-	
-//			helpPane = new Panel();
-//			helpPane.setImmediate(false);
-//			helpPane.setSizeFull();
-//
-			Label help = new Label(pageSource, ContentMode.HTML);
-//
-//			helpPane.setContent(help);
-			//helpPane.setExpandRatio(help, 1.0f);
-			
-				//helpPane.setContent(helpBody);
-			helpContainer.addComponent(help);
-		}
-		else
-		{
-			VerticalLayout help = new VerticalLayout();
-			help.setSizeFull();
+			@Override
+			public void run()
+			{
+				String helpSource = null;
+				try
+				{
+					helpSource = page.lookupHelpPage(helpId);
+				}
+				catch (ExecutionException e)
+				{
+					logger.error(e, e);
+				}
+				
+				final String pageSource = helpSource;
+				UI.getCurrent().access(new Runnable()
+				{
 
-			Link link = new Link("To create a help page click here", new ExternalResource(
-					"https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"), "wiki", 0, 0,
-					BorderStyle.DEFAULT);
+					@Override
+					public void run()
+					{
+						if (pageSource != null)
+						{
+							helpContainer.removeAllComponents();
 
-			help.addComponent(new Label(
-					"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
-							+ helpId + " in the wiki."));
-			help.addComponent(link);
-			help.addComponent(new Label("Help id is " + helpId));
-			//helpPane.addComponent(help);
-			helpPane.setContent(help);
-		}
+							helpContainer.addComponent(new Label("Help page is 'Help-" + helpId + "'"));
+
+							Label help = new Label(pageSource, ContentMode.HTML);
+							helpContainer.addComponent(help);
+						}
+						else
+						{
+							VerticalLayout help = new VerticalLayout();
+							help.setSizeFull();
+
+							Link link = new Link("To create a help page click here", new ExternalResource(
+									"https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"), "wiki", 0, 0,
+									BorderStyle.DEFAULT);
+
+							help.addComponent(new Label(
+									"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
+											+ helpId + " in the wiki."));
+							help.addComponent(link);
+							help.addComponent(new Label("Help id is " + helpId));
+							helpPane.setContent(help);
+						}
+
+					}
+				});
+
+			}
+		});
+		loadPage.start();
+
 	}
 
 	@Override
 	public void setHelpPageListener(HelpPageListener helpSplitPanel)
 	{
 		throw new RuntimeException("This is the top level HelpPageListener, you cant set the HelpPageListener");
-		
-	}
 
-	
+	}
 
 }
