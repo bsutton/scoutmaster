@@ -14,24 +14,25 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 
 	public TagDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public TagDao(EntityManager em)
+
+	public TagDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-	public Tag findByName(String name)
+	public Tag findByName(final String name)
 	{
 		return super.findSingleBySingleParameter(Tag.FIND_BY_NAME, "tagName", name);
 	}
-	
-	public static Tag addTag(String name, String description)
+
+	public static Tag addTag(final String name, final String description)
 	{
-		EntityManager em = EntityManagerProvider.getEntityManager();
-		Tag tag = new Tag(name, description);
+		final EntityManager em = EntityManagerProvider.getEntityManager();
+		final Tag tag = new Tag(name, description);
 		em.persist(tag);
-	
+
 		return tag;
 	}
 
@@ -40,11 +41,11 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 	{
 		return super.createVaadinContainer();
 	}
-	
-	public void addContact(Tag tag, Contact contact)
+
+	public void addContact(final Tag tag, final Contact contact)
 	{
 		tag.getContacts().add(contact);
 		contact.getTags().add(tag);
-		
+
 	}
 }

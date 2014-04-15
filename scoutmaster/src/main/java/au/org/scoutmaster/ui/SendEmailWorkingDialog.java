@@ -25,8 +25,9 @@ import com.vaadin.ui.UI;
 
 /**
  * Designed to show a 'working' dialog whilst sending a single email.
- * 
+ *
  * Uses a builder pattern to construct the email.
+ * 
  * @author bsutton
  *
  */
@@ -37,91 +38,85 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 	private static Logger logger = LogManager.getLogger(SendEmailWorkingDialog.class);
 
 	private String subject;
-	
-	private ArrayList<String> toEmailAddresses = new ArrayList<>();
+
+	private final ArrayList<String> toEmailAddresses = new ArrayList<>();
 	private String message;
 	private String fromEmailAddress;
 
 	private CompleteListener completeListener;
 
-	public SendEmailWorkingDialog(String caption, String message)
+	public SendEmailWorkingDialog(final String caption, final String message)
 	{
 		super(caption, message);
 	}
-	
-	public SendEmailWorkingDialog setFrom(String fromEmailAddress)
+
+	public SendEmailWorkingDialog setFrom(final String fromEmailAddress)
 	{
 		this.fromEmailAddress = fromEmailAddress;
 		return this;
 	}
 
-	
-	public SendEmailWorkingDialog setSubject(String subject)
+	public SendEmailWorkingDialog setSubject(final String subject)
 	{
 		this.subject = subject;
 		return this;
 	}
 
-	public SendEmailWorkingDialog addTo(String toEmailAddress)
+	public SendEmailWorkingDialog addTo(final String toEmailAddress)
 	{
-		this.toEmailAddresses .add(toEmailAddress);
+		this.toEmailAddresses.add(toEmailAddress);
 		return this;
 	}
-	
-	public SendEmailWorkingDialog setMessage(String message)
+
+	public SendEmailWorkingDialog setMessage(final String message)
 	{
 		this.message = message;
 		return this;
 	}
-	
-	public void setCompleteListener(CompleteListener completeListener)
+
+	public void setCompleteListener(final CompleteListener completeListener)
 	{
 		this.completeListener = completeListener;
 	}
 
-
-
 	public void send()
 	{
-		
+
 		UI.getCurrent().addWindow(this);
-		this.setWorker(new Runnable() //(String fromEmailAddress, ArrayList<String> toEmailAddresses, String subject, String message)
-		{
-
-			@Override
-			public void run()
+		setWorker(() -> {
+			final EntityManager em = EntityManagerProvider.createEntityManager();
+			try (Transaction t = new Transaction(em))
 			{
-				EntityManager em = EntityManagerProvider.createEntityManager();
-				try (Transaction t = new Transaction(em))
-				{
 
-					SMTPSettingsDao settingsDao = new DaoFactory(em).getSMTPSettingsDao();
-					SMTPServerSettings settings = settingsDao.findSettings();
-			
-					Email email = new SimpleEmail();
-					email.setHostName(settings.getSmtpFQDN());
-					email.setSmtpPort(settings.getSmtpPort());
-					if (settings.isAuthRequired())
-						email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings.getPassword()));
-					email.setSSLOnConnect(true);
-					try
-					{
-						email.setFrom(SendEmailWorkingDialog.this.fromEmailAddress);
-						email.setSubject(SendEmailWorkingDialog.this.subject);
-						email.setMsg(SendEmailWorkingDialog.this.message);
-						email.addTo(SendEmailWorkingDialog.this.toEmailAddresses.toArray(new String[]{}));
-						email.send();
-					}
-					catch (EmailException e)
-					{
-						logger.error(e, e);
-						SMNotification.show(e, Type.ERROR_MESSAGE);
-					}
-					t.commit();
-					
+				final SMTPSettingsDao settingsDao = new DaoFactory(em).getSMTPSettingsDao();
+				final SMTPServerSettings settings = settingsDao.findSettings();
+
+				final Email email = new SimpleEmail();
+				email.setHostName(settings.getSmtpFQDN());
+				email.setSmtpPort(settings.getSmtpPort());
+				if (settings.isAuthRequired())
+				{
+					email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings.getPassword()));
 				}
+				email.setSSLOnConnect(true);
+				try
+				{
+					email.setFrom(SendEmailWorkingDialog.this.fromEmailAddress);
+					email.setSubject(SendEmailWorkingDialog.this.subject);
+					email.setMsg(SendEmailWorkingDialog.this.message);
+					email.addTo(SendEmailWorkingDialog.this.toEmailAddresses.toArray(new String[]
+					{}));
+					email.send();
+				}
+				catch (final EmailException e)
+				{
+					SendEmailWorkingDialog.logger.error(e, e);
+					SMNotification.show(e, Type.ERROR_MESSAGE);
+				}
+				t.commit();
 
 			}
+
 		}, this);
 
 	}
@@ -129,11 +124,12 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 	@Override
 	public void complete()
 	{
-		this.setVisible(false);
+		setVisible(false);
 		if (this.completeListener != null)
+		{
 			this.completeListener.complete();
-		
-	}
+		}
 
+	}
 
 }

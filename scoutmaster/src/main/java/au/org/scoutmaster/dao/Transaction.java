@@ -5,28 +5,31 @@ import javax.persistence.EntityTransaction;
 
 public class Transaction implements AutoCloseable
 {
-	private EntityTransaction transaction;
+	private final EntityTransaction transaction;
 
-	public Transaction(EntityManager em)
+	public Transaction(final EntityManager em)
 	{
-		transaction = em.getTransaction();
-		transaction.begin();
+		this.transaction = em.getTransaction();
+		this.transaction.begin();
 	}
 
+	@Override
 	public void close()
 	{
-		if (transaction.isActive())
+		if (this.transaction.isActive())
+		{
 			rollback();
+		}
 	}
 
 	private void rollback()
 	{
-		transaction.rollback();
+		this.transaction.rollback();
 	}
 
 	public void commit()
 	{
-		transaction.commit();
+		this.transaction.commit();
 
 	}
 
@@ -37,10 +40,12 @@ public class Transaction implements AutoCloseable
 	 */
 	public void begin()
 	{
-		if (!transaction.isActive())
+		if (!this.transaction.isActive())
+		{
 			throw new IllegalStateException("Begin has already been called on the transaction");
+		}
 
-		transaction.begin();
+		this.transaction.begin();
 	}
 
 }

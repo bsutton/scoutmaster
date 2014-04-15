@@ -24,7 +24,7 @@ public class Period
 
 	}
 
-	public Period(Integer years, Integer months, Integer days)
+	public Period(final Integer years, final Integer months, final Integer days)
 	{
 		this.years = years;
 		this.months = months;
@@ -32,7 +32,7 @@ public class Period
 
 	}
 
-	public Period(Interval interval)
+	public Period(final Interval interval)
 	{
 		this.years = interval.toPeriod().getYears();
 		this.months = interval.toPeriod().getMonths();
@@ -40,9 +40,9 @@ public class Period
 	}
 
 	/**
-	 * Takes an Period string and attempts to parse it. Expected format is YYy MMy
-	 * DDd
-	 * 
+	 * Takes an Period string and attempts to parse it. Expected format is YYy
+	 * MMy DDd
+	 *
 	 * @param age
 	 */
 	public Period(String age)
@@ -62,10 +62,12 @@ public class Period
 			age = age.replace(" d", "d");
 			// strip comma's out.
 			age = age.replace(",", "");
-			String[] ageParts = age.trim().split(" ");
+			final String[] ageParts = age.trim().split(" ");
 
 			if (ageParts.length > 3)
+			{
 				throw new RuntimeException("An age must only contain three parts e.g. 10y 3m 31d");
+			}
 
 			if (ageParts.length > 0)
 			{
@@ -74,34 +76,40 @@ public class Period
 				if (part.endsWith("y"))
 				{
 					// we have a year part.
-					String years = part.substring(0, part.length() - 1);
+					final String years = part.substring(0, part.length() - 1);
 					this.years = Integer.valueOf(years);
 					index++;
 				}
 				else
+				{
 					this.years = 0;
+				}
 
 				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("m"))
 				{
 					part = ageParts[index].trim().toLowerCase();
 					// we have a month part.
-					String month = part.substring(0, part.length() - 1);
+					final String month = part.substring(0, part.length() - 1);
 					this.months = Integer.valueOf(month);
 					index++;
 				}
 				else
+				{
 					this.months = 0;
+				}
 
 				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("d"))
 				{
 					part = ageParts[index].trim().toLowerCase();
 					// we have a day part.
-					String day = part.substring(0, part.length() - 1);
+					final String day = part.substring(0, part.length() - 1);
 					this.days = Integer.valueOf(day);
 					index++;
 				}
 				else
+				{
 					this.days = 0;
+				}
 
 				if (ageParts.length != index)
 				{
@@ -114,68 +122,71 @@ public class Period
 
 	public Integer getYears()
 	{
-		return years;
+		return this.years;
 	}
 
 	public Integer getMonths()
 	{
-		return months;
+		return this.months;
 	}
 
 	public Integer getDays()
 	{
-		return days;
+		return this.days;
 	}
 
+	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		boolean prior = false;
-		if (years > 0)
+		if (this.years > 0)
 		{
-			sb.append(years + "y");
+			sb.append(this.years + "y");
 			prior = true;
 		}
 
-		if (months > 0)
+		if (this.months > 0)
 		{
 			if (prior)
+			{
 				sb.append(", ");
-			sb.append(months + "m");
+			}
+			sb.append(this.months + "m");
 			prior = true;
 		}
-		if (days > 0)
+		if (this.days > 0)
 		{
 			if (prior)
+			{
 				sb.append(", ");
-			sb.append(days + "d");
+			}
+			sb.append(this.days + "d");
 		}
 		return sb.toString();
 	}
-	
-	
 
 	public DateTime getDateTime()
 	{
-		return new DateTime(years, months, days, 0, 0);
+		return new DateTime(this.years, this.months, this.days, 0, 0);
 	}
-	
-	Period withYears(Integer years)
+
+	Period withYears(final Integer years)
 	{
 		this.years = years;
 		return this;
 	}
-	
-	Period withMonths(Integer months)
+
+	Period withMonths(final Integer months)
 	{
 		this.months = months;
 		return this;
 	}
-	Period withDays(Integer days)
+
+	Period withDays(final Integer days)
 	{
 		this.days = days;
 		return this;
 	}
 }
-

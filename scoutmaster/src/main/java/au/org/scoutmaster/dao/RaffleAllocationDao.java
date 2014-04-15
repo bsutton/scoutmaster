@@ -18,7 +18,7 @@ public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> impl
 		// inherit the default per request em.
 	}
 
-	public RaffleAllocationDao(EntityManager em)
+	public RaffleAllocationDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -26,16 +26,16 @@ public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> impl
 	@Override
 	public JPAContainer<RaffleAllocation> createVaadinContainer()
 	{
-		JPAContainer<RaffleAllocation> container = super.createVaadinContainer();
-		
+		final JPAContainer<RaffleAllocation> container = super.createVaadinContainer();
+
 		container.addNestedContainerProperty(new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName());
 		container.addNestedContainerProperty(new Path(RaffleAllocation_.issuedBy, Contact_.fullname).getName());
-		
 
-		container.sort(new Object[]
-		{ RaffleAllocation_.dateAllocated.getName(), new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName()}, new boolean[]
-		{ true, true });
-		
+		container.sort(
+				new Object[]
+				{ RaffleAllocation_.dateAllocated.getName(),
+						new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName() }, new boolean[]
+				{ true, true });
 
 		return container;
 	}

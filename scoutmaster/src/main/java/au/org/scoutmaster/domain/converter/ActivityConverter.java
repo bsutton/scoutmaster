@@ -20,7 +20,7 @@ public class ActivityConverter extends BaseConverter<CommunicationLog>
 	}
 
 	@Override
-	protected CommunicationLog newInstance(Object value)
+	protected CommunicationLog newInstance(final Object value)
 	{
 		return new CommunicationLog();
 	}

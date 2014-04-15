@@ -55,11 +55,11 @@ public class PurchaseLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "itemCostMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "itemCostMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPercentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "itemCostMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "itemCostMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
 	MoneyWithTax itemCost;
 
 	/**
@@ -67,11 +67,11 @@ public class PurchaseLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
 	MoneyWithTax lineTotal;
 
 	PurchaseLine()
@@ -83,7 +83,7 @@ public class PurchaseLine extends BaseEntity
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public String getName()
 	{
-		return description;
+		return this.description;
 	}
 
 }

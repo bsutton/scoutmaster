@@ -13,46 +13,48 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.domain.BaseEntity;
+
 /**
  * A user can belong to one or more roles.
+ *
+ * A role is really defined by the set of features that a User that belongs to
+ * that role has accessed to.
+ *
+ * A user has access to the sum of features defined by the roles they belong to.
  * 
- * A role is really defined by the set of features that a User that belongs to that role has accessed to.
- * 
- * A user has access to the sum of features defined by the roles they belong to. 
- *  
  * @author bsutton
  *
  */
 @Entity
-@Table(name="Role")
+@Table(name = "Role")
 @Access(AccessType.FIELD)
 public class Role extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	/** 
+	/**
 	 * The name of the role
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String name;
-	
+
 	/**
 	 * A meaningful description of the the roles purpose.
 	 */
 	@NotBlank
 	String description;
-	
+
 	/**
 	 * The set of features this role is permitted to access.
 	 */
-	@ManyToMany(targetEntity=Feature.class)
+	@ManyToMany(targetEntity = Feature.class)
 	List<Feature> permitted = new ArrayList<>();
 
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 }

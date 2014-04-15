@@ -9,9 +9,9 @@ import com.google.gwt.thirdparty.guava.common.base.Objects;
 
 /**
  * Used to track the database version.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
 @Entity(name = "Version")
 @Table(name = "Version")

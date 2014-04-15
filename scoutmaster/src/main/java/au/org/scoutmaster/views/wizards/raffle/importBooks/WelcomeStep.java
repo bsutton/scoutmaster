@@ -10,8 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 public class WelcomeStep implements WizardStep
 {
 
-
-	public WelcomeStep(RaffleBookImportWizardView setupWizardView)
+	public WelcomeStep(final RaffleBookImportWizardView setupWizardView)
 	{
 	}
 
@@ -24,20 +23,20 @@ public class WelcomeStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		
-		StringBuilder sb = new StringBuilder();
+
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<h1>Import Raffle books.</h1>");
 		sb.append("<p>This wizard is designed to allow you to import a set of Raffle books at the start of a Raffle.</p>");
 		sb.append("<p>If you have sets of books which numbered consecutively (there are no number gaps between books)</p>");
 		sb.append("<p>then you can import all books in a single batch. If all of the books are not numbered consecutively then</p>");
 		sb.append("<p>you need to import each set of books that fall in a consecutive range as separate batches.</p>");
 		sb.append("<p>Once you have imported the books you can then allocate them to members using the Book Allocation wizard.</p>");
-		
-		Label label = new Label(sb.toString());
+
+		final Label label = new Label(sb.toString());
 		label.setContentMode(ContentMode.HTML);
-		
+
 		layout.addComponent(label);
 		return layout;
 	}

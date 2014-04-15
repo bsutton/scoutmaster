@@ -15,7 +15,9 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 /**
- * Caches a help page after retrieving it from the github wiki and converting it from mark up to html.
+ * Caches a help page after retrieving it from the github wiki and converting it
+ * from mark up to html.
+ * 
  * @author bsutton
  *
  */
@@ -30,32 +32,33 @@ public class HelpPageCache
 			// TODO: put this back to 10 minutes.
 
 			.build(new CacheLoader<HelpPageIdentifier, String>()
-			{
-				public String load(HelpPageIdentifier key) throws Exception
+					{
+				@Override
+				public String load(final HelpPageIdentifier key) throws Exception
 				{
 					String page = "";
 					BufferedReader in = null;
-					String url = "https://raw.github.com/wiki/bsutton/scoutmaster/Help-" + key + ".md";
+					final String url = "https://raw.github.com/wiki/bsutton/scoutmaster/Help-" + key + ".md";
 					try
 					{
-						URL oracle = new URL(url);
-						URLConnection yc = oracle.openConnection();
+						final URL oracle = new URL(url);
+						final URLConnection yc = oracle.openConnection();
 						in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
-						Markdown4jProcessor processor = new Markdown4jProcessor();
+						final Markdown4jProcessor processor = new Markdown4jProcessor();
 						page = processor.process(in);
 						in.close();
 					}
-					catch (Exception e)
+					catch (final Exception e)
 					{
-						logger.error(e, e);
+						HelpPageCache.logger.error(e, e);
 					}
 					return page;
 				}
-			});
+					});
 
-	public String lookupHelpPage(HelpPageIdentifier id) throws ExecutionException
+	public String lookupHelpPage(final HelpPageIdentifier id) throws ExecutionException
 	{
-		return cache.get(id);
+		return HelpPageCache.cache.get(id);
 
 	}
 }

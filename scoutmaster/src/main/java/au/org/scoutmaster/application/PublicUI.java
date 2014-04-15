@@ -16,9 +16,9 @@ import com.vaadin.ui.VerticalLayout;
 /**
  * Check this out.
  * http://www.aceevo.com/reusable-patterns-for-vaadin-custom-form-layout/
- * 
+ *
  * @author bsutton
- * 
+ *
  */
 /*
  * UI class is the starting point for your app. You may deploy it with
@@ -35,7 +35,7 @@ public class PublicUI extends UI
 {
 	private static final long serialVersionUID = 1L;
 
-	private ArrayList<ViewMapping> viewMap = new ArrayList<>();
+	private final ArrayList<ViewMapping> viewMap = new ArrayList<>();
 
 	private VerticalLayout mainLayout;
 
@@ -43,23 +43,25 @@ public class PublicUI extends UI
 	 * After UI class is created, init() is executed. You should build and wire
 	 * up your user interface here.
 	 */
-	protected void init(VaadinRequest request)
+	@Override
+	protected void init(final VaadinRequest request)
 	{
-//		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
-//		styleConfirmDialog();
-//
-//		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
-//		daoSectionType.cacheSectionTypes();
+		// VaadinSession.getCurrent().setConverterFactory(new
+		// ScoutmasterConverterFactory());
+		// styleConfirmDialog();
+		//
+		// SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+		// daoSectionType.cacheSectionTypes();
 
-		viewMap.add(new ViewMapping("", PublicCalendarView.class));
-		viewMap.add(new ViewMapping(PublicCalendarView.NAME, PublicCalendarView.class));
+		this.viewMap.add(new ViewMapping("", PublicCalendarView.class));
+		this.viewMap.add(new ViewMapping(PublicCalendarView.NAME, PublicCalendarView.class));
 
-		mainLayout = new VerticalLayout();
-		mainLayout.setMargin(false);
-		mainLayout.setSpacing(true);
-		mainLayout.setSizeFull();
+		this.mainLayout = new VerticalLayout();
+		this.mainLayout.setMargin(false);
+		this.mainLayout.setSpacing(true);
+		this.mainLayout.setSizeFull();
 
-		VerticalLayout viewContainer = new VerticalLayout();
+		final VerticalLayout viewContainer = new VerticalLayout();
 		viewContainer.setHeight("100%");
 
 		final Navigator navigator = new Navigator(this, viewContainer);
@@ -70,9 +72,9 @@ public class PublicUI extends UI
 			navigator.addView(viewmap.getViewName(), viewmap.getView());
 		}
 
-		mainLayout.addComponent(viewContainer);
-		mainLayout.setExpandRatio(viewContainer, 1.0f);
+		this.mainLayout.addComponent(viewContainer);
+		this.mainLayout.setExpandRatio(viewContainer, 1.0f);
 
-		this.setContent(mainLayout);
+		setContent(this.mainLayout);
 	}
 }

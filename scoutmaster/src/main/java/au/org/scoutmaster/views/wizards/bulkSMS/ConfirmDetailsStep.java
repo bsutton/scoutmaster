@@ -24,47 +24,47 @@ import com.vaadin.ui.VerticalLayout;
 public class ConfirmDetailsStep implements WizardStep
 {
 
-	private TextField subject;
-	private TextArea message;
-	private TextField from;
-	private TextField provider;
-	private BulkSMSWizardView messagingWizardView;
-	private VerticalLayout layout;
-	private Label recipientCount;
-	private MessageDetailsStep details;
+	private final TextField subject;
+	private final TextArea message;
+	private final TextField from;
+	private final TextField provider;
+	private final BulkSMSWizardView messagingWizardView;
+	private final VerticalLayout layout;
+	private final Label recipientCount;
+	private final MessageDetailsStep details;
 
-	public ConfirmDetailsStep(BulkSMSWizardView messagingWizardView)
+	public ConfirmDetailsStep(final BulkSMSWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
-		details = messagingWizardView.getDetails();
+		this.details = messagingWizardView.getDetails();
 
-		layout = new VerticalLayout();
-		layout.addComponent(new Label(
+		this.layout = new VerticalLayout();
+		this.layout.addComponent(new Label(
 				"Please review the details before clicking next as messages will be sent immediately."));
-		layout.setWidth("100%");
+		this.layout.setWidth("100%");
 
-		recipientCount = new Label();
-		recipientCount.setContentMode(ContentMode.HTML);
-		layout.addComponent(recipientCount);
+		this.recipientCount = new Label();
+		this.recipientCount.setContentMode(ContentMode.HTML);
+		this.layout.addComponent(this.recipientCount);
 
-		MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
+		final MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
 		formLayout.setColumnFieldWidth(0, 500);
-		provider = formLayout.bindTextField("Provider", "provider");
-		provider.setReadOnly(true);
+		this.provider = formLayout.bindTextField("Provider", "provider");
+		this.provider.setReadOnly(true);
 
-		from = formLayout.bindTextField("From", "from");
-		from.setReadOnly(true);
+		this.from = formLayout.bindTextField("From", "from");
+		this.from.setReadOnly(true);
 
-		subject = formLayout.bindTextField("Subject", "subject");
-		subject.setSizeFull();
-		subject.setReadOnly(true);
+		this.subject = formLayout.bindTextField("Subject", "subject");
+		this.subject.setSizeFull();
+		this.subject.setReadOnly(true);
 
-		message = formLayout.bindTextAreaField("Message", "message", 4);
-		message.setReadOnly(true);
-		message.setWidth("100%");
+		this.message = formLayout.bindTextAreaField("Message", "message", 4);
+		this.message.setReadOnly(true);
+		this.message.setWidth("100%");
 
-		layout.addComponent(formLayout);
-		layout.setMargin(true);
+		this.layout.addComponent(formLayout);
+		this.layout.setMargin(true);
 	}
 
 	@Override
@@ -77,43 +77,45 @@ public class ConfirmDetailsStep implements WizardStep
 	public Component getContent()
 	{
 
-		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
+		this.recipientCount.setValue("<p><b>" + this.messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following Email.</b></p>");
 
-		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
-		Contact sampleContact = recipients.get(0);
-		User user = (User) SMSession.INSTANCE.getLoggedInUser();
+		final ArrayList<Contact> recipients = this.messagingWizardView.getRecipientStep().getRecipients();
+		final Contact sampleContact = recipients.get(0);
+		final User user = SMSession.INSTANCE.getLoggedInUser();
 
 		try
 		{
-			provider.setReadOnly(false);
-			provider.setValue(details.getProvider().getProviderName());
-			provider.setReadOnly(true);
-			from.setReadOnly(false);
-			from.setValue(details.getFrom());
-			from.setReadOnly(true);
-			subject.setReadOnly(false);
-			subject.setValue(details.getSubject());
-			subject.setReadOnly(true);
-			message.setReadOnly(false);
-			message.setValue(details.getMessage().expandBody(user, sampleContact).toString());
-			message.setReadOnly(true);
+			this.provider.setReadOnly(false);
+			this.provider.setValue(this.details.getProvider().getProviderName());
+			this.provider.setReadOnly(true);
+			this.from.setReadOnly(false);
+			this.from.setValue(this.details.getFrom());
+			this.from.setReadOnly(true);
+			this.subject.setReadOnly(false);
+			this.subject.setValue(this.details.getSubject());
+			this.subject.setReadOnly(true);
+			this.message.setReadOnly(false);
+			this.message.setValue(this.details.getMessage().expandBody(user, sampleContact).toString());
+			this.message.setReadOnly(true);
 		}
-		catch (VelocityFormatException e)
+		catch (final VelocityFormatException e)
 		{
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
-		boolean advance = this.subject.getValue() != null && this.message.getValue() != null;
+		final boolean advance = this.subject.getValue() != null && this.message.getValue() != null;
 
 		if (!advance)
+		{
 			Notification.show("Please enter a Subject and a Message then click Next");
+		}
 		return advance;
 	}
 
@@ -125,7 +127,7 @@ public class ConfirmDetailsStep implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
+		return new Message(this.subject.getValue(), this.message.getValue(), new Phone(this.from.getValue()));
 	}
 
 }

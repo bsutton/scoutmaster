@@ -13,18 +13,19 @@ public class CommunicationTypeDao extends JpaBaseDao<CommunicationType, Long> im
 
 	public CommunicationTypeDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public CommunicationTypeDao(EntityManager em)
+
+	public CommunicationTypeDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-	
-	public CommunicationType findByName(String name)
+	public CommunicationType findByName(final String name)
 	{
 		return super.findSingleBySingleParameter(CommunicationType.FIND_BY_NAME, CommunicationType_.name, name);
 	}
+
 	@Override
 	public JPAContainer<CommunicationType> createVaadinContainer()
 	{

@@ -20,17 +20,15 @@ import au.org.scoutmaster.domain.access.User;
 
 /**
  * Used to log a variety of activities
- * 
+ *
  * @author bsutton
  *
  */
 @Entity
-@Table(name="CommunicationLog")
+@Table(name = "CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-})
-
+		{})
 public class CommunicationLog extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -38,90 +36,90 @@ public class CommunicationLog extends BaseEntity implements CrudEntity
 	/**
 	 * The type of activity.
 	 */
-	@ManyToOne(targetEntity=CommunicationType.class)
+	@ManyToOne(targetEntity = CommunicationType.class)
 	private CommunicationType type;
-	
-	@ManyToOne(targetEntity=User.class)
+
+	@ManyToOne(targetEntity = User.class)
 	private User addedBy;
-	
-	@ManyToOne(targetEntity=Contact.class)
+
+	@ManyToOne(targetEntity = Contact.class)
 	private Contact withContact;
-	
+
 	/**
 	 * The date/time the activity occurred.
 	 */
-	@Temporal(value=TemporalType.TIMESTAMP)
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date activityDate = new Date(); // DateTime.now();
-	
+
 	/**
 	 * A short description of the activity
 	 */
 	@NotBlank
 	private String subject;
-	
+
 	/**
 	 * The activities details. May contain html for markup.
 	 */
 	@Lob
-	@Column(name="DETAILS", columnDefinition="TEXT" )
+	@Column(name = "DETAILS", columnDefinition = "TEXT")
 	private String details;
 
 	public CommunicationType getType()
 	{
-		return type;
+		return this.type;
 	}
 
-	public void setType(CommunicationType type)
+	public void setType(final CommunicationType type)
 	{
 		this.type = type;
 	}
 
 	public User getAddedBy()
 	{
-		return addedBy;
+		return this.addedBy;
 	}
 
-	public void setAddedBy(User addedBy)
+	public void setAddedBy(final User addedBy)
 	{
 		this.addedBy = addedBy;
 	}
 
 	public Contact getWithContact()
 	{
-		return withContact;
+		return this.withContact;
 	}
 
-	public void setWithContact(Contact withContact)
+	public void setWithContact(final Contact withContact)
 	{
 		this.withContact = withContact;
 	}
 
 	public Date getActivityDate()
 	{
-		return activityDate;
+		return this.activityDate;
 	}
 
-	public void setActivityDate(Date activityDate)
+	public void setActivityDate(final Date activityDate)
 	{
 		this.activityDate = activityDate;
 	}
 
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
-	public void setSubject(String subject)
+	public void setSubject(final String subject)
 	{
 		this.subject = subject;
 	}
 
 	public String getDetails()
 	{
-		return details;
+		return this.details;
 	}
 
-	public void setDetails(String details)
+	public void setDetails(final String details)
 	{
 		this.details = details;
 	}
@@ -129,12 +127,14 @@ public class CommunicationLog extends BaseEntity implements CrudEntity
 	@Override
 	public String getName()
 	{
-		return withContact.getFullname() + " CommunicationLog:" + this.subject.substring(0, Math.min(20, this.subject.length()));
+		return this.withContact.getFullname() + " CommunicationLog:"
+				+ this.subject.substring(0, Math.min(20, this.subject.length()));
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return getName();
 	}
-	
+
 }

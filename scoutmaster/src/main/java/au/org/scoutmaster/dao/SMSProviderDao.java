@@ -22,15 +22,14 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	Logger logger = LogManager.getLogger(SMSProviderDao.class);
 	private boolean cancel = false;
 
-
-	public List<SMSProvider> findByName(String name)
+	public List<SMSProvider> findByName(final String name)
 	{
 		return super.findListBySingleParameter(SMSProvider.FIND_BY_NAME, "name", name);
 	}
 
 	/**
 	 * Sends a list of SMS messages using a single provider session.
-	 * 
+	 *
 	 * @param provider
 	 * @param targets
 	 * @param message
@@ -39,18 +38,20 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	 * @throws SmsException
 	 * @throws IOException
 	 */
-	public CancelListener send(SMSProvider provider, List<SMSTransmission> targets, Message message,
-			ProgressListener<SMSTransmission> listener) throws SmsException, IOException
+	public CancelListener send(final SMSProvider provider, final List<SMSTransmission> targets, final Message message,
+			final ProgressListener<SMSTransmission> listener) throws SmsException, IOException
 	{
-		int max = targets.size();
+		final int max = targets.size();
 		int sent = 0;
 
 		try (SMSSession session = new SMSSession(provider))
 		{
-			for (SMSTransmission transmission : targets)
+			for (final SMSTransmission transmission : targets)
 			{
-				if (cancel == true)
+				if (this.cancel == true)
+				{
 					break;
+				}
 				try
 				{
 					session.send(transmission);
@@ -61,14 +62,14 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 				{
 					transmission.setException(e);
 					listener.itemError(e, transmission);
-					logger.error(e, e);
+					this.logger.error(e, e);
 				}
 
 			}
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			throw e;
 		}
 
@@ -78,15 +79,15 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 
 	/**
 	 * Sends a single SMS messaging using its own session.
-	 * 
+	 *
 	 * @param provider
 	 * @param transmission
 	 * @param listener
 	 * @throws SmsException
 	 * @throws IOException
 	 */
-	public void send(SMSProvider provider, SMSTransmission transmission, ProgressListener<SMSTransmission> listener)
-			throws SmsException, IOException
+	public void send(final SMSProvider provider, final SMSTransmission transmission,
+			final ProgressListener<SMSTransmission> listener) throws SmsException, IOException
 	{
 
 		try (SMSSession session = new SMSSession(provider))
@@ -96,9 +97,9 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 			listener.progress(1, 1, transmission);
 			listener.complete(1);
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			throw e;
 		}
 

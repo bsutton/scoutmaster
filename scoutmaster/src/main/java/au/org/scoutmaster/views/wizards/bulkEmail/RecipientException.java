@@ -5,19 +5,19 @@ import au.org.scoutmaster.domain.Contact;
 public class RecipientException extends Exception
 {
 	private static final long serialVersionUID = 1L;
-	private Contact contact;
-	private String cause;
+	private final Contact contact;
+	private final String cause;
 
-	RecipientException(String cause, Contact contact)
+	RecipientException(final String cause, final Contact contact)
 	{
 		this.contact = contact;
 		this.cause = cause;
 	}
-	
+
+	@Override
 	public String getMessage()
 	{
-		return this.contact.getFirstname() + " " + this.contact.getLastname()
-				+ " rejected due to : " + cause;
+		return this.contact.getFirstname() + " " + this.contact.getLastname() + " rejected due to : " + this.cause;
 	}
-	
+
 }

@@ -22,67 +22,75 @@ public class LoginAttemptDao extends JpaBaseDao<LoginAttempt, Long> implements D
 		// inherit the default per request em.
 	}
 
-	public LoginAttemptDao(EntityManager em)
+	public LoginAttemptDao(final EntityManager em)
 	{
 		super(em);
 	}
 
 	@Override
-	public LoginAttempt findById(Long id)
+	public LoginAttempt findById(final Long id)
 	{
-		LoginAttempt user = entityManager.find(this.entityClass, id);
+		final LoginAttempt user = this.entityManager.find(this.entityClass, id);
 		return user;
 	}
 
-	public LoginAttempt findByName(String username)
+	public LoginAttempt findByName(final String username)
 	{
 		return super.findSingleBySingleParameter(LoginAttempt.FIND_BY_NAME, "username", username);
 	}
 
+	@Override
 	public JPAContainer<LoginAttempt> createVaadinContainer()
 	{
-		JPAContainer<LoginAttempt> container = super.createVaadinContainer();
+		final JPAContainer<LoginAttempt> container = super.createVaadinContainer();
 		container.addNestedContainerProperty("user.username");
-		
+
 		return container;
 	}
 
-	public DateTime blockedUtil(String username)
+	public DateTime blockedUtil(final String username)
 	{
-		LoginAttempt attempt = super.findSingleBySingleParameter(LoginAttempt.FIND_LAST_ATTEMPTS, "username", username);
+		final LoginAttempt attempt = super.findSingleBySingleParameter(LoginAttempt.FIND_LAST_ATTEMPTS, "username",
+				username);
 
-		DateTime blockedUntil = new DateTime(attempt.getDateOfAttempt()).plusMinutes(5);
-		
+		final DateTime blockedUntil = new DateTime(attempt.getDateOfAttempt()).plusMinutes(5);
+
 		return blockedUntil;
 	}
 
 	/**
-	 * User can have no more than five failed login attempts (in a row) in any five minute period.
+	 * User can have no more than five failed login attempts (in a row) in any
+	 * five minute period.
+	 * 
 	 * @param username
 	 * @return
 	 */
-	public boolean hasExceededAttempts(String username)
+	public boolean hasExceededAttempts(final String username)
 	{
-		
-		Query query = entityManager.createNamedQuery(LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS);
+
+		final Query query = this.entityManager.createNamedQuery(LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS);
 		query.setParameter("username", username);
-		DateTime fiveMinutesAgo = new DateTime().minusMinutes(5);
+		final DateTime fiveMinutesAgo = new DateTime().minusMinutes(5);
 		query.setParameter("fiveMinutesAgo", fiveMinutesAgo.toDate(), TemporalType.TIMESTAMP);
 		@SuppressWarnings("unchecked")
-		List<LoginAttempt> attempts = query.getResultList();
-		
+		final List<LoginAttempt> attempts = query.getResultList();
+
 		int failedAttempts = 0;
-		for (LoginAttempt attempt: attempts)
+		for (final LoginAttempt attempt : attempts)
 		{
 			if (attempt.isSucceeded())
+			{
 				break;
+			}
 			failedAttempts++;
-			
+
 			if (failedAttempts > 4)
+			{
 				break;
+			}
 		}
-		
-		return (failedAttempts > 4);
+
+		return failedAttempts > 4;
 	}
 
 }

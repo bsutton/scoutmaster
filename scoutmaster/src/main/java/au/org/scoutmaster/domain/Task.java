@@ -20,17 +20,15 @@ import au.org.scoutmaster.domain.access.User;
 
 /**
  * Used to log a variety of activities
- * 
+ *
  * @author bsutton
  *
  */
 @Entity
-@Table(name="Task")
+@Table(name = "Task")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-})
-
+		{})
 public class Task extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -38,38 +36,38 @@ public class Task extends BaseEntity implements CrudEntity
 	/**
 	 * The type of task.
 	 */
-	@ManyToOne(targetEntity=TaskType.class)
+	@ManyToOne(targetEntity = TaskType.class)
 	private TaskType taskType;
-	
+
 	/**
 	 * The user that added this task.
 	 */
-	@ManyToOne(targetEntity=User.class)
+	@ManyToOne(targetEntity = User.class)
 	private User addedBy;
-	
+
 	/**
 	 * The current status of the task.
 	 */
-	@ManyToOne(targetEntity=TaskStatus.class)
+	@ManyToOne(targetEntity = TaskStatus.class)
 	private TaskStatus taskStatus = new TaskStatus();
 	/**
 	 * This task is private to the user that added the task.
 	 */
-	private Boolean privateTask = new Boolean(true); 
-	
-	@ManyToOne(targetEntity=Contact.class)
+	private Boolean privateTask = new Boolean(true);
+
+	@ManyToOne(targetEntity = Contact.class)
 	private Contact withContact;
-	
+
 	/**
 	 * The date/time task is due by
 	 */
-	@Temporal(value=TemporalType.DATE)
+	@Temporal(value = TemporalType.DATE)
 	private Date dueDate = new Date(); // DateTime.now();
 
 	/**
 	 * The date/time the task was completed on.
 	 */
-	@Temporal(value=TemporalType.DATE)
+	@Temporal(value = TemporalType.DATE)
 	private Date completionDate;
 
 	/**
@@ -77,76 +75,73 @@ public class Task extends BaseEntity implements CrudEntity
 	 */
 	@NotBlank
 	private String subject;
-	
+
 	@Lob
-	@Column(name="DETAILS", columnDefinition="TEXT" )
+	@Column(name = "DETAILS", columnDefinition = "TEXT")
 	private String details;
-	
+
 	/**
 	 * The section the task is applicable to. This is optional.
 	 */
-	@ManyToOne(targetEntity=Section.class)
+	@ManyToOne(targetEntity = Section.class)
 	private Section section;
 
-	
-
-	
 	public TaskType getType()
 	{
-		return taskType;
+		return this.taskType;
 	}
 
-	public void setType(TaskType taskType)
+	public void setType(final TaskType taskType)
 	{
 		this.taskType = taskType;
 	}
 
 	public User getAddedBy()
 	{
-		return addedBy;
+		return this.addedBy;
 	}
 
-	public void setAddedBy(User addedBy)
+	public void setAddedBy(final User addedBy)
 	{
 		this.addedBy = addedBy;
 	}
 
 	public Contact getWithContact()
 	{
-		return withContact;
+		return this.withContact;
 	}
 
-	public void setWithContact(Contact withContact)
+	public void setWithContact(final Contact withContact)
 	{
 		this.withContact = withContact;
 	}
 
 	public Date getTaskDate()
 	{
-		return dueDate;
+		return this.dueDate;
 	}
 
-	public void setTaskDate(Date activityDate)
+	public void setTaskDate(final Date activityDate)
 	{
 		this.dueDate = activityDate;
 	}
 
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
-	public void setSubject(String subject)
+	public void setSubject(final String subject)
 	{
 		this.subject = subject;
 	}
 
 	public String getDetails()
 	{
-		return details;
+		return this.details;
 	}
 
-	public void setDetails(String details)
+	public void setDetails(final String details)
 	{
 		this.details = details;
 	}
@@ -154,9 +149,10 @@ public class Task extends BaseEntity implements CrudEntity
 	@Override
 	public String getName()
 	{
-		return addedBy.getFullname() + " Task:" + this.subject.substring(0, Math.min(20, this.subject.length()));
+		return this.addedBy.getFullname() + " Task:" + this.subject.substring(0, Math.min(20, this.subject.length()));
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return getName();
@@ -164,18 +160,18 @@ public class Task extends BaseEntity implements CrudEntity
 
 	public Boolean getPrivateTask()
 	{
-		return privateTask;
+		return this.privateTask;
 	}
 
-	public void setPrivateTask(Boolean privateTask)
+	public void setPrivateTask(final Boolean privateTask)
 	{
 		this.privateTask = privateTask;
 	}
 
-	public void setStatus(TaskStatus taskStatus)
+	public void setStatus(final TaskStatus taskStatus)
 	{
 		this.taskStatus = taskStatus;
-		
+
 	}
-	
+
 }

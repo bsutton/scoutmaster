@@ -1,6 +1,5 @@
 package au.org.scoutmaster.views;
 
-
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -28,98 +27,99 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
-@Menu(display = "SMTP Settings", path="Admin")
+@Menu(display = "SMTP Settings", path = "Admin")
 public class SMTPSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "SMTPSettingsView";
 
-	
-	private TextField smtpFQDN;
-	
-	private TextField smtpPort;
-	
-	private CheckBox authRequired;
-	
-	private TextField username;
-	
-	private PasswordField password;
-	
-	private TextField fromEmailAddress;
+	private final TextField smtpFQDN;
+
+	private final TextField smtpPort;
+
+	private final CheckBox authRequired;
+
+	private final TextField username;
+
+	private final PasswordField password;
+
+	private final TextField fromEmailAddress;
 
 	private final Button saveButton;
 
 	public SMTPSettingsView()
 	{
 		setSizeFull();
-		
-		SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
-		SMTPServerSettings settings = daoEMailServerSettings.findSettings();
+
+		final SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
+		final SMTPServerSettings settings = daoEMailServerSettings.findSettings();
 
 		if (settings == null)
+		{
 			throw new IllegalStateException("The email Server Settings are missing from the database.");
+		}
 
 		// Create the user input field
-		smtpFQDN = new TextField("SMTP FQDN:");
-		smtpFQDN.setWidth("300px");
-		smtpFQDN.setRequired(true);
-		smtpFQDN.setDescription("SMTP Server FQDN or IP address");
-		smtpFQDN.setImmediate(true);
-		smtpFQDN.setValue(settings.getSmtpFQDN());
+		this.smtpFQDN = new TextField("SMTP FQDN:");
+		this.smtpFQDN.setWidth("300px");
+		this.smtpFQDN.setRequired(true);
+		this.smtpFQDN.setDescription("SMTP Server FQDN or IP address");
+		this.smtpFQDN.setImmediate(true);
+		this.smtpFQDN.setValue(settings.getSmtpFQDN());
 
-		smtpPort = new TextField("SMTP Port:");
-		smtpPort.setWidth("300px");
-		smtpPort.setRequired(true);
-		smtpPort.setDescription("SMTP Server FQDN or IP address");
-		smtpPort.setImmediate(true);
-		smtpPort.setValue(settings.getSmtpPort().toString());
-		smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535", 1, 65535));
+		this.smtpPort = new TextField("SMTP Port:");
+		this.smtpPort.setWidth("300px");
+		this.smtpPort.setRequired(true);
+		this.smtpPort.setDescription("SMTP Server FQDN or IP address");
+		this.smtpPort.setImmediate(true);
+		this.smtpPort.setValue(settings.getSmtpPort().toString());
+		this.smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535",
+				1, 65535));
 
-		authRequired = new CheckBox("SMTP Authentication Requried");
-		authRequired.setValue(settings.isAuthRequired());
-		authRequired.addValueChangeListener(this);
-		
-		
-		username = new TextField("SMTP Username:");
-		username.setWidth("300px");
-		username.setRequired(true);
-		username.setDescription("SMTP username if authentication is used");
-		username.setImmediate(true);
-		username.setValue(settings.getUsername());
+		this.authRequired = new CheckBox("SMTP Authentication Requried");
+		this.authRequired.setValue(settings.isAuthRequired());
+		this.authRequired.addValueChangeListener(this);
 
+		this.username = new TextField("SMTP Username:");
+		this.username.setWidth("300px");
+		this.username.setRequired(true);
+		this.username.setDescription("SMTP username if authentication is used");
+		this.username.setImmediate(true);
+		this.username.setValue(settings.getUsername());
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
-		password.setRequired(true);
-		password.setNullRepresentation("");
-		password.setDescription("SMS Provider Password");
-		password.setValue(settings.getPassword());
+		this.password = new PasswordField("Password:");
+		this.password.setWidth("300px");
+		this.password.setRequired(true);
+		this.password.setNullRepresentation("");
+		this.password.setDescription("SMS Provider Password");
+		this.password.setValue(settings.getPassword());
 
 		// Create the user input field
-		fromEmailAddress = new TextField("From Email Address:");
-		fromEmailAddress.setWidth("300px");
-		fromEmailAddress.setRequired(true);
-		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
-		fromEmailAddress.setImmediate(true);
-		fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
-		fromEmailAddress.setValue(settings.getFromEmailAddress());
+		this.fromEmailAddress = new TextField("From Email Address:");
+		this.fromEmailAddress.setWidth("300px");
+		this.fromEmailAddress.setRequired(true);
+		this.fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
+		this.fromEmailAddress.setImmediate(true);
+		this.fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+		this.fromEmailAddress.setValue(settings.getFromEmailAddress());
 
 		// Create login button
-		saveButton = new Button("Save", new ClickEventLogged.ClickAdaptor(this));
-		saveButton.setClickShortcut(KeyCode.ENTER);
-		saveButton.addStyleName("default");
+		this.saveButton = new Button("Save", new ClickEventLogged.ClickAdaptor(this));
+		this.saveButton.setClickShortcut(KeyCode.ENTER);
+		this.saveButton.addStyleName("default");
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(smtpFQDN, authRequired, username, password, fromEmailAddress, saveButton);
+		final VerticalLayout fields = new VerticalLayout(this.smtpFQDN, this.authRequired, this.username,
+				this.password, this.fromEmailAddress, this.saveButton);
 		fields.setCaption("Configure SMTP mail settings.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
+		final VerticalLayout viewLayout = new VerticalLayout(fields);
 		viewLayout.setSizeFull();
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
@@ -127,47 +127,48 @@ public class SMTPSettingsView extends CustomComponent implements View, ValueChan
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		smtpFQDN.focus();
+		this.smtpFQDN.focus();
 	}
 
 	/**
 	 * Save button click so lets save the details.
 	 */
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
-		SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
-		SMTPServerSettings settings = daoEMailServerSettings.findSettings();
-
+		final SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
+		final SMTPServerSettings settings = daoEMailServerSettings.findSettings();
 
 		if (settings == null)
+		{
 			throw new IllegalStateException("The email Server Settings are missing from the database.");
+		}
 
-		settings.setSmtpFQDN(smtpFQDN.getValue());
-		settings.setAuthRequired(authRequired.getValue());
-		settings.setUsername(username.getValue());
-		settings.setPassword(password.getValue());
-		settings.setFromEmailAddress(fromEmailAddress.getValue());
-		
+		settings.setSmtpFQDN(this.smtpFQDN.getValue());
+		settings.setAuthRequired(this.authRequired.getValue());
+		settings.setUsername(this.username.getValue());
+		settings.setPassword(this.password.getValue());
+		settings.setFromEmailAddress(this.fromEmailAddress.getValue());
+
 		daoEMailServerSettings.persist(settings);
 		Notification.show("SMTP Server details have been saved.", Type.TRAY_NOTIFICATION);
 
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
 		if (event.getProperty() == this.authRequired)
 		{
-			Boolean authRequired = (Boolean) event.getProperty().getValue();
-			
-			username.setVisible(authRequired);
-			password.setVisible(authRequired);
+			final Boolean authRequired = (Boolean) event.getProperty().getValue();
+
+			this.username.setVisible(authRequired);
+			this.password.setVisible(authRequired);
 		}
-		
+
 	}
 
 }

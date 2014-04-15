@@ -18,7 +18,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Group Setup", path="Wizards")
+@Menu(display = "Group Setup", path = "Wizards")
 public class GroupSetupWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
@@ -36,101 +36,103 @@ public class GroupSetupWizardView extends VerticalLayout implements View, Wizard
 
 	public WelcomeStep getWelcomeStep()
 	{
-		return welcomeStep;
+		return this.welcomeStep;
 	}
 
 	public GroupDetailStep getGroupDetailStep()
 	{
-		return groupDetailStep;
+		return this.groupDetailStep;
 	}
 
 	public NewAccountStep getNewAccountStep()
 	{
-		return newAccountStep;
+		return this.newAccountStep;
 	}
 
 	public SmsProviderStep getSmsProviderStep()
 	{
-		return smsProviderStep;
+		return this.smsProviderStep;
 	}
 
 	public SmtpStep getSmtpStep()
 	{
-		return smtpStep;
+		return this.smtpStep;
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 
-		welcomeStep = new WelcomeStep(this);
-		newAccountStep = new NewAccountStep(this);
-		groupDetailStep = new GroupDetailStep(this);
-		smsProviderStep = new SmsProviderStep(this);
-		smtpStep = new SmtpStep(this);
-		finalStep = new FinalStep(this);
+		this.welcomeStep = new WelcomeStep(this);
+		this.newAccountStep = new NewAccountStep(this);
+		this.groupDetailStep = new GroupDetailStep(this);
+		this.smsProviderStep = new SmsProviderStep(this);
+		this.smtpStep = new SmtpStep(this);
+		this.finalStep = new FinalStep(this);
 
-		UserDao daoUser = new DaoFactory().getUserDao();
+		final UserDao daoUser = new DaoFactory().getUserDao();
 		boolean skipAccountSetup = false;
 		if (daoUser.findAll().size() > 0)
+		{
 			skipAccountSetup = true;
+		}
 
 		// create the Wizard component and add the steps
-		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
-		wizard.addListener(this);
+		this.wizard = new Wizard();
+		this.wizard.setUriFragmentEnabled(true);
+		this.wizard.addListener(this);
 		if (!skipAccountSetup)
 		{
-			wizard.addStep(welcomeStep, "Welcome");
-			wizard.addStep(newAccountStep, "NewAccount");
+			this.wizard.addStep(this.welcomeStep, "Welcome");
+			this.wizard.addStep(this.newAccountStep, "NewAccount");
 		}
-		wizard.addStep(groupDetailStep, "GroupDetails");
-		wizard.addStep(smsProviderStep, "SMSProvider");
-		wizard.addStep(smtpStep, "SMTP");
-		wizard.addStep(finalStep, "Final");
-		wizard.setSizeFull();
-		wizard.setUriFragmentEnabled(true);
+		this.wizard.addStep(this.groupDetailStep, "GroupDetails");
+		this.wizard.addStep(this.smsProviderStep, "SMSProvider");
+		this.wizard.addStep(this.smtpStep, "SMTP");
+		this.wizard.addStep(this.finalStep, "Final");
+		this.wizard.setSizeFull();
+		this.wizard.setUriFragmentEnabled(true);
 
 		/* Main layout */
 		this.setMargin(true);
-		this.setSpacing(true);
-		this.addComponent(wizard);
-		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		this.setSizeFull();
+		setSpacing(true);
+		this.addComponent(this.wizard);
+		setComponentAlignment(this.wizard, Alignment.TOP_CENTER);
+		setSizeFull();
 
 	}
 
 	@Override
-	public void activeStepChanged(WizardStepActivationEvent event)
+	public void activeStepChanged(final WizardStepActivationEvent event)
 	{
 		// NOOP
 
 	}
 
 	@Override
-	public void stepSetChanged(WizardStepSetChangedEvent event)
+	public void stepSetChanged(final WizardStepSetChangedEvent event)
 	{
 		Page.getCurrent().setTitle(event.getComponent().getCaption());
 
 	}
 
 	@Override
-	public void wizardCompleted(WizardCompletedEvent event)
+	public void wizardCompleted(final WizardCompletedEvent event)
 	{
-		this.endWizard("Setup Completed!");
+		endWizard("Setup Completed!");
 
 	}
 
 	@Override
-	public void wizardCancelled(WizardCancelledEvent event)
+	public void wizardCancelled(final WizardCancelledEvent event)
 	{
-		this.endWizard("Setup Cancelled!");
+		endWizard("Setup Cancelled!");
 
 	}
 
-	private void endWizard(String message)
+	private void endWizard(final String message)
 	{
-		wizard.setVisible(false);
+		this.wizard.setVisible(false);
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		Page.getCurrent().setLocation("");

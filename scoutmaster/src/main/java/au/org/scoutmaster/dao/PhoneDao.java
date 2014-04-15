@@ -14,22 +14,24 @@ public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long
 
 	public PhoneDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public PhoneDao(EntityManager em)
+
+	public PhoneDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-	
-	public boolean isEmpty(Phone phone)
+	public boolean isEmpty(final Phone phone)
 	{
 		return phone.getPhoneNo() == null || phone.getPhoneNo().trim().length() == 0;
 	}
-	public List<Phone> findByNo(String value)
+
+	public List<Phone> findByNo(final String value)
 	{
 		return super.findListBySingleParameter(Phone.FIND_BY_NO, "phoneNo", value);
 	}
+
 	@Override
 	public JPAContainer<Phone> createVaadinContainer()
 	{

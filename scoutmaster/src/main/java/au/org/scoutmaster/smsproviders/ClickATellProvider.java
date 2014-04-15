@@ -7,7 +7,7 @@ public class ClickATellProvider implements iSMSProvider
 {
 
 	@Override
-	public void send(Phone phone, String msg)
+	public void send(final Phone phone, final String msg)
 	{
 		// TODO Auto-generated method stub
 

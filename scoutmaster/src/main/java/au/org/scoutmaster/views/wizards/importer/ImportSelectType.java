@@ -17,20 +17,21 @@ import com.vaadin.ui.VerticalLayout;
 public class ImportSelectType implements WizardStep
 {
 	ArrayList<ImportType> importTypes = new ArrayList<ImportType>();
-	private OptionGroup optionGroup;
-	private VerticalLayout layout;
+	private final OptionGroup optionGroup;
+	private final VerticalLayout layout;
 
-	public ImportSelectType(ImportWizardView importView)
+	public ImportSelectType(final ImportWizardView importView)
 	{
-		importTypes.add(new ImportType("Contacts", Contact.class));
+		this.importTypes.add(new ImportType("Contacts", Contact.class));
 
-		layout = new VerticalLayout();
-		layout.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
-		FormLayout formLayout = new FormLayout();
-		this.optionGroup = new OptionGroup("Type", importTypes);
-		formLayout.addComponent(optionGroup);
-		layout.addComponent(formLayout);
-		layout.setMargin(true);
+		this.layout = new VerticalLayout();
+		this.layout
+				.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
+		final FormLayout formLayout = new FormLayout();
+		this.optionGroup = new OptionGroup("Type", this.importTypes);
+		formLayout.addComponent(this.optionGroup);
+		this.layout.addComponent(formLayout);
+		this.layout.setMargin(true);
 	}
 
 	@Override
@@ -43,16 +44,18 @@ public class ImportSelectType implements WizardStep
 	public Component getContent()
 	{
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
-		boolean advance = this.optionGroup.getValue() != null;
+		final boolean advance = this.optionGroup.getValue() != null;
 
 		if (!advance)
+		{
 			Notification.show("Please select a Type to import and then click Next");
+		}
 		return advance;
 	}
 
@@ -72,15 +75,16 @@ public class ImportSelectType implements WizardStep
 		String name;
 		Class<? extends Importable> importable;
 
-		public ImportType(String name, Class<? extends Importable> class1)
+		public ImportType(final String name, final Class<? extends Importable> class1)
 		{
 			this.name = name;
 			this.importable = class1;
 		}
 
+		@Override
 		public String toString()
 		{
-			return name;
+			return this.name;
 		}
 	}
 

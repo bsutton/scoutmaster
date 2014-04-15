@@ -10,28 +10,24 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-@Entity(name="SMSProvider")
-@Table(name="SMSProvider")
+@Entity(name = "SMSProvider")
+@Table(name = "SMSProvider")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name")
-})
-
+		{ @NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name") })
 public class SMSProvider extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String FIND_BY_NAME = "SMSProvider.findByName";
-	
 
 	/**
 	 * The name of the provider used to display the provider to th e user.
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	private String providerName;
-	
+
 	private String description;
 
 	@NotBlank
@@ -44,83 +40,84 @@ public class SMSProvider extends BaseEntity
 	private String ApiId;
 
 	private Boolean active;
-	
+
 	/**
-	 * The default sender id used when sending a text message.
-	 * The sender id is usually a mobile phone number but in some countries can be a test message e.g. 'Heidelberg Scouts'.
-	 * Clickatell require that the senderid is registered to stop spam/spoofing.
-	 * The mobile phone of the person who created the account will be registered by default.
+	 * The default sender id used when sending a text message. The sender id is
+	 * usually a mobile phone number but in some countries can be a test message
+	 * e.g. 'Heidelberg Scouts'. Clickatell require that the senderid is
+	 * registered to stop spam/spoofing. The mobile phone of the person who
+	 * created the account will be registered by default.
 	 */
 	private String defaultSenderID;
 
 	public String getDefaultSenderID()
 	{
-		return defaultSenderID;
+		return this.defaultSenderID;
 	}
 
-	public void setDefaultSenderID(String defaultSenderID)
+	public void setDefaultSenderID(final String defaultSenderID)
 	{
 		this.defaultSenderID = defaultSenderID;
 	}
 
 	public Boolean getActive()
 	{
-		return active;
+		return this.active;
 	}
 
 	private Boolean defaultProvider;
-	
+
 	public String getUsername()
 	{
-		return username;
+		return this.username;
 	}
 
-	public void setUsername(String username)
+	public void setUsername(final String username)
 	{
 		this.username = username;
 	}
 
 	public String getPassword()
 	{
-		return password;
+		return this.password;
 	}
 
-	public void setPassword(String password)
+	public void setPassword(final String password)
 	{
 		this.password = password;
 	}
 
 	public String getApiId()
 	{
-		return ApiId;
+		return this.ApiId;
 	}
 
-	public void setApiId(String ApiId)
+	public void setApiId(final String ApiId)
 	{
 		this.ApiId = ApiId;
 	}
 
 	public Boolean isActive()
 	{
-		return active;
+		return this.active;
 	}
 
-	public void setActive(Boolean active)
+	public void setActive(final Boolean active)
 	{
 		this.active = active;
 	}
 
 	public Boolean isDefaultProvider()
 	{
-		return defaultProvider;
+		return this.defaultProvider;
 	}
 
-	public void setDefaultProvider(Boolean defaultProvider)
+	public void setDefaultProvider(final Boolean defaultProvider)
 	{
 		this.defaultProvider = defaultProvider;
 	}
 
-	public void setProviderName(String providerName)
+	public void setProviderName(final String providerName)
 	{
 		this.providerName = providerName;
 	}
@@ -132,10 +129,10 @@ public class SMSProvider extends BaseEntity
 
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
@@ -143,7 +140,7 @@ public class SMSProvider extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return providerName;
+		return this.providerName;
 	}
 
 }

@@ -23,7 +23,7 @@ public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implem
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(GroupDetailStep.class);
 
-	public GroupDetailStep(GroupSetupWizardView setupWizardView)
+	public GroupDetailStep(final GroupSetupWizardView setupWizardView)
 	{
 		super(new DaoFactory().getOrganisationDao(), Organisation.class);
 	}
@@ -35,21 +35,21 @@ public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implem
 	}
 
 	@Override
-	public Component getContent(ValidatingFieldGroup<Organisation> fieldGroup)
+	public Component getContent(final ValidatingFieldGroup<Organisation> fieldGroup)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		final MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setColumnFieldWidth(0, 250);
 		formLayout.setSizeFull();
 
-		Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);
+		final Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);
 		layout.addComponent(formLayout);
 
-		TextField groupName = formLayout.bindTextField("Scout Group Name", "name");
+		final TextField groupName = formLayout.bindTextField("Scout Group Name", "name");
 		formLayout.bindTextField("Phone No.", "primaryPhone");
 		formLayout.bindTextField("Street", "location.street");
 		formLayout.bindTextField("City", "location.city");
@@ -62,11 +62,11 @@ public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implem
 	}
 
 	@Override
-	protected void initEntity(Organisation entity)
+	protected void initEntity(final Organisation entity)
 	{
 		entity.setOurScoutGroup(true);
 		entity.setLocation(new Address());
-		
+
 	}
 
 	@Override

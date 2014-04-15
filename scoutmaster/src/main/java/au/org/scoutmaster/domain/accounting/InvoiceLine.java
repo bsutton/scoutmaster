@@ -19,14 +19,14 @@ public class InvoiceLine extends BaseEntity
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * The invoice this InvoiceLine belongs to.
 	 */
-	@ManyToOne(targetEntity=Invoice.class)
+	@ManyToOne(targetEntity = Invoice.class)
 	Invoice invoice;
 
 	/**
@@ -39,16 +39,14 @@ public class InvoiceLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "quantityFixedDoubleValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "quantityPrecision"))
-	})
+			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "quantityFixedDoubleValue")),
+				@AttributeOverride(name = "precision", column = @Column(name = "quantityPrecision")) })
 	FixedDouble quantity;
 
 	/**
 	 * The product or service the person is being billed for.
 	 */
-	@ManyToOne(targetEntity=Product.class)
+	@ManyToOne(targetEntity = Product.class)
 	Product product;
 
 	/**
@@ -56,11 +54,11 @@ public class InvoiceLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPercentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
 	MoneyWithTax itemCost;
 
 	/**
@@ -68,11 +66,11 @@ public class InvoiceLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
 	MoneyWithTax lineTotal;
 
 	@Override
@@ -80,7 +78,7 @@ public class InvoiceLine extends BaseEntity
 	public String getName()
 	{
 		// TODO Auto-generated method stub
-		return invoice.getName() + " " + ordinal;
+		return this.invoice.getName() + " " + this.ordinal;
 	}
 
 }

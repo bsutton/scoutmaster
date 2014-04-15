@@ -10,12 +10,12 @@ import javax.persistence.Table;
 
 /**
  * Used to define the set of qualifications the associated leader has.
- * 
+ *
  * @author bsutton
  *
  */
-@Entity(name="Qualification")
-@Table(name="Qualification")
+@Entity(name = "Qualification")
+@Table(name = "Qualification")
 @Access(AccessType.FIELD)
 public class Qualification extends BaseEntity
 {
@@ -24,30 +24,30 @@ public class Qualification extends BaseEntity
 	/**
 	 * Describes the qualification type held by this leader.
 	 */
-	@ManyToOne(targetEntity=QualificationType.class)
+	@ManyToOne(targetEntity = QualificationType.class)
 	QualificationType type;
-	
+
 	/**
 	 * The leader that has this qualifications
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	Contact leader;
-	
-	
+
 	/**
 	 * The date the qualification was obtained
 	 */
 	Date obtained;
-	
+
 	/**
-	 * The date the qualification expires or null if the QualificationType doesn't expire.
+	 * The date the qualification expires or null if the QualificationType
+	 * doesn't expire.
 	 */
 	Date expires;
 
 	@Override
 	public String getName()
 	{
-		return leader.getFullname() + " " + type.getName();
+		return this.leader.getFullname() + " " + this.type.getName();
 	}
 
 }

@@ -12,9 +12,9 @@ import org.joda.time.Interval;
 
 /**
  * Used to represent the age of a person in Years, Months and days
- * 
+ *
  * @author bsutton
- * 
+ *
  */
 @Embeddable
 @Access(AccessType.FIELD)
@@ -37,15 +37,15 @@ public class Age
 
 	}
 
-	public Age(DateTime birthDate)
+	public Age(final DateTime birthDate)
 	{
-		Interval interval = new Interval(birthDate, DateTime.now());
+		final Interval interval = new Interval(birthDate, DateTime.now());
 		this.years = interval.toPeriod().getYears();
 		this.months = interval.toPeriod().getMonths();
 		this.days = interval.toPeriod().getDays();
 	}
 
-	public Age(Integer years, Integer months, Integer days)
+	public Age(final Integer years, final Integer months, final Integer days)
 	{
 		this.years = years;
 		this.months = months;
@@ -56,7 +56,7 @@ public class Age
 	/**
 	 * Takes an age string and attempts to parse it. Expected format is YYy MMy
 	 * DDd
-	 * 
+	 *
 	 * @param age
 	 */
 	public Age(String age)
@@ -76,10 +76,12 @@ public class Age
 			age = age.replace(" d", "d");
 			// strip comma's out.
 			age = age.replace(",", "");
-			String[] ageParts = age.trim().split(" ");
+			final String[] ageParts = age.trim().split(" ");
 
 			if (ageParts.length > 3)
+			{
 				throw new RuntimeException("An age must only contain three parts e.g. 10y 3m 31d");
+			}
 
 			if (ageParts.length > 0)
 			{
@@ -88,34 +90,40 @@ public class Age
 				if (part.endsWith("y"))
 				{
 					// we have a year part.
-					String years = part.substring(0, part.length() - 1);
+					final String years = part.substring(0, part.length() - 1);
 					this.years = Integer.valueOf(years);
 					index++;
 				}
 				else
+				{
 					this.years = 0;
+				}
 
 				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("m"))
 				{
 					part = ageParts[index].trim().toLowerCase();
 					// we have a month part.
-					String month = part.substring(0, part.length() - 1);
+					final String month = part.substring(0, part.length() - 1);
 					this.months = Integer.valueOf(month);
 					index++;
 				}
 				else
+				{
 					this.months = 0;
+				}
 
 				if (index < ageParts.length && ageParts[index].trim().toLowerCase().endsWith("d"))
 				{
 					part = ageParts[index].trim().toLowerCase();
 					// we have a day part.
-					String day = part.substring(0, part.length() - 1);
+					final String day = part.substring(0, part.length() - 1);
 					this.days = Integer.valueOf(day);
 					index++;
 				}
 				else
+				{
 					this.days = 0;
+				}
 
 				if (ageParts.length != index)
 				{
@@ -128,64 +136,69 @@ public class Age
 
 	public Integer getYears()
 	{
-		return years;
+		return this.years;
 	}
 
 	public Integer getMonths()
 	{
-		return months;
+		return this.months;
 	}
 
 	public Integer getDays()
 	{
-		return days;
+		return this.days;
 	}
 
+	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 
 		boolean prior = false;
-		if (years > 0)
+		if (this.years > 0)
 		{
-			sb.append(years + "y");
+			sb.append(this.years + "y");
 			prior = true;
 		}
 
-		if (months > 0)
+		if (this.months > 0)
 		{
 			if (prior)
+			{
 				sb.append(", ");
-			sb.append(months + "m");
+			}
+			sb.append(this.months + "m");
 			prior = true;
 		}
-		if (days > 0)
+		if (this.days > 0)
 		{
 			if (prior)
+			{
 				sb.append(", ");
-			sb.append(days + "d");
+			}
+			sb.append(this.days + "d");
 		}
 		return sb.toString();
 	}
 
 	public DateTime getDateTime()
 	{
-		return new DateTime(years, months, days, 0, 0);
+		return new DateTime(this.years, this.months, this.days, 0, 0);
 	}
 
-	Age withYears(Integer years)
+	Age withYears(final Integer years)
 	{
 		this.years = years;
 		return this;
 	}
 
-	Age withMonths(Integer months)
+	Age withMonths(final Integer months)
 	{
 		this.months = months;
 		return this;
 	}
 
-	Age withDays(Integer days)
+	Age withDays(final Integer days)
 	{
 		this.days = days;
 		return this;
@@ -195,7 +208,7 @@ public class Age
 	{
 		return new DateMidnight(DateTime.now().minus(
 				new org.joda.time.Period().withYears(getYears()).withMonths(getMonths()).withDays(getDays())))
-				.toDateTime();
+		.toDateTime();
 	}
 
 }

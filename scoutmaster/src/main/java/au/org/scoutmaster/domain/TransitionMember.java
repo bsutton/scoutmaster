@@ -12,12 +12,12 @@ import javax.persistence.Table;
 /**
  * A youth members that are currently transitioning from one section to another
  * e.g. moving from cubs to scouts.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="TransitionMember")
-@Table(name="TransitionMember")
+@Entity(name = "TransitionMember")
+@Table(name = "TransitionMember")
 @Access(AccessType.FIELD)
 public class TransitionMember extends BaseEntity
 {
@@ -26,28 +26,28 @@ public class TransitionMember extends BaseEntity
 	/**
 	 * The youth member that is currently transitioning.
 	 */
-	@OneToOne(targetEntity=Contact.class)
+	@OneToOne(targetEntity = Contact.class)
 	Contact youthMember;
 
 	/**
 	 * The contact who's job it is to supervise the youth member during
 	 * transition.
-	 * 
+	 *
 	 * This may be null if no supervisor has been appointed.
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	Contact transitionSupervisor;
 
 	/**
 	 * The section they are transitioning from.
 	 */
-	@ManyToOne(targetEntity=Section.class)
+	@ManyToOne(targetEntity = Section.class)
 	Section fromSection;
 
 	/**
 	 * The section they are transitioning too.
 	 */
-	@ManyToOne(targetEntity=Section.class)
+	@ManyToOne(targetEntity = Section.class)
 	Section toSection;
 
 	Date expectedStartDate;
@@ -57,7 +57,7 @@ public class TransitionMember extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return youthMember.getFullname();
+		return this.youthMember.getFullname();
 	}
 
 }

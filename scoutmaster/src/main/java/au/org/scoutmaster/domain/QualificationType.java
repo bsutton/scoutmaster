@@ -12,8 +12,8 @@ import org.hibernate.validator.constraints.NotBlank;
 /*
  * Used to define different types of qualifications required by leaders, parents and scouts.
  */
-@Entity(name="QualificationType")
-@Table(name="QualificationType")
+@Entity(name = "QualificationType")
+@Table(name = "QualificationType")
 @Access(AccessType.FIELD)
 public class QualificationType extends BaseEntity
 {
@@ -23,20 +23,22 @@ public class QualificationType extends BaseEntity
 	 * A short descriptive name for the qualification Type.
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String name;
-	
+
 	/**
-	 * A detailed description of the qualification potentially containing HTML formating.
+	 * A detailed description of the qualification potentially containing HTML
+	 * formating.
 	 */
 	@NotBlank
 	String description;
-	
+
 	/**
-	 * If try then this type of qualification expires after a defined period of time.
+	 * If try then this type of qualification expires after a defined period of
+	 * time.
 	 */
 	Boolean expires;
-	
+
 	/**
 	 * The default period of time that the qualifications is valid for.
 	 */
@@ -46,8 +48,7 @@ public class QualificationType extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
-	
 
 }

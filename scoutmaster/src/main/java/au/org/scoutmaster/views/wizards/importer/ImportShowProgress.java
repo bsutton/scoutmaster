@@ -29,7 +29,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 
 	@SuppressWarnings("unused")
 	static private Logger logger = LogManager.getLogger(ImportShowProgress.class);
-	private ImportWizardView importView;
+	private final ImportWizardView importView;
 	private PoJoTable<ImportItemStatus> progressTable;
 
 	private boolean importComplete = false;
@@ -37,7 +37,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	private int count;
 	private Label progressDescription;
 
-	public ImportShowProgress(ImportWizardView importView)
+	public ImportShowProgress(final ImportWizardView importView)
 	{
 		this.importView = importView;
 	}
@@ -53,27 +53,26 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	{
 		this.count = 0;
 
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		progressDescription = new Label("Imported: " + this.count + " records");
-		layout.addComponent(progressDescription);
-		
-		indicator = new ProgressBar(new Float(0.0));
-		indicator.setWidth("100%");
-		layout.addComponent(indicator);
+		this.progressDescription = new Label("Imported: " + this.count + " records");
+		layout.addComponent(this.progressDescription);
 
+		this.indicator = new ProgressBar(new Float(0.0));
+		this.indicator.setWidth("100%");
+		layout.addComponent(this.indicator);
 
-		Label errorLabel = new Label("Errors are displayed below.");
+		final Label errorLabel = new Label("Errors are displayed below.");
 		layout.addComponent(errorLabel);
 
-		progressTable = new PoJoTable<>(ImportItemStatus.class, new String[]
-		{ "Row", "Exception" });
-		progressTable.setColumnExpandRatio("Exception", 1);
-		progressTable.setSizeFull();
+		this.progressTable = new PoJoTable<>(ImportItemStatus.class, new String[]
+				{ "Row", "Exception" });
+		this.progressTable.setColumnExpandRatio("Exception", 1);
+		this.progressTable.setSizeFull();
 		layout.addComponent(this.progressTable);
-		layout.setExpandRatio(progressTable, 1);
-		Button errorExport = new Button("Export Errors");
+		layout.setExpandRatio(this.progressTable, 1);
+		final Button errorExport = new Button("Export Errors");
 		layout.addComponent(errorExport);
 		layout.setComponentAlignment(errorExport, Alignment.BOTTOM_RIGHT);
 		errorExport.addClickListener(new ClickEventLogged.ClickListener()
@@ -81,28 +80,26 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void clicked(ClickEvent event)
+			public void clicked(final ClickEvent event)
 			{
 				CsvExport csvExport;
-		        csvExport = new CsvExport(progressTable);
-		        csvExport.setDisplayTotals(false);
-		        csvExport.setDoubleDataFormat("0");
-		        csvExport.excludeCollapsedColumns();
-		        csvExport.setReportTitle("Document title");
-		        csvExport.setExportFileName("Nome_file_example.csv");
-		        csvExport.export();
+				csvExport = new CsvExport(ImportShowProgress.this.progressTable);
+				csvExport.setDisplayTotals(false);
+				csvExport.setDoubleDataFormat("0");
+				csvExport.excludeCollapsedColumns();
+				csvExport.setReportTitle("Document title");
+				csvExport.setExportFileName("Nome_file_example.csv");
+				csvExport.export();
 			}
 		});
-		
-
 
 		// Set polling frequency to 0.5 seconds.
 
-		File tempFile = this.importView.getFile().getTempFile();
-		Class<? extends Importable> clazz = importView.getType().getEntityClass();
+		final File tempFile = this.importView.getFile().getTempFile();
+		final Class<? extends Importable> clazz = this.importView.getType().getEntityClass();
 
-		ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(new ImportTask(this, tempFile, clazz,
-				this.importView.getMatch().getFieldMap()));
+		final ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(new ImportTask(this, tempFile,
+				clazz, this.importView.getMatch().getFieldMap()));
 		worker.start();
 
 		return layout;
@@ -111,7 +108,7 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public boolean onAdvance()
 	{
-		return importComplete;
+		return this.importComplete;
 	}
 
 	@Override
@@ -123,17 +120,13 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public void taskProgress(final int count, final int max, final ImportItemStatus status)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
+		new UIUpdater(() -> {
+			ImportShowProgress.this.progressDescription.setValue("Imported: " + count + " records.");
+			if (status != null)
 			{
-				progressDescription.setValue("Imported: " + count + " records.");
-				if (status != null)
-					ImportShowProgress.this.progressTable.addRow(status);
-				indicator.setValue(((float)count)/((float)max));
+				ImportShowProgress.this.progressTable.addRow(status);
 			}
-
+			ImportShowProgress.this.indicator.setValue((float) count / (float) max);
 		});
 	}
 
@@ -141,34 +134,21 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	public void taskComplete(final int sent)
 	{
 
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				indicator.setValue(1.0f);
-				indicator.setVisible(false);
-				indicator.setEnabled(false);
-				SMNotification.show("Import has completed.", Type.TRAY_NOTIFICATION);
-				progressDescription.setValue("Imported " + sent + " records. Import complete.");
-			}
+		new UIUpdater(() -> {
+			ImportShowProgress.this.indicator.setValue(1.0f);
+			ImportShowProgress.this.indicator.setVisible(false);
+			ImportShowProgress.this.indicator.setEnabled(false);
+			SMNotification.show("Import has completed.", Type.TRAY_NOTIFICATION);
+			ImportShowProgress.this.progressDescription.setValue("Imported " + sent + " records. Import complete.");
 		});
 
-		importComplete = true;
+		this.importComplete = true;
 	}
 
 	@Override
 	public void taskItemError(final ImportItemStatus status)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-
-				ImportShowProgress.this.progressTable.addRow(status);
-			}
-		});
+		new UIUpdater(() -> ImportShowProgress.this.progressTable.addRow(status));
 
 	}
 

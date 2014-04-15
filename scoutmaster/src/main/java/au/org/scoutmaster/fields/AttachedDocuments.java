@@ -32,54 +32,52 @@ public class AttachedDocuments extends AbstractComponent
 {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LogManager.getLogger(AttachedDocuments.class);
-	
+
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 
-	private AbstractLayout uploadWidget;
+	private final AbstractLayout uploadWidget;
 
-	private GridLayout documentLayout;
+	private final GridLayout documentLayout;
 
-	private ArrayList<AttachedDocument> attachedDocuments = new ArrayList<>();
+	private final ArrayList<AttachedDocument> attachedDocuments = new ArrayList<>();
 	private List<Document> entitiesDocuments;
-	
+
 	public AttachedDocuments()
 	{
-		HorizontalLayout layout = new HorizontalLayout();
-		
-		uploadWidget = buildUploadWidget();
-		layout.addComponent(uploadWidget);
-		layout.setComponentAlignment(uploadWidget, Alignment.MIDDLE_LEFT);
-		documentLayout = buildDocumentList();
-		layout.addComponent(documentLayout);
-		layout.setComponentAlignment(documentLayout, Alignment.MIDDLE_RIGHT);
+		final HorizontalLayout layout = new HorizontalLayout();
+
+		this.uploadWidget = buildUploadWidget();
+		layout.addComponent(this.uploadWidget);
+		layout.setComponentAlignment(this.uploadWidget, Alignment.MIDDLE_LEFT);
+		this.documentLayout = buildDocumentList();
+		layout.addComponent(this.documentLayout);
+		layout.setComponentAlignment(this.documentLayout, Alignment.MIDDLE_RIGHT);
 	}
-	
-	
+
 	private GridLayout buildDocumentList()
 	{
-		GridLayout layout = new GridLayout(1,3);
+		final GridLayout layout = new GridLayout(1, 3);
 		layout.setColumnExpandRatio(0, 1.0f);
 		return layout;
 	}
-	
-	public void setDocuments(List<Document> documents)
+
+	public void setDocuments(final List<Document> documents)
 	{
 		this.entitiesDocuments = documents;
-		for (Document document : documents)
+		for (final Document document : documents)
 		{
 			displayDocument(document, null);
 		}
 	}
 
-
-	private void displayDocument(Document document, File file)
+	private void displayDocument(final Document document, final File file)
 	{
-		int row = documentLayout.getRows() - 1;
-		documentLayout.addComponent(new Label(document.getFilename()), row, 0);
-		documentLayout.addComponent(new Label(document.getMimeType()), row, 0);
-		Button removeButton = new Button("x");
+		final int row = this.documentLayout.getRows() - 1;
+		this.documentLayout.addComponent(new Label(document.getFilename()), row, 0);
+		this.documentLayout.addComponent(new Label(document.getMimeType()), row, 0);
+		final Button removeButton = new Button("x");
 		removeButton.setStyleName("small");
-		AttachedDocument attached = new AttachedDocument(document, file, row);
+		final AttachedDocument attached = new AttachedDocument(document, file, row);
 		removeButton.setData(attached);
 
 		removeButton.addClickListener(new ClickEventLogged.ClickListener()
@@ -87,68 +85,68 @@ public class AttachedDocuments extends AbstractComponent
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void clicked(ClickEvent event)
+			public void clicked(final ClickEvent event)
 			{
-				AttachedDocument attachedDocument = (AttachedDocument) event.getButton().getData();
+				final AttachedDocument attachedDocument = (AttachedDocument) event.getButton().getData();
 				attachedDocument.deleteFile();
-				attachedDocuments.remove(attachedDocument);
-				int row = attachedDocument.getRow();
-				documentLayout.removeRow(row);
-				entitiesDocuments.remove(attachedDocument.getDocument());
+				AttachedDocuments.this.attachedDocuments.remove(attachedDocument);
+				final int row = attachedDocument.getRow();
+				AttachedDocuments.this.documentLayout.removeRow(row);
+				AttachedDocuments.this.entitiesDocuments.remove(attachedDocument.getDocument());
 				// now we have to renumber all document rows
-				for (AttachedDocument document: attachedDocuments)
+				for (final AttachedDocument document : AttachedDocuments.this.attachedDocuments)
 				{
 					if (document.getRow() > row)
+					{
 						document.setRow(document.getRow() - 1);
+					}
 				}
-				
+
 			}
 		});
 
-		documentLayout.addComponent(removeButton, documentLayout.getRows(), 1);
-		attachedDocuments.add(attached);
+		this.documentLayout.addComponent(removeButton, this.documentLayout.getRows(), 1);
+		this.attachedDocuments.add(attached);
 	}
 
-
-	private void attachDocument(File file, String mimeType) throws FileNotFoundException, IOException
+	private void attachDocument(final File file, final String mimeType) throws FileNotFoundException, IOException
 	{
-		
-		Document document = new Document();
+
+		final Document document = new Document();
 		document.setFilename(file.getName());
 		document.setMimeType(mimeType);
 		document.setAddedBy(SMSession.INSTANCE.getLoggedInUser());
-		
+
 		// TODO: this could be very heavy weight.
 		final byte[] data = IOUtils.toByteArray(new FileInputStream(file));
 		document.setContent(data);
-		entitiesDocuments.add(document);
-		
+		this.entitiesDocuments.add(document);
+
 		addDocument(document, file);
 	}
-	
-	private void addDocument(Document document, File file)
+
+	private void addDocument(final Document document, final File file)
 	{
 		displayDocument(document, file);
 	}
 
-
 	private AbstractLayout buildUploadWidget()
 	{
 
-		MultiFileUpload multiFileUpload2 = new MultiFileUpload()
+		final MultiFileUpload multiFileUpload2 = new MultiFileUpload()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void handleFile(File file, String fileName, String mimeType, long length)
+			protected void handleFile(final File file, final String fileName, final String mimeType, final long length)
 			{
 				try
 				{
 					attachDocument(file, mimeType);
 				}
-				catch (IOException  e)
+				catch (final IOException e)
 				{
-					logger.error(e,e);
+					AttachedDocuments.logger.error(e, e);
 					SMNotification.show(e, Type.ERROR_MESSAGE);
 				}
 			}
@@ -156,7 +154,7 @@ public class AttachedDocuments extends AbstractComponent
 			@Override
 			protected FileBuffer createReceiver()
 			{
-				FileBuffer receiver = super.createReceiver();
+				final FileBuffer receiver = super.createReceiver();
 				/*
 				 * Make receiver not to delete files after they have been
 				 * handled by #handleFile().
@@ -166,45 +164,45 @@ public class AttachedDocuments extends AbstractComponent
 			}
 		};
 		multiFileUpload2.setCaption("Attach files");
-		multiFileUpload2.setRootDirectory(TEMP_FILE_DIR);
+		multiFileUpload2.setRootDirectory(AttachedDocuments.TEMP_FILE_DIR);
 		return multiFileUpload2;
 	}
 
-	
-
 	public class AttachedDocument
 	{
-		private Document document;
-		private File file;
+		private final Document document;
+		private final File file;
 		private int row;
 
-		public AttachedDocument(Document document, File file, int row)
+		public AttachedDocument(final Document document, final File file, final int row)
 		{
 			this.document = document;
 			this.file = file;
 			this.row = row;
 		}
 
-		public void setRow(int row)
+		public void setRow(final int row)
 		{
 			this.row = row;
-			
+
 		}
 
 		public void deleteFile()
 		{
-			if (file != null)
-				file.delete();
+			if (this.file != null)
+			{
+				this.file.delete();
+			}
 		}
 
 		public Document getDocument()
 		{
-			return document;
+			return this.document;
 		}
-		
+
 		public int getRow()
 		{
-			return row;
+			return this.row;
 		}
 	}
 

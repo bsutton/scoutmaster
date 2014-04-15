@@ -17,7 +17,7 @@ public class Message
 	private final String body;
 	private final Phone sender;
 
-	public Message(String subject, String body, Phone sender)
+	public Message(final String subject, final String body, final Phone sender)
 	{
 		this.subject = subject;
 		this.body = body;
@@ -26,38 +26,40 @@ public class Message
 
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
 	public String getBody()
 	{
-		return body;
+		return this.body;
 	}
 
 	public Phone getSender()
 	{
-		return sender;
+		return this.sender;
 	}
 
-	public StringBuffer expandBody(User user, Contact contact) throws VelocityFormatException
+	public StringBuffer expandBody(final User user, final Contact contact) throws VelocityFormatException
 	{
-		VelocityEngine velocityEngine = new VelocityEngine();
-		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute" );
-		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger","velocity");
+		final VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+				"org.apache.velocity.runtime.log.Log4JLogChute");
+		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "velocity");
 		velocityEngine.init();
 
-
-		StringWriter sw = new StringWriter();
-		VelocityContext context = new VelocityContext();
+		final StringWriter sw = new StringWriter();
+		final VelocityContext context = new VelocityContext();
 		context.put("user", user);
 		context.put("contact", contact);
 
 		try
 		{
 			if (!velocityEngine.evaluate(context, sw, user.getFullname(), this.body))
+			{
 				throw new RuntimeException("Error processing Velocity macro for SMS body. Check error log");
+			}
 		}
-		catch (Throwable e)
+		catch (final Throwable e)
 		{
 			throw new VelocityFormatException(e);
 

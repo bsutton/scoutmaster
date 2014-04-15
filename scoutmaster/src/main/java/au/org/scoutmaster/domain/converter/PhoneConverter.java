@@ -17,18 +17,18 @@ public class PhoneConverter implements Converter<Object, Phone>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Phone convertToModel(Object value, Class<? extends Phone> targetType, Locale locale)
+	public Phone convertToModel(final Object value, final Class<? extends Phone> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		Phone result = null;
-		PhoneDao daoPhone = new DaoFactory().getPhoneDao();
+		final PhoneDao daoPhone = new DaoFactory().getPhoneDao();
 
-		logger.debug("converToModel: value: {} valueType: {} targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		PhoneConverter.logger.debug("converToModel: value: {} valueType: {} targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Long)
 		{
-			logger.debug("Calling findById");
+			PhoneConverter.logger.debug("Calling findById");
 			result = daoPhone.findById((Long) value);
 		}
 		else if (value instanceof Object || value instanceof String)
@@ -36,22 +36,26 @@ public class PhoneConverter implements Converter<Object, Phone>
 			result = new Phone((String) value);
 		}
 
-		logger.debug("result: {}", result);
+		PhoneConverter.logger.debug("result: {}", result);
 		return result;
 	}
 
 	@Override
-	public Object convertToPresentation(Phone value, Class<? extends Object> targetType, Locale locale)
+	public Object convertToPresentation(final Phone value, final Class<? extends Object> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
 
-		logger.debug("convertToPresentation: value: {} targetType: {}", value, targetType);
+		PhoneConverter.logger.debug("convertToPresentation: value: {} targetType: {}", value, targetType);
 		if (value != null)
+		{
 			result = value.getPhoneNo();
+		}
 		else
+		{
 			result = "";
-		logger.debug("result: {}", result);
+		}
+		PhoneConverter.logger.debug("result: {}", result);
 		return result;
 	}
 

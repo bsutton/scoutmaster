@@ -17,35 +17,35 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
-@Table(name="CreditNote")
+@Table(name = "CreditNote")
 @Access(AccessType.FIELD)
-public class CreditNote  extends BaseEntity
+public class CreditNote extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static String CREDIT_NOTE_PREFIX = "CN-";
 
 	Long creditNoteNumber;
-	
-	@OneToMany(cascade = CascadeType.ALL,targetEntity=CreditNoteLine.class)
+
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = CreditNoteLine.class)
 	List<CreditNoteLine> creditNoteLines = new ArrayList<>();
-	
+
 	/**
 	 * The invoice this CreditNote is attached to.
 	 */
-	@OneToOne(targetEntity=Invoice.class)
+	@OneToOne(targetEntity = Invoice.class)
 	Invoice associatedInvoice;
 
 	@Override
 	public String getName()
 	{
-		return CREDIT_NOTE_PREFIX + creditNoteNumber;
+		return CreditNote.CREDIT_NOTE_PREFIX + this.creditNoteNumber;
 	}
-	
+
 	@PrePersist
 	private void prePersist()
 	{
-		CreditNoteDao daoCreditNote = new DaoFactory().getCreditNoteDao();
-		creditNoteNumber = daoCreditNote.getNextCreditNote();
+		final CreditNoteDao daoCreditNote = new DaoFactory().getCreditNoteDao();
+		this.creditNoteNumber = daoCreditNote.getNextCreditNote();
 	}
 }

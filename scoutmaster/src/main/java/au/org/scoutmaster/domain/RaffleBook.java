@@ -18,17 +18,17 @@ import au.org.scoutmaster.domain.accounting.Money;
 
 /**
  * Represents a Raffle ticket Book that has been sent from Branch to be sold.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
 @Entity(name = "RaffleBook")
 @Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
-		@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
+		{
+			@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
+			@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
 public class RaffleBook extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -91,8 +91,8 @@ public class RaffleBook extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
+			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
+				@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
 	private Money amountReturned = new Money(0);
 
 	/**
@@ -115,6 +115,7 @@ public class RaffleBook extends BaseEntity
 	 */
 	private String notes;
 
+	@Override
 	public String getName()
 	{
 		return this.firstNo
@@ -124,85 +125,85 @@ public class RaffleBook extends BaseEntity
 
 	public Integer getTicketCount()
 	{
-		return ticketCount;
+		return this.ticketCount;
 	}
 
-	public void setTicketCount(Integer ticketCount)
+	public void setTicketCount(final Integer ticketCount)
 	{
 		this.ticketCount = ticketCount;
 	}
 
 	public Integer getFirstNo()
 	{
-		return firstNo;
+		return this.firstNo;
 	}
 
-	public void setFirstNo(Integer firstNo)
+	public void setFirstNo(final Integer firstNo)
 	{
 		this.firstNo = firstNo;
 	}
 
 	public Integer getTicketsReturned()
 	{
-		return ticketsReturned;
+		return this.ticketsReturned;
 	}
 
-	public void setTicketsReturned(Integer ticketsReturned)
+	public void setTicketsReturned(final Integer ticketsReturned)
 	{
 		this.ticketsReturned = ticketsReturned;
 	}
 
 	public Money getAmountReturned()
 	{
-		return amountReturned;
+		return this.amountReturned;
 	}
 
-	public void setAmountReturned(Money amountReturned)
+	public void setAmountReturned(final Money amountReturned)
 	{
 		this.amountReturned = amountReturned;
 	}
 
 	public Date getDateReturned()
 	{
-		return dateReturned;
+		return this.dateReturned;
 	}
 
-	public void setDateReturned(Date dateReturned)
+	public void setDateReturned(final Date dateReturned)
 	{
 		this.dateReturned = dateReturned;
 	}
 
 	public Contact getCollectedBy()
 	{
-		return collectedBy;
+		return this.collectedBy;
 	}
 
-	public void setCollectedBy(Contact collectedBy)
+	public void setCollectedBy(final Contact collectedBy)
 	{
 		this.collectedBy = collectedBy;
 	}
 
 	public Boolean getReceiptIssued()
 	{
-		return receiptIssued;
+		return this.receiptIssued;
 	}
 
-	public void setReceiptIssued(Boolean receiptIssued)
+	public void setReceiptIssued(final Boolean receiptIssued)
 	{
 		this.receiptIssued = receiptIssued;
 	}
 
 	public String getNotes()
 	{
-		return notes;
+		return this.notes;
 	}
 
-	public void setNotes(String notes)
+	public void setNotes(final String notes)
 	{
 		this.notes = notes;
 	}
 
-	public void setRaffle(Raffle raffle)
+	public void setRaffle(final Raffle raffle)
 	{
 		this.raffle = raffle;
 	}
@@ -212,16 +213,18 @@ public class RaffleBook extends BaseEntity
 		return this.raffleAllocation;
 	}
 
-	public void setRaffleAllocation(RaffleAllocation allocation)
+	public void setRaffleAllocation(final RaffleAllocation allocation)
 	{
 		this.raffleAllocation = allocation;
 
 	}
-	
+
 	public int getLastTicketNo()
 	{
-		return this.firstNo + this.ticketCount - 1;		
+		return this.firstNo + this.ticketCount - 1;
 	}
+
+	@Override
 	public String toString()
 	{
 		return "First Ticket No.: " + this.firstNo + ", Last Ticket No: " + getLastTicketNo();

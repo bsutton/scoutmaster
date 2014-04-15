@@ -21,7 +21,7 @@ public class CreditNoteLine extends BaseEntity
 	/**
 	 * The invoice this InvoiceLine belongs to.
 	 */
-	@ManyToOne(targetEntity=CreditNote.class)
+	@ManyToOne(targetEntity = CreditNote.class)
 	CreditNote creditNote;
 
 	/**
@@ -37,7 +37,7 @@ public class CreditNoteLine extends BaseEntity
 	/**
 	 * The product or service the person is being billed for.
 	 */
-	@ManyToOne(targetEntity=Product.class)
+	@ManyToOne(targetEntity = Product.class)
 	Product product;
 
 	/**
@@ -45,11 +45,11 @@ public class CreditNoteLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "itemCostMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "itemCostMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPrecentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "itemCostMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "itemCostMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "itemCostTaxPrecentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "itemCostTaxPercentagePrecision")) })
 	MoneyWithTax itemCost;
 
 	/**
@@ -57,18 +57,18 @@ public class CreditNoteLine extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "lineTotalMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "lineTotalMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "lineTotalTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "lineTotalTaxPercentagePrecision")) })
 	MoneyWithTax lineTotal;
 
 	@Override
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "UWF_UNWRITTEN_FIELD", justification = "JPA injection")
 	public String getName()
 	{
-		return creditNote.getName() + " " + this.ordinal;
+		return this.creditNote.getName() + " " + this.ordinal;
 	}
 
 }

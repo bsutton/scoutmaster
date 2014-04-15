@@ -7,8 +7,10 @@ import javax.persistence.metamodel.SingularAttribute;
 import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.fields.DependantComboBox;
 import au.com.vaadinutils.fields.EntityComboBox;
+import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.wizards.bulkJasperEmail.JasperProxy;
 import au.com.vaadinutils.wizards.bulkJasperEmail.Recipient;
@@ -36,7 +38,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Section", path="Test")
+@Menu(display = "Section", path = "Test")
 public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, ContactRecipient> implements View
 {
 	private static final long serialVersionUID = 1L;
@@ -69,7 +71,7 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	}
 
 	@Override
-	public ContactRecipient getRecipient(Long recipientId)
+	public ContactRecipient getRecipient(final Long recipientId)
 	{
 		return new ContactRecipient(recipientId);
 	}
@@ -77,12 +79,12 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	class ContactRecipient implements Recipient
 	{
 
-		private Contact contact;
+		private final Contact contact;
 
-		public ContactRecipient(Long recipientId)
+		public ContactRecipient(final Long recipientId)
 		{
-			ContactDao daoContact = new DaoFactory().getContactDao();
-			contact = daoContact.findById(recipientId);
+			final ContactDao daoContact = new DaoFactory().getContactDao();
+			this.contact = daoContact.findById(recipientId);
 		}
 
 		@Override
@@ -91,14 +93,14 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 			// String email = contact.getHomeEmail();
 			// if (email == null || email.trim().length() == 0)
 			// email = contact.getWorkEmail();
-			String email = "bsutton@noojee.com.au";
+			final String email = "bsutton@noojee.com.au";
 			return email;
 		}
 
 		@Override
 		public String getDescription()
 		{
-			return contact.getFullname();
+			return this.contact.getFullname();
 		}
 
 	}
@@ -111,9 +113,9 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public HeadingPropertySet<Contact> getVisibleSelectColumns()
 	{
-		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
+		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-				.addColumn("Birth Date", Contact_.birthDate);
+		.addColumn("Birth Date", Contact_.birthDate);
 
 		return builder.build();
 	}
@@ -147,133 +149,136 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public JasperProxy getJasperProxy() throws JRException
 	{
-		return new JasperProxy(getJasperReport(), subjectField.getValue(), "support@noojee.com.au", new JasperSettingsImpl(),
-				new JasperEmailSettingsImpl());
+		final JasperReportProperties properties = new JasperReportProperties("Member Report", getJasperReport(), null,
+				EntityManagerProvider.getEntityManager(), new JasperSettingsImpl());
+		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(),
+				properties);
 	}
 
 	@Override
 	protected AbstractLayout buildFilter()
 	{
-		if (filterLayout == null)
+		if (this.filterLayout == null)
 		{
-			filterLayout = new VerticalLayout();
-			filterLayout.addComponent(new Label("Select the list you are looking email to. Then click 'Next'"));
-			FormLayout formLayout = new FormLayout();
-			
-			dateField = new DateField("Unpublished Date");
-			formLayout.addComponent(dateField);
+			this.filterLayout = new VerticalLayout();
+			this.filterLayout.addComponent(new Label("Select the list you are looking email to. Then click 'Next'"));
+			final FormLayout formLayout = new FormLayout();
 
-			sectionField = new EntityComboBox<SectionType>("Section", getParentContainer(), getParentDisplayProperty());
-			sectionField.setWidth("300");
-			formLayout.addComponent(sectionField);
+			this.dateField = new DateField("Unpublished Date");
+			formLayout.addComponent(this.dateField);
 
-			contactField = new DependantComboBox<SectionType, Contact>("Contact", sectionField, getChildContainer(),
-					getChildForeignAttribute(), getChildDisplayProperty());
-			contactField.setWidth("300");
-			formLayout.addComponent(contactField);
+			this.sectionField = new EntityComboBox<SectionType>("Section", getParentContainer(),
+					getParentDisplayProperty());
+			this.sectionField.setWidth("300");
+			formLayout.addComponent(this.sectionField);
 
-			subjectField = new TextField("Subject");
-			subjectField.setWidth("300");
-			formLayout.addComponent(subjectField);
+			this.contactField = new DependantComboBox<SectionType, Contact>("Contact", this.sectionField,
+					getChildContainer(), getChildForeignAttribute(), getChildDisplayProperty());
+			this.contactField.setWidth("300");
+			formLayout.addComponent(this.contactField);
 
-			letterField = new ComboBox("Letter");
-			List<Parameter<String>> parameterList = getParameters();
-			for (Parameter<String> parameter : parameterList)
+			this.subjectField = new TextField("Subject");
+			this.subjectField.setWidth("300");
+			formLayout.addComponent(this.subjectField);
+
+			this.letterField = new ComboBox("Letter");
+			final List<Parameter<String>> parameterList = getParameters();
+			for (final Parameter<String> parameter : parameterList)
 			{
-				letterField.addItem(parameter);
+				this.letterField.addItem(parameter);
 			}
-			letterField.setWidth("300");
-			formLayout.addComponent(letterField);
+			this.letterField.setWidth("300");
+			formLayout.addComponent(this.letterField);
 
-			sendNowField = new CheckBox("Send Now");
-			formLayout.addComponent(sendNowField);
+			this.sendNowField = new CheckBox("Send Now");
+			formLayout.addComponent(this.sendNowField);
 
-			filterLayout.addComponent(formLayout);
-			filterLayout.setMargin(true);
+			this.filterLayout.addComponent(formLayout);
+			this.filterLayout.setMargin(true);
 
-			filterLayout.setReadOnly(false);
+			this.filterLayout.setReadOnly(false);
 		}
 
-		return filterLayout;
+		return this.filterLayout;
 	}
 
 	@Override
 	protected AbstractLayout buildConfirm()
 	{
-		if (confirmLayout == null)
+		if (this.confirmLayout == null)
 		{
-			confirmLayout = new VerticalLayout();
-			confirmSectionField = new TextField("Section");
-			confirmLayout.addComponent(confirmSectionField);
-			confirmSectionField.setReadOnly(true);
-			confirmSectionField.setWidth("100%");
+			this.confirmLayout = new VerticalLayout();
+			this.confirmSectionField = new TextField("Section");
+			this.confirmLayout.addComponent(this.confirmSectionField);
+			this.confirmSectionField.setReadOnly(true);
+			this.confirmSectionField.setWidth("100%");
 
-			confirmContactField = new TextField("Contacts");
-			confirmLayout.addComponent(confirmContactField);
-			confirmContactField.setReadOnly(true);
-			confirmContactField.setWidth("100%");
+			this.confirmContactField = new TextField("Contacts");
+			this.confirmLayout.addComponent(this.confirmContactField);
+			this.confirmContactField.setReadOnly(true);
+			this.confirmContactField.setWidth("100%");
 
-			confirmRecipientCountField = new Label("Recipients");
-			confirmRecipientCountField.setContentMode(ContentMode.HTML);
-			confirmRecipientCountField.setReadOnly(true);
-			confirmLayout.addComponent(confirmRecipientCountField);
+			this.confirmRecipientCountField = new Label("Recipients");
+			this.confirmRecipientCountField.setContentMode(ContentMode.HTML);
+			this.confirmRecipientCountField.setReadOnly(true);
+			this.confirmLayout.addComponent(this.confirmRecipientCountField);
 
-			confirmSubjectField = new TextField("Subject");
-			confirmSubjectField.setWidth("100%");
-			confirmSubjectField.setReadOnly(true);
-			confirmLayout.addComponent(confirmSubjectField);
+			this.confirmSubjectField = new TextField("Subject");
+			this.confirmSubjectField.setWidth("100%");
+			this.confirmSubjectField.setReadOnly(true);
+			this.confirmLayout.addComponent(this.confirmSubjectField);
 
-			confirmLetterField = new TextField("Letter");
-			confirmLetterField.setWidth("100%");
-			confirmLetterField.setReadOnly(true);
-			confirmLayout.addComponent(confirmLetterField);
+			this.confirmLetterField = new TextField("Letter");
+			this.confirmLetterField.setWidth("100%");
+			this.confirmLetterField.setReadOnly(true);
+			this.confirmLayout.addComponent(this.confirmLetterField);
 
-			confirmSendNowField = new CheckBox("Send Now");
-			confirmSendNowField.setWidth("100%");
-			confirmSendNowField.setReadOnly(true);
-			confirmLayout.addComponent(confirmSendNowField);
+			this.confirmSendNowField = new CheckBox("Send Now");
+			this.confirmSendNowField.setWidth("100%");
+			this.confirmSendNowField.setReadOnly(true);
+			this.confirmLayout.addComponent(this.confirmSendNowField);
 
-			confirmLayout.setMargin(true);
+			this.confirmLayout.setMargin(true);
 		}
 
 		/**
 		 * Set the values each time as they may change between invocations.
 		 */
-		confirmRecipientCountField.setReadOnly(false);
-		confirmRecipientCountField.setValue("<p><b>" + getRecipientStep().getRecipientCount()
+		this.confirmRecipientCountField.setReadOnly(false);
+		this.confirmRecipientCountField.setValue("<p><b>" + getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the transmission.</b></p>");
-		confirmRecipientCountField.setReadOnly(true);
+		this.confirmRecipientCountField.setReadOnly(true);
 
-		if (sectionField.getValue() != null)
+		if (this.sectionField.getValue() != null)
 		{
-			confirmSectionField.setReadOnly(false);
-			confirmSectionField.setValue(sectionField.getConvertedValue().toString());
-			confirmSectionField.setReadOnly(true);
+			this.confirmSectionField.setReadOnly(false);
+			this.confirmSectionField.setValue(this.sectionField.getConvertedValue().toString());
+			this.confirmSectionField.setReadOnly(true);
 		}
 
-		if (contactField.getValue() != null)
+		if (this.contactField.getValue() != null)
 		{
-			confirmContactField.setReadOnly(false);
-			confirmContactField.setValue(contactField.getConvertedValue().toString());
-			confirmContactField.setReadOnly(true);
+			this.confirmContactField.setReadOnly(false);
+			this.confirmContactField.setValue(this.contactField.getConvertedValue().toString());
+			this.confirmContactField.setReadOnly(true);
 		}
 
-		if (letterField.getValue() != null)
+		if (this.letterField.getValue() != null)
 		{
-			confirmLetterField.setReadOnly(false);
-			confirmLetterField.setValue(letterField.getValue().toString());
-			confirmLetterField.setReadOnly(true);
+			this.confirmLetterField.setReadOnly(false);
+			this.confirmLetterField.setValue(this.letterField.getValue().toString());
+			this.confirmLetterField.setReadOnly(true);
 		}
 
-		confirmSubjectField.setReadOnly(false);
-		confirmSubjectField.setValue(subjectField.getValue());
-		confirmSubjectField.setReadOnly(true);
+		this.confirmSubjectField.setReadOnly(false);
+		this.confirmSubjectField.setValue(this.subjectField.getValue());
+		this.confirmSubjectField.setReadOnly(true);
 
-		confirmSendNowField.setReadOnly(false);
-		confirmSendNowField.setValue(sendNowField.getValue());
-		confirmSendNowField.setReadOnly(true);
+		this.confirmSendNowField.setReadOnly(false);
+		this.confirmSendNowField.setValue(this.sendNowField.getValue());
+		this.confirmSendNowField.setReadOnly(true);
 
-		return confirmLayout;
+		return this.confirmLayout;
 	}
 
 	@Override
@@ -281,30 +286,29 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	{
 		boolean valid = true;
 
-		if (sectionField.getValue() == null)
+		if (this.sectionField.getValue() == null)
 		{
 			SMNotification.show("Please select a Section Type", Type.WARNING_MESSAGE);
 			valid = false;
 		}
 
-		else if (contactField.getValue() == null)
+		else if (this.contactField.getValue() == null)
 		{
 			SMNotification.show("Please select a Contact", Type.WARNING_MESSAGE);
 			valid = false;
 		}
 
-		else if (subjectField.getValue() == null || subjectField.getValue().trim().length() == 0)
+		else if (this.subjectField.getValue() == null || this.subjectField.getValue().trim().length() == 0)
 		{
 			SMNotification.show("Please enter a Subject", Type.WARNING_MESSAGE);
 			valid = false;
 		}
-		
-		else if (letterField.getValue() == null)
+
+		else if (this.letterField.getValue() == null)
 		{
 			SMNotification.show("Please select a Letter", Type.WARNING_MESSAGE);
 			valid = false;
 		}
-
 
 		return valid;
 	}

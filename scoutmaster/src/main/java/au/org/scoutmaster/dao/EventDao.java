@@ -21,7 +21,7 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 		// inherit the default per request em.
 	}
 
-	public EventDao(EntityManager em)
+	public EventDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -29,11 +29,11 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 	@Override
 	public JPAContainer<Event> createVaadinContainer()
 	{
-		JPAContainer<Event> container = super.createVaadinContainer();
+		final JPAContainer<Event> container = super.createVaadinContainer();
 
 		container.sort(new Object[]
-		{ Event_.eventStartDateTime.getName() }, new boolean[]
-		{ true });
+				{ Event_.eventStartDateTime.getName() }, new boolean[]
+						{ true });
 
 		container.addNestedContainerProperty("location.street");
 		container.addNestedContainerProperty("location.city");
@@ -43,28 +43,28 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 		return container;
 	}
 
-	public List<Event> findBetween(Date startDate, Date endDate)
+	public List<Event> findBetween(final Date startDate, final Date endDate)
 	{
-		Query query = entityManager.createNamedQuery(Event.FIND_BETWEEN);
+		final Query query = this.entityManager.createNamedQuery(Event.FIND_BETWEEN);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
 		@SuppressWarnings("unchecked")
-		List<Event> results = query.getResultList();
+		final List<Event> results = query.getResultList();
 		return results;
 
 	}
 
-	public boolean hasCoordinator(au.org.scoutmaster.domain.Event event, Contact contact)
+	public boolean hasCoordinator(final au.org.scoutmaster.domain.Event event, final Contact contact)
 	{
 		return event.getCoordinators().contains(contact);
 	}
 
-	public void attachCoordinator(au.org.scoutmaster.domain.Event event, Contact contact)
+	public void attachCoordinator(final au.org.scoutmaster.domain.Event event, final Contact contact)
 	{
 		event.getCoordinators().add(contact);
 	}
 
-	public void detachCoordinator(au.org.scoutmaster.domain.Event event, Contact contact)
+	public void detachCoordinator(final au.org.scoutmaster.domain.Event event, final Contact contact)
 	{
 		event.getCoordinators().remove(contact);
 

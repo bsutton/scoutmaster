@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="OrganisationType")
+@Table(name = "OrganisationType")
 @Access(AccessType.FIELD)
 public class OrganisationType extends BaseEntity
 {
@@ -18,12 +18,11 @@ public class OrganisationType extends BaseEntity
 	 */
 	@NotNull
 	private String name;
-	
+
 	/*
 	 * A description of the use or the organisation type.
 	 */
 	private String description;
-	
 
 	public OrganisationType()
 	{
@@ -33,29 +32,28 @@ public class OrganisationType extends BaseEntity
 	@Override
 	public String toString()
 	{
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
 
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
 
-	
 }

@@ -13,8 +13,7 @@ import com.vaadin.ui.VerticalLayout;
 public class FinalStep implements WizardStep
 {
 
-
-	public FinalStep(GroupSetupWizardView setupWizardView)
+	public FinalStep(final GroupSetupWizardView setupWizardView)
 	{
 	}
 
@@ -27,16 +26,16 @@ public class FinalStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-	VerticalLayout layout = new VerticalLayout();
-		
-		StringBuilder sb = new StringBuilder();
+		final VerticalLayout layout = new VerticalLayout();
+
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<h1>Configuration complete.</h1>");
 		sb.append("<p>Congratulations Scoutmaster is now setup and ready to go.</p>");
 		sb.append("<p>Click the 'Finish' button and start growing your Group.</p>");
-		
-		Label label = new Label(sb.toString());
+
+		final Label label = new Label(sb.toString());
 		label.setContentMode(ContentMode.HTML);
-		
+
 		layout.addComponent(label);
 		return layout;
 	}

@@ -8,23 +8,27 @@ import org.joda.time.Duration;
 /**
  * Persists org.joda.time.Duration using EclipseLink. Value is stored as a
  * varchar.
- * 
+ *
  * @author georgi.knox
- * 
+ *
  */
 public class DurationConverter implements Converter
 {
 	private static final long serialVersionUID = 1L;
 
-	public Object convertDataValueToObjectValue(Object dataValue, Session session)
+	@Override
+	public Object convertDataValueToObjectValue(final Object dataValue, final Session session)
 	{
 		if (dataValue instanceof String)
+		{
 			return new Duration(dataValue);
+		}
 		throw new IllegalStateException("Converstion exception, value is not of LocalDate type.");
 
 	}
 
-	public Object convertObjectValueToDataValue(Object objectValue, Session arg1)
+	@Override
+	public Object convertObjectValueToDataValue(final Object objectValue, final Session arg1)
 	{
 
 		if (objectValue instanceof Duration)
@@ -34,11 +38,13 @@ public class DurationConverter implements Converter
 		throw new IllegalStateException("Converstion exception, value is not of java.util.Date type.");
 	}
 
-	public void initialize(DatabaseMapping arg0, Session arg1)
+	@Override
+	public void initialize(final DatabaseMapping arg0, final Session arg1)
 	{
 
 	}
 
+	@Override
 	public boolean isMutable()
 	{
 		return false;

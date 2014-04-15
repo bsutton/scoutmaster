@@ -52,44 +52,45 @@ public class NavigatorUI extends UI
 	 * After UI class is created, init() is executed. You should build and wire
 	 * up your user interface here.
 	 */
-	protected void init(VaadinRequest request)
+	@Override
+	protected void init(final VaadinRequest request)
 	{
 
 		DeadlockFinder.SINGLETON.start();
 
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
-		
-		SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+
+		final SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 		daoSectionType.cacheSectionTypes();
 
-	
-		mainLayout = new VerticalLayout();
-		mainLayout.setMargin(false);
-		mainLayout.setSpacing(true);
-		mainLayout.setSizeFull();
+		this.mainLayout = new VerticalLayout();
+		this.mainLayout.setMargin(false);
+		this.mainLayout.setSpacing(true);
+		this.mainLayout.setSizeFull();
 
-		VerticalLayout viewContainer = new VerticalLayout();
+		final VerticalLayout viewContainer = new VerticalLayout();
 		viewContainer.setHeight("100%");
 
 		final Navigator navigator = new Navigator(this, viewContainer);
 		navigator.addView("", ScoutmasterViewEnum.getDefaultView());
 
-		// create our custom provider which will wrap all views in a helpSplitPannel
-		HelpWrappingViewProvider provider = new HelpWrappingViewProvider();
+		// create our custom provider which will wrap all views in a
+		// helpSplitPannel
+		final HelpWrappingViewProvider provider = new HelpWrappingViewProvider();
 		navigator.addProvider(provider);
 
-//
-//		// Wire up the navigation
-//		for (final ViewMapping viewmap : this.viewMap)
-//		{
-//			navigator.addView(viewmap.getViewName(), viewmap.getView());
-//		}
+		//
+		// // Wire up the navigation
+		// for (final ViewMapping viewmap : this.viewMap)
+		// {
+		// navigator.addView(viewmap.getViewName(), viewmap.getView());
+		// }
 
-		mainLayout.addComponent(viewContainer);
-		mainLayout.setExpandRatio(viewContainer, 1.0f);
+		this.mainLayout.addComponent(viewContainer);
+		this.mainLayout.setExpandRatio(viewContainer, 1.0f);
 
-		this.setContent(mainLayout);
+		setContent(this.mainLayout);
 
 		//
 		// We use a view change handler to ensure the user is always redirected
@@ -100,19 +101,19 @@ public class NavigatorUI extends UI
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public boolean beforeViewChange(ViewChangeEvent event)
+			public boolean beforeViewChange(final ViewChangeEvent event)
 			{
 
 				// Check if a user has logged in
-				boolean isLoggedIn = getSession().getAttribute("user") != null;
-				boolean isLoginView = event.getNewView() instanceof LoginView;
-				boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
-				boolean isResetPasswordView = event.getNewView() instanceof ResetPasswordView;
+				final boolean isLoggedIn = getSession().getAttribute("user") != null;
+				final boolean isLoginView = event.getNewView() instanceof LoginView;
+				final boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
+				final boolean isResetPasswordView = event.getNewView() instanceof ResetPasswordView;
 
 				// TODO: should we cache this?
 				// during dev its easier if we don't.
-				UserDao daoUser = new DaoFactory().getUserDao();
-				long userCount = daoUser.getCount();
+				final UserDao daoUser = new DaoFactory().getUserDao();
+				final long userCount = daoUser.getCount();
 
 				if (userCount == 0)
 				{
@@ -122,7 +123,9 @@ public class NavigatorUI extends UI
 					// on our way to the
 					// setupview.
 					if (event.getNewView() instanceof GroupSetupWizardView)
+					{
 						return true;
+					}
 					else
 					{
 						// Must be a first time login so lets go and run the
@@ -158,35 +161,36 @@ public class NavigatorUI extends UI
 					{
 						NavigatorUI.this.menubar = new MenuBuilder(navigator, ScoutmasterViewEnum.getViewMap()).build();
 						NavigatorUI.this.menubar.setWidth("100%");
-						mainLayout.addComponentAsFirst(menubar);
+						NavigatorUI.this.mainLayout.addComponentAsFirst(NavigatorUI.this.menubar);
 					}
 				}
 				return true;
 			}
 
 			@Override
-			public void afterViewChange(ViewChangeEvent event)
+			public void afterViewChange(final ViewChangeEvent event)
 			{
 				// For some reason the page title is set to null after each
 				// navigation transition.
 				getPage().setTitle("Scoutmaster");
 			}
 
-			});
+		});
 
 	}
 
 	void styleConfirmDialog()
 	{
-		ConfirmDialog.Factory df = new DefaultConfirmDialogFactory()
+		final ConfirmDialog.Factory df = new DefaultConfirmDialogFactory()
 		{
 			private static final long serialVersionUID = 1L;
 
 			// We change the default order of the buttons
 			@Override
-			public ConfirmDialog create(String caption, String message, String okCaption, String cancelCaption)
+			public ConfirmDialog create(final String caption, final String message, final String okCaption,
+					final String cancelCaption)
 			{
-				ConfirmDialog d = super.create(caption, message, okCaption, cancelCaption);
+				final ConfirmDialog d = super.create(caption, message, okCaption, cancelCaption);
 				d.setStyleName("black");
 				d.setModal(true);
 
@@ -197,28 +201,29 @@ public class NavigatorUI extends UI
 		ConfirmDialog.setFactory(df);
 
 	}
-	
-	public static HashMap<String, String>  extractParameterMap(ViewChangeEvent event)
-	{
-		HashMap<String, String> paramMap = new HashMap<>();
 
-		String parameters = event.getParameters();
+	public static HashMap<String, String> extractParameterMap(final ViewChangeEvent event)
+	{
+		final HashMap<String, String> paramMap = new HashMap<>();
+
+		final String parameters = event.getParameters();
 		if (parameters.trim().length() > 0)
 		{
 			// split at "/", and look for key value pairs.
-			String[] params = parameters.split("/");
-			for (String param : params)
+			final String[] params = parameters.split("/");
+			for (final String param : params)
 			{
-				String[] pair = param.split("=");
+				final String[] pair = param.split("=");
 				if (pair.length != 2)
+				{
 					throw new IllegalArgumentException("The URI contained an invalid parameter (" + param
 							+ ") which did not confirm to the required pattern of 'key=value'");
+				}
 
 				paramMap.put(pair[0], pair[1]);
 			}
 		}
 		return paramMap;
 	}
-
 
 }

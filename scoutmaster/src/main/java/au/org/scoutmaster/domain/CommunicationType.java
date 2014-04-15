@@ -12,16 +12,15 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Activity are interactions with a Contact, Household or Organisation.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="CommunicationType")
-@Table(name="CommunicationType")
+@Entity(name = "CommunicationType")
+@Table(name = "CommunicationType")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = CommunicationType.FIND_BY_NAME, query = "SELECT communicationtype FROM CommunicationType communicationtype where communicationtype.name = :name"), })
+		{ @NamedQuery(name = CommunicationType.FIND_BY_NAME, query = "SELECT communicationtype FROM CommunicationType communicationtype where communicationtype.name = :name"), })
 public class CommunicationType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -54,35 +53,37 @@ public class CommunicationType extends BaseEntity
 
 	}
 
-	public CommunicationType(String name, String description)
+	public CommunicationType(final String name, final String description)
 	{
-		this.setName(name);
-		this.setDescription(description);
+		setName(name);
+		setDescription(description);
 
 	}
 
+	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
 
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return name;
+		return this.name;
 	}
 }

@@ -22,7 +22,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Task Status'", path="Admin.Lists")
+@Menu(display = "Task Status'", path = "Admin.Lists")
 public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Selected<TaskStatus>
 {
 
@@ -35,36 +35,34 @@ public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Se
 
 	private SMMultiColumnFormLayout<TaskStatus> overviewForm;
 
-
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<TaskStatus> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<TaskStatus> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		overviewForm = new SMMultiColumnFormLayout<TaskStatus>(2, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 280);
-		overviewForm.setColumnLabelWidth(0, 70);
-		overviewForm.setSizeFull();
+		this.overviewForm = new SMMultiColumnFormLayout<TaskStatus>(2, this.fieldGroup);
+		this.overviewForm.setColumnFieldWidth(0, 280);
+		this.overviewForm.setColumnLabelWidth(0, 70);
+		this.overviewForm.setSizeFull();
 
-		overviewForm.bindTextField("Nanme", TaskStatus_.name);
-		overviewForm.newLine();
-		overviewForm.bindTextField("Description", TaskStatus_.description);
-		overviewForm.newLine();
-		layout.addComponent(overviewForm);
+		this.overviewForm.bindTextField("Nanme", TaskStatus_.name);
+		this.overviewForm.newLine();
+		this.overviewForm.bindTextField("Description", TaskStatus_.description);
+		this.overviewForm.newLine();
+		layout.addComponent(this.overviewForm);
 
 		return layout;
 	}
 
-	
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<TaskStatus> container = DaoFactory.getGenericDao(TaskStatus.class).createVaadinContainer();
+		final JPAContainer<TaskStatus> container = DaoFactory.getGenericDao(TaskStatus.class).createVaadinContainer();
 		container.sort(new String[]
-		{ TaskStatus_.name.getName() }, new boolean[]
-		{ true });
+				{ TaskStatus_.name.getName() }, new boolean[]
+						{ true });
 
-		Builder<TaskStatus> builder = new HeadingPropertySet.Builder<TaskStatus>();
+		final Builder<TaskStatus> builder = new HeadingPropertySet.Builder<TaskStatus>();
 		builder.addColumn("TaskStatus", TaskStatus_.name).addColumn("Description", TaskStatus_.description);
 
 		super.init(TaskStatus.class, container, builder.build());
@@ -72,10 +70,10 @@ public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Se
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(TaskStatus_.name.getName(), filterString, true, false), new SimpleStringFilter(
-				TaskStatus_.description.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(TaskStatus_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(TaskStatus_.description.getName(), filterString, true, false));
 	}
 
 	@Override

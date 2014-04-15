@@ -40,41 +40,42 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		setSizeFull();
 
 		// Create the user input field
-		user = new TextField("Username:");
-		user.setWidth("300px");
-		user.setRequired(true);
-		user.setInputPrompt("Your username");
-		user.addValidator(new UsernameValidator());
-		user.setInvalidAllowed(false);
+		this.user = new TextField("Username:");
+		this.user.setWidth("300px");
+		this.user.setRequired(true);
+		this.user.setInputPrompt("Your username");
+		this.user.addValidator(new UsernameValidator());
+		this.user.setInvalidAllowed(false);
 
 		// Create the password input field
-		passwordField = new PasswordField("Password:");
-		passwordField.setWidth("300px");
-		passwordField.addValidator(new PasswordValidator("Password"));
-		passwordField.setRequired(true);
-		passwordField.setValue("");
-		passwordField.setNullRepresentation("");
+		this.passwordField = new PasswordField("Password:");
+		this.passwordField.setWidth("300px");
+		this.passwordField.addValidator(new PasswordValidator("Password"));
+		this.passwordField.setRequired(true);
+		this.passwordField.setValue("");
+		this.passwordField.setNullRepresentation("");
 
 		// Create the password input field
-		confirmField = new PasswordField("Confirm Password:");
-		confirmField.setWidth("300px");
-		confirmField.addValidator(new PasswordValidator("Confirm Password"));
-		confirmField.setRequired(true);
-		confirmField.setValue("");
-		confirmField.setNullRepresentation("");
+		this.confirmField = new PasswordField("Confirm Password:");
+		this.confirmField.setWidth("300px");
+		this.confirmField.addValidator(new PasswordValidator("Confirm Password"));
+		this.confirmField.setRequired(true);
+		this.confirmField.setValue("");
+		this.confirmField.setNullRepresentation("");
 
 		// Create login button
-		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
+		this.loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(user, passwordField, confirmField, loginButton);
+		final VerticalLayout fields = new VerticalLayout(this.user, this.passwordField, this.confirmField,
+				this.loginButton);
 		fields.setCaption("Please enter your username and new password.");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
+		final VerticalLayout viewLayout = new VerticalLayout(fields);
 		viewLayout.setSizeFull();
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
@@ -82,30 +83,30 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		user.focus();
+		this.user.focus();
 	}
 
-	
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 
 		//
 		// Validate the fields using the navigator. By using validators for the
-		// fields we reduce the amount of queries we have to make to the database
+		// fields we reduce the amount of queries we have to make to the
+		// database
 		// for wrongly entered passwords
 		//
-		if (!user.isValid() || !passwordField.isValid())
+		if (!this.user.isValid() || !this.passwordField.isValid())
 		{
 			return;
 		}
 
-		String username = user.getValue();
-		String password = this.passwordField.getValue();
-		String confirm = this.confirmField.getValue();
+		final String username = this.user.getValue();
+		final String password = this.passwordField.getValue();
+		final String confirm = this.confirmField.getValue();
 
 		//
 		// Validate username and password with database here. For examples sake
@@ -118,9 +119,9 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 		}
 		else
 		{
-			UserDao daoUser = new DaoFactory().getUserDao();
+			final UserDao daoUser = new DaoFactory().getUserDao();
 
-			User user = daoUser.findByName(username);
+			final User user = daoUser.findByName(username);
 			if (user != null)
 			{
 				daoUser.updatePassword(user, password);
@@ -132,7 +133,8 @@ public class ResetPasswordView extends CustomComponent implements View, Button.C
 			}
 			else
 			{
-				Notification.show("The entered username does not exist. Your username is your email address.", Type.ERROR_MESSAGE);
+				Notification.show("The entered username does not exist. Your username is your email address.",
+						Type.ERROR_MESSAGE);
 				this.user.focus();
 			}
 

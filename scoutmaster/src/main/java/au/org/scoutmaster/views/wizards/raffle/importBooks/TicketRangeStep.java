@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views.wizards.raffle.importBooks;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +28,7 @@ public class TicketRangeStep implements WizardStep
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(TicketRangeStep.class);
-	private RaffleBookImportWizardView wizard;
+	private final RaffleBookImportWizardView wizard;
 	private TextField firstTicketNoField;
 	private TextField noOfBooksField;
 	private TextField lastTicketNoField;
@@ -38,7 +37,7 @@ public class TicketRangeStep implements WizardStep
 	FieldGroup fieldGroup = new FieldGroup();
 	private FieldValidator fieldValidator;
 
-	public TicketRangeStep(RaffleBookImportWizardView setupWizardView)
+	public TicketRangeStep(final RaffleBookImportWizardView setupWizardView)
 	{
 		this.wizard = setupWizardView;
 	}
@@ -52,45 +51,48 @@ public class TicketRangeStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 
-		fieldValidator = new FieldValidator();
-		formLayout = new MultiColumnFormLayout<Integer>(1, null); // new
-																	// ValidatingFieldGroup(dynamicFieldItem));
-		formLayout.setColumnLabelWidth(0, 150);
-		formLayout.setColumnFieldWidth(0, 250);
-		formLayout.setSizeFull();
+		this.fieldValidator = new FieldValidator();
+		this.formLayout = new MultiColumnFormLayout<Integer>(1, null); // new
+																		// ValidatingFieldGroup(dynamicFieldItem));
+		this.formLayout.setColumnLabelWidth(0, 150);
+		this.formLayout.setColumnFieldWidth(0, 250);
+		this.formLayout.setSizeFull();
 
-		Label label = new Label("<h1>Enter the details for the group of books you want to import.</h1>",
+		final Label label = new Label("<h1>Enter the details for the group of books you want to import.</h1>",
 				ContentMode.HTML);
 
 		layout.addComponent(label);
-		layout.addComponent(formLayout);
+		layout.addComponent(this.formLayout);
 
-		firstTicketNoField = formLayout.addTextField("First Book Ticket No.");
-		noOfBooksField = formLayout.addTextField("No. of consecutive Books");
-		noOfBooksField.setDescription("The no of Books to be imported. They must be in a consecutive number range!");
-		lastTicketNoField = formLayout.addTextField("Last Ticket No. of Last Book");
-		lastTicketNoField
-				.setDescription("Enter the ticket no of the 'last' ticket of the 'last' book. This is used to check that all of the details are correct.");
+		this.firstTicketNoField = this.formLayout.addTextField("First Book Ticket No.");
+		this.noOfBooksField = this.formLayout.addTextField("No. of consecutive Books");
+		this.noOfBooksField
+				.setDescription("The no of Books to be imported. They must be in a consecutive number range!");
+		this.lastTicketNoField = this.formLayout.addTextField("Last Ticket No. of Last Book");
+		this.lastTicketNoField
+		.setDescription("Enter the ticket no of the 'last' ticket of the 'last' book. This is used to check that all of the details are correct.");
 
-		firstTicketNoField.addValidator(new IntegerRangeValidator("First Ticket No must be an integer", 0, 6000000));
-		firstTicketNoField.setConverter(new StringToIntegerConverter());
-		firstTicketNoField.setRequired(true);
-		fieldValidator.addField(firstTicketNoField);
+		this.firstTicketNoField
+				.addValidator(new IntegerRangeValidator("First Ticket No must be an integer", 0, 6000000));
+		this.firstTicketNoField.setConverter(new StringToIntegerConverter());
+		this.firstTicketNoField.setRequired(true);
+		this.fieldValidator.addField(this.firstTicketNoField);
 
-		noOfBooksField.addValidator(new IntegerRangeValidator("No. of Books must be an integer", 1, 1000));
-		noOfBooksField.setConverter(new StringToIntegerConverter());
-		noOfBooksField.setRequired(true);
-		fieldValidator.addField(noOfBooksField);
+		this.noOfBooksField.addValidator(new IntegerRangeValidator("No. of Books must be an integer", 1, 1000));
+		this.noOfBooksField.setConverter(new StringToIntegerConverter());
+		this.noOfBooksField.setRequired(true);
+		this.fieldValidator.addField(this.noOfBooksField);
 
-		lastTicketNoField.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 6000000));
-		lastTicketNoField.setConverter(new StringToIntegerConverter());
-		lastTicketNoField.setRequired(true);
-		fieldValidator.addField(lastTicketNoField);
+		this.lastTicketNoField
+				.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 6000000));
+		this.lastTicketNoField.setConverter(new StringToIntegerConverter());
+		this.lastTicketNoField.setRequired(true);
+		this.fieldValidator.addField(this.lastTicketNoField);
 
-		Label labelImport = new Label("<h1>Clicking Next will import the books!</h1>", ContentMode.HTML);
+		final Label labelImport = new Label("<h1>Clicking Next will import the books!</h1>", ContentMode.HTML);
 
 		layout.addComponent(labelImport);
 
@@ -101,18 +103,18 @@ public class TicketRangeStep implements WizardStep
 	public boolean onAdvance()
 	{
 		boolean advance = false;
-		Raffle raffle = wizard.getRaffle();
+		final Raffle raffle = this.wizard.getRaffle();
 
 		try
 		{
-			fieldValidator.validate();
+			this.fieldValidator.validate();
 
-			int firstTicketNo = (Integer)firstTicketNoField.getConvertedValue();
-			int lastTicketNo = (Integer)lastTicketNoField.getConvertedValue();
-			int noOfBooks = (Integer)noOfBooksField.getConvertedValue();
-			int ticketsPerBook = raffle.getTicketsPerBook();
+			final int firstTicketNo = (Integer) this.firstTicketNoField.getConvertedValue();
+			final int lastTicketNo = (Integer) this.lastTicketNoField.getConvertedValue();
+			final int noOfBooks = (Integer) this.noOfBooksField.getConvertedValue();
+			final int ticketsPerBook = raffle.getTicketsPerBook();
 
-			RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
+			final RaffleBook book = findFirstDuplicateBook(raffle, firstTicketNo, lastTicketNo);
 
 			if (book != null)
 			{
@@ -122,19 +124,21 @@ public class TicketRangeStep implements WizardStep
 			}
 			else
 			{
-				int calcLastTicket = firstTicketNo + (noOfBooks * ticketsPerBook) - 1;
+				final int calcLastTicket = firstTicketNo + noOfBooks * ticketsPerBook - 1;
 				if (calcLastTicket != lastTicketNo)
 				{
-					int expectedLast = firstTicketNo + (noOfBooks * ticketsPerBook) - 1;
+					final int expectedLast = firstTicketNo + noOfBooks * ticketsPerBook - 1;
 					SMNotification
-							.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
-									+ expectedLast, Type.WARNING_MESSAGE);
+					.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
+							+ expectedLast, Type.WARNING_MESSAGE);
 				}
 				else
+				{
 					advance = true;
+				}
 			}
 		}
-		catch (InvalidValueException e)
+		catch (final InvalidValueException e)
 		{
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
@@ -142,28 +146,21 @@ public class TicketRangeStep implements WizardStep
 		return advance;
 	}
 
-	private RaffleBook findFirstDuplicateBook(Raffle raffle, int firstTicketNo, int lastTicketNo)
+	private RaffleBook findFirstDuplicateBook(final Raffle raffle, final int firstTicketNo, final int lastTicketNo)
 	{
 		RaffleBook first = null;
-		Set<RaffleBook> books = raffle.getImportedBooks();
-		RaffleBook[] sortedBooks =  books.toArray(new RaffleBook[]{});
-		Arrays.sort(sortedBooks, new Comparator<RaffleBook>()
+		final Set<RaffleBook> books = raffle.getImportedBooks();
+		final RaffleBook[] sortedBooks = books.toArray(new RaffleBook[]
+		{});
+		Arrays.sort(sortedBooks, (o1, o2) -> o1.getFirstNo().intValue() - o2.getFirstNo().intValue());
+
+		for (final RaffleBook book : sortedBooks)
 		{
+			final int firstTicket = book.getFirstNo().intValue();
+			final int lastTicket = book.getFirstNo() + book.getTicketCount() - 1;
 
-			@Override
-			public int compare(RaffleBook o1, RaffleBook o2)
-			{
-				return o1.getFirstNo().intValue() - o2.getFirstNo().intValue();
-			}
-		});
-
-		for (RaffleBook book : sortedBooks)
-		{
-			int firstTicket = book.getFirstNo().intValue();
-			int lastTicket = book.getFirstNo() + book.getTicketCount() - 1;
-
-			if (firstTicket >= firstTicketNo && firstTicket <= lastTicketNo
-					|| (lastTicket >= firstTicketNo && lastTicket <= lastTicketNo))
+			if (firstTicket >= firstTicketNo && firstTicket <= lastTicketNo || lastTicket >= firstTicketNo
+					&& lastTicket <= lastTicketNo)
 			{
 				first = book;
 				break;
@@ -180,17 +177,17 @@ public class TicketRangeStep implements WizardStep
 
 	public int getFirstBookNo()
 	{
-		return ((Integer)firstTicketNoField.getConvertedValue()).intValue();
+		return ((Integer) this.firstTicketNoField.getConvertedValue()).intValue();
 	}
 
 	public int getLastBookNo()
 	{
-		return ((Integer)lastTicketNoField.getConvertedValue()).intValue();
+		return ((Integer) this.lastTicketNoField.getConvertedValue()).intValue();
 	}
 
 	public int getBookCount()
 	{
-		return ((Integer)noOfBooksField.getConvertedValue()).intValue();
+		return ((Integer) this.noOfBooksField.getConvertedValue()).intValue();
 	}
 
 }

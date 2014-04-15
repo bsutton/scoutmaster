@@ -23,45 +23,45 @@ import com.vaadin.ui.VerticalLayout;
 public class StepConfirmDetails implements WizardStep
 {
 
-	private TextField subject;
-	private CKEditorEmailField ckEditorTextField;
-	private TextField from;
-	private BulkEmailWizardView messagingWizardView;
-	private VerticalLayout layout;
-	private Label recipientCount;
-	private StepEnterDetails details;
+	private final TextField subject;
+	private final CKEditorEmailField ckEditorTextField;
+	private final TextField from;
+	private final BulkEmailWizardView messagingWizardView;
+	private final VerticalLayout layout;
+	private final Label recipientCount;
+	private final StepEnterDetails details;
 
-	public StepConfirmDetails(BulkEmailWizardView messagingWizardView)
+	public StepConfirmDetails(final BulkEmailWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
-		details = messagingWizardView.getDetails();
+		this.details = messagingWizardView.getDetails();
 
-		layout = new VerticalLayout();
-		layout.addComponent(new Label(
+		this.layout = new VerticalLayout();
+		this.layout.addComponent(new Label(
 				"Please review the details before clicking next as messages will be sent immediately."));
-		layout.setSizeFull();
+		this.layout.setSizeFull();
 
-		recipientCount = new Label();
-		recipientCount.setContentMode(ContentMode.HTML);
-		layout.addComponent(recipientCount);
+		this.recipientCount = new Label();
+		this.recipientCount.setContentMode(ContentMode.HTML);
+		this.layout.addComponent(this.recipientCount);
 
-		from = new TextField("From");
-		layout.addComponent(from);
-		from.setReadOnly(true);
-		from.setWidth("100%");
+		this.from = new TextField("From");
+		this.layout.addComponent(this.from);
+		this.from.setReadOnly(true);
+		this.from.setWidth("100%");
 
-		subject = new TextField("Subject");
-		layout.addComponent(subject);
-		subject.setWidth("100%");
-		subject.setReadOnly(true);
+		this.subject = new TextField("Subject");
+		this.layout.addComponent(this.subject);
+		this.subject.setWidth("100%");
+		this.subject.setReadOnly(true);
 
-		ckEditorTextField = new CKEditorEmailField(false);
-		layout.addComponent(ckEditorTextField);
-		ckEditorTextField.setReadOnly(true);
-		ckEditorTextField.setSizeFull();
+		this.ckEditorTextField = new CKEditorEmailField(false);
+		this.layout.addComponent(this.ckEditorTextField);
+		this.ckEditorTextField.setReadOnly(true);
+		this.ckEditorTextField.setSizeFull();
 
-		layout.setExpandRatio(ckEditorTextField, 1.0f);
-		layout.setMargin(true);
+		this.layout.setExpandRatio(this.ckEditorTextField, 1.0f);
+		this.layout.setMargin(true);
 
 	}
 
@@ -75,40 +75,42 @@ public class StepConfirmDetails implements WizardStep
 	public Component getContent()
 	{
 
-		recipientCount.setValue("<p><b>" + messagingWizardView.getRecipientStep().getRecipientCount()
+		this.recipientCount.setValue("<p><b>" + this.messagingWizardView.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following Email.</b></p>");
 
-		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
-		User user = (User) SMSession.INSTANCE.getLoggedInUser();
+		final ArrayList<Contact> recipients = this.messagingWizardView.getRecipientStep().getRecipients();
+		final User user = SMSession.INSTANCE.getLoggedInUser();
 
 		try
 		{
-			Contact sampleContact = recipients.get(0);
-			from.setReadOnly(false);
-			from.setValue(details.getFrom());
-			from.setReadOnly(true);
-			subject.setReadOnly(false);
-			subject.setValue(details.getMessage().expandSubject(user, sampleContact).toString());
-			subject.setReadOnly(true);
-			ckEditorTextField.setReadOnly(false);
-			ckEditorTextField.setValue(details.getMessage().expandBody(user, sampleContact).toString());
-			ckEditorTextField.setReadOnly(true);
+			final Contact sampleContact = recipients.get(0);
+			this.from.setReadOnly(false);
+			this.from.setValue(this.details.getFrom());
+			this.from.setReadOnly(true);
+			this.subject.setReadOnly(false);
+			this.subject.setValue(this.details.getMessage().expandSubject(user, sampleContact).toString());
+			this.subject.setReadOnly(true);
+			this.ckEditorTextField.setReadOnly(false);
+			this.ckEditorTextField.setValue(this.details.getMessage().expandBody(user, sampleContact).toString());
+			this.ckEditorTextField.setReadOnly(true);
 		}
-		catch (VelocityFormatException e)
+		catch (final VelocityFormatException e)
 		{
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
-		boolean advance = this.subject.getValue() != null && this.ckEditorTextField.getValue() != null;
+		final boolean advance = this.subject.getValue() != null && this.ckEditorTextField.getValue() != null;
 
 		if (!advance)
+		{
 			Notification.show("Please enter a Subject and a Message then click Next");
+		}
 		return advance;
 	}
 
@@ -120,7 +122,7 @@ public class StepConfirmDetails implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), ckEditorTextField.getValue(), new Phone(from.getValue()));
+		return new Message(this.subject.getValue(), this.ckEditorTextField.getValue(), new Phone(this.from.getValue()));
 	}
 
 }

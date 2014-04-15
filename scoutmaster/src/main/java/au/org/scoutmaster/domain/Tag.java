@@ -22,17 +22,17 @@ import org.pojomatic.annotations.Property;
 /**
  * Tags are used to group and identify certain attributes of a contact,
  * organisation, household or school
- * 
- * 
- * 
+ *
+ *
+ *
  * @author bsutton
- * 
+ *
  */
 @Entity(name = "Tag")
 @Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+		{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
 @AutoProperty
 public class Tag extends BaseEntity
 {
@@ -46,11 +46,11 @@ public class Tag extends BaseEntity
 
 	@Column(unique = true, length = 30)
 	@NotBlank
-	@Size(max=30)
+	@Size(max = 30)
 	String name;
 
 	@Column(length = 250)
-	@Size(max=250)
+	@Size(max = 250)
 	@NotBlank
 	String description;
 
@@ -67,13 +67,14 @@ public class Tag extends BaseEntity
 	 * searching for entities by a tag all encompassing. i.e. all major
 	 * attributes of an entity are cross referenced by a tag for the purposes of
 	 * searching.
-	 * 
+	 *
 	 * Only builtin tags may be NON-detachable.
 	 */
 	Boolean detachable = new Boolean(true);
 
 	@ManyToMany(mappedBy = "tags")
-	@Property(policy = PojomaticPolicy.NONE) // stop pojomatic generating a circular reference.
+	@Property(policy = PojomaticPolicy.NONE)
+	// stop pojomatic generating a circular reference.
 	private final Set<Contact> contacts = new HashSet<>();
 
 	//
@@ -91,13 +92,13 @@ public class Tag extends BaseEntity
 
 	}
 
-	public Tag(String name)
+	public Tag(final String name)
 	{
 		this.name = name;
 		this.description = "";
 	}
 
-	public Tag(String name, String description)
+	public Tag(final String name, final String description)
 	{
 		this.name = name;
 		this.description = description;
@@ -108,11 +109,12 @@ public class Tag extends BaseEntity
 	// this.contacts.add(contact);
 	// }
 
-	public Boolean isTag(String tagName)
+	public Boolean isTag(final String tagName)
 	{
 		return this.name.equals(tagName);
 	}
 
+	@Override
 	public String getName()
 	{
 		return this.name;
@@ -123,32 +125,32 @@ public class Tag extends BaseEntity
 		return this.description;
 	}
 
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
 
 	public Boolean getBuiltin()
 	{
-		return builtin;
+		return this.builtin;
 	}
 
-	public void setBuiltin(Boolean builtin)
+	public void setBuiltin(final Boolean builtin)
 	{
 		this.builtin = builtin;
 	}
 
 	public Boolean getDetachable()
 	{
-		return detachable;
+		return this.detachable;
 	}
 
-	public void setDetachable(Boolean detachable)
+	public void setDetachable(final Boolean detachable)
 	{
 		this.detachable = detachable;
 	}
@@ -174,7 +176,7 @@ public class Tag extends BaseEntity
 	// }
 
 	@Override
-	public boolean equals(Object other)
+	public boolean equals(final Object other)
 	{
 		return Pojomatic.equals(this, other);
 	}

@@ -30,6 +30,7 @@ import au.org.scoutmaster.views.reports.CalendarReportView;
 import au.org.scoutmaster.views.reports.ExternalProspectsReport;
 import au.org.scoutmaster.views.reports.MemberAddressReport;
 import au.org.scoutmaster.views.reports.MemberReport;
+import au.org.scoutmaster.views.reports.RaffleAllocationsReportView;
 import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
 import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.importer.ImportWizardView;
@@ -42,80 +43,66 @@ import com.vaadin.navigator.View;
 public enum ScoutmasterViewEnum
 {
 	// Memebers
-	Contact(ContactView.NAME, ContactView.class,  true),
-	Member(MemberReport.NAME, MemberReport.class),
-	MemberAddress(MemberAddressReport.NAME, MemberAddressReport.class),
-	Tag(TagView.NAME, TagView.class),
-	ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class),
-	ImportWizard(ImportWizardView.NAME, ImportWizardView.class),
-	
+	Contact(ContactView.NAME, ContactView.class, true), Member(MemberReport.NAME, MemberReport.class), MemberAddress(
+			MemberAddressReport.NAME, MemberAddressReport.class), Tag(TagView.NAME, TagView.class), ExternalProspects(
+			ExternalProspectsReport.NAME, ExternalProspectsReport.class), ImportWizard(ImportWizardView.NAME,
+			ImportWizardView.class),
+
 	// Communications
-	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class),
-	BulkSMSWizard(BulkSMSWizardView.NAME, BulkSMSWizardView.class),
-	CommunicationLog(CommunicationLogView.NAME, CommunicationLogView.class),
-	
+	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class), BulkSMSWizard(BulkSMSWizardView.NAME,
+			BulkSMSWizardView.class), CommunicationLog(CommunicationLogView.NAME, CommunicationLogView.class),
+
 	// Calendar
-	Calendar(CalendarView.NAME, CalendarView.class),
-	Event(EventView.NAME, EventView.class),
-	CalendarReport(CalendarReportView.NAME, CalendarReportView.class),
-	PublicCalendar(PublicCalendarView.NAME, PublicCalendarView.class),
+	Calendar(CalendarView.NAME, CalendarView.class), Event(EventView.NAME, EventView.class), CalendarReport(
+			CalendarReportView.NAME, CalendarReportView.class), PublicCalendar(PublicCalendarView.NAME,
+			PublicCalendarView.class),
 
 	// Raffle
-	Raffle(RaffleView.NAME, RaffleView.class),
-	RaffleBookImportWizard(RaffleBookImportWizardView.NAME, RaffleBookImportWizardView.class),
-	RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME, RaffleBookAllocationWizardView.class),
-	
+	Raffle(RaffleView.NAME, RaffleView.class), RaffleBookImportWizard(RaffleBookImportWizardView.NAME,
+			RaffleBookImportWizardView.class), RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME,
+			RaffleBookAllocationWizardView.class), RaffleAllocationsReport(RaffleAllocationsReportView.NAME,
+			RaffleAllocationsReportView.class),
+
 	// Wizards
 	GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class),
 
-	
 	// Admin menu
-	Organisation(OrganisationView.NAME, OrganisationView.class),
-	OrganisationType(OrganisationTypeView.NAME, OrganisationTypeView.class),
-	QualificationType(QualificationTypeView.NAME, QualificationTypeView.class),
-	SectionType(SectionTypeView.NAME, SectionTypeView.class),
-	Task(TaskView.NAME, TaskView.class),
-	TaskType(TaskTypeView.NAME, TaskTypeView.class),
-	TaskStatus(TaskStatusView.NAME, TaskStatusView.class),
-	ChangePassword(ChangePasswordView.NAME, ChangePasswordView.class),
-	
-	// Admin Security
-	User(UserView.NAME, UserView.class),
-	SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class),
-	LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class),
-	
+	Organisation(OrganisationView.NAME, OrganisationView.class), OrganisationType(OrganisationTypeView.NAME,
+			OrganisationTypeView.class), QualificationType(QualificationTypeView.NAME, QualificationTypeView.class), SectionType(
+			SectionTypeView.NAME, SectionTypeView.class), Task(TaskView.NAME, TaskView.class), TaskType(
+			TaskTypeView.NAME, TaskTypeView.class), TaskStatus(TaskStatusView.NAME, TaskStatusView.class), ChangePassword(
+			ChangePasswordView.NAME, ChangePasswordView.class),
 
-	
+	// Admin Security
+	User(UserView.NAME, UserView.class), SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class), LoginAttempt(
+			LoginAttemptView.NAME, LoginAttemptView.class),
+
 	// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
 	// SectionBulkEmailWizard.class));
 
-	Login(LoginView.NAME, LoginView.class),
-	Logout(LogoutView.NAME, LogoutView.class),
-	ForgottenPassword(ForgottenPasswordView.NAME, ForgottenPasswordView.class),
-	ResetPassword(ResetPasswordView.NAME, ResetPasswordView.class);
+	Login(LoginView.NAME, LoginView.class), Logout(LogoutView.NAME, LogoutView.class), ForgottenPassword(
+			ForgottenPasswordView.NAME, ForgottenPasswordView.class), ResetPassword(ResetPasswordView.NAME,
+			ResetPasswordView.class);
 
-	
-	
-	
 	private String title;
 	private Class<? extends View> clazz;
 	private boolean defaultView;
 
-	ScoutmasterViewEnum(String title, Class<? extends View> clazz, boolean defaultView)
+	ScoutmasterViewEnum(final String title, final Class<? extends View> clazz, final boolean defaultView)
 	{
 		this.title = title;
 		this.clazz = clazz;
 		this.defaultView = defaultView;
-				
-		
+
 	}
-	ScoutmasterViewEnum(String title, Class<? extends View> clazz)
+
+	ScoutmasterViewEnum(final String title, final Class<? extends View> clazz)
 	{
 		this.title = title;
 		this.clazz = clazz;
 		this.defaultView = false;
 	}
-	
+
 	public boolean isDefaultView()
 	{
 		return this.defaultView;
@@ -123,12 +110,12 @@ public enum ScoutmasterViewEnum
 
 	public boolean noHelp()
 	{
-		return !HelpProvider.class.isAssignableFrom(clazz);
+		return !HelpProvider.class.isAssignableFrom(this.clazz);
 	}
 
 	public String getTitle()
 	{
-		return this.title;	
+		return this.title;
 	}
 
 	public Class<? extends View> getViewClass()
@@ -138,9 +125,9 @@ public enum ScoutmasterViewEnum
 
 	public static ArrayList<ViewMapping> getViewMap()
 	{
-		ArrayList<ViewMapping> mappings = new ArrayList<>();
-		
-		for (ScoutmasterViewEnum value : values())
+		final ArrayList<ViewMapping> mappings = new ArrayList<>();
+
+		for (final ScoutmasterViewEnum value : ScoutmasterViewEnum.values())
 		{
 			mappings.add(new ViewMapping(value.getTitle(), value.getViewClass()));
 		}
@@ -150,7 +137,7 @@ public enum ScoutmasterViewEnum
 	public static Class<? extends View> getDefaultView()
 	{
 		ScoutmasterViewEnum defaultView = null;
-		for ( ScoutmasterViewEnum value : values())
+		for (final ScoutmasterViewEnum value : ScoutmasterViewEnum.values())
 		{
 			if (value.defaultView)
 			{

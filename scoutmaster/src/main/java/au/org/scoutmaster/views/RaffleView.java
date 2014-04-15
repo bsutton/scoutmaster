@@ -45,75 +45,74 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 	private static Logger logger = LogManager.getLogger(RaffleView.class);
 
 	public static final String NAME = "Raffle";
-	
+
 	TabSheet tabs = new TabSheet();
 
-
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<Raffle> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<Raffle> fieldGroup2)
 	{
 		buildOverviewTab();
-		
+
 		buildRaffleBookTab();
 		buildRaffleAllocationTab();
 
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
-		layout.addComponent(tabs);
+		layout.addComponent(this.tabs);
 		return layout;
 	}
 
 	private void buildRaffleBookTab()
 	{
 		// Now add the child raffle book crud
-		RaffleBookChildView raffleBookView = new RaffleBookChildView(this);
+		final RaffleBookChildView raffleBookView = new RaffleBookChildView(this);
 		raffleBookView.setSizeFull();
 		super.addChildCrudListener(raffleBookView);
 
-		tabs.addTab(raffleBookView, "Books");
-		
+		this.tabs.addTab(raffleBookView, "Books");
+
 	}
 
 	private void buildRaffleAllocationTab()
 	{
 		// Now add the child raffle book crud
-		RaffleAllocationChildView raffleAllocationView = new RaffleAllocationChildView(this);
+		final RaffleAllocationChildView raffleAllocationView = new RaffleAllocationChildView(this);
 		raffleAllocationView.setSizeFull();
 		super.addChildCrudListener(raffleAllocationView);
 
-		tabs.addTab(raffleAllocationView, "Allocations");
-		
+		this.tabs.addTab(raffleAllocationView, "Allocations");
+
 	}
 
 	private void buildOverviewTab()
 	{
-		SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<Raffle>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<Raffle>(1, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 300);
 		overviewForm.setSizeFull();
 
 		overviewForm.bindTextField("Name", Raffle_.name);
-		 overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
+		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
-				.setDescription("The date the raffle ticksets need to be collected by.");
+		.setDescription("The date the raffle ticksets need to be collected by.");
 		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
 				"The date the raffle ticksets need to be returned to Branch.");
-		
-		
 
-		FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
-		ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Group Raffle Manager").setField(Raffle_.groupRaffleManager).setListFieldName(Contact_.fullname).build();
+		final FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
+		final ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>()
+				.setLabel("Group Raffle Manager").setField(Raffle_.groupRaffleManager)
+				.setListFieldName(Contact_.fullname).build();
 		groupRaffleManager.setFilteringMode(FilteringMode.CONTAINS);
 		groupRaffleManager.setTextInputAllowed(true);
 		groupRaffleManager.setDescription("The Group member responsible for organising the Raffle.");
-		
-		ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Branch Raffle Contact").setField(Raffle_.branchRaffleContact).setListFieldName(Contact_.fullname).build();
+
+		final ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>()
+				.setLabel("Branch Raffle Contact").setField(Raffle_.branchRaffleContact)
+				.setListFieldName(Contact_.fullname).build();
 		branchRaffleConact.setFilteringMode(FilteringMode.CONTAINS);
 		branchRaffleConact.setTextInputAllowed(true);
 		branchRaffleConact.setDescription("The Branch person who is a main contact for Raffle issues.");
-		
+
 		overviewForm.bindTextField("Book No. Prefix", Raffle_.raffleNoPrefix).setDescription(
 				"If raffle books have a non-numeric prefix for the ticket no's enter it here.");
 		overviewForm.bindTextField("Tickets per Book", Raffle_.ticketsPerBook);
@@ -125,37 +124,36 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 				"The amount the Group is aiming to raise via the Raffle.");
 
 		overviewForm.bindTextField("Revenue Raised", Raffle_.revenueRaised).setReadOnly(true);
-		
-		tabs.addTab(overviewForm, "Raffle");
+
+		this.tabs.addTab(overviewForm, "Raffle");
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<Raffle> container = new DaoFactory().getRaffleDao().createVaadinContainer();
-		
-		tabs.setSizeFull();
+		final JPAContainer<Raffle> container = new DaoFactory().getRaffleDao().createVaadinContainer();
 
-		Builder<Raffle> builder = new HeadingPropertySet.Builder<Raffle>();
+		this.tabs.setSizeFull();
+
+		final Builder<Raffle> builder = new HeadingPropertySet.Builder<Raffle>();
 		builder.addColumn("Name", Raffle_.name).addColumn("Start Date", Raffle_.startDate)
-				.addColumn("Collection Date", Raffle_.collectionsDate);
+		.addColumn("Collection Date", Raffle_.collectionsDate);
 
 		super.init(Raffle.class, container, builder.build());
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new Or(new SimpleStringFilter(Raffle_.name.getName(), filterString, true, false),
 				new SimpleStringFilter(Raffle_.startDate.getName(), filterString, true, false));
-		
-	}
 
+	}
 
 	@Override
 	protected List<CrudAction<Raffle>> getCrudActions()
 	{
-		List<CrudAction<Raffle>> actions = super.getCrudActions();
+		final List<CrudAction<Raffle>> actions = super.getCrudActions();
 
 		actions.add(new RaffleActionImportBooks());
 		actions.add(new RaffleActionAllocateBooks());

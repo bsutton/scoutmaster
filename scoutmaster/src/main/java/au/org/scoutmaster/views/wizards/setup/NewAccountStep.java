@@ -37,7 +37,7 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 
 	private TextField confirmEmailAddress;
 
-	public NewAccountStep(GroupSetupWizardView setupWizardView)
+	public NewAccountStep(final GroupSetupWizardView setupWizardView)
 	{
 		super(new DaoFactory().getUserDao(), User.class);
 	}
@@ -48,51 +48,50 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 		return "Create Account";
 	}
 
-
 	@Override
-	protected Component getContent(ValidatingFieldGroup<User> fieldGroup)
+	protected Component getContent(final ValidatingFieldGroup<User> fieldGroup)
 	{
-		SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(2, fieldGroup);
+		final SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(2, fieldGroup);
 		formLayout.setWidth("600px");
 		formLayout.setColumnFieldWidth(0, 400);
 		formLayout.setColumnFieldWidth(1, 20);
 
 		formLayout.colspan(2);
-		Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
+		final Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
 		label.setContentMode(ContentMode.HTML);
 		formLayout.bindLabel(label);
 
-		username = formLayout.bindTextField("Username:", "username");
-		username.setInputPrompt("Enter a username");
-		username.addValidator(new UsernameValidator());
-		username.setRequired(true);
+		this.username = formLayout.bindTextField("Username:", "username");
+		this.username.setInputPrompt("Enter a username");
+		this.username.addValidator(new UsernameValidator());
+		this.username.setRequired(true);
 
 		// Create the password input field
-		password = formLayout.bindPasswordField("Password:", "password");
-		password.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
-		password.addValidator(new PasswordValidator("Password"));
-		password.setRequired(true);
+		this.password = formLayout.bindPasswordField("Password:", "password");
+		this.password
+				.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
+		this.password.addValidator(new PasswordValidator("Password"));
+		this.password.setRequired(true);
 
 		// Create the confirm password input field but we don't bind it.
-		confirmPassword = formLayout.addPasswordField("Confirm Password:");
-		confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
-		confirmPassword.setRequired(true);
-		
+		this.confirmPassword = formLayout.addPasswordField("Confirm Password:");
+		this.confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
+		this.confirmPassword.setRequired(true);
 
 		// Create the email address input field
-		emailAddress = formLayout.bindTextField("Email Address:", "emailAddress");
-		emailAddress.addValidator(new EmailValidator("Enter your email address."));
-		emailAddress.setRequired(true);
-		emailAddress.setNullRepresentation("");
+		this.emailAddress = formLayout.bindTextField("Email Address:", "emailAddress");
+		this.emailAddress.addValidator(new EmailValidator("Enter your email address."));
+		this.emailAddress.setRequired(true);
+		this.emailAddress.setNullRepresentation("");
 
 		// Create the confirmEmail input field
-		confirmEmailAddress = formLayout.addTextField("Confirm Email Address:");
-		confirmEmailAddress.addValidator(new EmailValidator("Enter your email address."));
-		confirmEmailAddress.setRequired(true);
-		confirmEmailAddress.setNullRepresentation("");
+		this.confirmEmailAddress = formLayout.addTextField("Confirm Email Address:");
+		this.confirmEmailAddress.addValidator(new EmailValidator("Enter your email address."));
+		this.confirmEmailAddress.setRequired(true);
+		this.confirmEmailAddress.setNullRepresentation("");
 
 		// focus the username field when user arrives to the login view
-		username.focus();
+		this.username.focus();
 
 		return formLayout;
 	}
@@ -101,9 +100,9 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 	public boolean validate()
 	{
 		boolean valid = false;
-		if (confirmPassword.getValue().equals(password.getValue()))
+		if (this.confirmPassword.getValue().equals(this.password.getValue()))
 		{
-			if (confirmEmailAddress.getValue().equals(emailAddress.getValue()))
+			if (this.confirmEmailAddress.getValue().equals(this.emailAddress.getValue()))
 			{
 				valid = super.validate();
 			}
@@ -128,7 +127,7 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 	}
 
 	@Override
-	protected void initEntity(User entity)
+	protected void initEntity(final User entity)
 	{
 		// No Op
 
@@ -138,12 +137,16 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 	protected User findEntity()
 	{
 		User user = null;
-		List<User> users = new DaoFactory().getUserDao().findAll();
+		final List<User> users = new DaoFactory().getUserDao().findAll();
 		if (users.size() > 1)
+		{
 			throw new IllegalStateException(
 					"More than one user has been found which is not valid during initial setup.");
+		}
 		if (users.size() == 1)
+		{
 			user = users.get(0);
+		}
 		return user;
 	}
 

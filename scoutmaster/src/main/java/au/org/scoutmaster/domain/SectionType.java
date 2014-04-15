@@ -19,21 +19,19 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * A section type is used to identify basic attributes about a section type.
- * 
+ *
  * Typical section types are Joeys, Cubs, Scouts Venturers but each region may
  * have different names for these sections.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="SectionType")
-@Table(name="SectionType")
+@Entity(name = "SectionType")
+@Table(name = "SectionType")
 @Access(AccessType.FIELD)
 @NamedQueries(
 
-{ 
-	@NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") })
-
+		{ @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") })
 public class SectionType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +42,7 @@ public class SectionType extends BaseEntity
 	 * The name of the section type. e.g Cubs.
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	private String name;
 
 	/**
@@ -55,19 +53,18 @@ public class SectionType extends BaseEntity
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "years", column = @Column(name = "startingAgeYears")),
-			@AttributeOverride(name = "months", column = @Column(name = "startingAgeMonths")),
-			@AttributeOverride(name = "days", column = @Column(name = "startingAgeDays")) })
-	
+			{ @AttributeOverride(name = "years", column = @Column(name = "startingAgeYears")),
+				@AttributeOverride(name = "months", column = @Column(name = "startingAgeMonths")),
+				@AttributeOverride(name = "days", column = @Column(name = "startingAgeDays")) })
 	private Age startingAge;
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "years", column = @Column(name = "endingAgeYears")),
-			@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths")),
-			@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays")) })
+			{ @AttributeOverride(name = "years", column = @Column(name = "endingAgeYears")),
+				@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths")),
+				@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays")) })
 	private Age endingAge;
-	
+
 	/**
 	 * The default colour to use when representing this Section graphically.
 	 */
@@ -77,71 +74,73 @@ public class SectionType extends BaseEntity
 	/**
 	 * details the qualifications required by the section leader.
 	 */
-	@ManyToMany(targetEntity=QualificationType.class)
-	Set<QualificationType> leaderRequirements = new  TreeSet<>();
-	@ManyToMany(targetEntity=QualificationType.class)
+	@ManyToMany(targetEntity = QualificationType.class)
+	Set<QualificationType> leaderRequirements = new TreeSet<>();
+	@ManyToMany(targetEntity = QualificationType.class)
 	Set<QualificationType> assistentLeaderRequirements = new TreeSet<>();
-	@ManyToMany(targetEntity=QualificationType.class)
+	@ManyToMany(targetEntity = QualificationType.class)
 	Set<QualificationType> parentHelperRequirements = new TreeSet<>();
-	
+
+	@Override
 	public String getName()
 	{
 		return this.name;
 	}
-	
+
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
 
 	public Age getStartingAge()
 	{
-		return startingAge;
+		return this.startingAge;
 	}
 
-	public void setStartingAge(Age startingAge)
+	public void setStartingAge(final Age startingAge)
 	{
 		this.startingAge = startingAge;
 	}
 
 	public Age getEndingAge()
 	{
-		return endingAge;
+		return this.endingAge;
 	}
 
-	public void setEndingAge(Age endingAge)
+	public void setEndingAge(final Age endingAge)
 	{
 		this.endingAge = endingAge;
 	}
 
 	public Set<QualificationType> getLeaderRequirements()
 	{
-		return leaderRequirements;
+		return this.leaderRequirements;
 	}
 
-	public void setLeaderRequirements(Set<QualificationType> leaderRequirements)
+	public void setLeaderRequirements(final Set<QualificationType> leaderRequirements)
 	{
 		this.leaderRequirements = leaderRequirements;
 	}
 
 	public Set<QualificationType> getParentHelperRequirements()
 	{
-		return parentHelperRequirements;
+		return this.parentHelperRequirements;
 	}
 
-	public void setParentHelperRequirements(Set<QualificationType> parentHelperRequirements)
+	public void setParentHelperRequirements(final Set<QualificationType> parentHelperRequirements)
 	{
 		this.parentHelperRequirements = parentHelperRequirements;
 	}
 
+	@Override
 	public String toString()
 	{
-		return name;
+		return this.name;
 	}
 
 }

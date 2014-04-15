@@ -20,7 +20,7 @@ public class ContactConverter extends BaseConverter<Contact>
 	}
 
 	@Override
-	protected Contact newInstance(Object value)
+	protected Contact newInstance(final Object value)
 	{
 		return new Contact();
 	}

@@ -11,27 +11,27 @@ public class EntityConverter<E extends BaseEntity> extends BaseConverter<E>
 {
 	private static Logger logger = LogManager.getLogger(EntityConverter.class);
 	private static final long serialVersionUID = 1L;
-	
+
 	private Class<E> type;
 
 	@Override
 	public Class<E> getModelType()
 	{
-		return type;
+		return this.type;
 	}
 
 	@Override
-	protected E newInstance(Object value)
+	protected E newInstance(final Object value)
 	{
 		E newInstance = null;
 		try
 		{
-			 newInstance = type.newInstance();
+			newInstance = this.type.newInstance();
 		}
 		catch (InstantiationException | IllegalAccessException e)
 		{
 			// should never happen
-			logger.error(e);
+			EntityConverter.logger.error(e);
 		}
 		return newInstance;
 	}
@@ -39,6 +39,6 @@ public class EntityConverter<E extends BaseEntity> extends BaseConverter<E>
 	@Override
 	protected JpaBaseDao<E, Long> getDao()
 	{
-		return DaoFactory.getGenericDao(type);
+		return DaoFactory.getGenericDao(this.type);
 	}
 }

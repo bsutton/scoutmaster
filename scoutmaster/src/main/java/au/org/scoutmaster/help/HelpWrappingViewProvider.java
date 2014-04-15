@@ -13,26 +13,26 @@ import com.vaadin.navigator.ViewProvider;
 
 /**
  * View Provider, to replace the default one that Vaadin uses.
- * 
+ *
  * The list of views is automatically retrieved from the VaadinPageEnum enum
- * 
+ *
  * This one wraps the views in a HelpSplitPanel, so all our vaadin pages have a
  * help panel.
- * 
+ *
  * @author rsutton
- * 
+ *
  */
 public class HelpWrappingViewProvider implements ViewProvider
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1300354248455962125L;
-	private Map<String, Class<? extends View>> views = new HashMap<String, Class<? extends View>>();
+	private final Map<String, Class<? extends View>> views = new HashMap<String, Class<? extends View>>();
 
-	private Map<String, Class<? extends View>> viewsWithoutHelp = new HashMap<String, Class<? extends View>>();
-	
+	private final Map<String, Class<? extends View>> viewsWithoutHelp = new HashMap<String, Class<? extends View>>();
+
 	ScoutmasterViewEnum defaultView = null;
 
 	Logger logger = Logger.getLogger(HelpWrappingViewProvider.class);
@@ -42,7 +42,7 @@ public class HelpWrappingViewProvider implements ViewProvider
 	 */
 	public HelpWrappingViewProvider()
 	{
-		for (ScoutmasterViewEnum page : ScoutmasterViewEnum.values())
+		for (final ScoutmasterViewEnum page : ScoutmasterViewEnum.values())
 		{
 			addView(page);
 		}
@@ -52,37 +52,43 @@ public class HelpWrappingViewProvider implements ViewProvider
 	@Override
 	public String getViewName(String viewAndParameters)
 	{
-		logger.info(viewAndParameters);
+		this.logger.info(viewAndParameters);
 
 		if (viewAndParameters.contains("&"))
+		{
 			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("&"));
+		}
 
 		if (viewAndParameters.contains("/"))
-			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("/"));
-		
-		if (viewAndParameters.length() == 0)
-			viewAndParameters = defaultView.getTitle();
-
-		if (!views.containsKey(viewAndParameters)&& !viewsWithoutHelp.containsKey(viewAndParameters))
 		{
-			logger.error("Couldn't match view " + viewAndParameters);
+			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("/"));
+		}
+
+		if (viewAndParameters.length() == 0)
+		{
+			viewAndParameters = this.defaultView.getTitle();
+		}
+
+		if (!this.views.containsKey(viewAndParameters) && !this.viewsWithoutHelp.containsKey(viewAndParameters))
+		{
+			this.logger.error("Couldn't match view " + viewAndParameters);
 			return null;
 		}
 		return viewAndParameters;
 	}
 
 	@Override
-	public View getView(String viewName)
+	public View getView(final String viewName)
 	{
 		boolean noHelp = false;
 		View helpPanel = null;
 		try
 		{
-			Class<? extends View> viewClass = views.get(viewName);
+			Class<? extends View> viewClass = this.views.get(viewName);
 			if (viewClass == null)
 			{
 				noHelp = true;
-				viewClass = viewsWithoutHelp.get(viewName);
+				viewClass = this.viewsWithoutHelp.get(viewName);
 			}
 			Preconditions.checkNotNull(viewClass, "Couldn't find the view " + viewName);
 
@@ -94,30 +100,32 @@ public class HelpWrappingViewProvider implements ViewProvider
 			}
 
 		}
-		catch (InstantiationException e)
+		catch (final InstantiationException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 		}
-		catch (IllegalAccessException e)
+		catch (final IllegalAccessException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 		}
 		return helpPanel;
 	}
 
-	private void addView(ScoutmasterViewEnum view)
+	private void addView(final ScoutmasterViewEnum view)
 	{
 		if (view.noHelp())
 		{
-			viewsWithoutHelp.put(view.getTitle(), view.getViewClass());
+			this.viewsWithoutHelp.put(view.getTitle(), view.getViewClass());
 		}
 		else
 		{
-			views.put(view.getTitle(), view.getViewClass());
+			this.views.put(view.getTitle(), view.getViewClass());
 		}
 
 		if (view.isDefaultView())
-			defaultView = view;
+		{
+			this.defaultView = view;
+		}
 	}
 
 }

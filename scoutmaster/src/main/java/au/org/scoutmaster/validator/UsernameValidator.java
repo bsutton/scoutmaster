@@ -14,9 +14,9 @@ public final class UsernameValidator implements Validator
 	}
 
 	@Override
-	public void validate(Object objectValue)
+	public void validate(final Object objectValue)
 	{
-		String value = (String) objectValue;
+		final String value = (String) objectValue;
 		//
 		// username must be at least 7 characters long and contain at least
 		// one number
@@ -26,7 +26,9 @@ public final class UsernameValidator implements Validator
 			throw new InvalidValueException("The username must not be null.");
 		}
 		if (value.length() < 7)
+		{
 			throw new InvalidValueException("The username must be at least 8 characters long.");
+		}
 
 		// printable characters only.
 		if (!value.matches("[a-zA-Z0-9]*"))

@@ -8,23 +8,24 @@ import com.vaadin.ui.DateField;
 public class DateRangeValidator implements Validator
 {
 	private static final long serialVersionUID = 1L;
-	private DateField endDateField;
-	private String startDateCaption;
+	private final DateField endDateField;
+	private final String startDateCaption;
 
-	public DateRangeValidator(String label, DateField endDateField)
+	public DateRangeValidator(final String label, final DateField endDateField)
 	{
 		this.startDateCaption = label;
 		this.endDateField = endDateField;
 	}
 
 	@Override
-	public void validate(Object object) throws InvalidValueException
+	public void validate(final Object object) throws InvalidValueException
 	{
-		Date value = (Date) object;
+		final Date value = (Date) object;
 
-		if (value == null  || this.endDateField.getValue() == null || value.after(this.endDateField.getValue()))
+		if (value == null || this.endDateField.getValue() == null || value.after(this.endDateField.getValue()))
 		{
-			throw new InvalidValueException("The " + startDateCaption + " must be before the " + endDateField.getCaption() );
+			throw new InvalidValueException("The " + this.startDateCaption + " must be before the "
+					+ this.endDateField.getCaption());
 		}
 	}
 

@@ -24,7 +24,7 @@ public class LogoutView extends CustomComponent implements View
 	{
 		setSizeFull();
 
-		VerticalLayout fields = new VerticalLayout();
+		final VerticalLayout fields = new VerticalLayout();
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, true));
 		fields.setSizeUndefined();
@@ -40,7 +40,7 @@ public class LogoutView extends CustomComponent implements View
 		fields.addComponent(label);
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
+		final VerticalLayout viewLayout = new VerticalLayout(fields);
 		viewLayout.setSizeFull();
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
@@ -48,11 +48,11 @@ public class LogoutView extends CustomComponent implements View
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		SMSession.INSTANCE.setLoggedInUser(null);
 		getUI().getSession().close();
 		getUI().getSession().getSession().invalidate();
-		getUI().getPage().setLocation( "/scoutmaster/" );
+		getUI().getPage().setLocation("/scoutmaster/");
 	}
 }

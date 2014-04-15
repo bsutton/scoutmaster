@@ -18,63 +18,72 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Set<Contact> convertToModel(Set<? extends Object> value, Class<? extends Set<Contact>> targetType,
-			Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
-	{
+	public Set<Contact> convertToModel(final Set<? extends Object> value,
+			final Class<? extends Set<Contact>> targetType, final Locale locale)
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+			{
 		HashSet<Contact> result = null;
-		ContactDao daoContact = new ContactDao();
+		final ContactDao daoContact = new ContactDao();
 
-		logger.debug("converToModel: value: {} valueType:{} targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		ContactSetConverter.logger.debug("converToModel: value: {} valueType:{} targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Set)
 		{
-			logger.debug("Calling findByName");
+			ContactSetConverter.logger.debug("Calling findByName");
 			@SuppressWarnings("unchecked")
-			HashSet<Object> set = (HashSet<Object>) value;
+			final HashSet<Object> set = (HashSet<Object>) value;
 			result = new HashSet<Contact>();
-			for (Object item : set.toArray())
+			for (final Object item : set.toArray())
 			{
 				// Now we have to determine if the element is an identity or an
 				// actual Contact
 				if (item instanceof Long)
+				{
 					result.add(daoContact.findById((Long) item));
+				}
 				else
+				{
 					result.add((Contact) item);
+				}
 			}
 		}
 
-		logger.debug("result: {}", result);
+		ContactSetConverter.logger.debug("result: {}", result);
 		return result;
-	}
+			}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<? extends Object> convertToPresentation(Set<Contact> value,
-			Class<? extends Set<? extends Object>> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
-	{
+	public Set<? extends Object> convertToPresentation(final Set<Contact> value,
+			final Class<? extends Set<? extends Object>> targetType, final Locale locale)
+					throws com.vaadin.data.util.converter.Converter.ConversionException
+					{
 		Set<? extends Object> result = new HashSet<>();
 		if (targetType.getName().equals("java.util.Set"))
 		{
 			result = new HashSet<Contact>();
 
-			logger.debug("convertToPresentation: value {} targetType: {}", value, targetType);
+			ContactSetConverter.logger.debug("convertToPresentation: value {} targetType: {}", value, targetType);
 			if (value != null)
+			{
 				((HashSet<Contact>) result).addAll(value);
+			}
 		}
 		else
+		{
 			throw new UnsupportedOperationException("Conversion for Contact from type " + targetType + " not supported");
+		}
 
-		logger.debug("result: {}", result);
+		ContactSetConverter.logger.debug("result: {}", result);
 		return result;
-	}
+					}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Class<Set<Contact>> getModelType()
 	{
-		Set<Contact> a = new HashSet<>();
+		final Set<Contact> a = new HashSet<>();
 		return (Class<Set<Contact>>) a.getClass();
 	}
 
@@ -82,7 +91,7 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 	@Override
 	public Class<Set<? extends Object>> getPresentationType()
 	{
-		Set<Object> a = new HashSet<>();
+		final Set<Object> a = new HashSet<>();
 		return (Class<Set<? extends Object>>) a.getClass();
 	}
 

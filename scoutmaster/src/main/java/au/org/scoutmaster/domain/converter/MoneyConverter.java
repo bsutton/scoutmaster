@@ -15,35 +15,40 @@ public class MoneyConverter implements Converter<Object, Money>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Money convertToModel(Object value, Class<? extends Money> targetType, Locale locale)
+	public Money convertToModel(final Object value, final Class<? extends Money> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		Money result = null;
 
-		logger.debug("converToModel: value: {} valueType: {} targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		MoneyConverter.logger.debug("converToModel: value: {} valueType: {} targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Object || value instanceof String)
 		{
 			result = new Money((String) value);
 		}
 
-		logger.debug("result: {}", result);
+		MoneyConverter.logger.debug("result: {}", result);
 		return result;
 	}
 
 	@Override
-	public Object convertToPresentation(Money value, Class<? extends Object> targetType, Locale locale)
+	public Object convertToPresentation(final Money value, final Class<? extends Object> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
 
-		logger.debug("convertToPresentation: value: {}  targetType: {}", (value == null ? "null" : value), targetType);
+		MoneyConverter.logger.debug("convertToPresentation: value: {}  targetType: {}", value == null ? "null" : value,
+				targetType);
 		if (value != null)
+		{
 			result = value.toString();
+		}
 		else
+		{
 			result = "";
-		logger.debug("result: {}", result);
+		}
+		MoneyConverter.logger.debug("result: {}", result);
 		return result;
 	}
 

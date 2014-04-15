@@ -8,23 +8,23 @@ import com.vaadin.server.widgetsetutils.ConnectorBundleLoaderFactory;
 import com.vaadin.shared.ui.Connect.LoadStyle;
 
 /**
- * This class is referenced in AppWidgetSet.gwt.xml and provides
- * vaadin connector optimisations.
- * 
+ * This class is referenced in AppWidgetSet.gwt.xml and provides vaadin
+ * connector optimisations.
+ *
  * @author bsutton
  *
  */
 public class OptimizedConnectorBundleLoaderFactory extends ConnectorBundleLoaderFactory
 {
-	private Set<String> eagerConnectors = new HashSet<String>();
+	private final Set<String> eagerConnectors = new HashSet<String>();
 	{
-		eagerConnectors.add(com.vaadin.client.ui.ui.UIConnector.class.getName());
+		this.eagerConnectors.add(com.vaadin.client.ui.ui.UIConnector.class.getName());
 	}
 
 	@Override
-	protected LoadStyle getLoadStyle(JClassType connectorType)
+	protected LoadStyle getLoadStyle(final JClassType connectorType)
 	{
-		if (eagerConnectors.contains(connectorType.getQualifiedBinaryName()))
+		if (this.eagerConnectors.contains(connectorType.getQualifiedBinaryName()))
 		{
 			return LoadStyle.EAGER;
 		}

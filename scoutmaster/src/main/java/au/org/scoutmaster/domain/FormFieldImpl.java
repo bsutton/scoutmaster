@@ -12,13 +12,13 @@ public class FormFieldImpl
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(FormFieldImpl.class);
 
-	private String fieldName;
-	private FormField formField;
-	private Field field;
+	private final String fieldName;
+	private final FormField formField;
+	private final Field field;
 
-	private String alternateDisplayName;
+	private final String alternateDisplayName;
 
-	public FormFieldImpl(Field field, String fieldName, FormField formField)
+	public FormFieldImpl(final Field field, final String fieldName, final FormField formField)
 	{
 		this.fieldName = fieldName;
 		this.formField = formField;
@@ -26,7 +26,8 @@ public class FormFieldImpl
 		this.alternateDisplayName = null;
 	}
 
-	public FormFieldImpl(Field field, String fieldName, FormField formField, String alternateDisplayName)
+	public FormFieldImpl(final Field field, final String fieldName, final FormField formField,
+			final String alternateDisplayName)
 	{
 		this.fieldName = fieldName;
 		this.formField = formField;
@@ -43,40 +44,48 @@ public class FormFieldImpl
 	public String displayName()
 	{
 		if (this.alternateDisplayName == null)
-			return formField.displayName();
+		{
+			return this.formField.displayName();
+		}
 		else
+		{
 			return this.alternateDisplayName;
+		}
 	}
 
 	public boolean visible()
 	{
-		return formField.visible();
+		return this.formField.visible();
 	}
 
+	@Override
 	public String toString()
 	{
 		return displayName();
 	}
 
-	public void setValue(Object entity, Object value) throws IllegalArgumentException, IllegalAccessException
+	public void setValue(final Object entity, Object value) throws IllegalArgumentException, IllegalAccessException
 	{
-		if (value.getClass() != field.getType())
+		if (value.getClass() != this.field.getType())
 		{
-			// we need to do some conversions by trying to instantiate an instance of of the field with the value as
+			// we need to do some conversions by trying to instantiate an
+			// instance of of the field with the value as
 			// an argument
 			Constructor<?> ctor;
 			try
 			{
-				ctor = field.getType().getConstructor(value.getClass());
+				ctor = this.field.getType().getConstructor(value.getClass());
 				if (ctor != null)
-					value  = ctor.newInstance(value); 
+				{
+					value = ctor.newInstance(value);
+				}
 			}
 			catch (NoSuchMethodException | SecurityException | InstantiationException | InvocationTargetException e)
 			{
-				throw new IllegalArgumentException("Unable to convert value: " + value + " of type " + value.getClass() 
-						+ " to the field type of " + field.getType());
+				throw new IllegalArgumentException("Unable to convert value: " + value + " of type " + value.getClass()
+						+ " to the field type of " + this.field.getType());
 			}
 		}
-		field.set(entity, value);
+		this.field.set(entity, value);
 	}
 }

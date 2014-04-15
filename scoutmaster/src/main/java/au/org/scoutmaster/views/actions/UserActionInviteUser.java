@@ -34,7 +34,7 @@ public class UserActionInviteUser implements CrudAction<User>
 {
 	private static final long serialVersionUID = 1L;
 	Logger logger = LogManager.getLogger(UserActionInviteUser.class);
-	
+
 	@Override
 	public boolean isDefault()
 	{
@@ -42,105 +42,25 @@ public class UserActionInviteUser implements CrudAction<User>
 	}
 
 	@Override
-	public void exec(BaseCrudView<User> crud, EntityItem<User> entity)
+	public void exec(final BaseCrudView<User> crud, final EntityItem<User> entity)
 	{
-		InputDialog dialog = new InputDialog(UI.getCurrent(), "Invite User",
+		final InputDialog dialog = new InputDialog(UI.getCurrent(), "Invite User",
 				"Enter user's email address to invite them:", new Recipient()
+		{
+
+			@Override
+			public boolean onOK(final String emailAddress)
+			{
+				new InputDialog(UI.getCurrent(), "Select Username",
+						"Enter the Username to assign this new user.", new Recipient()
 				{
 
 					@Override
-					public boolean onOK(final String emailAddress)
+					public boolean onOK(final String username)
 					{
-						new InputDialog(UI.getCurrent(), "Select Username",
-								"Enter the Username to assign this new user.", new Recipient()
-								{
-
-									@Override
-									public boolean onOK(final String username)
-									{
-										// Email the user a token.
-										inviteUser(username, emailAddress);
-										return true;
-									}
-
-									@Override
-									public boolean onCancel()
-									{
-										return true;
-									}
-
-								});
+						// Email the user a token.
+						inviteUser(username, emailAddress);
 						return true;
-
-					}
-
-					private void inviteUser(String username, String emailAddress)
-					{
-						SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
-						SMTPServerSettings settings = settingsDao.findSettings();
-
-						// first check that the username doesn't already exists
-
-						UserDao daoUser = new DaoFactory().getDao(UserDao.class);
-						if (daoUser.findByName(username) != null)
-						{
-							SMNotification.show("The selected username already exists. Please select a new one",
-									Type.ERROR_MESSAGE);
-						}
-						else
-						{
-
-							// Create the new user account.
-							User user = new User(username, new RandomString(RandomString.Type.ALPHANUMERIC, 32).nextString());
-							user.setEmailAddress(emailAddress);
-							daoUser.persist(user);
-
-							// Now notify the user.
-							Email email = new SimpleEmail();
-							email.setHostName(settings.getSmtpFQDN());
-							email.setSmtpPort(settings.getSmtpPort());
-							if (settings.isAuthRequired())
-								email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings
-										.getPassword()));
-							email.setSSLOnConnect(true);
-							try
-							{
-								email.setFrom(settings.getFromEmailAddress());
-								email.setSubject("[Scoutmaster] Invitation to login");
-
-								ForgottenPasswordResetDao forgottenPasswordResetDao = new DaoFactory()
-										.getForgottenPasswordResetDao();
-								ForgottenPasswordReset reset = forgottenPasswordResetDao.createReset(emailAddress);
-
-								forgottenPasswordResetDao.persist(reset);
-
-								StringBuffer url = VaadinServletService.getCurrentServletRequest().getRequestURL();
-
-								User loggedInUser = SMSession.INSTANCE.getLoggedInUser();
-								Organisation scoutGroup = new DaoFactory().getOrganisationDao().findOurScoutGroup();
-								
-								StringBuilder sb = new StringBuilder();
-								sb.append("You have been invited by " + loggedInUser.getFullname() + " to join the Scoutmaster Group management system for "
-										 + scoutGroup.getName() + ".\n\n");
-								sb.append("Use the following link within the next 24 hours to activate your account.\n\n");
-								
-								sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid() + "\n\n");
-								sb.append("You have been allocated the username '" + user.getUsername() + "' which you will need to use each time you login.");
-								email.setMsg(sb.toString());
-								email.addTo(emailAddress);
-								email.send();
-							}
-							catch (IllegalArgumentException e)
-							{
-								SMNotification.show(e, Type.ERROR_MESSAGE);
-							}
-							catch (EmailException e)
-							{
-								logger.error(e, e);
-								SMNotification.show(e, Type.ERROR_MESSAGE);
-							}
-						}
-
 					}
 
 					@Override
@@ -148,10 +68,100 @@ public class UserActionInviteUser implements CrudAction<User>
 					{
 						return true;
 					}
+
 				});
+				return true;
+
+			}
+
+			private void inviteUser(final String username, final String emailAddress)
+			{
+				final SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
+				final SMTPServerSettings settings = settingsDao.findSettings();
+
+				// first check that the username doesn't already exists
+
+				final UserDao daoUser = new DaoFactory().getDao(UserDao.class);
+				if (daoUser.findByName(username) != null)
+				{
+					SMNotification.show("The selected username already exists. Please select a new one",
+							Type.ERROR_MESSAGE);
+				}
+				else
+				{
+
+					// Create the new user account.
+					final User user = new User(username, new RandomString(RandomString.Type.ALPHANUMERIC, 32)
+									.nextString());
+					user.setEmailAddress(emailAddress);
+					daoUser.persist(user);
+
+					// Now notify the user.
+					final Email email = new SimpleEmail();
+					email.setHostName(settings.getSmtpFQDN());
+					email.setSmtpPort(settings.getSmtpPort());
+					if (settings.isAuthRequired())
+					{
+						email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings
+								.getPassword()));
+					}
+					email.setSSLOnConnect(true);
+					try
+					{
+						email.setFrom(settings.getFromEmailAddress());
+						email.setSubject("[Scoutmaster] Invitation to login");
+
+						final ForgottenPasswordResetDao forgottenPasswordResetDao = new DaoFactory()
+						.getForgottenPasswordResetDao();
+						final ForgottenPasswordReset reset = forgottenPasswordResetDao
+										.createReset(emailAddress);
+
+						forgottenPasswordResetDao.persist(reset);
+
+						final StringBuffer url = VaadinServletService.getCurrentServletRequest()
+										.getRequestURL();
+
+						final User loggedInUser = SMSession.INSTANCE.getLoggedInUser();
+						final Organisation scoutGroup = new DaoFactory().getOrganisationDao()
+										.findOurScoutGroup();
+
+								final StringBuilder sb = new StringBuilder();
+						sb.append("You have been invited by " + loggedInUser.getFullname()
+										+ " to join the Scoutmaster Group management system for "
+										+ scoutGroup.getName() + ".\n\n");
+						sb.append("Use the following link within the next 24 hours to activate your account.\n\n");
+
+								sb.append(url + "/" + ResetPasswordView.NAME + "?resetid=" + reset.getResetid()
+										+ "\n\n");
+						sb.append("You have been allocated the username '" + user.getUsername()
+										+ "' which you will need to use each time you login.");
+						email.setMsg(sb.toString());
+						email.addTo(emailAddress);
+						email.send();
+					}
+					catch (final IllegalArgumentException e)
+					{
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+					catch (final EmailException e)
+					{
+						UserActionInviteUser.this.logger.error(e, e);
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+				}
+
+			}
+
+			@Override
+			public boolean onCancel()
+			{
+				return true;
+			}
+		});
 		dialog.addValidator(new EmailValidator("You must enter a valid email address."));
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "Invite User";

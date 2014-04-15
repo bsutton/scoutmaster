@@ -8,13 +8,13 @@ import com.vaadin.ui.VerticalLayout;
 public class AttachedFile
 {
 	/**
-	 * 
+	 *
 	 */
 	private final VerticalLayout attachedFilesLayout;
-	private File file;
-	private AbstractLayout line;
+	private final File file;
+	private final AbstractLayout line;
 
-	public AttachedFile(VerticalLayout attachedFilesLayout, File file, AbstractLayout line)
+	public AttachedFile(final VerticalLayout attachedFilesLayout, final File file, final AbstractLayout line)
 	{
 		this.attachedFilesLayout = attachedFilesLayout;
 		this.file = file;
@@ -23,12 +23,12 @@ public class AttachedFile
 
 	public void remove()
 	{
-		this.attachedFilesLayout.removeComponent(line);
-		file.delete();
+		this.attachedFilesLayout.removeComponent(this.line);
+		this.file.delete();
 	}
 
 	public File getFile()
 	{
-		return file;
+		return this.file;
 	}
 }

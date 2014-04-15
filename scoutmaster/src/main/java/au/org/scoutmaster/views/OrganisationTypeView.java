@@ -21,7 +21,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 
-@Menu(display = "Organisation Types", path="Admin.Lists")
+@Menu(display = "Organisation Types", path = "Admin.Lists")
 public class OrganisationTypeView extends BaseCrudView<OrganisationType> implements View, Selected<OrganisationType>
 {
 
@@ -33,9 +33,10 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 	public static final String NAME = "OrganisationType";
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<OrganisationType> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<OrganisationType> fieldGroup2)
 	{
-		SMMultiColumnFormLayout<OrganisationType> overviewForm = new SMMultiColumnFormLayout<OrganisationType>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<OrganisationType> overviewForm = new SMMultiColumnFormLayout<OrganisationType>(1,
+				this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setColumnLabelWidth(0, 100);
 
@@ -45,27 +46,27 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 		return overviewForm;
 	}
 
-		@Override
-	public void enter(ViewChangeEvent event)
+	@Override
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class).createVaadinContainer();
+		final JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class)
+				.createVaadinContainer();
 		container.sort(new String[]
-		{ OrganisationType_.name.getName() }, new boolean[]
-		{ true });
+				{ OrganisationType_.name.getName() }, new boolean[]
+						{ true });
 
-		Builder<OrganisationType> builder = new HeadingPropertySet.Builder<OrganisationType>();
+		final Builder<OrganisationType> builder = new HeadingPropertySet.Builder<OrganisationType>();
 		builder.addColumn("Type Name", OrganisationType_.name);
 
 		super.init(OrganisationType.class, container, builder.build());
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new SimpleStringFilter(OrganisationType_.name.getName(), filterString, true, false);
 	}
 
-	
 	@Override
 	protected String getTitleText()
 	{

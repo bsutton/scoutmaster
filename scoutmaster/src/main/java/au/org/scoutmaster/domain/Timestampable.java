@@ -10,7 +10,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public class Timestampable //extends Model
+public class Timestampable // extends Model
 {
 
 	@Id
@@ -23,34 +23,34 @@ public class Timestampable //extends Model
 	@Column(name = "updated_at")
 	public Date updatedAt;
 
-//	@Version
-//	public int version;
-//
-//	@Override
-//	public void save()
-//	{
-//		createdAt();
-//		super.save();
-//	}
-//
-//	@Override
-//	public void update()
-//	{
-//		updatedAt();
-//		super.update();
-//	}
+	// @Version
+	// public int version;
+	//
+	// @Override
+	// public void save()
+	// {
+	// createdAt();
+	// super.save();
+	// }
+	//
+	// @Override
+	// public void update()
+	// {
+	// updatedAt();
+	// super.update();
+	// }
 
 	@PrePersist
 	void createdAt()
 	{
-		java.util.Date today = new java.util.Date();
+		final java.util.Date today = new java.util.Date();
 		this.createdAt = this.updatedAt = new java.sql.Date(today.getTime());
 	}
 
 	@PreUpdate
 	void updatedAt()
 	{
-		java.util.Date today = new java.util.Date();
+		final java.util.Date today = new java.util.Date();
 		this.updatedAt = new java.sql.Date(today.getTime());
 	}
 }

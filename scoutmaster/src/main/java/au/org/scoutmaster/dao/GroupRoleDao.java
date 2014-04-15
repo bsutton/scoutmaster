@@ -23,17 +23,17 @@ public class GroupRoleDao extends JpaBaseDao<GroupRole, Long> implements Dao<Gro
 		// inherit the default per request em.
 	}
 
-	public GroupRoleDao(EntityManager em)
+	public GroupRoleDao(final EntityManager em)
 	{
 		super(em);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<GroupRole> findByName(String name)
+	public List<GroupRole> findByName(final String name)
 	{
-		Query query = entityManager.createNamedQuery(GroupRole.FIND_BY_NAME);
+		final Query query = this.entityManager.createNamedQuery(GroupRole.FIND_BY_NAME);
 		query.setParameter("name", name);
-		List<GroupRole> results = query.getResultList();
+		final List<GroupRole> results = query.getResultList();
 		return results;
 	}
 

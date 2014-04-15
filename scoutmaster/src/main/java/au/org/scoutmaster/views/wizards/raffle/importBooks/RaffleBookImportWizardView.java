@@ -52,96 +52,98 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 
 	public WelcomeStep getWelcomeStep()
 	{
-		return welcomeStep;
+		return this.welcomeStep;
 	}
 
 	public TicketRangeStep getTicketRangeStep()
 	{
-		return ticketRangeStep;
+		return this.ticketRangeStep;
 	}
 
 	public ConfirmRaffleDetails getConfirmRaffleStep()
 	{
-		return confirmRaffleStep;
+		return this.confirmRaffleStep;
 	}
 
 	public FinalStep getImportStep()
 	{
-		return finalStep;
+		return this.finalStep;
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 
-		HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
-		
-		String value = parameters.get("ID");
+		final HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
+
+		final String value = parameters.get("ID");
 		if (value != null)
 		{
-			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+			final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			this.raffle = daoRaffle.findById(Long.valueOf(value));
 		}
 
-		welcomeStep = new WelcomeStep(this);
-		raffleStep = new SelectRaffleStep(this);
-		confirmRaffleStep = new ConfirmRaffleDetails(this);
-		ticketRangeStep = new TicketRangeStep(this);
-		finalStep = new FinalStep(this);
+		this.welcomeStep = new WelcomeStep(this);
+		this.raffleStep = new SelectRaffleStep(this);
+		this.confirmRaffleStep = new ConfirmRaffleDetails(this);
+		this.ticketRangeStep = new TicketRangeStep(this);
+		this.finalStep = new FinalStep(this);
 
 		// create the Wizard component and add the steps
-		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
-		wizard.addListener(this);
-		wizard.addStep(welcomeStep, "Welcome");
-		if (raffle == null)
-			wizard.addStep(raffleStep, "Raffle");
-		wizard.addStep(confirmRaffleStep, "Confirm");
-		wizard.addStep(ticketRangeStep, "TicketRange");
-		wizard.addStep(finalStep, "Final");
-		wizard.setSizeFull();
-		wizard.setUriFragmentEnabled(true);
+		this.wizard = new Wizard();
+		this.wizard.setUriFragmentEnabled(true);
+		this.wizard.addListener(this);
+		this.wizard.addStep(this.welcomeStep, "Welcome");
+		if (this.raffle == null)
+		{
+			this.wizard.addStep(this.raffleStep, "Raffle");
+		}
+		this.wizard.addStep(this.confirmRaffleStep, "Confirm");
+		this.wizard.addStep(this.ticketRangeStep, "TicketRange");
+		this.wizard.addStep(this.finalStep, "Final");
+		this.wizard.setSizeFull();
+		this.wizard.setUriFragmentEnabled(true);
 
 		/* Main layout */
 		this.setMargin(true);
-		this.setSpacing(true);
-		this.addComponent(wizard);
-		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		this.setSizeFull();
+		setSpacing(true);
+		this.addComponent(this.wizard);
+		setComponentAlignment(this.wizard, Alignment.TOP_CENTER);
+		setSizeFull();
 
 	}
 
 	@Override
-	public void activeStepChanged(WizardStepActivationEvent event)
+	public void activeStepChanged(final WizardStepActivationEvent event)
 	{
 		// NOOP
 
 	}
 
 	@Override
-	public void stepSetChanged(WizardStepSetChangedEvent event)
+	public void stepSetChanged(final WizardStepSetChangedEvent event)
 	{
 		Page.getCurrent().setTitle(event.getComponent().getCaption());
 
 	}
 
 	@Override
-	public void wizardCompleted(WizardCompletedEvent event)
+	public void wizardCompleted(final WizardCompletedEvent event)
 	{
-		this.endWizard("Import Completed!");
+		endWizard("Import Completed!");
 
 	}
 
 	@Override
-	public void wizardCancelled(WizardCancelledEvent event)
+	public void wizardCancelled(final WizardCancelledEvent event)
 	{
-		this.endWizard("Import Cancelled!");
+		endWizard("Import Cancelled!");
 
 	}
 
-	private void endWizard(String message)
+	private void endWizard(final String message)
 	{
-		wizard.setVisible(false);
+		this.wizard.setVisible(false);
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		UI.getCurrent().getNavigator().navigateTo(RaffleView.NAME);
@@ -153,11 +155,12 @@ public class RaffleBookImportWizardView extends VerticalLayout implements View, 
 		return this.raffle;
 	}
 
-	public void setRaffle(Raffle raffle)
+	public void setRaffle(final Raffle raffle)
 	{
 		this.raffle = raffle;
 
 	}
+
 	@Override
 	public HelpPageIdentifier getHelpId()
 	{

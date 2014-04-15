@@ -9,14 +9,14 @@ public enum Night
 
 	private Integer dayOfWeek;
 
-	Night(Integer dayOfWeek)
+	Night(final Integer dayOfWeek)
 	{
 		this.dayOfWeek = dayOfWeek;
 	}
 
 	public Integer getDayOfWeek()
 	{
-		return dayOfWeek;
+		return this.dayOfWeek;
 	}
 
 }

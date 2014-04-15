@@ -19,14 +19,15 @@ public class EventActionCopy implements CrudAction<Event>
 	}
 
 	@Override
-	public void exec(BaseCrudView<Event> crud, EntityItem<Event> entity)
+	public void exec(final BaseCrudView<Event> crud, final EntityItem<Event> entity)
 	{
-		EventDao eventDao = new DaoFactory().getEventDao();
-		
-		Event copy = new Event(entity.getEntity());
+		final EventDao eventDao = new DaoFactory().getEventDao();
+
+		final Event copy = new Event(entity.getEntity());
 		eventDao.persist(copy);
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "Copy";

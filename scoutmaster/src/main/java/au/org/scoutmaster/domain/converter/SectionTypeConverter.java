@@ -16,42 +16,46 @@ public class SectionTypeConverter implements Converter<Object, SectionType>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public SectionType convertToModel(Object value, Class<? extends SectionType> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
+	public SectionType convertToModel(final Object value, final Class<? extends SectionType> targetType,
+			final Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		SectionType result = null;
-		SectionTypeDao daoSectionType = new SectionTypeDao();
+		final SectionTypeDao daoSectionType = new SectionTypeDao();
 
-		logger.debug("converToModel: value: {} valueType: targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		SectionTypeConverter.logger.debug("converToModel: value: {} valueType: targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Long)
 		{
-			logger.debug("Calling findById");
+			SectionTypeConverter.logger.debug("Calling findById");
 			result = daoSectionType.findById((Long) value);
 		}
 		else if (value instanceof Object || value instanceof String)
 		{
-			logger.debug("Calling findByName");
+			SectionTypeConverter.logger.debug("Calling findByName");
 			result = daoSectionType.findByName((String) value);
 		}
 
-		logger.debug("result: {}", result);
+		SectionTypeConverter.logger.debug("result: {}", result);
 		return result;
 	}
 
 	@Override
-	public Object convertToPresentation(SectionType value, Class<? extends Object> targetType, Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
+	public Object convertToPresentation(final SectionType value, final Class<? extends Object> targetType,
+			final Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
 
-		logger.debug("convertToPresentation: value: {} targetType: {}", value, targetType);
+		SectionTypeConverter.logger.debug("convertToPresentation: value: {} targetType: {}", value, targetType);
 		if (value != null)
+		{
 			result = value.getName();
+		}
 		else
+		{
 			result = "";
-		logger.debug("result: {}", result);
+		}
+		SectionTypeConverter.logger.debug("result: {}", result);
 		return result;
 	}
 

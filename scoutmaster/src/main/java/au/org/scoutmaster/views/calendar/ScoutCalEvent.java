@@ -12,15 +12,16 @@ public class ScoutCalEvent implements CalendarEvent, EventChangeNotifier
 {
 	private static final long serialVersionUID = 1L;
 	Event eventEntity;
-	private HashSet<EventChangeListener> listeners = new HashSet<>();
+	private final HashSet<EventChangeListener> listeners = new HashSet<>();
 
-	public ScoutCalEvent(Event eventEntity)
+	public ScoutCalEvent(final Event eventEntity)
 	{
 		this.eventEntity = eventEntity;
 	}
-	public void updateEvent(Event updatedEvent)
+
+	public void updateEvent(final Event updatedEvent)
 	{
-		eventEntity = updatedEvent;
+		this.eventEntity = updatedEvent;
 		fireEventChanged();
 	}
 
@@ -70,23 +71,23 @@ public class ScoutCalEvent implements CalendarEvent, EventChangeNotifier
 
 	public void fireEventChanged()
 	{
-		for (EventChangeListener listener : listeners)
+		for (final EventChangeListener listener : this.listeners)
 		{
 			listener.eventChange(new EventChangeEvent(this));
 		}
 	}
 
 	@Override
-	public void addEventChangeListener(EventChangeListener listener)
+	public void addEventChangeListener(final EventChangeListener listener)
 	{
-		listeners.add(listener);
+		this.listeners.add(listener);
 	}
 
 	@Override
-	public void removeEventChangeListener(EventChangeListener listener)
+	public void removeEventChangeListener(final EventChangeListener listener)
 	{
-		listeners.remove(listener);
-		
+		this.listeners.remove(listener);
+
 	}
 
 }

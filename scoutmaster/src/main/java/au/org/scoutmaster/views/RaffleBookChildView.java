@@ -11,13 +11,13 @@ import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.BaseEntity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.RaffleBook_;
-import au.org.scoutmaster.domain.Raffle_;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -35,48 +35,48 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	private static final long serialVersionUID = 1L;
 	private ComboBox allocatedTo;
 
-	public RaffleBookChildView(BaseCrudView<Raffle> parentCrud)
+	public RaffleBookChildView(final BaseCrudView<Raffle> parentCrud)
 	{
-		super(parentCrud, Raffle.class, RaffleBook.class, Raffle_.id, RaffleBook_.raffle.getName());
+		super(parentCrud, Raffle.class, RaffleBook.class, BaseEntity_.id, RaffleBook_.raffle.getName());
 
-		JPAContainer<RaffleBook> container = new DaoFactory().getRaffleBookDao().createVaadinContainer();
+		final JPAContainer<RaffleBook> container = new DaoFactory().getRaffleBookDao().createVaadinContainer();
 		container.sort(new String[]
-		{ RaffleBook_.firstNo.getName() }, new boolean[]
-		{ true });
+				{ RaffleBook_.firstNo.getName() }, new boolean[]
+						{ true });
 
-		Builder<RaffleBook> builder = new HeadingPropertySet.Builder<RaffleBook>();
+		final Builder<RaffleBook> builder = new HeadingPropertySet.Builder<RaffleBook>();
 		builder.addColumn("First No.", RaffleBook_.firstNo)
-				.addColumn("Allocation",
-						new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
+		.addColumn("Allocation",
+				new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
 				.addColumn("Date Allocated",
 						new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated).getName())
-				.addColumn("Date Returned", RaffleBook_.dateReturned);
+						.addColumn("Date Returned", RaffleBook_.dateReturned);
 		super.init(RaffleBook.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Component buildEditor(ValidatingFieldGroup<RaffleBook> fieldGroup2)
+	protected Component buildEditor(final ValidatingFieldGroup<RaffleBook> fieldGroup2)
 	{
-		MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<RaffleBook>(1, this.fieldGroup);
+		final MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<RaffleBook>(1, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 240);
 		overviewForm.setColumnLabelWidth(0, 110);
 		overviewForm.setSizeFull();
 
-		FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
+		final FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
 
 		overviewForm.bindTextField("Ticket Count", RaffleBook_.ticketCount);
 		overviewForm.bindTextField("First No.", RaffleBook_.firstNo);
 
-		allocatedTo = formHelper.new EntityFieldBuilder<Contact>().setLabel("Allocated To")
+		this.allocatedTo = formHelper.new EntityFieldBuilder<Contact>().setLabel("Allocated To")
 				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
 				.setListFieldName(Contact_.fullname).setListClass(Contact.class).build();
-		allocatedTo.setFilteringMode(FilteringMode.CONTAINS);
-		allocatedTo.setTextInputAllowed(true);
-		allocatedTo.setNullSelectionAllowed(true);
-		allocatedTo.setDescription("The person the book has been allocated to.");
+		this.allocatedTo.setFilteringMode(FilteringMode.CONTAINS);
+		this.allocatedTo.setTextInputAllowed(true);
+		this.allocatedTo.setNullSelectionAllowed(true);
+		this.allocatedTo.setDescription("The person the book has been allocated to.");
 		// you can't edit the allocation.
-		allocatedTo.setReadOnly(true);
+		this.allocatedTo.setReadOnly(true);
 
 		overviewForm.bindTextField("Tickets Returned?", RaffleBook_.ticketsReturned).setDescription(
 				"The no. of tickets that have been returned.");
@@ -85,9 +85,9 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 				"The amount of money returned for this book.");
 
 		overviewForm.bindDateField("Date Returned", RaffleBook_.dateReturned, "yyyy-MM-dd", Resolution.DAY)
-				.setDescription("The date the money and tickets for this book were returned");
+		.setDescription("The date the money and tickets for this book were returned");
 
-		ComboBox collectedBy = formHelper.new EntityFieldBuilder<Contact>().setLabel("Collected By")
+		final ComboBox collectedBy = formHelper.new EntityFieldBuilder<Contact>().setLabel("Collected By")
 				.setField(RaffleBook_.collectedBy).setListFieldName(Contact_.fullname).build();
 		collectedBy.setFilteringMode(FilteringMode.CONTAINS);
 		collectedBy.setTextInputAllowed(true);
@@ -102,24 +102,24 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new FilterBuilder()
-				.or(new SimpleStringFilter(RaffleBook_.firstNo.getName(), filterString, true, false))
-				.or(new SimpleStringFilter(new Path().add(RaffleBook_.raffleAllocation)
-						.add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName(), filterString, true, false))
+		.or(new SimpleStringFilter(RaffleBook_.firstNo.getName(), filterString, true, false))
+		.or(new SimpleStringFilter(new Path().add(RaffleBook_.raffleAllocation)
+				.add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName(), filterString, true, false))
 				.or(new SimpleStringFilter(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated)
-						.getName(), filterString, true, false)).build();
+				.getName(), filterString, true, false)).build();
 	}
 
 	@Override
-	public void associateChild(Raffle newParent, RaffleBook child)
+	public void associateChild(final Raffle newParent, final RaffleBook child)
 	{
 		newParent.addRaffleBook(child);
 	}
 
 	@Override
-	public void rowChanged(EntityItem<RaffleBook> item)
+	public void rowChanged(final EntityItem<RaffleBook> item)
 	{
 		super.rowChanged(item);
 
@@ -128,13 +128,15 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 			// you can only edit books that have been allocated.
 			if (item.getEntity().getRaffleAllocation() == null)
 			{
-				fieldGroup.setReadOnly(true);
+				this.fieldGroup.setReadOnly(true);
 			}
 			else
-				fieldGroup.setReadOnly(false);
+			{
+				this.fieldGroup.setReadOnly(false);
+			}
 
 			// Your can't edit a books allocation.
-			allocatedTo.setReadOnly(true);
+			this.allocatedTo.setReadOnly(true);
 		}
 
 	}
@@ -143,17 +145,17 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	{
 		ArrayList<Filter> filters = new ArrayList<>();
 
-		FilterBuilder or(Filter filter)
+		FilterBuilder or(final Filter filter)
 		{
-			filters.add(filter);
+			this.filters.add(filter);
 
 			return this;
 		}
 
 		Or build()
 		{
-			Filter[] aFilters = new Filter[1];
-			return new Or(filters.toArray(aFilters));
+			final Filter[] aFilters = new Filter[1];
+			return new Or(this.filters.toArray(aFilters));
 		}
 	}
 }

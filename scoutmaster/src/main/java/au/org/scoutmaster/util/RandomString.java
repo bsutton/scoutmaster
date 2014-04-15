@@ -13,7 +13,7 @@ public class RandomString
 			@Override
 			char[] getSymbols()
 			{
-				return hex;
+				return RandomString.hex;
 			}
 		},
 		ALPHA
@@ -21,7 +21,7 @@ public class RandomString
 			@Override
 			char[] getSymbols()
 			{
-				return alpha;
+				return RandomString.alpha;
 			}
 		},
 		ALPHANUMERIC
@@ -29,7 +29,7 @@ public class RandomString
 			@Override
 			char[] getSymbols()
 			{
-				return alphaNumeric;
+				return RandomString.alphaNumeric;
 			}
 		},
 		NUMERIC
@@ -37,7 +37,7 @@ public class RandomString
 			@Override
 			char[] getSymbols()
 			{
-				return numeric;
+				return RandomString.numeric;
 			}
 		};
 		abstract char[] getSymbols();
@@ -53,45 +53,49 @@ public class RandomString
 		// load the numeric symbols
 		for (int idx = 0; idx < 10; idx++)
 		{
-			numeric[idx] = (char) ('0' + idx);
-			hex[idx] = (char) ('0' + idx);
-			alphaNumeric[idx] = (char) ('0' + idx);
+			RandomString.numeric[idx] = (char) ('0' + idx);
+			RandomString.hex[idx] = (char) ('0' + idx);
+			RandomString.alphaNumeric[idx] = (char) ('0' + idx);
 		}
 
 		// load the alpha symbols
 		for (int idx = 0; idx < 26; idx++)
 		{
-			alpha[idx * 2] = (char) ('a' + idx);
-			alpha[(idx * 2) + 1] = (char) ('A' + idx);
-			alphaNumeric[(idx * 2) + 10] = (char) ('a' + idx);
-			alphaNumeric[(idx * 2) + 11] = (char) ('A' + idx);
+			RandomString.alpha[idx * 2] = (char) ('a' + idx);
+			RandomString.alpha[idx * 2 + 1] = (char) ('A' + idx);
+			RandomString.alphaNumeric[idx * 2 + 10] = (char) ('a' + idx);
+			RandomString.alphaNumeric[idx * 2 + 11] = (char) ('A' + idx);
 		}
 
 		// load the hex symbols
 		for (int idx = 0; idx < 6; idx++)
 		{
-			hex[idx + 10] = (char) ('A' + idx);
+			RandomString.hex[idx + 10] = (char) ('A' + idx);
 		}
 	}
 
 	private final Random random = new SecureRandom();
 
 	private final char[] buf;
-	private Type type;
+	private final Type type;
 
-	public RandomString(Type type, int length)
+	public RandomString(final Type type, final int length)
 	{
 		this.type = type;
 		if (length < 1)
+		{
 			throw new IllegalArgumentException("length < 1: " + length);
-		buf = new char[length];
+		}
+		this.buf = new char[length];
 	}
 
 	public String nextString()
 	{
-		for (int idx = 0; idx < buf.length; ++idx)
-			buf[idx] = type.getSymbols()[random.nextInt(type.getSymbols().length)];
-		return new String(buf);
+		for (int idx = 0; idx < this.buf.length; ++idx)
+		{
+			this.buf[idx] = this.type.getSymbols()[this.random.nextInt(this.type.getSymbols().length)];
+		}
+		return new String(this.buf);
 	}
 
 }

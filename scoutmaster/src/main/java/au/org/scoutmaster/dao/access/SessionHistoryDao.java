@@ -13,7 +13,7 @@ public class SessionHistoryDao extends JpaBaseDao<SessionHistory, Long> implemen
 		// inherit the default per request em.
 	}
 
-	public SessionHistoryDao(EntityManager em)
+	public SessionHistoryDao(final EntityManager em)
 	{
 		super(em);
 	}

@@ -19,14 +19,14 @@ public class Money
 
 	Money()
 	{
-		this.precision = defaultPrecision;
+		this.precision = Money.defaultPrecision;
 		this.fixedDoubleValue = 0.0;
 	}
 
 	public Money(final double dValue)
 	{
-		this.precision = defaultPrecision;
-		this.fixedDoubleValue = FixedDouble.Round(dValue, precision);
+		this.precision = Money.defaultPrecision;
+		this.fixedDoubleValue = FixedDouble.Round(dValue, this.precision);
 	}
 
 	public Money(final FixedDouble rhs)
@@ -37,14 +37,16 @@ public class Money
 
 	/**
 	 * Casts a string to a money value.
-	 * 
+	 *
 	 * @param value
 	 */
 	public Money(String amount)
 	{
 		if (amount == null || amount.trim().length() == 0)
+		{
 			amount = "0.00";
-		this.precision = defaultPrecision;
+		}
+		this.precision = Money.defaultPrecision;
 		// TODO internationalise this.
 		this.fixedDoubleValue = org.joda.money.Money.parse("AUD " + amount).getAmount().doubleValue();
 	}
@@ -56,12 +58,12 @@ public class Money
 
 	private double getFixedDoubleValue()
 	{
-		return fixedDoubleValue;
+		return this.fixedDoubleValue;
 	}
 
 	private int getPrecision()
 	{
-		return precision;
+		return this.precision;
 	}
 
 	public Money subtract(final Money rhs)
@@ -84,7 +86,7 @@ public class Money
 		return new Money(getFixedDoubleValue() * rhs);
 	}
 
-	public Money multiply(double rhs)
+	public Money multiply(final double rhs)
 	{
 		return new Money(getFixedDoubleValue() * rhs);
 	}
@@ -96,30 +98,32 @@ public class Money
 
 	public boolean equals(final Money rhs)
 	{
-		return rhs != null && (Math.abs(getFixedDoubleValue() - rhs.getFixedDoubleValue()) < HalfAPrecision());
+		return rhs != null && Math.abs(getFixedDoubleValue() - rhs.getFixedDoubleValue()) < HalfAPrecision();
 	}
 
+	@Override
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-	{ "HE_EQUALS_USE_HASHCODE" }, justification = "Explicit implementation of equals as above.")
+{ "HE_EQUALS_USE_HASHCODE" }, justification = "Explicit implementation of equals as above.")
 	public boolean equals(final Object rhs)
 	{
 		return rhs != null && equals((Money) rhs);
 	}
 
+	@Override
 	public int hashCode()
 	{
 		assert false : "You can't put money into a map/hashtable as a key.";
-		return 42; // any arbitrary constant will do
+	return 42; // any arbitrary constant will do
 	}
 
 	public boolean lessThan(final Money rhs)
 	{
-		return ((rhs.getFixedDoubleValue() - getFixedDoubleValue()) >= HalfAPrecision());
+		return rhs.getFixedDoubleValue() - getFixedDoubleValue() >= HalfAPrecision();
 	}
 
 	public boolean lessThan(final int rhs)
 	{
-		return ((rhs - getFixedDoubleValue()) >= HalfAPrecision());
+		return rhs - getFixedDoubleValue() >= HalfAPrecision();
 	}
 
 	public boolean greaterThan(final Money rhs)
@@ -130,14 +134,15 @@ public class Money
 
 	public boolean lessThanOrEqual(final Money rhs)
 	{
-		return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue());
+		return getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() < rhs.getFixedDoubleValue();
 	}
 
 	public boolean greaterThanOrEqual(final Money rhs)
 	{
-		return (getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() > rhs.getFixedDoubleValue());
+		return getFixedDoubleValue() == rhs.getFixedDoubleValue() || getFixedDoubleValue() > rhs.getFixedDoubleValue();
 	}
 
+	@Override
 	public String toString()
 	{
 		return FixedDouble.toString(getFixedDoubleValue(), getPrecision());
@@ -148,17 +153,17 @@ public class Money
 		return FixedDouble.HalfAPrecision(getPrecision());
 	}
 
-	public Money multiply(double lhs, final Money rhs)
+	public Money multiply(final double lhs, final Money rhs)
 	{
 		return new Money(lhs * rhs.getFixedDoubleValue());
 	}
 
-	public Money add(double lhs, final Money rhs)
+	public Money add(final double lhs, final Money rhs)
 	{
 		return new Money(lhs + rhs.getFixedDoubleValue());
 	}
 
-	public Money subtract(double lhs, final Money rhs)
+	public Money subtract(final double lhs, final Money rhs)
 	{
 		return new Money(lhs - rhs.getFixedDoubleValue());
 	}
@@ -166,12 +171,12 @@ public class Money
 	// returns the absolute value of the currency.
 	public Money abs(final Money val)
 	{
-		return (val.lessThan(0)) ? val.multiply(-1) : val;
+		return val.lessThan(0) ? val.multiply(-1) : val;
 	}
 
 	public static int getDefaultPrecision()
 	{
-		return defaultPrecision;
+		return Money.defaultPrecision;
 	}
 
 }

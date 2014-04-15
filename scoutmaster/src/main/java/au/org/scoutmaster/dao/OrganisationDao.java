@@ -18,15 +18,16 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 		// inherit the default per request em.
 	}
 
-	public OrganisationDao(EntityManager em)
+	public OrganisationDao(final EntityManager em)
 	{
 		super(em);
 	}
 
+	@Override
 	public JPAContainer<Organisation> createVaadinContainer()
 	{
 
-		JPAContainer<Organisation> contactContainer = super.createVaadinContainer();
+		final JPAContainer<Organisation> contactContainer = super.createVaadinContainer();
 		contactContainer.addNestedContainerProperty("location.street");
 		contactContainer.addNestedContainerProperty("location.city");
 		contactContainer.addNestedContainerProperty("location.state");
@@ -50,12 +51,14 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 	public Organisation findOurScoutGroup()
 	{
 		Organisation entity = null;
-		Query query = entityManager.createNamedQuery(Organisation.FIND_OUR_SCOUT_GROUP);
+		final Query query = this.entityManager.createNamedQuery(Organisation.FIND_OUR_SCOUT_GROUP);
 
 		@SuppressWarnings("unchecked")
-		List<Organisation> entities = query.getResultList();
+		final List<Organisation> entities = query.getResultList();
 		if (entities.size() > 0)
+		{
 			entity = entities.get(0);
+		}
 		return entity;
 
 	}

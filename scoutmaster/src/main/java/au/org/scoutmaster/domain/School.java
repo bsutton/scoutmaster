@@ -16,12 +16,12 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * A school in the Scout Groups catchment area.
- * 
+ *
  * @author bsutton
  *
  */
-@Entity(name="School")
-@Table(name="School")
+@Entity(name = "School")
+@Table(name = "School")
 @Access(AccessType.FIELD)
 public class School extends BaseEntity
 {
@@ -31,44 +31,43 @@ public class School extends BaseEntity
 	 * The name of the school
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String name;
-	
+
 	/**
 	 * A detailed description of the school. May be HTML.
 	 */
 	String description;
-	
+
 	/**
 	 * A list of the schools locations (if it has multiple campus'
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	List<Address> location = new ArrayList<>();
-	
+
 	/**
 	 * The schools principle
 	 */
-	@OneToOne(targetEntity=Contact.class)
+	@OneToOne(targetEntity = Contact.class)
 	Contact principle;
-	
+
 	/**
 	 * Advertising contact
 	 */
-	@OneToOne(targetEntity=Contact.class)
+	@OneToOne(targetEntity = Contact.class)
 	Contact advertisingContact;
-	
-	
-	/**
-	 * The list of youth affiliated with our group (this includes prospects) that attend the school.
-	 */
-	@OneToMany(cascade = CascadeType.ALL,targetEntity=Contact.class)
-	List<Contact> youth = new ArrayList<>();
 
+	/**
+	 * The list of youth affiliated with our group (this includes prospects)
+	 * that attend the school.
+	 */
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Contact.class)
+	List<Contact> youth = new ArrayList<>();
 
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 }

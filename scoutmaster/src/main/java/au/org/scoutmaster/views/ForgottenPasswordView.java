@@ -45,92 +45,92 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 
 	private final Button retrieveButton;
 
-	private VerticalLayout viewLayout;
+	private final VerticalLayout viewLayout;
 
-	private Label sentLabel;
+	private final Label sentLabel;
 
 	public ForgottenPasswordView()
 	{
 		setSizeFull();
 
 		// Create the user input field
-		emailAddress = new TextField("Email Address");
-		emailAddress.setWidth("300px");
-		emailAddress.setRequired(true);
-		emailAddress.setInputPrompt("Your email address.");
-		emailAddress.addValidator(new EmailValidator("Enter a valid email address."));
-		emailAddress.setInvalidAllowed(false);
+		this.emailAddress = new TextField("Email Address");
+		this.emailAddress.setWidth("300px");
+		this.emailAddress.setRequired(true);
+		this.emailAddress.setInputPrompt("Your email address.");
+		this.emailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+		this.emailAddress.setInvalidAllowed(false);
 
 		// Create login button
-		retrieveButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
-		retrieveButton.addStyleName(Reindeer.BUTTON_DEFAULT);
-		retrieveButton.setClickShortcut(KeyCode.ENTER);
+		this.retrieveButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
+		this.retrieveButton.addStyleName(Reindeer.BUTTON_DEFAULT);
+		this.retrieveButton.setClickShortcut(KeyCode.ENTER);
 
 		// Add both to a panel
-		VerticalLayout fields = new VerticalLayout(emailAddress, retrieveButton);
+		final VerticalLayout fields = new VerticalLayout(this.emailAddress, this.retrieveButton);
 		fields.setCaption("Enter your email address to reset your password. (e.g. test@test.com)");
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
-		sentLabel = new Label("<b>An email has been sent with details on resetting your password.</b>");
-		sentLabel.setContentMode(ContentMode.HTML);
-		fields.addComponent(sentLabel);
-		sentLabel.setVisible(false);
+		this.sentLabel = new Label("<b>An email has been sent with details on resetting your password.</b>");
+		this.sentLabel.setContentMode(ContentMode.HTML);
+		fields.addComponent(this.sentLabel);
+		this.sentLabel.setVisible(false);
 
-
-		viewLayout = new VerticalLayout(fields);
-		viewLayout.setSizeFull();
-		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
-		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
-		setCompositionRoot(viewLayout);
+		this.viewLayout = new VerticalLayout(fields);
+		this.viewLayout.setSizeFull();
+		this.viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
+		this.viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
+		setCompositionRoot(this.viewLayout);
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		emailAddress.focus();
+		this.emailAddress.focus();
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 		// just in case the user goes around a second time.
-		sentLabel.setVisible(false);
-		String emailAddressValue = emailAddress.getValue();
+		this.sentLabel.setVisible(false);
+		final String emailAddressValue = this.emailAddress.getValue();
 
-		UserDao userDao = new DaoFactory().getUserDao();
-		User user = userDao.findByEmail(emailAddressValue);
+		final UserDao userDao = new DaoFactory().getUserDao();
+		final User user = userDao.findByEmail(emailAddressValue);
 		if (user == null)
 		{
 			SMNotification.show("The entered email address does not exist.", Type.WARNING_MESSAGE);
 		}
 		else
 		{
-			SendEmailWorkingDialog dialog = new SendEmailWorkingDialog("Sending",
+			final SendEmailWorkingDialog dialog = new SendEmailWorkingDialog("Sending",
 					"Sending a reset link to you via email.<br> It should arrive in a few moments.");
-			SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
-			SMTPServerSettings settings = settingsDao.findSettings();
+			final SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
+			final SMTPServerSettings settings = settingsDao.findSettings();
 
 			dialog.setFrom(settings.getFromEmailAddress());
 			dialog.setSubject("[Scoutmaster] Password reset request");
 
-			ForgottenPasswordResetDao forgottenPasswordResetDao = new DaoFactory().getForgottenPasswordResetDao();
-			ForgottenPasswordReset reset = forgottenPasswordResetDao.createReset(emailAddressValue);
+			final ForgottenPasswordResetDao forgottenPasswordResetDao = new DaoFactory().getForgottenPasswordResetDao();
+			final ForgottenPasswordReset reset = forgottenPasswordResetDao.createReset(emailAddressValue);
 
 			forgottenPasswordResetDao.persist(reset);
 
 			String url = VaadinServletService.getCurrentServletRequest().getRequestURL().toString();
-			
-			// The click event seesm to come from a vaading PUSH service so we need to remove the /PUSH/ from the path.
+
+			// The click event seesm to come from a vaading PUSH service so we
+			// need to remove the /PUSH/ from the path.
 			if (url.contains("/PUSH"))
 			{
-				int pushStartIndex = url.indexOf("/PUSH/");
-				int pushEndIndex = pushStartIndex + 6;
+				final int pushStartIndex = url.indexOf("/PUSH/");
+				final int pushEndIndex = pushStartIndex + 6;
 				url = url.substring(0, pushStartIndex) + url.substring(pushEndIndex);
 			}
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			sb.append("So you forgot your password, surely not :))\n\n");
 			sb.append("Use the following link within the next 24 hours to reset your password:\n");
 			sb.append(url + "/?resetid=" + reset.getResetid() + "#!" + ResetPasswordView.NAME);
@@ -145,6 +145,6 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 	@Override
 	public void complete()
 	{
-		sentLabel.setVisible(true);
+		this.sentLabel.setVisible(true);
 	}
 }

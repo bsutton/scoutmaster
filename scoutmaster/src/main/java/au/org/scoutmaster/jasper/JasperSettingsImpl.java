@@ -25,11 +25,24 @@ public class JasperSettingsImpl implements JasperSettings
 		return VaadinSession.getCurrent().getService().getBaseDirectory();
 	}
 
-	
 	@Override
-	public File getReportFile(String reportName)
+	public File getReportFile(final String reportName)
 	{
 		return new File(new File(getDocumentBase(), getReportDir()), reportName);
+	}
+
+	@Override
+	public String getHeaderFooterTemplateName()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsername()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

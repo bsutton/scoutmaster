@@ -28,22 +28,22 @@ import com.vaadin.ui.Notification.Type;
 
 public class ImportTask extends ProgressBarTask<ImportItemStatus>
 {
-	private Logger logger = LogManager.getLogger(ImportTask.class);
+	private final Logger logger = LogManager.getLogger(ImportTask.class);
 
-	private File tempFile;
-	private Class<? extends Importable> clazz;
-	private Hashtable<String, FormFieldImpl> fieldMap;
+	private final File tempFile;
+	private final Class<? extends Importable> clazz;
+	private final Hashtable<String, FormFieldImpl> fieldMap;
 
 	private EntityManager em;
 
-	ImportTask(ProgressTaskListener<ImportItemStatus> listener, File tempFile, Class<? extends Importable> clazz,
-			Hashtable<String, FormFieldImpl> fieldMap)
-	{
+	ImportTask(final ProgressTaskListener<ImportItemStatus> listener, final File tempFile,
+			final Class<? extends Importable> clazz, final Hashtable<String, FormFieldImpl> fieldMap)
+			{
 		super(listener);
 		this.tempFile = tempFile;
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
-	}
+			}
 
 	@Override
 	public void run()
@@ -51,34 +51,38 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 		FileReader reader = null;
 		try
 		{
-			reader = new FileReader(tempFile);
+			reader = new FileReader(this.tempFile);
 
-			int rows = buildContainerFromCSV(clazz, reader);
+			final int rows = buildContainerFromCSV(this.clazz, reader);
 
 			reader.close();
-			if (tempFile.exists())
-				tempFile.delete();
+			if (this.tempFile.exists())
+			{
+				this.tempFile.delete();
+			}
 
 			super.taskComplete(rows);
 
 		}
 		catch (IOException | InstantiationException | IllegalAccessException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			SMNotification.show(e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		finally
 		{
 			if (reader != null)
+			{
 				try
 				{
 					reader.close();
 				}
-				catch (IOException e)
+				catch (final IOException e)
 				{
-					logger.error(e, e);
+					this.logger.error(e, e);
 					SMNotification.show(e.getMessage(), Type.ERROR_MESSAGE);
 				}
+			}
 		}
 
 	}
@@ -86,22 +90,22 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	/**
 	 * Uses http://opencsv.sourceforge.net/ to read the entire contents of a CSV
 	 * file, and creates an IndexedContainer from it
-	 * 
+	 *
 	 * @param reader
 	 * @return
 	 * @throws IOException
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	protected <T extends Importable> int buildContainerFromCSV(Class<T> entityClass, Reader reader) throws IOException,
-			InstantiationException, IllegalAccessException
+	protected <T extends Importable> int buildContainerFromCSV(final Class<T> entityClass, final Reader reader)
+			throws IOException, InstantiationException, IllegalAccessException
 	{
-		JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, em);
+		final JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, this.em);
 
 		CSVReader csvReader = null;
 		int count = 0;
 
-		try (Transaction t = new Transaction(em))
+		try (Transaction t = new Transaction(this.em))
 		{
 			csvReader = new CSVReader(reader);
 
@@ -117,35 +121,37 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 				{
 					try
 					{
-						addRow(container, entityClass, columnHeaders, record, fieldMap);
+						addRow(container, entityClass, columnHeaders, record, this.fieldMap);
 						++count;
 						super.taskProgress(count, -1, null);
 					}
-					catch (ConstraintViolationException e)
+					catch (final ConstraintViolationException e)
 					{
-						logger.warn(e, e);
-						ImportItemStatus status = new ImportItemStatus(count, e);
+						this.logger.warn(e, e);
+						final ImportItemStatus status = new ImportItemStatus(count, e);
 						super.taskItemError(status);
 					}
-					catch (Exception e)
+					catch (final Exception e)
 					{
-						logger.warn(e, e);
-						ImportItemStatus status = new ImportItemStatus(count, e);
+						this.logger.warn(e, e);
+						final ImportItemStatus status = new ImportItemStatus(count, e);
 						super.taskItemError(status);
 					}
 				}
 			}
 			t.commit();
 		}
-		catch (Throwable e)
+		catch (final Throwable e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			SMNotification.show("Import failed:", e.getMessage(), Type.ERROR_MESSAGE);
 		}
 		finally
 		{
 			if (csvReader != null)
+			{
 				csvReader.close();
+			}
 		}
 		return count;
 	}
@@ -154,7 +160,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 * Adds an item to the given container, assuming each field maps to it's
 	 * corresponding property id. Again, note that I am assuming that the field
 	 * is a string.
-	 * 
+	 *
 	 * @param container
 	 * @param entityClass
 	 * @param csvHeaders
@@ -162,17 +168,18 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private <T> void addRow(JPAContainer<T> container, Class<T> entityClass, String[] csvHeaders, String[] fieldValues,
-			Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
+	private <T> void addRow(final JPAContainer<T> container, final Class<T> entityClass, final String[] csvHeaders,
+			final String[] fieldValues, final Hashtable<String, FormFieldImpl> fieldMaps)
+			throws InstantiationException, IllegalAccessException
 	{
-		EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
+		final EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 
-		EntityAdaptor<T> adaptor = EntityAdaptor.create(entityClass);
+		final EntityAdaptor<T> adaptor = EntityAdaptor.create(entityClass);
 
-		T entity = entityItem.getEntity();
+		final T entity = entityItem.getEntity();
 
-		adaptor.save(em, entity, csvHeaders, fieldValues, fieldMaps);
+		adaptor.save(this.em, entity, csvHeaders, fieldValues, fieldMaps);
 
-		em.merge(entity);
+		this.em.merge(entity);
 	}
 }

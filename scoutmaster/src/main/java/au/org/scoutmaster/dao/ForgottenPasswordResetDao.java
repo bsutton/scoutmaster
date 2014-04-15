@@ -17,58 +17,63 @@ import au.org.scoutmaster.util.RandomString;
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements Dao<ForgottenPasswordReset, Long>
+public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements
+		Dao<ForgottenPasswordReset, Long>
 {
 
 	public ForgottenPasswordResetDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public ForgottenPasswordResetDao(EntityManager em)
+
+	public ForgottenPasswordResetDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-	
 	@SuppressWarnings("unchecked")
-	boolean hasExpired(String resetid)
+	boolean hasExpired(final String resetid)
 	{
 		boolean hasExpired = true;
 
 		List<ForgottenPasswordReset> resultReset = null;
-		EntityManager em = EntityManagerProvider.getEntityManager();
+		final EntityManager em = EntityManagerProvider.getEntityManager();
 
-		Query query = em.createNamedQuery("ForgottenPasswordReset.getByResetid");
+		final Query query = em.createNamedQuery("ForgottenPasswordReset.getByResetid");
 		query.setParameter("resetid", resetid);
 		resultReset = query.getResultList();
 		if (!resultReset.isEmpty())
 		{
-			ForgottenPasswordReset row = resultReset.get(0);
-			DateTime expires = row.getExpires();
+			final ForgottenPasswordReset row = resultReset.get(0);
+			final DateTime expires = row.getExpires();
 			if (expires.isAfterNow())
+			{
 				hasExpired = false;
+			}
 		}
 		return hasExpired;
 
 	}
-	public ForgottenPasswordReset createReset(String emailAddressValue)
+
+	public ForgottenPasswordReset createReset(final String emailAddressValue)
 	{
 		Preconditions.checkArgument(emailAddressValue != null, "You must pass a valid email address.");
-		UserDao userDao = new DaoFactory().getUserDao();
-		User user = userDao.findByEmail(emailAddressValue);
-		
+		final UserDao userDao = new DaoFactory().getUserDao();
+		final User user = userDao.findByEmail(emailAddressValue);
+
 		Preconditions.checkArgument(user != null, "The email address: " + emailAddressValue + " does not exist");
-		RandomString rs = new RandomString(RandomString.Type.ALPHANUMERIC, 32);
-		String resetid = rs.nextString();
-		
-		ForgottenPasswordReset reset = new ForgottenPasswordReset();
-		DateTime now = new DateTime();
+		final RandomString rs = new RandomString(RandomString.Type.ALPHANUMERIC, 32);
+		final String resetid = rs.nextString();
+
+		final ForgottenPasswordReset reset = new ForgottenPasswordReset();
+		final DateTime now = new DateTime();
 		now.plusDays(1);
 		reset.setExpires(now);
 		reset.setResetid(resetid);
-		
+
 		return reset;
 	}
+
 	@Override
 	public JPAContainer<ForgottenPasswordReset> createVaadinContainer()
 	{

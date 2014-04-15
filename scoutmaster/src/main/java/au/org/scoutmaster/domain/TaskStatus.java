@@ -12,16 +12,15 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Activity are interactions with a Contact, Household or Organisation.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="TaskStatus")
-@Table(name="TaskStatus")
+@Entity(name = "TaskStatus")
+@Table(name = "TaskStatus")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = TaskStatus.FIND_BY_NAME, query = "SELECT taskstatus FROM TaskStatus taskstatus where taskstatus.name = :name"), })
+		{ @NamedQuery(name = TaskStatus.FIND_BY_NAME, query = "SELECT taskstatus FROM TaskStatus taskstatus where taskstatus.name = :name"), })
 public class TaskStatus extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -54,35 +53,37 @@ public class TaskStatus extends BaseEntity
 
 	}
 
-	public TaskStatus(String name, String description)
+	public TaskStatus(final String name, final String description)
 	{
-		this.setName(name);
-		this.setDescription(description);
+		setName(name);
+		setDescription(description);
 
 	}
 
+	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 	}
 
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return name;
+		return this.name;
 	}
 }

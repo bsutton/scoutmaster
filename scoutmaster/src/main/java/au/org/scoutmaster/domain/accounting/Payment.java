@@ -16,13 +16,13 @@ import javax.persistence.Table;
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
-@Table(name="Payment")
+@Table(name = "Payment")
 @Access(AccessType.FIELD)
 public class Payment extends BaseEntity
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -34,7 +34,7 @@ public class Payment extends BaseEntity
 	/**
 	 * The set of invoices this payment applies to.
 	 */
-	@ManyToMany(targetEntity=Invoice.class)
+	@ManyToMany(targetEntity = Invoice.class)
 	List<Invoice> invoices;
 
 	/**
@@ -42,13 +42,11 @@ public class Payment extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) 
-			})
-
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) })
 	MoneyWithTax amount;
 
 	/**
@@ -63,9 +61,10 @@ public class Payment extends BaseEntity
 	String note;
 
 	@Override
-	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = {"NP_UNWRITTEN_FIELD","UWF_UNWRITTEN_FIELD"}, justification = "JPA injection")
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
+	{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
 	public String getName()
 	{
-		return paymentDate.toString() + note;
+		return this.paymentDate.toString() + this.note;
 	}
 }

@@ -16,15 +16,11 @@ public class NoteDao extends JpaBaseDao<Note, Long>
 	{
 		return super.createVaadinContainer();
 	}
-	
-	
+
 	@SuppressWarnings("unchecked")
-	public List<Note> findNoteBySubject(String subject)
+	public List<Note> findNoteBySubject(final String subject)
 	{
 		return (List<Note>) super.findOneByAttribute(Note_.subject, subject);
 	}
-
-	
-	
 
 }

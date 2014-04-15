@@ -15,8 +15,8 @@ import org.joda.time.DateTime;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
-import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.Age;
+import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Note;
@@ -33,47 +33,47 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 
 	public ContactDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public ContactDao(EntityManager em)
+
+	public ContactDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-	
 	@SuppressWarnings("unchecked")
-	public List<Contact> findByName(String firstname, String lastname)
+	public List<Contact> findByName(final String firstname, final String lastname)
 	{
-		Query query = entityManager.createNamedQuery(Contact.FIND_BY_NAME);
+		final Query query = this.entityManager.createNamedQuery(Contact.FIND_BY_NAME);
 		query.setParameter("firstname", firstname);
 		query.setParameter("lastname", lastname);
-		List<Contact> resultContacts = query.getResultList();
+		final List<Contact> resultContacts = query.getResultList();
 		return resultContacts;
 	}
 
 	/**
 	 * Find all contacts that have an email address
+	 * 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Contact> findByHasEmail()
 	{
-		Query query = entityManager.createNamedQuery(Contact.FIND_BY_HAS_EMAIL);
-		List<Contact> resultContacts = query.getResultList();
+		final Query query = this.entityManager.createNamedQuery(Contact.FIND_BY_HAS_EMAIL);
+		final List<Contact> resultContacts = query.getResultList();
 		return resultContacts;
 	}
 
-	
-	public Long getAge(Contact contact)
+	public Long getAge(final Contact contact)
 	{
 		long age = 0;
 		if (contact.getBirthDate() != null)
 		{
-			Calendar cal1 = new GregorianCalendar();
-			Calendar cal2 = new GregorianCalendar();
+			final Calendar cal1 = new GregorianCalendar();
+			final Calendar cal2 = new GregorianCalendar();
 			int factor = 0;
-			Date date1 = contact.getBirthDate();
-			Date date2 = new Date(new java.util.Date().getTime());
+			final Date date1 = contact.getBirthDate();
+			final Date date2 = new Date(new java.util.Date().getTime());
 			cal1.setTime(date1);
 			cal2.setTime(date2);
 			if (cal2.get(Calendar.DAY_OF_YEAR) < cal1.get(Calendar.DAY_OF_YEAR))
@@ -85,41 +85,41 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		return age;
 	}
 
-	public void addNote(Contact contact, String subject, String body)
+	public void addNote(final Contact contact, final String subject, final String body)
 	{
-		Note note = new Note(subject, body);
+		final Note note = new Note(subject, body);
 		// note.setContact(this);
 		contact.getNotes().add(note);
 	}
 
-	public void attachTag(Contact contact, Tag tag)
+	public void attachTag(final Contact contact, final Tag tag)
 	{
 		contact.getTags().add(tag);
 		tag.getContacts().add(contact);
 	}
-	
-	public void addRelationship(Contact contact, Relationship child)
+
+	public void addRelationship(final Contact contact, final Relationship child)
 	{
 		contact.getLHSRelationships().add(child);
-		
+
 	}
-	public void addCommunication(Contact contact, CommunicationLog communication)
+
+	public void addCommunication(final Contact contact, final CommunicationLog communication)
 	{
 		contact.getCommunicationsLog().add(communication);
 
 	}
 
-
 	/**
-	 * Detaches the tag from this contact. The tag entity is not actually deleted as
-	 * it may be used by other entities.
-	 *  
+	 * Detaches the tag from this contact. The tag entity is not actually
+	 * deleted as it may be used by other entities.
+	 * 
 	 * @param tagName
 	 */
-	public void detachTag(Contact contact, String tagName)
+	public void detachTag(final Contact contact, final String tagName)
 	{
 		Tag tagToRemove = null;
-		for (Tag tag : contact.getTags())
+		for (final Tag tag : contact.getTags())
 		{
 			if (tag.isTag(tagName))
 			{
@@ -127,23 +127,27 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 			}
 		}
 		if (tagToRemove != null)
+		{
 			detachTag(contact, tagToRemove);
+		}
 		else
-			logger.warn("Attempt to detach non-existant tag. tagName={}", tagName);
+		{
+			ContactDao.logger.warn("Attempt to detach non-existant tag. tagName={}", tagName);
+		}
 	}
 
-	public void detachTag(Contact contact, Tag tag)
+	public void detachTag(final Contact contact, final Tag tag)
 	{
 		if (tag != null)
+		{
 			contact.getTags().remove(tag);
+		}
 	}
 
-
-
-	public Note getNote(Contact contact, String noteSubject)
+	public Note getNote(final Contact contact, final String noteSubject)
 	{
 		Note found = null;
-		for (Note note : contact.getNotes())
+		for (final Note note : contact.getNotes())
 		{
 			if (note.getSubject().equals(noteSubject))
 			{
@@ -154,35 +158,40 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		return found;
 
 	}
-	public boolean hasTag(Contact contact, Tag tag)
+
+	public boolean hasTag(final Contact contact, final Tag tag)
 	{
 		boolean hasTag = false;
-		for (Tag aTag : contact.getTags())
+		for (final Tag aTag : contact.getTags())
 		{
 			if (aTag.equals(tag))
 			{
 				hasTag = true;
 				break;
 			}
-				
+
 		}
 		return hasTag;
 	}
-	public Age getAge(java.util.Date birthDate)
+
+	public Age getAge(final java.util.Date birthDate)
 	{
-		DateTime date = new DateTime(birthDate);
+		final DateTime date = new DateTime(birthDate);
 		return new Age(date);
 	}
-	public SectionType getSectionEligibilty(java.util.Date birthDate)
+
+	public SectionType getSectionEligibilty(final java.util.Date birthDate)
 	{
-		DateTime date = new DateTime(new DateMidnight(birthDate));
-		
-		SectionTypeDao daoSectionType = new SectionTypeDao();
+		final DateTime date = new DateTime(new DateMidnight(birthDate));
+
+		final SectionTypeDao daoSectionType = new SectionTypeDao();
 		return daoSectionType.getEligibleSection(date);
 	}
+
+	@Override
 	public JPAContainer<Contact> createVaadinContainer()
 	{
-		JPAContainer<Contact> contactContainer = super.createVaadinContainer();
+		final JPAContainer<Contact> contactContainer = super.createVaadinContainer();
 		contactContainer.addNestedContainerProperty("phone1.phoneNo");
 		contactContainer.addNestedContainerProperty("phone1.primaryPhone");
 		contactContainer.addNestedContainerProperty("phone1.phoneType");
@@ -199,10 +208,10 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		contactContainer.addNestedContainerProperty("address.city");
 		contactContainer.addNestedContainerProperty("address.postcode");
 		contactContainer.addNestedContainerProperty("address.state");
-		
+
 		contactContainer.addNestedContainerProperty("groupRole.name");
 		contactContainer.addNestedContainerProperty(new Path(Contact_.section, Section_.name).getName());
-		
+
 		return contactContainer;
 	}
 

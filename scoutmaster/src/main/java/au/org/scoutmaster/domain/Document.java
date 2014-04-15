@@ -15,24 +15,22 @@ import au.org.scoutmaster.domain.access.User;
 
 /**
  * Used to log a variety of activities
- * 
+ *
  * @author bsutton
  *
  */
 @Entity
-@Table(name="Document")
+@Table(name = "Document")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-})
-
+		{})
 public class Document extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(targetEntity=User.class)
+	@ManyToOne(targetEntity = User.class)
 	private User addedBy;
-	
+
 	/**
 	 * A short description of the document
 	 */
@@ -51,27 +49,24 @@ public class Document extends BaseEntity implements CrudEntity
 	@Lob
 	private byte[] content;
 
-
 	private String mimeType;
-
 
 	public User getAddedBy()
 	{
-		return addedBy;
+		return this.addedBy;
 	}
 
-	public void setAddedBy(User addedBy)
+	public void setAddedBy(final User addedBy)
 	{
 		this.addedBy = addedBy;
 	}
 
-
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
@@ -79,41 +74,38 @@ public class Document extends BaseEntity implements CrudEntity
 	@Override
 	public String getName()
 	{
-		return filename;
+		return this.filename;
 	}
 
 	public String getFilename()
 	{
-		return filename;
+		return this.filename;
 	}
 
-	public void setFilename(String filename)
+	public void setFilename(final String filename)
 	{
 		this.filename = filename;
 	}
 
 	public byte[] getContent()
 	{
-		return content;
+		return this.content;
 	}
 
-	public void setContent(byte[] content)
+	public void setContent(final byte[] content)
 	{
 		this.content = content;
 	}
 
-
-	public void setMimeType(String mimeType)
+	public void setMimeType(final String mimeType)
 	{
 		this.mimeType = mimeType;
-		
+
 	}
 
 	public String getMimeType()
 	{
-		return mimeType;
+		return this.mimeType;
 	}
 
-	
-	
 }

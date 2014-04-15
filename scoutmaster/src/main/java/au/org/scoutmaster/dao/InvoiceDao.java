@@ -16,7 +16,7 @@ public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice
 		// inherit the default per request em.
 	}
 
-	public InvoiceDao(EntityManager em)
+	public InvoiceDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -31,7 +31,7 @@ public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice
 	{
 		Long nextCredtiNote = -1L;
 
-		Long highestNo = findHighestNo();
+		final Long highestNo = findHighestNo();
 		nextCredtiNote = highestNo + 1;
 
 		return nextCredtiNote;
@@ -40,7 +40,7 @@ public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice
 
 	public Long findHighestNo()
 	{
-		Query query = entityManager.createQuery("select max(i.InvoiceNumber) from Invoice i", Integer.class);
+		final Query query = this.entityManager.createQuery("select max(i.InvoiceNumber) from Invoice i", Integer.class);
 		return (Long) query.getSingleResult();
 	}
 }

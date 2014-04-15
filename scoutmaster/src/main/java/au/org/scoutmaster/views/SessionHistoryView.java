@@ -25,7 +25,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Session History", path="Admin.Security")
+@Menu(display = "Session History", path = "Admin.Security")
 public class SessionHistoryView extends BaseCrudView<SessionHistory> implements View, Selected<SessionHistory>
 {
 
@@ -37,17 +37,18 @@ public class SessionHistoryView extends BaseCrudView<SessionHistory> implements 
 	public static final String NAME = "SessionHistory";
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<SessionHistory> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<SessionHistory> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		SMMultiColumnFormLayout<SessionHistory> overviewForm = new SMMultiColumnFormLayout<SessionHistory>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<SessionHistory> overviewForm = new SMMultiColumnFormLayout<SessionHistory>(1,
+				this.fieldGroup);
 		overviewForm.setColumnLabelWidth(0, 70);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
-		
+
 		overviewForm.bindTextField("User", new Path(SessionHistory_.user, User_.username).getName());
 		overviewForm.newLine();
 		overviewForm.bindDateField("Start Time", SessionHistory_.start, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
@@ -62,28 +63,30 @@ public class SessionHistoryView extends BaseCrudView<SessionHistory> implements 
 		return layout;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		new DaoFactory();
-		JPAContainer<SessionHistory> container = DaoFactory.getGenericDao(SessionHistory.class).createVaadinContainer();
-		container.sort(new String[] {SessionHistory_.start.getName()},new boolean[] {false});
+		final JPAContainer<SessionHistory> container = DaoFactory.getGenericDao(SessionHistory.class)
+				.createVaadinContainer();
+		container.sort(new String[]
+		{ SessionHistory_.start.getName() }, new boolean[]
+		{ false });
 
-		Builder<SessionHistory> builder = new HeadingPropertySet.Builder<SessionHistory>();
+		final Builder<SessionHistory> builder = new HeadingPropertySet.Builder<SessionHistory>();
 		builder.addColumn("User", SessionHistory_.user).addColumn("Start Time", SessionHistory_.start)
-				.addColumn("End Time", SessionHistory_.end);
+		.addColumn("End Time", SessionHistory_.end);
 
 		super.init(SessionHistory.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(SessionHistory_.user.getName(), filterString, true, false)
-		, new SimpleStringFilter(SessionHistory_.start.getName(), filterString, true, false)
-		, new SimpleStringFilter(SessionHistory_.end.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(SessionHistory_.user.getName(), filterString, true, false),
+				new SimpleStringFilter(SessionHistory_.start.getName(), filterString, true, false),
+				new SimpleStringFilter(SessionHistory_.end.getName(), filterString, true, false));
 	}
 
 	@Override

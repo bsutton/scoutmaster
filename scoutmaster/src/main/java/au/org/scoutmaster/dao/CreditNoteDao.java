@@ -16,7 +16,7 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 		// inherit the default per request em.
 	}
 
-	public CreditNoteDao(EntityManager em)
+	public CreditNoteDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -31,7 +31,7 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 	{
 		Long nextCredtiNote = -1L;
 
-		Long highestNo = findHighestNo();
+		final Long highestNo = findHighestNo();
 		nextCredtiNote = highestNo + 1;
 
 		return nextCredtiNote;
@@ -40,7 +40,8 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 
 	public Long findHighestNo()
 	{
-		Query query = entityManager.createQuery("select max(cn.creditNoteNumber) from CreditNote cn", Integer.class);
+		final Query query = this.entityManager.createQuery("select max(cn.creditNoteNumber) from CreditNote cn",
+				Integer.class);
 		return (Long) query.getSingleResult();
 	}
 }

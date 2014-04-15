@@ -10,33 +10,36 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.views.Selected;
 
-
 public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFormLayout<E>
 {
 	private static final long serialVersionUID = 1L;
 
-	public SMMultiColumnFormLayout(int columns, ValidatingFieldGroup<E> fieldGroup)
+	public SMMultiColumnFormLayout(final int columns, final ValidatingFieldGroup<E> fieldGroup)
 	{
 		super(columns, fieldGroup);
 	}
-	
-	protected FormHelper<E> getFormHelper(MultiColumnFormLayout<E> layout, ValidatingFieldGroup<E> fieldGroup)
+
+	@Override
+	protected FormHelper<E> getFormHelper(final MultiColumnFormLayout<E> layout,
+			final ValidatingFieldGroup<E> fieldGroup)
 	{
 		return new SMFormHelper<>(layout, fieldGroup);
 	}
 
-
-	public <L> TokenField bindTagField(Selected<E> selected, String fieldLabel, SetAttribute<E, L> entityField)
+	public <L> TokenField bindTagField(final Selected<E> selected, final String fieldLabel,
+			final SetAttribute<E, L> entityField)
 	{
-		TokenField field = ((SMFormHelper<E>)getFormHelper()).bindTagField(this, super.getFieldGroup(), selected, fieldLabel, entityField);
-		this.getFieldList().add(field);
+		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(),
+				selected, fieldLabel, entityField);
+		getFieldList().add(field);
 		return field;
 	}
 
-	public <L> TokenField bindTokenField(Selected<E> selected, String fieldLabel, String fieldName)
+	public <L> TokenField bindTokenField(final Selected<E> selected, final String fieldLabel, final String fieldName)
 	{
-		TokenField field = ((SMFormHelper<E>)getFormHelper()).bindTagField(this, super.getFieldGroup(), selected, fieldLabel, fieldName);
-		this.getFieldList().add(field);
+		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(),
+				selected, fieldLabel, fieldName);
+		getFieldList().add(field);
 		return field;
 	}
 }

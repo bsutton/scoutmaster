@@ -8,9 +8,9 @@ import com.vaadin.ui.Label;
 public class SplitTagField<T extends BaseEntity> extends TagField implements SplitField
 {
 	private static final long serialVersionUID = 7753660388792217050L;
-	private Label label;
+	private final Label label;
 
-	public SplitTagField(String fieldLabel, boolean readonly)
+	public SplitTagField(final String fieldLabel, final boolean readonly)
 	{
 		super(null, readonly);
 		this.label = new Label(fieldLabel);
@@ -19,29 +19,29 @@ public class SplitTagField<T extends BaseEntity> extends TagField implements Spl
 	}
 
 	@Override
-	public void setVisible(boolean visible)
+	public void setVisible(final boolean visible)
 	{
-		label.setVisible(visible);
+		this.label.setVisible(visible);
 		super.setVisible(visible);
 	}
 
 	@Override
 	public Label getLabel()
 	{
-		return label;
+		return this.label;
 	}
 
 	@Override
 	public String getCaption()
 	{
-		return label.getValue();
+		return this.label.getValue();
 	}
-	
+
 	@Override
 	public void hideLabel()
 	{
 		setCaption(null);
-		
+
 	}
 
 }

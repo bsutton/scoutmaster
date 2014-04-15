@@ -8,9 +8,9 @@ import com.vaadin.ui.Label;
 public class SplitContactTokenField<T extends BaseEntity> extends ContactTokenField<T> implements SplitField
 {
 	private static final long serialVersionUID = 7753660388792217050L;
-	private Label label;
+	private final Label label;
 
-	public SplitContactTokenField(String fieldLabel)
+	public SplitContactTokenField(final String fieldLabel)
 	{
 		super(null);
 		this.label = new Label(fieldLabel);
@@ -19,29 +19,29 @@ public class SplitContactTokenField<T extends BaseEntity> extends ContactTokenFi
 	}
 
 	@Override
-	public void setVisible(boolean visible)
+	public void setVisible(final boolean visible)
 	{
-		label.setVisible(visible);
+		this.label.setVisible(visible);
 		super.setVisible(visible);
 	}
 
 	@Override
 	public Label getLabel()
 	{
-		return label;
+		return this.label;
 	}
 
 	@Override
 	public String getCaption()
 	{
-		return label.getValue();
+		return this.label.getValue();
 	}
-	
+
 	@Override
 	public void hideLabel()
 	{
 		setCaption(null);
-		
+
 	}
 
 }

@@ -20,14 +20,14 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
-public class ConfirmRaffleDetails  implements WizardStep
+public class ConfirmRaffleDetails implements WizardStep
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(ConfirmRaffleDetails.class);
 
-	private RaffleBookImportWizardView setupWizardView;
+	private final RaffleBookImportWizardView setupWizardView;
 
-	public ConfirmRaffleDetails(RaffleBookImportWizardView setupWizardView)
+	public ConfirmRaffleDetails(final RaffleBookImportWizardView setupWizardView)
 	{
 		this.setupWizardView = setupWizardView;
 	}
@@ -38,32 +38,29 @@ public class ConfirmRaffleDetails  implements WizardStep
 		return "Confirm Details";
 	}
 
-
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		Label label = new Label("<h1>Confirm the Raffle has been setup correctly.</h1>",
-				ContentMode.HTML);
+		final Label label = new Label("<h1>Confirm the Raffle has been setup correctly.</h1>", ContentMode.HTML);
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);
 
-		
-		Raffle raffle = setupWizardView.getRaffle();
-		ValidatingFieldGroup<Raffle> fieldGroup = new ValidatingFieldGroup<Raffle>(Raffle.class);
-		
-		RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+		final Raffle raffle = this.setupWizardView.getRaffle();
+		final ValidatingFieldGroup<Raffle> fieldGroup = new ValidatingFieldGroup<Raffle>(Raffle.class);
+
+		final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 		// we are going to manipulate the event on a different thread.
 		EntityManagerProvider.detach(raffle);
-		
-		JPAContainer<Raffle> container = daoRaffle.createVaadinContainer();
-		EntityItem<Raffle> entityItem = container.createEntityItem(raffle);
-		
+
+		final JPAContainer<Raffle> container = daoRaffle.createVaadinContainer();
+		final EntityItem<Raffle> entityItem = container.createEntityItem(raffle);
+
 		fieldGroup.setItemDataSource(entityItem);
-		
-		SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<>(1,  fieldGroup);
+
+		final SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<>(1, fieldGroup);
 		overviewForm.setWidth("600px");
 		overviewForm.setColumnFieldWidth(0, 400);
 
@@ -75,7 +72,7 @@ public class ConfirmRaffleDetails  implements WizardStep
 		overviewForm.bindTextField("Tickets per Book", Raffle_.ticketsPerBook).setReadOnly(true);
 		overviewForm.bindTextField("Sales Price per Ticket", Raffle_.salePricePerTicket).setReadOnly(true);
 		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6).setReadOnly(true);
-		
+
 		layout.addComponent(overviewForm);
 
 		return layout;

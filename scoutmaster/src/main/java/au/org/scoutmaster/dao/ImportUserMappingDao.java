@@ -13,7 +13,6 @@ import au.org.scoutmaster.domain.ImportUserMapping;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
-
 public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> implements Dao<ImportUserMapping, Long>
 {
 	@SuppressWarnings("unused")
@@ -21,35 +20,36 @@ public class ImportUserMappingDao extends JpaBaseDao<ImportUserMapping, Long> im
 
 	public ImportUserMappingDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public ImportUserMappingDao(EntityManager em)
+
+	public ImportUserMappingDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-
-	public List<ImportUserMapping> findByName(String name)
+	public List<ImportUserMapping> findByName(final String name)
 	{
 		return super.findListBySingleParameter(ImportUserMapping.FIND_BY_NAME, "name", name);
 	}
-	
-	public void addColumnFieldMapping(ImportUserMapping importMapping, ImportColumnFieldMapping columnMapping)
+
+	public void addColumnFieldMapping(final ImportUserMapping importMapping,
+			final ImportColumnFieldMapping columnMapping)
 	{
 		columnMapping.setUserMapping(importMapping);
 		importMapping.getColumnFieldMappings().add(columnMapping);
 	}
 
-	public void clearMappings(ImportUserMapping importMapping)
+	public void clearMappings(final ImportUserMapping importMapping)
 	{
 		importMapping.getColumnFieldMappings().clear();
 
 	}
+
 	@Override
 	public JPAContainer<ImportUserMapping> createVaadinContainer()
 	{
 		return super.createVaadinContainer();
 	}
-
 
 }

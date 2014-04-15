@@ -28,110 +28,110 @@ import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener
 
 final class ScoutsContainerEventProvider extends ContainerEventProvider implements EventChangeListener
 {
-	private Logger logger = LogManager.getLogger(ScoutsContainerEventProvider.class);
+	private final Logger logger = LogManager.getLogger(ScoutsContainerEventProvider.class);
 
 	private final JPAContainer<au.org.scoutmaster.domain.Event> container;
 
 	private final List<EventChangeListener> eventChangeListeners = new LinkedList<CalendarEvent.EventChangeListener>();
 
-	private Calendar calendar;
+	private final Calendar calendar;
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
-	ScoutsContainerEventProvider(Calendar calendar)
+	ScoutsContainerEventProvider(final Calendar calendar)
 	{
 		super(new DaoFactory().getEventDao().createVaadinContainer());
 		this.calendar = calendar;
 
 		this.container = (JPAContainer<Event>) super.getContainerDataSource();
 
-		this.setStartDateProperty(Event_.eventStartDateTime.getName());
-		this.setEndDateProperty(Event_.eventEndDateTime.getName());
-		this.setDescriptionProperty(Event_.details.getName());
-		this.setCaptionProperty(Event_.subject.getName());
+		setStartDateProperty(Event_.eventStartDateTime.getName());
+		setEndDateProperty(Event_.eventEndDateTime.getName());
+		setDescriptionProperty(Event_.details.getName());
+		setCaptionProperty(Event_.subject.getName());
 
 	}
 
 	@Override
-	public void addEvent(CalendarEvent event)
+	public void addEvent(final CalendarEvent event)
 	{
-		au.org.scoutmaster.domain.Event entity = new au.org.scoutmaster.domain.Event(event.getCaption(),
+		final au.org.scoutmaster.domain.Event entity = new au.org.scoutmaster.domain.Event(event.getCaption(),
 				event.getDescription(), event.getStart(), event.getEnd(), event.getStyleName());
-		container.addEntity(entity);
+		this.container.addEntity(entity);
 	}
 
 	@Override
-	public void eventMove(MoveEvent event)
+	public void eventMove(final MoveEvent event)
 	{
-		ScoutCalEvent calendarEvent = (ScoutCalEvent) event.getCalendarEvent();
+		final ScoutCalEvent calendarEvent = (ScoutCalEvent) event.getCalendarEvent();
 		Event eventEntity = calendarEvent.getEntity();
 
-		Date newStart = event.getNewStart();
+		final Date newStart = event.getNewStart();
 
-		Date oldStart = eventEntity.getEventStartDateTime();
+		final Date oldStart = eventEntity.getEventStartDateTime();
 		eventEntity.setEventStartDateTime(newStart);
 
-		long duration = eventEntity.getEventEndDateTime().getTime() - oldStart.getTime();
+		final long duration = eventEntity.getEventEndDateTime().getTime() - oldStart.getTime();
 
-		Date newEndTime = new Date(newStart.getTime() + duration);
+		final Date newEndTime = new Date(newStart.getTime() + duration);
 		eventEntity.setEventEndDateTime(newEndTime);
 		eventChange(new EventChangeEvent(calendarEvent));
 		try
 		{
-			EventDao daoEvent = new DaoFactory().getEventDao();
+			final EventDao daoEvent = new DaoFactory().getEventDao();
 			eventEntity = daoEvent.merge(eventEntity);
 			calendarEvent.eventEntity = eventEntity;
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
 	}
 
 	@Override
-	public void eventResize(EventResize event)
+	public void eventResize(final EventResize event)
 	{
-		ScoutCalEvent calendarEvent = (ScoutCalEvent) event.getCalendarEvent();
+		final ScoutCalEvent calendarEvent = (ScoutCalEvent) event.getCalendarEvent();
 		Event eventEntity = calendarEvent.getEntity();
 
-		Date newEndTime = event.getNewEnd();
-		Date newStartTime = event.getNewStart();
+		final Date newEndTime = event.getNewEnd();
+		final Date newStartTime = event.getNewStart();
 		eventEntity.setEventEndDateTime(newEndTime);
 		eventEntity.setEventStartDateTime(newStartTime);
 		try
 		{
-			EventDao daoEvent = new DaoFactory().getEventDao();
+			final EventDao daoEvent = new DaoFactory().getEventDao();
 			eventEntity = daoEvent.merge(eventEntity);
 			calendarEvent.eventEntity = eventEntity;
 			eventChange(new EventChangeEvent(calendarEvent));
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}
 
 	}
 
 	@Override
-	public List<CalendarEvent> getEvents(Date startDate, Date endDate)
+	public List<CalendarEvent> getEvents(final Date startDate, final Date endDate)
 	{
-		EventDao daoEvent = new DaoFactory().getDao(EventDao.class);
-		List<Event> entries = daoEvent.findBetween(startDate, endDate);
+		final EventDao daoEvent = new DaoFactory().getDao(EventDao.class);
+		final List<Event> entries = daoEvent.findBetween(startDate, endDate);
 
 		// Wrap Events as CalendarEvents for the view
-		ArrayList<CalendarEvent> arrayList = new ArrayList<CalendarEvent>();
-		for (Event event : entries)
+		final ArrayList<CalendarEvent> arrayList = new ArrayList<CalendarEvent>();
+		for (final Event event : entries)
 		{
-			ScoutCalEvent scoutEvent = new ScoutCalEvent(event);
+			final ScoutCalEvent scoutEvent = new ScoutCalEvent(event);
 			scoutEvent.addEventChangeListener(this);
 			arrayList.add(scoutEvent);
 
 			if (event.getColor() != null)
 			{
 				// Inject the color style required by each event into the page
-				Styles styles = Page.getCurrent().getStyles();
+				final Styles styles = Page.getCurrent().getStyles();
 
 				// Inject the style. We Use the colour name as the css name
 				// (sans
@@ -145,24 +145,24 @@ final class ScoutsContainerEventProvider extends ContainerEventProvider implemen
 	}
 
 	@Override
-	public void eventChange(EventChangeEvent eventChangeEvent)
+	public void eventChange(final EventChangeEvent eventChangeEvent)
 	{
-		for (EventChangeListener listener : eventChangeListeners)
+		for (final EventChangeListener listener : this.eventChangeListeners)
 		{
 			listener.eventChange(eventChangeEvent);
 		}
-		calendar.markAsDirty();
+		this.calendar.markAsDirty();
 	}
 
 	/**
 	 * Over-ridden as the base implementation is broken.
 	 */
 	@Override
-	public void addEventChangeListener(EventChangeListener listener)
+	public void addEventChangeListener(final EventChangeListener listener)
 	{
-		if (!eventChangeListeners.contains(listener))
+		if (!this.eventChangeListeners.contains(listener))
 		{
-			eventChangeListeners.add(listener);
+			this.eventChangeListeners.add(listener);
 		}
 	}
 }

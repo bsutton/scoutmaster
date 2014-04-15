@@ -13,24 +13,24 @@ public enum SMSession
 
 	public User getLoggedInUser()
 	{
-		return (User) UI.getCurrent().getSession().getAttribute(USER);
+		return (User) UI.getCurrent().getSession().getAttribute(SMSession.USER);
 	}
 
-	public void setLoggedInUser(User user)
+	public void setLoggedInUser(final User user)
 	{
-		VaadinSession session = UI.getCurrent().getSession();
+		final VaadinSession session = UI.getCurrent().getSession();
 
 		if (user != null)
 		{
-			session.setAttribute(USER, user);
+			session.setAttribute(SMSession.USER, user);
 			// push the user into the servlet session as well
 			// so we can write session history when the session collapses.
-			session.getSession().setAttribute(USER, user);
+			session.getSession().setAttribute(SMSession.USER, user);
 		}
 		else
 		{
-			session.setAttribute(USER, null);
-			session.getSession().removeAttribute(USER);
+			session.setAttribute(SMSession.USER, null);
+			session.getSession().removeAttribute(SMSession.USER);
 		}
 
 	}

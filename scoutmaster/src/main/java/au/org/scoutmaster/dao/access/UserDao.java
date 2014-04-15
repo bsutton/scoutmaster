@@ -17,46 +17,45 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 		// inherit the default per request em.
 	}
 
-	public UserDao(EntityManager em)
+	public UserDao(final EntityManager em)
 	{
 		super(em);
 	}
 
 	@Override
-	public User findById(Long id)
+	public User findById(final Long id)
 	{
-		User user = entityManager.find(this.entityClass, id);
+		final User user = this.entityManager.find(this.entityClass, id);
 		return user;
 	}
 
-	public User addUser(String username, String password)
+	public User addUser(final String username, final String password)
 	{
-		User user = new User(username, password);
-		this.persist(user);
+		final User user = new User(username, password);
+		persist(user);
 		return user;
 
 	}
-	
-	
-	public void updatePassword(User user, String password)
+
+	public void updatePassword(final User user, final String password)
 	{
 		user.setPassword(password);
 
-		EntityManager em = EntityManagerProvider.getEntityManager();
+		final EntityManager em = EntityManagerProvider.getEntityManager();
 		em.merge(user);
 	}
 
-
-	public User findByName(String username)
+	public User findByName(final String username)
 	{
 		return super.findSingleBySingleParameter(User.FIND_BY_NAME, "username", username);
 	}
 
-	public User findByEmail(String emailAddressValue)
+	public User findByEmail(final String emailAddressValue)
 	{
 		return super.findSingleBySingleParameter(User.FIND_BY_EMAIL, "emailAddress", emailAddressValue);
 	}
-	
+
+	@Override
 	public JPAContainer<User> createVaadinContainer()
 	{
 		return super.createVaadinContainer();

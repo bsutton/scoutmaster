@@ -20,9 +20,9 @@ public class ActivityTypeConverter extends BaseConverter<CommunicationType>
 	}
 
 	@Override
-	protected CommunicationType newInstance(Object value)
+	protected CommunicationType newInstance(final Object value)
 	{
-		return new CommunicationType((String)value, null);
+		return new CommunicationType((String) value, null);
 	}
 
 	@Override

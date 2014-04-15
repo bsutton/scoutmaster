@@ -61,16 +61,16 @@ public class EmailForm extends VerticalLayout
 	private static final long serialVersionUID = 1L;
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 
-	private User sender;
-	private TextField subject;
-	private CKEditorEmailField ckEditor;
-	private Window owner;
-	private Button send;
-	private Contact contact;
-	private VerticalLayout attachedFiles;
-	private HashSet<AttachedFile> fileList = new HashSet<>();
+	private final User sender;
+	private final TextField subject;
+	private final CKEditorEmailField ckEditor;
+	private final Window owner;
+	private final Button send;
+	private final Contact contact;
+	private final VerticalLayout attachedFiles;
+	private final HashSet<AttachedFile> fileList = new HashSet<>();
 
-	private GridLayout grid;
+	private final GridLayout grid;
 
 	class TargetLine
 	{
@@ -82,97 +82,97 @@ public class EmailForm extends VerticalLayout
 	}
 
 	ArrayList<TargetLine> lines = new ArrayList<>();
-	private ComboBox primaryTypeCombo;
-	private TextField primaryTargetAddress;
-	private Button primaryPlusButton;
+	private final ComboBox primaryTypeCombo;
+	private final TextField primaryTargetAddress;
+	private final Button primaryPlusButton;
 
 	/**
-	 * 
+	 *
 	 * @param sender
 	 *            the user who is sending this email.
 	 */
-	public EmailForm(Window owner, User sender, Contact contact, String toEmailAddress)
+	public EmailForm(final Window owner, final User sender, final Contact contact, final String toEmailAddress)
 	{
 		this.owner = owner;
 		this.sender = sender;
 		this.contact = contact;
 
-		this.setSpacing(true);
+		setSpacing(true);
 		this.setMargin(true);
-		this.setSizeFull();
+		setSizeFull();
 
-		grid = new GridLayout(4, 2);
-		grid.setWidth("100%");
-		grid.setColumnExpandRatio(1, (float) 1.0);
-		grid.setSpacing(true);
+		this.grid = new GridLayout(4, 2);
+		this.grid.setWidth("100%");
+		this.grid.setColumnExpandRatio(1, (float) 1.0);
+		this.grid.setSpacing(true);
 
-		List<EmailAddressType> targetTypes = getTargetTypes();
+		final List<EmailAddressType> targetTypes = getTargetTypes();
 
-		primaryTypeCombo = new ComboBox(null, targetTypes);
-		primaryTypeCombo.setWidth("60");
-		primaryTypeCombo.select(targetTypes.get(0));
-		primaryTypeCombo.select(EmailAddressType.To);
-		grid.addComponent(primaryTypeCombo);
+		this.primaryTypeCombo = new ComboBox(null, targetTypes);
+		this.primaryTypeCombo.setWidth("60");
+		this.primaryTypeCombo.select(targetTypes.get(0));
+		this.primaryTypeCombo.select(EmailAddressType.To);
+		this.grid.addComponent(this.primaryTypeCombo);
 
-		primaryTargetAddress = new TextField(null, toEmailAddress);
-		primaryTargetAddress.setWidth("100%");
-		//primaryTargetAddress.setReadOnly(true);
-		primaryTargetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
-		primaryTargetAddress.setImmediate(true);
-		grid.addComponent(primaryTargetAddress);
+		this.primaryTargetAddress = new TextField(null, toEmailAddress);
+		this.primaryTargetAddress.setWidth("100%");
+		// primaryTargetAddress.setReadOnly(true);
+		this.primaryTargetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
+		this.primaryTargetAddress.setImmediate(true);
+		this.grid.addComponent(this.primaryTargetAddress);
 
-		primaryPlusButton = new Button("+");
-		primaryPlusButton.setDescription("Click to add another email address line.");
-		primaryPlusButton.setStyleName(Reindeer.BUTTON_SMALL);
-		grid.addComponent(primaryPlusButton);
-		Action1<ClickEvent> plusClickAction = new PlusClickAction();
-		ButtonEventSource.fromActionOf(primaryPlusButton).subscribe(plusClickAction);
+		this.primaryPlusButton = new Button("+");
+		this.primaryPlusButton.setDescription("Click to add another email address line.");
+		this.primaryPlusButton.setStyleName(Reindeer.BUTTON_SMALL);
+		this.grid.addComponent(this.primaryPlusButton);
+		final Action1<ClickEvent> plusClickAction = new PlusClickAction();
+		ButtonEventSource.fromActionOf(this.primaryPlusButton).subscribe(plusClickAction);
 
-		send = new Button("Send");
-		send.setDescription("Click to send this email.");
-		Action1<ClickEvent> sendClickAction = new SendClickAction();
-		ButtonEventSource.fromActionOf(send).subscribe(sendClickAction);
+		this.send = new Button("Send");
+		this.send.setDescription("Click to send this email.");
+		final Action1<ClickEvent> sendClickAction = new SendClickAction();
+		ButtonEventSource.fromActionOf(this.send).subscribe(sendClickAction);
 
-		send.setImmediate(true);
+		this.send.setImmediate(true);
 
-		grid.newLine();
-		grid.addComponent(send);
+		this.grid.newLine();
+		this.grid.addComponent(this.send);
 
-		this.addComponent(grid);
-		subject = new TextField("Subject");
-		subject.setWidth("100%");
+		this.addComponent(this.grid);
+		this.subject = new TextField("Subject");
+		this.subject.setWidth("100%");
 
-		this.addComponent(subject);
-		ckEditor = new CKEditorEmailField(false);
-		this.addComponent(ckEditor);
-		this.setExpandRatio(ckEditor, 1.0f);
+		this.addComponent(this.subject);
+		this.ckEditor = new CKEditorEmailField(false);
+		this.addComponent(this.ckEditor);
+		setExpandRatio(this.ckEditor, 1.0f);
 
 		if (sender.getEmailSignature() != null)
 		{
-			ckEditor.setValue("</br></br>" + sender.getEmailSignature());
+			this.ckEditor.setValue("</br></br>" + sender.getEmailSignature());
 		}
 
-		HorizontalLayout uploadArea = new HorizontalLayout();
-		AbstractLayout uploadWidget = addUploadWidget();
+		final HorizontalLayout uploadArea = new HorizontalLayout();
+		final AbstractLayout uploadWidget = addUploadWidget();
 		uploadArea.addComponent(uploadWidget);
-		attachedFiles = new VerticalLayout();
-		Label attachedLabel = new Label("<b>Attached Files</b>");
+		this.attachedFiles = new VerticalLayout();
+		final Label attachedLabel = new Label("<b>Attached Files</b>");
 		attachedLabel.setContentMode(ContentMode.HTML);
-		attachedFiles.addComponent(attachedLabel);
-		uploadArea.addComponent(attachedFiles);
+		this.attachedFiles.addComponent(attachedLabel);
+		uploadArea.addComponent(this.attachedFiles);
 		uploadArea.setWidth("100%");
 		uploadArea.setComponentAlignment(uploadWidget, Alignment.TOP_LEFT);
-		uploadArea.setComponentAlignment(attachedFiles, Alignment.TOP_RIGHT);
+		uploadArea.setComponentAlignment(this.attachedFiles, Alignment.TOP_RIGHT);
 
 		this.addComponent(uploadArea);
 
-		subject.focus();
+		this.subject.focus();
 
 	}
 
 	List<EmailAddressType> getTargetTypes()
 	{
-		ArrayList<EmailAddressType> targetTypes = new ArrayList<>();
+		final ArrayList<EmailAddressType> targetTypes = new ArrayList<>();
 
 		targetTypes.add(EmailAddressType.To);
 		targetTypes.add(EmailAddressType.CC);
@@ -183,7 +183,7 @@ public class EmailForm extends VerticalLayout
 	private boolean checkValidAddresses()
 	{
 		boolean valid = true;
-		for (TargetLine line : lines)
+		for (final TargetLine line : this.lines)
 		{
 			if (!line.targetAddress.isValid())
 			{
@@ -194,7 +194,7 @@ public class EmailForm extends VerticalLayout
 		return valid;
 	}
 
-	private boolean isEmpty(String value)
+	private boolean isEmpty(final String value)
 	{
 		return value == null || value.length() == 0;
 	}
@@ -202,12 +202,12 @@ public class EmailForm extends VerticalLayout
 	private AbstractLayout addUploadWidget()
 	{
 
-		MultiFileUpload multiFileUpload2 = new MultiFileUpload()
+		final MultiFileUpload multiFileUpload2 = new MultiFileUpload()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void handleFile(File file, String fileName, String mimeType, long length)
+			protected void handleFile(final File file, final String fileName, final String mimeType, final long length)
 			{
 				attachFile(file);
 			}
@@ -215,7 +215,7 @@ public class EmailForm extends VerticalLayout
 			@Override
 			protected FileBuffer createReceiver()
 			{
-				FileBuffer receiver = super.createReceiver();
+				final FileBuffer receiver = super.createReceiver();
 				/*
 				 * Make receiver not to delete files after they have been
 				 * handled by #handleFile().
@@ -225,15 +225,15 @@ public class EmailForm extends VerticalLayout
 			}
 		};
 		multiFileUpload2.setCaption("Attach files");
-		multiFileUpload2.setRootDirectory(TEMP_FILE_DIR);
+		multiFileUpload2.setRootDirectory(EmailForm.TEMP_FILE_DIR);
 		return multiFileUpload2;
 	}
 
-	private void attachFile(File file)
+	private void attachFile(final File file)
 	{
-		HorizontalLayout line = new HorizontalLayout();
+		final HorizontalLayout line = new HorizontalLayout();
 		line.setSpacing(true);
-		Button removeButton = new Button("x");
+		final Button removeButton = new Button("x");
 
 		removeButton.setStyleName("small");
 
@@ -241,7 +241,7 @@ public class EmailForm extends VerticalLayout
 		line.addComponent(new Label(file.getName()));
 		EmailForm.this.attachedFiles.addComponent(line);
 
-		AttachedFile attachedFile = new AttachedFile(attachedFiles, file, line);
+		final AttachedFile attachedFile = new AttachedFile(this.attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
 
@@ -250,9 +250,9 @@ public class EmailForm extends VerticalLayout
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void clicked(ClickEvent event)
+			public void clicked(final ClickEvent event)
 			{
-				AttachedFile file = (AttachedFile) event.getButton().getData();
+				final AttachedFile file = (AttachedFile) event.getButton().getData();
 				file.remove();
 				EmailForm.this.fileList.remove(file);
 
@@ -261,13 +261,13 @@ public class EmailForm extends VerticalLayout
 
 	}
 
-	private TargetLine insertTargetLine(int row)
+	private TargetLine insertTargetLine(final int row)
 	{
-		List<EmailAddressType> targetTypes = getTargetTypes();
+		final List<EmailAddressType> targetTypes = getTargetTypes();
 
 		EmailForm.this.grid.insertRow(row);
-		grid.setCursorY(row);
-		grid.setCursorX(0);
+		this.grid.setCursorY(row);
+		this.grid.setCursorX(0);
 
 		final TargetLine line = new TargetLine();
 		line.row = row;
@@ -275,10 +275,10 @@ public class EmailForm extends VerticalLayout
 		line.targetTypeCombo = new ComboBox(null, targetTypes);
 		line.targetTypeCombo.setWidth("60");
 		line.targetTypeCombo.select(targetTypes.get(0));
-		grid.addComponent(line.targetTypeCombo);
+		this.grid.addComponent(line.targetTypeCombo);
 
 		line.targetAddress = new ComboBox(null);
-		grid.addComponent(line.targetAddress);
+		this.grid.addComponent(line.targetAddress);
 		line.targetAddress.setImmediate(true);
 		line.targetAddress.setTextInputAllowed(true);
 		line.targetAddress.setInputPrompt("Enter Contact Name or email address");
@@ -294,11 +294,11 @@ public class EmailForm extends VerticalLayout
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void addNewItem(String newItemCaption)
+			public void addNewItem(final String newItemCaption)
 			{
-				IndexedContainer container = (IndexedContainer) line.targetAddress.getContainerDataSource();
+				final IndexedContainer container = (IndexedContainer) line.targetAddress.getContainerDataSource();
 
-				Item item = addItem(container, "", newItemCaption);
+				final Item item = addItem(container, "", newItemCaption);
 				if (item != null)
 				{
 					line.targetAddress.addItem(item.getItemProperty("id").getValue());
@@ -311,30 +311,30 @@ public class EmailForm extends VerticalLayout
 		line.minusButton.setDescription("Click to remove this email address line.");
 		line.minusButton.setData(line);
 		line.minusButton.setStyleName(Reindeer.BUTTON_SMALL);
-		grid.addComponent(line.minusButton);
-		Action1<ClickEvent> minusClickAction = new MinusClickAction();
+		this.grid.addComponent(line.minusButton);
+		final Action1<ClickEvent> minusClickAction = new MinusClickAction();
 
 		line.buttonSubscription = ButtonEventSource.fromActionOf(line.minusButton).subscribe(minusClickAction);
 
-		lines.add(line);
+		this.lines.add(line);
 
 		return line;
 	}
 
 	private IndexedContainer getValidEmailContacts()
 	{
-		IndexedContainer container = new IndexedContainer();
+		final IndexedContainer container = new IndexedContainer();
 
-		ContactDao daoContact = new DaoFactory().getContactDao();
-		List<Contact> list = daoContact.findByHasEmail();
+		final ContactDao daoContact = new DaoFactory().getContactDao();
+		final List<Contact> list = daoContact.findByHasEmail();
 
 		container.addContainerProperty("id", String.class, null);
 		container.addContainerProperty("email", String.class, null);
 		container.addContainerProperty("namedemail", String.class, null);
 
-		for (Contact contact : list)
+		for (final Contact contact : list)
 		{
-			String named = contact.getFirstname() + " " + contact.getLastname();
+			final String named = contact.getFirstname() + " " + contact.getLastname();
 			if (contact.getHomeEmail().trim().length() != 0)
 			{
 				addItem(container, named, contact.getHomeEmail());
@@ -348,25 +348,33 @@ public class EmailForm extends VerticalLayout
 	}
 
 	@SuppressWarnings("unchecked")
-	private Item addItem(IndexedContainer container, String named, String email)
+	private Item addItem(final IndexedContainer container, final String named, String email)
 	{
 		// When we are editing an email (as second time) we can end up with
 		// double brackets so we strip them off here.
 		if (email.startsWith("<"))
+		{
 			email = email.substring(1);
+		}
 		if (email.endsWith(">"))
+		{
 			email = email.substring(0, email.length() - 1);
+		}
 
-		Item item = container.addItem(email);
+		final Item item = container.addItem(email);
 		if (item != null)
 		{
 			item.getItemProperty("id").setValue(email);
 			item.getItemProperty("email").setValue(email);
 			String namedEmail;
 			if (named != null && named.trim().length() > 0)
+			{
 				namedEmail = named + " <" + email + ">";
+			}
 			else
+			{
 				namedEmail = "<" + email + ">";
+			}
 			item.getItemProperty("namedemail").setValue(namedEmail);
 		}
 		return item;
@@ -375,9 +383,9 @@ public class EmailForm extends VerticalLayout
 	class PlusClickAction implements Action1<ClickEvent>
 	{
 		@Override
-		public void call(ClickEvent event)
+		public void call(final ClickEvent event)
 		{
-			TargetLine newLine = insertTargetLine(EmailForm.this.lines.size() + 1);
+			final TargetLine newLine = insertTargetLine(EmailForm.this.lines.size() + 1);
 			newLine.targetAddress.focus();
 		}
 	}
@@ -385,17 +393,17 @@ public class EmailForm extends VerticalLayout
 	class MinusClickAction implements Action1<ClickEvent>
 	{
 		@Override
-		public void call(ClickEvent event)
+		public void call(final ClickEvent event)
 		{
-			Button button = event.getButton();
-			TargetLine line = (TargetLine) button.getData();
+			final Button button = event.getButton();
+			final TargetLine line = (TargetLine) button.getData();
 			EmailForm.this.grid.removeRow(line.row);
 			line.buttonSubscription.unsubscribe();
-			lines.remove(line.row - 1);
+			EmailForm.this.lines.remove(line.row - 1);
 
 			// recalculate rows
 			int row = 1;
-			for (TargetLine aLine : lines)
+			for (final TargetLine aLine : EmailForm.this.lines)
 			{
 				aLine.row = row++;
 			}
@@ -405,76 +413,81 @@ public class EmailForm extends VerticalLayout
 	class SendClickAction implements Action1<ClickEvent>, CompleteListener
 	{
 		@Override
-		public void call(ClickEvent t1)
+		public void call(final ClickEvent t1)
 		{
-			send.setEnabled(false);
+			EmailForm.this.send.setEnabled(false);
 			if (isEmpty(EmailForm.this.subject.getValue()))
+			{
 				SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
+			}
 			else if (!checkValidAddresses())
+			{
 				SMNotification.show("All Email adddresses must be valid", Type.WARNING_MESSAGE);
+			}
 			else if (isEmpty(EmailForm.this.ckEditor.getValue()))
+			{
 				SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
+			}
 			else
 
 			{
-				WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
+				final WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
 				UI.getCurrent().addWindow(working);
-				working.setWorker(new Runnable()
-				{
-
-					@Override
-					public void run()
+				working.setWorker(() -> {
+					final EntityManager em = EntityManagerProvider.createEntityManager();
+					try (Transaction t = new Transaction(em))
 					{
-						EntityManager em = EntityManagerProvider.createEntityManager();
-						try (Transaction t = new Transaction(em))
+						final SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
+						final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+
+						final ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
+
+						// First add in the primary address.
+						if (!isEmpty(EmailForm.this.primaryTargetAddress.getValue()))
 						{
-							SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
-							SMTPServerSettings settings = daoSMTPSettings.findSettings();
+							targets.add(new SMTPSettingsDao.EmailTarget(
+									(EmailAddressType) EmailForm.this.primaryTypeCombo.getValue(),
+									EmailForm.this.primaryTargetAddress.getValue()));
+						}
 
-							ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
-
-							
-							// First add in the primary address.
-							if (!isEmpty((String) primaryTargetAddress.getValue()))
-								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) primaryTypeCombo
-										.getValue(), (String) primaryTargetAddress.getValue()));
-
-							for (TargetLine line : lines)
+						for (final TargetLine line : EmailForm.this.lines)
+						{
+							if (!isEmpty((String) line.targetAddress.getValue()))
 							{
-								if (!isEmpty((String) line.targetAddress.getValue()))
-									targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
-											.getValue(), (String) line.targetAddress.getValue()));
+								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
+										.getValue(), (String) line.targetAddress.getValue()));
 							}
-
-							assert targets.size() != 0 : "Empty list of email targets";
-							daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
-									EmailForm.this.subject.getValue(), ckEditor.getValue(), fileList);
-
-//							em.detach(EmailForm.this.sender);
-//							em.detach(EmailForm.this.contact);
-							// Log the activity
-							CommunicationLogDao daoActivity = new DaoFactory(em).getCommunicationLogDao();
-							CommunicationTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
-							CommunicationType type = daoActivityType.findByName(CommunicationType.EMAIL);
-							CommunicationLog activity = new CommunicationLog();
-							activity.setAddedBy(EmailForm.this.sender);
-							activity.setWithContact(EmailForm.this.contact);
-							activity.setSubject(EmailForm.this.subject.getValue());
-							activity.setDetails(EmailForm.this.ckEditor.getValue());
-							activity.setType(type);
-
-							daoActivity.persist(activity);
-							t.commit();
-
 						}
-						catch (EmailException e)
-						{
-							logger.error(e, e);
-							EmailForm.this.send.setEnabled(true);
-							SMNotification.show(e, Type.ERROR_MESSAGE);
-						}
+
+						assert targets.size() != 0 : "Empty list of email targets";
+						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
+								EmailForm.this.subject.getValue(), EmailForm.this.ckEditor.getValue(),
+								EmailForm.this.fileList);
+
+						// em.detach(EmailForm.this.sender);
+						// em.detach(EmailForm.this.contact);
+						// Log the activity
+						final CommunicationLogDao daoActivity = new DaoFactory(em).getCommunicationLogDao();
+						final CommunicationTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
+						final CommunicationType type = daoActivityType.findByName(CommunicationType.EMAIL);
+						final CommunicationLog activity = new CommunicationLog();
+						activity.setAddedBy(EmailForm.this.sender);
+						activity.setWithContact(EmailForm.this.contact);
+						activity.setSubject(EmailForm.this.subject.getValue());
+						activity.setDetails(EmailForm.this.ckEditor.getValue());
+						activity.setType(type);
+
+						daoActivity.persist(activity);
+						t.commit();
 
 					}
+					catch (final EmailException e)
+					{
+						EmailForm.logger.error(e, e);
+						EmailForm.this.send.setEnabled(true);
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+
 				}, this);
 
 			}

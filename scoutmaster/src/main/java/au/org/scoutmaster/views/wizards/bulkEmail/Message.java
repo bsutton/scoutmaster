@@ -19,7 +19,7 @@ public class Message
 	private final Phone senderPhone;
 	private final String senderEmailAddress;
 
-	public Message(String subject, String body, Phone senderPhone)
+	public Message(final String subject, final String body, final Phone senderPhone)
 	{
 		this.subject = subject;
 		this.body = body;
@@ -27,7 +27,7 @@ public class Message
 		this.senderEmailAddress = null;
 	}
 
-	public Message(String subject, String body, String senderEmailAddress)
+	public Message(final String subject, final String body, final String senderEmailAddress)
 	{
 		this.subject = subject;
 		this.body = body;
@@ -37,12 +37,12 @@ public class Message
 
 	public String getSubject()
 	{
-		return subject;
+		return this.subject;
 	}
 
 	public String getBody()
 	{
-		return body;
+		return this.body;
 	}
 
 	public Phone getSender()
@@ -55,32 +55,35 @@ public class Message
 		return this.senderEmailAddress;
 	}
 
-	public String expandBody(User user, Contact contact) throws VelocityFormatException
+	public String expandBody(final User user, final Contact contact) throws VelocityFormatException
 	{
-		String result= null;
-		VelocityEngine velocityEngine = new VelocityEngine();
-		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute" );
-		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger","velocity");
+		String result = null;
+		final VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+				"org.apache.velocity.runtime.log.Log4JLogChute");
+		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "velocity");
 		velocityEngine.init();
 
-
-		StringWriter sw = new StringWriter();
-		VelocityContext context = new VelocityContext();
+		final StringWriter sw = new StringWriter();
+		final VelocityContext context = new VelocityContext();
 		context.put("user", user);
 		context.put("contact", contact);
 
 		try
 		{
-			// html escaping cause velocity problems so we need to unescape before we past the body to velocity.
-			String unescapedBody = StringEscapeUtils.unescapeHtml(this.body);
+			// html escaping cause velocity problems so we need to unescape
+			// before we past the body to velocity.
+			final String unescapedBody = StringEscapeUtils.unescapeHtml(this.body);
 			if (!velocityEngine.evaluate(context, sw, user.getFullname(), unescapedBody))
+			{
 				throw new RuntimeException("Error processing Velocity macro for email body. Check error log");
-			
+			}
+
 			// now we need to re-escape the body.
-			//result = StringEscapeUtils.escapeHtml(sw.toString());
+			// result = StringEscapeUtils.escapeHtml(sw.toString());
 			result = sw.toString();
 		}
-		catch (Throwable e)
+		catch (final Throwable e)
 		{
 			throw new VelocityFormatException(e);
 
@@ -89,24 +92,27 @@ public class Message
 		return result;
 	}
 
-	public StringBuffer expandSubject(User user, Contact contact) throws VelocityFormatException
+	public StringBuffer expandSubject(final User user, final Contact contact) throws VelocityFormatException
 	{
-		VelocityEngine velocityEngine = new VelocityEngine();
-		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.Log4JLogChute" );
-		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger","velocity");
+		final VelocityEngine velocityEngine = new VelocityEngine();
+		velocityEngine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+				"org.apache.velocity.runtime.log.Log4JLogChute");
+		velocityEngine.setProperty("runtime.log.logsystem.log4j.logger", "velocity");
 		velocityEngine.init();
 
-		StringWriter sw = new StringWriter();
-		VelocityContext context = new VelocityContext();
+		final StringWriter sw = new StringWriter();
+		final VelocityContext context = new VelocityContext();
 		context.put("user", user);
 		context.put("contact", contact);
 
 		try
 		{
 			if (!velocityEngine.evaluate(context, sw, user.getFullname(), this.subject))
+			{
 				throw new RuntimeException("Error processing Velocity macro for email body. Check error log");
+			}
 		}
-		catch (Throwable e)
+		catch (final Throwable e)
 		{
 			throw new VelocityFormatException(e);
 

@@ -14,10 +14,10 @@ public class TouchNavigatorUI extends UI
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void init(VaadinRequest request)
+	protected void init(final VaadinRequest request)
 	{
 
 		// Use it as the content root
-	//	setContent(new TouchView());
+		// setContent(new TouchView());
 	}
 }

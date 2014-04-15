@@ -11,7 +11,6 @@ import au.com.vaadinutils.crud.RowChangeListener;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.fields.TagChangeListener;
 import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
@@ -30,87 +29,78 @@ public class SearchableContactTable extends VerticalLayout
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SearchableContactTable.class);
 	private static final long serialVersionUID = 1L;
-	private EntityTable<Contact> contactTable;
-	private TextField searchField = new TextField();
+	private final EntityTable<Contact> contactTable;
+	private final TextField searchField = new TextField();
 	private VerticalLayout searchLayout = new VerticalLayout();
-	private JPAContainer<Contact> contactContainer;
+	private final JPAContainer<Contact> contactContainer;
 	private HorizontalLayout stringSearchLayout;
-	private Button clearButton = new Button("Clear");
+	private final Button clearButton = new Button("Clear");
 	private TagField includeTagField;
 	private TagField excludeTagField;
 	private boolean excludeDoNotSendBulkCommunications;
 
-	public SearchableContactTable(JPAContainer<Contact> contactContainer, HeadingPropertySet<Contact> headingPropertySet)
+	public SearchableContactTable(final JPAContainer<Contact> contactContainer,
+			final HeadingPropertySet<Contact> headingPropertySet)
 	{
 		this.contactContainer = contactContainer;
 		this.contactTable = new EntityTable<Contact>(contactContainer, headingPropertySet);
 		init();
 	}
 
-	void setRowChangeListener(RowChangeListener<Contact> rowChangeListener)
+	void setRowChangeListener(final RowChangeListener<Contact> rowChangeListener)
 	{
-		contactTable.setRowChangeListener(rowChangeListener);
+		this.contactTable.setRowChangeListener(rowChangeListener);
 	}
 
 	public void init()
 	{
-		contactTable.init();
+		this.contactTable.init();
 		initSearch();
-		this.addComponent(searchLayout);
-		this.addComponent(contactTable);
-		contactTable.setSizeFull();
-		this.setExpandRatio(contactTable, 1);
-		this.setSizeFull();
+		this.addComponent(this.searchLayout);
+		this.addComponent(this.contactTable);
+		this.contactTable.setSizeFull();
+		setExpandRatio(this.contactTable, 1);
+		setSizeFull();
 	}
 
 	public EntityItem<Contact> getCurrent()
 	{
-		return contactTable.getCurrent();
+		return this.contactTable.getCurrent();
 	}
 
 	private void initSearch()
 	{
-		searchLayout = new VerticalLayout();
-		HorizontalLayout tagSearchLayout = new HorizontalLayout();
-		includeTagField = new TagField("Include Tags", true);
-		excludeTagField = new TagField("Exclude Tags", true);
-		tagSearchLayout.addComponent(includeTagField);
-		tagSearchLayout.addComponent(excludeTagField);
+		this.searchLayout = new VerticalLayout();
+		final HorizontalLayout tagSearchLayout = new HorizontalLayout();
+		this.includeTagField = new TagField("Include Tags", true);
+		this.excludeTagField = new TagField("Exclude Tags", true);
+		tagSearchLayout.addComponent(this.includeTagField);
+		tagSearchLayout.addComponent(this.excludeTagField);
 
-		includeTagField.addChangeListener(new TagChangeListener()
-		{
-			public void onTagListChanged(ArrayList<Tag> tags)
-			{
-				resetFilter(tags, excludeTagField.getTags(), SearchableContactTable.this.searchField.getValue());
-
-			}
-		});
-		excludeTagField.addChangeListener(new TagChangeListener()
-		{
-			public void onTagListChanged(ArrayList<Tag> tags)
-			{
-				resetFilter(includeTagField.getTags(), tags, SearchableContactTable.this.searchField.getValue());
-
-			}
-		});
+		this.includeTagField.addChangeListener(tags -> resetFilter(tags,
+				SearchableContactTable.this.excludeTagField.getTags(),
+				SearchableContactTable.this.searchField.getValue()));
+		this.excludeTagField.addChangeListener(tags -> resetFilter(
+				SearchableContactTable.this.includeTagField.getTags(), tags,
+				SearchableContactTable.this.searchField.getValue()));
 
 		tagSearchLayout.setSizeFull();
-		searchLayout.addComponent(tagSearchLayout);
+		this.searchLayout.addComponent(tagSearchLayout);
 
-		stringSearchLayout = new HorizontalLayout();
-		stringSearchLayout.addComponent(searchField);
-		stringSearchLayout.addComponent(clearButton);
-		stringSearchLayout.setWidth("100%");
-		searchField.setWidth("100%");
-		stringSearchLayout.setExpandRatio(searchField, 1);
+		this.stringSearchLayout = new HorizontalLayout();
+		this.stringSearchLayout.addComponent(this.searchField);
+		this.stringSearchLayout.addComponent(this.clearButton);
+		this.stringSearchLayout.setWidth("100%");
+		this.searchField.setWidth("100%");
+		this.stringSearchLayout.setExpandRatio(this.searchField, 1);
 
-		searchLayout.addComponent(stringSearchLayout);
+		this.searchLayout.addComponent(this.stringSearchLayout);
 		/*
 		 * We want to show a subtle prompt in the search field. We could also
 		 * set a caption that would be shown above the field or description to
 		 * be shown in a tooltip.
 		 */
-		searchField.setInputPrompt("Search contacts");
+		this.searchField.setInputPrompt("Search contacts");
 
 		/*
 		 * Granularity for sending events over the wire can be controlled. By
@@ -120,7 +110,7 @@ public class SearchableContactTable extends VerticalLayout
 		 * leaves the field. Here we choose to send the text over the wire as
 		 * soon as user stops writing for a moment.
 		 */
-		searchField.setTextChangeEventMode(TextChangeEventMode.LAZY);
+		this.searchField.setTextChangeEventMode(TextChangeEventMode.LAZY);
 
 		/*
 		 * When the event happens, we handle it in the anonymous inner class.
@@ -128,69 +118,72 @@ public class SearchableContactTable extends VerticalLayout
 		 * MVP) instead. In the end, the preferred application architecture is
 		 * up to you.
 		 */
-		searchField.addTextChangeListener(new TextChangeListener()
+		this.searchField.addTextChangeListener(new TextChangeListener()
 		{
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void textChange(final TextChangeEvent event)
 			{
-				resetFilter(includeTagField.getTags(), excludeTagField.getTags(), event.getText());
+				resetFilter(SearchableContactTable.this.includeTagField.getTags(),
+						SearchableContactTable.this.excludeTagField.getTags(), event.getText());
 			}
 		});
 
-				
-		clearButton.addClickListener(new ClickEventLogged.ClickListener()
+		this.clearButton.addClickListener(new ClickEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@SuppressWarnings("unchecked")
 			@Override
-			public void clicked(ClickEvent event)
+			public void clicked(final ClickEvent event)
 			{
-				searchField.setValue("");
-				includeTagField.setValue((Object)null);
-				excludeTagField.setValue((Object)null);
+				SearchableContactTable.this.searchField.setValue("");
+				SearchableContactTable.this.includeTagField.setValue((Object) null);
+				SearchableContactTable.this.excludeTagField.setValue((Object) null);
 			}
 		});
-		
-		searchField.focus();
+
+		this.searchField.focus();
 
 	}
 
-
-	void resetFilter(ArrayList<Tag> includeTags, ArrayList<Tag> excludeTags, String fullTextSearch)
+	void resetFilter(final ArrayList<Tag> includeTags, final ArrayList<Tag> excludeTags, final String fullTextSearch)
 	{
-		contactContainer.removeAllContainerFilters();
-		contactContainer.getEntityProvider().setQueryModifierDelegate(
-				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch, excludeDoNotSendBulkCommunications));
-		contactTable.refreshRowCache();
+		this.contactContainer.removeAllContainerFilters();
+		this.contactContainer.getEntityProvider().setQueryModifierDelegate(
+				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch,
+						this.excludeDoNotSendBulkCommunications));
+		this.contactTable.refreshRowCache();
 
 	}
 
 	public int size()
 	{
-		return contactTable.size();
+		return this.contactTable.size();
 	}
 
 	public ArrayList<Contact> getFilteredContacts()
 	{
-		ArrayList<Contact> contacts = new ArrayList<>();
+		final ArrayList<Contact> contacts = new ArrayList<>();
 
-		for (Object itemId : contactContainer.getItemIds())
+		for (final Object itemId : this.contactContainer.getItemIds())
 		{
-			Contact contact = contactContainer.getItem(itemId).getEntity();
+			final Contact contact = this.contactContainer.getItem(itemId).getEntity();
 			contacts.add(contact);
 		}
 		return contacts;
 	}
 
 	/**
-	 * if set to true then any contact that does not want bulk communications will be excluded from the list.
+	 * if set to true then any contact that does not want bulk communications
+	 * will be excluded from the list.
+	 * 
 	 * @param b
 	 */
-	public void excludeDoNotSendBulkCommunications(boolean exclude)
+	public void excludeDoNotSendBulkCommunications(final boolean exclude)
 	{
 		this.excludeDoNotSendBulkCommunications = exclude;
-		
+
 	}
 }

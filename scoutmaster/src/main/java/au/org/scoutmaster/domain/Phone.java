@@ -8,18 +8,15 @@ import javax.persistence.NamedQuery;
 
 /**
  * Used to store a phone no.
- * 
+ *
  * @author bsutton
  *
  */
 @Embeddable
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-	@NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"),
-})
-
-public class Phone 
+		{ @NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"), })
+public class Phone
 {
 	public static final String FIND_BY_NO = "Phone.findByNo";
 
@@ -27,10 +24,10 @@ public class Phone
 	 * The type of phone number.
 	 */
 	private PhoneType phoneType = PhoneType.MOBILE;
-	
+
 	/**
-	 * If true then this is the contacts primary phone no.
-	 * A contact MUST have only one primary phone no.
+	 * If true then this is the contacts primary phone no. A contact MUST have
+	 * only one primary phone no.
 	 */
 	private Boolean primaryPhone = false;
 
@@ -38,52 +35,54 @@ public class Phone
 	 * the phone no.
 	 */
 	private String phoneNo = "";
-	
+
 	public Phone()
 	{
-		
+
 	}
-	public Phone(String phoneNo)
+
+	public Phone(final String phoneNo)
 	{
 		// Strip spaces from the phone no.
-		this.phoneNo = phoneNo.replaceAll("\\s","");
+		this.phoneNo = phoneNo.replaceAll("\\s", "");
 	}
 
 	public Boolean getPrimaryPhone()
 	{
-		return primaryPhone;
+		return this.primaryPhone;
 	}
 
-	public void setPrimaryPhone(Boolean primaryPhone)
+	public void setPrimaryPhone(final Boolean primaryPhone)
 	{
 		this.primaryPhone = primaryPhone;
 	}
 
-	public void setPhoneNo(String phoneNo)
+	public void setPhoneNo(final String phoneNo)
 	{
-		this.phoneNo = phoneNo.replaceAll("\\s","");
+		this.phoneNo = phoneNo.replaceAll("\\s", "");
 	}
-
 
 	public PhoneType getPhoneType()
 	{
-		return phoneType;
+		return this.phoneType;
 	}
 
-	public void setPhoneType(PhoneType phoneType)
+	public void setPhoneType(final PhoneType phoneType)
 	{
 		this.phoneType = phoneType;
 	}
 
 	public String getPhoneNo()
 	{
-		return phoneNo.replaceAll("\\s","");
+		return this.phoneNo.replaceAll("\\s", "");
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return phoneNo;
+		return this.phoneNo;
 	}
+
 	public String getName()
 	{
 		return toString();

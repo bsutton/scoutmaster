@@ -12,12 +12,12 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 public class ColorDao extends JpaBaseDao<Color, Long> implements Dao<Color, Long>
 {
 
-
 	public ColorDao()
 	{
-		// inherit the default per request em. 
+		// inherit the default per request em.
 	}
-	public ColorDao(EntityManager em)
+
+	public ColorDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -27,12 +27,12 @@ public class ColorDao extends JpaBaseDao<Color, Long> implements Dao<Color, Long
 	{
 		return super.createVaadinContainer();
 	}
-	
+
 	static public class ColorFactory implements iColorFactory
 	{
 
 		@Override
-		public iColor createColor(com.vaadin.shared.ui.colorpicker.Color color)
+		public iColor createColor(final com.vaadin.shared.ui.colorpicker.Color color)
 		{
 			return new au.org.scoutmaster.domain.Color(color);
 		}

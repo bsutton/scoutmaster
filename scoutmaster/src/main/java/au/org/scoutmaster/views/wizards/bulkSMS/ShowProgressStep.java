@@ -35,16 +35,16 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@SuppressWarnings("unused")
 	static private Logger logger = LogManager.getLogger(ShowProgressStep.class);
 	JPAContainer<? extends Importable> entities;
-	private BulkSMSWizardView messagingWizardView;
+	private final BulkSMSWizardView messagingWizardView;
 	private boolean sendComplete = false;
 	private ProgressBar indicator;
 	private Label progressDescription;
 	private PoJoTable<SMSTransmission> progressTable;
-	private MutableInteger queued = new MutableInteger(0);
-	private MutableInteger rejected = new MutableInteger(0);
+	private final MutableInteger queued = new MutableInteger(0);
+	private final MutableInteger rejected = new MutableInteger(0);
 	private WorkingDialog workDialog;
 
-	public ShowProgressStep(BulkSMSWizardView messagingWizardView)
+	public ShowProgressStep(final BulkSMSWizardView messagingWizardView)
 	{
 		this.messagingWizardView = messagingWizardView;
 	}
@@ -58,69 +58,73 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		progressTable = new PoJoTable<>(SMSTransmission.class, new String[]
-		{ "ContactName", "RecipientPhoneNo", "Result" });
-		progressTable.setColumnWidth("RecipientPhoneNo", 80);
-		progressTable.setColumnExpandRatio("Result", 1);
-		progressTable.setSizeFull();
-		progressDescription = new Label();
-		layout.addComponent(progressDescription);
+		this.progressTable = new PoJoTable<>(SMSTransmission.class, new String[]
+				{ "ContactName", "RecipientPhoneNo", "Result" });
+		this.progressTable.setColumnWidth("RecipientPhoneNo", 80);
+		this.progressTable.setColumnExpandRatio("Result", 1);
+		this.progressTable.setSizeFull();
+		this.progressDescription = new Label();
+		layout.addComponent(this.progressDescription);
 		layout.setMargin(true);
-		indicator = new ProgressBar(new Float(0.0));
-		indicator.setHeight("30px");
-		indicator.setIndeterminate(false);
-		indicator.setImmediate(true);
-		indicator.setSizeFull();
-		layout.addComponent(indicator);
+		this.indicator = new ProgressBar(new Float(0.0));
+		this.indicator.setHeight("30px");
+		this.indicator.setIndeterminate(false);
+		this.indicator.setImmediate(true);
+		this.indicator.setSizeFull();
+		layout.addComponent(this.indicator);
 		layout.addComponent(this.progressTable);
-		layout.setExpandRatio(progressTable, 1);
+		layout.setExpandRatio(this.progressTable, 1);
 
-		ArrayList<Contact> recipients = messagingWizardView.getRecipientStep().getRecipients();
+		final ArrayList<Contact> recipients = this.messagingWizardView.getRecipientStep().getRecipients();
 
-		MessageDetailsStep detailsStep = messagingWizardView.getDetails();
-		ArrayList<SMSTransmission> transmissions = new ArrayList<>();
+		final MessageDetailsStep detailsStep = this.messagingWizardView.getDetails();
+		final ArrayList<SMSTransmission> transmissions = new ArrayList<>();
 
-		HashSet<String> dedupList = new HashSet<>();
-		PhoneDao daoPhone = new DaoFactory().getPhoneDao();
+		final HashSet<String> dedupList = new HashSet<>();
+		final PhoneDao daoPhone = new DaoFactory().getPhoneDao();
 
-		for (Contact contact : recipients)
+		for (final Contact contact : recipients)
 		{
 
 			// Find if the contact has a mobile.
 			// Check the primary field first.
-			Phone primaryPhone = contact.getPrimaryPhone();
-			if (primaryPhone != null && primaryPhone.getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(primaryPhone))
+			final Phone primaryPhone = contact.getPrimaryPhone();
+			if (primaryPhone != null && primaryPhone.getPhoneType() == PhoneType.MOBILE
+					&& !daoPhone.isEmpty(primaryPhone))
 			{
 				queueTransmission(detailsStep, transmissions, dedupList, contact, primaryPhone);
 				continue;
 			}
 
-			if (contact.getPhone1() != null && contact.getPhone1().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone1()))
+			if (contact.getPhone1() != null && contact.getPhone1().getPhoneType() == PhoneType.MOBILE
+					&& !daoPhone.isEmpty(contact.getPhone1()))
 			{
 				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone1());
 				continue;
 			}
 
-			if (contact.getPhone2() != null && contact.getPhone2().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone2()))
+			if (contact.getPhone2() != null && contact.getPhone2().getPhoneType() == PhoneType.MOBILE
+					&& !daoPhone.isEmpty(contact.getPhone2()))
 			{
 				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone2());
 				continue;
 			}
 
-			if (contact.getPhone3() != null && contact.getPhone3().getPhoneType() == PhoneType.MOBILE && !daoPhone.isEmpty(contact.getPhone3()))
+			if (contact.getPhone3() != null && contact.getPhone3().getPhoneType() == PhoneType.MOBILE
+					&& !daoPhone.isEmpty(contact.getPhone3()))
 			{
 				queueTransmission(detailsStep, transmissions, dedupList, contact, contact.getPhone3());
 				continue;
 			}
 
 			// No mobile found
-			SMSTransmission transmission = new SMSTransmission(contact, detailsStep.getMessage(), new RecipientException(
-					"No mobile no.", contact));
+			final SMSTransmission transmission = new SMSTransmission(contact, detailsStep.getMessage(),
+					new RecipientException("No mobile no.", contact));
 			ShowProgressStep.this.progressTable.addRow(transmission);
-			rejected.setValue(rejected.intValue() + 1);
+			this.rejected.setValue(this.rejected.intValue() + 1);
 		}
 
 		if (transmissions.size() == 0)
@@ -129,32 +133,30 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		}
 		else
 		{
-			queued.setValue(transmissions.size());
-			progressDescription.setValue(queued.intValue() + " messages queued. Initialising SMS Provider, ");
+			this.queued.setValue(transmissions.size());
+			this.progressDescription.setValue(this.queued.intValue() + " messages queued. Initialising SMS Provider, ");
 
-			SMSProvider provider = messagingWizardView.getDetails().getProvider();
+			final SMSProvider provider = this.messagingWizardView.getDetails().getProvider();
 
-			
-
-			SendMessageTask task = new SendMessageTask(
-					this, provider, detailsStep.getMessage(), transmissions);
-			workDialog = new WorkingDialog("Sending SMS messages", "Sending...", task);
-			ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(task);
+			final SendMessageTask task = new SendMessageTask(this, provider, detailsStep.getMessage(), transmissions);
+			this.workDialog = new WorkingDialog("Sending SMS messages", "Sending...", task);
+			final ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(task);
 			worker.start();
-			
 
-			UI.getCurrent().addWindow(workDialog);
+			UI.getCurrent().addWindow(this.workDialog);
 
 		}
 
 		return layout;
 	}
 
-	private void queueTransmission(MessageDetailsStep detailsStep, ArrayList<SMSTransmission> transmissions,
-			HashSet<String> dedupList, Contact contact, Phone primaryPhone)
+	private void queueTransmission(final MessageDetailsStep detailsStep,
+			final ArrayList<SMSTransmission> transmissions, final HashSet<String> dedupList, final Contact contact,
+			final Phone primaryPhone)
 	{
-		SMSTransmission transmission = new SMSTransmission(detailsStep.getActivityTags(), contact, detailsStep.getMessage(), primaryPhone);
-		String phone = primaryPhone.getPhoneNo();
+		final SMSTransmission transmission = new SMSTransmission(detailsStep.getActivityTags(), contact,
+				detailsStep.getMessage(), primaryPhone);
+		final String phone = primaryPhone.getPhoneNo();
 		if (!dedupList.contains(phone))
 		{
 			dedupList.add(phone);
@@ -170,7 +172,7 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public boolean onAdvance()
 	{
-		return sendComplete;
+		return this.sendComplete;
 	}
 
 	@Override
@@ -179,56 +181,55 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		return true;
 	}
 
+	@Override
 	public final void taskProgress(final int count, final int max, final SMSTransmission status)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				String message = "Sending: " + count + " of " + max + " messages.";
-				progressDescription.setValue(message);
-				indicator.setValue((float) count / max);
-				workDialog.progress(count, max, message);
+		new UIUpdater(() -> {
+			final String message = "Sending: " + count + " of " + max + " messages.";
+			ShowProgressStep.this.progressDescription.setValue(message);
+			ShowProgressStep.this.indicator.setValue((float) count / max);
+			ShowProgressStep.this.workDialog.progress(count, max, message);
 
-				ShowProgressStep.this.progressTable.addRow(status);
-			}
-		});
-	}
-
-	public final void taskComplete(final int sent)
-	{
-		new UIUpdater(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-				sendComplete = true;
-				indicator.setValue(1.0f);
-
-				if (ShowProgressStep.this.rejected.intValue() == 0 && queued.intValue() == sent)
-					progressDescription.setValue("All SMS Messages have been sent successfully.");
-
-				else
-					progressDescription
-							.setValue(sent
-									+ " SMS Message " + (sent == 1 ? "has" : "s have") + " been sent successfully. Check the list below for the reason why some of the messages failed.");
-				workDialog.complete(sent);
-
-			}
+			ShowProgressStep.this.progressTable.addRow(status);
 		});
 	}
 
 	@Override
-	public void taskItemError(SMSTransmission transmission)
+	public final void taskComplete(final int sent)
+	{
+		new UIUpdater(
+				() -> {
+					ShowProgressStep.this.sendComplete = true;
+					ShowProgressStep.this.indicator.setValue(1.0f);
+
+					if (ShowProgressStep.this.rejected.intValue() == 0
+							&& ShowProgressStep.this.queued.intValue() == sent)
+					{
+						ShowProgressStep.this.progressDescription
+								.setValue("All SMS Messages have been sent successfully.");
+					}
+					else
+					{
+						ShowProgressStep.this.progressDescription
+								.setValue(sent
+										+ " SMS Message "
+										+ (sent == 1 ? "has" : "s have")
+										+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
+					}
+					ShowProgressStep.this.workDialog.complete(sent);
+
+				});
+	}
+
+	@Override
+	public void taskItemError(final SMSTransmission transmission)
 	{
 		this.progressTable.addRow(transmission);
 
 	}
 
 	@Override
-	public void taskException(Exception e)
+	public void taskException(final Exception e)
 	{
 		Notification.show("Error occurred sending Message.", e.getMessage(), Type.ERROR_MESSAGE);
 

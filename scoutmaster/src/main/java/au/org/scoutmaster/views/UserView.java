@@ -38,8 +38,9 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Users", path="Admin.Security")
-public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener , HelpProvider
+@Menu(display = "Users", path = "Admin.Security")
+public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener,
+		HelpProvider
 {
 
 	private static final long serialVersionUID = 1L;
@@ -56,29 +57,29 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	private boolean passwordChanged = false;
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<User> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<User> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		SMMultiColumnFormLayout<User> overviewForm = new SMMultiColumnFormLayout<User>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<User> overviewForm = new SMMultiColumnFormLayout<User>(1, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 380);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setSizeFull();
 
 		overviewForm.bindTextField("Username", User_.username);
-		password = overviewForm.addPasswordField("Password");
-		password.addTextChangeListener(this);
-		password.addFocusListener(this);
-		confirmPassword = overviewForm.addPasswordField("Confirm Password");
-		confirmPassword.addFocusListener(this);
-		confirmPassword.addTextChangeListener(this);
+		this.password = overviewForm.addPasswordField("Password");
+		this.password.addTextChangeListener(this);
+		this.password.addFocusListener(this);
+		this.confirmPassword = overviewForm.addPasswordField("Confirm Password");
+		this.confirmPassword.addFocusListener(this);
+		this.confirmPassword.addTextChangeListener(this);
 		overviewForm.bindBooleanField("Enabled", User_.enabled);
-		TextField emailAddress = overviewForm.bindTextField("Email Address", User_.emailAddress);
+		final TextField emailAddress = overviewForm.bindTextField("Email Address", User_.emailAddress);
 		emailAddress.addValidator(new com.vaadin.data.validator.EmailValidator("Enter a valid Email Address."));
 		layout.addComponent(overviewForm);
 		overviewForm.bindTextField("Firstname", User_.firstname);
 		overviewForm.bindTextField("Surname", User_.surname);
-		TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
+		final TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
 		mobile.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
 		mobile.setDescription("Used when sending bulk emails as the sender phone no.");
 		overviewForm.bindEditorField(User_.emailSignature, false);
@@ -87,29 +88,31 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	}
 
 	@Override
-	protected void interceptSaveValues(EntityItem<User> item)
+	protected void interceptSaveValues(final EntityItem<User> item)
 	{
-		if (passwordChanged)
-			item.getEntity().setPassword(password.getValue());
+		if (this.passwordChanged)
+		{
+			item.getEntity().setPassword(this.password.getValue());
+		}
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
+		final JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
 		container.sort(new String[]
-		{ User_.username.getName() }, new boolean[]
-		{ true });
+				{ User_.username.getName() }, new boolean[]
+						{ true });
 
-		Builder<User> builder = new HeadingPropertySet.Builder<User>();
+		final Builder<User> builder = new HeadingPropertySet.Builder<User>();
 		builder.addColumn("Username", User_.username).addColumn("Enabled", User_.enabled)
-				.addColumn("Email", User_.emailAddress);
+		.addColumn("Email", User_.emailAddress);
 
 		super.init(User.class, container, builder.build());
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new Or(new SimpleStringFilter(User_.username.getName(), filterString, true, false),
 				new SimpleStringFilter(User_.emailAddress, filterString, true, false));
@@ -118,42 +121,42 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	@Override
 	protected void formValidate() throws InvalidValueException
 	{
-		password.validate();
-		confirmPassword.validate();
+		this.password.validate();
+		this.confirmPassword.validate();
 	}
 
 	@Override
-	public void rowChanged(EntityItem<User> item)
+	public void rowChanged(final EntityItem<User> item)
 	{
 		if (item != null)
 		{
 
 			if (super.isNew())
 			{
-				password.removeAllValidators();
-				confirmPassword.removeAllValidators();
-				password.addValidator(new PasswordValidator("Password"));
-				confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
-				password.setValue("");
-				confirmPassword.setValue("");
+				this.password.removeAllValidators();
+				this.confirmPassword.removeAllValidators();
+				this.password.addValidator(new PasswordValidator("Password"));
+				this.confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
+				this.password.setValue("");
+				this.confirmPassword.setValue("");
 
 			}
 			else
 			{
 				// Clear the validators as we only enable them if the user
 				// clicks into one of the password fields.
-				password.removeAllValidators();
-				confirmPassword.removeAllValidators();
+				this.password.removeAllValidators();
+				this.confirmPassword.removeAllValidators();
 
 				// push a value so it looks like the password is filled out.
-				password.setValue("********");
-				confirmPassword.setValue("********");
+				this.password.setValue("********");
+				this.confirmPassword.setValue("********");
 			}
 		}
 		else
 		{
-			password.setValue("");
-			confirmPassword.setValue("");
+			this.password.setValue("");
+			this.confirmPassword.setValue("");
 		}
 		super.rowChanged(item);
 		this.passwordChanged = false;
@@ -162,38 +165,38 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 
 	/**
 	 * One of the password fields has changed so we need to inject the
-	 * validators.
-	 * We only inject the validator is a user attempts to edit the password.
-	 * 
+	 * validators. We only inject the validator is a user attempts to edit the
+	 * password.
+	 *
 	 */
 	@Override
-	public void textChange(TextChangeEvent event)
+	public void textChange(final TextChangeEvent event)
 	{
 		this.passwordChanged = true;
 
-		password.removeAllValidators();
-		confirmPassword.removeAllValidators();
-		password.addValidator(new PasswordValidator("Password"));
-		confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
+		this.password.removeAllValidators();
+		this.confirmPassword.removeAllValidators();
+		this.password.addValidator(new PasswordValidator("Password"));
+		this.confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
 
 	}
 
 	@Override
 	protected List<CrudAction<User>> getCrudActions()
 	{
-		List<CrudAction<User>> actions = super.getCrudActions();
-		
+		final List<CrudAction<User>> actions = super.getCrudActions();
+
 		actions.add(new UserActionInviteUser());
 		return actions;
 	}
 
 	@Override
-	public void focus(FocusEvent event)
+	public void focus(final FocusEvent event)
 	{
-		if (passwordChanged == false)
+		if (this.passwordChanged == false)
 		{
-			password.setValue("");
-			confirmPassword.setValue("");
+			this.password.setValue("");
+			this.confirmPassword.setValue("");
 		}
 
 	}

@@ -26,13 +26,13 @@ public class SectionTryout extends BaseEntity
 	/**
 	 * The type of tryout.
 	 */
-	@ManyToOne(targetEntity=SectionTryoutType.class)
+	@ManyToOne(targetEntity = SectionTryoutType.class)
 	SectionTryoutType type;
 
 	/**
 	 * The youth who is doing a trial.
 	 */
-	@OneToOne(targetEntity=Contact.class)
+	@OneToOne(targetEntity = Contact.class)
 	Contact trialYouthMember;
 
 	/**
@@ -75,7 +75,7 @@ public class SectionTryout extends BaseEntity
 	public String getName()
 	{
 		// TODO Auto-generated method stub
-		return trialYouthMember.getFullname() + type.getName();
+		return this.trialYouthMember.getFullname() + this.type.getName();
 	}
 
 }

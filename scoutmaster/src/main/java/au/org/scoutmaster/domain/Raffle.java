@@ -22,12 +22,12 @@ import au.org.scoutmaster.domain.accounting.Money;
 
 /**
  * Represents a Raffle that is being held by the group.
- * 
+ *
  * @author bsutton
  *
  */
-@Entity(name="Raffle")
-@Table(name="Raffle")
+@Entity(name = "Raffle")
+@Table(name = "Raffle")
 @Access(AccessType.FIELD)
 public class Raffle extends BaseEntity
 {
@@ -37,53 +37,51 @@ public class Raffle extends BaseEntity
 	 * The name of the raffle (e.g. Monster raffle March 2013
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String name;
-	
+
 	/**
 	 * Any special notes about the raffle
 	 */
 	String notes;
 
-	
 	/**
 	 * Date the raffle commences
 	 */
-	Date startDate= new Date(new java.util.Date().getTime());
-	
-	
+	Date startDate = new Date(new java.util.Date().getTime());
+
 	/**
-	 * The date the raffle tickets needs to be collected by. 
+	 * The date the raffle tickets needs to be collected by.
 	 */
 	Date collectionsDate;
-	
+
 	/**
 	 * The date the tickets need to be returned to branch.
 	 */
 	Date returnDate;
-	
+
 	/**
 	 * Person in the group who is responsible for running the raffle.
 	 */
 	@ManyToOne
 	Contact groupRaffleManager;
-	
+
 	/**
-	 * The contact at branch who is responsible for the raffle or our primary contact for raffle matters.
+	 * The contact at branch who is responsible for the raffle or our primary
+	 * contact for raffle matters.
 	 */
 	@ManyToOne
 	Contact branchRaffleContact;
-	
+
 	/**
 	 * Any non-numeric prefix used for the raffle book no.s
 	 */
 	String raffleNoPrefix = new String();
-	
+
 	/**
 	 * The no. of tickets in each book.
 	 */
 	Integer ticketsPerBook = new Integer(10);
-	
 
 	/*
 	 * Transient value used to track the no. of tickets sold
@@ -101,81 +99,69 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision"))
-	})
+			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue")),
+				@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision")) })
 	Money salePricePerTicket;
-	
+
 	/**
 	 * The revenue target for the raffle.
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision"))
-	})
+			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue")),
+				@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision")) })
 	Money revenueTarget;
-	
-	
+
 	/*
 	 * Transient value used to track the total revenue raised by the raffle.
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue")),
-			@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision"))
-	})
+			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue")),
+				@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision")) })
 	Money revenueRaised;
-	
-	
 
 	/**
-	 * The set of available books (books recieved from branch but not allocated to a contact.
+	 * The set of available books (books recieved from branch but not allocated
+	 * to a contact.
 	 */
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "raffle", orphanRemoval=true)
-	private Set<RaffleBook> available = new HashSet<>();
+	@OneToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
+	private final Set<RaffleBook> available = new HashSet<>();
 
 	/**
-	 * The set of allocations. Allocations represent a set of books that have been allocated to contacts.
+	 * The set of allocations. Allocations represent a set of books that have
+	 * been allocated to contacts.
 	 */
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "raffle", orphanRemoval=true)
-	private Set<RaffleAllocation> allocated = new HashSet<>();
-
+	@OneToMany(cascade =
+	{ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
+	private final Set<RaffleAllocation> allocated = new HashSet<>();
 
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
-
-	public void addRaffleBook(RaffleBook child)
+	public void addRaffleBook(final RaffleBook child)
 	{
-		available.add(child);
+		this.available.add(child);
 	}
-
 
 	public int getTicketsPerBook()
 	{
 		return this.ticketsPerBook;
 	}
 
-
-	public void addRaffleAllocation(RaffleAllocation child)
+	public void addRaffleAllocation(final RaffleAllocation child)
 	{
 		this.allocated.add(child);
-	
-		
-	}
 
+	}
 
 	public Set<RaffleBook> getImportedBooks()
 	{
 		return this.available;
 	}
-
 
 }

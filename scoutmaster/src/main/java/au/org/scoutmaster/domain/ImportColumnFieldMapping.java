@@ -6,14 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity(name="ImportColumnFieldMapping")
-@Table(name="ImportColumnFieldMapping")
+@Entity(name = "ImportColumnFieldMapping")
+@Table(name = "ImportColumnFieldMapping")
 @Access(AccessType.FIELD)
 public class ImportColumnFieldMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(optional = false,targetEntity=ImportUserMapping.class)
+	@ManyToOne(optional = false, targetEntity = ImportUserMapping.class)
 	private ImportUserMapping userMapping;
 
 	/**
@@ -32,12 +32,11 @@ public class ImportColumnFieldMapping extends BaseEntity
 
 	}
 
-	public ImportColumnFieldMapping(String csvColumnName, String dbFieldName)
+	public ImportColumnFieldMapping(final String csvColumnName, final String dbFieldName)
 	{
 		this.csvColumnName = csvColumnName;
 		this.dbFieldName = dbFieldName;
 	}
-
 
 	@Override
 	public String toString()
@@ -46,7 +45,7 @@ public class ImportColumnFieldMapping extends BaseEntity
 
 	}
 
-	public void setUserMapping(ImportUserMapping importUserMapping)
+	public void setUserMapping(final ImportUserMapping importUserMapping)
 	{
 		this.userMapping = importUserMapping;
 	}

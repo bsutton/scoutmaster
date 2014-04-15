@@ -22,7 +22,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Task Types", path="Admin.Lists")
+@Menu(display = "Task Types", path = "Admin.Lists")
 public class TaskTypeView extends BaseCrudView<TaskType> implements View, Selected<TaskType>
 {
 
@@ -35,36 +35,34 @@ public class TaskTypeView extends BaseCrudView<TaskType> implements View, Select
 
 	private SMMultiColumnFormLayout<TaskType> overviewForm;
 
-
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<TaskType> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<TaskType> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		overviewForm = new SMMultiColumnFormLayout<TaskType>(2, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 280);
-		overviewForm.setColumnLabelWidth(0, 70);
-		overviewForm.setSizeFull();
+		this.overviewForm = new SMMultiColumnFormLayout<TaskType>(2, this.fieldGroup);
+		this.overviewForm.setColumnFieldWidth(0, 280);
+		this.overviewForm.setColumnLabelWidth(0, 70);
+		this.overviewForm.setSizeFull();
 
-		overviewForm.bindTextField("Name", TaskType_.name);
-		overviewForm.newLine();
-		overviewForm.bindTextField("Description", TaskType_.description);
-		overviewForm.newLine();
-		layout.addComponent(overviewForm);
+		this.overviewForm.bindTextField("Name", TaskType_.name);
+		this.overviewForm.newLine();
+		this.overviewForm.bindTextField("Description", TaskType_.description);
+		this.overviewForm.newLine();
+		layout.addComponent(this.overviewForm);
 
 		return layout;
 	}
 
-	
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<TaskType> container = DaoFactory.getGenericDao(TaskType.class).createVaadinContainer();
+		final JPAContainer<TaskType> container = DaoFactory.getGenericDao(TaskType.class).createVaadinContainer();
 		container.sort(new String[]
-		{ TaskType_.name.getName() }, new boolean[]
-		{ true });
+				{ TaskType_.name.getName() }, new boolean[]
+						{ true });
 
-		Builder<TaskType> builder = new HeadingPropertySet.Builder<TaskType>();
+		final Builder<TaskType> builder = new HeadingPropertySet.Builder<TaskType>();
 		builder.addColumn("TaskType", TaskType_.name).addColumn("Description", TaskType_.description);
 
 		super.init(TaskType.class, container, builder.build());
@@ -72,10 +70,10 @@ public class TaskTypeView extends BaseCrudView<TaskType> implements View, Select
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(TaskType_.name.getName(), filterString, true, false), new SimpleStringFilter(
-				TaskType_.description.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(TaskType_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(TaskType_.description.getName(), filterString, true, false));
 	}
 
 	@Override

@@ -15,15 +15,16 @@ public class OrganisationTypeDao extends JpaBaseDao<OrganisationType, Long> impl
 		// inherit the default per request em.
 	}
 
-	public OrganisationTypeDao(EntityManager em)
+	public OrganisationTypeDao(final EntityManager em)
 	{
 		super(em);
 	}
 
+	@Override
 	public JPAContainer<OrganisationType> createVaadinContainer()
 	{
 
-		JPAContainer<OrganisationType> contactContainer = super.createVaadinContainer();
+		final JPAContainer<OrganisationType> contactContainer = super.createVaadinContainer();
 
 		return contactContainer;
 	}

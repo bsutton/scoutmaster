@@ -28,9 +28,9 @@ public class ImportShowSample implements WizardStep
 {
 	Logger logger = LogManager.getLogger(ImportShowSample.class.getName());
 
-	private ImportWizardView importView;
+	private final ImportWizardView importView;
 
-	public ImportShowSample(ImportWizardView importView)
+	public ImportShowSample(final ImportWizardView importView)
 	{
 		this.importView = importView;
 	}
@@ -44,8 +44,8 @@ public class ImportShowSample implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		File tempFile = this.importView.getFile().getTempFile();
-		Table table = new Table();
+		final File tempFile = this.importView.getFile().getTempFile();
+		final Table table = new Table();
 		table.setSizeFull();
 
 		FileReader reader;
@@ -54,7 +54,7 @@ public class ImportShowSample implements WizardStep
 			if (tempFile.exists())
 			{
 				reader = new FileReader(tempFile);
-				IndexedContainer indexedContainer = buildContainerFromCSV(reader);
+				final IndexedContainer indexedContainer = buildContainerFromCSV(reader);
 				reader.close();
 
 				/* Finally, let's update the table with the container */
@@ -67,23 +67,23 @@ public class ImportShowSample implements WizardStep
 				/* Finally, let's update the table with the container */
 				table.setCaption("No file selected");
 				table.setVisible(true);
-	
+
 			}
 
 		}
-		catch (FileNotFoundException e)
+		catch (final FileNotFoundException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			throw new RuntimeException(e);
 		}
-		catch (IOException e)
+		catch (final IOException e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			Notification.show(e.getMessage());
 		}
 
 		/* Main layout */
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 		layout.setSpacing(true);
 		layout.setSizeFull();
@@ -107,9 +107,9 @@ public class ImportShowSample implements WizardStep
 		return true;
 	}
 
-	protected IndexedContainer buildContainerFromCSV(Reader reader) throws IOException
+	protected IndexedContainer buildContainerFromCSV(final Reader reader) throws IOException
 	{
-		IndexedContainer container = new IndexedContainer();
+		final IndexedContainer container = new IndexedContainer();
 		CSVReader csvReader = null;
 
 		try
@@ -121,11 +121,11 @@ public class ImportShowSample implements WizardStep
 			Hashtable<String, FormFieldImpl> fieldMaps = new Hashtable<String, FormFieldImpl>();
 
 			fieldMaps = this.importView.getMatch().getFieldMap();
-			addItemProperties(container, fieldMaps);
+			ImportShowSample.addItemProperties(container, fieldMaps);
 
 			// Import no more than 100 records as this is only a sample
 			int count = 0;
-			while (((record = csvReader.readNext()) != null) && count < 100)
+			while ((record = csvReader.readNext()) != null && count < 100)
 			{
 				if (columnHeaders == null)
 				{
@@ -133,7 +133,7 @@ public class ImportShowSample implements WizardStep
 				}
 				else
 				{
-					addRow(container, columnHeaders, record, fieldMaps);
+					ImportShowSample.addRow(container, columnHeaders, record, fieldMaps);
 					count++;
 				}
 			}
@@ -141,34 +141,37 @@ public class ImportShowSample implements WizardStep
 		finally
 		{
 			if (csvReader != null)
+			{
 				csvReader.close();
+			}
 		}
 		return container;
 	}
 
-	private static void addItemProperties(IndexedContainer container, Hashtable<String, FormFieldImpl> fieldMaps)
+	private static void addItemProperties(final IndexedContainer container,
+			final Hashtable<String, FormFieldImpl> fieldMaps)
 	{
-		for (String key : fieldMaps.keySet())
+		for (final String key : fieldMaps.keySet())
 		{
 			container.addContainerProperty(fieldMaps.get(key).getFieldName(), String.class, null);
 		}
 	}
 
-	private static <R extends Importable> void addRow(IndexedContainer container, String[] csvHeaders, String[] fields,
-			Hashtable<String, FormFieldImpl> fieldMaps)
+	private static <R extends Importable> void addRow(final IndexedContainer container, final String[] csvHeaders,
+			final String[] fields, final Hashtable<String, FormFieldImpl> fieldMaps)
 	{
-		Object itemId = container.addItem();
-		Item item = container.getItem(itemId);
+		final Object itemId = container.addItem();
+		final Item item = container.getItem(itemId);
 		for (int i = 0; i < fields.length; i++)
 		{
-			String csvHeaderName = csvHeaders[i];
-			FormFieldImpl fieldMap = fieldMaps.get(csvHeaderName);
+			final String csvHeaderName = csvHeaders[i];
+			final FormFieldImpl fieldMap = fieldMaps.get(csvHeaderName);
 			if (fieldMap != null)
 			{
-				String field = fields[i];
-				String fieldName = fieldMap.getFieldName();
+				final String field = fields[i];
+				final String fieldName = fieldMap.getFieldName();
 				@SuppressWarnings("unchecked")
-				Property<String> itemProperty = item.getItemProperty(fieldName);
+				final Property<String> itemProperty = item.getItemProperty(fieldName);
 				itemProperty.setValue(field);
 			}
 		}

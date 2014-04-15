@@ -30,82 +30,90 @@ import com.vaadin.ui.VerticalLayout;
 public class MessageDetailsStep implements WizardStep
 {
 
-	private TextField subject;
-	private TextArea message;
-	private Label remaining;
+	private final TextField subject;
+	private final TextArea message;
+	private final Label remaining;
 
 	// SMFormHelper<SMSProvider> formHelper;
-	private TextField from;
-	private ComboBox providers;
-	private BulkSMSWizardView wizard;
-	private MultiColumnFormLayout<SMSProvider> formLayout;
-	private VerticalLayout layout;
-	private Label recipientCount;
-	private TagField tag;
+	private final TextField from;
+	private final ComboBox providers;
+	private final BulkSMSWizardView wizard;
+	private final MultiColumnFormLayout<SMSProvider> formLayout;
+	private final VerticalLayout layout;
+	private final Label recipientCount;
+	private final TagField tag;
 
-	public MessageDetailsStep(BulkSMSWizardView messagingWizardView)
+	public MessageDetailsStep(final BulkSMSWizardView messagingWizardView)
 	{
-		wizard = messagingWizardView;
-		
-		layout = new VerticalLayout();
-		layout.setDescription("MessageDetailsContent");
-		
-		layout.addComponent(new Label("Enter the subject and message and then click next."));
-		formLayout = new MultiColumnFormLayout<>(1, null);
-		formLayout.setColumnFieldWidth(0, 500);
-		formLayout.setSizeFull();
-		
-		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		List<SMSProvider> providerList = daoSMSProvider.findAll();
+		this.wizard = messagingWizardView;
+
+		this.layout = new VerticalLayout();
+		this.layout.setDescription("MessageDetailsContent");
+
+		this.layout.addComponent(new Label("Enter the subject and message and then click next."));
+		this.formLayout = new MultiColumnFormLayout<>(1, null);
+		this.formLayout.setColumnFieldWidth(0, 500);
+		this.formLayout.setSizeFull();
+
+		final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+		final List<SMSProvider> providerList = daoSMSProvider.findAll();
 		if (providerList.size() == 0)
+		{
 			throw new IllegalStateException("You must first configure an SMS Provider");
-		SMSProvider provider = providerList.get(0);
+		}
+		final SMSProvider provider = providerList.get(0);
 
-		providers = new ComboBox("Provider");
-		providers.setContainerDataSource(daoSMSProvider.createVaadinContainer());
-		providers.setConverter(SMSProvider.class);
-		providers.select(provider.getId());
-		
-		// Only give the user the option to select a provider if there is more than one of them.
+		this.providers = new ComboBox("Provider");
+		this.providers.setContainerDataSource(daoSMSProvider.createVaadinContainer());
+		this.providers.setConverter(SMSProvider.class);
+		this.providers.select(provider.getId());
+
+		// Only give the user the option to select a provider if there is more
+		// than one of them.
 		if (providerList.size() > 1)
-			layout.addComponent(providers);
-		
-		recipientCount = new Label();
-		recipientCount.setContentMode(ContentMode.HTML);
-		layout.addComponent(recipientCount);
+		{
+			this.layout.addComponent(this.providers);
+		}
 
-		tag = new TagField("Activity Tag", false);
-		tag.setWidth("100%");
-		tag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
-		layout.addComponent(tag);
+		this.recipientCount = new Label();
+		this.recipientCount.setContentMode(ContentMode.HTML);
+		this.layout.addComponent(this.recipientCount);
 
-		from = formLayout.bindTextField("From Mobile No.", "from");
-		from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
-		User user = SMSession.INSTANCE.getLoggedInUser();
+		this.tag = new TagField("Activity Tag", false);
+		this.tag.setWidth("100%");
+		this.tag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
+		this.layout.addComponent(this.tag);
+
+		this.from = this.formLayout.bindTextField("From Mobile No.", "from");
+		this.from.addValidator(new StringLengthValidator("'From Mobile' must be supplied", 1, 15, false));
+		final User user = SMSession.INSTANCE.getLoggedInUser();
 		String senderID = provider.getDefaultSenderID();
-		if (user.getSenderMobile()!= null && user.getSenderMobile().length() > 0)
+		if (user.getSenderMobile() != null && user.getSenderMobile().length() > 0)
+		{
 			senderID = user.getSenderMobile();
-		from.setValue(senderID);
-		from.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
-		subject = formLayout.bindTextField("Subject", "subject");
-		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
-		message = formLayout.bindTextAreaField("Message", "message", 4);
-		message.addValidator(new StringLengthValidator("'Message' must be supplied", 1, 160, false));
-		remaining = formLayout.bindLabel("Characters remaining 160");
-		remaining.setImmediate(true);
-		
-		layout.addComponent(formLayout);
-		layout.setMargin(true);
-		
-		message.addTextChangeListener(new TextChangeListener()
+		}
+		this.from.setValue(senderID);
+		this.from
+				.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
+		this.subject = this.formLayout.bindTextField("Subject", "subject");
+		this.subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
+		this.message = this.formLayout.bindTextAreaField("Message", "message", 4);
+		this.message.addValidator(new StringLengthValidator("'Message' must be supplied", 1, 160, false));
+		this.remaining = this.formLayout.bindLabel("Characters remaining 160");
+		this.remaining.setImmediate(true);
+
+		this.layout.addComponent(this.formLayout);
+		this.layout.setMargin(true);
+
+		this.message.addTextChangeListener(new TextChangeListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void textChange(TextChangeEvent event)
+			public void textChange(final TextChangeEvent event)
 			{
-				remaining.setValue("Characters remaining " + (160 - event.getText().length()));
-				
+				MessageDetailsStep.this.remaining.setValue("Characters remaining " + (160 - event.getText().length()));
+
 			}
 		});
 
@@ -120,25 +128,27 @@ public class MessageDetailsStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		recipientCount.setValue("<p><b>" + wizard.getRecipientStep().getRecipientCount()
+		this.recipientCount.setValue("<p><b>" + this.wizard.getRecipientStep().getRecipientCount()
 				+ " recipients have been selected to recieve the following SMS.</b></p>");
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
 
-		boolean advance = notEmpty("Message", message.getValue()) && notEmpty("From", from.getValue())
-				&& notEmpty("Subject", subject.getValue());
+		final boolean advance = notEmpty("Message", this.message.getValue()) && notEmpty("From", this.from.getValue())
+				&& notEmpty("Subject", this.subject.getValue());
 
 		if (!advance)
+		{
 			Notification.show("Please enter your Mobile, Subject and a Message then click Next");
+		}
 		return advance;
 	}
 
-	private boolean notEmpty(String label, String value)
+	private boolean notEmpty(final String label, final String value)
 	{
 		return value != null && value.length() > 0;
 	}
@@ -151,25 +161,25 @@ public class MessageDetailsStep implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), message.getValue(), new Phone(from.getValue()));
+		return new Message(this.subject.getValue(), this.message.getValue(), new Phone(this.from.getValue()));
 	}
 
 	public SMSProvider getProvider()
 	{
-		Long providerId = (Long)providers.getValue();
-		
-		SMSProviderDao dao = new DaoFactory().getSMSProviderDao();
+		final Long providerId = (Long) this.providers.getValue();
+
+		final SMSProviderDao dao = new DaoFactory().getSMSProviderDao();
 		return dao.findById(providerId);
 	}
 
 	public String getFrom()
 	{
-		return from.getValue();
+		return this.from.getValue();
 	}
 
 	public String getSubject()
 	{
-		return subject.getValue();
+		return this.subject.getValue();
 	}
 
 	public ArrayList<Tag> getActivityTags()

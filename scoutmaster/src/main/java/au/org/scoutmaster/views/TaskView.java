@@ -50,26 +50,25 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 
 	public static final String NAME = "Tasks";
 
-
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<Task> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<Task> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		SMMultiColumnFormLayout<Task> overviewForm = new SMMultiColumnFormLayout<Task>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<Task> overviewForm = new SMMultiColumnFormLayout<Task>(2, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setColumnLabelWidth(0, 70);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
 
-		FormHelper<Task> formHelper = overviewForm.getFormHelper();
+		final FormHelper<Task> formHelper = overviewForm.getFormHelper();
 
 		overviewForm.bindTextField("Subject", Task_.subject);
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<User>().setLabel("Added By").setField(Task_.addedBy)
-				.setListFieldName(User_.username).build();
+		.setListFieldName(User_.username).build();
 
 		overviewForm.newLine();
 
@@ -83,24 +82,24 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskStatus>().setLabel("Status").setField(Task_.taskStatus)
-				.setListFieldName(TaskStatus_.name).build();
+		.setListFieldName(TaskStatus_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskType>().setLabel("Type").setField(Task_.taskType)
-				.setListFieldName(TaskType_.name).build();
+		.setListFieldName(TaskType_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<Contact>().setLabel("With Contact").setField(Task_.withContact)
-				.setListFieldName("fullname").build();
+		.setListFieldName("fullname").build();
 
 		overviewForm.newLine();
 		formHelper.new EntityFieldBuilder<Section>().setLabel("Section").setField(Task_.section)
-				.setListFieldName(Section_.name).build();
+		.setListFieldName(Section_.name).build();
 
 		overviewForm.newLine();
 		overviewForm.colspan(2);
 
-		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Task_.details, true);
+		final CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Task_.details, true);
 		detailsEditor.setSizeFull();
 		overviewForm.setExpandRatio(1.0f);
 
@@ -110,45 +109,49 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 	}
 
 	@Override
-	protected void preNew(EntityItem<Task> newEntity)
+	protected void preNew(final EntityItem<Task> newEntity)
 	{
-		JpaBaseDao<TaskStatus, Long> daoStatus = DaoFactory.getGenericDao(TaskStatus.class);
-		TaskStatus result = daoStatus.findOneByAttribute(TaskStatus_.name, TaskStatus.NOT_STARTED);
-		Task task = newEntity.getEntity();
+		final JpaBaseDao<TaskStatus, Long> daoStatus = DaoFactory.getGenericDao(TaskStatus.class);
+		final TaskStatus result = daoStatus.findOneByAttribute(TaskStatus_.name, TaskStatus.NOT_STARTED);
+		final Task task = newEntity.getEntity();
 		task.setStatus(result);
 		task.setAddedBy(SMSession.INSTANCE.getLoggedInUser());
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<Task> container = DaoFactory.getGenericDao(Task.class).createVaadinContainer();
+		final JPAContainer<Task> container = DaoFactory.getGenericDao(Task.class).createVaadinContainer();
 		container.sort(new String[]
-		{ Task_.dueDate.getName() }, new boolean[]
-		{ false });
+				{ Task_.dueDate.getName() }, new boolean[]
+						{ false });
 
-		Builder<Task> builder = new HeadingPropertySet.Builder<Task>();
+		final Builder<Task> builder = new HeadingPropertySet.Builder<Task>();
 		builder.addColumn("Owner", Task_.addedBy).addColumn("Subject", Task_.subject)
-				.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
-				.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
+		.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
+		.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
 
 		super.init(Task.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		if (filterString.trim().length() > 0)
+		{
 			return new Or(new SimpleStringFilter(Task_.dueDate.getName(), filterString, true, false),
 					new SimpleStringFilter(new Path(Task_.taskType, TaskType_.name).getName(), filterString, true,
 							false), new SimpleStringFilter(new Path(Task_.withContact, Contact_.lastname).getName(),
-							filterString, true, false), new SimpleStringFilter(new Path(Task_.withContact,
-							Contact_.firstname).getName(), filterString, true, false), new SimpleStringFilter(new Path(
-							Task_.addedBy, User_.username).getName(), filterString, true, false),
-					new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
+									filterString, true, false), new SimpleStringFilter(new Path(Task_.withContact,
+											Contact_.firstname).getName(), filterString, true, false), new SimpleStringFilter(new Path(
+													Task_.addedBy, User_.username).getName(), filterString, true, false),
+													new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
+		}
 		else
+		{
 			return null;
+		}
 	}
 
 	@Override

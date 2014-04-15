@@ -27,46 +27,44 @@ public class ContextListener implements ServletContextListener
 	private static final String MASTER_XML = "liquibase/db.changelog-master.xml";
 
 	@Override
-	public void contextInitialized(ServletContextEvent sce)
+	public void contextInitialized(final ServletContextEvent sce)
 	{
 		Liquibase liquibase;
-		try(Connection conn = getConnection())
+		try (Connection conn = getConnection())
 		{
-			String masterPath = sce.getServletContext().getRealPath(new File("WEB-INF/classes/", MASTER_XML).getPath());
-			logger.info("Initialising liquibase");
+			final String masterPath = sce.getServletContext().getRealPath(
+					new File("WEB-INF/classes/", ContextListener.MASTER_XML).getPath());
+			ContextListener.logger.info("Initialising liquibase");
 
-			File masterFile = new File(masterPath);
-			File baseDir = masterFile.getParentFile().getParentFile();
+			final File masterFile = new File(masterPath);
+			final File baseDir = masterFile.getParentFile().getParentFile();
 
-			liquibase = new Liquibase(MASTER_XML, new FileSystemResourceAccessor(baseDir.getCanonicalPath()),
-					new JdbcConnection(conn));
+			liquibase = new Liquibase(ContextListener.MASTER_XML, new FileSystemResourceAccessor(
+					baseDir.getCanonicalPath()), new JdbcConnection(conn));
 			liquibase.update("");
-			
-			logger.info("Liquibase has completed successfully");
-			
-			
-			
+
+			ContextListener.logger.info("Liquibase has completed successfully");
+
 		}
 		catch (LiquibaseException | NamingException | SQLException | IOException e)
 		{
-			logger.info("Liquibase failed.");
-			logger.error(e, e);
+			ContextListener.logger.info("Liquibase failed.");
+			ContextListener.logger.error(e, e);
 		}
-		
 
 	}
 
 	@Override
-	public void contextDestroyed(ServletContextEvent sce)
+	public void contextDestroyed(final ServletContextEvent sce)
 	{
 
 	}
 
 	Connection getConnection() throws NamingException, SQLException
 	{
-		Context context = new InitialContext();
-		DataSource ds = (DataSource) context.lookup(JNDI_SCOUTMASTER_DS);
-		Connection connection = ds.getConnection();
+		final Context context = new InitialContext();
+		final DataSource ds = (DataSource) context.lookup(ContextListener.JNDI_SCOUTMASTER_DS);
+		final Connection connection = ds.getConnection();
 		return connection;
 	}
 

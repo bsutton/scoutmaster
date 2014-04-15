@@ -12,34 +12,38 @@ import org.joda.time.LocalDate;
 
 /**
  * Persist LocalDate via EclipseLink
- * 
+ *
  * @author georgi.knox
- * 
+ *
  */
 public class LocalDateConverter implements Converter
 {
 	private static final long serialVersionUID = 1L;
 
-	public Object convertDataValueToObjectValue(Object dataValue, Session session)
+	@Override
+	public Object convertDataValueToObjectValue(final Object dataValue, final Session session)
 	{
 		if (dataValue instanceof Date)
+		{
 			return new LocalDate(dataValue);
+		}
 		throw new IllegalStateException("Converstion exception, value is not of LocalDate type.");
 	}
 
-	public Object convertObjectValueToDataValue(Object objectValue, Session arg1)
+	@Override
+	public Object convertObjectValueToDataValue(final Object objectValue, final Session arg1)
 	{
 
 		if (objectValue instanceof LocalDate)
 		{
-			LocalDate localDate = (LocalDate) objectValue;
-			String dateString = localDate.toString();
-			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			final LocalDate localDate = (LocalDate) objectValue;
+			final String dateString = localDate.toString();
+			final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			try
 			{
 				return df.parse(dateString);
 			}
-			catch (ParseException e)
+			catch (final ParseException e)
 			{
 				throw new IllegalStateException("Converstion exception, value is not of java.util.Date type.");
 			}
@@ -47,11 +51,13 @@ public class LocalDateConverter implements Converter
 		throw new IllegalStateException("Converstion exception, value is not of java.util.Date type.");
 	}
 
-	public void initialize(DatabaseMapping arg0, Session arg1)
+	@Override
+	public void initialize(final DatabaseMapping arg0, final Session arg1)
 	{
 
 	}
 
+	@Override
 	public boolean isMutable()
 	{
 		return false;

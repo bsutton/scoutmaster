@@ -6,24 +6,24 @@ public class ImportItemStatus
 {
 	public Integer getRow()
 	{
-		return row;
+		return this.row;
 	}
 
 	public Exception getException()
 	{
-		return exception;
+		return this.exception;
 	}
 
 	Integer row;
 	Exception exception;
 
-	public ImportItemStatus(Integer row, Exception e)
+	public ImportItemStatus(final Integer row, final Exception e)
 	{
 		this.row = row;
 		this.exception = new ImportRowExeption(e);
 	}
 
-	public ImportItemStatus(int row, ConstraintViolationException e)
+	public ImportItemStatus(final int row, final ConstraintViolationException e)
 	{
 		this.row = row;
 		this.exception = new ImportRowExeption(e);

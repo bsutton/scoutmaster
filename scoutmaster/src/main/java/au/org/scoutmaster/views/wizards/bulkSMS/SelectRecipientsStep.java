@@ -20,29 +20,27 @@ import com.vaadin.ui.VerticalLayout;
 public class SelectRecipientsStep implements WizardStep
 {
 
-	private SearchableContactTable contactTable;
-	private VerticalLayout layout;
+	private final SearchableContactTable contactTable;
+	private final VerticalLayout layout;
 
-	public SelectRecipientsStep(BulkSMSWizardView messagingWizardView)
+	public SelectRecipientsStep(final BulkSMSWizardView messagingWizardView)
 	{
-		layout = new VerticalLayout();
-		layout.setMargin(true);
-		layout.setSizeFull();
+		this.layout = new VerticalLayout();
+		this.layout.setMargin(true);
+		this.layout.setSizeFull();
 
-		ContactDao daoContact = new DaoFactory().getContactDao();
-		
-		JPAContainer<Contact> contactContainer = daoContact.createVaadinContainer();
-		
-		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
-		builder.addColumn("First Name", Contact_.firstname)
-		.addColumn("Lastname", Contact_.lastname)
-		.addColumn("Birth Date", Contact_.birthDate)
-		.addColumn("Section", Contact_.section)
-		.addColumn("Mobile", Contact.PRIMARY_PHONE);
+		final ContactDao daoContact = new DaoFactory().getContactDao();
 
-		contactTable = new SearchableContactTable(contactContainer, builder.build());
-		contactTable.excludeDoNotSendBulkCommunications(true);
-		layout.addComponent(contactTable);
+		final JPAContainer<Contact> contactContainer = daoContact.createVaadinContainer();
+
+		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
+		builder.addColumn("First Name", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
+				.addColumn("Birth Date", Contact_.birthDate).addColumn("Section", Contact_.section)
+				.addColumn("Mobile", Contact.PRIMARY_PHONE);
+
+		this.contactTable = new SearchableContactTable(contactContainer, builder.build());
+		this.contactTable.excludeDoNotSendBulkCommunications(true);
+		this.layout.addComponent(this.contactTable);
 
 	}
 
@@ -55,14 +53,14 @@ public class SelectRecipientsStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		return layout;
+		return this.layout;
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
 		boolean advance = true;
-		if (contactTable.size() == 0)
+		if (this.contactTable.size() == 0)
 		{
 			advance = false;
 			Notification.show("You must select at least one recipient.");
@@ -78,11 +76,11 @@ public class SelectRecipientsStep implements WizardStep
 
 	public ArrayList<Contact> getRecipients()
 	{
-		return contactTable.getFilteredContacts();
+		return this.contactTable.getFilteredContacts();
 	}
 
 	public int getRecipientCount()
 	{
-		return contactTable.size();
+		return this.contactTable.size();
 	}
 }

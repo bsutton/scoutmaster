@@ -13,5 +13,5 @@ public class RelationshipDao extends JpaBaseDao<Relationship, Long>
 	{
 		return super.createVaadinContainer();
 	}
-	
+
 }

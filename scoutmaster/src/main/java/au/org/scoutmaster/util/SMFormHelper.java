@@ -21,32 +21,31 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	public SMFormHelper(AbstractLayout form, ValidatingFieldGroup<E> group)
+	public SMFormHelper(final AbstractLayout form, final ValidatingFieldGroup<E> group)
 	{
 		super(form, group);
 	}
 
-	
-	public <T extends BaseEntity> TokenField bindTokenField(Selected<T> selected, String fieldLabel, String fieldName,
-			Class<? extends BaseEntity> clazz)
+	public <T extends BaseEntity> TokenField bindTokenField(final Selected<T> selected, final String fieldLabel,
+			final String fieldName, final Class<? extends BaseEntity> clazz)
 	{
-		TokenField field = bindTagField(super.getForm(), super.getFieldGroup(), selected, fieldLabel, fieldName);
-		this.getFieldList().add(field);
-		return field;
-	}
-	
-	public <T extends BaseEntity, L, F> TokenField bindTagField(AbstractLayout form, FieldGroup group, Selected<T> selected
-			, String fieldLabel, SetAttribute<T, L> entityField)
-	{
-		TokenField field = bindTagField(form, group, selected, fieldLabel, entityField.getName());
-		this.getFieldList().add(field);
+		final TokenField field = bindTagField(super.getForm(), super.getFieldGroup(), selected, fieldLabel, fieldName);
+		getFieldList().add(field);
 		return field;
 	}
 
-
-	public <T extends BaseEntity, L> TokenField bindTagField(AbstractLayout form, FieldGroup group, Selected<T> selected, String fieldLabel, String fieldName)
+	public <T extends BaseEntity, L, F> TokenField bindTagField(final AbstractLayout form, final FieldGroup group,
+			final Selected<T> selected, final String fieldLabel, final SetAttribute<T, L> entityField)
 	{
-		TokenField field = new SplitTagField<T>(fieldLabel, false);
+		final TokenField field = bindTagField(form, group, selected, fieldLabel, entityField.getName());
+		getFieldList().add(field);
+		return field;
+	}
+
+	public <T extends BaseEntity, L> TokenField bindTagField(final AbstractLayout form, final FieldGroup group,
+			final Selected<T> selected, final String fieldLabel, final String fieldName)
+	{
+		final TokenField field = new SplitTagField<T>(fieldLabel, false);
 		field.setWidth("100%"); // width...
 		field.setInputWidth("100%"); // and input width separately
 		field.setFilteringMode(FilteringMode.CONTAINS); // suggest
@@ -56,7 +55,9 @@ public class SMFormHelper<E> extends FormHelper<E> implements Serializable
 		field.setImmediate(true);
 
 		if (group != null)
+		{
 			group.bind(field, fieldName);
+		}
 		form.addComponent(field);
 		return field;
 	}

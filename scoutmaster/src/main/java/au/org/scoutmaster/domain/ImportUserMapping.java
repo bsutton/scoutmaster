@@ -15,18 +15,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Used to save the set of 'csv field' to 'Entity field' mappings that the user has
- * selected during the import.
- * 
+ * Used to save the set of 'csv field' to 'Entity field' mappings that the user
+ * has selected during the import.
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="ImportUserMapping")
-@Table(name="ImportUserMapping")
+@Entity(name = "ImportUserMapping")
+@Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
+		{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
 public class ImportUserMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -34,25 +33,25 @@ public class ImportUserMapping extends BaseEntity
 	public static final String FIND_BY_NAME = "ImportUserMapping.findByName";
 
 	// Name of this save import mapping
-	@Column(unique=true)
+	@Column(unique = true)
 	private String mappingName;
 
-	@OneToMany(mappedBy = "userMapping", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true,targetEntity=ImportColumnFieldMapping.class)
+	@OneToMany(mappedBy = "userMapping", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = ImportColumnFieldMapping.class)
 	// @JoinColumn(name="importUserMappingId")
-	private List<ImportColumnFieldMapping> columnFieldMappings = new ArrayList<>();
+	private final List<ImportColumnFieldMapping> columnFieldMappings = new ArrayList<>();
 
 	public ImportUserMapping()
 	{
 	}
 
-	public ImportUserMapping(String mappingName)
+	public ImportUserMapping(final String mappingName)
 	{
-		this.setMappingName(mappingName);
+		setMappingName(mappingName);
 	}
 
-	public void setName(String mappingName)
+	public void setName(final String mappingName)
 	{
-		this.setMappingName(mappingName);
+		setMappingName(mappingName);
 	}
 
 	public String getMappingName()
@@ -60,19 +59,19 @@ public class ImportUserMapping extends BaseEntity
 		return null;
 	}
 
-	public void setMappingName(String mappingName)
+	public void setMappingName(final String mappingName)
 	{
 		this.mappingName = mappingName;
 	}
 
 	public List<ImportColumnFieldMapping> getColumnFieldMappings()
 	{
-		return columnFieldMappings;
+		return this.columnFieldMappings;
 	}
 
 	@Override
 	public String getName()
 	{
-		return mappingName;
+		return this.mappingName;
 	}
 }

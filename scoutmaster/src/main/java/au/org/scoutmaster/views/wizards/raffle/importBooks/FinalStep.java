@@ -14,9 +14,9 @@ import com.vaadin.ui.VerticalLayout;
 
 public class FinalStep implements WizardStep
 {
-	private RaffleBookImportWizardView wizard;
+	private final RaffleBookImportWizardView wizard;
 
-	public FinalStep(RaffleBookImportWizardView setupWizardView)
+	public FinalStep(final RaffleBookImportWizardView setupWizardView)
 	{
 		this.wizard = setupWizardView;
 	}
@@ -30,36 +30,35 @@ public class FinalStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		
-		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
-		
-		Raffle raffle = this.wizard.getRaffle();
-		TicketRangeStep ticketRange = this.wizard.getTicketRangeStep();
-		
-		
-		
-		int firstBookNo = ticketRange.getFirstBookNo();
-		int lastBookNo = ticketRange.getLastBookNo();
-		int ticketsInBook = raffle.getTicketsPerBook();
-		
+
+		final RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
+
+		final Raffle raffle = this.wizard.getRaffle();
+		final TicketRangeStep ticketRange = this.wizard.getTicketRangeStep();
+
+		final int firstBookNo = ticketRange.getFirstBookNo();
+		final int lastBookNo = ticketRange.getLastBookNo();
+		final int ticketsInBook = raffle.getTicketsPerBook();
+
 		int currentBookNo = firstBookNo;
 		for (currentBookNo = firstBookNo; currentBookNo < lastBookNo; currentBookNo += ticketsInBook)
 		{
-			RaffleBook book = new RaffleBook();
+			final RaffleBook book = new RaffleBook();
 			book.setRaffle(raffle);
 			book.setFirstNo(currentBookNo);
 			book.setTicketCount(ticketsInBook);
 			daoRaffleBook.persist(book);
 		}
-		
-		StringBuffer sb = new StringBuffer();
+
+		final StringBuffer sb = new StringBuffer();
 		sb.append("<h1>Import Complete</h1>");
-		sb.append("<p>" + ticketRange.getBookCount() + " books have been imported and can be viewed under the 'Books' tab on the Raffle page.</p>");
+		sb.append("<p>" + ticketRange.getBookCount()
+				+ " books have been imported and can be viewed under the 'Books' tab on the Raffle page.</p>");
 		sb.append("<p></p><p>If you have more books to import simply run the import wizard again.</p>");
-		
-		Label label = new Label(sb.toString());
+
+		final Label label = new Label(sb.toString());
 		label.setContentMode(ContentMode.HTML);
 		layout.addComponent(label);
 
@@ -81,5 +80,4 @@ public class FinalStep implements WizardStep
 		return false;
 	}
 
-	
 }

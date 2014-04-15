@@ -18,72 +18,60 @@ public class SMNotification extends Notification
 	public static void show(final String caption, final Type type)
 	{
 
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
+		new UIUpdater(() -> {
+			final Notification notification = new Notification(caption, type);
+			if (type == Type.TRAY_NOTIFICATION)
 			{
-				Notification notification = new Notification(caption, type);
-				if (type == Type.TRAY_NOTIFICATION)
-					notification.setPosition(Position.BOTTOM_LEFT);
-				notification.show(Page.getCurrent());
+				notification.setPosition(Position.BOTTOM_LEFT);
 			}
+			notification.show(Page.getCurrent());
 		});
 
 	}
 
 	public static void show(final String caption, final String description, final Type type)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
+		new UIUpdater(() -> {
 
-				Notification notification = new Notification(caption, description, type);
-				if (type == Type.TRAY_NOTIFICATION)
-					notification.setPosition(Position.BOTTOM_LEFT);
-				notification.show(Page.getCurrent());
+			final Notification notification = new Notification(caption, description, type);
+			if (type == Type.TRAY_NOTIFICATION)
+			{
+				notification.setPosition(Position.BOTTOM_LEFT);
 			}
+			notification.show(Page.getCurrent());
 		});
 	}
 
 	public static void show(final Exception e, final Type type)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
+		new UIUpdater(() -> {
 
-				// find root cause.
+			// find root cause.
 				Throwable rootCause = e;
 
 				while (rootCause.getCause() != null)
+				{
 					rootCause = rootCause.getCause();
+				}
 
-				show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
-			}
-		});
+				SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
+			});
 	}
-	
+
 	public static void show(final Throwable e, final Type type)
 	{
-		new UIUpdater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
+		new UIUpdater(() -> {
 
-				// find root cause.
+			// find root cause.
 				Throwable rootCause = e;
 
 				while (rootCause.getCause() != null)
+				{
 					rootCause = rootCause.getCause();
+				}
 
-				show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
-			}
-		});
+				SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
+			});
 	}
 
 }

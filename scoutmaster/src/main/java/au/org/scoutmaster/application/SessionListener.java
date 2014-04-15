@@ -23,34 +23,34 @@ public class SessionListener implements HttpSessionListener
 	private static Logger logger = LogManager.getLogger();
 
 	@Override
-	public void sessionCreated(HttpSessionEvent arg0)
+	public void sessionCreated(final HttpSessionEvent arg0)
 	{
-		logger.debug("Session created");
+		SessionListener.logger.debug("Session created");
 	}
 
 	@Override
-	public void sessionDestroyed(HttpSessionEvent arg0)
+	public void sessionDestroyed(final HttpSessionEvent arg0)
 	{
-		logger.debug("Session destroyed");
+		SessionListener.logger.debug("Session destroyed");
 
 		/**
 		 * NOTE: this won't work until we move to tomcat 8 as vaadin uses a
 		 * FakeHttpSession which is something to do with atmosphere. Tomcat 8
 		 * resolves this issue.
-		 * 
+		 *
 		 * In the mean time we have no session history.
 		 */
 		/**
 		 * Create a record of the users session.
 		 */
-		EntityManager em = EntityManagerProvider.createEntityManager();
+		final EntityManager em = EntityManagerProvider.createEntityManager();
 		try (Transaction t = new Transaction(em))
 		{
-			JpaBaseDao<SessionHistory, Long> daoSession = new DaoFactory(em).getSessionHistoryDao();
-			HttpSession session = arg0.getSession();
-			User user = (User) session.getAttribute(SMSession.USER);
+			final JpaBaseDao<SessionHistory, Long> daoSession = new DaoFactory(em).getSessionHistoryDao();
+			final HttpSession session = arg0.getSession();
+			final User user = (User) session.getAttribute(SMSession.USER);
 
-			SessionHistory sessionHistory = new SessionHistory();
+			final SessionHistory sessionHistory = new SessionHistory();
 			sessionHistory.setUser(user);
 			sessionHistory.setEnd(new Date());
 			sessionHistory.setStart(new Date(session.getCreationTime()));

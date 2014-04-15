@@ -46,118 +46,115 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 	private final Button loginButton;
 
-	private Button forgottenButton;
+	private final Button forgottenButton;
 
 	public LoginView()
 	{
 		setSizeFull();
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout();
+		final VerticalLayout viewLayout = new VerticalLayout();
 		viewLayout.setSizeFull();
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
 
-		HorizontalLayout logo = new HorizontalLayout();
+		final HorizontalLayout logo = new HorizontalLayout();
 		logo.setWidth("100%");
 
-		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/scoutmaster-logo.png"));
+		final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		final FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/scoutmaster-logo.png"));
 
-		Image image = new Image(null, resource);
+		final Image image = new Image(null, resource);
 		image.setAlternateText("Scoutmaster Logo");
 		logo.addComponent(image);
 		logo.setComponentAlignment(image, Alignment.TOP_RIGHT);
 		viewLayout.addComponent(logo);
 
-		VerticalLayout fields = new VerticalLayout();
+		final VerticalLayout fields = new VerticalLayout();
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, true));
 		fields.setSizeUndefined();
 
-
-
 		// Add both to a panel
-		Label label = new Label("<H1>Login to Scoutmaster</H1>");
+		final Label label = new Label("<H1>Login to Scoutmaster</H1>");
 		label.setContentMode(ContentMode.HTML);
 
 		fields.addComponent(label);
 
 		// Create the user input field
-		usernameField = new TextField("Username:");
-		usernameField.setWidth("300px");
-		usernameField.setRequired(true);
-		usernameField.setInputPrompt("Your username");
-		usernameField.setImmediate(true);
-		usernameField.setInvalidAllowed(false);
-		fields.addComponent(usernameField);
+		this.usernameField = new TextField("Username:");
+		this.usernameField.setWidth("300px");
+		this.usernameField.setRequired(true);
+		this.usernameField.setInputPrompt("Your username");
+		this.usernameField.setImmediate(true);
+		this.usernameField.setInvalidAllowed(false);
+		fields.addComponent(this.usernameField);
 
 		// Create the password input field
-		passwordField = new PasswordField("Password:");
-		passwordField.setWidth("300px");
+		this.passwordField = new PasswordField("Password:");
+		this.passwordField.setWidth("300px");
 
-		passwordField.setRequired(true);
-		passwordField.setNullRepresentation("");
+		this.passwordField.setRequired(true);
+		this.passwordField.setNullRepresentation("");
 
-		fields.addComponent(passwordField);
+		fields.addComponent(this.passwordField);
 
 		// Buttons
-		HorizontalLayout buttons = new HorizontalLayout();
+		final HorizontalLayout buttons = new HorizontalLayout();
 		buttons.setSpacing(true);
 
 		// Create login button
-		loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
-		loginButton.setClickShortcut(KeyCode.ENTER);
-		loginButton.addStyleName(Reindeer.BUTTON_DEFAULT);
-		buttons.addComponent(loginButton);
-		buttons.setComponentAlignment(loginButton, Alignment.MIDDLE_LEFT);
+		this.loginButton = new Button("Login", new ClickEventLogged.ClickAdaptor(this));
+		this.loginButton.setClickShortcut(KeyCode.ENTER);
+		this.loginButton.addStyleName(Reindeer.BUTTON_DEFAULT);
+		buttons.addComponent(this.loginButton);
+		buttons.setComponentAlignment(this.loginButton, Alignment.MIDDLE_LEFT);
 
-		forgottenButton = new Button("Forgotten Password", new ClickEventLogged.ClickAdaptor(this));
-		buttons.addComponent(forgottenButton);
-		buttons.setComponentAlignment(forgottenButton, Alignment.MIDDLE_RIGHT);
+		this.forgottenButton = new Button("Forgotten Password", new ClickEventLogged.ClickAdaptor(this));
+		buttons.addComponent(this.forgottenButton);
+		buttons.setComponentAlignment(this.forgottenButton, Alignment.MIDDLE_RIGHT);
 		fields.addComponent(buttons);
 
 		viewLayout.addComponent(fields);
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 
-
 		setCompositionRoot(viewLayout);
-		
+
 		viewLayout.addComponent(fields);
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		usernameField.focus();
+		this.usernameField.focus();
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 
-		if (event.getButton() == forgottenButton)
+		if (event.getButton() == this.forgottenButton)
 		{
 			UI.getCurrent().getNavigator().navigateTo(ForgottenPasswordView.NAME);
 		}
 		else
 		{
-			String username = this.usernameField.getValue();
-			String password = this.passwordField.getValue();
+			final String username = this.usernameField.getValue();
+			final String password = this.passwordField.getValue();
 
-			UserDao daoUser = new DaoFactory().getUserDao();
-			LoginAttemptDao daoLoginAttempt = new DaoFactory().getLoginAttemptDao();
+			final UserDao daoUser = new DaoFactory().getUserDao();
+			final LoginAttemptDao daoLoginAttempt = new DaoFactory().getLoginAttemptDao();
 
 			// check the user hasn't exceed there login attempts.
 			if (!daoLoginAttempt.hasExceededAttempts(username))
 			{
-				User user = daoUser.findByName(username);
+				final User user = daoUser.findByName(username);
 				if (user != null && user.isEnabled() && user.isValidPassword(password))
 				{
 					// Store the current user in the service session
 					SMSession.INSTANCE.setLoggedInUser(user);
 
-					LoginAttempt attempt = new LoginAttempt(user, true);
+					final LoginAttempt attempt = new LoginAttempt(user, true);
 					daoLoginAttempt.persist(attempt);
 
 					// Navigate to main view
@@ -165,7 +162,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				}
 				else
 				{
-					LoginAttempt attempt = new LoginAttempt(user, false);
+					final LoginAttempt attempt = new LoginAttempt(user, false);
 					daoLoginAttempt.persist(attempt);
 
 					// Wrong password clear the password field and refocuses it
@@ -180,8 +177,8 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				// round up to the nearest minute.
 				blockedUntil = blockedUntil.plusMinutes(1);
 				blockedUntil = blockedUntil.minusSeconds(blockedUntil.getSecondOfMinute());
-				Notification.show("Login Attempts have been exceed."
-						,  "You are now blocked until " + blockedUntil.toString("h:mm") + ".", Type.TRAY_NOTIFICATION);
+				Notification.show("Login Attempts have been exceed.",
+						"You are now blocked until " + blockedUntil.toString("h:mm") + ".", Type.TRAY_NOTIFICATION);
 			}
 		}
 	}

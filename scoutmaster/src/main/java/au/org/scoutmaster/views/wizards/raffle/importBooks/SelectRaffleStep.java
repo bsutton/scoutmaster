@@ -41,10 +41,10 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SelectRaffleStep.class);
 
-	private RaffleBookImportWizardView setupWizardView;
+	private final RaffleBookImportWizardView setupWizardView;
 
 	private ComboBox raffleField;
-	
+
 	private Raffle newRaffle = null;
 
 	private VerticalLayout layout;
@@ -55,7 +55,7 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 
 	private AbstractLayout newLayout;
 
-	public SelectRaffleStep(RaffleBookImportWizardView setupWizardView)
+	public SelectRaffleStep(final RaffleBookImportWizardView setupWizardView)
 	{
 		super(DaoFactory.getGenericDao(Raffle.class), Raffle.class);
 		this.setupWizardView = setupWizardView;
@@ -73,91 +73,98 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 
 		private String description;
 
-		RaffleType(String description)
+		RaffleType(final String description)
 		{
 			this.description = description;
 		}
 
+		@Override
 		public String toString()
 		{
-			return description;
+			return this.description;
 		}
 
 	}
 
 	@Override
-	public Component getContent(ValidatingFieldGroup<Raffle> fieldGroup)
+	public Component getContent(final ValidatingFieldGroup<Raffle> fieldGroup)
 	{
-		if (layout == null)
+		if (this.layout == null)
 		{
-			layout = new VerticalLayout();
+			this.layout = new VerticalLayout();
 
-			layout.setMargin(true);
-			Label label = new Label("<h1>Select Raffle to Import Books into.</h1>", ContentMode.HTML);
+			this.layout.setMargin(true);
+			final Label label = new Label("<h1>Select Raffle to Import Books into.</h1>", ContentMode.HTML);
 			label.setContentMode(ContentMode.HTML);
 
-			layout.addComponent(label);
+			this.layout.addComponent(label);
 
-			options = new OptionGroup();
-			options.addItem(RaffleType.New);
-			options.addItem(RaffleType.Existing);
-			options.setImmediate(true);
-			options.addValueChangeListener(this);
-			layout.addComponent(options);
+			this.options = new OptionGroup();
+			this.options.addItem(RaffleType.New);
+			this.options.addItem(RaffleType.Existing);
+			this.options.setImmediate(true);
+			this.options.addValueChangeListener(this);
+			this.layout.addComponent(this.options);
 
 			Raffle raffle = null;
-			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+			final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			@SuppressWarnings("unchecked")
-			List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
-			{ Raffle_.startDate }, new boolean[]
-			{ false });
+			final List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
+					{ Raffle_.startDate }, new boolean[]
+							{ false });
 			if (list.size() > 0)
 			{
 				raffle = list.get(0);
-				DateTime created = new DateTime(raffle.getCreated());
+				final DateTime created = new DateTime(raffle.getCreated());
 				// If the raffle is older than six months we assume they will
 				// be wanting to create a new raffle.
 				if (created.isBefore(new DateTime().minusMonths(6)))
+				{
 					raffle = null;
+				}
 			}
 
-			existingLayout = buildExistingRaffleLayout(raffle);
-			newLayout = buildNewRaffleLayout(fieldGroup);
-			layout.addComponent(existingLayout);
-			layout.addComponent(newLayout);
+			this.existingLayout = buildExistingRaffleLayout(raffle);
+			this.newLayout = buildNewRaffleLayout(fieldGroup);
+			this.layout.addComponent(this.existingLayout);
+			this.layout.addComponent(this.newLayout);
 
 			if (raffle == null)
-				options.setValue(RaffleType.New);
+			{
+				this.options.setValue(RaffleType.New);
+			}
 			else
-				options.setValue(RaffleType.Existing);
+			{
+				this.options.setValue(RaffleType.Existing);
+			}
 
 		}
 
-		return layout;
+		return this.layout;
 	}
 
-	private AbstractLayout buildExistingRaffleLayout(Raffle raffle)
+	private AbstractLayout buildExistingRaffleLayout(final Raffle raffle)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
-		raffleField = new ComboBox();
-		raffleField.setContainerDataSource(daoRaffle.createVaadinContainer());
+		final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+		this.raffleField = new ComboBox();
+		this.raffleField.setContainerDataSource(daoRaffle.createVaadinContainer());
 		// raffleField.setConverter(Raffle.class);
-		raffleField.setItemCaptionPropertyId(Raffle_.name.getName());
-		raffleField.setRequired(true);
-		raffleField.setNullSelectionAllowed(false);
+		this.raffleField.setItemCaptionPropertyId(Raffle_.name.getName());
+		this.raffleField.setRequired(true);
+		this.raffleField.setNullSelectionAllowed(false);
 
-		raffleField.setValue(raffle.getId());
+		this.raffleField.setValue(raffle.getId());
 
-		layout.addComponent(raffleField);
+		layout.addComponent(this.raffleField);
 		return layout;
 
 	}
 
-	AbstractLayout buildNewRaffleLayout(ValidatingFieldGroup<Raffle> fieldGroup)
+	AbstractLayout buildNewRaffleLayout(final ValidatingFieldGroup<Raffle> fieldGroup)
 	{
-		SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<Raffle>(1, fieldGroup);
+		final SMMultiColumnFormLayout<Raffle> overviewForm = new SMMultiColumnFormLayout<Raffle>(1, fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 300);
 		overviewForm.setSizeFull();
 
@@ -165,19 +172,21 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
-				.setDescription("The date the raffle ticksets need to be collected by.");
+		.setDescription("The date the raffle ticksets need to be collected by.");
 		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
 				"The date the raffle ticksets need to be returned to Branch.");
 
-		FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
-		ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>().setLabel("Group Raffle Manager")
-				.setField(Raffle_.groupRaffleManager).setListFieldName(Contact_.fullname).build();
+		final FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
+		final ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>()
+				.setLabel("Group Raffle Manager").setField(Raffle_.groupRaffleManager)
+				.setListFieldName(Contact_.fullname).build();
 		groupRaffleManager.setFilteringMode(FilteringMode.CONTAINS);
 		groupRaffleManager.setTextInputAllowed(true);
 		groupRaffleManager.setDescription("The Group member responsible for organising the Raffle.");
 
-		ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>().setLabel("Branch Raffle Contact")
-				.setField(Raffle_.branchRaffleContact).setListFieldName(Contact_.fullname).build();
+		final ComboBox branchRaffleConact = formHelper.new EntityFieldBuilder<Contact>()
+				.setLabel("Branch Raffle Contact").setField(Raffle_.branchRaffleContact)
+				.setListFieldName(Contact_.fullname).build();
 		branchRaffleConact.setFilteringMode(FilteringMode.CONTAINS);
 		branchRaffleConact.setTextInputAllowed(true);
 		branchRaffleConact.setDescription("The Branch person who is a main contact for Raffle issues.");
@@ -199,18 +208,18 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
-		RaffleType method = (RaffleType) options.getValue();
+		final RaffleType method = (RaffleType) this.options.getValue();
 		switch (method)
 		{
 			case New:
-				existingLayout.setVisible(false);
-				newLayout.setVisible(true);
+				this.existingLayout.setVisible(false);
+				this.newLayout.setVisible(true);
 				break;
 			case Existing:
-				existingLayout.setVisible(true);
-				newLayout.setVisible(false);
+				this.existingLayout.setVisible(true);
+				this.newLayout.setVisible(false);
 				break;
 		}
 
@@ -220,38 +229,41 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	public boolean onAdvance()
 	{
 		boolean advance = false;
-		if (options.getValue() == RaffleType.Existing)
+		if (this.options.getValue() == RaffleType.Existing)
 		{
-			if (raffleField.isValid())
+			if (this.raffleField.isValid())
 			{
-				Long id = (Long) raffleField.getValue();
-				JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
-				Raffle raffle = raffleDao.findById(id);
-				setupWizardView.setRaffle(raffle);
+				final Long id = (Long) this.raffleField.getValue();
+				final JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
+				final Raffle raffle = raffleDao.findById(id);
+				this.setupWizardView.setRaffle(raffle);
 				advance = true;
 			}
 			else
+			{
 				SMNotification.show("Please select a Raffle", Type.WARNING_MESSAGE);
+			}
 		}
 		else
 		{
 			// call super to create the new raffle
 			advance = super.onAdvance();
-			newRaffle = super.getEntity();
-			
-			setupWizardView.setRaffle(newRaffle);
+			this.newRaffle = super.getEntity();
+
+			this.setupWizardView.setRaffle(this.newRaffle);
 		}
 
 		return advance;
 	}
 
+	@Override
 	public boolean onBack()
 	{
 		return true;
 	}
 
 	@Override
-	protected void initEntity(Raffle entity)
+	protected void initEntity(final Raffle entity)
 	{
 		// nothing to initialise for a new raffle.
 	}
@@ -261,7 +273,7 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 	{
 		// If we create a raffle we need to return it when someone clicks
 		// back so we don't keep adding new raffles.
-		return newRaffle;
+		return this.newRaffle;
 	}
 
 }

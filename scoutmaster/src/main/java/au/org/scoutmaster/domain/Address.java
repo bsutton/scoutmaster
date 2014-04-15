@@ -15,47 +15,46 @@ import javax.validation.constraints.Size;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 
-@Entity(name="Address")
-@Table(name="Address")
+@Entity(name = "Address")
+@Table(name = "Address")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
-				+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
+		{ @NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
+		+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
 public class Address extends BaseEntity
 {
 	public static final String FIND_MATCHING = "Address.findMatching";
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	@Size(max=255)
-	private String street= "";
-	
-	@Size(max=255)
+
+	@Size(max = 255)
+	private String street = "";
+
+	@Size(max = 255)
 	private String city = "";
-	
-	@Size(max=255)
-	private String postcode= "";
-	
-	@Size(max=255)
+
+	@Size(max = 255)
+	private String postcode = "";
+
+	@Size(max = 255)
 	private String state = "";
 
-	public void setStreet(String street)
+	public void setStreet(final String street)
 	{
 		this.street = street;
 	}
 
-	public void setCity(String city)
+	public void setCity(final String city)
 	{
 		this.city = city;
 	}
 
-	public void setPostcode(String postcode)
+	public void setPostcode(final String postcode)
 	{
 		this.postcode = postcode;
 	}
 
-	public void setState(String state)
+	public void setState(final String state)
 	{
 		this.state = state;
 	}
@@ -65,7 +64,7 @@ public class Address extends BaseEntity
 
 	}
 
-	public Address(String street, String city, String state, String postcode)
+	public Address(final String street, final String city, final String state, final String postcode)
 	{
 		this.street = street;
 		this.city = city;
@@ -100,12 +99,13 @@ public class Address extends BaseEntity
 	}
 
 	@SuppressWarnings("unchecked")
-	static public List<Address> findAddress(String street, String city, String state, String postcode)
+	static public List<Address> findAddress(final String street, final String city, final String state,
+			final String postcode)
 	{
 		List<Address> addressList = new ArrayList<Address>();
-		EntityManager em = EntityManagerProvider.getEntityManager();
+		final EntityManager em = EntityManagerProvider.getEntityManager();
 
-		Query query = em.createNamedQuery(Address.FIND_MATCHING);
+		final Query query = em.createNamedQuery(Address.FIND_MATCHING);
 		query.setParameter("street", street);
 		query.setParameter("city", city);
 		query.setParameter("state", state);

@@ -25,23 +25,20 @@ import org.hibernate.validator.constraints.NotBlank;
 /**
  * An organisation (company, government body) that the scout group interacts
  * with in some way.
- * 
+ *
  * There should also be one special organisation created for each system which
  * is the one that represents the Scout Group.
- * 
+ *
  * e.g. supplier of uniforms.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="Organisation")
-@Table(name="Organisation")
+@Entity(name = "Organisation")
+@Table(name = "Organisation")
 @Access(AccessType.FIELD)
-
 @NamedQueries(
-{
-	@NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"),
-})
+		{ @NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"), })
 public class Organisation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -53,7 +50,7 @@ public class Organisation extends BaseEntity
 	/**
 	 * If true then this organisation represents our local scout group. This
 	 * organisations should be created by the setup wizard.
-	 * 
+	 *
 	 */
 	private Boolean isOurScoutGroup = false;
 
@@ -61,13 +58,13 @@ public class Organisation extends BaseEntity
 	 * The name of the organisation
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	private String name;
-	
+
 	/**
 	 * The primary role an organisation takes in connection to the group.
 	 */
-	@ManyToOne(targetEntity=OrganisationType.class)
+	@ManyToOne(targetEntity = OrganisationType.class)
 	private OrganisationType organisationType;
 
 	/**
@@ -78,168 +75,169 @@ public class Organisation extends BaseEntity
 	/**
 	 * The list of contacts at the organsiation that the group associates with.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity=Contact.class)
-	private List<Contact> contacts = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Contact.class)
+	private final List<Contact> contacts = new ArrayList<>();
 
 	/**
 	 * The location of the organisation.
 	 */
-	@OneToOne(targetEntity=Address.class)
+	@OneToOne(targetEntity = Address.class)
 	private Address location = new Address();
-	
-	
+
 	@Transient
 	private Phone primaryPhone;
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
 
-	})
+			})
 	private Phone phone1 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
 
-	})
+			})
 	private Phone phone2 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
 
-	})
+			})
 	private Phone phone3 = new Phone();
-	
 
 	/**
 	 * The list of tags used to describe the organisation.
 	 */
-	@ManyToMany(targetEntity=Tag.class)
-	private List<Tag> tags = new ArrayList<>();
+	@ManyToMany(targetEntity = Tag.class)
+	private final List<Tag> tags = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL,targetEntity=Note.class)
-	private List<Note> notes = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Note.class)
+	private final List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(targetEntity=CommunicationLog.class)
-	private List<CommunicationLog> activites = new ArrayList<>();
-
-
+	@OneToMany(targetEntity = CommunicationLog.class)
+	private final List<CommunicationLog> activites = new ArrayList<>();
 
 	public Boolean isOurScoutGroup()
 	{
-		return isOurScoutGroup;
+		return this.isOurScoutGroup;
 	}
 
-	public void setOurScoutGroup(Boolean isOurScoutGroup)
+	public void setOurScoutGroup(final Boolean isOurScoutGroup)
 	{
 		this.isOurScoutGroup = isOurScoutGroup;
 	}
 
 	public String getDescription()
 	{
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description)
+	public void setDescription(final String description)
 	{
 		this.description = description;
 	}
 
+	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 	public Address getLocation()
 	{
-		return location;
+		return this.location;
 	}
 
-	public void setName(String name)
+	public void setName(final String name)
 	{
 		this.name = name;
 
 	}
 
-	public void setLocation(Address location)
+	public void setLocation(final Address location)
 	{
 		this.location = location;
 	}
 
-	public void addTag(Tag tag)
+	public void addTag(final Tag tag)
 	{
 		this.tags.add(tag);
 	}
 
 	public Phone getPhone1()
 	{
-		return phone1;
+		return this.phone1;
 	}
 
-	public void setPhone1(Phone phone1)
+	public void setPhone1(final Phone phone1)
 	{
 		this.phone1 = phone1;
 	}
 
 	public Phone getPhone2()
 	{
-		return phone2;
+		return this.phone2;
 	}
 
-	public void setPhone2(Phone phone2)
+	public void setPhone2(final Phone phone2)
 	{
 		this.phone2 = phone2;
 	}
 
 	public Phone getPhone3()
 	{
-		return phone3;
+		return this.phone3;
 	}
 
-	public void setPhone3(Phone phone3)
+	public void setPhone3(final Phone phone3)
 	{
 		this.phone3 = phone3;
 	}
-	
+
 	public Phone getPrimaryPhone()
 	{
 		Phone primary = null;
-		if (phone1.getPrimaryPhone())
-			primary = phone1;
-		else if (phone2.getPrimaryPhone())
-			primary = phone2;
-		else if (phone3.getPrimaryPhone())
-			primary = phone3;
+		if (this.phone1.getPrimaryPhone())
+		{
+			primary = this.phone1;
+		}
+		else if (this.phone2.getPrimaryPhone())
+		{
+			primary = this.phone2;
+		}
+		else if (this.phone3.getPrimaryPhone())
+		{
+			primary = this.phone3;
+		}
 		return primary;
 
 	}
 
-	public void setPrimaryPhone(Phone phoneNo)
+	public void setPrimaryPhone(final Phone phoneNo)
 	{
 		// No Op
 	}
 
 	public OrganisationType getType()
 	{
-		return organisationType;
+		return this.organisationType;
 	}
 
-	public void setType(OrganisationType type)
+	public void setType(final OrganisationType type)
 	{
 		this.organisationType = type;
 	}
-
-
 
 }

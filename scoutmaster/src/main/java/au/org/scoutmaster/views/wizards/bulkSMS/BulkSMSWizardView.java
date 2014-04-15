@@ -16,15 +16,15 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Bulk SMS", path="Communication")
+@Menu(display = "Bulk SMS", path = "Communication")
 public class BulkSMSWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String NAME = "BulkSMS";
 
 	private Wizard wizard;
-	
+
 	private SelectRecipientsStep recipientStep;
 	private MessageDetailsStep details;
 	private ConfirmDetailsStep confirm;
@@ -32,84 +32,79 @@ public class BulkSMSWizardView extends VerticalLayout implements View, WizardPro
 
 	public MessageDetailsStep getDetails()
 	{
-		return details;
+		return this.details;
 	}
-
 
 	public ShowProgressStep getSend()
 	{
-		return send;
+		return this.send;
 	}
-
 
 	public SelectRecipientsStep getRecipientStep()
 	{
-		return recipientStep;
+		return this.recipientStep;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 
-		recipientStep = new SelectRecipientsStep(this);
-		details = new MessageDetailsStep(this);
-		send = new ShowProgressStep(this);
-		confirm = new ConfirmDetailsStep(this);
-
+		this.recipientStep = new SelectRecipientsStep(this);
+		this.details = new MessageDetailsStep(this);
+		this.send = new ShowProgressStep(this);
+		this.confirm = new ConfirmDetailsStep(this);
 
 		// create the Wizard component and add the steps
-		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
-		wizard.addListener(this);
-		wizard.addStep(recipientStep, "select");
-		wizard.addStep(details, "enter");
-		wizard.addStep(confirm, "confirm");
-		wizard.addStep(send, "send");
-		wizard.setSizeFull();
-		wizard.setUriFragmentEnabled(true);
-		
+		this.wizard = new Wizard();
+		this.wizard.setUriFragmentEnabled(true);
+		this.wizard.addListener(this);
+		this.wizard.addStep(this.recipientStep, "select");
+		this.wizard.addStep(this.details, "enter");
+		this.wizard.addStep(this.confirm, "confirm");
+		this.wizard.addStep(this.send, "send");
+		this.wizard.setSizeFull();
+		this.wizard.setUriFragmentEnabled(true);
+
 		/* Main layout */
 		this.setMargin(true);
-		this.setSpacing(true);
-		this.addComponent(wizard);
-		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		this.setSizeFull();
+		setSpacing(true);
+		this.addComponent(this.wizard);
+		setComponentAlignment(this.wizard, Alignment.TOP_CENTER);
+		setSizeFull();
 
 	}
 
-	
 	@Override
-	public void activeStepChanged(WizardStepActivationEvent event)
+	public void activeStepChanged(final WizardStepActivationEvent event)
 	{
 		// NOOP
 
 	}
 
 	@Override
-	public void stepSetChanged(WizardStepSetChangedEvent event)
+	public void stepSetChanged(final WizardStepSetChangedEvent event)
 	{
 		Page.getCurrent().setTitle(event.getComponent().getCaption());
 
 	}
 
 	@Override
-	public void wizardCompleted(WizardCompletedEvent event)
+	public void wizardCompleted(final WizardCompletedEvent event)
 	{
-		this.endWizard("Transmission Completed!");
+		endWizard("Transmission Completed!");
 
 	}
 
 	@Override
-	public void wizardCancelled(WizardCancelledEvent event)
+	public void wizardCancelled(final WizardCancelledEvent event)
 	{
-		this.endWizard("Transmission Cancelled!");
-		
+		endWizard("Transmission Cancelled!");
+
 	}
 
-	private void endWizard(String message)
+	private void endWizard(final String message)
 	{
-		wizard.setVisible(false);
+		this.wizard.setVisible(false);
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		Page.getCurrent().setLocation("");

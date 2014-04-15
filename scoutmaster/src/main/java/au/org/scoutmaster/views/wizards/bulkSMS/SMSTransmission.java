@@ -10,14 +10,15 @@ import au.org.scoutmaster.domain.Tag;
 
 public class SMSTransmission
 {
-	private Contact contact;
-	private Message message;
+	private final Contact contact;
+	private final Message message;
 	private Phone recipient;
 	// If an exception is thrown during transmission it is stored here.
 	private Exception exception;
-	private ArrayList<Tag> activityTags;
+	private final ArrayList<Tag> activityTags;
 
-	public SMSTransmission(ArrayList<Tag> activityTags, Contact contact, Message message, Phone recipient)
+	public SMSTransmission(final ArrayList<Tag> activityTags, final Contact contact, final Message message,
+			final Phone recipient)
 	{
 		this.contact = contact;
 		this.message = message;
@@ -25,23 +26,29 @@ public class SMSTransmission
 		this.activityTags = activityTags;
 
 		if (recipient.getPhoneType() != PhoneType.MOBILE)
+		{
 			throw new IllegalArgumentException("The phone argument must be of type MOBILE");
-		
-		// We are about to pass these to a new thread and em so we must detach them.
+		}
+
+		// We are about to pass these to a new thread and em so we must detach
+		// them.
 		EntityManagerProvider.detach(contact);
-		for (Tag tag: this.activityTags)
+		for (final Tag tag : this.activityTags)
+		{
 			EntityManagerProvider.detach(tag);
+		}
 
 	}
 
-	public SMSTransmission(Contact contact, Message message, Exception exception)
+	public SMSTransmission(final Contact contact, final Message message, final Exception exception)
 	{
 		this.contact = contact;
 		this.message = message;
 		this.exception = exception;
 		this.activityTags = new ArrayList<>();
-		
-		// We are about to pass these to a new thread and em so we must detach them.
+
+		// We are about to pass these to a new thread and em so we must detach
+		// them.
 		EntityManagerProvider.detach(contact);
 
 	}
@@ -59,12 +66,16 @@ public class SMSTransmission
 	public String getRecipientPhoneNo()
 	{
 		if (this.recipient != null)
+		{
 			return this.recipient.getPhoneNo();
+		}
 		else
+		{
 			return "";
+		}
 	}
 
-	public void setException(Exception e)
+	public void setException(final Exception e)
 	{
 		this.exception = e;
 
@@ -72,20 +83,24 @@ public class SMSTransmission
 
 	public String getResult()
 	{
-		if (exception != null)
-			return exception.getClass().getSimpleName() + ": " + exception.getMessage();
+		if (this.exception != null)
+		{
+			return this.exception.getClass().getSimpleName() + ": " + this.exception.getMessage();
+		}
 		else
+		{
 			return "Success";
+		}
 	}
 
 	public String getContactName()
 	{
 		return this.contact.getFirstname() + " " + this.contact.getLastname();
 	}
-	
+
 	public Contact getContact()
 	{
-		return contact;
+		return this.contact;
 	}
 
 	public ArrayList<Tag> getActivityTags()

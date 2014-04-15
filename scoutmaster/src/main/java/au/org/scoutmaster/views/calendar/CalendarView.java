@@ -31,14 +31,14 @@ import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener
 import com.vaadin.ui.themes.Reindeer;
 
 /** A start view for navigating to the main view */
-@Menu(display = "Month View", path="Calendar")
+@Menu(display = "Month View", path = "Calendar")
 public class CalendarView extends VerticalLayout implements View,
-		au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeListener
+au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeListener
 {
 	public static final String NAME = "Calendar";
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -63,7 +63,7 @@ public class CalendarView extends VerticalLayout implements View,
 
 	}
 
-	public void setPublic(boolean isPublic)
+	public void setPublic(final boolean isPublic)
 	{
 		this.isPublic = isPublic;
 
@@ -75,32 +75,31 @@ public class CalendarView extends VerticalLayout implements View,
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		HorizontalLayout calendarLabel = buildTitleArea();
+		final HorizontalLayout calendarLabel = buildTitleArea();
 		this.addComponent(calendarLabel);
 		calendarLabel.setWidth("100%");
-		
 
-		HorizontalLayout horizontalLayout = new HorizontalLayout();
+		final HorizontalLayout horizontalLayout = new HorizontalLayout();
 		horizontalLayout.setSizeFull();
 		this.addComponent(horizontalLayout);
-		this.setComponentAlignment(calendarLabel, Alignment.MIDDLE_CENTER);
-		this.setExpandRatio(horizontalLayout, 1.0f);
+		setComponentAlignment(calendarLabel, Alignment.MIDDLE_CENTER);
+		setExpandRatio(horizontalLayout, 1.0f);
 
 		this.calendar = buildCalendar();
-		
-		if (isPublic)
+
+		if (this.isPublic)
 		{
 			this.calendar.setReadOnly(true);
 		}
 
-		VerticalLayout calendarArea = new VerticalLayout();
+		final VerticalLayout calendarArea = new VerticalLayout();
 		calendarArea.setSizeFull();
 
 		calendarArea.addComponent(buildControlArea());
-		calendarArea.addComponent(calendar);
-		calendarArea.setExpandRatio(calendar, 1.0f);
+		calendarArea.addComponent(this.calendar);
+		calendarArea.setExpandRatio(this.calendar, 1.0f);
 		calendarArea.setSpacing(false);
 
 		horizontalLayout.addComponent(calendarArea);
@@ -109,31 +108,31 @@ public class CalendarView extends VerticalLayout implements View,
 
 	}
 
-	private void buildEditor(HorizontalLayout horizontalLayout)
+	private void buildEditor(final HorizontalLayout horizontalLayout)
 	{
-		eventDetails = new EventDetails(this, isPublic);
-		eventDetails.setWidth("400px");
+		this.eventDetails = new EventDetails(this, this.isPublic);
+		this.eventDetails.setWidth("400px");
 		// eventDetails.setHeight("100%");
-		horizontalLayout.addComponent(eventDetails);
+		horizontalLayout.addComponent(this.eventDetails);
 	}
 
 	private HorizontalLayout buildTitleArea()
 	{
-		HorizontalLayout layout = new HorizontalLayout();
+		final HorizontalLayout layout = new HorizontalLayout();
 		layout.setWidth("100%");
 
-		OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
-		Organisation ourGroup = daoOrganisation.findOurScoutGroup();
-		Label calendarLabel = new Label("<b>" + ourGroup.getName() + " Calendar</b>");
+		final OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
+		final Organisation ourGroup = daoOrganisation.findOurScoutGroup();
+		final Label calendarLabel = new Label("<b>" + ourGroup.getName() + " Calendar</b>");
 		calendarLabel.setContentMode(ContentMode.HTML);
 		layout.addComponent(calendarLabel);
 		layout.setWidth(null);
 		layout.setExpandRatio(calendarLabel, 1.0f);
 		layout.setComponentAlignment(calendarLabel, Alignment.TOP_CENTER);
 
-		if (!isPublic)
+		if (!this.isPublic)
 		{
-			Button newButton = new Button("New Event");
+			final Button newButton = new Button("New Event");
 			newButton.addClickListener(new NewButtonListener());
 			layout.addComponent(newButton);
 			layout.setComponentAlignment(newButton, Alignment.MIDDLE_RIGHT);
@@ -143,7 +142,7 @@ public class CalendarView extends VerticalLayout implements View,
 
 	private MyCalendar buildCalendar()
 	{
-		MyCalendar calendar = new MyCalendar();
+		final MyCalendar calendar = new MyCalendar();
 		calendar.setTimeFormat(null);
 		calendar.setWeeklyCaptionFormat("dd MMM yyyy");
 		calendar.setStartDate(new Date());
@@ -154,10 +153,10 @@ public class CalendarView extends VerticalLayout implements View,
 		calendar.setFirstVisibleHourOfDay(5);
 		calendar.setLastVisibleHourOfDay(22);
 		calendar.setSizeFull();
-		
+
 		// Customize the event provider for adding events
 		// as entities
-		ContainerEventProvider cep = new ScoutsContainerEventProvider(calendar);
+		final ContainerEventProvider cep = new ScoutsContainerEventProvider(calendar);
 		// Set the container as the data source
 		calendar.setEventProvider(cep);
 		cep.addEventChangeListener(this);
@@ -174,47 +173,28 @@ public class CalendarView extends VerticalLayout implements View,
 	private AbstractLayout buildControlArea()
 	{
 
-		HorizontalLayout intervalLayout = new HorizontalLayout();
+		final HorizontalLayout intervalLayout = new HorizontalLayout();
 		intervalLayout.setSpacing(true);
 
-		dailyView = createIntervalButton(Interval.Daily);
-		weeklyView = createIntervalButton(Interval.Weekly);
-		monthlyView = createIntervalButton(Interval.Monthly);
-		setActiveViewButton(monthlyView);
-		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.addButton(monthlyView);
-		buttonGroup.addButton(weeklyView);
-		buttonGroup.addButton(dailyView);
+		this.dailyView = createIntervalButton(Interval.Daily);
+		this.weeklyView = createIntervalButton(Interval.Weekly);
+		this.monthlyView = createIntervalButton(Interval.Monthly);
+		setActiveViewButton(this.monthlyView);
+		final ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup.addButton(this.monthlyView);
+		buttonGroup.addButton(this.weeklyView);
+		buttonGroup.addButton(this.dailyView);
 
 		intervalLayout.addComponent(buttonGroup);
 
-		HorizontalLayout controlLayout = new HorizontalLayout();
+		final HorizontalLayout controlLayout = new HorizontalLayout();
 		controlLayout.setWidth("100%");
 		controlLayout.setMargin(new MarginInfo(false, false, true, false));
-		Button previous = new Button("Prev");
-		previous.addClickListener(new ClickListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				calendar.fireNavigationEvent(false);
-
-			}
-		});
-		Button next = new Button("Next");
-		next.addClickListener(new ClickListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void buttonClick(ClickEvent event)
-			{
-				calendar.fireNavigationEvent(true);
-
-			}
-		});
+		final Button previous = new Button("Prev");
+		previous.addClickListener(buttonClick -> CalendarView.this.calendar.fireNavigationEvent(false));
+		final Button next = new Button("Next");
+		next.addClickListener(buttonClick -> CalendarView.this.calendar.fireNavigationEvent(true));
+		
 
 		controlLayout.addComponent(previous);
 		controlLayout.addComponent(intervalLayout);
@@ -225,23 +205,23 @@ public class CalendarView extends VerticalLayout implements View,
 		return controlLayout;
 	}
 
-	void setActiveViewButton(Button active)
+	void setActiveViewButton(final Button active)
 	{
-		dailyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
-		weeklyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
-		monthlyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
-		dailyView.markAsDirty();
-		weeklyView.markAsDirty();
-		monthlyView.markAsDirty();
+		this.dailyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
+		this.weeklyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
+		this.monthlyView.removeStyleName(Reindeer.BUTTON_DEFAULT);
+		this.dailyView.markAsDirty();
+		this.weeklyView.markAsDirty();
+		this.monthlyView.markAsDirty();
 
 		active.addStyleName(Reindeer.BUTTON_DEFAULT);
 	}
 
-	private Button createIntervalButton(Interval interval)
+	private Button createIntervalButton(final Interval interval)
 	{
-		Button intervalButton = new Button(interval.name());
+		final Button intervalButton = new Button(interval.name());
 		intervalButton.setData(interval);
-		intervalButton.addClickListener(new IntervalChangeListener(calendar, this));
+		intervalButton.addClickListener(new IntervalChangeListener(this.calendar, this));
 
 		return intervalButton;
 	}
@@ -251,17 +231,17 @@ public class CalendarView extends VerticalLayout implements View,
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void buttonClick(ClickEvent event)
+		public void buttonClick(final ClickEvent event)
 		{
-			au.org.scoutmaster.domain.Event calEvent = new au.org.scoutmaster.domain.Event();
+			final au.org.scoutmaster.domain.Event calEvent = new au.org.scoutmaster.domain.Event();
 			if (CalendarView.this.calendar.getStartDate().after(calEvent.getEventStartDateTime()))
 			{
-				DateTime calFirstDate = new DateTime(CalendarView.this.calendar.getStartDate());
+				final DateTime calFirstDate = new DateTime(CalendarView.this.calendar.getStartDate());
 				calEvent.setEventStartDateTime(calFirstDate.withHourOfDay(12).toDate());
 				calEvent.setEventEndDateTime(calFirstDate.withHourOfDay(14).toDate());
 			}
-			currentEvent = new ScoutCalEvent(calEvent);
-			eventDetails.setEvent(calEvent, true);
+			CalendarView.this.currentEvent = new ScoutCalEvent(calEvent);
+			CalendarView.this.eventDetails.setEvent(calEvent, true);
 		}
 	}
 
@@ -270,38 +250,38 @@ public class CalendarView extends VerticalLayout implements View,
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void eventClick(EventClick event)
+		public void eventClick(final EventClick event)
 		{
 			if (event != null)
 			{
-				currentEvent = (ScoutCalEvent) event.getCalendarEvent();
-				eventDetails.setEvent(currentEvent.getEntity(), false);
+				CalendarView.this.currentEvent = (ScoutCalEvent) event.getCalendarEvent();
+				CalendarView.this.eventDetails.setEvent(CalendarView.this.currentEvent.getEntity(), false);
 			}
 			else
 			{
-				currentEvent = null;
-				eventDetails.setEvent(null, false);
+				CalendarView.this.currentEvent = null;
+				CalendarView.this.eventDetails.setEvent(null, false);
 			}
 		}
 	}
 
 	@Override
-	public void eventSaved(au.org.scoutmaster.domain.Event event, boolean newEvent)
+	public void eventSaved(final au.org.scoutmaster.domain.Event event, final boolean newEvent)
 	{
 		if (newEvent)
 		{
-			CalendarView.this.calendar.addEvent(currentEvent);
+			CalendarView.this.calendar.addEvent(this.currentEvent);
 		}
 		else
 		{
-			currentEvent.updateEvent(event);
+			this.currentEvent.updateEvent(event);
 		}
 	}
 
 	@Override
-	public void eventDeleted(au.org.scoutmaster.domain.Event event)
+	public void eventDeleted(final au.org.scoutmaster.domain.Event event)
 	{
-		currentEvent.updateEvent(event);
+		this.currentEvent.updateEvent(event);
 
 	}
 
@@ -310,7 +290,7 @@ public class CalendarView extends VerticalLayout implements View,
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void fireNavigationEvent(boolean forward)
+		public void fireNavigationEvent(final boolean forward)
 		{
 			super.fireNavigationEvent(forward);
 		}
@@ -322,9 +302,9 @@ public class CalendarView extends VerticalLayout implements View,
 	 * update.
 	 */
 	@Override
-	public void eventChange(EventChangeEvent eventChangeEvent)
+	public void eventChange(final EventChangeEvent eventChangeEvent)
 	{
-		ScoutCalEvent changedEvent = (ScoutCalEvent) eventChangeEvent.getCalendarEvent();
+		final ScoutCalEvent changedEvent = (ScoutCalEvent) eventChangeEvent.getCalendarEvent();
 
 		if (changedEvent.getEntity().getId().equals(this.currentEvent.getEntity().getId()))
 		{

@@ -25,25 +25,24 @@ import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.util.PasswordHash;
 
 @Entity
-@Table(name="User")
+@Table(name = "User")
 @NamedQueries(
-{
-		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
-		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
+		{
+			@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
+			@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
 public class User extends BaseEntity
 {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Transient
 	private static final Logger logger = LogManager.getLogger(User.class);
 
-	
 	public static final String FIND_BY_NAME = "User.findByName";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	private String username;
 
 	/**
@@ -51,18 +50,17 @@ public class User extends BaseEntity
 	 */
 	@NotBlank
 	private String saltedPassword;
-	
-	
+
 	private String firstname;
-	
+
 	private String surname;
-	
+
 	/**
 	 * The users email address used when they forget their password.
 	 */
 	@Email
 	private String emailAddress;
-	
+
 	/**
 	 * Allows us to disable a user account. When a user is disabled they can't
 	 * log in.
@@ -76,67 +74,64 @@ public class User extends BaseEntity
 	 * potential new user that wants to use the same username.
 	 */
 	private Boolean deleted;
-	
-	
+
 	/**
-	 * Used as the 'sender' mobile when sending bulk mobiles. 
+	 * Used as the 'sender' mobile when sending bulk mobiles.
 	 */
 	private String senderMobile;
-	
-	/** 
+
+	/**
 	 * Email signature used by default when this user is sending an email
 	 */
-	@Size(max=1024)
+	@Size(max = 1024)
 	private String emailSignature;
-	
-	
 
 	public String getSenderMobile()
 	{
-		return senderMobile;
+		return this.senderMobile;
 	}
 
-	public void setSenderMobile(String senderMobile)
+	public void setSenderMobile(final String senderMobile)
 	{
 		this.senderMobile = senderMobile;
 	}
 
 	public String getUsername()
 	{
-		return username;
+		return this.username;
 	}
 
-	public void setUsername(String username)
+	public void setUsername(final String username)
 	{
 		this.username = username;
 	}
 
 	public Boolean isEnabled()
 	{
-		return enabled;
+		return this.enabled;
 	}
 
-	public void setEnabled(Boolean enabled)
+	public void setEnabled(final Boolean enabled)
 	{
 		this.enabled = enabled;
 	}
 
 	public Boolean getDeleted()
 	{
-		return deleted;
+		return this.deleted;
 	}
 
-	public void setDeleted(Boolean deleted)
+	public void setDeleted(final Boolean deleted)
 	{
 		this.deleted = deleted;
 	}
 
 	public List<Role> getBelongsTo()
 	{
-		return belongsTo;
+		return this.belongsTo;
 	}
 
-	public void setBelongsTo(List<Role> belongsTo)
+	public void setBelongsTo(final List<Role> belongsTo)
 	{
 		this.belongsTo = belongsTo;
 	}
@@ -154,7 +149,7 @@ public class User extends BaseEntity
 
 	}
 
-	public User(String username, String password)
+	public User(final String username, final String password)
 	{
 		this.username = username;
 		this.saltedPassword = generatePassword(password);
@@ -162,19 +157,19 @@ public class User extends BaseEntity
 		this.deleted = false;
 
 	}
-	
+
 	@Access(value = AccessType.PROPERTY)
 	/**
 	 * Takes a clear text password and hashes and salts it for storage.
 	 * @param password
 	 */
-	public void setPassword(String password)
+	public void setPassword(final String password)
 	{
 		this.saltedPassword = generatePassword(password);
 	}
-	
+
 	/*
-	 * returns a hashed and salted version of the password 
+	 * returns a hashed and salted version of the password
 	 */
 	public String getPassword()
 	{
@@ -184,11 +179,11 @@ public class User extends BaseEntity
 
 	/**
 	 * Takes a password and generates a salted hash we can store in the db.
-	 * 
+	 *
 	 * @param password
 	 * @return
 	 */
-	private String generatePassword(String password)
+	private String generatePassword(final String password)
 	{
 		String saltedPassword;
 		try
@@ -197,14 +192,14 @@ public class User extends BaseEntity
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			logger.error(e, e);
+			User.logger.error(e, e);
 			throw new RuntimeException(e);
 		}
 		return saltedPassword;
 
 	}
 
-	public boolean isValidPassword(String password)
+	public boolean isValidPassword(final String password)
 	{
 		try
 		{
@@ -212,53 +207,54 @@ public class User extends BaseEntity
 		}
 		catch (NoSuchAlgorithmException | InvalidKeySpecException e)
 		{
-			logger.error(e, e);
+			User.logger.error(e, e);
 			throw new RuntimeException(e);
 		}
 	}
 
-	public void setEmailAddress(String emailAddress)
+	public void setEmailAddress(final String emailAddress)
 	{
 		this.emailAddress = emailAddress;
 
 	}
-	
+
 	public String getEmailAddress()
 	{
-		return emailAddress;
+		return this.emailAddress;
 	}
 
+	@Override
 	public String toString()
 	{
-		return username;
+		return this.username;
 	}
 
 	@Override
 	public String getName()
 	{
-		return username;
+		return this.username;
 	}
 
 	public String getFirstname()
 	{
-		return firstname;
+		return this.firstname;
 	}
 
-	public void setFirstname(String firstname)
+	public void setFirstname(final String firstname)
 	{
 		this.firstname = firstname;
 	}
 
 	public String getSurname()
 	{
-		return surname;
+		return this.surname;
 	}
 
-	public void setSurname(String surname)
+	public void setSurname(final String surname)
 	{
 		this.surname = surname;
 	}
-	
+
 	public String getFullname()
 	{
 		return this.firstname + " " + this.surname;
@@ -266,7 +262,6 @@ public class User extends BaseEntity
 
 	public String getEmailSignature()
 	{
-		return emailSignature;
+		return this.emailSignature;
 	}
 }
-

@@ -12,61 +12,62 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Used to hold the set of defaults for a given section.
- * 
+ *
  * @author bsutton
  *
  */
 
-@Entity(name="SectionMeetingDefaults")
-@Table(name="SectionMeetingDefaults")
+@Entity(name = "SectionMeetingDefaults")
+@Table(name = "SectionMeetingDefaults")
 @Access(AccessType.FIELD)
 public class SectionMeetingDefaults extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
-	/** 
+	/**
 	 * The section these defaults apply to
 	 */
-	@ManyToOne(targetEntity=Section.class)
+	@ManyToOne(targetEntity = Section.class)
 	Section section;
-	
-	/** 
+
+	/**
 	 * The night this section usually meets on.
 	 */
 	Night meetingNight;
-	
-	/** 
+
+	/**
 	 * The normal meeting start time
 	 */
 	Time startTime;
-	
+
 	/**
 	 * The normal meeting end time
 	 */
 	Time EndTime;
-	
+
 	/**
 	 * A short default description used when summarizing the meeting.
 	 */
 	@NotBlank
 	String meetingSubject;
-	
+
 	/**
-	 * A default detailed description of the meeting. 
+	 * A default detailed description of the meeting.
 	 */
 	String meetingDetails;
-	
-	/** 
+
+	/**
 	 * The default location of the meeting.
 	 */
-	@ManyToOne(targetEntity=Address.class)
+	@ManyToOne(targetEntity = Address.class)
 	Address location;
 
 	@Override
-	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value = {"NP_UNWRITTEN_FIELD","UWF_UNWRITTEN_FIELD"}, justification = "JPA injection")
+	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
+	{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
 	public String getName()
 	{
-		return section.getName() + " " + meetingNight.toString() + " " + meetingSubject;
+		return this.section.getName() + " " + this.meetingNight.toString() + " " + this.meetingSubject;
 	}
 
 }

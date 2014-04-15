@@ -47,103 +47,107 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 	private static Logger logger = LogManager.getLogger(EventDetails.class);
 	private static final long serialVersionUID = 1L;
 
-	private ValidatingFieldGroup<au.org.scoutmaster.domain.Event> fieldGroup;
+	private final ValidatingFieldGroup<au.org.scoutmaster.domain.Event> fieldGroup;
 	private DateField startDateField;
 	private DateField endDateField;
-	private JPAContainer<au.org.scoutmaster.domain.Event> container;
+	private final JPAContainer<au.org.scoutmaster.domain.Event> container;
 	private EntityItem<au.org.scoutmaster.domain.Event> entityItem;
 	private Button save;
 	private Button cancel;
 	private au.org.scoutmaster.domain.Event event;
-	private SaveEventListener newEventListener;
+	private final SaveEventListener newEventListener;
 	private Button delete;
 	private boolean newEvent;
-	private boolean readonly;
+	private final boolean readonly;
 	private RichTextArea detailsEditor;
 	private Label clickToViewLabel;
 	private RichTextArea message;
 
 	/**
-	 * 
+	 *
 	 * @param readonly
 	 * @param newButtonListener
 	 * @param sender
 	 *            the user who is sending this email.
 	 */
-	public EventDetails(SaveEventListener newEventListener, boolean readonly)
+	public EventDetails(final SaveEventListener newEventListener, final boolean readonly)
 	{
 		this.readonly = readonly;
-		EventDao daoEvent = new DaoFactory().getEventDao();
+		final EventDao daoEvent = new DaoFactory().getEventDao();
 		this.container = daoEvent.createVaadinContainer();
 		this.fieldGroup = new ValidatingFieldGroup<au.org.scoutmaster.domain.Event>(
 				au.org.scoutmaster.domain.Event.class);
 		this.newEventListener = newEventListener;
 		buildForm();
 		this.newEvent = false;
-		fieldGroup.setEnabled(false);
+		this.fieldGroup.setEnabled(false);
 		if (!readonly)
 		{
-			delete.setEnabled(false);
-			cancel.setEnabled(false);
-			save.setEnabled(false);
+			this.delete.setEnabled(false);
+			this.cancel.setEnabled(false);
+			this.save.setEnabled(false);
 		}
-		
+
 	}
 
-	void setEvent(au.org.scoutmaster.domain.Event event, boolean newEvent)
+	void setEvent(final au.org.scoutmaster.domain.Event event, final boolean newEvent)
 	{
 		this.event = event;
 		this.newEvent = newEvent;
 
 		if (event != null)
 		{
-			clickToViewLabel.setVisible(false);
-			entityItem = container.createEntityItem(event);
+			this.clickToViewLabel.setVisible(false);
+			this.entityItem = this.container.createEntityItem(event);
 
 			// startDateField.removeValueChangeListener(this);
-			fieldGroup.setItemDataSource(entityItem);
+			this.fieldGroup.setItemDataSource(this.entityItem);
 			// startDateField.addValueChangeListener(this);
 
-			if (!readonly)
+			if (!this.readonly)
 			{
 				if (newEvent)
-					delete.setEnabled(false);
+				{
+					this.delete.setEnabled(false);
+				}
 				else
-					delete.setEnabled(true);
-				save.setEnabled(true);
-				cancel.setEnabled(true);
-				fieldGroup.setEnabled(true);
+				{
+					this.delete.setEnabled(true);
+				}
+				this.save.setEnabled(true);
+				this.cancel.setEnabled(true);
+				this.fieldGroup.setEnabled(true);
 				this.detailsEditor.setReadOnly(false);
 			}
 			else
 			{
-				fieldGroup.setEnabled(true);
-				fieldGroup.setReadOnly(true);
+				this.fieldGroup.setEnabled(true);
+				this.fieldGroup.setReadOnly(true);
 			}
 
 		}
 		else
 		{
-			clickToViewLabel.setVisible(false);
-			fieldGroup.discard();
-			entityItem = container.createEntityItem(new au.org.scoutmaster.domain.Event());
-			fieldGroup.setItemDataSource(entityItem);
-			fieldGroup.setEnabled(false);
-			delete.setEnabled(false);
-			cancel.setEnabled(false);
-			save.setEnabled(false);
+			this.clickToViewLabel.setVisible(false);
+			this.fieldGroup.discard();
+			this.entityItem = this.container.createEntityItem(new au.org.scoutmaster.domain.Event());
+			this.fieldGroup.setItemDataSource(this.entityItem);
+			this.fieldGroup.setEnabled(false);
+			this.delete.setEnabled(false);
+			this.cancel.setEnabled(false);
+			this.save.setEnabled(false);
 		}
 	}
 
 	void buildForm()
 	{
-		clickToViewLabel = new Label("<b>Click an event in the Calendar to view its details.</b>");
-		clickToViewLabel.setContentMode(ContentMode.HTML);
-		clickToViewLabel.setWidth(null);
-		this.addComponent(clickToViewLabel);
-		this.setComponentAlignment(clickToViewLabel, Alignment.MIDDLE_RIGHT);
+		this.clickToViewLabel = new Label("<b>Click an event in the Calendar to view its details.</b>");
+		this.clickToViewLabel.setContentMode(ContentMode.HTML);
+		this.clickToViewLabel.setWidth(null);
+		this.addComponent(this.clickToViewLabel);
+		setComponentAlignment(this.clickToViewLabel, Alignment.MIDDLE_RIGHT);
 
-		SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event> overviewForm = new SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event>(
+		final SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event> overviewForm = new SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event>(
 				3, this.fieldGroup);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setColumnLabelWidth(1, 0);
@@ -153,13 +157,13 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		overviewForm.setColumnFieldWidth(2, 20);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.colspan(3);
-		TextField subject = overviewForm.bindTextField("Subject", Event_.subject);
+		final TextField subject = overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
 
-		if (!readonly)
+		if (!this.readonly)
 		{
 
-			iColorFactory factory = new ColorDao.ColorFactory();
+			final iColorFactory factory = new ColorDao.ColorFactory();
 			overviewForm.bindColorPicker(factory, "Colour", Event_.color.getName());
 			overviewForm.newLine();
 
@@ -168,18 +172,18 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		}
 
 		overviewForm.colspan(3);
-		startDateField = overviewForm.bindDateField("Start", Event_.eventStartDateTime, "yyyy-MM-dd hh:mm a",
+		this.startDateField = overviewForm.bindDateField("Start", Event_.eventStartDateTime, "yyyy-MM-dd hh:mm a",
 				Resolution.MINUTE);
-		startDateField.setRangeStart(new Date());
-		startDateField.addValueChangeListener(this);
+		this.startDateField.setRangeStart(new Date());
+		this.startDateField.addValueChangeListener(this);
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
-		endDateField = overviewForm.bindDateField("End", Event_.eventEndDateTime, "yyyy-MM-dd hh:mm a",
+		this.endDateField = overviewForm.bindDateField("End", Event_.eventEndDateTime, "yyyy-MM-dd hh:mm a",
 				Resolution.MINUTE);
-		endDateField.setRangeStart(new Date());
+		this.endDateField.setRangeStart(new Date());
 
-		startDateField.addValidator(new DateRangeValidator(startDateField.getCaption(), endDateField));
+		this.startDateField.addValidator(new DateRangeValidator(this.startDateField.getCaption(), this.endDateField));
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
@@ -197,75 +201,74 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		overviewForm.colspan(3);
 		this.addComponent(overviewForm);
 
-		if (!readonly)
+		if (!this.readonly)
 		{
-			VerticalLayout detailsEditorLayout = new VerticalLayout();
+			final VerticalLayout detailsEditorLayout = new VerticalLayout();
 			detailsEditorLayout.setMargin(new MarginInfo(false, false, false, true));
 			detailsEditorLayout.setSizeFull();
-			detailsEditor = new RichTextArea();
-			detailsEditor.setNullRepresentation("");
-			detailsEditor.setSizeFull();
-			this.fieldGroup.bind(detailsEditor, Event_.details.getName());
-			
-			detailsEditorLayout.addComponent(detailsEditor);
+			this.detailsEditor = new RichTextArea();
+			this.detailsEditor.setNullRepresentation("");
+			this.detailsEditor.setSizeFull();
+			this.fieldGroup.bind(this.detailsEditor, Event_.details.getName());
+
+			detailsEditorLayout.addComponent(this.detailsEditor);
 			this.addComponent(detailsEditorLayout);
-			this.setComponentAlignment(detailsEditorLayout, Alignment.MIDDLE_RIGHT);
-		}		
+			setComponentAlignment(detailsEditorLayout, Alignment.MIDDLE_RIGHT);
+		}
 		else
 		{
-			message = new RichTextArea();
-			message.setNullRepresentation("");
-			message.setReadOnly(true);
-			
+			this.message = new RichTextArea();
+			this.message.setNullRepresentation("");
+			this.message.setReadOnly(true);
+
 			this.setMargin(true);
-			this.fieldGroup.bind(message, Event_.details.getName());
-			this.addComponent(message);
-			this.setExpandRatio(message, 1.0f);
+			this.fieldGroup.bind(this.message, Event_.details.getName());
+			this.addComponent(this.message);
+			setExpandRatio(this.message, 1.0f);
 
 		}
 
-		if (!readonly)
+		if (!this.readonly)
 		{
-			HorizontalLayout buttonLayout = new HorizontalLayout();
+			final HorizontalLayout buttonLayout = new HorizontalLayout();
 			buttonLayout.setMargin(new MarginInfo(false, false, false, true));
 			buttonLayout.setSpacing(true);
-			save = new Button("Save");
-			save.addClickListener(this);
-			cancel = new Button("Cancel");
-			cancel.addClickListener(this);
+			this.save = new Button("Save");
+			this.save.addClickListener(this);
+			this.cancel = new Button("Cancel");
+			this.cancel.addClickListener(this);
 
-			delete = new Button("Delete");
-			delete.addClickListener(this);
+			this.delete = new Button("Delete");
+			this.delete.addClickListener(this);
 
-			buttonLayout.addComponent(cancel);
-			buttonLayout.addComponent(save);
-			buttonLayout.setComponentAlignment(cancel, Alignment.MIDDLE_LEFT);
-			buttonLayout.setComponentAlignment(save, Alignment.MIDDLE_RIGHT);
+			buttonLayout.addComponent(this.cancel);
+			buttonLayout.addComponent(this.save);
+			buttonLayout.setComponentAlignment(this.cancel, Alignment.MIDDLE_LEFT);
+			buttonLayout.setComponentAlignment(this.save, Alignment.MIDDLE_RIGHT);
 
-			HorizontalLayout buttonGroupLayout = new HorizontalLayout();
+			final HorizontalLayout buttonGroupLayout = new HorizontalLayout();
 			buttonGroupLayout.setMargin(true);
-			buttonGroupLayout.addComponent(delete);
+			buttonGroupLayout.addComponent(this.delete);
 			buttonGroupLayout.addComponent(buttonLayout);
 			buttonGroupLayout.setComponentAlignment(buttonLayout, Alignment.MIDDLE_RIGHT);
-			buttonGroupLayout.setComponentAlignment(delete, Alignment.MIDDLE_LEFT);
+			buttonGroupLayout.setComponentAlignment(this.delete, Alignment.MIDDLE_LEFT);
 			buttonGroupLayout.setWidth("100%");
 			buttonGroupLayout.setExpandRatio(buttonLayout, 1.0f);
 
 			this.addComponent(buttonGroupLayout);
-			this.setComponentAlignment(buttonGroupLayout, Alignment.BOTTOM_RIGHT);
+			setComponentAlignment(buttonGroupLayout, Alignment.BOTTOM_RIGHT);
 		}
 
 		subject.focus();
-		
 
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
-		if (event.getButton() == save)
+		if (event.getButton() == this.save)
 		{
-			EventDao daoEvent = new DaoFactory().getEventDao();
+			final EventDao daoEvent = new DaoFactory().getEventDao();
 			try
 			{
 				this.fieldGroup.commit();
@@ -274,27 +277,29 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 				// the merge returns a new event so we have to reattach it to
 				// the field group.
-				this.setEvent(this.event, newEvent);
-				newEventListener.eventSaved(this.event, newEvent);
-				newEvent = false;
+				setEvent(this.event, this.newEvent);
+				this.newEventListener.eventSaved(this.event, this.newEvent);
+				this.newEvent = false;
 			}
-			catch (CommitException e)
+			catch (final CommitException e)
 			{
 				SMNotification.show(e, Type.ERROR_MESSAGE);
 			}
 		}
 
-		else if (event.getButton() == cancel)
+		else if (event.getButton() == this.cancel)
 		{
 			if (this.newEvent)
 			{
-				newEvent = false;
+				this.newEvent = false;
 				setEvent(null, false);
 			}
 			else
-				fieldGroup.discard();
+			{
+				this.fieldGroup.discard();
+			}
 		}
-		else if (event.getButton() == delete)
+		else if (event.getButton() == this.delete)
 		{
 			if (EventDetails.this.event != null)
 			{
@@ -305,7 +310,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void onClose(ConfirmDialog dialog)
+					public void onClose(final ConfirmDialog dialog)
 					{
 						if (dialog.isConfirmed())
 						{
@@ -322,7 +327,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 	protected void delete()
 	{
-		EventDao daoEvent = new DaoFactory().getEventDao();
+		final EventDao daoEvent = new DaoFactory().getEventDao();
 		// we can't delete an unmanaged entity so merge and then delete
 		// it.
 		this.event = daoEvent.merge(EventDetails.this.event);
@@ -336,7 +341,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		/**
 		 * Called when the user clicks save to notify the listener that a new
 		 * event was added or an existing event updated..
-		 * 
+		 *
 		 * @param event
 		 */
 		void eventSaved(au.org.scoutmaster.domain.Event event, boolean newEvent);
@@ -344,7 +349,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		/**
 		 * Called when the user clicks delete to notify the listener that the
 		 * event was delete.
-		 * 
+		 *
 		 * @param event
 		 */
 
@@ -352,7 +357,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
 		if (!this.readonly)
 		{
@@ -361,12 +366,14 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 			// the future
 			// by default we set it to two hours into the future.
 
-			DateField startDateField = (DateField) event.getProperty();
+			final DateField startDateField = (DateField) event.getProperty();
 
-			DateTime startDate = new DateTime(startDateField.getValue());
+			final DateTime startDate = new DateTime(startDateField.getValue());
 
 			if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDateField.getValue()))
+			{
 				this.endDateField.setValue(startDate.plusHours(2).toDate());
+			}
 		}
 	}
 
@@ -376,7 +383,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		private boolean isDefault = true;
 
 		@Override
-		public void exec(final BaseCrudView<E> crud, EntityItem<E> entity)
+		public void exec(final BaseCrudView<E> crud, final EntityItem<E> entity)
 		{
 			ConfirmDialog.show(UI.getCurrent(), "Confirm Delete", "Are you sure you want to delete "
 					+ entity.getEntity().getName() + "?", "Delete", "Cancel", new ConfirmDialog.Listener()
@@ -384,7 +391,7 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				public void onClose(ConfirmDialog dialog)
+				public void onClose(final ConfirmDialog dialog)
 				{
 					if (dialog.isConfirmed())
 					{
@@ -397,17 +404,19 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 
 		}
 
+		@Override
 		public String toString()
 		{
 			return "Delete";
 		}
 
+		@Override
 		public boolean isDefault()
 		{
-			return isDefault;
+			return this.isDefault;
 		}
 
-		public void setIsDefault(boolean isDefault)
+		public void setIsDefault(final boolean isDefault)
 		{
 			this.isDefault = isDefault;
 		}

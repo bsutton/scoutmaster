@@ -20,16 +20,15 @@ public class CommunicationLogDao extends JpaBaseDao<CommunicationLog, Long> impl
 		// inherit the default per request em.
 	}
 
-	public CommunicationLogDao(EntityManager em)
+	public CommunicationLogDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-
 	@Override
 	public JPAContainer<CommunicationLog> createVaadinContainer()
 	{
-		JPAContainer<CommunicationLog> container = super.createVaadinContainer();
+		final JPAContainer<CommunicationLog> container = super.createVaadinContainer();
 		container.addNestedContainerProperty(new Path(CommunicationLog_.withContact, Contact_.lastname).getName());
 		container.addNestedContainerProperty(new Path(CommunicationLog_.withContact, Contact_.firstname).getName());
 		container.addNestedContainerProperty(new Path(CommunicationLog_.addedBy, User_.username).getName());

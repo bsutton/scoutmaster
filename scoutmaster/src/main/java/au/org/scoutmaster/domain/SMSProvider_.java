@@ -4,7 +4,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2013-09-10T16:46:53.000+1000")
+@Generated(value="Dali", date="2014-04-15T13:07:13.963+1000")
 @StaticMetamodel(SMSProvider.class)
 public class SMSProvider_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SMSProvider, String> providerName;

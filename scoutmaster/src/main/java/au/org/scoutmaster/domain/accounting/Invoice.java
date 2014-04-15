@@ -20,55 +20,53 @@ import au.org.scoutmaster.dao.InvoiceDao;
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Contact;
 
-
 @Entity
-@Table(name="Invoice")
+@Table(name = "Invoice")
 @Access(AccessType.FIELD)
-public class Invoice  extends BaseEntity
+public class Invoice extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
-	private static String INVOICED_PREFIX = "V-";
 
+	private static String INVOICED_PREFIX = "V-";
 
 	/**
 	 * The date the invoice was created.
 	 */
 	Date created;
-	
+
 	Long invoiceNo;
-	
+
 	/**
 	 * The contact the invoice has been raised against.
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	Contact billTo;
-	
+
 	/**
 	 * The date the invoice was raised.
 	 */
 	Date invoiceDate;
-	
+
 	/**
 	 * The no. of days from the invoiceDate that the invoice is due.
 	 */
 	Integer terms;
-	
+
 	/**
 	 * The date the invoice is due.
 	 */
 	@Transient
 	Date dueDate;
-	
-	@OneToMany(cascade = CascadeType.ALL,targetEntity=InvoiceLine.class)
+
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = InvoiceLine.class)
 	List<InvoiceLine> invoiceLines = new ArrayList<>();
-	
+
 	/**
 	 * The set of payments attached to this invoice.
 	 */
-	@ManyToMany(targetEntity=Payment.class)
+	@ManyToMany(targetEntity = Payment.class)
 	List<Payment> payments = new ArrayList<>();
-	
+
 	/**
 	 * A descriptive note that appears on the invoice.
 	 */
@@ -77,14 +75,14 @@ public class Invoice  extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return INVOICED_PREFIX + invoiceNo;
+		return Invoice.INVOICED_PREFIX + this.invoiceNo;
 	}
-	
+
 	@PrePersist
 	private void prePersist()
 	{
-		InvoiceDao daoInvoice = new DaoFactory().getDao(InvoiceDao.class);
-		invoiceNo = daoInvoice.getNextInvoice();
+		final InvoiceDao daoInvoice = new DaoFactory().getDao(InvoiceDao.class);
+		this.invoiceNo = daoInvoice.getNextInvoice();
 	}
 
 }

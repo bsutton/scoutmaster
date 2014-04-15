@@ -17,21 +17,20 @@ import au.org.scoutmaster.domain.access.User;
 /**
  * When a user needs to reset their password we generate a random string which
  * is used to do the reset.
- * 
+ *
  * The random string is valid for 24 hours and we store it here.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
 
-@Entity(name="ForgottenPasswordReset")
-@Table(name="ForgottenPasswordReset")
+@Entity(name = "ForgottenPasswordReset")
+@Table(name = "ForgottenPasswordReset")
 @Access(AccessType.FIELD)
 @NamedQueries(
-// We order the set just incase we get two identical random strings (but almost
-// impossible)
-{
-		@NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
+		// We order the set just incase we get two identical random strings (but almost
+		// impossible)
+		{ @NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
 public class ForgottenPasswordReset extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +43,7 @@ public class ForgottenPasswordReset extends BaseEntity
 	 */
 	private Date expires;
 
-	@ManyToOne(targetEntity=User.class)
+	@ManyToOne(targetEntity = User.class)
 	private User userWithBadMemory;
 
 	/**
@@ -54,39 +53,38 @@ public class ForgottenPasswordReset extends BaseEntity
 
 	public User getUserWithBadMemory()
 	{
-		return userWithBadMemory;
+		return this.userWithBadMemory;
 	}
 
-	public void setUserWithBadMemory(User userWithBadMemory)
+	public void setUserWithBadMemory(final User userWithBadMemory)
 	{
 		this.userWithBadMemory = userWithBadMemory;
 	}
 
 	public String getResetid()
 	{
-		return resetid;
+		return this.resetid;
 	}
 
-	public void setResetid(String resetid)
+	public void setResetid(final String resetid)
 	{
 		this.resetid = resetid;
 	}
 
-	public void setExpires(DateTime expires)
+	public void setExpires(final DateTime expires)
 	{
 		this.expires = new Date(expires.toDate().getTime());
 	}
 
 	public DateTime getExpires()
 	{
-		return new DateTime(expires);
+		return new DateTime(this.expires);
 	}
 
 	@Override
 	public String getName()
 	{
-		return userWithBadMemory.getUsername() + expires.toString();
+		return this.userWithBadMemory.getUsername() + this.expires.toString();
 	}
 
-	
 }

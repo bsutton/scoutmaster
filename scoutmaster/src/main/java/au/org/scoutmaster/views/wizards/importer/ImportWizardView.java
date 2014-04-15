@@ -16,15 +16,15 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display="Import Contacts", path="Members")
+@Menu(display = "Import Contacts", path = "Members")
 public class ImportWizardView extends VerticalLayout implements View, WizardProgressListener
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String NAME = "Import";
 
 	private Wizard wizard;
-	
+
 	private ImportSelectType type;
 	private ImportSelectFile file;
 	private ImportMatchFields match;
@@ -32,116 +32,105 @@ public class ImportWizardView extends VerticalLayout implements View, WizardProg
 	private ImportShowProgress progress;
 	private ImportComplete complete;
 
-
-
 	public ImportSelectType getType()
 	{
-		return type;
+		return this.type;
 	}
-
 
 	public ImportSelectFile getFile()
 	{
-		return file;
+		return this.file;
 	}
-
 
 	public ImportMatchFields getMatch()
 	{
-		return match;
+		return this.match;
 	}
-
 
 	public ImportShowSample getSample()
 	{
-		return sample;
+		return this.sample;
 	}
-
 
 	public ImportShowProgress getProgress()
 	{
-		return progress;
+		return this.progress;
 	}
-
 
 	public ImportComplete getComplete()
 	{
-		return complete;
+		return this.complete;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		type = new ImportSelectType(this);
-		file = new ImportSelectFile(this);
-		match = new ImportMatchFields(this);
-		sample = new ImportShowSample(this);
-		progress = new ImportShowProgress(this);
-		complete = new ImportComplete(this, wizard);
-
+		this.type = new ImportSelectType(this);
+		this.file = new ImportSelectFile(this);
+		this.match = new ImportMatchFields(this);
+		this.sample = new ImportShowSample(this);
+		this.progress = new ImportShowProgress(this);
+		this.complete = new ImportComplete(this, this.wizard);
 
 		// create the Wizard component and add the steps
-		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
-		wizard.setSizeFull();
-		wizard.addListener(this);
-		wizard.addStep(type, "type");
-		wizard.addStep(file, "file");
-		wizard.addStep(match, "match");
-		wizard.addStep(sample, "sample");
-		wizard.addStep(progress, "progress");
-		wizard.addStep(complete, "complete");
-		
+		this.wizard = new Wizard();
+		this.wizard.setUriFragmentEnabled(true);
+		this.wizard.setSizeFull();
+		this.wizard.addListener(this);
+		this.wizard.addStep(this.type, "type");
+		this.wizard.addStep(this.file, "file");
+		this.wizard.addStep(this.match, "match");
+		this.wizard.addStep(this.sample, "sample");
+		this.wizard.addStep(this.progress, "progress");
+		this.wizard.addStep(this.complete, "complete");
+
 		/* Main layout */
 		this.setMargin(true);
-		this.setSpacing(true);
-		this.addComponent(wizard);
-		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		
-		
+		setSpacing(true);
+		this.addComponent(this.wizard);
+		setComponentAlignment(this.wizard, Alignment.TOP_CENTER);
 
 		/* Main layout */
-		this.setSizeFull();
-
+		setSizeFull();
 
 	}
 
-	
 	@Override
-	public void activeStepChanged(WizardStepActivationEvent event)
+	public void activeStepChanged(final WizardStepActivationEvent event)
 	{
 		// NOOP
 
 	}
 
 	@Override
-	public void stepSetChanged(WizardStepSetChangedEvent event)
+	public void stepSetChanged(final WizardStepSetChangedEvent event)
 	{
 		Page.getCurrent().setTitle(event.getComponent().getCaption());
 
 	}
 
 	@Override
-	public void wizardCompleted(WizardCompletedEvent event)
+	public void wizardCompleted(final WizardCompletedEvent event)
 	{
-		this.endWizard("Import Completed!");
+		endWizard("Import Completed!");
 
 	}
 
 	@Override
-	public void wizardCancelled(WizardCancelledEvent event)
+	public void wizardCancelled(final WizardCancelledEvent event)
 	{
-		this.endWizard("Import Cancelled!");
-		
+		endWizard("Import Cancelled!");
+
 		if (this.file != null && this.file.getTempFile().exists())
+		{
 			this.file.getTempFile().delete();
+		}
 
 	}
 
-	private void endWizard(String message)
+	private void endWizard(final String message)
 	{
-		wizard.setVisible(false);
+		this.wizard.setVisible(false);
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		Page.getCurrent().setLocation("");

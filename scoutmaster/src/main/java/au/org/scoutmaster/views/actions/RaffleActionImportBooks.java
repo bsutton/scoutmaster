@@ -19,13 +19,14 @@ public class RaffleActionImportBooks implements CrudAction<Raffle>
 	}
 
 	@Override
-	public void exec(BaseCrudView<Raffle> crud, EntityItem<Raffle> entity)
+	public void exec(final BaseCrudView<Raffle> crud, final EntityItem<Raffle> entity)
 	{
 		// Launch the raffle book import wizard.
-		Raffle raffle = entity.getEntity();
+		final Raffle raffle = entity.getEntity();
 		UI.getCurrent().getNavigator().navigateTo(RaffleBookImportWizardView.NAME + "/ID=" + raffle.getId());
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		return "Import Books";

@@ -7,54 +7,54 @@ import au.org.scoutmaster.domain.SMTPServerSettings;
 
 public class JasperEmailSettingsImpl implements JasperEmailSettings
 {
-	private SMTPServerSettings smtpSettings;
+	private final SMTPServerSettings smtpSettings;
 
 	public JasperEmailSettingsImpl()
 	{
-		SMTPSettingsDao stmpDao = new DaoFactory().getSMTPSettingsDao();
-		smtpSettings = stmpDao.findSettings();
+		final SMTPSettingsDao stmpDao = new DaoFactory().getSMTPSettingsDao();
+		this.smtpSettings = stmpDao.findSettings();
 	}
 
 	@Override
 	public String getSmtpFQDN()
 	{
-		return smtpSettings.getSmtpFQDN();
+		return this.smtpSettings.getSmtpFQDN();
 	}
 
 	@Override
 	public Integer getSmtpPort()
 	{
-		return smtpSettings.getSmtpPort();
+		return this.smtpSettings.getSmtpPort();
 	}
 
 	@Override
 	public boolean isAuthRequired()
 	{
-		return smtpSettings.isAuthRequired();
+		return this.smtpSettings.isAuthRequired();
 	}
 
 	@Override
 	public String getUsername()
 	{
-		return smtpSettings.getUsername();
+		return this.smtpSettings.getUsername();
 	}
 
 	@Override
 	public String getPassword()
 	{
-		return smtpSettings.getPassword();
+		return this.smtpSettings.getPassword();
 	}
 
 	@Override
 	public boolean getUseSSL()
 	{
-		return smtpSettings.getUseSSL();
+		return this.smtpSettings.getUseSSL();
 	}
 
 	@Override
 	public String getBounceEmailAddress()
 	{
-		return smtpSettings.getBounceEmailAddress();
+		return this.smtpSettings.getBounceEmailAddress();
 	}
 
 }

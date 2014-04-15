@@ -25,7 +25,7 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Tags", path="Members")
+@Menu(display = "Tags", path = "Members")
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 {
 
@@ -43,76 +43,75 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	private CheckBox builtin;
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<Tag> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<Tag> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		overviewForm = new SMMultiColumnFormLayout<Tag>(2, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 280);
-		overviewForm.setColumnLabelWidth(0, 70);
-		overviewForm.setSizeFull();
-		overviewForm.getFieldGroup().setReadOnly(true);
+		this.overviewForm = new SMMultiColumnFormLayout<Tag>(2, this.fieldGroup);
+		this.overviewForm.setColumnFieldWidth(0, 280);
+		this.overviewForm.setColumnLabelWidth(0, 70);
+		this.overviewForm.setSizeFull();
+		this.overviewForm.getFieldGroup().setReadOnly(true);
 
-		overviewForm.bindTextField("Nanme", Tag_.name);
-		overviewForm.newLine();
-		overviewForm.bindTextField("Description", Tag_.description);
-		overviewForm.newLine();
-		builtin = overviewForm.bindBooleanField("Built In", Tag_.builtin);
-		builtin.setReadOnly(true);
-		overviewForm.newLine();
-		detachable = overviewForm.bindBooleanField("Detachable", Tag_.detachable.getName());
-		overviewForm.newLine();
-		layout.addComponent(overviewForm);
+		this.overviewForm.bindTextField("Nanme", Tag_.name);
+		this.overviewForm.newLine();
+		this.overviewForm.bindTextField("Description", Tag_.description);
+		this.overviewForm.newLine();
+		this.builtin = this.overviewForm.bindBooleanField("Built In", Tag_.builtin);
+		this.builtin.setReadOnly(true);
+		this.overviewForm.newLine();
+		this.detachable = this.overviewForm.bindBooleanField("Detachable", Tag_.detachable.getName());
+		this.overviewForm.newLine();
+		layout.addComponent(this.overviewForm);
 
 		return layout;
 	}
 
-	
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<Tag> container = new DaoFactory().getTagDao().createVaadinContainer();
+		final JPAContainer<Tag> container = new DaoFactory().getTagDao().createVaadinContainer();
 		container.sort(new String[]
-		{ Tag_.name.getName() }, new boolean[]
-		{ true });
+				{ Tag_.name.getName() }, new boolean[]
+						{ true });
 
-		Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
+		final Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
 		builder.addColumn("Tag", Tag_.name).addColumn("Description", Tag_.description)
-				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
+		.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
 
 		super.init(Tag.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new Or(new SimpleStringFilter(Tag_.name.getName(), filterString, true, false), new SimpleStringFilter(
 				Tag_.description.getName(), filterString, true, false));
 	}
 
 	@Override
-	public void rowChanged(EntityItem<Tag> item)
+	public void rowChanged(final EntityItem<Tag> item)
 	{
 		if (item != null)
 		{
-			Tag entity = item.getEntity();
+			final Tag entity = item.getEntity();
 
 			if (entity != null && entity.getBuiltin())
 			{
 				// You can't edit builin tags.
-				detachable.setReadOnly(false);
+				this.detachable.setReadOnly(false);
 				super.disallowEdit(true, false);
 				super.disallowDelete(true);
 			}
 			else
 			{
-				overviewForm.setReadOnly(false);
-				detachable.setReadOnly(false);
+				this.overviewForm.setReadOnly(false);
+				this.detachable.setReadOnly(false);
 				super.disallowEdit(false, false);
 				super.disallowDelete(false);
 			}
-			builtin.setReadOnly(true);
+			this.builtin.setReadOnly(true);
 
 			super.rowChanged(item);
 		}
@@ -124,14 +123,12 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 		return "Tags";
 	}
 
-
 	@Override
-	protected void postDelete(Object entityId)
+	protected void postDelete(final Object entityId)
 	{
 		// need to flush the cache as a db cascade delete removed child records.
 		EntityManagerProvider.getEntityManager().getEntityManagerFactory().getCache().evictAll();
 		super.postDelete(entityId);
 	}
 
-	
 }

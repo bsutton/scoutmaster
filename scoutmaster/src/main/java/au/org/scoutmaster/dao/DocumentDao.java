@@ -18,16 +18,15 @@ public class DocumentDao extends JpaBaseDao<Document, Long> implements Dao<Docum
 		// inherit the default per request em.
 	}
 
-	public DocumentDao(EntityManager em)
+	public DocumentDao(final EntityManager em)
 	{
 		super(em);
 	}
 
-
 	@Override
 	public JPAContainer<Document> createVaadinContainer()
 	{
-		JPAContainer<Document> container = super.createVaadinContainer();
+		final JPAContainer<Document> container = super.createVaadinContainer();
 		container.addNestedContainerProperty(new Path(Document_.addedBy, User_.username).getName());
 
 		return container;

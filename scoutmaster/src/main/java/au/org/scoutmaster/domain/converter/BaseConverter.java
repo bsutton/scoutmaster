@@ -16,18 +16,18 @@ public abstract class BaseConverter<E extends BaseEntity> implements Converter<O
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public E convertToModel(Object value, Class<? extends E> targetType, Locale locale)
+	public E convertToModel(final Object value, final Class<? extends E> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		E result = null;
-		JpaBaseDao<E, Long> daoBaseEntity = getDao();
+		final JpaBaseDao<E, Long> daoBaseEntity = getDao();
 
-		logger.debug("converToModel: value: {}  valueType: {} targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		BaseConverter.logger.debug("converToModel: value: {}  valueType: {} targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Long)
 		{
-			logger.debug("Calling findById");
+			BaseConverter.logger.debug("Calling findById");
 			result = daoBaseEntity.findById((Long) value);
 		}
 		else if (value instanceof Object || value instanceof String)
@@ -35,7 +35,7 @@ public abstract class BaseConverter<E extends BaseEntity> implements Converter<O
 			result = newInstance(value);
 		}
 
-		logger.debug("result: {}");
+		BaseConverter.logger.debug("result: {}");
 		return result;
 	}
 
@@ -44,17 +44,21 @@ public abstract class BaseConverter<E extends BaseEntity> implements Converter<O
 	abstract protected JpaBaseDao<E, Long> getDao();
 
 	@Override
-	public Object convertToPresentation(E entity, Class<? extends Object> targetType, Locale locale)
+	public Object convertToPresentation(final E entity, final Class<? extends Object> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
 
-		logger.debug("convertToPresentation: value {} targetType:{}", entity, targetType);
+		BaseConverter.logger.debug("convertToPresentation: value {} targetType:{}", entity, targetType);
 		if (entity != null)
+		{
 			result = entity.toString();
+		}
 		else
+		{
 			result = "";
-		logger.debug("result: {}", result);
+		}
+		BaseConverter.logger.debug("result: {}", result);
 		return result;
 	}
 

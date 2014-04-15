@@ -19,11 +19,11 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-@Table(name="Note")
+@Table(name = "Note")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
-		@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })
+		{ @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
+			@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })
 public class Note extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -35,23 +35,23 @@ public class Note extends BaseEntity
 	 * The contact that this note was made against.
 	 */
 	@NotNull
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	private Contact attachedContact;
-	
+
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date noteDate = new Date();
-	
+	private final Date noteDate = new Date();
+
 	@NotBlank
-	@Size(max=255)
+	@Size(max = 255)
 	private String subject;
 
-	@Size(max=4096)
+	@Size(max = 4096)
 	private String body;
 
 	public String getBody()
 	{
-		return body;
+		return this.body;
 	}
 
 	public Note()
@@ -59,7 +59,7 @@ public class Note extends BaseEntity
 
 	}
 
-	public Note(String subject, String body)
+	public Note(final String subject, final String body)
 	{
 		this.subject = subject;
 		this.body = body;
@@ -68,7 +68,7 @@ public class Note extends BaseEntity
 	@Override
 	public String toString()
 	{
-		return sdf.format(this.getCreated()) + " " + subject;
+		return this.sdf.format(getCreated()) + " " + this.subject;
 	}
 
 	public String getSubject()
@@ -82,5 +82,4 @@ public class Note extends BaseEntity
 		return "Note: " + toString();
 	}
 
-	
 }

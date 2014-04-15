@@ -40,81 +40,80 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
-		ClickListener
+ClickListener
 {
 	private static Logger logger = LogManager.getLogger(SmtpStep.class);
 	private static final long serialVersionUID = 1L;
 
-	private TextField smtpFQDN;
+	private final TextField smtpFQDN;
 
-	private TextField smtpPort;
+	private final TextField smtpPort;
 
-	private CheckBox authRequired;
+	private final CheckBox authRequired;
 
-	private TextField username;
+	private final TextField username;
 
-	private PasswordField password;
+	private final PasswordField password;
 
-	private TextField fromEmailAddress;
+	private final TextField fromEmailAddress;
 
-	private CheckBox useSSL;
-	
+	private final CheckBox useSSL;
 
-	private TextField bounceEmailAddress;
-	private VerticalLayout layout;
+	private final TextField bounceEmailAddress;
+	private final VerticalLayout layout;
 
-	public SmtpStep(GroupSetupWizardView setupWizardView)
+	public SmtpStep(final GroupSetupWizardView setupWizardView)
 	{
 		super(new DaoFactory().getSMTPSettingsDao(), SMTPServerSettings.class);
 
-		layout = new VerticalLayout();
-		layout.setMargin(true);
-		MultiColumnFormLayout<SMTPServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
+		this.layout = new VerticalLayout();
+		this.layout.setMargin(true);
+		final MultiColumnFormLayout<SMTPServerSettings> formLayout = new MultiColumnFormLayout<>(1, getFieldGroup());
 		formLayout.setColumnFieldWidth(0, 250);
 
-		Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
+		final Label label = new Label("<h1>Configure SMTP mail settings.</h1>");
 		label.setContentMode(ContentMode.HTML);
-		layout.addComponent(label);
-		layout.addComponent(formLayout);
+		this.layout.addComponent(label);
+		this.layout.addComponent(formLayout);
 
 		// Create the user input fields
-		smtpFQDN = formLayout.bindTextField("SMTP FQDN:", "smtpFQDN");
-		smtpFQDN.setDescription("SMTP Server FQDN or IP address");
+		this.smtpFQDN = formLayout.bindTextField("SMTP FQDN:", "smtpFQDN");
+		this.smtpFQDN.setDescription("SMTP Server FQDN or IP address");
 
-		smtpPort = formLayout.bindTextField("SMTP Port:", "smtpPort");
-		smtpPort.setDescription("SMTP Port No.");
-		smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535", 1,
-				65535));
+		this.smtpPort = formLayout.bindTextField("SMTP Port:", "smtpPort");
+		this.smtpPort.setDescription("SMTP Port No.");
+		this.smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535",
+				1, 65535));
 
-		authRequired = formLayout.bindBooleanField("Authentication Requried", "authRequired");
-		authRequired.addValueChangeListener(this);
+		this.authRequired = formLayout.bindBooleanField("Authentication Requried", "authRequired");
+		this.authRequired.addValueChangeListener(this);
 
-		username = formLayout.bindTextField("Username:", "username");
-		username.setDescription("SMTP username if authentication is used");
-		username.setVisible(false);
+		this.username = formLayout.bindTextField("Username:", "username");
+		this.username.setDescription("SMTP username if authentication is used");
+		this.username.setVisible(false);
 
 		// Create the password input field
-		password = formLayout.bindPasswordField("Password:", "password");
-		password.setDescription("SMS Provider Password");
-		password.setVisible(false);
+		this.password = formLayout.bindPasswordField("Password:", "password");
+		this.password.setDescription("SMS Provider Password");
+		this.password.setVisible(false);
 
-		useSSL = formLayout.bindBooleanField("Use SSL", "useSSL");
-		useSSL.setDescription("Enables an SSL connection to your SMTP server if it supports it.");
+		this.useSSL = formLayout.bindBooleanField("Use SSL", "useSSL");
+		this.useSSL.setDescription("Enables an SSL connection to your SMTP server if it supports it.");
 
-		fromEmailAddress = formLayout.bindTextField("From Email Address:", "fromEmailAddress");
-		fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
-		fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+		this.fromEmailAddress = formLayout.bindTextField("From Email Address:", "fromEmailAddress");
+		this.fromEmailAddress.setDescription("Default From Address to use when sending bulk emails.");
+		this.fromEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
 
-		bounceEmailAddress = formLayout.bindTextField("Bounce Email Address:", "bounceEmailAddress");
-		bounceEmailAddress.setDescription("Email Address that bounced emails should be sent to.");
-		bounceEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
+		this.bounceEmailAddress = formLayout.bindTextField("Bounce Email Address:", "bounceEmailAddress");
+		this.bounceEmailAddress.setDescription("Email Address that bounced emails should be sent to.");
+		this.bounceEmailAddress.addValidator(new EmailValidator("Enter a valid email address."));
 
-		Button test = new Button("Test");
-		layout.addComponent(test);
+		final Button test = new Button("Test");
+		this.layout.addComponent(test);
 		test.addClickListener(new ClickEventLogged.ClickAdaptor(this));
 
 		// focus the fqnd field when user arrives to the login view
-		smtpFQDN.focus();
+		this.smtpFQDN.focus();
 
 	}
 
@@ -126,26 +125,26 @@ public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> impleme
 	}
 
 	@Override
-	public Component getContent(ValidatingFieldGroup<SMTPServerSettings> fieldGroup)
+	public Component getContent(final ValidatingFieldGroup<SMTPServerSettings> fieldGroup)
 	{
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
 		if (event.getProperty() == this.authRequired)
 		{
-			Boolean authRequired = (Boolean) event.getProperty().getValue();
+			final Boolean authRequired = (Boolean) event.getProperty().getValue();
 
-			username.setVisible(authRequired);
-			password.setVisible(authRequired);
+			this.username.setVisible(authRequired);
+			this.password.setVisible(authRequired);
 		}
 	}
 
 	@Override
-	protected void initEntity(SMTPServerSettings entity)
+	protected void initEntity(final SMTPServerSettings entity)
 	{
 		entity.setAuthRequired(false);
 	}
@@ -154,24 +153,28 @@ public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> impleme
 	protected SMTPServerSettings findEntity()
 	{
 		SMTPServerSettings setting = null;
-		List<SMTPServerSettings> settings = new DaoFactory().getSMTPSettingsDao().findAll();
+		final List<SMTPServerSettings> settings = new DaoFactory().getSMTPSettingsDao().findAll();
 		if (settings.size() > 1)
+		{
 			throw new IllegalStateException(
 					"More than one EmailServerSetting has been found which is not valid during initial setup.");
+		}
 		if (settings.size() == 1)
+		{
 			setting = settings.get(0);
+		}
 
 		if (setting != null)
 		{
-			username.setVisible(setting.isAuthRequired());
-			password.setVisible(setting.isAuthRequired());
+			this.username.setVisible(setting.isAuthRequired());
+			this.password.setVisible(setting.isAuthRequired());
 		}
 
 		return setting;
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 		// test that the SMS Provider configuration works.
 
@@ -180,52 +183,55 @@ public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> impleme
 		{
 			final SMTPServerSettings settings = super.getEntity();
 			if (settings == null)
+			{
 				Notification.show(
 						"Can't find the SMTP Settings, this usually means the install did not complete correctly.",
 						Type.ERROR_MESSAGE);
+			}
 			else
 			{
-				CompositeValidator validator = new CompositeValidator();
+				final CompositeValidator validator = new CompositeValidator();
 				validator.addValidator(new EmailValidator("Please input your email address"));
 				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new Recipient()
+				{
+					@Override
+					public boolean onOK(final String input)
+					{
+						final String toEmailAddress = input;
+
+						final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+
+						try
 						{
-							public boolean onOK(String input)
-							{
-								String toEmailAddress = input;
+							final StringBuilder sb = new StringBuilder();
+							sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
+							sb.append("So welcome to Scoutmaster.\n\n");
+							sb.append("May you live long and recruit many.\n");
 
-								SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+							daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(),
+											new SMTPSettingsDao.EmailTarget(EmailAddressType.To, toEmailAddress),
+											"Test email from Scoutmaster setup", sb.toString(), null);
 
-								try
-								{
-									StringBuilder sb = new StringBuilder();
-									sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
-									sb.append("So welcome to Scoutmaster.\n\n");
-									sb.append("May you live long and recruit many.\n");
+							SMNotification.show("An email has been sent to: " + toEmailAddress
+									+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
 
-									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(), new SMTPSettingsDao.EmailTarget(EmailAddressType.To,
-											toEmailAddress), "Test email from Scoutmaster setup",
-											sb.toString(), null);
+						}
+						catch (final EmailException e)
+						{
+							SmtpStep.logger.error(e, e);
+							SMNotification.show(e, Type.ERROR_MESSAGE);
+						}
+						return true;
+					}
 
-									SMNotification.show("An email has been sent to: " + toEmailAddress
-											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
-
-								}
-								catch (EmailException e)
-								{
-									logger.error(e, e);
-									SMNotification.show(e, Type.ERROR_MESSAGE);
-								}
-								return true;
-							}
-
-							@Override
-							public boolean onCancel()
-							{
-								return true;
-							}
-						}).addValidator(validator);
+					@Override
+					public boolean onCancel()
+					{
+						return true;
+					}
+				}).addValidator(validator);
 
 			}
 		}

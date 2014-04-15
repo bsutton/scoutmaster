@@ -10,8 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 public class WelcomeStep implements WizardStep
 {
 
-
-	public WelcomeStep(GroupSetupWizardView setupWizardView)
+	public WelcomeStep(final GroupSetupWizardView setupWizardView)
 	{
 	}
 
@@ -24,17 +23,17 @@ public class WelcomeStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		
-		StringBuilder sb = new StringBuilder();
+
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<h1>Welcome to Scoutmaster.</h1>");
 		sb.append("<p>As the first user to login to Scoutmaster we need to take you through some first time configuration to get Scoutmaster up and running.</p>");
 		sb.append("<p>Click the 'Next' button to begin</p>");
-		
-		Label label = new Label(sb.toString());
+
+		final Label label = new Label(sb.toString());
 		label.setContentMode(ContentMode.HTML);
-		
+
 		layout.addComponent(label);
 		return layout;
 	}

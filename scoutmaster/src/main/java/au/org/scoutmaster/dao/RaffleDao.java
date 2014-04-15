@@ -16,7 +16,7 @@ public class RaffleDao extends JpaBaseDao<Raffle, Long> implements Dao<Raffle, L
 		// inherit the default per request em.
 	}
 
-	public RaffleDao(EntityManager em)
+	public RaffleDao(final EntityManager em)
 	{
 		super(em);
 	}
@@ -24,11 +24,11 @@ public class RaffleDao extends JpaBaseDao<Raffle, Long> implements Dao<Raffle, L
 	@Override
 	public JPAContainer<Raffle> createVaadinContainer()
 	{
-		JPAContainer<Raffle> container = super.createVaadinContainer();
+		final JPAContainer<Raffle> container = super.createVaadinContainer();
 
 		container.sort(new Object[]
-		{ Raffle_.startDate.getName() }, new boolean[]
-		{ true });
+				{ Raffle_.startDate.getName() }, new boolean[]
+						{ true });
 
 		return container;
 	}

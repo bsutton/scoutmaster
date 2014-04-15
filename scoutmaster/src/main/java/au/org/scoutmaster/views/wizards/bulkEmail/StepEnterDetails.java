@@ -33,81 +33,80 @@ public class StepEnterDetails implements WizardStep
 {
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
 
-	private TextField subject;
+	private final TextField subject;
 
-	private TextField from;
-	private BulkEmailWizardView wizard;
-	private VerticalLayout layout;
-	private Label recipientCount;
-	private CKEditorEmailField ckEditorTextField;
+	private final TextField from;
+	private final BulkEmailWizardView wizard;
+	private final VerticalLayout layout;
+	private final Label recipientCount;
+	private final CKEditorEmailField ckEditorTextField;
 
 	VerticalLayout attachedFiles;
-	
-	private HashSet<AttachedFile>fileList = new HashSet<>();
+
+	private final HashSet<AttachedFile> fileList = new HashSet<>();
 
 	/**
 	 * Used to tag the set of contacts that we successfully send the email to.
 	 */
-	private TagField activityTag;
+	private final TagField activityTag;
 
-
-	public StepEnterDetails(BulkEmailWizardView messagingWizardView)
+	public StepEnterDetails(final BulkEmailWizardView messagingWizardView)
 	{
-		wizard = messagingWizardView;
+		this.wizard = messagingWizardView;
 
-		layout = new VerticalLayout();
+		this.layout = new VerticalLayout();
 		// layout.setDescription("MessageDetailsContent");
-		layout.setSizeFull();
-		layout.setMargin(true);
-		layout.setSpacing(true);
+		this.layout.setSizeFull();
+		this.layout.setMargin(true);
+		this.layout.setSpacing(true);
 
-		layout.addComponent(new Label("Enter the subject and message and then click next."));
-		recipientCount = new Label("Recipient Count");
-		recipientCount.setContentMode(ContentMode.HTML);
-		layout.addComponent(recipientCount);
+		this.layout.addComponent(new Label("Enter the subject and message and then click next."));
+		this.recipientCount = new Label("Recipient Count");
+		this.recipientCount.setContentMode(ContentMode.HTML);
+		this.layout.addComponent(this.recipientCount);
 
-		activityTag = new TagField("Activity Tag", false);
-		activityTag.setWidth("100%");
-		activityTag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
-		layout.addComponent(activityTag);
+		this.activityTag = new TagField("Activity Tag", false);
+		this.activityTag.setWidth("100%");
+		this.activityTag.setDescription("Enter a tag to associate with each Contact we successfully send to.");
+		this.layout.addComponent(this.activityTag);
 
-		from = new TextField("From Email Address");
-		layout.addComponent(from);
-		from.setWidth("100%");
-		from.addValidator(new EmailValidator("'From Email address' must be supplied"));
-		from.setDescription("Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
+		this.from = new TextField("From Email Address");
+		this.layout.addComponent(this.from);
+		this.from.setWidth("100%");
+		this.from.addValidator(new EmailValidator("'From Email address' must be supplied"));
+		this.from
+				.setDescription("Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
 
-		User user = (User) VaadinSession.getCurrent().getAttribute("user");
-		from.setValue(user.getEmailAddress());
+		final User user = (User) VaadinSession.getCurrent().getAttribute("user");
+		this.from.setValue(user.getEmailAddress());
 
-		subject = new TextField("Subject");
-		subject.setWidth("100%");
-		layout.addComponent(subject);
-		subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
+		this.subject = new TextField("Subject");
+		this.subject.setWidth("100%");
+		this.layout.addComponent(this.subject);
+		this.subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
 
-		ckEditorTextField = new CKEditorEmailField(false);
+		this.ckEditorTextField = new CKEditorEmailField(false);
 
-		layout.addComponent(ckEditorTextField);
-		layout.setExpandRatio(ckEditorTextField, 1.0f);
+		this.layout.addComponent(this.ckEditorTextField);
+		this.layout.setExpandRatio(this.ckEditorTextField, 1.0f);
 		if (user.getEmailSignature() != null)
 		{
-			ckEditorTextField.setValue("</br></br>" + user.getEmailSignature());
+			this.ckEditorTextField.setValue("</br></br>" + user.getEmailSignature());
 		}
 
-
-		HorizontalLayout uploadArea = new HorizontalLayout();
-		AbstractLayout uploadWidget = addUploadWidget();
+		final HorizontalLayout uploadArea = new HorizontalLayout();
+		final AbstractLayout uploadWidget = addUploadWidget();
 		uploadArea.addComponent(uploadWidget);
-		attachedFiles = new VerticalLayout();
-		Label attachedLabel = new Label("<b>Attached Files</b>");
+		this.attachedFiles = new VerticalLayout();
+		final Label attachedLabel = new Label("<b>Attached Files</b>");
 		attachedLabel.setContentMode(ContentMode.HTML);
-		attachedFiles.addComponent(attachedLabel);
-		uploadArea.addComponent(attachedFiles);
+		this.attachedFiles.addComponent(attachedLabel);
+		uploadArea.addComponent(this.attachedFiles);
 		uploadArea.setWidth("100%");
 		uploadArea.setComponentAlignment(uploadWidget, Alignment.TOP_LEFT);
-		uploadArea.setComponentAlignment(attachedFiles, Alignment.TOP_RIGHT);
+		uploadArea.setComponentAlignment(this.attachedFiles, Alignment.TOP_RIGHT);
 
-		layout.addComponent(uploadArea);
+		this.layout.addComponent(uploadArea);
 
 	}
 
@@ -120,38 +119,40 @@ public class StepEnterDetails implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		int recipientCount = wizard.getRecipientStep().getRecipientCount();
+		final int recipientCount = this.wizard.getRecipientStep().getRecipientCount();
 		this.recipientCount
-				.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
-						+ pluralize(" has", " have", recipientCount)
-						+ " been selected to recieve the following Email.</b></p>");
+		.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
+				+ pluralize(" has", " have", recipientCount)
+				+ " been selected to recieve the following Email.</b></p>");
 
-		return layout;
+		return this.layout;
 	}
 
-	private String pluralize(String singularForm, String pluralForm, int recipientCount)
+	private String pluralize(final String singularForm, final String pluralForm, final int recipientCount)
 	{
-		return (recipientCount == 1 ? singularForm : pluralForm);
+		return recipientCount == 1 ? singularForm : pluralForm;
 	}
 
-	private String pluralize(String singularForm, int recipientCount)
+	private String pluralize(final String singularForm, final int recipientCount)
 	{
-		return (recipientCount == 1 ? singularForm : singularForm + "s");
+		return recipientCount == 1 ? singularForm : singularForm + "s";
 	}
 
 	@Override
 	public boolean onAdvance()
 	{
 
-		boolean advance = notEmpty("Message", ckEditorTextField.getValue()) && notEmpty("From", from.getValue())
-				&& notEmpty("Subject", subject.getValue());
+		final boolean advance = notEmpty("Message", this.ckEditorTextField.getValue())
+				&& notEmpty("From", this.from.getValue()) && notEmpty("Subject", this.subject.getValue());
 
 		if (!advance)
+		{
 			Notification.show("Please enter your Email a Subject and a Message then click Next");
+		}
 		return advance;
 	}
 
-	private boolean notEmpty(String label, String value)
+	private boolean notEmpty(final String label, final String value)
 	{
 		return value != null && value.length() > 0;
 	}
@@ -164,28 +165,28 @@ public class StepEnterDetails implements WizardStep
 
 	public Message getMessage()
 	{
-		return new Message(subject.getValue(), ckEditorTextField.getValue(), from.getValue());
+		return new Message(this.subject.getValue(), this.ckEditorTextField.getValue(), this.from.getValue());
 	}
 
 	public String getFrom()
 	{
-		return from.getValue();
+		return this.from.getValue();
 	}
 
 	public String getSubject()
 	{
-		return subject.getValue();
+		return this.subject.getValue();
 	}
 
 	private AbstractLayout addUploadWidget()
 	{
 
-		MultiFileUpload multiFileUpload2 = new MultiFileUpload()
+		final MultiFileUpload multiFileUpload2 = new MultiFileUpload()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void handleFile(File file, String fileName, String mimeType, long length)
+			protected void handleFile(final File file, final String fileName, final String mimeType, final long length)
 			{
 				attachFile(file);
 			}
@@ -193,7 +194,7 @@ public class StepEnterDetails implements WizardStep
 			@Override
 			protected FileBuffer createReceiver()
 			{
-				FileBuffer receiver = super.createReceiver();
+				final FileBuffer receiver = super.createReceiver();
 				/*
 				 * Make receiver not to delete files after they have been
 				 * handled by #handleFile().
@@ -203,34 +204,34 @@ public class StepEnterDetails implements WizardStep
 			}
 		};
 		multiFileUpload2.setCaption("Attach files");
-		multiFileUpload2.setRootDirectory(TEMP_FILE_DIR);
+		multiFileUpload2.setRootDirectory(StepEnterDetails.TEMP_FILE_DIR);
 		return multiFileUpload2;
 	}
 
-	private void attachFile(File file)
+	private void attachFile(final File file)
 	{
-		HorizontalLayout line = new HorizontalLayout();
+		final HorizontalLayout line = new HorizontalLayout();
 		line.setSpacing(true);
-		Button removeButton = new Button("x");
-		
+		final Button removeButton = new Button("x");
+
 		removeButton.setStyleName("small");
-		
+
 		line.addComponent(removeButton);
 		line.addComponent(new Label(file.getName()));
 		StepEnterDetails.this.attachedFiles.addComponent(line);
-		
-		AttachedFile attachedFile = new AttachedFile(attachedFiles, file, line);
+
+		final AttachedFile attachedFile = new AttachedFile(this.attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
-		
+
 		removeButton.addClickListener(new ClickEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void clicked(ClickEvent event)
+			public void clicked(final ClickEvent event)
 			{
-				AttachedFile file = (AttachedFile) event.getButton().getData();
+				final AttachedFile file = (AttachedFile) event.getButton().getData();
 				file.remove();
 				StepEnterDetails.this.fileList.remove(file);
 
@@ -238,7 +239,7 @@ public class StepEnterDetails implements WizardStep
 		});
 
 	}
-	
+
 	public HashSet<AttachedFile> getAttachedFiles()
 	{
 		return this.fileList;
@@ -246,7 +247,7 @@ public class StepEnterDetails implements WizardStep
 
 	public ArrayList<Tag> getActivityTags()
 	{
-		return activityTag.getTags();
+		return this.activityTag.getTags();
 	}
 
 }

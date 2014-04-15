@@ -14,54 +14,57 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 {
 	private static Logger logger = LogManager.getLogger(ContactEntityAdaptor.class);
 
-	public ContactEntityAdaptor(Class<?> entity)
+	public ContactEntityAdaptor(final Class<?> entity)
 	{
 		super(entity);
 	}
 
+	@Override
 	public ArrayList<FormFieldImpl> getFields()
 	{
-		ArrayList<FormFieldImpl> formFields = new ArrayList<>();
-		Field[] fields = entity.getDeclaredFields();
+		final ArrayList<FormFieldImpl> formFields = new ArrayList<>();
+		final Field[] fields = this.entity.getDeclaredFields();
 
-		for (Field field : fields)
+		for (final Field field : fields)
 		{
 			if (field.isAnnotationPresent(FormField.class))
 			{
-				FormField singleAnnotation = (FormField) field.getAnnotation(FormField.class);
+				final FormField singleAnnotation = field.getAnnotation(FormField.class);
 
 				if (field.getName().equals(Contact_.address.getName()))
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, Address_.street.getName(), singleAnnotation, "Address.Street");
+					FormFieldImpl formField = new FormFieldImpl(field, Address_.street.getName(), singleAnnotation,
+							"Address.Street");
 					formFields.add(formField);
 					formField = new FormFieldImpl(field, Address_.city.getName(), singleAnnotation, "Address.City");
 					formFields.add(formField);
 					formField = new FormFieldImpl(field, Address_.state.getName(), singleAnnotation, "Address.State");
 					formFields.add(formField);
-					formField = new FormFieldImpl(field, Address_.postcode.getName(), singleAnnotation, "Address.Postcode");
+					formField = new FormFieldImpl(field, Address_.postcode.getName(), singleAnnotation,
+							"Address.Postcode");
 					formFields.add(formField);
 				}
 				else if (field.getName().equals(Contact_.phone1.getName()))
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone1.getName(), singleAnnotation,
-							"Phone1.PhoneNo");
+					final FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone1.getName(),
+							singleAnnotation, "Phone1.PhoneNo");
 					formFields.add(formField);
 				}
 				else if (field.getName().equals(Contact_.phone2.getName()))
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone2.getName(), singleAnnotation,
-							"Phone2.PhoneNo");
+					final FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone2.getName(),
+							singleAnnotation, "Phone2.PhoneNo");
 					formFields.add(formField);
 				}
 				else if (field.getName().equals(Contact_.phone3.getName()))
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone3.getName(), singleAnnotation,
-							"Phone3.PhoneNo");
+					final FormFieldImpl formField = new FormFieldImpl(field, Contact_.phone3.getName(),
+							singleAnnotation, "Phone3.PhoneNo");
 					formFields.add(formField);
 				}
 				else
 				{
-					FormFieldImpl formField = new FormFieldImpl(field, field.getName(), ((FormField) singleAnnotation));
+					final FormFieldImpl formField = new FormFieldImpl(field, field.getName(), singleAnnotation);
 					formFields.add(formField);
 				}
 			}
@@ -72,46 +75,67 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 		return formFields;
 	}
 
-	public void save(EntityManager em, Contact entity, String[] csvHeaders, String[] fieldValues,
-			Hashtable<String, FormFieldImpl> fieldMap)
+	@Override
+	public void save(final EntityManager em, final Contact entity, final String[] csvHeaders,
+			final String[] fieldValues, final Hashtable<String, FormFieldImpl> fieldMap)
 	{
 
 		for (int i = 0; i < fieldValues.length; i++)
 		{
 			try
 			{
-				String csvHeaderName = csvHeaders[i];
-				FormFieldImpl formField = fieldMap.get(csvHeaderName);
+				final String csvHeaderName = csvHeaders[i];
+				final FormFieldImpl formField = fieldMap.get(csvHeaderName);
 				if (formField != null)
 				{
-					String fieldValue = fieldValues[i];
+					final String fieldValue = fieldValues[i];
 
 					if (formField.getFieldName().equals(Contact_.phone1.getName()))
+					{
 						entity.setPhone1(fieldValue);
+					}
 					else if (formField.getFieldName().equals(Contact_.phone2.getName()))
+					{
 						entity.setPhone2(new Phone(fieldValue));
+					}
 					else if (formField.getFieldName().equals(Contact_.phone3.getName()))
+					{
 						entity.setPhone3(new Phone(fieldValue));
+					}
 					else if (formField.getFieldName().equals(Contact_.gender.getName()))
+					{
 						entity.setGender(Gender.valueOf(fieldValue));
+					}
 					else if (formField.getFieldName().equals(Address_.street.getName()))
+					{
 						entity.setStreet(fieldValue);
+					}
 					else if (formField.getFieldName().equals(Address_.city.getName()))
+					{
 						entity.setCity(fieldValue);
+					}
 					else if (formField.getFieldName().equals(Address_.state.getName()))
+					{
 						entity.setState(fieldValue);
+					}
 					else if (formField.getFieldName().equals(Address_.postcode.getName()))
+					{
 						entity.setPostcode(fieldValue);
+					}
 					else if (formField.getFieldName().equals(Contact_.birthDate.getName()))
+					{
 						entity.setBirthDate(fieldValue);
+					}
 					else
+					{
 						formField.setValue(entity, fieldValue);
+					}
 				}
 			}
-			catch (Throwable e)
+			catch (final Throwable e)
 			{
 				// For the moment just ignore non-parsable fields.
-				logger.error(e, e);
+				ContactEntityAdaptor.logger.error(e, e);
 			}
 		}
 

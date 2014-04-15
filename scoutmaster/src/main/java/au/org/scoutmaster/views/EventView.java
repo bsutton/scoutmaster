@@ -40,8 +40,9 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Events", path="Calendar")
-public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>, ValueChangeListener
+@Menu(display = "Events", path = "Calendar")
+public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>,
+		ValueChangeListener
 {
 
 	private static final long serialVersionUID = 1L;
@@ -54,37 +55,35 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	private DateField endDateField;
 
 	private DateField startDateField;
-	
-//	private AttachedDocuments attachedDocuments;
+
+	// private AttachedDocuments attachedDocuments;
 
 	private JPAContainer<au.org.scoutmaster.domain.Event> container;
 
-
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		container = new DaoFactory().getDao( EventDao.class).createVaadinContainer();
-		container.sort(new String[] {Event_.eventStartDateTime.getName()},new boolean[] {false});
+		this.container = new DaoFactory().getDao(EventDao.class).createVaadinContainer();
+		this.container.sort(new String[]
+		{ Event_.eventStartDateTime.getName() }, new boolean[]
+		{ false });
 
-		Builder< au.org.scoutmaster.domain.Event> builder = new HeadingPropertySet.Builder< au.org.scoutmaster.domain.Event>();
-		builder.addColumn("Subject", Event_.subject)
-				.addColumn("All Day", Event_.allDayEvent)
-				.addColumn("Start Date", Event_.eventStartDateTime)
-				.addColumn("End Date", Event_.eventEndDateTime);
+		final Builder<au.org.scoutmaster.domain.Event> builder = new HeadingPropertySet.Builder<au.org.scoutmaster.domain.Event>();
+		builder.addColumn("Subject", Event_.subject).addColumn("All Day", Event_.allDayEvent)
+		.addColumn("Start Date", Event_.eventStartDateTime).addColumn("End Date", Event_.eventEndDateTime);
 
-		super.init( au.org.scoutmaster.domain.Event.class, container, builder.build());
+		super.init(au.org.scoutmaster.domain.Event.class, this.container, builder.build());
 
 	}
 
-
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup< au.org.scoutmaster.domain.Event> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<au.org.scoutmaster.domain.Event> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		SMMultiColumnFormLayout< au.org.scoutmaster.domain.Event> overviewForm = new SMMultiColumnFormLayout< au.org.scoutmaster.domain.Event>(3, this.fieldGroup);
+		final SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event> overviewForm = new SMMultiColumnFormLayout<au.org.scoutmaster.domain.Event>(
+				3, this.fieldGroup);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setColumnLabelWidth(1, 0);
 		overviewForm.setColumnLabelWidth(2, 60);
@@ -97,50 +96,59 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Subject", Event_.subject);
 		overviewForm.newLine();
-		
-//		overviewForm.bindBooleanField("Section Meeting", Event_.sectionMeeting);
-		
-		//SectionTypeDao daoSectionType = new DaoFactory().getDao(SectionTypeDao.class);
 
-		//overviewForm.bindEntityField("Section", fieldName, listClazz, listFieldName);
-		
-//		overviewForm.getFormHelper().new ListSelectBuilder<QualificationType>()
-//		.setField(Event_.sectionType)
-//		.setContainer(daoSectionType.createVaadinContainer())
-//		.setForm(overviewForm)
-//		.setListFieldName(QualificationType_.name)
-//		.setLabel("Leader Qualifications")
-//		.build();
+		// overviewForm.bindBooleanField("Section Meeting",
+		// Event_.sectionMeeting);
+
+		// SectionTypeDao daoSectionType = new
+		// DaoFactory().getDao(SectionTypeDao.class);
+
+		// overviewForm.bindEntityField("Section", fieldName, listClazz,
+		// listFieldName);
+
+		// overviewForm.getFormHelper().new
+		// ListSelectBuilder<QualificationType>()
+		// .setField(Event_.sectionType)
+		// .setContainer(daoSectionType.createVaadinContainer())
+		// .setForm(overviewForm)
+		// .setListFieldName(QualificationType_.name)
+		// .setLabel("Leader Qualifications")
+		// .build();
 		overviewForm.newLine();
 
-		iColorFactory factory = new ColorDao.ColorFactory();
+		final iColorFactory factory = new ColorDao.ColorFactory();
 		overviewForm.bindColorPicker(factory, "Colour", Event_.color.getName());
 		overviewForm.newLine();
-		
+
 		overviewForm.bindBooleanField("All Day Event", Event_.allDayEvent);
 		overviewForm.newLine();
-		
+
 		overviewForm.colspan(3);
-		startDateField = overviewForm.bindDateField("Start", Event_.eventStartDateTime, "yyyy-MM-dd hh:mm a", Resolution.MINUTE);
-		startDateField.setRangeStart(new Date());
+		this.startDateField = overviewForm.bindDateField("Start", Event_.eventStartDateTime, "yyyy-MM-dd hh:mm a",
+				Resolution.MINUTE);
+		this.startDateField.setRangeStart(new Date());
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
-		endDateField = overviewForm.bindDateField("End", Event_.eventEndDateTime, "yyyy-MM-dd hh:mm a", Resolution.MINUTE);
-		endDateField.setRangeStart(new Date());
-		
-		startDateField.addValidator(new DateRangeValidator(startDateField.getCaption(), endDateField));
-		startDateField.addValueChangeListener(this);
+		this.endDateField = overviewForm.bindDateField("End", Event_.eventEndDateTime, "yyyy-MM-dd hh:mm a",
+				Resolution.MINUTE);
+		this.endDateField.setRangeStart(new Date());
 
-		
+		this.startDateField.addValidator(new DateRangeValidator(this.startDateField.getCaption(), this.endDateField));
+		this.startDateField.addValueChangeListener(this);
+
 		overviewForm.newLine();
-		
-//		overviewForm.bindAutoCompleteField("Co-ordinators", Event_.coordinators, Contact.class);
-		
-//		ContactDao daoContact = new DaoFactory().getContactDao();
-//		EntityAutoCompleteField<Contact, ContactDao> contactSelect = new EntityAutoCompleteField<Contact, ContactDao>(daoContact.createVaadinContainer(), daoContact, "Coordinators", this);
-//		overviewForm.addComponent(contactSelect);
-		
+
+		// overviewForm.bindAutoCompleteField("Co-ordinators",
+		// Event_.coordinators, Contact.class);
+
+		// ContactDao daoContact = new DaoFactory().getContactDao();
+		// EntityAutoCompleteField<Contact, ContactDao> contactSelect = new
+		// EntityAutoCompleteField<Contact,
+		// ContactDao>(daoContact.createVaadinContainer(), daoContact,
+		// "Coordinators", this);
+		// overviewForm.addComponent(contactSelect);
+
 		overviewForm.newLine();
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Street", "location.street");
@@ -155,32 +163,31 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
-		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Event_.details, true);
+		final CKEditorEmailField detailsEditor = overviewForm.bindEditorField(Event_.details, true);
 		detailsEditor.setSizeFull();
 		overviewForm.setExpandRatio(1.0f);
-		
+
 		layout.addComponent(overviewForm);
-		
-//		attachedDocuments = new AttachedDocuments();
-//		layout.addComponent(attachedDocuments);
+
+		// attachedDocuments = new AttachedDocuments();
+		// layout.addComponent(attachedDocuments);
 
 		return layout;
 	}
 
 	@Override
-	public void rowChanged(EntityItem<au.org.scoutmaster.domain.Event> item)
+	public void rowChanged(final EntityItem<au.org.scoutmaster.domain.Event> item)
 	{
-//		if (item != null)
-//			attachedDocuments.setDocuments(item.getEntity().getDocuments());
+		// if (item != null)
+		// attachedDocuments.setDocuments(item.getEntity().getDocuments());
 		super.rowChanged(item);
 	}
 
-
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new SimpleStringFilter(Event_.eventStartDateTime.getName(), filterString, true,
-				false), new SimpleStringFilter(Event_.eventEndDateTime.getName(), filterString, true, false)),
+		return new Or(new Or(new SimpleStringFilter(Event_.eventStartDateTime.getName(), filterString, true, false),
+				new SimpleStringFilter(Event_.eventEndDateTime.getName(), filterString, true, false)),
 				new SimpleStringFilter(Event_.subject.getName(), filterString, true, false));
 	}
 
@@ -190,54 +197,52 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		return "Events";
 	}
 
-
 	@Override
-	public boolean hasEntity(Contact entity)
+	public boolean hasEntity(final Contact entity)
 	{
-		EventDao daoEvent = new DaoFactory().getEventDao();
-		return daoEvent.hasCoordinator(this.getCurrent(), entity);
+		final EventDao daoEvent = new DaoFactory().getEventDao();
+		return daoEvent.hasCoordinator(getCurrent(), entity);
 	}
 
-
 	@Override
-	public void attachEntity(Contact entity)
+	public void attachEntity(final Contact entity)
 	{
-		EventDao daoEvent = new DaoFactory().getEventDao();
-		daoEvent.attachCoordinator(this.getCurrent(), entity);
+		final EventDao daoEvent = new DaoFactory().getEventDao();
+		daoEvent.attachCoordinator(getCurrent(), entity);
 	}
 
-
 	@Override
-	public void detachEntity(Contact entity)
+	public void detachEntity(final Contact entity)
 	{
-		EventDao daoEvent = new DaoFactory().getEventDao();
-		daoEvent.detachCoordinator(this.getCurrent(), entity);
+		final EventDao daoEvent = new DaoFactory().getEventDao();
+		daoEvent.detachCoordinator(getCurrent(), entity);
 	}
-
 
 	@Override
 	protected List<CrudAction<au.org.scoutmaster.domain.Event>> getCrudActions()
 	{
-		List<CrudAction<au.org.scoutmaster.domain.Event>> actions = super.getCrudActions();
-		
+		final List<CrudAction<au.org.scoutmaster.domain.Event>> actions = super.getCrudActions();
+
 		actions.add(new EventActionCopy());
 		return actions;
 	}
+
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
-		// The start date has just changed so make certain the end date is in the future 
+		// The start date has just changed so make certain the end date is in
+		// the future
 		// by default we set it to two hours into the future.
-		
-		DateField startDateField = (DateField)event.getProperty();
-		
-		DateTime startDate = new DateTime(startDateField.getValue());
-		
-		
+
+		final DateField startDateField = (DateField) event.getProperty();
+
+		final DateTime startDate = new DateTime(startDateField.getValue());
+
 		if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDateField.getValue()))
+		{
 			this.endDateField.setValue(startDate.plusHours(2).toDate());
-		
+		}
+
 	}
-	
-	
+
 }

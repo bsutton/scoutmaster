@@ -28,68 +28,70 @@ public class SMSSession implements Closeable
 {
 	static private Logger logger = LogManager.getLogger(SMSSession.class);
 
-	private SmsSender smsSender;
+	private final SmsSender smsSender;
 
-	public SMSSession(SMSProvider provider) throws SmsException, IOException
+	public SMSSession(final SMSProvider provider) throws SmsException, IOException
 	{
-		smsSender = SmsSender.getClickatellSender(provider.getUsername(), provider.getPassword(), provider.getApiId());
-		Preconditions.checkNotNull(smsSender);
-		smsSender.connect();
+		this.smsSender = SmsSender.getClickatellSender(provider.getUsername(), provider.getPassword(),
+				provider.getApiId());
+		Preconditions.checkNotNull(this.smsSender);
+		this.smsSender.connect();
 	}
 
 	@Override
 	public void close() throws IOException
 	{
-		if (smsSender != null)
+		if (this.smsSender != null)
+		{
 			try
 			{
-				smsSender.disconnect();
+				this.smsSender.disconnect();
 			}
-			catch (SmsException e)
+			catch (final SmsException e)
 			{
-				logger.error(e, e);
+				SMSSession.logger.error(e, e);
 			}
+		}
 
 	}
 
-	public void send(SMSTransmission transmission) throws SmsException, IOException
+	public void send(final SMSTransmission transmission) throws SmsException, IOException
 	{
-		User user = (User) SMSession.INSTANCE.getLoggedInUser();
+		final User user = SMSession.INSTANCE.getLoggedInUser();
 
 		try
 		{
 			// The message that you want to send.
-			String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
+			final String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
 
 			// International number to target without leading "+"
-			Phone reciever = transmission.getRecipient();
+			final Phone reciever = transmission.getRecipient();
 
 			// Number of sender (not supported on all transports)
-			smsSender.sendTextSms(msg, reciever.getPhoneNo().replaceAll("\\s", ""), transmission.getMessage()
+			this.smsSender.sendTextSms(msg, reciever.getPhoneNo().replaceAll("\\s", ""), transmission.getMessage()
 					.getSender().getPhoneNo());
 
 			// Log the activity
-			CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
-			CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-			CommunicationLog activity = new CommunicationLog();
+			final CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
+			final CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+			final CommunicationLog activity = new CommunicationLog();
 			activity.setAddedBy(user);
 			activity.setWithContact(transmission.getContact());
 			activity.setSubject(transmission.getMessage().getSubject());
 			activity.setType(daoActivityType.findByName(CommunicationType.BULK_SMS));
 			activity.setDetails(transmission.getMessage().getBody());
 			daoActivity.persist(activity);
-			
-			
+
 			// Tag the contact
-			ContactDao daoContact = new DaoFactory().getContactDao();
-			for (Tag tag : transmission.getActivityTags())
+			final ContactDao daoContact = new DaoFactory().getContactDao();
+			for (final Tag tag : transmission.getActivityTags())
 			{
 				daoContact.attachTag(transmission.getContact(), tag);
 			}
 			daoContact.merge(transmission.getContact());
 
 		}
-		catch (VelocityFormatException e)
+		catch (final VelocityFormatException e)
 		{
 			SMNotification.show(e, Type.ERROR_MESSAGE);
 		}

@@ -17,12 +17,12 @@ import org.joda.money.Money;
 
 /**
  * Used to store defaults associated with a youth member trying out for scouts.
- * 
+ *
  * @author bsutton
- * 
+ *
  */
-@Entity(name="SectionTryoutType")
-@Table(name="SectionTryoutType")
+@Entity(name = "SectionTryoutType")
+@Table(name = "SectionTryoutType")
 @Access(AccessType.FIELD)
 public class SectionTryoutType extends BaseEntity
 {
@@ -31,14 +31,14 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The sections this tryout type applies to.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity=Section.class)
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Section.class)
 	List<Section> sections = new ArrayList<>();
 
 	/**
 	 * The name used to identify this type of tryout. e.g. Three for free
 	 */
 	@NotBlank
-	@Column(unique=true)
+	@Column(unique = true)
 	String name;
 
 	/**
@@ -55,7 +55,7 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The number of weeks the tryout normally goes for.
 	 */
-	@Min(value=1)
+	@Min(value = 1)
 	Integer weeks;
 
 	/**
@@ -66,7 +66,7 @@ public class SectionTryoutType extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return name;
+		return this.name;
 	}
 
 }

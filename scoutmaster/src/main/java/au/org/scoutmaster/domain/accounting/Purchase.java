@@ -19,27 +19,25 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Organisation;
 
 @Entity
-@Table(name="Purchase")
+@Table(name = "Purchase")
 @Access(AccessType.FIELD)
-public class Purchase  extends BaseEntity
+public class Purchase extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	/**
 	 * A high level description of what was purchased.
 	 */
 	String description;
-	
+
 	/**
 	 * The reason the goods or services where purchases
 	 */
 	String reason;
 
-
 	/**
 	 * How the purchase was made. Either direct purchase or an expense claim.
-	 * 
+	 *
 	 * For a direct purchase
 	 */
 	@Enumerated(EnumType.STRING)
@@ -48,35 +46,34 @@ public class Purchase  extends BaseEntity
 
 	/**
 	 * The organisation/supplier this purchase was made from.
-	 * 
-	 * This will generally 
+	 *
+	 * This will generally
 	 */
-	@ManyToOne(targetEntity=Organisation.class)
+	@ManyToOne(targetEntity = Organisation.class)
 	Organisation purchasedFrom;
-	
+
 	/**
 	 * The group member that made the purchase.
-	 * 
-	 * If the method is EXPENSE_CLAIM then this is the person the group needs to pay.
+	 *
+	 * If the method is EXPENSE_CLAIM then this is the person the group needs to
+	 * pay.
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	Contact purchasedBy;
-	
-	
+
 	/**
 	 * The group member that approved the purchase.
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	Contact approvedBy;
-	
-		
-	@OneToMany(cascade = CascadeType.ALL, targetEntity=PurchaseLine.class)
+
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = PurchaseLine.class)
 	List<PurchaseLine> purchaseLines = new ArrayList<>();
 
 	@Override
 	public String getName()
 	{
-		return purchasedFrom.getName();
+		return this.purchasedFrom.getName();
 	}
-	
+
 }

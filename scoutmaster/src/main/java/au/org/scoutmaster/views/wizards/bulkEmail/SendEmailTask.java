@@ -36,14 +36,15 @@ import com.vaadin.ui.Notification.Type;
 public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements CancelListener
 {
 	Logger logger = LogManager.getLogger(SendEmailTask.class);
-	private Message message;
-	private List<EmailTransmission> transmissions;
-	private User user;
-	private HashSet<AttachedFile> attachedFiles;
+	private final Message message;
+	private final List<EmailTransmission> transmissions;
+	private final User user;
+	private final HashSet<AttachedFile> attachedFiles;
 	private boolean cancel = false;
 
-	public SendEmailTask(ProgressTaskListener<EmailTransmission> listener, User user, Message message,
-			ArrayList<EmailTransmission> transmissions, HashSet<AttachedFile> attachedFiles)
+	public SendEmailTask(final ProgressTaskListener<EmailTransmission> listener, final User user,
+			final Message message, final ArrayList<EmailTransmission> transmissions,
+			final HashSet<AttachedFile> attachedFiles)
 	{
 		super(listener);
 		this.message = message;
@@ -58,20 +59,21 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 	{
 		try
 		{
-			sendMessages(user, transmissions, message);
+			sendMessages(this.user, this.transmissions, this.message);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
-			logger.error(e, e);
+			this.logger.error(e, e);
 			super.taskException(e);
 		}
 
 	}
 
-	private void sendMessages(User user, List<EmailTransmission> targets, Message message) throws IOException
+	private void sendMessages(final User user, final List<EmailTransmission> targets, final Message message)
+			throws IOException
 	{
 
-		EntityManager em = EntityManagerProvider.createEntityManager();
+		final EntityManager em = EntityManagerProvider.createEntityManager();
 		int sent = 0;
 
 		try (Transaction t = new Transaction(em))
@@ -80,27 +82,29 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 			// manager.
 			EntityManagerProvider.setCurrentEntityManager(em);
 
-			SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-			SMTPServerSettings settings = daoSMTPSettings.findSettings();
+			final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+			final SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
-			for (EmailTransmission transmission : targets)
+			for (final EmailTransmission transmission : targets)
 			{
-				if (cancel == true)
+				if (this.cancel == true)
+				{
 					break;
+				}
 
 				try
 				{
-					String expandedBody = message.expandBody(user, transmission.getContact());
-					StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
-					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(), new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
-							expandedSubject.toString(), expandedBody.toString(),
-							attachedFiles);
+					final String expandedBody = message.expandBody(user, transmission.getContact());
+					final StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
+					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(),
+							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
+							expandedSubject.toString(), expandedBody.toString(), this.attachedFiles);
 
 					// Log the activity
-					CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
-					CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-					CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
-					CommunicationLog activity = new CommunicationLog();
+					final CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
+					final CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+					final CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
+					final CommunicationLog activity = new CommunicationLog();
 					activity.setAddedBy(user);
 					activity.setWithContact(transmission.getContact());
 					activity.setSubject(message.getSubject());
@@ -109,8 +113,8 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					daoActivity.persist(activity);
 
 					// Tag the contact
-					ContactDao daoContact = new DaoFactory().getContactDao();
-					TagDao daoTag = new DaoFactory().getTagDao();
+					final ContactDao daoContact = new DaoFactory().getContactDao();
+					final TagDao daoTag = new DaoFactory().getTagDao();
 					for (Tag tag : transmission.getActivityTags())
 					{
 						tag = daoTag.merge(tag);
@@ -124,14 +128,14 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					// SMNotification.show("Message sent",
 					// Type.TRAY_NOTIFICATION);
 				}
-				catch (EmailException e)
+				catch (final EmailException e)
 				{
-					logger.error(e, e);
+					this.logger.error(e, e);
 					transmission.setException(e);
 					super.taskItemError(transmission);
 					SMNotification.show(e, Type.ERROR_MESSAGE);
 				}
-				catch (VelocityFormatException e)
+				catch (final VelocityFormatException e)
 				{
 					SMNotification.show(e, Type.ERROR_MESSAGE);
 				}

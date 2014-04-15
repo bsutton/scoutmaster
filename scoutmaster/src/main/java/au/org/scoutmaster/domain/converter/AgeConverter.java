@@ -15,35 +15,39 @@ public class AgeConverter implements Converter<Object, Age>
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Age convertToModel(Object value, Class<? extends Age> targetType, Locale locale)
+	public Age convertToModel(final Object value, final Class<? extends Age> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		Age result = null;
 
-		logger.debug("converToModel: value={} valueType: {} targetType: {}", value, (value != null ? value.getClass()
-				: "null"), targetType);
+		AgeConverter.logger.debug("converToModel: value={} valueType: {} targetType: {}", value,
+				value != null ? value.getClass() : "null", targetType);
 
 		if (value instanceof Object || value instanceof String)
 		{
 			result = new Age((String) value);
 		}
 
-		logger.debug("result: {}", result);
+		AgeConverter.logger.debug("result: {}", result);
 		return result;
 	}
 
 	@Override
-	public Object convertToPresentation(Age value, Class<? extends Object> targetType, Locale locale)
+	public Object convertToPresentation(final Age value, final Class<? extends Object> targetType, final Locale locale)
 			throws com.vaadin.data.util.converter.Converter.ConversionException
 	{
 		String result = "0";
 
-		logger.debug("convertToPresentation: value {} targetType: {}", value, targetType);
+		AgeConverter.logger.debug("convertToPresentation: value {} targetType: {}", value, targetType);
 		if (value != null)
+		{
 			result = value.toString();
+		}
 		else
+		{
 			result = "";
-		logger.debug("result: {}", result);
+		}
+		AgeConverter.logger.debug("result: {}", result);
 		return result;
 	}
 

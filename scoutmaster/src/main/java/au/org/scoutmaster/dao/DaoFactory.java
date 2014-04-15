@@ -22,10 +22,10 @@ public class DaoFactory
 
 	/**
 	 * Allows us to control the used em. This is normally used for unit testing.
-	 * 
+	 *
 	 * @param em
 	 */
-	public DaoFactory(EntityManager em)
+	public DaoFactory(final EntityManager em)
 	{
 		this.em = em;
 	}
@@ -146,19 +146,19 @@ public class DaoFactory
 		return (UserDao) instantiateDAO(UserDao.class);
 	}
 
-	public static <E> JpaBaseDao<E, Long> getGenericDao(Class<E> class1)
+	public static <E> JpaBaseDao<E, Long> getGenericDao(final Class<E> class1)
 	{
 		return new JpaBaseDao<E, Long>(class1);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	public <D extends JpaBaseDao<E, Long>, E extends BaseEntity> D getDao(Class<D> clazz)
+	public <D extends JpaBaseDao<E, Long>, E extends BaseEntity> D getDao(final Class<D> clazz)
 	{
 		return (D) instantiateDAO(clazz);
 	}
 
-	private JpaBaseDao<?, ?> instantiateDAO(Class<?> daoClass)
+	private JpaBaseDao<?, ?> instantiateDAO(final Class<?> daoClass)
 	{
 		try
 		{
@@ -166,13 +166,15 @@ public class DaoFactory
 			if (this.em != null)
 			{
 				dao = (JpaBaseDao<?, ?>) daoClass.getDeclaredConstructor(new Class[]
-				{ EntityManager.class }).newInstance(this.em);
+						{ EntityManager.class }).newInstance(this.em);
 			}
 			else
+			{
 				dao = (JpaBaseDao<?, ?>) daoClass.newInstance();
+			}
 			return dao;
 		}
-		catch (Exception ex)
+		catch (final Exception ex)
 		{
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}

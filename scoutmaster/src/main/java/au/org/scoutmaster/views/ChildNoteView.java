@@ -7,8 +7,8 @@ import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.BaseEntity_;
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Note_;
 
@@ -25,16 +25,16 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 {
 	private static final long serialVersionUID = 1L;
 
-	public ChildNoteView(BaseCrudView<Contact> parentCrud)
+	public ChildNoteView(final BaseCrudView<Contact> parentCrud)
 	{
-		super(parentCrud, Contact.class, Note.class, Contact_.id, Note_.attachedContact.getName());
+		super(parentCrud, Contact.class, Note.class, BaseEntity_.id, Note_.attachedContact.getName());
 
-		JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
+		final JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
 		container.sort(new String[]
-		{ Note_.created.getName() }, new boolean[]
-		{ false });
+				{ BaseEntity_.created.getName() }, new boolean[]
+						{ false });
 
-		Builder<Note> builder = new HeadingPropertySet.Builder<Note>();
+		final Builder<Note> builder = new HeadingPropertySet.Builder<Note>();
 		builder.addColumn("Subject", Note_.subject).addColumn("Date", Note_.noteDate);
 
 		super.init(Note.class, container, builder.build());
@@ -42,12 +42,12 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	}
 
 	@Override
-	protected Component buildEditor(ValidatingFieldGroup<Note> fieldGroup2)
+	protected Component buildEditor(final ValidatingFieldGroup<Note> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		MultiColumnFormLayout<Note> overviewForm = new MultiColumnFormLayout<Note>(1, this.fieldGroup);
+		final MultiColumnFormLayout<Note> overviewForm = new MultiColumnFormLayout<Note>(1, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 180);
 		overviewForm.setColumnLabelWidth(0, 70);
 		// overviewForm.setColumnExpandRatio(0, 1.0f);
@@ -59,7 +59,7 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 		overviewForm.bindTextField("Subject", Note_.subject);
 		overviewForm.newLine();
 
-		TextArea detailsEditor = overviewForm.bindTextAreaField("Body", Note_.body, 6);
+		final TextArea detailsEditor = overviewForm.bindTextAreaField("Body", Note_.body, 6);
 		detailsEditor.setSizeFull();
 		overviewForm.setExpandRatio(1.0f);
 
@@ -68,15 +68,15 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(Note_.created.getName(), filterString, true,
-				false), new SimpleStringFilter(Note_.subject.getName(), filterString, true, false)),
+		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(BaseEntity_.created.getName(), filterString,
+				true, false), new SimpleStringFilter(Note_.subject.getName(), filterString, true, false)),
 				new SimpleStringFilter(Note_.body.getName(), filterString, true, false)))));
 	}
 
 	@Override
-	public void associateChild(Contact newParent, Note child)
+	public void associateChild(final Contact newParent, final Note child)
 	{
 		newParent.addNote(child);
 	}

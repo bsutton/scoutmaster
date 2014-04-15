@@ -34,14 +34,14 @@ public class ImportSelectFile implements WizardStep
 	private boolean uploadComplete = false;
 	protected String selectedFilename;
 	private Upload upload;
-	private ProgressBar progressBar;
-	private Label progress = new Label();
+	private final ProgressBar progressBar;
+	private final Label progress = new Label();
 	protected boolean uploadStarted;
 	private VerticalLayout content;
-//	private ComboBox mapping;
+	// private ComboBox mapping;
 	private Label completionMessage;
 
-	public ImportSelectFile(ImportWizardView importView)
+	public ImportSelectFile(final ImportWizardView importView)
 	{
 		this.progressBar = new ProgressBar();
 		this.progressBar.setCaption("Progress");
@@ -59,13 +59,13 @@ public class ImportSelectFile implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		if (content == null)
+		if (this.content == null)
 		{
-			content = new VerticalLayout();
+			this.content = new VerticalLayout();
 
 			initUpload();
 
-			upload.setImmediate(true);
+			this.upload.setImmediate(true);
 
 			startListener();
 
@@ -75,16 +75,16 @@ public class ImportSelectFile implements WizardStep
 
 			finishListener();
 
-			content.addComponent(new Label("Click the 'Upload' button to select the file to import."));
+			this.content.addComponent(new Label("Click the 'Upload' button to select the file to import."));
 
-			content.addComponent(upload);
+			this.content.addComponent(this.upload);
 
-			content.addComponent(this.progressBar);
+			this.content.addComponent(this.progressBar);
 			this.progressBar.setValue(0.0f);
 			this.progressBar.setVisible(false);
-			
-			completionMessage = new Label("");
-			content.addComponent(completionMessage);
+
+			this.completionMessage = new Label("");
+			this.content.addComponent(this.completionMessage);
 
 			// JPAContainer<ImportUserMapping> userMappings =
 			// JPAContainerFactory.make(ImportUserMapping.class,
@@ -102,10 +102,10 @@ public class ImportSelectFile implements WizardStep
 			// //row.addComponent(new
 			// Label("If you have imported this type of file previously you can select a saved field mapping."));
 			// content.addComponent(row);
-			content.setMargin(true);
+			this.content.setMargin(true);
 		}
 
-		return content;
+		return this.content;
 	}
 
 	private void initUpload()
@@ -115,7 +115,7 @@ public class ImportSelectFile implements WizardStep
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public OutputStream receiveUpload(String filename, String mimeType)
+			public OutputStream receiveUpload(final String filename, final String mimeType)
 			{
 				try
 				{
@@ -125,13 +125,13 @@ public class ImportSelectFile implements WizardStep
 					 * reader around it, use ProgressListener (and a progress
 					 * bar) and a separate reader thread to populate a container
 					 * *during* the update.
-					 * 
+					 *
 					 * This is quick and easy example, though.
 					 */
-					tempFile = File.createTempFile("temp", ".csv");
-					return new FileOutputStream(tempFile);
+					ImportSelectFile.this.tempFile = File.createTempFile("temp", ".csv");
+					return new FileOutputStream(ImportSelectFile.this.tempFile);
 				}
-				catch (IOException e)
+				catch (final IOException e)
 				{
 					e.printStackTrace();
 					return null;
@@ -142,28 +142,23 @@ public class ImportSelectFile implements WizardStep
 
 	private void finishListener()
 	{
-		upload.addFinishedListener(new Upload.FinishedListener()
+		this.upload.addFinishedListener(new Upload.FinishedListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void uploadFinished(final Upload.FinishedEvent finishedEvent)
 			{
-				new UIUpdater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
-						ImportSelectFile.this.uploadComplete = true;
-						progress.setVisible(false);
-						ImportSelectFile.this.progressBar.setValue(1.0f);
-						ImportSelectFile.this.progressBar.setVisible(true);
-						ImportSelectFile.this.completionMessage.setValue("The upload of File "
-								+ ImportSelectFile.this.selectedFilename + " has been completed.");
+				new UIUpdater(() -> {
+					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
+					ImportSelectFile.this.uploadComplete = true;
+					ImportSelectFile.this.progress.setVisible(false);
+					ImportSelectFile.this.progressBar.setValue(1.0f);
+					ImportSelectFile.this.progressBar.setVisible(true);
+					ImportSelectFile.this.completionMessage.setValue("The upload of File "
+							+ ImportSelectFile.this.selectedFilename + " has been completed.");
 
-						SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
-					}
+					SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
 				});
 
 			}
@@ -172,23 +167,18 @@ public class ImportSelectFile implements WizardStep
 
 	private void progressListener()
 	{
-		upload.addProgressListener(new ProgressListener()
+		this.upload.addProgressListener(new ProgressListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void updateProgress(final long readBytes, final long contentLength)
 			{
-				new UIUpdater(new Runnable()
-				{
-
-					@Override
-					public void run()
-					{
-						progress.setValue("Uploaded: " + ((float) readBytes / (float) contentLength) * 100 + "%");
-						ImportSelectFile.this.progressBar.setValue(((float) readBytes / (float) contentLength));
-						ImportSelectFile.this.progressBar.setVisible(true);
-					}
+				new UIUpdater(() -> {
+					ImportSelectFile.this.progress.setValue("Uploaded: " + (float) readBytes / (float) contentLength
+							* 100 + "%");
+					ImportSelectFile.this.progressBar.setValue((float) readBytes / (float) contentLength);
+					ImportSelectFile.this.progressBar.setVisible(true);
 				});
 			}
 		});
@@ -196,23 +186,18 @@ public class ImportSelectFile implements WizardStep
 
 	private void failedListener()
 	{
-		upload.addFailedListener(new FailedListener()
+		this.upload.addFailedListener(new FailedListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void uploadFailed(final FailedEvent event)
 			{
-				new UIUpdater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						SMNotification.show("The upload failed. " + event.getReason()
-								+ " Please fix the problem and try again.");
-						ImportSelectFile.this.uploadStarted = true;
-						ImportSelectFile.this.uploadComplete = false;
-					}
+				new UIUpdater(() -> {
+					Notification.show("The upload failed. " + event.getReason()
+							+ " Please fix the problem and try again.");
+					ImportSelectFile.this.uploadStarted = true;
+					ImportSelectFile.this.uploadComplete = false;
 				});
 			}
 		});
@@ -220,12 +205,12 @@ public class ImportSelectFile implements WizardStep
 
 	private void startListener()
 	{
-		upload.addStartedListener(new StartedListener()
+		this.upload.addStartedListener(new StartedListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void uploadStarted(StartedEvent event)
+			public void uploadStarted(final StartedEvent event)
 			{
 				ImportSelectFile.this.uploadStarted = true;
 				ImportSelectFile.this.uploadComplete = false;
@@ -237,9 +222,13 @@ public class ImportSelectFile implements WizardStep
 	public boolean onAdvance()
 	{
 		if (!this.uploadStarted)
+		{
 			Notification.show("Please select a file and then click 'Upload' to start the upload.");
-		else if (!uploadComplete)
+		}
+		else if (!this.uploadComplete)
+		{
 			Notification.show("Please wait for the upload to complete.");
+		}
 
 		return this.uploadStarted && this.uploadComplete;
 	}
@@ -252,17 +241,17 @@ public class ImportSelectFile implements WizardStep
 
 	public File getTempFile()
 	{
-		return tempFile;
+		return this.tempFile;
 	}
 
 	public String getSelectedFilename()
 	{
-		return selectedFilename;
+		return this.selectedFilename;
 	}
 
-//	public String getImportMapping()
-//	{
-//		return (String) mapping.getValue();
-//	}
+	// public String getImportMapping()
+	// {
+	// return (String) mapping.getValue();
+	// }
 
 }

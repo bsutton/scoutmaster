@@ -14,30 +14,29 @@ import javax.persistence.Transient;
 
 /**
  * Represents an Allocation of Raffle Books to a contact from a Raffle.
- * 
+ *
  * @author bsutton
  *
  */
-@Entity(name="RaffleAllocation")
-@Table(name="RaffleAllocation")
+@Entity(name = "RaffleAllocation")
+@Table(name = "RaffleAllocation")
 @Access(AccessType.FIELD)
-
 public class RaffleAllocation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * The raffle this book is attached to.
 	 */
-	@ManyToOne(targetEntity=Raffle.class)
+	@ManyToOne(targetEntity = Raffle.class)
 	Raffle raffle;
-	
+
 	/**
 	 * The contact the book was allocated to.
 	 */
-	@ManyToOne(targetEntity=Contact.class)
+	@ManyToOne(targetEntity = Contact.class)
 	private Contact allocatedTo = new Contact();
-	
+
 	/**
 	 * The date the book was allocated to a Contact.
 	 */
@@ -52,7 +51,7 @@ public class RaffleAllocation extends BaseEntity
 	 * The date the book was actually given to the Contact.
 	 */
 	private Date dateIssued = new Date(new java.util.Date().getTime());
-	
+
 	/**
 	 * Any special notes about the allocation
 	 */
@@ -61,90 +60,94 @@ public class RaffleAllocation extends BaseEntity
 	/**
 	 * The set of raffle books allocated by this allocation.
 	 */
-	@OneToMany(mappedBy="raffleAllocation")
+	@OneToMany(mappedBy = "raffleAllocation")
 	private Set<RaffleBook> books = new HashSet<>();
-	
+
+	@Override
 	public String getName()
 	{
 		return "Allocated To: " + this.allocatedTo.getFullname() + " Date Allocated: " + this.dateIssued;
 	}
-	
+
 	public Contact getAllocatedTo()
 	{
-		return allocatedTo;
+		return this.allocatedTo;
 	}
 
-	public void setAllocatedTo(Contact allocatedTo)
+	public void setAllocatedTo(final Contact allocatedTo)
 	{
 		this.allocatedTo = allocatedTo;
 	}
 
 	public Date getDateAllocated()
 	{
-		return dateAllocated;
+		return this.dateAllocated;
 	}
 
-	public void setDateAllocated(Date dateAllocated)
+	public void setDateAllocated(final Date dateAllocated)
 	{
 		this.dateAllocated = dateAllocated;
 	}
 
 	public Contact getIssuedBy()
 	{
-		return issuedBy;
+		return this.issuedBy;
 	}
 
-	public void setIssuedBy(Contact issuedBy)
+	public void setIssuedBy(final Contact issuedBy)
 	{
 		this.issuedBy = issuedBy;
 	}
 
 	public Date getDateIssued()
 	{
-		return dateIssued;
+		return this.dateIssued;
 	}
 
-	public void setDateIssued(Date dateIssued)
+	public void setDateIssued(final Date dateIssued)
 	{
 		this.dateIssued = dateIssued;
 	}
 
 	public String getNotes()
 	{
-		return notes;
+		return this.notes;
 	}
 
-	public void setNotes(String notes)
+	public void setNotes(final String notes)
 	{
 		this.notes = notes;
 	}
 
-	public void setRaffle(Raffle raffle)
+	public void setRaffle(final Raffle raffle)
 	{
 		this.raffle = raffle;
 	}
 
 	public Set<RaffleBook> getBooks()
 	{
-		return books;
+		return this.books;
 	}
 
-	public void setBooks(Set<RaffleBook> books)
+	public void setBooks(final Set<RaffleBook> books)
 	{
 		this.books = books;
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return "To: " + (this.allocatedTo == null ? "(none)" : this.allocatedTo.getFullname()) + " By:" + (this.issuedBy == null ? "none" : this.issuedBy.getFullname()) 
-				+ " On: " + this.dateAllocated + " Books: " + books.size(); 
+		return "To: " + (this.allocatedTo == null ? "(none)" : this.allocatedTo.getFullname()) + " By:"
+				+ (this.issuedBy == null ? "none" : this.issuedBy.getFullname()) + " On: " + this.dateAllocated
+				+ " Books: " + this.books.size();
 	}
 
-	public void addBook(RaffleBook book)
+	public void addBook(final RaffleBook book)
 	{
 		this.books.add(book);
-		
+
 	}
+
 	@Transient
 	public Long getBookCount()
 	{

@@ -11,9 +11,9 @@ public class ImportComplete implements WizardStep
 {
 
 	@SuppressWarnings("unused")
-	private ImportWizardView importView;
+	private final ImportWizardView importView;
 
-	public ImportComplete(ImportWizardView importView, Wizard wizard)
+	public ImportComplete(final ImportWizardView importView, final Wizard wizard)
 	{
 		this.importView = importView;
 	}
@@ -27,7 +27,7 @@ public class ImportComplete implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.addComponent(new Label("Import complete."));
 		layout.setMargin(true);
 		return layout;

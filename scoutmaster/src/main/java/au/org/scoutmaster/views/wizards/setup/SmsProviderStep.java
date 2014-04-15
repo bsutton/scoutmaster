@@ -35,12 +35,13 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> implements WizardStep, ClickListener, ProgressListener<SMSTransmission>
+public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> implements WizardStep, ClickListener,
+		ProgressListener<SMSTransmission>
 {
 	private static final long serialVersionUID = 1L;
 	private TextField senderId;
 
-	public SmsProviderStep(GroupSetupWizardView setupWizardView)
+	public SmsProviderStep(final GroupSetupWizardView setupWizardView)
 	{
 		super(new DaoFactory().getSMSProviderDao(), SMSProvider.class);
 	}
@@ -52,37 +53,40 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 	}
 
 	@Override
-	public Component getContent(ValidatingFieldGroup<SMSProvider> fieldGroup)
+	public Component getContent(final ValidatingFieldGroup<SMSProvider> fieldGroup)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<SMSProvider> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+		final MultiColumnFormLayout<SMSProvider> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
 		formLayout.setColumnFieldWidth(0, 250);
 
-		Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");
+		final Label label = new Label("<h1>Configure Click A Tell provider settings</h1>");
 		label.setContentMode(ContentMode.HTML);
 		layout.addComponent(label);
 		layout.addComponent(formLayout);
 
 		// Create the user input field
-		TextField user = formLayout.bindTextField("Username:", SMSProvider_.username);
+		final TextField user = formLayout.bindTextField("Username:", SMSProvider_.username);
 		user.setDescription("SMS Provider Username");
-		//user.addValidator(new StringLengthValidator("Please enter a username.", 1, 32, false));
+		// user.addValidator(new
+		// StringLengthValidator("Please enter a username.", 1, 32, false));
 
 		// Create the password input field
-		PasswordField password = formLayout.bindPasswordField("Password:", SMSProvider_.password);
+		final PasswordField password = formLayout.bindPasswordField("Password:", SMSProvider_.password);
 		password.setDescription("SMS Provider Password");
-		//password.addValidator(new StringLengthValidator("Please enter a password.", 1, 32, false));
+		// password.addValidator(new
+		// StringLengthValidator("Please enter a password.", 1, 32, false));
 
 		// Create the user input field
-		TextField apiId = formLayout.bindTextField("Api Id:", SMSProvider_.ApiId);
+		final TextField apiId = formLayout.bindTextField("Api Id:", SMSProvider_.ApiId);
 		apiId.setDescription("SMS Provider API key");
-		//apiId.addValidator(new StringLengthValidator("Please enter an API Key.", 1, 32, false));
+		// apiId.addValidator(new
+		// StringLengthValidator("Please enter an API Key.", 1, 32, false));
 
-		senderId = formLayout.bindTextField("Sender ID", SMSProvider_.defaultSenderID);
+		this.senderId = formLayout.bindTextField("Sender ID", SMSProvider_.defaultSenderID);
 		apiId.setDescription("Mobile phone to send message from. Must include country code.");
 
-		Button test = new Button("Test");
+		final Button test = new Button("Test");
 		layout.addComponent(test);
 		test.addClickListener(new ClickEventLogged.ClickAdaptor(this));
 
@@ -93,7 +97,7 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 	}
 
 	@Override
-	protected void initEntity(SMSProvider entity)
+	protected void initEntity(final SMSProvider entity)
 	{
 		entity.setProviderName("ClickATell");
 		entity.setActive(true);
@@ -105,19 +109,23 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 	{
 		SMSProvider provider = null;
 
-		SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-		List<SMSProvider> providers = daoSMSProvider.findByName("ClickATell");
+		final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+		final List<SMSProvider> providers = daoSMSProvider.findByName("ClickATell");
 		if (providers.size() > 1)
+		{
 			throw new IllegalArgumentException("Found more passwordthan one ClickATell SMSProvider");
+		}
 
 		if (providers.size() == 1)
+		{
 			provider = providers.get(0);
+		}
 
 		return provider;
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 		// test that the SMS Provider configuration works.
 
@@ -126,50 +134,56 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 		{
 			final SMSProvider provider = super.getEntity();
 			if (provider == null)
+			{
 				Notification.show(
 						"Can't find the SMS Provider, this usually means the install did not complete correctly.",
 						Type.ERROR_MESSAGE);
+			}
 			else
 			{
 
-				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.", "Enter your Mobile No. to recieve a test SMS.",
-						new Recipient()
+				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.",
+						"Enter your Mobile No. to recieve a test SMS.", new Recipient()
+				{
+					@Override
+					public boolean onOK(final String input)
+					{
+						final Phone recipient = new Phone(input);
+						final Message message = new Message("Test SMS Subject",
+										"Test SMS Message from Scoutmaster setup wizard.", new Phone(
+												SmsProviderStep.this.senderId.getValue()));
+
+						final Contact contact = new Contact();
+						contact.setFirstname("Test");
+						contact.setLastname("SMS");
+
+						final SMSTransmission transmission = new SMSTransmission(null, contact, message,
+										recipient);
+						final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+
+						try
 						{
-							public boolean onOK(String input)
-							{
-								Phone recipient = new Phone(input);
-								Message message = new Message("Test SMS Subject", "Test SMS Message from Scoutmaster setup wizard.", new Phone(SmsProviderStep.this.senderId.getValue()));
+							daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
+						}
+						catch (final SmsException e)
+						{
+							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+						}
+						catch (final Throwable e)
+						{
+							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+						}
+						return true;
+					}
 
-								Contact contact = new Contact();
-								contact.setFirstname("Test");
-								contact.setLastname("SMS");
+					@Override
+					public boolean onCancel()
+					{
+						Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
+						return true;
 
-								SMSTransmission transmission = new SMSTransmission(null, contact, message, recipient);
-								SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-
-								try
-								{
-									daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
-								}
-								catch (SmsException e)
-								{
-									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-								}
-								catch (Throwable e)
-								{
-									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-								}
-								return true;
 							}
-
-							@Override
-							public boolean onCancel()
-							{
-								Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
-								return true;
-								
-							}
-						}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));
+				}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));
 
 			}
 		}
@@ -177,31 +191,31 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 	}
 
 	@Override
-	public void progress(int count, int max, SMSTransmission status)
+	public void progress(final int count, final int max, final SMSTransmission status)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void complete(int sent)
+	public void complete(final int sent)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void itemError(Exception e, SMSTransmission status)
+	public void itemError(final Exception e, final SMSTransmission status)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void exception(Exception e)
+	public void exception(final Exception e)
 	{
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
