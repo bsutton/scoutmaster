@@ -32,7 +32,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Communication Log", path="Communication")
+@Menu(display = "Communication Log", path = "Communication")
 public class CommunicationLogView extends BaseCrudView<CommunicationLog> implements View, Selected<CommunicationLog>
 {
 
@@ -44,45 +44,46 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 	public static final String NAME = "Communication Log";
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<CommunicationLog> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<CommunicationLog> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
-		SMMultiColumnFormLayout<CommunicationLog> overviewForm = new SMMultiColumnFormLayout<CommunicationLog>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<CommunicationLog> overviewForm = new SMMultiColumnFormLayout<CommunicationLog>(2,
+				this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setColumnLabelWidth(0, 70);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
-		
-		FormHelper<CommunicationLog> formHelper = overviewForm.getFormHelper();
 
+		final FormHelper<CommunicationLog> formHelper = overviewForm.getFormHelper();
 
-		overviewForm.bindDateField("Activity Date", CommunicationLog_.activityDate, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
+		overviewForm.bindDateField("Activity Date", CommunicationLog_.activityDate, "yyyy-MM-dd hh:mm",
+				Resolution.MINUTE);
 		overviewForm.newLine();
-		
-		formHelper.new EntityFieldBuilder<CommunicationType>()
-				.setLabel("Type").setField(CommunicationLog_.type).setListFieldName(CommunicationType_.name).build();
+
+		formHelper.new EntityFieldBuilder<CommunicationType>().setLabel("Type").setField(CommunicationLog_.type)
+				.setListFieldName(CommunicationType_.name).build();
 
 		overviewForm.newLine();
-		
-		formHelper.new EntityFieldBuilder<User>()
-			.setLabel("Added By").setField(CommunicationLog_.addedBy).setListFieldName(User_.username).build();
-		
+
+		formHelper.new EntityFieldBuilder<User>().setLabel("Added By").setField(CommunicationLog_.addedBy)
+				.setListFieldName(User_.username).build();
+
 		overviewForm.newLine();
-		formHelper.new EntityFieldBuilder<Contact>()
-			.setLabel("With Contact").setField(CommunicationLog_.withContact).setListFieldName("fullname").build();
-	
+		formHelper.new EntityFieldBuilder<Contact>().setLabel("With Contact").setField(CommunicationLog_.withContact)
+				.setListFieldName("fullname").build();
+
 		overviewForm.newLine();
 		overviewForm.bindTextField("Subject", CommunicationLog_.subject);
 		overviewForm.newLine();
 		overviewForm.colspan(2);
 
-		CKEditorEmailField detailsEditor = overviewForm.bindEditorField(CommunicationLog_.details, true);
+		final CKEditorEmailField detailsEditor = overviewForm.bindEditorField(CommunicationLog_.details, true);
 		detailsEditor.setSizeFull();
 		overviewForm.setExpandRatio(1.0f);
-		
+
 		layout.addComponent(overviewForm);
 
 		super.disallowEdit(true, true);
@@ -91,31 +92,35 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 		return layout;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<CommunicationLog> container = new DaoFactory().getCommunicationLogDao().createVaadinContainer();
-		container.sort(new String[] {CommunicationLog_.activityDate.getName()},new boolean[] {false});
+		final JPAContainer<CommunicationLog> container = new DaoFactory().getCommunicationLogDao()
+				.createVaadinContainer();
+		container.sort(new String[]
+		{ CommunicationLog_.activityDate.getName() }, new boolean[]
+		{ false });
 
-		Builder<CommunicationLog> builder = new HeadingPropertySet.Builder<CommunicationLog>();
+		final Builder<CommunicationLog> builder = new HeadingPropertySet.Builder<CommunicationLog>();
 		builder.addColumn("Contact", CommunicationLog_.withContact).addColumn("Subject", CommunicationLog_.subject)
-				.addColumn("Type", CommunicationLog_.type).addColumn("Activity Date", CommunicationLog_.activityDate)
-				.addColumn("Added By", CommunicationLog_.addedBy);
+		.addColumn("Type", CommunicationLog_.type).addColumn("Activity Date", CommunicationLog_.activityDate)
+		.addColumn("Added By", CommunicationLog_.addedBy);
 
 		super.init(CommunicationLog.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(), filterString, true,
-				false), new SimpleStringFilter(new Path(CommunicationLog_.type, CommunicationType_.name).getName(), filterString, true, false)),
-				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.lastname).getName(), filterString, true, false)),
-				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.firstname).getName(), filterString, true, false)),
-				new SimpleStringFilter(new Path(CommunicationLog_.addedBy, User_.username).getName(), filterString, true, false)),
-				new SimpleStringFilter(CommunicationLog_.subject.getName(), filterString, true, false));
+		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(),
+				filterString, true, false), new SimpleStringFilter(new Path(CommunicationLog_.type,
+				CommunicationType_.name).getName(), filterString, true, false)), new SimpleStringFilter(new Path(
+				CommunicationLog_.withContact, Contact_.lastname).getName(), filterString, true, false)),
+				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.firstname).getName(),
+						filterString, true, false)), new SimpleStringFilter(new Path(CommunicationLog_.addedBy,
+				User_.username).getName(), filterString, true, false)), new SimpleStringFilter(
+				CommunicationLog_.subject.getName(), filterString, true, false));
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Qualification Type", path="Admin.Lists")
+@Menu(display = "Qualification Type", path = "Admin.Lists")
 public class QualificationTypeView extends BaseCrudView<QualificationType> implements View, Selected<QualificationType>
 {
 
@@ -35,22 +35,23 @@ public class QualificationTypeView extends BaseCrudView<QualificationType> imple
 	public static final String NAME = "QualificationType";
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<QualificationType> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<QualificationType> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		SMMultiColumnFormLayout<QualificationType> overviewForm = new SMMultiColumnFormLayout<>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<QualificationType> overviewForm = new SMMultiColumnFormLayout<>(2,
+				this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 600);
 		overviewForm.setColumnLabelWidth(0, 70);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
-		
+
 		overviewForm.bindTextField("Name", QualificationType_.name);
 		overviewForm.newLine();
 
 		overviewForm.bindTextAreaField("Description", QualificationType_.description, 6);
 		overviewForm.newLine();
-		
+
 		overviewForm.bindBooleanField("Expires", QualificationType_.expires);
 		overviewForm.newLine();
 
@@ -62,26 +63,29 @@ public class QualificationTypeView extends BaseCrudView<QualificationType> imple
 		return layout;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<QualificationType> container = new DaoFactory().getDao(QualificationTypeDao.class).createVaadinContainer();
-		container.sort(new String[] {QualificationType_.name.getName()},new boolean[] {false});
+		final JPAContainer<QualificationType> container = new DaoFactory().getDao(QualificationTypeDao.class)
+				.createVaadinContainer();
+		container.sort(new String[]
+		{ QualificationType_.name.getName() }, new boolean[]
+		{ false });
 
-		Builder<QualificationType> builder = new HeadingPropertySet.Builder<QualificationType>();
-		builder.addColumn("Qualification", QualificationType_.name).addColumn("Description", QualificationType_.description)
-				.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
+		final Builder<QualificationType> builder = new HeadingPropertySet.Builder<QualificationType>();
+		builder.addColumn("Qualification", QualificationType_.name)
+				.addColumn("Description", QualificationType_.description)
+		.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
 
 		super.init(QualificationType.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(QualificationType_.name.getName(), filterString, true,
-				false), new SimpleStringFilter(QualificationType_.description.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(QualificationType_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(QualificationType_.description.getName(), filterString, true, false));
 	}
 
 	@Override

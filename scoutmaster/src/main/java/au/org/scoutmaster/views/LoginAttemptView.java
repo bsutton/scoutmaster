@@ -25,7 +25,7 @@ import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Login Attempts", path="Admin.Security")
+@Menu(display = "Login Attempts", path = "Admin.Security")
 public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View, Selected<LoginAttempt>
 {
 
@@ -37,16 +37,17 @@ public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View
 	public static final String NAME = "LoginAttempt";
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<LoginAttempt> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<LoginAttempt> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		SMMultiColumnFormLayout<LoginAttempt> overviewForm = new SMMultiColumnFormLayout<LoginAttempt>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<LoginAttempt> overviewForm = new SMMultiColumnFormLayout<LoginAttempt>(1,
+				this.fieldGroup);
 		overviewForm.setColumnLabelWidth(0, 120);
 		overviewForm.setColumnFieldWidth(0, 280);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
-		
+
 		overviewForm.bindTextField("User", new Path(LoginAttempt_.user, User_.username).getName());
 		overviewForm.newLine();
 		overviewForm.bindDateField("Attempt Time", LoginAttempt_.dateOfAttempt, "yyyy-MM-dd hh:mm", Resolution.MINUTE);
@@ -57,32 +58,33 @@ public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View
 
 		super.disallowEdit(true, true);
 		super.disallowNew(true);
-		//super.disallowDelete(true);
+		// super.disallowDelete(true);
 
 		return layout;
 	}
 
-
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<LoginAttempt> container = new DaoFactory().getLoginAttemptDao().createVaadinContainer();
-		container.sort(new String[] {LoginAttempt_.dateOfAttempt.getName()},new boolean[] {false});
+		final JPAContainer<LoginAttempt> container = new DaoFactory().getLoginAttemptDao().createVaadinContainer();
+		container.sort(new String[]
+		{ LoginAttempt_.dateOfAttempt.getName() }, new boolean[]
+		{ false });
 
-		Builder<LoginAttempt> builder = new HeadingPropertySet.Builder<LoginAttempt>();
+		final Builder<LoginAttempt> builder = new HeadingPropertySet.Builder<LoginAttempt>();
 		builder.addColumn("User", LoginAttempt_.user).addColumn("Login Attempt", LoginAttempt_.dateOfAttempt)
-				.addColumn("Succeeded", LoginAttempt_.succeeded);
+		.addColumn("Succeeded", LoginAttempt_.succeeded);
 
 		super.init(LoginAttempt.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(LoginAttempt_.user.getName(), filterString, true, false)
-		, new SimpleStringFilter(LoginAttempt_.dateOfAttempt.getName(), filterString, true, false)
-		, new SimpleStringFilter(LoginAttempt_.succeeded.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(LoginAttempt_.user.getName(), filterString, true, false),
+				new SimpleStringFilter(LoginAttempt_.dateOfAttempt.getName(), filterString, true, false),
+				new SimpleStringFilter(LoginAttempt_.succeeded.getName(), filterString, true, false));
 	}
 
 	@Override

@@ -36,7 +36,7 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.VerticalLayout;
 
-@Menu(display = "Organisations", path="Admin.Lists")
+@Menu(display = "Organisations", path = "Admin.Lists")
 public class OrganisationView extends BaseCrudView<Organisation> implements View, Selected<Organisation>
 {
 
@@ -52,11 +52,11 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	private CheckBox primaryPhone3;
 
 	@Override
-	protected AbstractLayout buildEditor(ValidatingFieldGroup<Organisation> fieldGroup2)
+	protected AbstractLayout buildEditor(final ValidatingFieldGroup<Organisation> fieldGroup2)
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 
-		SMMultiColumnFormLayout<Organisation> overviewForm = new SMMultiColumnFormLayout<Organisation>(3,
+		final SMMultiColumnFormLayout<Organisation> overviewForm = new SMMultiColumnFormLayout<Organisation>(3,
 				this.fieldGroup);
 		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setColumnLabelWidth(1, 0);
@@ -65,34 +65,33 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 		overviewForm.setColumnFieldWidth(1, 100);
 		overviewForm.setColumnFieldWidth(2, 20);
 		overviewForm.setSizeFull();
-		
-		FormHelper<Organisation> formHelper = overviewForm.getFormHelper();
 
+		final FormHelper<Organisation> formHelper = overviewForm.getFormHelper();
 
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Name", Organisation_.name);
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Description", Organisation_.description);
 		overviewForm.colspan(3);
-		formHelper.new EntityFieldBuilder<OrganisationType>()
-				.setLabel("Type").setField( Organisation_.organisationType).setListFieldName(OrganisationType_.name).build();
+		formHelper.new EntityFieldBuilder<OrganisationType>().setLabel("Type").setField(Organisation_.organisationType)
+				.setListFieldName(OrganisationType_.name).build();
 
 		overviewForm.newLine();
 
 		overviewForm.bindTextField("Phone 1", "phone1.phoneNo");
 		overviewForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
-		primaryPhone1 = overviewForm.bindBooleanField("Primary",
-				Contact_.phone1.getName() + "." + Phone_.primaryPhone.getName());
+		this.primaryPhone1 = overviewForm.bindBooleanField("Primary", Contact_.phone1.getName() + "."
+				+ Phone_.primaryPhone.getName());
 
 		overviewForm.newLine();
 		overviewForm.bindTextField("Phone 2", "phone2.phoneNo");
 		overviewForm.bindEnumField(null, "phone2.phoneType", PhoneType.class);
-		primaryPhone2 = overviewForm.bindBooleanField("Primary", "phone2.primaryPhone");
+		this.primaryPhone2 = overviewForm.bindBooleanField("Primary", "phone2.primaryPhone");
 
 		overviewForm.newLine();
 		overviewForm.bindTextField("Phone 3", "phone3.phoneNo");
 		overviewForm.bindEnumField(null, "phone3.phoneType", PhoneType.class);
-		primaryPhone3 = overviewForm.bindBooleanField("Primary", "phone3.primaryPhone");
+		this.primaryPhone3 = overviewForm.bindBooleanField("Primary", "phone3.primaryPhone");
 
 		overviewForm.colspan(3);
 		overviewForm.bindTextField("Street", "location.street");
@@ -101,12 +100,12 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 		overviewForm.bindTextField("City", "location.city");
 		overviewForm.newLine();
 		overviewForm.bindTextField("State", "location.state");
-		
+
 		overviewForm.bindTextField("Postcode", "location.postcode");
 
-		primaryPhone1.addValueChangeListener(new PhoneChangeListener());
-		primaryPhone2.addValueChangeListener(new PhoneChangeListener());
-		primaryPhone3.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone1.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone2.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone3.addValueChangeListener(new PhoneChangeListener());
 
 		layout.addComponent(overviewForm);
 
@@ -114,30 +113,30 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<Organisation> container = new DaoFactory().getOrganisationDao().createVaadinContainer();
+		final JPAContainer<Organisation> container = new DaoFactory().getOrganisationDao().createVaadinContainer();
 		container.sort(new String[]
-		{ Organisation_.name.getName() }, new boolean[]
-		{ true });
+				{ Organisation_.name.getName() }, new boolean[]
+						{ true });
 
-		Builder<Organisation> builder = new HeadingPropertySet.Builder<Organisation>();
+		final Builder<Organisation> builder = new HeadingPropertySet.Builder<Organisation>();
 		builder.addColumn("Organisation", Organisation_.name).addColumn("Phone", Organisation.PRIMARY_PHONE);
 
 		super.init(Organisation.class, container, builder.build());
 	}
 
 	@Override
-	protected Filter getContainerFilter(String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new Or(new Or(new Or(new SimpleStringFilter(Organisation_.name.getName(), filterString, true, false),
-				new SimpleStringFilter(Organisation_.phone1, filterString, true, false)),
-		new SimpleStringFilter(Organisation_.phone2, filterString, true, false)),
-		new SimpleStringFilter(Organisation_.phone3, filterString, true, false));
+				new SimpleStringFilter(Organisation_.phone1, filterString, true, false)), new SimpleStringFilter(
+				Organisation_.phone2, filterString, true, false)), new SimpleStringFilter(Organisation_.phone3,
+				filterString, true, false));
 	}
 
 	@Override
-	protected boolean interceptAction(CrudAction<Organisation> action, EntityItem<Organisation> entity)
+	protected boolean interceptAction(final CrudAction<Organisation> action, final EntityItem<Organisation> entity)
 	{
 		boolean allow = true;
 		if (action instanceof CrudActionDelete)
@@ -162,27 +161,27 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void valueChange(ValueChangeEvent event)
+		public void valueChange(final ValueChangeEvent event)
 		{
-			CheckBox property = (CheckBox) event.getProperty();
-			Boolean value = property.getValue();
+			final CheckBox property = (CheckBox) event.getProperty();
+			final Boolean value = property.getValue();
 			if (value != null)
 			{
 
-				if (property == primaryPhone1 && value == true)
+				if (property == OrganisationView.this.primaryPhone1 && value == true)
 				{
-					primaryPhone2.setValue(false);
-					primaryPhone3.setValue(false);
+					OrganisationView.this.primaryPhone2.setValue(false);
+					OrganisationView.this.primaryPhone3.setValue(false);
 				}
-				else if (property == primaryPhone2 && value == true)
+				else if (property == OrganisationView.this.primaryPhone2 && value == true)
 				{
-					primaryPhone1.setValue(false);
-					primaryPhone3.setValue(false);
+					OrganisationView.this.primaryPhone1.setValue(false);
+					OrganisationView.this.primaryPhone3.setValue(false);
 				}
-				else if (property == primaryPhone3 && value == true)
+				else if (property == OrganisationView.this.primaryPhone3 && value == true)
 				{
-					primaryPhone2.setValue(false);
-					primaryPhone1.setValue(false);
+					OrganisationView.this.primaryPhone2.setValue(false);
+					OrganisationView.this.primaryPhone1.setValue(false);
 				}
 			}
 		}

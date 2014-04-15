@@ -41,35 +41,35 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 		setSizeFull();
 
 		// Create the password input field
-		password = new PasswordField("Password:");
-		password.setWidth("300px");
-		password.addValidator(new PasswordValidator("Password"));
-		password.setRequired(true);
-		password.setValue("");
-		password.setNullRepresentation("");
+		this.password = new PasswordField("Password:");
+		this.password.setWidth("300px");
+		this.password.addValidator(new PasswordValidator("Password"));
+		this.password.setRequired(true);
+		this.password.setValue("");
+		this.password.setNullRepresentation("");
 
 		// Create the password input field
-		confirm = new PasswordField("Confirm Password:");
-		confirm.setWidth("300px");
-		confirm.addValidator(new PasswordValidator("Confirm Password"));
-		confirm.setRequired(true);
-		confirm.setValue("");
-		confirm.setNullRepresentation("");
+		this.confirm = new PasswordField("Confirm Password:");
+		this.confirm.setWidth("300px");
+		this.confirm.addValidator(new PasswordValidator("Confirm Password"));
+		this.confirm.setRequired(true);
+		this.confirm.setValue("");
+		this.confirm.setNullRepresentation("");
 
 		// Create login button
-		resetButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
+		this.resetButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
 
 		// Add both to a panel
-		Label title = new Label("<b>Please enter your new password.</b>");
+		final Label title = new Label("<b>Please enter your new password.</b>");
 		title.setContentMode(ContentMode.HTML);
-		VerticalLayout fields = new VerticalLayout(title, password, confirm, resetButton);
-		
+		final VerticalLayout fields = new VerticalLayout(title, this.password, this.confirm, this.resetButton);
+
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));
 		fields.setSizeUndefined();
 
 		// The view root layout
-		VerticalLayout viewLayout = new VerticalLayout(fields);
+		final VerticalLayout viewLayout = new VerticalLayout(fields);
 		viewLayout.setSizeFull();
 		viewLayout.setComponentAlignment(fields, Alignment.MIDDLE_CENTER);
 		viewLayout.setStyleName(Reindeer.LAYOUT_BLUE);
@@ -77,14 +77,14 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 		// focus the username field when user arrives to the login view
-		password.focus();
+		this.password.focus();
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
 
 		//
@@ -93,27 +93,27 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 		// database
 		// for wrongly entered passwords
 		//
-		if (!password.isValid())
+		if (!this.password.isValid())
 		{
 			return;
 		}
 
-		String password = this.password.getValue();
+		final String password = this.password.getValue();
 
 		//
 		// Validate username and password with database here. For examples sake
 		// I use a dummy username and password.
 		//
-		if (!password.equals(confirm.getValue()))
+		if (!password.equals(this.confirm.getValue()))
 		{
 			Notification.show("The password and confirm passwords do not match", Type.ERROR_MESSAGE);
 			this.password.focus();
 		}
 		else
 		{
-			UserDao daoUser = new DaoFactory().getUserDao();
+			final UserDao daoUser = new DaoFactory().getUserDao();
 
-			User user = SMSession.INSTANCE.getLoggedInUser();
+			final User user = SMSession.INSTANCE.getLoggedInUser();
 
 			daoUser.updatePassword(user, password);
 

@@ -69,7 +69,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-@Menu(display = "Contact Management", path="Members")
+@Menu(display = "Contact Management", path = "Members")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
@@ -122,11 +122,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	public DateField dateMemberInvested;
 
 	@Override
-	protected VerticalLayout buildEditor(ValidatingFieldGroup<Contact> fieldGroup2)
+	protected VerticalLayout buildEditor(final ValidatingFieldGroup<Contact> fieldGroup2)
 	{
-		tabs.setSizeFull();
+		this.tabs.setSizeFull();
 
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setSizeFull();
 
 		// this needs to be updated when the contact changes
@@ -144,9 +144,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		// googleTab();
 
 		// When a persons birth date changes recalculate their age.
-		birthDate.addValueChangeListener(this.changeListener);
+		this.birthDate.addValueChangeListener(this.changeListener);
 
-		layout.addComponent(tabs);
+		layout.addComponent(this.tabs);
 		// VerticalLayout c = new VerticalLayout();
 		// layout.addComponent(c);
 		// layout.setExpandRatio(c, 1);
@@ -158,7 +158,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	{
 		// Overview tab
 
-		SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(3, this.fieldGroup);
+		final SMMultiColumnFormLayout<Contact> overviewForm = new SMMultiColumnFormLayout<Contact>(3, this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 100);
 		overviewForm.setColumnLabelWidth(1, 0);
 		overviewForm.setColumnFieldWidth(1, 140);
@@ -175,16 +175,16 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// overviewForm.setSizeFull();
 
-		FormHelper<Contact> formHelper = overviewForm.getFormHelper();
+		final FormHelper<Contact> formHelper = overviewForm.getFormHelper();
 
 		// overviewForm.setMargin(true);
-		tabs.addTab(overviewForm, "Overview");
+		this.tabs.addTab(overviewForm, "Overview");
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(3);
-		groupRoleField = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role").setField(Contact_.groupRole)
-				.setListFieldName(GroupRole_.name).build();
-		groupRoleField.addValueChangeListener(this.changeListener);
+		this.groupRoleField = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role")
+				.setField(Contact_.groupRole).setListFieldName(GroupRole_.name).build();
+		this.groupRoleField.addValueChangeListener(this.changeListener);
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
@@ -198,11 +198,11 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.bindTextField("Lastname", Contact_.lastname);
 
 		overviewForm.newLine();
-		birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy-MM-dd", Resolution.DAY);
-//		fieldOverviewSectionEligibity = overviewForm.addTextField(null);
-//		fieldOverviewSectionEligibity.setReadOnly(true);
-		ageField = overviewForm.bindLabel("Age");
-		overviewForm.setComponentAlignment(ageField, Alignment.MIDDLE_LEFT);
+		this.birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy-MM-dd", Resolution.DAY);
+		// fieldOverviewSectionEligibity = overviewForm.addTextField(null);
+		// fieldOverviewSectionEligibity.setReadOnly(true);
+		this.ageField = overviewForm.bindLabel("Age");
+		overviewForm.setComponentAlignment(this.ageField, Alignment.MIDDLE_LEFT);
 		overviewForm.newLine();
 		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
@@ -218,64 +218,54 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewForm.colspan(3);
 		final TextField homeEmail = overviewForm.bindTextField("Home Email", Contact_.homeEmail);
-		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 
-		FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/email.png"));
+		final FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/email.png"));
 
-		homeEmailImage = new Image(null, resource);
-		homeEmailImage.setDescription("Click to send an email");
-		homeEmailImage.addClickListener(new MouseEventLogged.ClickListener()
-		{
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void clicked(com.vaadin.event.MouseEvents.ClickEvent event)
-			{
-				showMailForm(homeEmail);
-
-			}
-		});
-		overviewForm.addComponent(homeEmailImage);
-		homeEmailImage.setVisible(false);
+		this.homeEmailImage = new Image(null, resource);
+		this.homeEmailImage.setDescription("Click to send an email");
+		this.homeEmailImage.addClickListener(clicked -> showMailForm(homeEmail));
+		overviewForm.addComponent(this.homeEmailImage);
+		this.homeEmailImage.setVisible(false);
 		overviewForm.newLine();
 		overviewForm.colspan(3);
 		final TextField workEmail = overviewForm.bindTextField("Work Email", Contact_.workEmail);
-		workEmailImage = new Image(null, resource);
-		workEmailImage.setDescription("Click to send an email");
-		overviewForm.addComponent(workEmailImage);
-		workEmailImage.addClickListener(new MouseEventLogged.ClickListener()
+		this.workEmailImage = new Image(null, resource);
+		this.workEmailImage.setDescription("Click to send an email");
+		overviewForm.addComponent(this.workEmailImage);
+		this.workEmailImage.addClickListener(new MouseEventLogged.ClickListener()
 		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void clicked(com.vaadin.event.MouseEvents.ClickEvent event)
+			public void clicked(final com.vaadin.event.MouseEvents.ClickEvent event)
 			{
 				showMailForm(workEmail);
 
 			}
 		});
 
-		workEmailImage.setVisible(false);
+		this.workEmailImage.setVisible(false);
 
 		overviewForm.newLine();
 
 		overviewForm.bindTextField("Phone 1", "phone1.phoneNo");
 		overviewForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
-		primaryPhone1 = overviewForm.bindBooleanField("Primary",
-				Contact_.phone1.getName() + "." + Phone_.primaryPhone.getName());
-		primaryPhone1.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone1 = overviewForm.bindBooleanField("Primary", Contact_.phone1.getName() + "."
+				+ Phone_.primaryPhone.getName());
+		this.primaryPhone1.addValueChangeListener(new PhoneChangeListener());
 
 		overviewForm.newLine();
 		overviewForm.bindTextField("Phone 2", "phone2.phoneNo");
 		overviewForm.bindEnumField(null, "phone2.phoneType", PhoneType.class);
-		primaryPhone2 = overviewForm.bindBooleanField("Primary", "phone2.primaryPhone");
-		primaryPhone2.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone2 = overviewForm.bindBooleanField("Primary", "phone2.primaryPhone");
+		this.primaryPhone2.addValueChangeListener(new PhoneChangeListener());
 
 		overviewForm.newLine();
 		overviewForm.bindTextField("Phone 3", "phone3.phoneNo");
 		overviewForm.bindEnumField(null, "phone3.phoneType", PhoneType.class);
-		primaryPhone3 = overviewForm.bindBooleanField("Primary", "phone3.primaryPhone");
-		primaryPhone3.addValueChangeListener(new PhoneChangeListener());
+		this.primaryPhone3 = overviewForm.bindBooleanField("Primary", "phone3.primaryPhone");
+		this.primaryPhone3.addValueChangeListener(new PhoneChangeListener());
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
@@ -290,50 +280,50 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.newLine();
 
 		overviewForm.colspan(3);
-		tagField = overviewForm.bindTagField(this, "Tags", Contact_.tags);
+		this.tagField = overviewForm.bindTagField(this, "Tags", Contact_.tags);
 
 		// tabs.addTab(overviewForm, "Contact");
 
-		return birthDate;
+		return this.birthDate;
 
 	}
 
 	private void logTab()
 	{
 		// Now add the child log crud
-		ChildCommunicationView logView = new ChildCommunicationView(this);
+		final ChildCommunicationView logView = new ChildCommunicationView(this);
 		logView.setSizeFull();
 		super.addChildCrudListener(logView);
 
-		tabs.addTab(logView, "Log");
+		this.tabs.addTab(logView, "Log");
 
 	}
 
 	private void relationshipTab()
 	{
 		// Now add the child relationship crud
-		ChildRelationshipView relationshipView = new ChildRelationshipView(this);
+		final ChildRelationshipView relationshipView = new ChildRelationshipView(this);
 		relationshipView.setSizeFull();
 		super.addChildCrudListener(relationshipView);
 
-		tabs.addTab(relationshipView, "Relationship");
+		this.tabs.addTab(relationshipView, "Relationship");
 
 	}
 
 	private void noteTab()
 	{
 		// Now add the child note crud
-		ChildNoteView noteView = new ChildNoteView(this);
+		final ChildNoteView noteView = new ChildNoteView(this);
 		noteView.setSizeFull();
 		super.addChildCrudListener(noteView);
 
-		tabs.addTab(noteView, "Note");
+		this.tabs.addTab(noteView, "Note");
 	}
 
 	private void youthTab()
 	{
 		// Youth tab
-		SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(1, this.fieldGroup);
+		final SMMultiColumnFormLayout<Contact> youthForm = new SMMultiColumnFormLayout<Contact>(1, this.fieldGroup);
 		youthForm.setColumnLabelWidth(0, 120);
 		youthForm.setColumnFieldWidth(0, 400);
 		youthForm.setMargin(true);
@@ -343,56 +333,58 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		youthForm.newLine();
 		youthForm.bindTextAreaField("Custody Order Details", Contact_.custodyOrderDetails, 4);
 
-		youthTab = tabs.addTab(youthForm, "Youth");
+		this.youthTab = this.tabs.addTab(youthForm, "Youth");
 	}
 
 	private void memberTab()
 	{
 		// Member tab
-		SMMultiColumnFormLayout<Contact> memberForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<Contact> memberForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
 		memberForm.setColumnLabelWidth(0, 120);
 		memberForm.setMargin(true);
-		isMemberField = memberForm.bindBooleanField("Member", Contact_.isMember);
-		isMemberField.addValueChangeListener(changeListener);
+		this.isMemberField = memberForm.bindBooleanField("Member", Contact_.isMember);
+		this.isMemberField.addValueChangeListener(this.changeListener);
 		memberForm.newLine();
 
-		FormHelper<Contact> formHelper = memberForm.getFormHelper();
+		final FormHelper<Contact> formHelper = memberForm.getFormHelper();
 
-		sectionTypeField = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section")
+		this.sectionTypeField = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section")
 				.setField(Contact_.section).setListFieldName(SectionType_.name).build();
-		sectionTypeField.addValueChangeListener(this.changeListener);
-		sectionTypeField.setNullSelectionAllowed(true);
+		this.sectionTypeField.addValueChangeListener(this.changeListener);
+		this.sectionTypeField.setNullSelectionAllowed(true);
 
 		memberForm.newLine();
-		fieldMemberSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>().setLabel("Section Eligibility")
-				.setField(Contact_.sectionEligibility).setListFieldName(SectionType_.name).build();
-		fieldMemberSectionEligibity.setReadOnly(true);
+		this.fieldMemberSectionEligibity = formHelper.new EntityFieldBuilder<SectionType>()
+				.setLabel("Section Eligibility").setField(Contact_.sectionEligibility)
+				.setListFieldName(SectionType_.name).build();
+		this.fieldMemberSectionEligibity.setReadOnly(true);
 		memberForm.newLine();
 
 		memberForm.colspan(2);
-		membershipNoField = memberForm.bindTextField("Member No", Contact_.memberNo);
+		this.membershipNoField = memberForm.bindTextField("Member No", Contact_.memberNo);
 		memberForm.newLine();
 		memberForm.colspan(2);
-		memberSinceField = memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd", Resolution.DAY);
-
-		memberForm.newLine();
-		memberForm.colspan(2);
-		dateMemberInvested = memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested, "yyyy-MM-dd",
+		this.memberSinceField = memberForm.bindDateField("Member Since", Contact_.memberSince, "yyyy-MM-dd",
 				Resolution.DAY);
 
-		tabs.addTab(memberForm, "Member");
+		memberForm.newLine();
+		memberForm.colspan(2);
+		this.dateMemberInvested = memberForm.bindDateField("Investiture Date", Contact_.dateMemberInvested,
+				"yyyy-MM-dd", Resolution.DAY);
+
+		this.tabs.addTab(memberForm, "Member");
 
 	}
 
 	private void medicalTab()
 	{
 		// Medical Tab
-		SMMultiColumnFormLayout<Contact> medicalForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<Contact> medicalForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
 		medicalForm.setColumnLabelWidth(0, 140);
 		medicalForm.setColumnFieldWidth(0, 200);
 		medicalForm.setColumnLabelWidth(1, 0);
 		medicalForm.setColumnFieldWidth(1, 100);
-		tabs.addTab(medicalForm, "Medical");
+		this.tabs.addTab(medicalForm, "Medical");
 		medicalForm.setMargin(true);
 		medicalForm.colspan(2);
 		medicalForm.bindTextAreaField("Allergies", "allergies", 4);
@@ -419,9 +411,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	private void backgroundTab()
 	{
 		// Background tab
-		SMMultiColumnFormLayout<Contact> background = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
+		final SMMultiColumnFormLayout<Contact> background = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
 		background.setColumnLabelWidth(0, 120);
-		tabs.addTab(background, "Background");
+		this.tabs.addTab(background, "Background");
 		background.setMargin(true);
 
 		background.colspan(2);
@@ -439,13 +431,15 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		background.bindBooleanField("License", Contact_.hasLicense);
 		background.newLine();
 		background.bindBooleanField("Has WWC", Contact_.hasWWC);
-		DateField wwcExpiryDate = background.bindDateField("WWC Expiry", Contact_.wwcExpiry, "yyyy-MM-dd", Resolution.DAY);
+		final DateField wwcExpiryDate = background.bindDateField("WWC Expiry", Contact_.wwcExpiry, "yyyy-MM-dd",
+				Resolution.DAY);
 		// WWC expiry is five years.
 		wwcExpiryDate.setValue(new DateTime().plusYears(5).toDate());
 		background.bindTextField("WWC No.", Contact_.wwcNo);
 		background.newLine();
 		background.bindBooleanField("Has Police Check", Contact_.hasPoliceCheck);
-		DateField policeCheckExpiry = background.bindDateField("Police Check Expiry", Contact_.policeCheckExpiry, "yyyy-MM-dd", Resolution.DAY);
+		final DateField policeCheckExpiry = background.bindDateField("Police Check Expiry", Contact_.policeCheckExpiry,
+				"yyyy-MM-dd", Resolution.DAY);
 		policeCheckExpiry.setValue(new DateTime().plusYears(5).toDate());
 		background.newLine();
 		background.bindBooleanField("Has Food Handling", Contact_.hasFoodHandlingCertificate);
@@ -461,7 +455,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		private static final long serialVersionUID = 1L;
 
-		private void reset(Contact contact)
+		private void reset(final Contact contact)
 		{
 			if (contact != null)
 			{
@@ -479,27 +473,28 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			}
 		}
 
-		public void valueChange(ValueChangeEvent event)
+		@Override
+		public void valueChange(final ValueChangeEvent event)
 		{
 			// Long groupRoleId = (Long) this.role.getValue();
 
 			@SuppressWarnings("rawtypes")
-			Property source = event.getProperty();
+			final Property source = event.getProperty();
 
 			if (source == ContactView.this.groupRoleField)
 			{
-				Long newGroupRoleId = (Long) event.getProperty().getValue();
-				if (newGroupRoleId != null && currentGroupRole != null
-						&& currentGroupRole.getId().equals(newGroupRoleId))
+				final Long newGroupRoleId = (Long) event.getProperty().getValue();
+				if (newGroupRoleId != null && this.currentGroupRole != null
+						&& this.currentGroupRole.getId().equals(newGroupRoleId))
 				{
-					GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
+					final GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
 
-					GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
+					final GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
 
 					if (newGroupRole != null)
 					{
 
-						GroupRole oldGroupRole = this.currentGroupRole;
+						final GroupRole oldGroupRole = this.currentGroupRole;
 
 						// Update the tag which represents this role
 						if (newGroupRole != oldGroupRole && newGroupRole != null)
@@ -510,7 +505,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 							// group
 							if (oldGroupRole != null)
 							{
-								for (Tag tag : oldGroupRole.getTags())
+								for (final Tag tag : oldGroupRole.getTags())
 								{
 									ContactView.this.tagField.removeToken(tag);
 								}
@@ -519,7 +514,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 							// Now add the new set of tags associated with the
 							// new
 							// group role.
-							for (Tag tag : newGroupRole.getTags())
+							for (final Tag tag : newGroupRole.getTags())
 							{
 								ContactView.this.tagField.addToken(tag);
 							}
@@ -538,7 +533,9 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 						this.currentGroupRole = newGroupRole;
 					}
 					else
+					{
 						throw new IllegalStateException("No group role found for : " + newGroupRoleId);
+					}
 
 				}
 
@@ -550,20 +547,22 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 			}
 			else if (source == ContactView.this.birthDate)
 			{
-				ContactDao daoContact = new DaoFactory().getContactDao();
+				final ContactDao daoContact = new DaoFactory().getContactDao();
 
-				DateField birthDate = (DateField) event.getProperty();
-				Date newBirthDate = birthDate.getValue();
-					if (currentBirthDate != null)
+				final DateField birthDate = (DateField) event.getProperty();
+				final Date newBirthDate = birthDate.getValue();
+				if (this.currentBirthDate != null)
 				{
-					fieldMemberSectionEligibity.setReadOnly(false);
-					fieldMemberSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate).getId());
-					fieldMemberSectionEligibity.setReadOnly(true);
-//					fieldOverviewSectionEligibity.setReadOnly(false);
-//					fieldOverviewSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate).getName());
-//					fieldOverviewSectionEligibity.setReadOnly(true);
-					currentBirthDate = newBirthDate;
-					ageField.setValue("Age " + daoContact.getAge(newBirthDate).toString() + " " + daoContact.getSectionEligibilty(newBirthDate).getName() + "");
+					ContactView.this.fieldMemberSectionEligibity.setReadOnly(false);
+					ContactView.this.fieldMemberSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate)
+							.getId());
+					ContactView.this.fieldMemberSectionEligibity.setReadOnly(true);
+					// fieldOverviewSectionEligibity.setReadOnly(false);
+					// fieldOverviewSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate).getName());
+					// fieldOverviewSectionEligibity.setReadOnly(true);
+					this.currentBirthDate = newBirthDate;
+					ContactView.this.ageField.setValue("Age " + daoContact.getAge(newBirthDate).toString() + " "
+							+ daoContact.getSectionEligibilty(newBirthDate).getName() + "");
 				}
 			}
 			else if (source == ContactView.this.sectionTypeField)
@@ -573,30 +572,30 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				// reset
 				// the tag used to represent that section type.
 				@SuppressWarnings("unchecked")
-				Property<Long> property = event.getProperty();
+				final Property<Long> property = event.getProperty();
 
-				Long newSectionTypeId = property.getValue();
-				if (!(currentSectionType == null && newSectionTypeId != null) && currentSectionType != null
-						&& !newSectionTypeId.equals(currentSectionType.getId()))
+				final Long newSectionTypeId = property.getValue();
+				if (!(this.currentSectionType == null && newSectionTypeId != null) && this.currentSectionType != null
+						&& !newSectionTypeId.equals(this.currentSectionType.getId()))
 				{
-					SectionType newValue = updateSectionTags(newSectionTypeId);
-					currentSectionType = newValue;
+					final SectionType newValue = updateSectionTags(newSectionTypeId);
+					this.currentSectionType = newValue;
 				}
 			}
 			else if (source == ContactView.this.isMemberField)
 			{
 				@SuppressWarnings("unchecked")
-				Property<Boolean> property = event.getProperty();
+				final Property<Boolean> property = event.getProperty();
 
-				Boolean newIsMember = property.getValue();
-				if (currentIsMember != null && currentIsMember != newIsMember)
+				final Boolean newIsMember = property.getValue();
+				if (this.currentIsMember != null && this.currentIsMember != newIsMember)
 				{
 
-					boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
+					final boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
 							: ContactView.this.isMemberField.getValue();
 
 					updateMembership(isMember);
-					currentIsMember = isMember;
+					this.currentIsMember = isMember;
 				}
 			}
 
@@ -605,17 +604,19 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		/**
 		 * Only members belong to a section so add/remove section tags according
 		 * to the users membership.
-		 * 
+		 *
 		 * @param isMember
 		 */
-		private void updateMembership(boolean isMember)
+		private void updateMembership(final boolean isMember)
 		{
-			SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
-			Tag tag = daoSectionType.getTag(currentSectionType);
+			final SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+			final Tag tag = daoSectionType.getTag(this.currentSectionType);
 			if (isMember == false)
 			{
 				if (tag != null)
+				{
 					ContactView.this.tagField.removeToken(tag);
+				}
 				ContactView.this.sectionTypeField.select(null);
 				ContactView.this.sectionTypeField.setReadOnly(true);
 				ContactView.this.membershipNoField.setReadOnly(true);
@@ -627,43 +628,47 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				ContactView.this.membershipNoField.setReadOnly(false);
 				ContactView.this.memberSinceField.setReadOnly(false);
 				if (tag != null)
+				{
 					ContactView.this.tagField.addToken(tag);
+				}
 			}
 		}
 
-		private SectionType updateSectionTags(Long newSectionTypeId)
+		private SectionType updateSectionTags(final Long newSectionTypeId)
 		{
-			SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
+			final SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
 
 			SectionType newValue = null;
 			if (newSectionTypeId != null)
+			{
 				newValue = daoSectionType.findById(newSectionTypeId);
+			}
 
-			boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
+			final boolean isMember = ContactView.this.isMemberField.getValue() == null ? false
 					: ContactView.this.isMemberField.getValue();
 
 			// both of these conditions should always be true.
-			if (currentSectionType != newValue)
+			if (this.currentSectionType != newValue)
 			{
-				if (currentSectionType != null)
+				if (this.currentSectionType != null)
 				{
-					Tag oldTag = daoSectionType.getTag(currentSectionType);
+					final Tag oldTag = daoSectionType.getTag(this.currentSectionType);
 					ContactView.this.tagField.removeToken(oldTag);
 				}
 
 				// Only members belong to a section.
 				if (newValue != null && isMember == true)
 				{
-					Tag newTag = daoSectionType.getTag(newValue);
+					final Tag newTag = daoSectionType.getTag(newValue);
 					ContactView.this.tagField.addToken(newTag);
 				}
 			}
 			return newValue;
 		}
 
-		private void showYouth(boolean visible)
+		private void showYouth(final boolean visible)
 		{
-			youthTab.setVisible(visible);
+			ContactView.this.youthTab.setVisible(visible);
 		}
 	}
 
@@ -672,46 +677,46 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void valueChange(ValueChangeEvent event)
+		public void valueChange(final ValueChangeEvent event)
 		{
-			CheckBox property = (CheckBox) event.getProperty();
-			Boolean value = property.getValue();
+			final CheckBox property = (CheckBox) event.getProperty();
+			final Boolean value = property.getValue();
 
-			if (property == primaryPhone1 && value == true)
+			if (property == ContactView.this.primaryPhone1 && value == true)
 			{
-				primaryPhone2.setValue(false);
-				primaryPhone3.setValue(false);
+				ContactView.this.primaryPhone2.setValue(false);
+				ContactView.this.primaryPhone3.setValue(false);
 			}
-			else if (property == primaryPhone2 && value == true)
+			else if (property == ContactView.this.primaryPhone2 && value == true)
 			{
-				primaryPhone1.setValue(false);
-				primaryPhone3.setValue(false);
+				ContactView.this.primaryPhone1.setValue(false);
+				ContactView.this.primaryPhone3.setValue(false);
 			}
-			else if (property == primaryPhone3 && value == true)
+			else if (property == ContactView.this.primaryPhone3 && value == true)
 			{
-				primaryPhone2.setValue(false);
-				primaryPhone1.setValue(false);
+				ContactView.this.primaryPhone2.setValue(false);
+				ContactView.this.primaryPhone1.setValue(false);
 			}
 		}
 
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
-		JPAContainer<Contact> container = new DaoFactory().getContactDao().createVaadinContainer();
+		final JPAContainer<Contact> container = new DaoFactory().getContactDao().createVaadinContainer();
 
-		Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
+		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
+		.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
+		.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
 		super.init(Contact.class, container, builder.build());
 
 	}
 
 	@Override
-	protected Filter getContainerFilter(final String filterString, boolean advancedSearchActive)
+	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		setQueryModifier(filterString);
 		return null;
@@ -720,13 +725,13 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected void clearAdvancedFilters()
 	{
-		EntityProvider<Contact> provider = container.getEntityProvider();
+		final EntityProvider<Contact> provider = this.container.getEntityProvider();
 
-		ArrayList<Tag> tags = tagSearchField.getTags();
+		final ArrayList<Tag> tags = this.tagSearchField.getTags();
 
-		for (Tag tag : tags)
+		for (final Tag tag : tags)
 		{
-			tagSearchField.removeToken(tag);
+			this.tagSearchField.removeToken(tag);
 		}
 		provider.setQueryModifierDelegate(null);
 
@@ -734,22 +739,22 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private void setQueryModifier(final String filterString)
 	{
-		EntityProvider<Contact> provider = container.getEntityProvider();
+		final EntityProvider<Contact> provider = this.container.getEntityProvider();
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(tagSearchField.getTags(), null,
+		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(this.tagSearchField.getTags(), null,
 				filterString, false));
 
 	}
 
-	private void showMailForm(TextField emailField)
+	private void showMailForm(final TextField emailField)
 	{
-		Window mailWindow = new Window("Send Email");
+		final Window mailWindow = new Window("Send Email");
 		mailWindow.setWidth("80%");
 		mailWindow.setHeight("80%");
-		User sender = (User) getSession().getAttribute("user");
-		mailWindow.setContent(new EmailForm(mailWindow, sender, this.getCurrent(), emailField.getValue()));
+		final User sender = (User) getSession().getAttribute("user");
+		mailWindow.setContent(new EmailForm(mailWindow, sender, getCurrent(), emailField.getValue()));
 		mailWindow.setVisible(true);
 		mailWindow.center();
 		UI.getCurrent().addWindow(mailWindow);
@@ -757,20 +762,20 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	}
 
 	@Override
-	public void rowChanged(EntityItem<Contact> item)
+	public void rowChanged(final EntityItem<Contact> item)
 	{
 		if (item != null)
 		{
-			Contact entity = item.getEntity();
+			final Contact entity = item.getEntity();
 			if (entity != null)
 			{
 				this.changeListener.reset(entity);
 				super.rowChanged(item);
-				homeEmailImage.setVisible((entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0));
-				workEmailImage.setVisible((entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0));
-//				fieldOverviewSectionEligibity.setReadOnly(false);
-//				fieldOverviewSectionEligibity.setValue(entity.getSectionEligibility().getName());
-//				fieldOverviewSectionEligibity.setReadOnly(true);
+				this.homeEmailImage.setVisible(entity.getHomeEmail() != null && entity.getHomeEmail().length() > 0);
+				this.workEmailImage.setVisible(entity.getWorkEmail() != null && entity.getWorkEmail().length() > 0);
+				// fieldOverviewSectionEligibity.setReadOnly(false);
+				// fieldOverviewSectionEligibity.setValue(entity.getSectionEligibility().getName());
+				// fieldOverviewSectionEligibity.setReadOnly(true);
 
 			}
 			else
@@ -790,24 +795,24 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	@Override
 	protected AbstractLayout getAdvancedSearchLayout()
 	{
-		VerticalLayout advancedSearchLayout = new VerticalLayout();
+		final VerticalLayout advancedSearchLayout = new VerticalLayout();
 		advancedSearchLayout.setSpacing(true);
 
-		HorizontalLayout tagSearchLayout = new HorizontalLayout();
-		tagSearchField = new TagField("Search Tags", true);
-		tagSearchLayout.addComponent(tagSearchField);
+		final HorizontalLayout tagSearchLayout = new HorizontalLayout();
+		this.tagSearchField = new TagField("Search Tags", true);
+		tagSearchLayout.addComponent(this.tagSearchField);
 
 		tagSearchLayout.setSizeFull();
 		advancedSearchLayout.addComponent(tagSearchLayout);
 
-		HorizontalLayout stringSearchLayout = new HorizontalLayout();
-		stringSearchLayout.addComponent(searchField);
+		final HorizontalLayout stringSearchLayout = new HorizontalLayout();
+		stringSearchLayout.addComponent(this.searchField);
 		stringSearchLayout.setWidth("100%");
 
 		advancedSearchLayout.addComponent(stringSearchLayout);
 
-		Button searchButton = new Button("Search");
-		Action1<ClickEvent> searchClickAction = new SearchClickAction();
+		final Button searchButton = new Button("Search");
+		final Action1<ClickEvent> searchClickAction = new SearchClickAction();
 		ButtonEventSource.fromActionOf(searchButton).subscribe(searchClickAction);
 
 		advancedSearchLayout.addComponent(searchButton);
@@ -820,7 +825,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 	public class SearchClickAction implements Action1<ClickEvent>
 	{
 		@Override
-		public void call(ClickEvent t1)
+		public void call(final ClickEvent t1)
 		{
 			ContactView.super.triggerFilter();
 		}
