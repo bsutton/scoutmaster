@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Raffle Allocations" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="26"/>
+	<parameter name="groupname" class="java.lang.String"/>
+	<parameter name="raffleId" class="java.lang.String">
+		<defaultValueExpression><![CDATA[16]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select r.id raffleId, b.firstNo, b.ticketCount, cTo.fullname allocatedTo, cBy.fullname issuedBy,
+r.name, a.id allocationId, a.dateAllocated, b.ticketsReturned, b.receiptIssued, b.amountReturnedMoneyValue, b.amountReturnedMoneyPrecision
+, b.ticketCount - b.ticketsReturned as outstandingTickets
+, (b.ticketCount * r.salePricePerTicketMoneyValue) - b.amountReturnedMoneyValue as outstandingMoney
+,if(cTo.phone1PrimaryPhone = 1, cTo.phone1PhoneNo , if(cTo.phone2PrimaryPhone = 1, cTo.phone2PhoneNo, cTo.phone3PhoneNo)) phone
+from RaffleAllocation a
+join RaffleBook b
+	on a.id = b.raffleAllocation_ID
+join Raffle r
+	on b.raffle_id = r.id
+join Contact cTo
+	on cTo.id = a.allocatedTo_ID
+left join Contact cBy
+	on cBy.id = a.issuedBy_ID
+where r.id in ($P!{raffleId})
+order by cTo.fullname, b.firstNo
+;]]>
+	</queryString>
+	<field name="raffleId" class="java.lang.Long"/>
+	<field name="firstNo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ticketCount" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="allocatedTo" class="java.lang.String"/>
+	<field name="issuedBy" class="java.lang.String"/>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="allocationId" class="java.lang.Long"/>
+	<field name="dateAllocated" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ticketsReturned" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="receiptIssued" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="amountReturnedMoneyValue" class="java.lang.Float">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="amountReturnedMoneyPrecision" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="outstandingTickets" class="java.lang.Long"/>
+	<field name="outstandingMoney" class="java.lang.Double"/>
+	<field name="phone" class="java.lang.String"/>
+	<variable name="ticketCount_1" class="java.lang.Integer" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{ticketCount}]]></variableExpression>
+	</variable>
+	<variable name="ticketsReturned_1" class="java.lang.Integer" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{ticketsReturned}]]></variableExpression>
+	</variable>
+	<variable name="amountReturnedMoneyValue_1" class="java.lang.Float" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{amountReturnedMoneyValue}]]></variableExpression>
+	</variable>
+	<variable name="outstandingTickets_1" class="java.lang.Long" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{outstandingTickets}]]></variableExpression>
+	</variable>
+	<variable name="outstandingMoney_1" class="java.lang.Double" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{outstandingMoney}]]></variableExpression>
+	</variable>
+	<variable name="ticketCount_2" class="java.lang.Integer" resetType="Group" resetGroup="AllocatedTo" calculation="Sum">
+		<variableExpression><![CDATA[$F{ticketCount}]]></variableExpression>
+	</variable>
+	<group name="AllocatedTo" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{allocatedTo}]]></groupExpression>
+		<groupHeader>
+			<band height="69">
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="32" width="557" height="36" forecolor="#006699" backcolor="#E6E6E6" uuid="8d655159-37b6-449b-814f-d1ec570ca740"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="68" width="557" height="1" forecolor="#666666" uuid="dc15ead7-8987-4773-a705-53667133eef0"/>
+				</line>
+				<staticText>
+					<reportElement x="0" y="48" width="100" height="20" uuid="35fd37d6-f928-47eb-927b-45376a8dbc37"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Allocated To]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="165" y="49" width="37" height="20" uuid="c7eb8f26-4766-471d-af58-3fe207ff956a"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tickets]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="229" y="49" width="57" height="20" uuid="71689038-a130-48ef-9fa9-d638389d331a"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tickets]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="286" y="49" width="71" height="20" uuid="d6a03fb0-f53b-43c3-97ae-23ecce39102c"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Amount]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="100" y="49" width="65" height="20" uuid="200c2571-ecb1-43f1-974f-a04836e06d88"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[First No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="391" y="49" width="66" height="20" uuid="ce08d2a4-e84d-4558-ae4e-ca0a8bb66a2c"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Tickets]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="457" y="48" width="100" height="20" uuid="89fb11ce-b2f8-46e8-b5fa-876f09d2a636"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Money]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="391" y="36" width="166" height="13" uuid="59bcbea7-20a3-4d61-a34e-e64829549ad2"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Outstanding]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="229" y="36" width="97" height="13" uuid="55847973-6144-49cb-97c6-af6a3d231db9"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Returned]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="17">
+				<textField>
+					<reportElement x="229" y="0" width="45" height="16" uuid="288105d4-ba35-4931-b978-0e482c99b30d"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ticketsReturned_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="286" y="0" width="40" height="16" uuid="2b2d7e84-ba6f-40d7-be77-c3c797b3618a"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{amountReturnedMoneyValue_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="391" y="0" width="66" height="16" uuid="53ce11c9-8fb1-421c-8164-420f094a360d"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{outstandingTickets_1}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="457" y="0" width="100" height="16" uuid="c15ce535-05d6-4562-b73c-95812a95183a"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{outstandingMoney_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="165" y="0" width="37" height="16" uuid="fc54ba4e-817b-4594-b3ff-744672e6055a"/>
+					<textElement textAlignment="Right">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{ticketCount_2}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="65" y="0" width="100" height="17" uuid="05466275-c9db-4f96-ae92-4a58c4558b40"/>
+					<textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="0" width="64" height="16" uuid="6bc236df-3f78-40aa-9c99-4f8c9f63fd7c"/>
+					<text><![CDATA[Phone:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="73">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="557" height="72" backcolor="#006699" uuid="870677d2-edb0-4ba7-9cfb-fe256a172354"/>
+				<staticText>
+					<reportElement x="14" y="10" width="531" height="29" forecolor="#FFFFFF" uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab"/>
+					<textElement>
+						<font size="22" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Raffle Allocations]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="309" y="52" width="236" height="20" forecolor="#FFFFFF" uuid="9f308bee-cb83-4620-ba5e-4f287130f6c8"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$P{groupname}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="165" y="0" width="37" height="16" uuid="e159e252-cd7d-435f-be21-6167705ec4ff"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{ticketCount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="286" y="1" width="40" height="16" uuid="1686b7d9-da79-44b4-8910-8381ac2456c8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{amountReturnedMoneyValue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="16" uuid="db02a262-d594-4dbd-9633-d2d6651bae6b"/>
+				<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="65" height="16" uuid="5b4500af-0e69-4ef4-92df-fa044ce10c3b"/>
+				<textFieldExpression><![CDATA[$F{firstNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="391" y="0" width="66" height="16" uuid="165e153e-e357-4128-b126-91bad65a9849"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{outstandingTickets}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="457" y="0" width="100" height="16" uuid="bf805fa4-a16f-4bd8-a016-6fa09dc2f3eb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{outstandingMoney}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="0" width="45" height="16" uuid="ef803d53-f728-4f04-8d60-e5c971062771"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{ticketsReturned}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<staticText>
+				<reportElement mode="Opaque" x="176" y="3" width="203" height="13" backcolor="#E6E6E6" uuid="26141f0d-4f5b-4cb1-bb7c-f3de5935cf03"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Scoutmaster By S. Brett Sutton]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement mode="Opaque" x="0" y="3" width="176" height="13" backcolor="#E6E6E6" uuid="0a0115c3-3b98-46ab-9fa8-e3494f881dcd"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="379" y="3" width="178" height="13" backcolor="#E6E6E6" uuid="614c814e-ff9e-4de2-948d-fadffd6901d8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="2" width="557" height="1" uuid="b74e8b05-6f82-4e08-ab05-f6ed944eb57f"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+	<noData>
+		<band height="50">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="557" height="50" backcolor="#006699" uuid="1e3637f5-7c77-4de3-ba20-a632f9b52151"/>
+				<staticText>
+					<reportElement x="0" y="12" width="557" height="28" forecolor="#FFFFFF" uuid="7e35cb68-7c6b-4659-85c7-852808aded7b"/>
+					<textElement textAlignment="Center">
+						<font size="22"/>
+					</textElement>
+					<text><![CDATA[No results were found for the selected Filter.]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</noData>
+</jasperReport>

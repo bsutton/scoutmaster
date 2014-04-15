@@ -2,10 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Raffle Allocation Acknowledgement" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="allocationIds" class="java.lang.String">
 		<defaultValueExpression><![CDATA["147"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="groupname" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select b.firstNo, b.ticketCount, cTo.fullname allocatedTo, cBy.fullname issuedBy,
 r.name, a.id allocationId, a.dateAllocated,
@@ -46,115 +47,103 @@ order by b.firstNo
 		<groupHeader>
 			<band height="69">
 				<staticText>
-					<reportElement uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558" mode="Opaque" x="297" y="48" width="99" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="297" y="48" width="99" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9e11c58c-bedf-4a01-8a0f-6bd597c5b558"/>
 					<textElement textAlignment="Center">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="322a78c5-acba-4bba-8f17-e58ed58a3468" mode="Opaque" x="82" y="48" width="83" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="82" y="48" width="83" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="322a78c5-acba-4bba-8f17-e58ed58a3468"/>
 					<textElement>
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Tickets]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="1a7807b3-122b-4d06-bed6-619f9d102885" mode="Opaque" x="0" y="48" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="0" y="48" width="82" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="1a7807b3-122b-4d06-bed6-619f9d102885"/>
 					<textElement>
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[First No.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="fe1f5b6e-d5ea-4a3d-83f1-b67620cfa86e" mode="Opaque" x="229" y="48" width="68" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="229" y="48" width="68" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fe1f5b6e-d5ea-4a3d-83f1-b67620cfa86e"/>
 					<textElement textAlignment="Center">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="f901d658-110c-452a-8d3d-33381f23c5a1" mode="Opaque" x="396" y="48" width="161" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="396" y="48" width="161" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="f901d658-110c-452a-8d3d-33381f23c5a1"/>
 					<textElement textAlignment="Center">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="8d655159-37b6-449b-814f-d1ec570ca740" mode="Opaque" x="165" y="48" width="64" height="20" forecolor="#006699" backcolor="#E6E6E6"/>
+					<reportElement mode="Opaque" x="165" y="48" width="64" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="8d655159-37b6-449b-814f-d1ec570ca740"/>
 					<textElement textAlignment="Center">
 						<font size="14" isBold="true"/>
 					</textElement>
 					<text><![CDATA[]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="4635ae97-4b7c-430e-9629-007d0107c563" x="250" y="1" width="129" height="20"/>
-					<textElement/>
+					<reportElement x="250" y="1" width="129" height="20" uuid="4635ae97-4b7c-430e-9629-007d0107c563"/>
 					<text><![CDATA[Issued By]]></text>
 				</staticText>
 				<textField>
-					<reportElement uuid="0d9dd1e9-5c42-4a18-9c51-ff34124b0e48" x="250" y="22" width="129" height="20"/>
-					<textElement/>
+					<reportElement x="250" y="22" width="129" height="20" uuid="0d9dd1e9-5c42-4a18-9c51-ff34124b0e48"/>
 					<textFieldExpression><![CDATA[$F{issuedBy}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="26c387ab-441b-400e-89e0-1f38ff32739a" x="445" y="1" width="100" height="20"/>
-					<textElement/>
+					<reportElement x="445" y="1" width="100" height="20" uuid="26c387ab-441b-400e-89e0-1f38ff32739a"/>
 					<text><![CDATA[Collection Date]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="07ee89cb-f5e9-4545-8900-30a110f19aee" x="141" y="1" width="100" height="20"/>
-					<textElement/>
+					<reportElement x="141" y="1" width="100" height="20" uuid="07ee89cb-f5e9-4545-8900-30a110f19aee"/>
 					<text><![CDATA[Date Allocated]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy">
-					<reportElement uuid="792f2035-1ff9-494d-9d63-6591b0871dfc" x="141" y="22" width="100" height="20"/>
-					<textElement/>
+					<reportElement x="141" y="22" width="100" height="20" uuid="792f2035-1ff9-494d-9d63-6591b0871dfc"/>
 					<textFieldExpression><![CDATA[$F{dateAllocated}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement uuid="4761b95c-1005-4a9f-b84b-08779a666b49" x="0" y="1" width="129" height="20"/>
-					<textElement/>
+					<reportElement x="0" y="1" width="129" height="20" uuid="4761b95c-1005-4a9f-b84b-08779a666b49"/>
 					<text><![CDATA[Allocated To]]></text>
 				</staticText>
 				<textField pattern="dd/MM/yyyy">
-					<reportElement uuid="a7553fd0-f05a-415e-8052-c4902cb23ab6" x="445" y="22" width="100" height="20"/>
-					<textElement/>
+					<reportElement x="445" y="22" width="100" height="20" uuid="a7553fd0-f05a-415e-8052-c4902cb23ab6"/>
 					<textFieldExpression><![CDATA[$F{collectionsDate}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement uuid="24c7339c-c509-47f9-80a5-bcb45730d87f" x="0" y="22" width="129" height="20"/>
-					<textElement/>
+					<reportElement x="0" y="22" width="129" height="20" uuid="24c7339c-c509-47f9-80a5-bcb45730d87f"/>
 					<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
 				</textField>
 				<line>
-					<reportElement uuid="dc15ead7-8987-4773-a705-53667133eef0" x="0" y="68" width="557" height="1" forecolor="#666666"/>
+					<reportElement x="0" y="68" width="557" height="1" forecolor="#666666" uuid="dc15ead7-8987-4773-a705-53667133eef0"/>
 				</line>
 			</band>
 		</groupHeader>
 		<groupFooter>
 			<band height="149">
 				<line>
-					<reportElement uuid="935bf83c-f757-4361-8938-5732d47392e0" x="73" y="137" width="437" height="1"/>
+					<reportElement x="73" y="137" width="437" height="1" uuid="935bf83c-f757-4361-8938-5732d47392e0"/>
 				</line>
 				<staticText>
-					<reportElement uuid="743197e1-71b6-4965-b7fa-534896ba40ef" x="3" y="13" width="554" height="26"/>
-					<textElement/>
+					<reportElement x="3" y="13" width="554" height="26" uuid="743197e1-71b6-4965-b7fa-534896ba40ef"/>
 					<text><![CDATA[I acknowledged that I have taken the above Raffle Books and understand that the books or equivalent value in money must be returned by the Collection Date.]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="a5b62ccb-eea4-4937-8483-c7b55abe53d0" x="0" y="112" width="73" height="20"/>
-					<textElement/>
+					<reportElement x="0" y="112" width="73" height="20" uuid="a5b62ccb-eea4-4937-8483-c7b55abe53d0"/>
 					<text><![CDATA[Signed:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="7114fe76-8596-45c9-9fd7-1801fc6c6194" x="0" y="71" width="73" height="20"/>
-					<textElement/>
+					<reportElement x="0" y="71" width="73" height="20" uuid="7114fe76-8596-45c9-9fd7-1801fc6c6194"/>
 					<text><![CDATA[Name:]]></text>
 				</staticText>
 				<textField>
-					<reportElement uuid="b1c3b1c2-5b89-4faf-bf36-2a88febf538f" x="73" y="71" width="336" height="20"/>
-					<textElement/>
+					<reportElement x="73" y="71" width="336" height="20" uuid="b1c3b1c2-5b89-4faf-bf36-2a88febf538f"/>
 					<textFieldExpression><![CDATA[$F{allocatedTo}]]></textFieldExpression>
 				</textField>
 			</band>
@@ -169,14 +158,19 @@ order by b.firstNo
 	<pageHeader>
 		<band height="73">
 			<frame>
-				<reportElement uuid="870677d2-edb0-4ba7-9cfb-fe256a172354" mode="Opaque" x="0" y="1" width="557" height="72" backcolor="#006699"/>
+				<reportElement mode="Opaque" x="0" y="0" width="557" height="72" backcolor="#006699" uuid="870677d2-edb0-4ba7-9cfb-fe256a172354"/>
 				<staticText>
-					<reportElement uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab" x="14" y="10" width="531" height="43" forecolor="#FFFFFF"/>
+					<reportElement x="14" y="10" width="531" height="29" forecolor="#FFFFFF" uuid="6b4a07ba-fd65-4088-9252-6b555fe054ab"/>
 					<textElement>
 						<font size="22" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Raffle Allocation Acknowledgement]]></text>
 				</staticText>
+				<textField>
+					<reportElement x="309" y="52" width="236" height="20" forecolor="#FFFFFF" uuid="9f308bee-cb83-4620-ba5e-4f287130f6c8"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$P{groupname}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</pageHeader>
@@ -186,13 +180,11 @@ order by b.firstNo
 	<detail>
 		<band height="19">
 			<textField>
-				<reportElement uuid="f9772005-5534-4d67-9f47-87341a16c13a" x="82" y="0" width="83" height="19"/>
-				<textElement/>
+				<reportElement x="82" y="0" width="83" height="19" uuid="f9772005-5534-4d67-9f47-87341a16c13a"/>
 				<textFieldExpression><![CDATA[$F{ticketCount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="10d9cd32-aebb-4772-907e-9014c411da09" x="0" y="0" width="82" height="19"/>
-				<textElement/>
+				<reportElement x="0" y="0" width="82" height="19" uuid="10d9cd32-aebb-4772-907e-9014c411da09"/>
 				<textFieldExpression><![CDATA[$F{firstNo}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -203,22 +195,21 @@ order by b.firstNo
 	<pageFooter>
 		<band height="17">
 			<staticText>
-				<reportElement uuid="26141f0d-4f5b-4cb1-bb7c-f3de5935cf03" mode="Opaque" x="176" y="3" width="203" height="13" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="176" y="3" width="203" height="13" backcolor="#E6E6E6" uuid="26141f0d-4f5b-4cb1-bb7c-f3de5935cf03"/>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Scoutmaster By S. Brett Sutton]]></text>
 			</staticText>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement uuid="0a0115c3-3b98-46ab-9fa8-e3494f881dcd" mode="Opaque" x="0" y="3" width="176" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
+				<reportElement mode="Opaque" x="0" y="3" width="176" height="13" backcolor="#E6E6E6" uuid="0a0115c3-3b98-46ab-9fa8-e3494f881dcd"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="614c814e-ff9e-4de2-948d-fadffd6901d8" mode="Opaque" x="379" y="3" width="178" height="13" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="379" y="3" width="178" height="13" backcolor="#E6E6E6" uuid="614c814e-ff9e-4de2-948d-fadffd6901d8"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="b74e8b05-6f82-4e08-ab05-f6ed944eb57f" positionType="FixRelativeToBottom" x="0" y="2" width="557" height="1"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="2" width="557" height="1" uuid="b74e8b05-6f82-4e08-ab05-f6ed944eb57f"/>
 			</line>
 		</band>
 	</pageFooter>
@@ -228,9 +219,9 @@ order by b.firstNo
 	<noData>
 		<band height="50">
 			<frame>
-				<reportElement uuid="1e3637f5-7c77-4de3-ba20-a632f9b52151" mode="Opaque" x="0" y="0" width="557" height="50" backcolor="#006699"/>
+				<reportElement mode="Opaque" x="0" y="0" width="557" height="50" backcolor="#006699" uuid="1e3637f5-7c77-4de3-ba20-a632f9b52151"/>
 				<staticText>
-					<reportElement uuid="7e35cb68-7c6b-4659-85c7-852808aded7b" x="0" y="12" width="557" height="28" forecolor="#FFFFFF"/>
+					<reportElement x="0" y="12" width="557" height="28" forecolor="#FFFFFF" uuid="7e35cb68-7c6b-4659-85c7-852808aded7b"/>
 					<textElement textAlignment="Center">
 						<font size="22"/>
 					</textElement>
