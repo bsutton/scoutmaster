@@ -26,46 +26,49 @@ public class DatabaseProvider
 	public static void initDatabaseProvider()
 	{
 
-		connectionString = "jdbc:mysql://localhost?sessionVariables=storage_engine=InnoDB";
-		username = "scoutmaster";
-		password = "master$4scout";
+		DatabaseProvider.connectionString = "jdbc:mysql://localhost?sessionVariables=storage_engine=InnoDB";
+		DatabaseProvider.username = "scoutmaster";
+		DatabaseProvider.password = "master$4scout";
 
 		try
 		{
 			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			Connection conn = getConnection();
+			final Connection conn = DatabaseProvider.getConnection();
 
-			Statement stmt = conn.createStatement();
+			final Statement stmt = conn.createStatement();
 
-			String sql = "DROP DATABASE if exists " + SCOUTMASTERTEST_DB_NAME;
+			String sql = "DROP DATABASE if exists " + DatabaseProvider.SCOUTMASTERTEST_DB_NAME;
 			stmt.executeUpdate(sql);
-			logger.info("Database dropped successfully...");
+			DatabaseProvider.logger.info("Database dropped successfully...");
 
-			sql = "CREATE DATABASE " + SCOUTMASTERTEST_DB_NAME;
+			sql = "CREATE DATABASE " + DatabaseProvider.SCOUTMASTERTEST_DB_NAME;
 			stmt.executeUpdate(sql);
-			logger.info("Database created successfully...");
-			
-			// Now the connection string to include the db name (can't include it to start with as it shouldn't exists as yet.
-			connectionString = "jdbc:mysql://localhost/" + SCOUTMASTERTEST_DB_NAME + "?sessionVariables=storage_engine=InnoDB";
+			DatabaseProvider.logger.info("Database created successfully...");
+
+			// Now the connection string to include the db name (can't include
+			// it to start with as it shouldn't exists as yet.
+			DatabaseProvider.connectionString = "jdbc:mysql://localhost/" + DatabaseProvider.SCOUTMASTERTEST_DB_NAME
+					+ "?sessionVariables=storage_engine=InnoDB";
 		}
-		catch (SQLException e)
+		catch (final SQLException e)
 		{
-			logger.error(e, e);
+			DatabaseProvider.logger.error(e, e);
 		}
 
 	}
 
 	public static Connection getConnection() throws SQLException
 	{
-		Connection conn = DriverManager.getConnection(connectionString, username, password);
+		final Connection conn = DriverManager.getConnection(DatabaseProvider.connectionString,
+				DatabaseProvider.username, DatabaseProvider.password);
 		return conn;
 
 	}
 
 	public static void initLiquibase() throws LiquibaseException, SQLException
 	{
-		Liquibase liquibase = new Liquibase(MASTER_XML,
-				new FileSystemResourceAccessor(), new JdbcConnection(getConnection()));
+		final Liquibase liquibase = new Liquibase(DatabaseProvider.MASTER_XML, new FileSystemResourceAccessor(),
+				new JdbcConnection(DatabaseProvider.getConnection()));
 		liquibase.update("");
 
 	}
@@ -73,8 +76,8 @@ public class DatabaseProvider
 	@After
 	public void finalise() throws LiquibaseException, SQLException
 	{
-		Liquibase liquibase = new Liquibase(MASTER_XML,
-				new FileSystemResourceAccessor(), new JdbcConnection(getConnection()));
+		final Liquibase liquibase = new Liquibase(DatabaseProvider.MASTER_XML, new FileSystemResourceAccessor(),
+				new JdbcConnection(DatabaseProvider.getConnection()));
 		liquibase.update("");
 	}
 

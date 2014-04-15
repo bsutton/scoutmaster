@@ -23,94 +23,94 @@ public class SectionTypeDaoTest
 	@Before
 	public void init() throws ServletException
 	{
-		
-		entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
-		em = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.setCurrentEntityManager(em);
+
+		this.entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
+		this.em = this.entityManagerFactory.createEntityManager();
+		EntityManagerProvider.setCurrentEntityManager(this.em);
 	}
 
 	@After
 	public void finalise()
 	{
-		em.close();
+		this.em.close();
 	}
 
 	@Test
 	public void testSectionEligibility()
 	{
-		SectionTypeDao daoSectionType = new DaoFactory(em).getSectionTypeDao();
+		final SectionTypeDao daoSectionType = new DaoFactory(this.em).getSectionTypeDao();
 		// Test the middle and cusp of each section
-		Age tooYoungStart = new Age(0, 0, 0);
+		final Age tooYoungStart = new Age(0, 0, 0);
 		testSectionEligibility(daoSectionType, tooYoungStart, "Too Young");
-		Age tooYoungMiddle = new Age(2, 1, 1);
+		final Age tooYoungMiddle = new Age(2, 1, 1);
 		testSectionEligibility(daoSectionType, tooYoungMiddle, "Too Young");
-		Age tooYoungEnd = new Age(5, 11, 30);
+		final Age tooYoungEnd = new Age(5, 11, 30);
 		testSectionEligibility(daoSectionType, tooYoungEnd, "Too Young");
 		failSectionEligibility(daoSectionType, tooYoungEnd, "Joeys");
-		
-		Age joeyStart = new Age(6, 0, 0);
+
+		final Age joeyStart = new Age(6, 0, 0);
 		failSectionEligibility(daoSectionType, joeyStart, "Too Young");
-		
+
 		testSectionEligibility(daoSectionType, joeyStart, "Joeys");
-		Age joeyMiddle = new Age(7, 1, 1);
+		final Age joeyMiddle = new Age(7, 1, 1);
 		testSectionEligibility(daoSectionType, joeyMiddle, "Joeys");
-		Age joeyEnd = new Age(7, 11, 30);
+		final Age joeyEnd = new Age(7, 11, 30);
 		testSectionEligibility(daoSectionType, joeyEnd, "Joeys");
 		failSectionEligibility(daoSectionType, joeyEnd, "Cubs");
 
-		Age cubStart = new Age(8, 0, 0);
+		final Age cubStart = new Age(8, 0, 0);
 		failSectionEligibility(daoSectionType, cubStart, "Joeys");
 		testSectionEligibility(daoSectionType, cubStart, "Cubs");
-		Age cubMiddle = new Age(9, 1, 1);
+		final Age cubMiddle = new Age(9, 1, 1);
 		testSectionEligibility(daoSectionType, cubMiddle, "Cubs");
-		Age cubEnd = new Age(10, 11, 30);
+		final Age cubEnd = new Age(10, 11, 30);
 		testSectionEligibility(daoSectionType, cubEnd, "Cubs");
 		failSectionEligibility(daoSectionType, cubEnd, "Scouts");
 
-		Age scoutStart = new Age(11, 0, 0);
+		final Age scoutStart = new Age(11, 0, 0);
 		failSectionEligibility(daoSectionType, scoutStart, "Cubs");
 		testSectionEligibility(daoSectionType, scoutStart, "Scouts");
-		Age scoutMiddle = new Age(12, 1, 1);
+		final Age scoutMiddle = new Age(12, 1, 1);
 		testSectionEligibility(daoSectionType, scoutMiddle, "Scouts");
-		Age scoutEnd = new Age(14, 5, 29);
+		final Age scoutEnd = new Age(14, 5, 29);
 		testSectionEligibility(daoSectionType, scoutEnd, "Scouts");
 		failSectionEligibility(daoSectionType, scoutEnd, "Venturers");
 
-		Age venturerStart = new Age(14, 7, 1);
+		final Age venturerStart = new Age(14, 7, 1);
 		failSectionEligibility(daoSectionType, venturerStart, "Scouts");
 		testSectionEligibility(daoSectionType, venturerStart, "Venturers");
-		Age venturerMiddle = new Age(15, 1, 1);
+		final Age venturerMiddle = new Age(15, 1, 1);
 		testSectionEligibility(daoSectionType, venturerMiddle, "Venturers");
-		Age venturerEnd = new Age(20, 11, 30);
+		final Age venturerEnd = new Age(20, 11, 30);
 		testSectionEligibility(daoSectionType, venturerEnd, "Venturers");
 		failSectionEligibility(daoSectionType, venturerEnd, "Rovers");
 
 		// Rovers actually starts at 18 but has an overlap with Venturers
-		Age roverStart = new Age(21, 0, 0);
-		failSectionEligibility(daoSectionType, roverStart, "Venturers"); 
+		final Age roverStart = new Age(21, 0, 0);
+		failSectionEligibility(daoSectionType, roverStart, "Venturers");
 		testSectionEligibility(daoSectionType, roverStart, "Rovers");
-		Age roverMiddle = new Age(21, 1, 1);
+		final Age roverMiddle = new Age(21, 1, 1);
 		testSectionEligibility(daoSectionType, roverMiddle, "Rovers");
-		Age roverEnd = new Age(25, 11, 30);
+		final Age roverEnd = new Age(25, 11, 30);
 		testSectionEligibility(daoSectionType, roverEnd, "Rovers");
 		failSectionEligibility(daoSectionType, roverEnd, "Leader");
 
-		Age tooOldStart = new Age(26, 0, 0);
+		final Age tooOldStart = new Age(26, 0, 0);
 		testSectionEligibility(daoSectionType, tooOldStart, "Leaders");
 		failSectionEligibility(daoSectionType, tooOldStart, "Rovers");
-		Age tooOldMiddle = new Age(50, 1, 1);
+		final Age tooOldMiddle = new Age(50, 1, 1);
 		testSectionEligibility(daoSectionType, tooOldMiddle, "Leaders");
 	}
 
-	private void testSectionEligibility(SectionTypeDao daoSectionType, Age age, String section)
+	private void testSectionEligibility(final SectionTypeDao daoSectionType, final Age age, final String section)
 	{
-		DateTime birthDate = age.getBirthDate();
+		final DateTime birthDate = age.getBirthDate();
 		Assert.assertTrue(daoSectionType.getEligibleSection(birthDate).getName().equals(section));
 	}
 
-	private void failSectionEligibility(SectionTypeDao daoSectionType, Age age, String section)
+	private void failSectionEligibility(final SectionTypeDao daoSectionType, final Age age, final String section)
 	{
-		DateTime birthDate = age.getBirthDate();
+		final DateTime birthDate = age.getBirthDate();
 		Assert.assertFalse(daoSectionType.getEligibleSection(birthDate).getName().equals(section));
 	}
 

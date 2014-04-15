@@ -14,7 +14,7 @@ import au.org.scoutmaster.DatabaseProvider;
 
 @RunWith(Suite.class)
 @SuiteClasses(
-{ SectionTypeDaoTest.class })
+		{ SectionTypeDaoTest.class })
 public class AllTests
 {
 	@BeforeClass

@@ -10,16 +10,16 @@ public class AgeTest
 	@Test
 	public void test()
 	{
-		Age tooYoungStart = new Age(0, 0, 0);
-		Age tooYoungEnd = new Age(5, 11, 30);
-		
+		final Age tooYoungStart = new Age(0, 0, 0);
+		final Age tooYoungEnd = new Age(5, 11, 30);
+
 		Assert.assertTrue(test(tooYoungStart, tooYoungEnd, new Age(0, 0, 0)));
 		Assert.assertTrue(test(tooYoungStart, tooYoungEnd, new Age(2, 1, 1)));
 		Assert.assertTrue(test(tooYoungStart, tooYoungEnd, new Age(5, 11, 30)));
 		Assert.assertFalse(test(tooYoungStart, tooYoungEnd, new Age(6, 0, 0)));
 
-		Age joeyStart = new Age(6, 0, 0);
-		Age joeyEnd = new Age(7, 11, 30);
+		final Age joeyStart = new Age(6, 0, 0);
+		final Age joeyEnd = new Age(7, 11, 30);
 
 		Assert.assertFalse(test(joeyStart, joeyEnd, new Age(5, 11, 30)));
 		Assert.assertTrue(test(joeyStart, joeyEnd, new Age(6, 0, 0)));
@@ -29,21 +29,21 @@ public class AgeTest
 
 	}
 
-	boolean test(Age start, Age end, Age person)
+	boolean test(final Age start, final Age end, final Age person)
 	{
-		DateTime birthDate = person.getBirthDate();
-		
-		DateTime startingAge = start.getBirthDate();
-		DateTime endingAge = end.getBirthDate();
-		
+		final DateTime birthDate = person.getBirthDate();
+
+		final DateTime startingAge = start.getBirthDate();
+		final DateTime endingAge = end.getBirthDate();
+
 		System.out.println("Start:" + start.toString() + " " + startingAge);
 		System.out.println("End: " + end.toString() + " " + endingAge);
 		System.out.println("Person:" + person.toString() + " " + person);
 
-		boolean result = (birthDate.equals(startingAge) || birthDate.isBefore(startingAge))
+		final boolean result = (birthDate.equals(startingAge) || birthDate.isBefore(startingAge))
 				&& (birthDate.isAfter(endingAge) || birthDate.equals(endingAge));
 		System.out.println("Result:" + result);
-		
+
 		return result;
 	}
 

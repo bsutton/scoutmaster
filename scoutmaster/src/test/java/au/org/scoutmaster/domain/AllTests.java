@@ -14,7 +14,7 @@ import au.org.scoutmaster.DatabaseProvider;
 
 @RunWith(Suite.class)
 @SuiteClasses(
-{ ContactTest.class, ImportMatchFieldsTest.class, TagTest.class })
+		{ ContactTest.class, ImportMatchFieldsTest.class, TagTest.class })
 public class AllTests
 {
 	@BeforeClass

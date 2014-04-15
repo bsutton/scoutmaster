@@ -26,41 +26,41 @@ public class TagTest
 	public void init() throws ServletException
 	{
 
-		entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
-		em = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.setCurrentEntityManager(em);
+		this.entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
+		this.em = this.entityManagerFactory.createEntityManager();
+		EntityManagerProvider.setCurrentEntityManager(this.em);
 	}
 
 	@After
 	public void finalise()
 	{
-		em.close();
+		this.em.close();
 	}
-
 
 	@Test
 	public void test()
 	{
-		String tokenName = "test";
-		Contact contact = new Contact();
+		final String tokenName = "test";
+		final Contact contact = new Contact();
 
-		TagDao daoTag = new DaoFactory(em).getTagDao();
-		Tag tag = daoTag.findByName(tokenName);
+		final TagDao daoTag = new DaoFactory(this.em).getTagDao();
+		final Tag tag = daoTag.findByName(tokenName);
 		if (tag != null)
 		{
 
 			// Now check if the Tag is already associated with the contact
-			ContactDao daoContact = new DaoFactory().getContactDao();
-			if (daoContact.hasTag((Contact) contact, tag))
+			final ContactDao daoContact = new DaoFactory().getContactDao();
+			if (daoContact.hasTag(contact, tag))
+			{
 				Notification.show(tag.getId() + " is already associated with this contact");
+			}
 			else
 			{
-				daoContact.attachTag((Contact) contact, tag);
-				daoContact.persist((Contact) contact);
+				daoContact.attachTag(contact, tag);
+				daoContact.persist(contact);
 			}
 		}
 
 	}
-
 
 }

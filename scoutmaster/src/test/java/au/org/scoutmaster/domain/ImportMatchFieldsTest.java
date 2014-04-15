@@ -26,35 +26,36 @@ public class ImportMatchFieldsTest
 	@Before
 	public void init() throws ServletException
 	{
-		entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
-		em = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.setCurrentEntityManager(em);
+		this.entityManagerFactory = Persistence.createEntityManagerFactory("scoutmastertest");
+		this.em = this.entityManagerFactory.createEntityManager();
+		EntityManagerProvider.setCurrentEntityManager(this.em);
 	}
 
 	@After
 	public void finalise()
 	{
-		em.close();
+		this.em.close();
 	}
 
 	@Test
 	public void test()
 	{
-		String existingFieldMapping = "AMapping";
+		final String existingFieldMapping = "AMapping";
 
-		try (Transaction t = new Transaction(em))
+		try (Transaction t = new Transaction(this.em))
 		{
-			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
 
 			// Create the mapping
-			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
+			final ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
 
-			Hashtable<String, String> mappings = new Hashtable<>();
+			final Hashtable<String, String> mappings = new Hashtable<>();
 			mappings.put("christian", "firstname");
 			mappings.put("surname", "lastname");
-			for (String mapping : mappings.keySet())
+			for (final String mapping : mappings.keySet())
 			{
-				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
+				final ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping,
+						mappings.get(mapping));
 				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
 			daoImportUserMapping.persist(userMapping);
@@ -64,14 +65,14 @@ public class ImportMatchFieldsTest
 		{
 		}
 
-		try (Transaction t = new Transaction(em))
+		try (Transaction t = new Transaction(this.em))
 		{
-			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
 
 			// Now replace the children.
-			List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
+			final List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
 			Assert.assertTrue(userMappings.size() == 1);
-			ImportUserMapping userMapping = userMappings.get(0);
+			final ImportUserMapping userMapping = userMappings.get(0);
 
 			userMapping.setName("AName-1");
 			Hashtable<String, String> mappings = new Hashtable<>();
@@ -81,9 +82,10 @@ public class ImportMatchFieldsTest
 			mappings.put("surname1", "lastname");
 
 			daoImportUserMapping.clearMappings(userMapping);
-			for (String mapping : mappings.keySet())
+			for (final String mapping : mappings.keySet())
 			{
-				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
+				final ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping,
+						mappings.get(mapping));
 				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
 			daoImportUserMapping.merge(userMapping);
@@ -97,27 +99,28 @@ public class ImportMatchFieldsTest
 	@Test
 	public void cascadeDelete()
 	{
-		String existingFieldMapping = "AMapping";
+		final String existingFieldMapping = "AMapping";
 
-		try (Transaction t = new Transaction(em))
+		try (Transaction t = new Transaction(this.em))
 		{
 
 			// Create the mapping
-			ImportUserMappingDao daoImportUserMapping = new DaoFactory(em).getImportUserMappingDao();
-			ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
+			final ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
 
-			Hashtable<String, String> mappings = new Hashtable<>();
+			final Hashtable<String, String> mappings = new Hashtable<>();
 			mappings.put("christian", "firstname");
 			mappings.put("surname", "lastname");
-			for (String mapping : mappings.keySet())
+			for (final String mapping : mappings.keySet())
 			{
-				ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping, mappings.get(mapping));
+				final ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping,
+						mappings.get(mapping));
 				daoImportUserMapping.addColumnFieldMapping(userMapping, columnMapping);
 			}
 			daoImportUserMapping.persist(userMapping);
 
 			// Now delete the entity and its children
-			List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
+			final List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
 			Assert.assertTrue(userMappings.size() == 1);
 			daoImportUserMapping.remove(userMappings.get(0));
 			t.commit();
