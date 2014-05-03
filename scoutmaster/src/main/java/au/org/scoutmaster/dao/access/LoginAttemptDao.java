@@ -61,7 +61,7 @@ public class LoginAttemptDao extends JpaBaseDao<LoginAttempt, Long> implements D
 	/**
 	 * User can have no more than five failed login attempts (in a row) in any
 	 * five minute period.
-	 * 
+	 *
 	 * @param username
 	 * @return
 	 */

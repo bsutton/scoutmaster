@@ -1,23 +1,22 @@
 package au.org.scoutmaster.views.reports;
 
 import net.sf.jasperreports.engine.JRException;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.jasper.JasperManager;
+import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
-import au.com.vaadinutils.reportFilter.ReportView;
-import au.org.scoutmaster.jasper.JasperSettingsImpl;
+import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
-@Menu(display = "External Prospects", path="Members")
-public class ExternalProspectsReport extends ReportView
+@Menu(display = "External Prospects", path = "Members")
+public class ExternalProspectsReport extends JasperReportView
 {
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "ExternalProspects";
 
-	public  ExternalProspectsReport() throws JRException
+	public ExternalProspectsReport() throws JRException
 	{
-		super("External Prospects", new JasperManager(EntityManagerProvider.getEntityManager(), "ExternalProspects.jasper", new JasperSettingsImpl()));
+		super(new SMJasperReportProperties("External Prospects", "ExternalProspects.jasper"));
 	}
 
+	@Override
 	public String getDescription()
 	{
 		return "Generates a list of Contacts that have been Tagged as External Prospects";

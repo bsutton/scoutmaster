@@ -7,10 +7,8 @@ import javax.persistence.metamodel.SingularAttribute;
 import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.fields.DependantComboBox;
 import au.com.vaadinutils.fields.EntityComboBox;
-import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.wizards.bulkJasperEmail.JasperProxy;
 import au.com.vaadinutils.wizards.bulkJasperEmail.Recipient;
@@ -22,7 +20,7 @@ import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.jasper.JasperEmailSettingsImpl;
-import au.org.scoutmaster.jasper.JasperSettingsImpl;
+import au.org.scoutmaster.jasper.SMJasperReportProperties;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.SectionBulkEmailWizard.ContactRecipient;
 
@@ -115,7 +113,7 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	{
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-		.addColumn("Birth Date", Contact_.birthDate);
+				.addColumn("Birth Date", Contact_.birthDate);
 
 		return builder.build();
 	}
@@ -149,10 +147,9 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public JasperProxy getJasperProxy() throws JRException
 	{
-		final JasperReportProperties properties = new JasperReportProperties("Member Report", getJasperReport(), null,
-				EntityManagerProvider.getEntityManager(), new JasperSettingsImpl());
-		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(),
-				properties);
+		final SMJasperReportProperties properties = new SMJasperReportProperties("Member Report", getJasperReport());
+		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", properties,
+				new JasperEmailSettingsImpl());
 	}
 
 	@Override

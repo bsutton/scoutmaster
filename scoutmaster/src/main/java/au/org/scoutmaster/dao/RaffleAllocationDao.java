@@ -33,9 +33,9 @@ public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> impl
 
 		container.sort(
 				new Object[]
-				{ RaffleAllocation_.dateAllocated.getName(),
+						{ RaffleAllocation_.dateAllocated.getName(),
 						new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName() }, new boolean[]
-				{ true, true });
+								{ true, true });
 
 		return container;
 	}

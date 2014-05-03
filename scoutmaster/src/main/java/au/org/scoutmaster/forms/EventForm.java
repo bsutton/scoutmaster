@@ -203,7 +203,7 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		/**
 		 * Called when the user clicks save to notify the listener that a new
 		 * event was added or an existing event updated..
-		 * 
+		 *
 		 * @param event
 		 */
 		void eventSaved(au.org.scoutmaster.domain.Event event);
@@ -211,7 +211,7 @@ public class EventForm extends VerticalLayout implements com.vaadin.ui.Button.Cl
 		/**
 		 * Called when the user clicks delete to notify the listener that the
 		 * event was delete.
-		 * 
+		 *
 		 * @param event
 		 */
 

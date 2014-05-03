@@ -32,7 +32,7 @@ import org.pojomatic.annotations.Property;
 @Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
 @AutoProperty
 public class Tag extends BaseEntity
 {
@@ -67,7 +67,7 @@ public class Tag extends BaseEntity
 	 * searching for entities by a tag all encompassing. i.e. all major
 	 * attributes of an entity are cross referenced by a tag for the purposes of
 	 * searching.
-	 *
+	 * 
 	 * Only builtin tags may be NON-detachable.
 	 */
 	Boolean detachable = new Boolean(true);

@@ -7,17 +7,18 @@ import au.org.scoutmaster.domain.RaffleBook;
 
 public class Allocation
 {
-	/** The contact the allocation is being made to.
-	 * 
+	/**
+	 * The contact the allocation is being made to.
+	 *
 	 */
-	private Contact allocatedTo;
-	
+	private final Contact allocatedTo;
+
 	/**
 	 * The list of books to be allocated.
 	 */
-	private List<RaffleBook> books;
+	private final List<RaffleBook> books;
 
-	public Allocation(Contact allocatedTo, List<RaffleBook> books)
+	public Allocation(final Contact allocatedTo, final List<RaffleBook> books)
 	{
 		this.allocatedTo = allocatedTo;
 		this.books = books;
@@ -30,11 +31,12 @@ public class Allocation
 
 	public List<RaffleBook> getBooks()
 	{
-		return books;
+		return this.books;
 	}
-	
+
+	@Override
 	public String toString()
 	{
-		return allocatedTo.getFullname() + ", Book Count:" + books.size();
+		return this.allocatedTo.getFullname() + ", Book Count:" + this.books.size();
 	}
 }

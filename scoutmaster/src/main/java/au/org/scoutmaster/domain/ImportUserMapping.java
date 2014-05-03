@@ -25,7 +25,7 @@ import javax.persistence.Table;
 @Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
+{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
 public class ImportUserMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

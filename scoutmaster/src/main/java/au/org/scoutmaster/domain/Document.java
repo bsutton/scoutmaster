@@ -23,7 +23,7 @@ import au.org.scoutmaster.domain.access.User;
 @Table(name = "Document")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{})
+{})
 public class Document extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

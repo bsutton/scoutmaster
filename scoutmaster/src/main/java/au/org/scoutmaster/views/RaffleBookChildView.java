@@ -41,16 +41,16 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 
 		final JPAContainer<RaffleBook> container = new DaoFactory().getRaffleBookDao().createVaadinContainer();
 		container.sort(new String[]
-				{ RaffleBook_.firstNo.getName() }, new boolean[]
-						{ true });
+		{ RaffleBook_.firstNo.getName() }, new boolean[]
+		{ true });
 
 		final Builder<RaffleBook> builder = new HeadingPropertySet.Builder<RaffleBook>();
 		builder.addColumn("First No.", RaffleBook_.firstNo)
-		.addColumn("Allocation",
-				new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
+				.addColumn("Allocation",
+						new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
 				.addColumn("Date Allocated",
 						new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated).getName())
-						.addColumn("Date Returned", RaffleBook_.dateReturned);
+				.addColumn("Date Returned", RaffleBook_.dateReturned);
 		super.init(RaffleBook.class, container, builder.build());
 
 	}
@@ -85,7 +85,7 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 				"The amount of money returned for this book.");
 
 		overviewForm.bindDateField("Date Returned", RaffleBook_.dateReturned, "yyyy-MM-dd", Resolution.DAY)
-		.setDescription("The date the money and tickets for this book were returned");
+				.setDescription("The date the money and tickets for this book were returned");
 
 		final ComboBox collectedBy = formHelper.new EntityFieldBuilder<Contact>().setLabel("Collected By")
 				.setField(RaffleBook_.collectedBy).setListFieldName(Contact_.fullname).build();
@@ -105,11 +105,11 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new FilterBuilder()
-		.or(new SimpleStringFilter(RaffleBook_.firstNo.getName(), filterString, true, false))
-		.or(new SimpleStringFilter(new Path().add(RaffleBook_.raffleAllocation)
-				.add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName(), filterString, true, false))
+				.or(new SimpleStringFilter(RaffleBook_.firstNo.getName(), filterString, true, false))
+				.or(new SimpleStringFilter(new Path().add(RaffleBook_.raffleAllocation)
+						.add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName(), filterString, true, false))
 				.or(new SimpleStringFilter(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated)
-				.getName(), filterString, true, false)).build();
+						.getName(), filterString, true, false)).build();
 	}
 
 	@Override

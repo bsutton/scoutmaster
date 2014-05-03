@@ -433,61 +433,67 @@ public class EmailForm extends VerticalLayout
 			{
 				final WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
 				UI.getCurrent().addWindow(working);
-				working.setWorker(() -> {
-					final EntityManager em = EntityManagerProvider.createEntityManager();
-					try (Transaction t = new Transaction(em))
+				working.setWorker(new Runnable()
+				{
+
+					@Override
+					public void run()
 					{
-						final SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
-						final SMTPServerSettings settings = daoSMTPSettings.findSettings();
-
-						final ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
-
-						// First add in the primary address.
-						if (!isEmpty(EmailForm.this.primaryTargetAddress.getValue()))
+						final EntityManager em = EntityManagerProvider.createEntityManager();
+						try (Transaction t = new Transaction(em))
 						{
-							targets.add(new SMTPSettingsDao.EmailTarget(
-									(EmailAddressType) EmailForm.this.primaryTypeCombo.getValue(),
-									EmailForm.this.primaryTargetAddress.getValue()));
-						}
+							final SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
+							final SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
-						for (final TargetLine line : EmailForm.this.lines)
-						{
-							if (!isEmpty((String) line.targetAddress.getValue()))
+							final ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
+
+							// First add in the primary address.
+							if (!isEmpty(EmailForm.this.primaryTargetAddress.getValue()))
 							{
-								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
-										.getValue(), (String) line.targetAddress.getValue()));
+								targets.add(new SMTPSettingsDao.EmailTarget(
+										(EmailAddressType) EmailForm.this.primaryTypeCombo.getValue(),
+										EmailForm.this.primaryTargetAddress.getValue()));
 							}
+
+							for (final TargetLine line : EmailForm.this.lines)
+							{
+								if (!isEmpty((String) line.targetAddress.getValue()))
+								{
+									targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
+											.getValue(), (String) line.targetAddress.getValue()));
+								}
+							}
+
+							assert targets.size() != 0 : "Empty list of email targets";
+							daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
+									EmailForm.this.subject.getValue(), EmailForm.this.ckEditor.getValue(),
+									EmailForm.this.fileList);
+
+							// em.detach(EmailForm.this.sender);
+							// em.detach(EmailForm.this.contact);
+							// Log the activity
+							final CommunicationLogDao daoActivity = new DaoFactory(em).getCommunicationLogDao();
+							final CommunicationTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
+							final CommunicationType type = daoActivityType.findByName(CommunicationType.EMAIL);
+							final CommunicationLog activity = new CommunicationLog();
+							activity.setAddedBy(EmailForm.this.sender);
+							activity.setWithContact(EmailForm.this.contact);
+							activity.setSubject(EmailForm.this.subject.getValue());
+							activity.setDetails(EmailForm.this.ckEditor.getValue());
+							activity.setType(type);
+
+							daoActivity.persist(activity);
+							t.commit();
+
+						}
+						catch (final EmailException e)
+						{
+							EmailForm.logger.error(e, e);
+							EmailForm.this.send.setEnabled(true);
+							SMNotification.show(e, Type.ERROR_MESSAGE);
 						}
 
-						assert targets.size() != 0 : "Empty list of email targets";
-						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
-								EmailForm.this.subject.getValue(), EmailForm.this.ckEditor.getValue(),
-								EmailForm.this.fileList);
-
-						// em.detach(EmailForm.this.sender);
-						// em.detach(EmailForm.this.contact);
-						// Log the activity
-						final CommunicationLogDao daoActivity = new DaoFactory(em).getCommunicationLogDao();
-						final CommunicationTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
-						final CommunicationType type = daoActivityType.findByName(CommunicationType.EMAIL);
-						final CommunicationLog activity = new CommunicationLog();
-						activity.setAddedBy(EmailForm.this.sender);
-						activity.setWithContact(EmailForm.this.contact);
-						activity.setSubject(EmailForm.this.subject.getValue());
-						activity.setDetails(EmailForm.this.ckEditor.getValue());
-						activity.setType(type);
-
-						daoActivity.persist(activity);
-						t.commit();
-
 					}
-					catch (final EmailException e)
-					{
-						EmailForm.logger.error(e, e);
-						EmailForm.this.send.setEnabled(true);
-						SMNotification.show(e, Type.ERROR_MESSAGE);
-					}
-
 				}, this);
 
 			}

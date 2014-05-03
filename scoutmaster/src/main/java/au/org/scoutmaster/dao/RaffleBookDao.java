@@ -34,19 +34,19 @@ public class RaffleBookDao extends JpaBaseDao<RaffleBook, Long> implements Dao<R
 		final JPAContainer<RaffleBook> container = super.createVaadinContainer();
 
 		container.sort(new Object[]
-				{ RaffleBook_.firstNo.getName() }, new boolean[]
-						{ true });
+		{ RaffleBook_.firstNo.getName() }, new boolean[]
+		{ true });
 
 		container.addNestedContainerProperty(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo)
-				.getName());
+		.getName());
 		container.addNestedContainerProperty(new Path().add(RaffleBook_.raffleAllocation)
 				.add(RaffleAllocation_.allocatedTo).add(Contact_.fullname).getName());
 		container.addNestedContainerProperty(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateAllocated)
-				.getName());
+		.getName());
 		container.addNestedContainerProperty(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.issuedBy)
-				.getName());
+		.getName());
 		container.addNestedContainerProperty(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateIssued)
-				.getName());
+		.getName());
 		container.addNestedContainerProperty(new Path(RaffleBook_.raffleAllocation, BaseEntity_.id).getName());
 
 		return container;
@@ -54,7 +54,7 @@ public class RaffleBookDao extends JpaBaseDao<RaffleBook, Long> implements Dao<R
 
 	/**
 	 * returns a list of unallocated books ordered by their first book no.
-	 * 
+	 *
 	 * @param raffle
 	 * @return
 	 */

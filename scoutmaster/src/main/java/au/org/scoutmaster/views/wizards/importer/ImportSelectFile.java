@@ -149,16 +149,21 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void uploadFinished(final Upload.FinishedEvent finishedEvent)
 			{
-				new UIUpdater(() -> {
-					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
-					ImportSelectFile.this.uploadComplete = true;
-					ImportSelectFile.this.progress.setVisible(false);
-					ImportSelectFile.this.progressBar.setValue(1.0f);
-					ImportSelectFile.this.progressBar.setVisible(true);
-					ImportSelectFile.this.completionMessage.setValue("The upload of File "
-							+ ImportSelectFile.this.selectedFilename + " has been completed.");
+				new UIUpdater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
+						ImportSelectFile.this.uploadComplete = true;
+						ImportSelectFile.this.progress.setVisible(false);
+						ImportSelectFile.this.progressBar.setValue(1.0f);
+						ImportSelectFile.this.progressBar.setVisible(true);
+						ImportSelectFile.this.completionMessage.setValue("The upload of File "
+								+ ImportSelectFile.this.selectedFilename + " has been completed.");
 
-					SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
+						SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
+					}
 				});
 
 			}
@@ -174,11 +179,17 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void updateProgress(final long readBytes, final long contentLength)
 			{
-				new UIUpdater(() -> {
-					ImportSelectFile.this.progress.setValue("Uploaded: " + (float) readBytes / (float) contentLength
-							* 100 + "%");
-					ImportSelectFile.this.progressBar.setValue((float) readBytes / (float) contentLength);
-					ImportSelectFile.this.progressBar.setVisible(true);
+				new UIUpdater(new Runnable()
+				{
+
+					@Override
+					public void run()
+					{
+						ImportSelectFile.this.progress.setValue("Uploaded: " + (float) readBytes
+								/ (float) contentLength * 100 + "%");
+						ImportSelectFile.this.progressBar.setValue((float) readBytes / (float) contentLength);
+						ImportSelectFile.this.progressBar.setVisible(true);
+					}
 				});
 			}
 		});
@@ -193,11 +204,16 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void uploadFailed(final FailedEvent event)
 			{
-				new UIUpdater(() -> {
-					Notification.show("The upload failed. " + event.getReason()
-							+ " Please fix the problem and try again.");
-					ImportSelectFile.this.uploadStarted = true;
-					ImportSelectFile.this.uploadComplete = false;
+				new UIUpdater(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Notification.show("The upload failed. " + event.getReason()
+								+ " Please fix the problem and try again.");
+						ImportSelectFile.this.uploadStarted = true;
+						ImportSelectFile.this.uploadComplete = false;
+					}
 				});
 			}
 		});

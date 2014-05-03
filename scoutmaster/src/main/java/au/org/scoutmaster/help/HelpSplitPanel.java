@@ -109,52 +109,61 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 	@Override
 	public void setHelp(final HelpPageIdentifier helpId)
 	{
-		final Thread loadPage = new Thread(
-				() -> {
-					String helpSource = null;
-					try
+		final Thread loadPage = new Thread(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+				String helpSource = null;
+				try
+				{
+					helpSource = HelpSplitPanel.this.page.lookupHelpPage(helpId);
+				}
+				catch (final ExecutionException e)
+				{
+					HelpSplitPanel.this.logger.error(e, e);
+				}
+
+				final String pageSource = helpSource;
+				UI.getCurrent().access(new Runnable()
+				{
+
+					@Override
+					public void run()
 					{
-						helpSource = HelpSplitPanel.this.page.lookupHelpPage(helpId);
+						if (pageSource != null)
+						{
+							HelpSplitPanel.this.helpContainer.removeAllComponents();
+
+							HelpSplitPanel.this.helpContainer.addComponent(new Label("Help page is 'Help-" + helpId
+									+ "'"));
+
+							final Label help = new Label(pageSource, ContentMode.HTML);
+							HelpSplitPanel.this.helpContainer.addComponent(help);
+						}
+						else
+						{
+							final VerticalLayout help = new VerticalLayout();
+							help.setSizeFull();
+
+							final Link link = new Link("To create a help page click here", new ExternalResource(
+									"https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"), "wiki", 0, 0,
+									BorderStyle.DEFAULT);
+
+							help.addComponent(new Label(
+									"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
+											+ helpId + " in the wiki."));
+							help.addComponent(link);
+							help.addComponent(new Label("Help id is " + helpId));
+							HelpSplitPanel.this.helpPane.setContent(help);
+						}
+
 					}
-					catch (final ExecutionException e)
-					{
-						HelpSplitPanel.this.logger.error(e, e);
-					}
-
-					final String pageSource = helpSource;
-					UI.getCurrent()
-							.access(() -> {
-								if (pageSource != null)
-								{
-									HelpSplitPanel.this.helpContainer.removeAllComponents();
-
-									HelpSplitPanel.this.helpContainer.addComponent(new Label("Help page is 'Help-"
-											+ helpId + "'"));
-
-									final Label help = new Label(pageSource, ContentMode.HTML);
-									HelpSplitPanel.this.helpContainer.addComponent(help);
-								}
-								else
-								{
-									final VerticalLayout help = new VerticalLayout();
-									help.setSizeFull();
-
-									final Link link = new Link("To create a help page click here",
-											new ExternalResource(
-													"https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"),
-											"wiki", 0, 0, BorderStyle.DEFAULT);
-
-									help.addComponent(new Label(
-											"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
-													+ helpId + " in the wiki."));
-									help.addComponent(link);
-									help.addComponent(new Label("Help id is " + helpId));
-									HelpSplitPanel.this.helpPane.setContent(help);
-								}
-
-							});
-
 				});
+
+			}
+		});
 		loadPage.start();
 
 	}

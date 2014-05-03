@@ -26,7 +26,7 @@ public class ImportSelectType implements WizardStep
 
 		this.layout = new VerticalLayout();
 		this.layout
-				.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
+		.addComponent(new Label("Select the type of information you are looking to import. The click 'Next'"));
 		final FormLayout formLayout = new FormLayout();
 		this.optionGroup = new OptionGroup("Type", this.importTypes);
 		formLayout.addComponent(this.optionGroup);

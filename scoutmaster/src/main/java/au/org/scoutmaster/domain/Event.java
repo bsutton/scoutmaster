@@ -35,7 +35,7 @@ import au.com.vaadinutils.crud.CrudEntity;
 @Table(name = "Event")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
+{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
 public class Event extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

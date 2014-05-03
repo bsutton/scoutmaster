@@ -2,7 +2,7 @@ package au.org.scoutmaster.util;
 
 /**
  * Used to package up velocity errors into a catchable exception.
- * 
+ *
  * @author bsutton
  *
  */

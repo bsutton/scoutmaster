@@ -26,9 +26,9 @@ import au.org.scoutmaster.domain.accounting.Money;
 @Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{
-			@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
-			@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
+{
+		@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
+		@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
 public class RaffleBook extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -91,8 +91,8 @@ public class RaffleBook extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
 	private Money amountReturned = new Money(0);
 
 	/**

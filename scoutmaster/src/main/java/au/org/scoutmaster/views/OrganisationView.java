@@ -74,7 +74,7 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 		overviewForm.bindTextField("Description", Organisation_.description);
 		overviewForm.colspan(3);
 		formHelper.new EntityFieldBuilder<OrganisationType>().setLabel("Type").setField(Organisation_.organisationType)
-				.setListFieldName(OrganisationType_.name).build();
+		.setListFieldName(OrganisationType_.name).build();
 
 		overviewForm.newLine();
 
@@ -117,8 +117,8 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	{
 		final JPAContainer<Organisation> container = new DaoFactory().getOrganisationDao().createVaadinContainer();
 		container.sort(new String[]
-				{ Organisation_.name.getName() }, new boolean[]
-						{ true });
+		{ Organisation_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<Organisation> builder = new HeadingPropertySet.Builder<Organisation>();
 		builder.addColumn("Organisation", Organisation_.name).addColumn("Phone", Organisation.PRIMARY_PHONE);
@@ -131,8 +131,8 @@ public class OrganisationView extends BaseCrudView<Organisation> implements View
 	{
 		return new Or(new Or(new Or(new SimpleStringFilter(Organisation_.name.getName(), filterString, true, false),
 				new SimpleStringFilter(Organisation_.phone1, filterString, true, false)), new SimpleStringFilter(
-				Organisation_.phone2, filterString, true, false)), new SimpleStringFilter(Organisation_.phone3,
-				filterString, true, false));
+						Organisation_.phone2, filterString, true, false)), new SimpleStringFilter(Organisation_.phone3,
+								filterString, true, false));
 	}
 
 	@Override

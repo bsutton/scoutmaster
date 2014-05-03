@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import net.sf.jasperreports.engine.JRException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
@@ -17,21 +15,23 @@ import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.jasper.JasperManager;
-import au.com.vaadinutils.jasper.PrintWindow;
+import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
+import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
+import au.com.vaadinutils.jasper.ui.JasperReportPopUp;
+import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleAllocationDao;
 import au.org.scoutmaster.dao.RaffleBookDao;
 import au.org.scoutmaster.dao.Transaction;
+import au.org.scoutmaster.domain.BaseEntity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.RaffleAllocation;
 import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
-import au.org.scoutmaster.jasper.JasperSettingsImpl;
-import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
@@ -44,7 +44,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -54,11 +53,11 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger();
-	private RaffleBookAllocationWizardView wizard;
+	private final RaffleBookAllocationWizardView wizard;
 
-	private List<RaffleAllocation> raffleAllocations = new ArrayList<>();
+	private final List<RaffleAllocation> raffleAllocations = new ArrayList<>();
 
-	public BulkAllocationStep(RaffleBookAllocationWizardView setupWizardView)
+	public BulkAllocationStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 		this.wizard = setupWizardView;
 	}
@@ -72,43 +71,45 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	@Override
 	public Component getContent()
 	{
-		Raffle raffle = wizard.getRaffle();
+		final Raffle raffle = this.wizard.getRaffle();
 
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, null);
+		final MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, null);
 		formLayout.setColumnLabelWidth(0, 150);
 		formLayout.setColumnFieldWidth(0, 250);
 		formLayout.setSizeFull();
 
-		Label label = new Label("<h1>The following Allocations have been made.</h1>", ContentMode.HTML);
+		final Label label = new Label("<h1>The following Allocations have been made.</h1>", ContentMode.HTML);
 
 		layout.addComponent(label);
 		layout.addComponent(formLayout);
 
-		Contact issuedByContact = wizard.getSelectStep().getIssuedByContact();
+		final Contact issuedByContact = this.wizard.getSelectStep().getIssuedByContact();
 
-		allocateBooks(raffle, issuedByContact, wizard.getSelectStep().getAllocations());
+		allocateBooks(raffle, issuedByContact, this.wizard.getSelectStep().getAllocations());
 
-		JPAContainer<RaffleAllocation> container = new DaoFactory().getRaffleAllocationDao().createVaadinContainer();
+		final JPAContainer<RaffleAllocation> container = new DaoFactory().getRaffleAllocationDao()
+				.createVaadinContainer();
 
-		List<Filter> filters = new ArrayList<>();
+		final List<Filter> filters = new ArrayList<>();
 		// build filter
-		for (RaffleAllocation allocation : raffleAllocations)
+		for (final RaffleAllocation allocation : this.raffleAllocations)
 		{
-			Filter filter = new Compare.Equal(RaffleAllocation_.id.getName(), allocation.getId());
+			final Filter filter = new Compare.Equal(BaseEntity_.id.getName(), allocation.getId());
 			filters.add(filter);
 		}
 		container.addContainerFilter(new Or(filters.toArray(new Filter[]
-		{})));
-		Builder<RaffleAllocation> builder = new HeadingPropertySet.Builder<>();
+				{})));
+		final Builder<RaffleAllocation> builder = new HeadingPropertySet.Builder<>();
 
 		builder.addColumn("Allocated To", RaffleAllocation_.allocatedTo);
 		builder.addColumn("Issued By", RaffleAllocation_.issuedBy);
 		builder.addColumn("Date Allocated", RaffleAllocation_.dateAllocated);
 		builder.addColumn("Book Count.", "bookCount");
 
-		EntityTable<RaffleAllocation> allocatedBooks = new EntityTable<RaffleAllocation>(container, builder.build());
+		final EntityTable<RaffleAllocation> allocatedBooks = new EntityTable<RaffleAllocation>(container,
+				builder.build());
 		allocatedBooks.setWidth("100%");
 		allocatedBooks.init();
 
@@ -117,14 +118,14 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 
 		layout.addComponent(allocatedBooks);
 
-		Label labelPrint = new Label(
+		final Label labelPrint = new Label(
 				"<p></p><h3>You can now print an 'Allocation Acknowledgement Form' for the Member to sign acknowledging that they have recieved the tickets.</h3>"
 						+ "You should print two copies, one for the parent and the second should be signed by the Parent and retained by Group.",
-				ContentMode.HTML);
+						ContentMode.HTML);
 
 		layout.addComponent(labelPrint);
 
-		Button printButton = new Button("Print Preview");
+		final Button printButton = new Button("Print Preview");
 		printButton.addClickListener(new ClickEventLogged.ClickAdaptor(this));
 		layout.addComponent(printButton);
 		layout.setComponentAlignment(printButton, Alignment.BOTTOM_RIGHT);
@@ -133,33 +134,32 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	}
 
 	/**
-	 * Man what a pain this method was to right.
-	 * I couldn't get the id on raffleallocation to return after the persist even after
-	 * calling flush which all of the doco says should work.
-	 * The eventual trick was to merge the allocation after the persist which then
-	 * had the correct id.
-	 * 
+	 * Man what a pain this method was to right. I couldn't get the id on
+	 * raffleallocation to return after the persist even after calling flush
+	 * which all of the doco says should work. The eventual trick was to merge
+	 * the allocation after the persist which then had the correct id.
+	 *
 	 * @param raffle
 	 * @param issuedByContact
 	 * @param preallocation
 	 */
-	private void allocateBooks(Raffle raffle, Contact issuedByContact, List<Allocation> preallocation)
+	private void allocateBooks(final Raffle raffle, final Contact issuedByContact, final List<Allocation> preallocation)
 	{
-		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
+		final RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
 
-		EntityManager em = EntityManagerProvider.createEntityManager();
-		RaffleAllocationDao daoLocalRaffleAllocation = new DaoFactory(em).getRaffleAllocationDao();
-		RaffleBookDao daoLocalRaffleBook = new DaoFactory(em).getRaffleBookDao();
+		final EntityManager em = EntityManagerProvider.createEntityManager();
+		final RaffleAllocationDao daoLocalRaffleAllocation = new DaoFactory(em).getRaffleAllocationDao();
+		final RaffleBookDao daoLocalRaffleBook = new DaoFactory(em).getRaffleBookDao();
 
-		for (Allocation allocation : preallocation)
+		for (final Allocation allocation : preallocation)
 		{
 			// Placed this in its own transaction as I need the allocation id
 			// which is only available after we commit.
 			try (Transaction t = new Transaction(em))
 			{
-				List<RaffleBook> books = new ArrayList<>();
+				final List<RaffleBook> books = new ArrayList<>();
 				// Move the books from the request em to our local em.
-				for (RaffleBook book : allocation.getBooks())
+				for (final RaffleBook book : allocation.getBooks())
 				{
 					daoRaffleBook.detach(book);
 					books.add(daoLocalRaffleBook.merge(book));
@@ -207,30 +207,26 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	}
 
 	@Override
-	public void buttonClick(ClickEvent event)
+	public void buttonClick(final ClickEvent event)
 	{
-		JasperManager manager;
-		try
-		{
-			manager = new JasperManager(EntityManagerProvider.getEntityManager(), "RaffleAllocation.jasper",
-					new JasperSettingsImpl());
-			StringBuilder ids = new StringBuilder();
+		final StringBuilder ids = new StringBuilder();
 
-			for (RaffleAllocation allocation : this.raffleAllocations)
+		for (final RaffleAllocation allocation : this.raffleAllocations)
+		{
+			if (ids.length() > 0)
 			{
-				if (ids.length() > 0)
-					ids.append(",");
-				ids.append(allocation.getId());
+				ids.append(",");
 			}
-			manager.bindParameter("allocationIds", ids.toString());
-			PrintWindow window = new PrintWindow(manager);
-			UI.getCurrent().addWindow(window);
-		}
-		catch (JRException e)
-		{
-			SMNotification.show(e.getMessage(), Type.ERROR_MESSAGE);
+			ids.append(allocation.getId());
 		}
 
+		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
+		builder.addField(new ReportParameterConstant<String>("allocationIds", ids.toString()));
+		final JasperReportProperties properties = new SMJasperReportProperties("Raffle Allocation",
+				"RaffleAllocation.jasper", builder);
+		final JasperReportPopUp window = new JasperReportPopUp(properties);
+
+		UI.getCurrent().addWindow(window);
 	}
 
 }

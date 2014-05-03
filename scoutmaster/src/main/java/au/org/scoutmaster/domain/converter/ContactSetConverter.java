@@ -20,8 +20,8 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 	@Override
 	public Set<Contact> convertToModel(final Set<? extends Object> value,
 			final Class<? extends Set<Contact>> targetType, final Locale locale)
-			throws com.vaadin.data.util.converter.Converter.ConversionException
-			{
+					throws com.vaadin.data.util.converter.Converter.ConversionException
+	{
 		HashSet<Contact> result = null;
 		final ContactDao daoContact = new ContactDao();
 
@@ -51,14 +51,14 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 
 		ContactSetConverter.logger.debug("result: {}", result);
 		return result;
-			}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<? extends Object> convertToPresentation(final Set<Contact> value,
 			final Class<? extends Set<? extends Object>> targetType, final Locale locale)
-					throws com.vaadin.data.util.converter.Converter.ConversionException
-					{
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+	{
 		Set<? extends Object> result = new HashSet<>();
 		if (targetType.getName().equals("java.util.Set"))
 		{
@@ -77,7 +77,7 @@ public class ContactSetConverter implements Converter<Set<? extends Object>, Set
 
 		ContactSetConverter.logger.debug("result: {}", result);
 		return result;
-					}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

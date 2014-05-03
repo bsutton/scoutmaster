@@ -72,10 +72,10 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 
 		@SuppressWarnings("unchecked")
 		final JPAContainer<Relationship> rhscontainer = (JPAContainer<Relationship>) this.relatedTo
-				.getContainerDataSource();
+		.getContainerDataSource();
 		rhscontainer.sort(new String[]
-				{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
-						{ true, true });
+		{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
+		{ true, true });
 
 		return relationshipForm;
 	}

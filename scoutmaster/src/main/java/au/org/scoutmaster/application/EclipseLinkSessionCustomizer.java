@@ -11,7 +11,7 @@ import org.eclipse.persistence.sessions.Session;
  * e.g. <persistence-unit name="scoutmaster" transaction-type="RESOURCE_LOCAL">
  * <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
  * <non-jta-data-source>java:comp/env/jdbc/scoutmaster-ds</non-jta-data-source>
- * 
+ *
  * <properties> <property name="eclipselink.session.customizer"
  * value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer" />
  * <property name="eclipselink.ddl-generation" value="none" /> <property

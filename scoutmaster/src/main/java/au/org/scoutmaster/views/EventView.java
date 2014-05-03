@@ -42,7 +42,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Events", path = "Calendar")
 public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>,
-		ValueChangeListener
+ValueChangeListener
 {
 
 	private static final long serialVersionUID = 1L;
@@ -65,12 +65,12 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	{
 		this.container = new DaoFactory().getDao(EventDao.class).createVaadinContainer();
 		this.container.sort(new String[]
-		{ Event_.eventStartDateTime.getName() }, new boolean[]
-		{ false });
+				{ Event_.eventStartDateTime.getName() }, new boolean[]
+						{ false });
 
 		final Builder<au.org.scoutmaster.domain.Event> builder = new HeadingPropertySet.Builder<au.org.scoutmaster.domain.Event>();
 		builder.addColumn("Subject", Event_.subject).addColumn("All Day", Event_.allDayEvent)
-		.addColumn("Start Date", Event_.eventStartDateTime).addColumn("End Date", Event_.eventEndDateTime);
+				.addColumn("Start Date", Event_.eventStartDateTime).addColumn("End Date", Event_.eventEndDateTime);
 
 		super.init(au.org.scoutmaster.domain.Event.class, this.container, builder.build());
 

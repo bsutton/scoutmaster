@@ -68,12 +68,12 @@ public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View
 	{
 		final JPAContainer<LoginAttempt> container = new DaoFactory().getLoginAttemptDao().createVaadinContainer();
 		container.sort(new String[]
-		{ LoginAttempt_.dateOfAttempt.getName() }, new boolean[]
-		{ false });
+				{ LoginAttempt_.dateOfAttempt.getName() }, new boolean[]
+						{ false });
 
 		final Builder<LoginAttempt> builder = new HeadingPropertySet.Builder<LoginAttempt>();
 		builder.addColumn("User", LoginAttempt_.user).addColumn("Login Attempt", LoginAttempt_.dateOfAttempt)
-		.addColumn("Succeeded", LoginAttempt_.succeeded);
+				.addColumn("Succeeded", LoginAttempt_.succeeded);
 
 		super.init(LoginAttempt.class, container, builder.build());
 

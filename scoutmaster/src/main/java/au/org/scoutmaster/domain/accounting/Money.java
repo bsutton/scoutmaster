@@ -103,7 +103,7 @@ public class Money
 
 	@Override
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-{ "HE_EQUALS_USE_HASHCODE" }, justification = "Explicit implementation of equals as above.")
+	{ "HE_EQUALS_USE_HASHCODE" }, justification = "Explicit implementation of equals as above.")
 	public boolean equals(final Object rhs)
 	{
 		return rhs != null && equals((Money) rhs);
@@ -113,7 +113,7 @@ public class Money
 	public int hashCode()
 	{
 		assert false : "You can't put money into a map/hashtable as a key.";
-	return 42; // any arbitrary constant will do
+		return 42; // any arbitrary constant will do
 	}
 
 	public boolean lessThan(final Money rhs)

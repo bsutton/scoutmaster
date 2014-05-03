@@ -1,20 +1,18 @@
 package au.org.scoutmaster.views.reports;
 
 import net.sf.jasperreports.engine.JRException;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.jasper.JasperManager;
+import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
-import au.com.vaadinutils.reportFilter.ReportView;
-import au.org.scoutmaster.jasper.JasperSettingsImpl;
+import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
-@Menu(display = "Member", path="Reports")
-public class MembershipInvoiceReport extends ReportView
+@Menu(display = "Member", path = "Reports")
+public class MembershipInvoiceReport extends JasperReportView
 {
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "Member";
 
-	public  MembershipInvoiceReport() throws JRException
+	public MembershipInvoiceReport() throws JRException
 	{
-		super("Member", new JasperManager(EntityManagerProvider.getEntityManager(), "Member.jasper", new JasperSettingsImpl()));
+		super(new SMJasperReportProperties("Member", "Member.jasper"));
 	}
 }

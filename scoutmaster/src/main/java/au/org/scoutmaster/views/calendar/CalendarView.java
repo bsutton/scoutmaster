@@ -191,10 +191,29 @@ au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeLis
 		controlLayout.setWidth("100%");
 		controlLayout.setMargin(new MarginInfo(false, false, true, false));
 		final Button previous = new Button("Prev");
-		previous.addClickListener(buttonClick -> CalendarView.this.calendar.fireNavigationEvent(false));
+		previous.addClickListener(new ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void buttonClick(final ClickEvent event)
+			{
+				CalendarView.this.calendar.fireNavigationEvent(false);
+
+			}
+		});
 		final Button next = new Button("Next");
-		next.addClickListener(buttonClick -> CalendarView.this.calendar.fireNavigationEvent(true));
-		
+		next.addClickListener(new ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void buttonClick(final ClickEvent event)
+			{
+				CalendarView.this.calendar.fireNavigationEvent(true);
+
+			}
+		});
 
 		controlLayout.addComponent(previous);
 		controlLayout.addComponent(intervalLayout);

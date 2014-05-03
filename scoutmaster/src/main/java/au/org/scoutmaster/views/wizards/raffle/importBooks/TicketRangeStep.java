@@ -1,6 +1,7 @@
 package au.org.scoutmaster.views.wizards.raffle.importBooks;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -152,7 +153,15 @@ public class TicketRangeStep implements WizardStep
 		final Set<RaffleBook> books = raffle.getImportedBooks();
 		final RaffleBook[] sortedBooks = books.toArray(new RaffleBook[]
 		{});
-		Arrays.sort(sortedBooks, (o1, o2) -> o1.getFirstNo().intValue() - o2.getFirstNo().intValue());
+		Arrays.sort(sortedBooks, new Comparator<RaffleBook>()
+				{
+
+			@Override
+			public int compare(final RaffleBook o1, final RaffleBook o2)
+			{
+				return o1.getFirstNo().intValue() - o2.getFirstNo().intValue();
+			}
+				});
 
 		for (final RaffleBook book : sortedBooks)
 		{

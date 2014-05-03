@@ -11,7 +11,7 @@ public class WelcomeStep implements WizardStep
 {
 	private VerticalLayout layout;
 
-	public WelcomeStep(RaffleBookAllocationWizardView setupWizardView)
+	public WelcomeStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 	}
 
@@ -24,24 +24,24 @@ public class WelcomeStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		if (layout == null)
+		if (this.layout == null)
 		{
-			layout = new VerticalLayout();
-			layout.setMargin(true);
+			this.layout = new VerticalLayout();
+			this.layout.setMargin(true);
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			sb.append("<h1>Allocate Raffle books.</h1>");
 			sb.append("<p>This wizard is designed to allow you to allocate books to Group Members (or any willing Contact).</p>");
 			sb.append("<p>Before you attempt to Allocate Raffle books you must have first Imported the books using the Import Raffle Wizard</p>");
 			sb.append("<p>The Allocation Wizard will find the first set of Unallocated books and allocate the desired count to the selected Contact.</p>");
 			sb.append("<p>At the end of this wizard you will be able to print off an Allocation form for the member to sign, acknowledging the receipt of the books.</p>");
-			Label label = new Label(sb.toString());
+			final Label label = new Label(sb.toString());
 			label.setContentMode(ContentMode.HTML);
-			layout.addComponent(label);
+			this.layout.addComponent(label);
 
 		}
 
-		return layout;
+		return this.layout;
 	}
 
 	@Override

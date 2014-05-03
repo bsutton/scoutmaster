@@ -27,9 +27,9 @@ import au.org.scoutmaster.util.PasswordHash;
 @Entity
 @Table(name = "User")
 @NamedQueries(
-		{
-			@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
-			@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
+{
+		@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
+		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
 public class User extends BaseEntity
 {
 

@@ -10,7 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 public class FinalStep implements WizardStep
 {
 
-	public FinalStep(RaffleBookAllocationWizardView setupWizardView)
+	public FinalStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 	}
 
@@ -23,13 +23,13 @@ public class FinalStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		sb.append("<h1>Allocation Completed</h1><p>If you have more books to allocate simply run the allocate wizard again.</p>");
 
-		Label label = new Label(sb.toString());
+		final Label label = new Label(sb.toString());
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);

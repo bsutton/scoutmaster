@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "EMailServerSettings")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{})
+{})
 public class SMTPServerSettings extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

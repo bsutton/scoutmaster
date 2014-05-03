@@ -36,7 +36,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> implements WizardStep, ClickListener,
-		ProgressListener<SMSTransmission>
+ProgressListener<SMSTransmission>
 {
 	private static final long serialVersionUID = 1L;
 	private TextField senderId;
@@ -144,46 +144,46 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider> impleme
 
 				new InputDialog(UI.getCurrent(), "Test SMS Provider Settings.",
 						"Enter your Mobile No. to recieve a test SMS.", new Recipient()
-				{
-					@Override
-					public boolean onOK(final String input)
-					{
-						final Phone recipient = new Phone(input);
-						final Message message = new Message("Test SMS Subject",
-										"Test SMS Message from Scoutmaster setup wizard.", new Phone(
-												SmsProviderStep.this.senderId.getValue()));
-
-						final Contact contact = new Contact();
-						contact.setFirstname("Test");
-						contact.setLastname("SMS");
-
-						final SMSTransmission transmission = new SMSTransmission(null, contact, message,
-										recipient);
-						final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-
-						try
 						{
-							daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
-						}
-						catch (final SmsException e)
-						{
-							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-						}
-						catch (final Throwable e)
-						{
-							Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-						}
-						return true;
-					}
+							@Override
+							public boolean onOK(final String input)
+							{
+								final Phone recipient = new Phone(input);
+								final Message message = new Message("Test SMS Subject",
+								"Test SMS Message from Scoutmaster setup wizard.", new Phone(
+										SmsProviderStep.this.senderId.getValue()));
 
-					@Override
-					public boolean onCancel()
-					{
-						Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
-						return true;
+								final Contact contact = new Contact();
+								contact.setFirstname("Test");
+								contact.setLastname("SMS");
 
+								final SMSTransmission transmission = new SMSTransmission(null, contact, message,
+								recipient);
+								final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+
+								try
+								{
+									daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
+								}
+								catch (final SmsException e)
+								{
+									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+								}
+								catch (final Throwable e)
+								{
+									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
+								}
+								return true;
 							}
-				}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));
+
+							@Override
+							public boolean onCancel()
+							{
+								Notification.show("Test Cancelled", Type.TRAY_NOTIFICATION);
+								return true;
+
+					}
+						}).addValidator(new StringLengthValidator("Please input your mobile no.", 8, 12, false));
 
 			}
 		}

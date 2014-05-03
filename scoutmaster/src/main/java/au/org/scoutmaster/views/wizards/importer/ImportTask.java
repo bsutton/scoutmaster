@@ -38,12 +38,12 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 
 	ImportTask(final ProgressTaskListener<ImportItemStatus> listener, final File tempFile,
 			final Class<? extends Importable> clazz, final Hashtable<String, FormFieldImpl> fieldMap)
-			{
+	{
 		super(listener);
 		this.tempFile = tempFile;
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
-			}
+	}
 
 	@Override
 	public void run()
@@ -170,7 +170,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 */
 	private <T> void addRow(final JPAContainer<T> container, final Class<T> entityClass, final String[] csvHeaders,
 			final String[] fieldValues, final Hashtable<String, FormFieldImpl> fieldMaps)
-			throws InstantiationException, IllegalAccessException
+					throws InstantiationException, IllegalAccessException
 	{
 		final EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 

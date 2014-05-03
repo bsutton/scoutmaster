@@ -14,7 +14,7 @@ import com.google.common.base.Preconditions;
 public class FixedDouble
 {
 	static final int pMultiplier[] =
-		{ 1, 10, 100, 1000, 10000, 100000, 1000000 };
+	{ 1, 10, 100, 1000, 10000, 100000, 1000000 };
 
 	/**
 	 * Always stored as a rounded value. Which means that when used in

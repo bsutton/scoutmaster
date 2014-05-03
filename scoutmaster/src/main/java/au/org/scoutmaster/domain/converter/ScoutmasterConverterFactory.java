@@ -22,7 +22,7 @@ public class ScoutmasterConverterFactory extends DefaultConverterFactory
 	@Override
 	public <PRESENTATION, MODEL> Converter<PRESENTATION, MODEL> createConverter(
 			final Class<PRESENTATION> presentationType, final Class<MODEL> modelType)
-			{
+	{
 		// Handle one particular type conversion
 		if (CommunicationLog.class == modelType)
 		{
@@ -67,5 +67,5 @@ public class ScoutmasterConverterFactory extends DefaultConverterFactory
 
 		// Default to the supertype
 		return super.createConverter(presentationType, modelType);
-			}
+	}
 }

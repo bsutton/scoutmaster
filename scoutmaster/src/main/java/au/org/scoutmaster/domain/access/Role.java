@@ -21,7 +21,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  * that role has accessed to.
  *
  * A user has access to the sum of features defined by the roles they belong to.
- * 
+ *
  * @author bsutton
  *
  */

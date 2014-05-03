@@ -64,7 +64,7 @@ public class SectionMeetingDefaults extends BaseEntity
 
 	@Override
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-	{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
+{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
 	public String getName()
 	{
 		return this.section.getName() + " " + this.meetingNight.toString() + " " + this.meetingSubject;

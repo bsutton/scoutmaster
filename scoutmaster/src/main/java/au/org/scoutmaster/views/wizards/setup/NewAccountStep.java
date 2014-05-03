@@ -69,7 +69,7 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 		// Create the password input field
 		this.password = formLayout.bindPasswordField("Password:", "password");
 		this.password
-				.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
+		.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
 		this.password.addValidator(new PasswordValidator("Password"));
 		this.password.setRequired(true);
 

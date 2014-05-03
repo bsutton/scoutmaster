@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "TaskType")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = TaskType.FIND_BY_NAME, query = "SELECT tasktype FROM TaskType tasktype where tasktype.name = :name"), })
+{ @NamedQuery(name = TaskType.FIND_BY_NAME, query = "SELECT tasktype FROM TaskType tasktype where tasktype.name = :name"), })
 public class TaskType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

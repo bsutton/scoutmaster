@@ -27,11 +27,11 @@ public class SelectRaffleStep implements WizardStep
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SelectRaffleStep.class);
 
-	private RaffleBookAllocationWizardView setupWizardView;
+	private final RaffleBookAllocationWizardView setupWizardView;
 
 	private ComboBox raffleField;
 
-	public SelectRaffleStep(RaffleBookAllocationWizardView setupWizardView)
+	public SelectRaffleStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 		this.setupWizardView = setupWizardView;
 	}
@@ -45,35 +45,34 @@ public class SelectRaffleStep implements WizardStep
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		Label label = new Label("<h1>Select Raffle to Allocate from.</h1>", ContentMode.HTML);
+		final Label label = new Label("<h1>Select Raffle to Allocate from.</h1>", ContentMode.HTML);
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);
 
-		RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
-		raffleField = new ComboBox();
-		raffleField.setContainerDataSource(daoRaffle.createVaadinContainer());
-		raffleField.setItemCaptionPropertyId(Raffle_.name.getName());
-		raffleField.setNullSelectionAllowed(false);
+		final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+		this.raffleField = new ComboBox();
+		this.raffleField.setContainerDataSource(daoRaffle.createVaadinContainer());
+		this.raffleField.setItemCaptionPropertyId(Raffle_.name.getName());
+		this.raffleField.setNullSelectionAllowed(false);
 
-		raffleField.setRequired(true);
-		
+		this.raffleField.setRequired(true);
+
 		Raffle raffle = null;
 		@SuppressWarnings("unchecked")
-		List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
+		final List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
 		{ Raffle_.startDate }, new boolean[]
 		{ false });
-		
+
 		if (list.size() > 0)
 		{
 			raffle = list.get(0);
 		}
-		raffleField.setValue(raffle.getId());
+		this.raffleField.setValue(raffle.getId());
 
-
-		layout.addComponent(raffleField);
+		layout.addComponent(this.raffleField);
 
 		return layout;
 	}
@@ -82,22 +81,24 @@ public class SelectRaffleStep implements WizardStep
 	public boolean onAdvance()
 	{
 		boolean advance = false;
-		if (raffleField.isValid())
+		if (this.raffleField.isValid())
 		{
-			Long id = (Long) raffleField.getValue();
-			JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
-			Raffle raffle = raffleDao.findById(id);
-			setupWizardView.setRaffle(raffle);
+			final Long id = (Long) this.raffleField.getValue();
+			final JpaBaseDao<Raffle, Long> raffleDao = DaoFactory.getGenericDao(Raffle.class);
+			final Raffle raffle = raffleDao.findById(id);
+			this.setupWizardView.setRaffle(raffle);
 			advance = true;
 		}
 		else
+		{
 			SMNotification.show("Please select a Raffle", Type.WARNING_MESSAGE);
+		}
 		return advance;
 	}
 
+	@Override
 	public boolean onBack()
 	{
 		return true;
 	}
 }
-

@@ -99,8 +99,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision")) })
 	Money salePricePerTicket;
 
 	/**
@@ -108,8 +108,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision")) })
 	Money revenueTarget;
 
 	/*
@@ -117,8 +117,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue")),
+			@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision")) })
 	Money revenueRaised;
 
 	/**
@@ -126,7 +126,7 @@ public class Raffle extends BaseEntity
 	 * to a contact.
 	 */
 	@OneToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
+		{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
 	private final Set<RaffleBook> available = new HashSet<>();
 
 	/**
@@ -134,7 +134,7 @@ public class Raffle extends BaseEntity
 	 * been allocated to contacts.
 	 */
 	@OneToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
+		{ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, mappedBy = "raffle", orphanRemoval = true)
 	private final Set<RaffleAllocation> allocated = new HashSet<>();
 
 	@Override

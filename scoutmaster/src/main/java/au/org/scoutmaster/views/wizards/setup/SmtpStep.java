@@ -40,7 +40,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
-ClickListener
+		ClickListener
 {
 	private static Logger logger = LogManager.getLogger(SmtpStep.class);
 	private static final long serialVersionUID = 1L;
@@ -195,43 +195,43 @@ ClickListener
 				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new Recipient()
-				{
-					@Override
-					public boolean onOK(final String input)
-					{
-						final String toEmailAddress = input;
-
-						final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-
-						try
 						{
-							final StringBuilder sb = new StringBuilder();
-							sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
-							sb.append("So welcome to Scoutmaster.\n\n");
-							sb.append("May you live long and recruit many.\n");
+							@Override
+							public boolean onOK(final String input)
+							{
+								final String toEmailAddress = input;
 
-							daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(),
-											new SMTPSettingsDao.EmailTarget(EmailAddressType.To, toEmailAddress),
-											"Test email from Scoutmaster setup", sb.toString(), null);
+								final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
 
-							SMNotification.show("An email has been sent to: " + toEmailAddress
-									+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
+								try
+								{
+									final StringBuilder sb = new StringBuilder();
+									sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
+									sb.append("So welcome to Scoutmaster.\n\n");
+									sb.append("May you live long and recruit many.\n");
 
-						}
-						catch (final EmailException e)
-						{
-							SmtpStep.logger.error(e, e);
-							SMNotification.show(e, Type.ERROR_MESSAGE);
-						}
-						return true;
-					}
+									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(),
+									new SMTPSettingsDao.EmailTarget(EmailAddressType.To, toEmailAddress),
+									"Test email from Scoutmaster setup", sb.toString(), null);
 
-					@Override
-					public boolean onCancel()
-					{
-						return true;
-					}
-				}).addValidator(validator);
+									SMNotification.show("An email has been sent to: " + toEmailAddress
+											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
+
+								}
+								catch (final EmailException e)
+								{
+									SmtpStep.logger.error(e, e);
+									SMNotification.show(e, Type.ERROR_MESSAGE);
+								}
+								return true;
+							}
+
+							@Override
+							public boolean onCancel()
+							{
+								return true;
+							}
+						}).addValidator(validator);
 
 			}
 		}

@@ -52,8 +52,8 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 		final JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class)
 				.createVaadinContainer();
 		container.sort(new String[]
-				{ OrganisationType_.name.getName() }, new boolean[]
-						{ true });
+		{ OrganisationType_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<OrganisationType> builder = new HeadingPropertySet.Builder<OrganisationType>();
 		builder.addColumn("Type Name", OrganisationType_.name);

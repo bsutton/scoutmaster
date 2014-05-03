@@ -32,8 +32,8 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 		final JPAContainer<Event> container = super.createVaadinContainer();
 
 		container.sort(new Object[]
-				{ Event_.eventStartDateTime.getName() }, new boolean[]
-						{ true });
+		{ Event_.eventStartDateTime.getName() }, new boolean[]
+		{ true });
 
 		container.addNestedContainerProperty("location.street");
 		container.addNestedContainerProperty("location.city");

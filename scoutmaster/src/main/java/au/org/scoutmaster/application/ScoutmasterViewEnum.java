@@ -45,44 +45,44 @@ public enum ScoutmasterViewEnum
 	// Memebers
 	Contact(ContactView.NAME, ContactView.class, true), Member(MemberReport.NAME, MemberReport.class), MemberAddress(
 			MemberAddressReport.NAME, MemberAddressReport.class), Tag(TagView.NAME, TagView.class), ExternalProspects(
-			ExternalProspectsReport.NAME, ExternalProspectsReport.class), ImportWizard(ImportWizardView.NAME,
-			ImportWizardView.class),
+					ExternalProspectsReport.NAME, ExternalProspectsReport.class), ImportWizard(ImportWizardView.NAME,
+							ImportWizardView.class),
 
-	// Communications
-	BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class), BulkSMSWizard(BulkSMSWizardView.NAME,
-			BulkSMSWizardView.class), CommunicationLog(CommunicationLogView.NAME, CommunicationLogView.class),
+							// Communications
+							BulkEmailWizard(BulkEmailWizardView.NAME, BulkEmailWizardView.class), BulkSMSWizard(BulkSMSWizardView.NAME,
+									BulkSMSWizardView.class), CommunicationLog(CommunicationLogView.NAME, CommunicationLogView.class),
 
-	// Calendar
-	Calendar(CalendarView.NAME, CalendarView.class), Event(EventView.NAME, EventView.class), CalendarReport(
-			CalendarReportView.NAME, CalendarReportView.class), PublicCalendar(PublicCalendarView.NAME,
-			PublicCalendarView.class),
+									// Calendar
+									Calendar(CalendarView.NAME, CalendarView.class), Event(EventView.NAME, EventView.class), CalendarReport(
+											CalendarReportView.NAME, CalendarReportView.class), PublicCalendar(PublicCalendarView.NAME,
+													PublicCalendarView.class),
 
-	// Raffle
-	Raffle(RaffleView.NAME, RaffleView.class), RaffleBookImportWizard(RaffleBookImportWizardView.NAME,
-			RaffleBookImportWizardView.class), RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME,
-			RaffleBookAllocationWizardView.class), RaffleAllocationsReport(RaffleAllocationsReportView.NAME,
-			RaffleAllocationsReportView.class),
+													// Raffle
+													Raffle(RaffleView.NAME, RaffleView.class), RaffleBookImportWizard(RaffleBookImportWizardView.NAME,
+															RaffleBookImportWizardView.class), RaffleBookAllocationWizard(RaffleBookAllocationWizardView.NAME,
+																	RaffleBookAllocationWizardView.class), RaffleAllocationsReport(RaffleAllocationsReportView.NAME,
+																			RaffleAllocationsReportView.class),
 
-	// Wizards
-	GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class),
+																			// Wizards
+																			GroupSetup(GroupSetupWizardView.NAME, GroupSetupWizardView.class),
 
-	// Admin menu
-	Organisation(OrganisationView.NAME, OrganisationView.class), OrganisationType(OrganisationTypeView.NAME,
-			OrganisationTypeView.class), QualificationType(QualificationTypeView.NAME, QualificationTypeView.class), SectionType(
-			SectionTypeView.NAME, SectionTypeView.class), Task(TaskView.NAME, TaskView.class), TaskType(
-			TaskTypeView.NAME, TaskTypeView.class), TaskStatus(TaskStatusView.NAME, TaskStatusView.class), ChangePassword(
-			ChangePasswordView.NAME, ChangePasswordView.class),
+																			// Admin menu
+																			Organisation(OrganisationView.NAME, OrganisationView.class), OrganisationType(OrganisationTypeView.NAME,
+																					OrganisationTypeView.class), QualificationType(QualificationTypeView.NAME, QualificationTypeView.class), SectionType(
+																							SectionTypeView.NAME, SectionTypeView.class), Task(TaskView.NAME, TaskView.class), TaskType(
+																									TaskTypeView.NAME, TaskTypeView.class), TaskStatus(TaskStatusView.NAME, TaskStatusView.class), ChangePassword(
+																											ChangePasswordView.NAME, ChangePasswordView.class),
 
-	// Admin Security
-	User(UserView.NAME, UserView.class), SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class), LoginAttempt(
-			LoginAttemptView.NAME, LoginAttemptView.class),
+																											// Admin Security
+																											User(UserView.NAME, UserView.class), SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class), LoginAttempt(
+																													LoginAttemptView.NAME, LoginAttemptView.class),
 
-	// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
-	// SectionBulkEmailWizard.class));
+																													// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,
+																													// SectionBulkEmailWizard.class));
 
-	Login(LoginView.NAME, LoginView.class), Logout(LogoutView.NAME, LogoutView.class), ForgottenPassword(
-			ForgottenPasswordView.NAME, ForgottenPasswordView.class), ResetPassword(ResetPasswordView.NAME,
-			ResetPasswordView.class);
+																													Login(LoginView.NAME, LoginView.class), Logout(LogoutView.NAME, LogoutView.class), ForgottenPassword(
+																															ForgottenPasswordView.NAME, ForgottenPasswordView.class), ResetPassword(ResetPasswordView.NAME,
+																																	ResetPasswordView.class);
 
 	private String title;
 	private Class<? extends View> clazz;

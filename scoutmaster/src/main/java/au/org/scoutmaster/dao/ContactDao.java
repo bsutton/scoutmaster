@@ -53,7 +53,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 
 	/**
 	 * Find all contacts that have an email address
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -113,7 +113,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	/**
 	 * Detaches the tag from this contact. The tag entity is not actually
 	 * deleted as it may be used by other entities.
-	 * 
+	 *
 	 * @param tagName
 	 */
 	public void detachTag(final Contact contact, final String tagName)

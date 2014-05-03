@@ -184,41 +184,49 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public final void taskProgress(final int count, final int max, final SMSTransmission status)
 	{
-		new UIUpdater(() -> {
-			final String message = "Sending: " + count + " of " + max + " messages.";
-			ShowProgressStep.this.progressDescription.setValue(message);
-			ShowProgressStep.this.indicator.setValue((float) count / max);
-			ShowProgressStep.this.workDialog.progress(count, max, message);
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final String message = "Sending: " + count + " of " + max + " messages.";
+				ShowProgressStep.this.progressDescription.setValue(message);
+				ShowProgressStep.this.indicator.setValue((float) count / max);
+				ShowProgressStep.this.workDialog.progress(count, max, message);
 
-			ShowProgressStep.this.progressTable.addRow(status);
+				ShowProgressStep.this.progressTable.addRow(status);
+			}
 		});
 	}
 
 	@Override
 	public final void taskComplete(final int sent)
 	{
-		new UIUpdater(
-				() -> {
-					ShowProgressStep.this.sendComplete = true;
-					ShowProgressStep.this.indicator.setValue(1.0f);
+		new UIUpdater(new Runnable()
+		{
 
-					if (ShowProgressStep.this.rejected.intValue() == 0
-							&& ShowProgressStep.this.queued.intValue() == sent)
-					{
-						ShowProgressStep.this.progressDescription
-								.setValue("All SMS Messages have been sent successfully.");
-					}
-					else
-					{
-						ShowProgressStep.this.progressDescription
-								.setValue(sent
-										+ " SMS Message "
-										+ (sent == 1 ? "has" : "s have")
-										+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
-					}
-					ShowProgressStep.this.workDialog.complete(sent);
+			@Override
+			public void run()
+			{
+				ShowProgressStep.this.sendComplete = true;
+				ShowProgressStep.this.indicator.setValue(1.0f);
 
-				});
+				if (ShowProgressStep.this.rejected.intValue() == 0 && ShowProgressStep.this.queued.intValue() == sent)
+				{
+					ShowProgressStep.this.progressDescription.setValue("All SMS Messages have been sent successfully.");
+				}
+				else
+				{
+					ShowProgressStep.this.progressDescription
+					.setValue(sent
+							+ " SMS Message "
+									+ (sent == 1 ? "has" : "s have")
+									+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
+				}
+				ShowProgressStep.this.workDialog.complete(sent);
+
+			}
+		});
 	}
 
 	@Override

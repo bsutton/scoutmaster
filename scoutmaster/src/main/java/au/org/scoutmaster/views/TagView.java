@@ -72,12 +72,12 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	{
 		final JPAContainer<Tag> container = new DaoFactory().getTagDao().createVaadinContainer();
 		container.sort(new String[]
-				{ Tag_.name.getName() }, new boolean[]
-						{ true });
+		{ Tag_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
 		builder.addColumn("Tag", Tag_.name).addColumn("Description", Tag_.description)
-		.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
+				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
 
 		super.init(Tag.class, container, builder.build());
 

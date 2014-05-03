@@ -60,95 +60,97 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 
 	public WelcomeStep getWelcomeStep()
 	{
-		return welcomeStep;
+		return this.welcomeStep;
 	}
 
 	public AllocationStep getAllocatedStep()
 	{
-		return allocationStep;
+		return this.allocationStep;
 	}
 
 	public SelectStep getSelectStep()
 	{
-		return selectStep;
+		return this.selectStep;
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event)
+	public void enter(final ViewChangeEvent event)
 	{
 
-		HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
+		final HashMap<String, String> parameters = NavigatorUI.extractParameterMap(event);
 
-		String value = parameters.get("ID");
+		final String value = parameters.get("ID");
 		if (value != null)
 		{
-			RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
+			final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			this.raffle = daoRaffle.findById(Long.valueOf(value));
-			hasRaffleSelectionStep = false;
+			this.hasRaffleSelectionStep = false;
 		}
 
-		welcomeStep = new WelcomeStep(this);
-		allocationMethodStep = new AllocationMethodStep(this);
-		selectStep = new BulkSelectionStep(this);
-		raffleStep = new SelectRaffleStep(this);
-		allocationStep = new BulkAllocationStep(this);
-		finalStep = new FinalStep(this);
+		this.welcomeStep = new WelcomeStep(this);
+		this.allocationMethodStep = new AllocationMethodStep(this);
+		this.selectStep = new BulkSelectionStep(this);
+		this.raffleStep = new SelectRaffleStep(this);
+		this.allocationStep = new BulkAllocationStep(this);
+		this.finalStep = new FinalStep(this);
 
 		// create the Wizard component and add the steps
-		wizard = new Wizard();
-		wizard.setUriFragmentEnabled(true);
-		wizard.addListener(this);
-		wizard.addStep(welcomeStep, "Welcome");
-		if (hasRaffleSelectionStep)
-			wizard.addStep(raffleStep, "Raffle");
-		wizard.addStep(allocationMethodStep);
-		wizard.addStep(selectStep, SELECTION_STEP);
-		wizard.addStep(allocationStep, ALLOCATION_STEP);
-		wizard.addStep(finalStep, "Final");
+		this.wizard = new Wizard();
+		this.wizard.setUriFragmentEnabled(true);
+		this.wizard.addListener(this);
+		this.wizard.addStep(this.welcomeStep, "Welcome");
+		if (this.hasRaffleSelectionStep)
+		{
+			this.wizard.addStep(this.raffleStep, "Raffle");
+		}
+		this.wizard.addStep(this.allocationMethodStep);
+		this.wizard.addStep(this.selectStep, RaffleBookAllocationWizardView.SELECTION_STEP);
+		this.wizard.addStep(this.allocationStep, RaffleBookAllocationWizardView.ALLOCATION_STEP);
+		this.wizard.addStep(this.finalStep, "Final");
 
-		wizard.setSizeFull();
-		wizard.setUriFragmentEnabled(true);
+		this.wizard.setSizeFull();
+		this.wizard.setUriFragmentEnabled(true);
 
 		/* Main layout */
 		this.setMargin(true);
-		this.setSpacing(true);
-		this.addComponent(wizard);
-		this.setComponentAlignment(wizard, Alignment.TOP_CENTER);
-		this.setSizeFull();
+		setSpacing(true);
+		this.addComponent(this.wizard);
+		setComponentAlignment(this.wizard, Alignment.TOP_CENTER);
+		setSizeFull();
 
 	}
 
 	@Override
-	public void activeStepChanged(WizardStepActivationEvent event)
+	public void activeStepChanged(final WizardStepActivationEvent event)
 	{
 		// NOOP
 
 	}
 
 	@Override
-	public void stepSetChanged(WizardStepSetChangedEvent event)
+	public void stepSetChanged(final WizardStepSetChangedEvent event)
 	{
 		Page.getCurrent().setTitle(event.getComponent().getCaption());
 
 	}
 
 	@Override
-	public void wizardCompleted(WizardCompletedEvent event)
+	public void wizardCompleted(final WizardCompletedEvent event)
 	{
-		this.endWizard("Allocation Completed");
+		endWizard("Allocation Completed");
 
 	}
 
 	@Override
-	public void wizardCancelled(WizardCancelledEvent event)
+	public void wizardCancelled(final WizardCancelledEvent event)
 	{
-		this.endWizard("Allocation Cancelled!");
+		endWizard("Allocation Cancelled!");
 
 	}
 
-	private void endWizard(String message)
+	private void endWizard(final String message)
 	{
-		wizard.setVisible(false);
+		this.wizard.setVisible(false);
 		Notification.show(message);
 		Page.getCurrent().setTitle(message);
 		UI.getCurrent().getNavigator().navigateTo(RaffleView.NAME);
@@ -159,25 +161,25 @@ public class RaffleBookAllocationWizardView extends VerticalLayout implements Vi
 		return this.raffle;
 	}
 
-	public void addAllocationStep(SelectStep selectionStep, AllocationStep allocationStep)
+	public void addAllocationStep(final SelectStep selectionStep, final AllocationStep allocationStep)
 	{
-		wizard.removeStep(SELECTION_STEP);
-		wizard.removeStep(ALLOCATION_STEP);
-		if (hasRaffleSelectionStep)
+		this.wizard.removeStep(RaffleBookAllocationWizardView.SELECTION_STEP);
+		this.wizard.removeStep(RaffleBookAllocationWizardView.ALLOCATION_STEP);
+		if (this.hasRaffleSelectionStep)
 		{
-			wizard.addStep(selectionStep, SELECTION_STEP, 3);
-			wizard.addStep(allocationStep, ALLOCATION_STEP, 4);
+			this.wizard.addStep(selectionStep, RaffleBookAllocationWizardView.SELECTION_STEP, 3);
+			this.wizard.addStep(allocationStep, RaffleBookAllocationWizardView.ALLOCATION_STEP, 4);
 		}
 		else
 		{
-			wizard.addStep(selectionStep, SELECTION_STEP, 2);
-			wizard.addStep(allocationStep, ALLOCATION_STEP, 3);
+			this.wizard.addStep(selectionStep, RaffleBookAllocationWizardView.SELECTION_STEP, 2);
+			this.wizard.addStep(allocationStep, RaffleBookAllocationWizardView.ALLOCATION_STEP, 3);
 		}
 		this.selectStep = selectionStep;
 		this.allocationStep = allocationStep;
 	}
 
-	public void setRaffle(Raffle raffle)
+	public void setRaffle(final Raffle raffle)
 	{
 		this.raffle = raffle;
 

@@ -22,9 +22,9 @@ public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFo
 	@Override
 	protected FormHelper<E> getFormHelper(final MultiColumnFormLayout<E> layout,
 			final ValidatingFieldGroup<E> fieldGroup)
-	{
+			{
 		return new SMFormHelper<>(layout, fieldGroup);
-	}
+			}
 
 	public <L> TokenField bindTagField(final Selected<E> selected, final String fieldLabel,
 			final SetAttribute<E, L> entityField)

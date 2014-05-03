@@ -165,40 +165,49 @@ public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailT
 	@Override
 	public final void taskProgress(final int count, final int max, final EmailTransmission status)
 	{
-		new UIUpdater(() -> {
-			final String message = "Sending: " + count + " of " + max + " messages.";
-			StepShowProgress.this.progressDescription.setValue(message);
-			StepShowProgress.this.indicator.setValue((float) count / max);
-			StepShowProgress.this.workDialog.progress(count, max, message);
-			StepShowProgress.this.progressTable.addRow(status);
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				final String message = "Sending: " + count + " of " + max + " messages.";
+				StepShowProgress.this.progressDescription.setValue(message);
+				StepShowProgress.this.indicator.setValue((float) count / max);
+				StepShowProgress.this.workDialog.progress(count, max, message);
+				StepShowProgress.this.progressTable.addRow(status);
+			}
 		});
 	}
 
 	@Override
 	public final void taskComplete(final int sent)
 	{
-		new UIUpdater(
-				() -> {
-					StepShowProgress.this.sendComplete = true;
-					StepShowProgress.this.indicator.setValue(1.0f);
+		new UIUpdater(new Runnable()
+		{
 
-					if (StepShowProgress.this.rejected.intValue() == 0
-							&& StepShowProgress.this.queued.intValue() == sent)
-					{
-						StepShowProgress.this.progressDescription
-								.setValue("All Email Messages have been sent successfully.");
-					}
-					else
-					{
-						StepShowProgress.this.progressDescription
-								.setValue(sent
-										+ " Email Message "
-										+ (sent == 1 ? "has" : "s have")
-										+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
-					}
-					SMNotification.show("Email batch send complete", Type.TRAY_NOTIFICATION);
-					StepShowProgress.this.workDialog.complete(sent);
-				});
+			@Override
+			public void run()
+			{
+				StepShowProgress.this.sendComplete = true;
+				StepShowProgress.this.indicator.setValue(1.0f);
+
+				if (StepShowProgress.this.rejected.intValue() == 0 && StepShowProgress.this.queued.intValue() == sent)
+				{
+					StepShowProgress.this.progressDescription
+							.setValue("All Email Messages have been sent successfully.");
+				}
+				else
+				{
+					StepShowProgress.this.progressDescription
+					.setValue(sent
+							+ " Email Message "
+									+ (sent == 1 ? "has" : "s have")
+									+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
+				}
+				SMNotification.show("Email batch send complete", Type.TRAY_NOTIFICATION);
+				StepShowProgress.this.workDialog.complete(sent);
+			}
+		});
 	}
 
 	@Override

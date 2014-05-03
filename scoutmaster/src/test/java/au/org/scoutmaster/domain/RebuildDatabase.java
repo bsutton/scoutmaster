@@ -34,12 +34,12 @@ public class RebuildDatabase
 	public void test()
 	{
 		System.out
-				.println("Before you run this script you should have first dropped and recreated the scoutmastertest database");
+		.println("Before you run this script you should have first dropped and recreated the scoutmastertest database");
 		System.out.println("Database has been rebuilt. Run: (password = master$4scout) \n");
 		System.out.println("mysqldump --triggers --routines -u scoutmaster -p scoutmastertest > init.sql\n");
 		System.out.println("Copy init.sql into /src/main/resources/liqibase \n");
 		System.out
-				.println("Edit the init.sql and remove the comments from the SET commands at the start and end of the script.");
+		.println("Edit the init.sql and remove the comments from the SET commands at the start and end of the script.");
 		System.out.println("Added the following lines to the top of the init.sql file. \n");
 		System.out.println("-- liquibase formatted sql");
 		System.out.println("-- changeset bsutton:1");

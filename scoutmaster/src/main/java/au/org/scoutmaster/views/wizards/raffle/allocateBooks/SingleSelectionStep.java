@@ -30,12 +30,12 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class SingleSelectionStep  implements WizardStep, SelectStep
+public class SingleSelectionStep implements WizardStep, SelectStep
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SingleSelectionStep.class);
 
-	private RaffleBookAllocationWizardView setupWizardView;
+	private final RaffleBookAllocationWizardView setupWizardView;
 
 	private ComboBox allocatedToContact;
 
@@ -43,9 +43,9 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 
 	private ComboBox issuedBy;
 
-	private List<Allocation> allocations = new ArrayList<>();
+	private final List<Allocation> allocations = new ArrayList<>();
 
-	public SingleSelectionStep(RaffleBookAllocationWizardView setupWizardView)
+	public SingleSelectionStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 		this.setupWizardView = setupWizardView;
 	}
@@ -56,54 +56,46 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 		return "Select Contact";
 	}
 
-
 	@Override
 	public Component getContent()
 	{
-		VerticalLayout layout = new VerticalLayout();
+		final VerticalLayout layout = new VerticalLayout();
 		layout.setMargin(true);
-		Label label = new Label("<h1>Select the Contact and no. of books to Allocate to them.</h1>",
+		final Label label = new Label("<h1>Select the Contact and no. of books to Allocate to them.</h1>",
 				ContentMode.HTML);
 		label.setContentMode(ContentMode.HTML);
 
 		layout.addComponent(label);
-		
-		MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<RaffleBook>(1, null);
+
+		final MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<RaffleBook>(1, null);
 		overviewForm.setColumnFieldWidth(0, 200);
-		FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
+		final FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
 
-		issuedBy= formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Issued By")
+		this.issuedBy = formHelper.new EntityFieldBuilder<Contact>().setLabel("Issued By")
 				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.issuedBy).getName())
-				.setListClass(Contact.class)
-				.setListFieldName(Contact_.fullname).build();
-		issuedBy.setFilteringMode(FilteringMode.CONTAINS);
-		issuedBy.setTextInputAllowed(true);
+				.setListClass(Contact.class).setListFieldName(Contact_.fullname).build();
+		this.issuedBy.setFilteringMode(FilteringMode.CONTAINS);
+		this.issuedBy.setTextInputAllowed(true);
 
-		noOfBooksField = overviewForm.addTextField("No. of Books");
-		noOfBooksField.setDescription("The no. of books to allocate to this Contact");
+		this.noOfBooksField = overviewForm.addTextField("No. of Books");
+		this.noOfBooksField.setDescription("The no. of books to allocate to this Contact");
 
-		allocatedToContact = formHelper.new EntityFieldBuilder<Contact>()
-				.setLabel("Allocate To")
+		this.allocatedToContact = formHelper.new EntityFieldBuilder<Contact>().setLabel("Allocate To")
 				.setField(new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.allocatedTo).getName())
-				.setListClass(Contact.class)
-				.setListFieldName(Contact_.fullname).build();
-		allocatedToContact.setFilteringMode(FilteringMode.CONTAINS);
-		allocatedToContact.setTextInputAllowed(true);
-		allocatedToContact.setDescription("The Contact to issue tickets to.");
-		
-		
-		allocatedToContact.setDescription("The Contact that issue tickets.");
+				.setListClass(Contact.class).setListFieldName(Contact_.fullname).build();
+		this.allocatedToContact.setFilteringMode(FilteringMode.CONTAINS);
+		this.allocatedToContact.setTextInputAllowed(true);
+		this.allocatedToContact.setDescription("The Contact to issue tickets to.");
 
-		
+		this.allocatedToContact.setDescription("The Contact that issue tickets.");
+
 		layout.addComponent(overviewForm);
-		
-		Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
+
+		final Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
 
 		layout.addComponent(labelAllocate);
-		
-		issuedBy.focus();
 
+		this.issuedBy.focus();
 
 		return layout;
 	}
@@ -112,39 +104,44 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 	public boolean onAdvance()
 	{
 		// check that we have enough books available.
-		RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
-		
-		Raffle raffle = setupWizardView.getRaffle();
-		
-		List<RaffleBook> books = daoRaffleBook.findAllUnallocated(raffle);
-		
-		int requiredBooks = Long.valueOf(noOfBooksField.getValue()).intValue();
-		
-		boolean enough = books.size() >= requiredBooks;
-		
+		final RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
+
+		final Raffle raffle = this.setupWizardView.getRaffle();
+
+		final List<RaffleBook> books = daoRaffleBook.findAllUnallocated(raffle);
+
+		final int requiredBooks = Long.valueOf(this.noOfBooksField.getValue()).intValue();
+
+		final boolean enough = books.size() >= requiredBooks;
+
 		if (!enough)
-			SMNotification.show("There are only " + books.size() + " books available to allocate.", Type.WARNING_MESSAGE);
+		{
+			SMNotification.show("There are only " + books.size() + " books available to allocate.",
+					Type.WARNING_MESSAGE);
+		}
 		else
+		{
 			preAllocateBooks(raffle, getAllocatedContact(), books, requiredBooks);
-		
-		
+		}
+
 		return enough;
 	}
 
-
-	private void preAllocateBooks(Raffle raffle, Contact allocatedTo, List<RaffleBook> books, int requiredBooks)
+	private void preAllocateBooks(final Raffle raffle, final Contact allocatedTo, final List<RaffleBook> books,
+			final int requiredBooks)
 	{
-		List<RaffleBook> bookAllocation = new ArrayList<>();
-		
+		final List<RaffleBook> bookAllocation = new ArrayList<>();
+
 		for (int i = 0; i < requiredBooks; i++)
 		{
 			bookAllocation.add(books.get(i));
 		}
-		Allocation allocation = new Allocation(allocatedTo, bookAllocation);
-		this.allocations .add(allocation);
-		
+		final Allocation allocation = new Allocation(allocatedTo, bookAllocation);
+		this.allocations.add(allocation);
+
 	}
 
+	@Override
 	public boolean onBack()
 	{
 		return true;
@@ -153,18 +150,19 @@ public class SingleSelectionStep  implements WizardStep, SelectStep
 	@SuppressWarnings("unchecked")
 	public Contact getAllocatedContact()
 	{
-		return (Contact) ((EntityItem<Contact>)allocatedToContact.getItem(allocatedToContact.getValue())).getEntity();
+		return ((EntityItem<Contact>) this.allocatedToContact.getItem(this.allocatedToContact.getValue())).getEntity();
 	}
 
 	public int getBookCount()
 	{
-		return Long.valueOf(noOfBooksField.getValue()).intValue();
+		return Long.valueOf(this.noOfBooksField.getValue()).intValue();
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public Contact getIssuedByContact()
 	{
-		return (Contact) ((EntityItem<Contact>)issuedBy.getItem(issuedBy.getValue())).getEntity();
+		return ((EntityItem<Contact>) this.issuedBy.getItem(this.issuedBy.getValue())).getEntity();
 	}
 
 	@Override

@@ -69,13 +69,13 @@ public class QualificationTypeView extends BaseCrudView<QualificationType> imple
 		final JPAContainer<QualificationType> container = new DaoFactory().getDao(QualificationTypeDao.class)
 				.createVaadinContainer();
 		container.sort(new String[]
-		{ QualificationType_.name.getName() }, new boolean[]
-		{ false });
+				{ QualificationType_.name.getName() }, new boolean[]
+						{ false });
 
 		final Builder<QualificationType> builder = new HeadingPropertySet.Builder<QualificationType>();
 		builder.addColumn("Qualification", QualificationType_.name)
-				.addColumn("Description", QualificationType_.description)
-		.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
+		.addColumn("Description", QualificationType_.description)
+				.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
 
 		super.init(QualificationType.class, container, builder.build());
 

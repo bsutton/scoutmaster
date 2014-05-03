@@ -20,7 +20,7 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 	@Override
 	public Set<Tag> convertToModel(final Set<? extends Object> value, final Class<? extends Set<Tag>> targetType,
 			final Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
-			{
+	{
 		HashSet<Tag> result = null;
 		final TagDao daoTag = new TagDao();
 
@@ -50,14 +50,14 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 
 		TagConverter.logger.debug("result: {}", result);
 		return result;
-			}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<? extends Object> convertToPresentation(final Set<Tag> value,
 			final Class<? extends Set<? extends Object>> targetType, final Locale locale)
-					throws com.vaadin.data.util.converter.Converter.ConversionException
-					{
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+	{
 		Set<? extends Object> result = new HashSet<>();
 		if (targetType.getName().equals("java.util.Set"))
 		{
@@ -76,7 +76,7 @@ public class TagConverter implements Converter<Set<? extends Object>, Set<Tag>>
 
 		TagConverter.logger.debug("result: {}", result);
 		return result;
-					}
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

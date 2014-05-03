@@ -19,8 +19,8 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
-		+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
+{ @NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
+				+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
 public class Address extends BaseEntity
 {
 	public static final String FIND_MATCHING = "Address.findMatching";
@@ -101,7 +101,7 @@ public class Address extends BaseEntity
 	@SuppressWarnings("unchecked")
 	static public List<Address> findAddress(final String street, final String city, final String state,
 			final String postcode)
-	{
+			{
 		List<Address> addressList = new ArrayList<Address>();
 		final EntityManager em = EntityManagerProvider.getEntityManager();
 
@@ -113,7 +113,7 @@ public class Address extends BaseEntity
 		addressList = query.getResultList();
 
 		return addressList;
-	}
+			}
 
 	@Override
 	public String getName()

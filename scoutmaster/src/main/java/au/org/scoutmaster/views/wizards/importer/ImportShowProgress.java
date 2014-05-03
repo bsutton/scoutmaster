@@ -120,13 +120,19 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public void taskProgress(final int count, final int max, final ImportItemStatus status)
 	{
-		new UIUpdater(() -> {
-			ImportShowProgress.this.progressDescription.setValue("Imported: " + count + " records.");
-			if (status != null)
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
 			{
-				ImportShowProgress.this.progressTable.addRow(status);
+				ImportShowProgress.this.progressDescription.setValue("Imported: " + count + " records.");
+				if (status != null)
+				{
+					ImportShowProgress.this.progressTable.addRow(status);
+				}
+				ImportShowProgress.this.indicator.setValue((float) count / (float) max);
 			}
-			ImportShowProgress.this.indicator.setValue((float) count / (float) max);
+
 		});
 	}
 
@@ -134,12 +140,17 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	public void taskComplete(final int sent)
 	{
 
-		new UIUpdater(() -> {
-			ImportShowProgress.this.indicator.setValue(1.0f);
-			ImportShowProgress.this.indicator.setVisible(false);
-			ImportShowProgress.this.indicator.setEnabled(false);
-			SMNotification.show("Import has completed.", Type.TRAY_NOTIFICATION);
-			ImportShowProgress.this.progressDescription.setValue("Imported " + sent + " records. Import complete.");
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				ImportShowProgress.this.indicator.setValue(1.0f);
+				ImportShowProgress.this.indicator.setVisible(false);
+				ImportShowProgress.this.indicator.setEnabled(false);
+				SMNotification.show("Import has completed.", Type.TRAY_NOTIFICATION);
+				ImportShowProgress.this.progressDescription.setValue("Imported " + sent + " records. Import complete.");
+			}
 		});
 
 		this.importComplete = true;
@@ -148,7 +159,15 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public void taskItemError(final ImportItemStatus status)
 	{
-		new UIUpdater(() -> ImportShowProgress.this.progressTable.addRow(status));
+		new UIUpdater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+
+				ImportShowProgress.this.progressTable.addRow(status);
+			}
+		});
 
 	}
 

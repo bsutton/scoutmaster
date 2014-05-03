@@ -70,12 +70,12 @@ public class SessionHistoryView extends BaseCrudView<SessionHistory> implements 
 		final JPAContainer<SessionHistory> container = DaoFactory.getGenericDao(SessionHistory.class)
 				.createVaadinContainer();
 		container.sort(new String[]
-		{ SessionHistory_.start.getName() }, new boolean[]
-		{ false });
+				{ SessionHistory_.start.getName() }, new boolean[]
+						{ false });
 
 		final Builder<SessionHistory> builder = new HeadingPropertySet.Builder<SessionHistory>();
 		builder.addColumn("User", SessionHistory_.user).addColumn("Start Time", SessionHistory_.start)
-		.addColumn("End Time", SessionHistory_.end);
+				.addColumn("End Time", SessionHistory_.end);
 
 		super.init(SessionHistory.class, container, builder.build());
 

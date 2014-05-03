@@ -224,7 +224,17 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		this.homeEmailImage = new Image(null, resource);
 		this.homeEmailImage.setDescription("Click to send an email");
-		this.homeEmailImage.addClickListener(clicked -> showMailForm(homeEmail));
+		this.homeEmailImage.addClickListener(new MouseEventLogged.ClickListener()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void clicked(final com.vaadin.event.MouseEvents.ClickEvent event)
+			{
+				showMailForm(homeEmail);
+
+			}
+		});
 		overviewForm.addComponent(this.homeEmailImage);
 		this.homeEmailImage.setVisible(false);
 		overviewForm.newLine();

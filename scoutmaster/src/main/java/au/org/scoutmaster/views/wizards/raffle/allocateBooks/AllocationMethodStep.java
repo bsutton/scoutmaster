@@ -15,10 +15,10 @@ public class AllocationMethodStep implements WizardStep, ValueChangeListener
 
 	private static final long serialVersionUID = 1L;
 	private OptionGroup options;
-	private RaffleBookAllocationWizardView wizard;
+	private final RaffleBookAllocationWizardView wizard;
 	private VerticalLayout layout;
 
-	public AllocationMethodStep(RaffleBookAllocationWizardView setupWizardView)
+	public AllocationMethodStep(final RaffleBookAllocationWizardView setupWizardView)
 	{
 		this.wizard = setupWizardView;
 	}
@@ -32,35 +32,35 @@ public class AllocationMethodStep implements WizardStep, ValueChangeListener
 	@Override
 	public Component getContent()
 	{
-		if (layout == null)
+		if (this.layout == null)
 		{
-			layout = new VerticalLayout();
-			layout.setMargin(true);
+			this.layout = new VerticalLayout();
+			this.layout.setMargin(true);
 
-			Label label = new Label("<h1>Select the Allocation method.</h1>");
+			final Label label = new Label("<h1>Select the Allocation method.</h1>");
 			label.setContentMode(ContentMode.HTML);
-			layout.addComponent(label);
+			this.layout.addComponent(label);
 
-			options = new OptionGroup();
-			options.addItem(AllocationMethod.BulkAllocation);
-			options.addItem(AllocationMethod.SingleAllocation);
-			options.addItem(AllocationMethod.ManualAllocation);
-			options.setValue(AllocationMethod.BulkAllocation);
-			options.setImmediate(true);
-			options.addValueChangeListener(this);
+			this.options = new OptionGroup();
+			this.options.addItem(AllocationMethod.BulkAllocation);
+			this.options.addItem(AllocationMethod.SingleAllocation);
+			this.options.addItem(AllocationMethod.ManualAllocation);
+			this.options.setValue(AllocationMethod.BulkAllocation);
+			this.options.setImmediate(true);
+			this.options.addValueChangeListener(this);
 
-			layout.addComponent(options);
+			this.layout.addComponent(this.options);
 
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			sb.append("<ul><li>Bulk Allocation allows you to automatically allocate a number of books to a list of selected Contacts.</li>");
 			sb.append("<li>Single Allocation allows you to automatically allocate a number of books to a single Contact.</li>");
 			sb.append("<li>Manual Allocation allows you select individual books to allocate to a single Contact.</li></ul>");
 
-			layout.addComponent(new Label(sb.toString(), ContentMode.HTML));
+			this.layout.addComponent(new Label(sb.toString(), ContentMode.HTML));
 
 		}
 
-		return layout;
+		return this.layout;
 	}
 
 	enum AllocationMethod
@@ -69,14 +69,15 @@ public class AllocationMethodStep implements WizardStep, ValueChangeListener
 
 		private String description;
 
-		AllocationMethod(String description)
+		AllocationMethod(final String description)
 		{
 			this.description = description;
 		}
 
+		@Override
 		public String toString()
 		{
-			return description;
+			return this.description;
 		}
 
 	}
@@ -86,7 +87,7 @@ public class AllocationMethodStep implements WizardStep, ValueChangeListener
 	{
 		boolean advance = false;
 
-		if (options.getValue() != null)
+		if (this.options.getValue() != null)
 		{
 			advance = true;
 		}
@@ -100,19 +101,21 @@ public class AllocationMethodStep implements WizardStep, ValueChangeListener
 	}
 
 	@Override
-	public void valueChange(ValueChangeEvent event)
+	public void valueChange(final ValueChangeEvent event)
 	{
-		AllocationMethod method = (AllocationMethod) options.getValue();
+		final AllocationMethod method = (AllocationMethod) this.options.getValue();
 		switch (method)
 		{
 			case BulkAllocation:
-				this.wizard.addAllocationStep(new BulkSelectionStep(wizard), new BulkAllocationStep(wizard));
+				this.wizard.addAllocationStep(new BulkSelectionStep(this.wizard), new BulkAllocationStep(this.wizard));
 				break;
 			case ManualAllocation:
-				this.wizard.addAllocationStep(new ManualSelectionStep(wizard), new ManualAllocationStep(wizard));
+				this.wizard.addAllocationStep(new ManualSelectionStep(this.wizard), new ManualAllocationStep(
+						this.wizard));
 				break;
 			case SingleAllocation:
-				this.wizard.addAllocationStep(new SingleSelectionStep(wizard), new SingleAllocationStep(wizard));
+				this.wizard.addAllocationStep(new SingleSelectionStep(this.wizard), new SingleAllocationStep(
+						this.wizard));
 				break;
 		}
 
