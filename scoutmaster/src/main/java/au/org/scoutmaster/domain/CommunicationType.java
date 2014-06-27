@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "CommunicationType")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = CommunicationType.FIND_BY_NAME, query = "SELECT communicationtype FROM CommunicationType communicationtype where communicationtype.name = :name"), })
+		{ @NamedQuery(name = CommunicationType.FIND_BY_NAME, query = "SELECT communicationtype FROM CommunicationType communicationtype where communicationtype.name = :name"), })
 public class CommunicationType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

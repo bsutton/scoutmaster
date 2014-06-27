@@ -28,7 +28,7 @@ import au.org.scoutmaster.domain.access.User;
 @Table(name = "CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{})
+		{})
 public class CommunicationLog extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

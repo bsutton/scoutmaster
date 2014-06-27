@@ -31,8 +31,8 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 
 		final JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
 		container.sort(new String[]
-		{ BaseEntity_.created.getName() }, new boolean[]
-		{ false });
+				{ BaseEntity_.created.getName() }, new boolean[]
+						{ false });
 
 		final Builder<Note> builder = new HeadingPropertySet.Builder<Note>();
 		builder.addColumn("Subject", Note_.subject).addColumn("Date", Note_.noteDate);
@@ -79,5 +79,11 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	public void associateChild(final Contact newParent, final Note child)
 	{
 		newParent.addNote(child);
+	}
+
+	@Override
+	public String getNewButtonActionLabel()
+	{
+		return "New Note";
 	}
 }

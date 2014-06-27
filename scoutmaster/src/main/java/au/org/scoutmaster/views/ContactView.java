@@ -202,7 +202,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		// fieldOverviewSectionEligibity = overviewForm.addTextField(null);
 		// fieldOverviewSectionEligibity.setReadOnly(true);
 		this.ageField = overviewForm.bindLabel("Age");
-		overviewForm.setComponentAlignment(this.ageField, Alignment.MIDDLE_LEFT);
+		// overviewForm.setComponentAlignment(this.ageField,
+		// Alignment.MIDDLE_LEFT);
 		overviewForm.newLine();
 		overviewForm.bindEnumField("Gender", Contact_.gender, Gender.class);
 		overviewForm.newLine();
@@ -718,8 +719,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-		.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-		.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
+				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
+				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
 		super.init(Contact.class, container, builder.build());
 

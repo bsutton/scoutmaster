@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -31,7 +30,7 @@ public class SectionTryoutType extends BaseEntity
 	/**
 	 * The sections this tryout type applies to.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Section.class)
+	@OneToMany(targetEntity = Section.class)
 	List<Section> sections = new ArrayList<>();
 
 	/**

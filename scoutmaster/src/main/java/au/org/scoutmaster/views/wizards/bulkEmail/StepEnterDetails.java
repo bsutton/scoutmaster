@@ -75,7 +75,7 @@ public class StepEnterDetails implements WizardStep
 		this.from.setWidth("100%");
 		this.from.addValidator(new EmailValidator("'From Email address' must be supplied"));
 		this.from
-		.setDescription("Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
+				.setDescription("Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
 
 		final User user = (User) VaadinSession.getCurrent().getAttribute("user");
 		this.from.setValue(user.getEmailAddress());
@@ -121,9 +121,9 @@ public class StepEnterDetails implements WizardStep
 	{
 		final int recipientCount = this.wizard.getRecipientStep().getRecipientCount();
 		this.recipientCount
-				.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
-						+ pluralize(" has", " have", recipientCount)
-						+ " been selected to recieve the following Email.</b></p>");
+		.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
+				+ pluralize(" has", " have", recipientCount)
+				+ " been selected to recieve the following Email.</b></p>");
 
 		return this.layout;
 	}

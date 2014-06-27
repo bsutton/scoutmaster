@@ -32,7 +32,7 @@ public class HelpPageCache
 			// TODO: put this back to 10 minutes.
 
 			.build(new CacheLoader<HelpPageIdentifier, String>()
-			{
+					{
 				@Override
 				public String load(final HelpPageIdentifier key) throws Exception
 				{
@@ -54,7 +54,7 @@ public class HelpPageCache
 					}
 					return page;
 				}
-			});
+					});
 
 	public String lookupHelpPage(final HelpPageIdentifier id) throws ExecutionException
 	{

@@ -11,7 +11,6 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -48,9 +47,9 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{
-		@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname"),
-		@NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
+		{
+			@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname"),
+			@NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
 public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
@@ -117,31 +116,31 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Phone 1")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
 
-	})
+			})
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
 
-	})
+			})
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
 
-	})
+			})
 	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
@@ -177,8 +176,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@Transient
 	private SectionType sectionEligibility;
 
-	@OneToOne(cascade =
-		{ CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
 	@FormField(displayName = "Address")
 	private Address address = new Address();
 
@@ -289,8 +287,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 *
 	 * Brett is on the LHS of the relationship
 	 */
-	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
+	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, orphanRemoval = true)
 	private final Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
@@ -301,29 +298,23 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 *
 	 * Tristan is on the RHS of the relationship
 	 */
-	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
+	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, orphanRemoval = true)
 	private final Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
 	 * List of tags used to describe this Contact.
 	 */
-	// @ManyToMany(mappedBy = "contacts", cascade = CascadeType.ALL, fetch =
-	// FetchType.EAGER)
-	@ManyToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER, targetEntity = Tag.class)
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Tag.class)
 	private Set<Tag> tags = new HashSet<>();
 
-	@OneToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "attachedContact", orphanRemoval = true)
+	@OneToMany(mappedBy = "attachedContact", orphanRemoval = true)
 	@FormField(displayName = "")
 	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade =
-	{ CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "withContact", targetEntity = CommunicationLog.class, orphanRemoval = true)
+	@OneToMany(mappedBy = "withContact", targetEntity = CommunicationLog.class, orphanRemoval = true)
 	private List<CommunicationLog> activities = new ArrayList<>();
 
 	/**
@@ -883,7 +874,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public void setBirthDate(final String fieldValue)
 	{
 		final DateTimeParser[] parsers =
-		{ DateTimeFormat.forPattern("yyyy-MM-dd").getParser(), DateTimeFormat.forPattern("yyyy/MM/dd").getParser() };
+			{ DateTimeFormat.forPattern("yyyy-MM-dd").getParser(), DateTimeFormat.forPattern("yyyy/MM/dd").getParser() };
 		final DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
 
 		if (fieldValue != null && fieldValue.length() > 0)

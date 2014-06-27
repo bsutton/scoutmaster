@@ -19,6 +19,7 @@ import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
 import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.jasper.ui.JasperReportProperties;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleBookDao;
 import au.org.scoutmaster.domain.BaseEntity_;
@@ -58,9 +59,9 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 
 		final Builder<RaffleAllocation> builder = new HeadingPropertySet.Builder<RaffleAllocation>();
 		builder.addColumn("Allocated To", RaffleAllocation_.allocatedTo)
-		.addColumn("Date Allocated", RaffleAllocation_.dateAllocated)
-		.addColumn("Issued By", RaffleAllocation_.issuedBy)
-		.addColumn("Date Issued", RaffleAllocation_.dateIssued).addColumn("Books", "bookCount");
+				.addColumn("Date Allocated", RaffleAllocation_.dateAllocated)
+				.addColumn("Issued By", RaffleAllocation_.issuedBy)
+				.addColumn("Date Issued", RaffleAllocation_.dateIssued).addColumn("Books", "bookCount");
 
 		super.init(RaffleAllocation.class, container, builder.build());
 	}
@@ -78,7 +79,7 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 			builder.addField(new ReportParameterConstant<Long>("allocationIds", allocation.getId()));
 
 			final SMJasperReportProperties properties = new SMJasperReportProperties("Raffle Allocation",
-					"RaffleAllocation.jasper", builder);
+					"RaffleAllocation.jasper", builder, ScoutmasterViewEnum.RaffleAllocationsReport);
 			return properties;
 		}
 	}
@@ -155,13 +156,13 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
 		return new FilterBuilder()
-		.or(new SimpleStringFilter(new Path(RaffleAllocation_.issuedBy, Contact_.fullname).getName(),
-				filterString, true, false))
+				.or(new SimpleStringFilter(new Path(RaffleAllocation_.issuedBy, Contact_.fullname).getName(),
+						filterString, true, false))
 				.or(new SimpleStringFilter(new Path(RaffleAllocation_.allocatedTo, Contact_.fullname).getName(),
 						filterString, true, false))
-						.or(new SimpleStringFilter(RaffleAllocation_.dateIssued.getName(), filterString, true, false))
-						.or(new SimpleStringFilter(RaffleAllocation_.dateAllocated.getName(), filterString, true, false))
-						.build();
+				.or(new SimpleStringFilter(RaffleAllocation_.dateIssued.getName(), filterString, true, false))
+				.or(new SimpleStringFilter(RaffleAllocation_.dateAllocated.getName(), filterString, true, false))
+				.build();
 	}
 
 	@Override
@@ -186,5 +187,11 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 			final Filter[] aFilters = new Filter[1];
 			return new Or(this.filters.toArray(aFilters));
 		}
+	}
+
+	@Override
+	public String getNewButtonActionLabel()
+	{
+		return "New Allocation";
 	}
 }

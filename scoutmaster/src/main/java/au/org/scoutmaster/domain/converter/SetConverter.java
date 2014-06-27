@@ -26,7 +26,7 @@ public class SetConverter<E, D extends JpaBaseDao<E, Long>> implements Converter
 	@Override
 	public Set<E> convertToModel(final Set<? extends Object> value, final Class<? extends Set<E>> targetType,
 			final Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException
-	{
+			{
 		HashSet<E> result = null;
 
 		SetConverter.logger.debug("converToModel: value: {} valueType: {} targetType: {}", value,
@@ -54,14 +54,14 @@ public class SetConverter<E, D extends JpaBaseDao<E, Long>> implements Converter
 
 		SetConverter.logger.debug("result: {}", result);
 		return result;
-	}
+			}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Set<? extends Object> convertToPresentation(final Set<E> value,
 			final Class<? extends Set<? extends Object>> targetType, final Locale locale)
-					throws com.vaadin.data.util.converter.Converter.ConversionException
-	{
+			throws com.vaadin.data.util.converter.Converter.ConversionException
+					{
 		Set<? extends Object> result = new HashSet<>();
 		if (targetType.getName().equals("java.util.Set"))
 		{
@@ -80,7 +80,7 @@ public class SetConverter<E, D extends JpaBaseDao<E, Long>> implements Converter
 
 		SetConverter.logger.debug("result: {}", result);
 		return result;
-	}
+					}
 
 	@SuppressWarnings("unchecked")
 	@Override

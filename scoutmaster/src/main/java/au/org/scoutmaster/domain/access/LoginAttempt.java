@@ -19,11 +19,11 @@ import au.org.scoutmaster.domain.BaseEntity;
 @Entity
 @Table(name = "LoginAttempt")
 @NamedQueries(
-{
-		@NamedQuery(name = LoginAttempt.FIND_BY_NAME, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt WHERE loginAttempt.user.username = :username"),
-		@NamedQuery(name = LoginAttempt.FIND_LAST_ATTEMPTS, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt WHERE loginAttempt.user.username = :username order by loginAttempt.dateOfAttempt desc"),
-		@NamedQuery(name = LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt "
-				+ "WHERE loginAttempt.user.username = :username and loginAttempt.dateOfAttempt > :fiveMinutesAgo order by loginAttempt.dateOfAttempt desc"), })
+		{
+			@NamedQuery(name = LoginAttempt.FIND_BY_NAME, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt WHERE loginAttempt.user.username = :username"),
+			@NamedQuery(name = LoginAttempt.FIND_LAST_ATTEMPTS, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt WHERE loginAttempt.user.username = :username order by loginAttempt.dateOfAttempt desc"),
+			@NamedQuery(name = LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS, query = "SELECT loginAttempt FROM LoginAttempt loginAttempt "
+					+ "WHERE loginAttempt.user.username = :username and loginAttempt.dateOfAttempt > :fiveMinutesAgo order by loginAttempt.dateOfAttempt desc"), })
 public class LoginAttempt extends BaseEntity
 {
 

@@ -3,6 +3,7 @@ package au.org.scoutmaster.views.reports;
 import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
 @Menu(display = "External Prospects", path = "Members")
@@ -13,7 +14,7 @@ public class ExternalProspectsReport extends JasperReportView
 
 	public ExternalProspectsReport() throws JRException
 	{
-		super(new SMJasperReportProperties("External Prospects", "ExternalProspects.jasper"));
+		super(new SMJasperReportProperties("External Prospects", "ExternalProspects.jasper", ScoutmasterViewEnum.ExternalProspects));
 	}
 
 	@Override

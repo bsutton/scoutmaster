@@ -1,7 +1,6 @@
 package au.org.scoutmaster.views.wizards.raffle.importBooks;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
@@ -57,7 +56,7 @@ public class TicketRangeStep implements WizardStep
 
 		this.fieldValidator = new FieldValidator();
 		this.formLayout = new MultiColumnFormLayout<Integer>(1, null); // new
-																		// ValidatingFieldGroup(dynamicFieldItem));
+		// ValidatingFieldGroup(dynamicFieldItem));
 		this.formLayout.setColumnLabelWidth(0, 150);
 		this.formLayout.setColumnFieldWidth(0, 250);
 		this.formLayout.setSizeFull();
@@ -71,13 +70,13 @@ public class TicketRangeStep implements WizardStep
 		this.firstTicketNoField = this.formLayout.addTextField("First Book Ticket No.");
 		this.noOfBooksField = this.formLayout.addTextField("No. of consecutive Books");
 		this.noOfBooksField
-				.setDescription("The no of Books to be imported. They must be in a consecutive number range!");
+		.setDescription("The no of Books to be imported. They must be in a consecutive number range!");
 		this.lastTicketNoField = this.formLayout.addTextField("Last Ticket No. of Last Book");
 		this.lastTicketNoField
-		.setDescription("Enter the ticket no of the 'last' ticket of the 'last' book. This is used to check that all of the details are correct.");
+				.setDescription("Enter the ticket no of the 'last' ticket of the 'last' book. This is used to check that all of the details are correct.");
 
 		this.firstTicketNoField
-				.addValidator(new IntegerRangeValidator("First Ticket No must be an integer", 0, 6000000));
+		.addValidator(new IntegerRangeValidator("First Ticket No must be an integer", 0, 6000000));
 		this.firstTicketNoField.setConverter(new StringToIntegerConverter());
 		this.firstTicketNoField.setRequired(true);
 		this.fieldValidator.addField(this.firstTicketNoField);
@@ -88,7 +87,7 @@ public class TicketRangeStep implements WizardStep
 		this.fieldValidator.addField(this.noOfBooksField);
 
 		this.lastTicketNoField
-				.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 6000000));
+		.addValidator(new IntegerRangeValidator("Last Ticket No. must be an integer", 1, 6000000));
 		this.lastTicketNoField.setConverter(new StringToIntegerConverter());
 		this.lastTicketNoField.setRequired(true);
 		this.fieldValidator.addField(this.lastTicketNoField);
@@ -130,8 +129,8 @@ public class TicketRangeStep implements WizardStep
 				{
 					final int expectedLast = firstTicketNo + noOfBooks * ticketsPerBook - 1;
 					SMNotification
-					.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
-							+ expectedLast, Type.WARNING_MESSAGE);
+							.show("Please check the first and last ticket no. and the no. of books as the values you entered don't add up. We expected the last ticket to be: "
+									+ expectedLast, Type.WARNING_MESSAGE);
 				}
 				else
 				{
@@ -152,16 +151,8 @@ public class TicketRangeStep implements WizardStep
 		RaffleBook first = null;
 		final Set<RaffleBook> books = raffle.getImportedBooks();
 		final RaffleBook[] sortedBooks = books.toArray(new RaffleBook[]
-		{});
-		Arrays.sort(sortedBooks, new Comparator<RaffleBook>()
-				{
-
-			@Override
-			public int compare(final RaffleBook o1, final RaffleBook o2)
-			{
-				return o1.getFirstNo().intValue() - o2.getFirstNo().intValue();
-			}
-				});
+				{});
+		Arrays.sort(sortedBooks, (o1, o2) -> o1.getFirstNo().intValue() - o2.getFirstNo().intValue());
 
 		for (final RaffleBook book : sortedBooks)
 		{

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -67,7 +66,7 @@ public class Purchase extends BaseEntity
 	@ManyToOne(targetEntity = Contact.class)
 	Contact approvedBy;
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = PurchaseLine.class)
+	@OneToMany(targetEntity = PurchaseLine.class)
 	List<PurchaseLine> purchaseLines = new ArrayList<>();
 
 	@Override

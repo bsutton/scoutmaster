@@ -68,7 +68,7 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<User>().setLabel("Added By").setField(Task_.addedBy)
-				.setListFieldName(User_.username).build();
+		.setListFieldName(User_.username).build();
 
 		overviewForm.newLine();
 
@@ -82,19 +82,19 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskStatus>().setLabel("Status").setField(Task_.taskStatus)
-				.setListFieldName(TaskStatus_.name).build();
+		.setListFieldName(TaskStatus_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskType>().setLabel("Type").setField(Task_.taskType)
-				.setListFieldName(TaskType_.name).build();
+		.setListFieldName(TaskType_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<Contact>().setLabel("With Contact").setField(Task_.withContact)
-				.setListFieldName("fullname").build();
+		.setListFieldName("fullname").build();
 
 		overviewForm.newLine();
 		formHelper.new EntityFieldBuilder<Section>().setLabel("Section").setField(Task_.section)
-				.setListFieldName(Section_.name).build();
+		.setListFieldName(Section_.name).build();
 
 		overviewForm.newLine();
 		overviewForm.colspan(2);
@@ -109,13 +109,14 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 	}
 
 	@Override
-	protected void preNew(final EntityItem<Task> newEntity)
+	protected Task preNew() throws InstantiationException, IllegalAccessException
 	{
+		Task task = super.preNew();
 		final JpaBaseDao<TaskStatus, Long> daoStatus = DaoFactory.getGenericDao(TaskStatus.class);
 		final TaskStatus result = daoStatus.findOneByAttribute(TaskStatus_.name, TaskStatus.NOT_STARTED);
-		final Task task = newEntity.getEntity();
 		task.setStatus(result);
 		task.setAddedBy(SMSession.INSTANCE.getLoggedInUser());
+		return task;
 	}
 
 	@Override
@@ -123,13 +124,13 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 	{
 		final JPAContainer<Task> container = DaoFactory.getGenericDao(Task.class).createVaadinContainer();
 		container.sort(new String[]
-		{ Task_.dueDate.getName() }, new boolean[]
-		{ false });
+				{ Task_.dueDate.getName() }, new boolean[]
+						{ false });
 
 		final Builder<Task> builder = new HeadingPropertySet.Builder<Task>();
 		builder.addColumn("Owner", Task_.addedBy).addColumn("Subject", Task_.subject)
-				.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
-				.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
+		.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
+		.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
 
 		super.init(Task.class, container, builder.build());
 
@@ -143,10 +144,10 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 			return new Or(new SimpleStringFilter(Task_.dueDate.getName(), filterString, true, false),
 					new SimpleStringFilter(new Path(Task_.taskType, TaskType_.name).getName(), filterString, true,
 							false), new SimpleStringFilter(new Path(Task_.withContact, Contact_.lastname).getName(),
-							filterString, true, false), new SimpleStringFilter(new Path(Task_.withContact,
-							Contact_.firstname).getName(), filterString, true, false), new SimpleStringFilter(new Path(
-							Task_.addedBy, User_.username).getName(), filterString, true, false),
-					new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
+									filterString, true, false), new SimpleStringFilter(new Path(Task_.withContact,
+											Contact_.firstname).getName(), filterString, true, false), new SimpleStringFilter(new Path(
+													Task_.addedBy, User_.username).getName(), filterString, true, false),
+													new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
 		}
 		else
 		{

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -42,7 +41,7 @@ public class School extends BaseEntity
 	/**
 	 * A list of the schools locations (if it has multiple campus'
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany()
 	List<Address> location = new ArrayList<>();
 
 	/**
@@ -61,7 +60,7 @@ public class School extends BaseEntity
 	 * The list of youth affiliated with our group (this includes prospects)
 	 * that attend the school.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Contact.class)
+	@OneToMany(targetEntity = Contact.class)
 	List<Contact> youth = new ArrayList<>();
 
 	@Override

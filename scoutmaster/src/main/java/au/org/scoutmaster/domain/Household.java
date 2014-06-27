@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -55,10 +54,10 @@ public class Household extends BaseEntity
 	/**
 	 * Members of the household and their relationship to the household.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Relationship.class)
+	@OneToMany(targetEntity = Relationship.class)
 	private final List<Relationship> members = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Note.class)
+	@OneToMany(targetEntity = Note.class)
 	private final List<Note> notes = new ArrayList<>();
 
 	@ManyToMany(targetEntity = Tag.class)
@@ -67,7 +66,7 @@ public class Household extends BaseEntity
 	/**
 	 * List of interactions with this contact.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = CommunicationLog.class)
+	@OneToMany(targetEntity = CommunicationLog.class)
 	private final List<CommunicationLog> activites = new ArrayList<>();
 
 	@Override

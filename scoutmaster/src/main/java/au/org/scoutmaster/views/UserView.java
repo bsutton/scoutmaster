@@ -40,7 +40,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Users", path = "Admin.Security")
 public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener,
-HelpProvider
+		HelpProvider
 {
 
 	private static final long serialVersionUID = 1L;
@@ -101,12 +101,12 @@ HelpProvider
 	{
 		final JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
 		container.sort(new String[]
-		{ User_.username.getName() }, new boolean[]
-		{ true });
+				{ User_.username.getName() }, new boolean[]
+						{ true });
 
 		final Builder<User> builder = new HeadingPropertySet.Builder<User>();
 		builder.addColumn("Username", User_.username).addColumn("Enabled", User_.enabled)
-				.addColumn("Email", User_.emailAddress);
+		.addColumn("Email", User_.emailAddress);
 
 		super.init(User.class, container, builder.build());
 	}

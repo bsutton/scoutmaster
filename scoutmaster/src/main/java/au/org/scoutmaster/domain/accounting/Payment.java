@@ -42,11 +42,11 @@ public class Payment extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-	{
-			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
-			@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
-			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
-			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) })
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) })
 	MoneyWithTax amount;
 
 	/**
@@ -62,7 +62,7 @@ public class Payment extends BaseEntity
 
 	@Override
 	@edu.umd.cs.findbugs.annotations.SuppressWarnings(value =
-{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
+	{ "NP_UNWRITTEN_FIELD", "UWF_UNWRITTEN_FIELD" }, justification = "JPA injection")
 	public String getName()
 	{
 		return this.paymentDate.toString() + this.note;

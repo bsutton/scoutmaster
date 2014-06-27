@@ -11,7 +11,6 @@ import au.com.vaadinutils.crud.RowChangeListener;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.fields.TagChangeListener;
 import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.addon.jpacontainer.EntityItem;
@@ -78,26 +77,12 @@ public class SearchableContactTable extends VerticalLayout
 		tagSearchLayout.addComponent(this.includeTagField);
 		tagSearchLayout.addComponent(this.excludeTagField);
 
-		this.includeTagField.addChangeListener(new TagChangeListener()
-		{
-			@Override
-			public void onTagListChanged(final ArrayList<Tag> tags)
-			{
-				resetFilter(tags, SearchableContactTable.this.excludeTagField.getTags(),
-						SearchableContactTable.this.searchField.getValue());
-
-			}
-		});
-		this.excludeTagField.addChangeListener(new TagChangeListener()
-		{
-			@Override
-			public void onTagListChanged(final ArrayList<Tag> tags)
-			{
-				resetFilter(SearchableContactTable.this.includeTagField.getTags(), tags,
-						SearchableContactTable.this.searchField.getValue());
-
-			}
-		});
+		this.includeTagField.addChangeListener(tags -> resetFilter(tags,
+				SearchableContactTable.this.excludeTagField.getTags(),
+				SearchableContactTable.this.searchField.getValue()));
+		this.excludeTagField.addChangeListener(tags -> resetFilter(
+				SearchableContactTable.this.includeTagField.getTags(), tags,
+				SearchableContactTable.this.searchField.getValue()));
 
 		tagSearchLayout.setSizeFull();
 		this.searchLayout.addComponent(tagSearchLayout);
@@ -193,7 +178,7 @@ public class SearchableContactTable extends VerticalLayout
 	/**
 	 * if set to true then any contact that does not want bulk communications
 	 * will be excluded from the list.
-	 * 
+	 *
 	 * @param b
 	 */
 	public void excludeDoNotSendBulkCommunications(final boolean exclude)

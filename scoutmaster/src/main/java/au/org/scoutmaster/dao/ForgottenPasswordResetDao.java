@@ -18,7 +18,7 @@ import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements
-Dao<ForgottenPasswordReset, Long>
+		Dao<ForgottenPasswordReset, Long>
 {
 
 	public ForgottenPasswordResetDao()

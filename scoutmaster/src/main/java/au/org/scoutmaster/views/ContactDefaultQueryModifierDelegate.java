@@ -78,7 +78,7 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 				fullTextSearchPredicate = builder.or(builder.like(
 						builder.function("date_format", String.class, fromContact.get(Contact_.birthDate),
 								builder.literal("%Y-%m-%d")), "%" + this.fullTextSearch.toUpperCase() + "%"),
-						fullTextSearchPredicate);
+								fullTextSearchPredicate);
 
 				// Section
 				fullTextSearchPredicate = builder.or(
@@ -145,7 +145,7 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 
 	private Subquery<Long> buildWhereIn(final CriteriaQuery<?> query, final CriteriaBuilder builder,
 			final ArrayList<Tag> tags)
-			{
+	{
 		Subquery<Long> subquery = null;
 
 		if (tags.size() > 0)
@@ -179,6 +179,6 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 
 		}
 		return subquery;
-			}
+	}
 
 }

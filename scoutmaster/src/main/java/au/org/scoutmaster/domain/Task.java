@@ -28,7 +28,7 @@ import au.org.scoutmaster.domain.access.User;
 @Table(name = "Task")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{})
+		{})
 public class Task extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -110,8 +110,8 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 			final RaffleDao daoRaffle = new DaoFactory().getRaffleDao();
 			@SuppressWarnings("unchecked")
 			final List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
-			{ Raffle_.startDate }, new boolean[]
-			{ false });
+					{ Raffle_.startDate }, new boolean[]
+							{ false });
 			if (list.size() > 0)
 			{
 				raffle = list.get(0);
@@ -172,7 +172,7 @@ public class SelectRaffleStep extends SingleEntityWizardStep<Raffle> implements 
 		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
-				.setDescription("The date the raffle ticksets need to be collected by.");
+		.setDescription("The date the raffle ticksets need to be collected by.");
 		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
 				"The date the raffle ticksets need to be returned to Branch.");
 

@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,7 +34,7 @@ import au.com.vaadinutils.crud.CrudEntity;
 @Table(name = "Event")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
+		{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
 public class Event extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -83,7 +82,7 @@ public class Event extends BaseEntity implements CrudEntity
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date eventEndDateTime = new Date();
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
 	private Address location = new Address();
 
 	/**

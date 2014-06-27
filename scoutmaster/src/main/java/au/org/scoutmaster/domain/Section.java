@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -56,7 +55,7 @@ public class Section extends BaseEntity
 	 * The list of youth members attached to this section.
 	 *
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Contact.class)
+	@OneToMany(targetEntity = Contact.class)
 	List<Contact> youthMembers = new ArrayList<>();
 
 	/**
@@ -70,7 +69,7 @@ public class Section extends BaseEntity
 	 * A list of youth members who are currently trying out to see if they would
 	 * like to join this scout section.
 	 */
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = SectionTryout.class)
+	@OneToMany(targetEntity = SectionTryout.class)
 	List<SectionTryout> trialMembers = new ArrayList<>();
 
 	/**

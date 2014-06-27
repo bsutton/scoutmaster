@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -27,7 +26,7 @@ public class CreditNote extends BaseEntity
 
 	Long creditNoteNumber;
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = CreditNoteLine.class)
+	@OneToMany(targetEntity = CreditNoteLine.class)
 	List<CreditNoteLine> creditNoteLines = new ArrayList<>();
 
 	/**

@@ -35,8 +35,8 @@ public class StepSelectRecipients implements WizardStep
 
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("First Name", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-		.addColumn("Birth Date", Contact_.birthDate).addColumn("Section", Contact_.section)
-		.addColumn("Email", Contact_.homeEmail);
+				.addColumn("Birth Date", Contact_.birthDate).addColumn("Section", Contact_.section)
+				.addColumn("Email", Contact_.homeEmail);
 
 		this.contactTable = new SearchableContactTable(contactContainer, builder.build());
 		this.contactTable.excludeDoNotSendBulkCommunications(true);

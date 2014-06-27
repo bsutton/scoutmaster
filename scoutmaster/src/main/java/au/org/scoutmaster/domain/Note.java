@@ -22,8 +22,8 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "Note")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
-		@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })
+		{ @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
+			@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })
 public class Note extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

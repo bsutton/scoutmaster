@@ -21,6 +21,7 @@ import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.jasper.ui.JasperReportPopUp;
 import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleAllocationDao;
 import au.org.scoutmaster.dao.RaffleBookDao;
@@ -93,8 +94,8 @@ public class SingleAllocationStep implements WizardStep, ClickListener, Allocati
 		container.addContainerFilter(new Compare.Equal(
 				new Path(RaffleBook_.raffleAllocation, BaseEntity_.id).getName(), this.raffleAllocation.getId()));
 		container.sort(new Object[]
-		{ RaffleBook_.firstNo.getName() }, new boolean[]
-		{ true });
+				{ RaffleBook_.firstNo.getName() }, new boolean[]
+						{ true });
 
 		final Builder<RaffleBook> builder = new HeadingPropertySet.Builder<>();
 		builder.addColumn("First Ticket No.", RaffleBook_.firstNo);
@@ -114,7 +115,7 @@ public class SingleAllocationStep implements WizardStep, ClickListener, Allocati
 		final Label labelPrint = new Label(
 				"<p></p><h3>You can now print an 'Allocation Acknowledgement Form' for the Member to sign acknowledging that they have recieved the tickets.</h3>"
 						+ "You should print two copies, one for the parent and the second should be signed by the Parent and retained by Group.",
-				ContentMode.HTML);
+						ContentMode.HTML);
 
 		layout.addComponent(labelPrint);
 
@@ -225,7 +226,7 @@ public class SingleAllocationStep implements WizardStep, ClickListener, Allocati
 		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 		builder.addField(new ReportParameterConstant<Long>("allocationIds", this.raffleAllocation.getId()));
 		final JasperReportProperties properties = new SMJasperReportProperties("Raffle Allocation",
-				"RaffleAllocation.jasper", builder);
+				"RaffleAllocation.jasper", builder, ScoutmasterViewEnum.RaffleAllocationsReport);
 
 		final JasperReportPopUp window = new JasperReportPopUp(properties);
 		UI.getCurrent().addWindow(window);

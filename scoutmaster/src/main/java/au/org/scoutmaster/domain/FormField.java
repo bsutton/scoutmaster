@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 // Make this annotation accessible at runtime via reflection.
 @Target(
-		{ ElementType.FIELD })
+{ ElementType.FIELD })
 // This annotation can only be applied to fields.
 public @interface FormField
 {

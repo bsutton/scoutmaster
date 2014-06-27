@@ -13,6 +13,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.wizards.bulkJasperEmail.JasperProxy;
 import au.com.vaadinutils.wizards.bulkJasperEmail.Recipient;
 import au.com.vaadinutils.wizards.bulkJasperEmail.WizardView;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
@@ -113,7 +114,7 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	{
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-				.addColumn("Birth Date", Contact_.birthDate);
+		.addColumn("Birth Date", Contact_.birthDate);
 
 		return builder.build();
 	}
@@ -147,9 +148,9 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public JasperProxy getJasperProxy() throws JRException
 	{
-		final SMJasperReportProperties properties = new SMJasperReportProperties("Member Report", getJasperReport());
-		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", properties,
-				new JasperEmailSettingsImpl());
+		final SMJasperReportProperties properties = new SMJasperReportProperties("Member Report", getJasperReport(), ScoutmasterViewEnum.Member);
+		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(), properties);
+				
 	}
 
 	@Override

@@ -27,8 +27,8 @@ public class RaffleDao extends JpaBaseDao<Raffle, Long> implements Dao<Raffle, L
 		final JPAContainer<Raffle> container = super.createVaadinContainer();
 
 		container.sort(new Object[]
-		{ Raffle_.startDate.getName() }, new boolean[]
-		{ true });
+				{ Raffle_.startDate.getName() }, new boolean[]
+						{ true });
 
 		return container;
 	}

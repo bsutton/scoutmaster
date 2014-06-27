@@ -14,6 +14,7 @@ import au.com.vaadinutils.jasper.parameter.ReportParameter;
 import au.com.vaadinutils.jasper.ui.CleanupCallback;
 import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 
 import com.vaadin.server.VaadinSession;
 
@@ -25,20 +26,24 @@ public class SMJasperReportProperties implements JasperReportProperties
 	private final String reportTitle;
 	private final String reportFilename;
 	private final ReportFilterUIBuilder builder;
+	private final ScoutmasterViewEnum reportView;
 
-	public SMJasperReportProperties(final String reportTitle, final String reportFilename)
+	public SMJasperReportProperties(final String reportTitle, final String reportFilename,
+			ScoutmasterViewEnum reportView)
 	{
 		this.reportTitle = reportTitle;
 		this.reportFilename = reportFilename;
 		this.builder = null;
+		this.reportView = reportView;
 	}
 
 	public SMJasperReportProperties(final String reportTitle, final String reportFilename,
-			final ReportFilterUIBuilder builder)
+			final ReportFilterUIBuilder builder, ScoutmasterViewEnum reportView)
 	{
 		this.reportTitle = reportTitle;
 		this.reportFilename = reportFilename;
 		this.builder = builder;
+		this.reportView = reportView;
 	}
 
 	@Override
@@ -59,15 +64,16 @@ public class SMJasperReportProperties implements JasperReportProperties
 		return this.builder;
 	}
 
-	@Override
 	/**
-	 * By default a NOOP you need to overload this method if you need to prepare data for you report.
+	 * By default a NOOP you need to overload this method if you need to prepare
+	 * data for you report.
 	 */
-	public List<ReportParameter<?>> prepareData(final Collection<ReportParameter<?>> params,
-			final CleanupCallback cleanupCallback) throws Exception
-			{
+	@Override
+	public List<ReportParameter<?>> prepareData(Collection<ReportParameter<?>> params, String reportFileName,
+			CleanupCallback cleanupCallback) throws Exception
+	{
 		return null;
-			}
+	}
 
 	@Override
 	public String getHeaderFooterTemplateName()
@@ -147,5 +153,23 @@ public class SMJasperReportProperties implements JasperReportProperties
 	private File getDocumentBase()
 	{
 		return VaadinSession.getCurrent().getService().getBaseDirectory();
+	}
+
+	@Override
+	public Class<? extends JasperReportProperties> getReportClass()
+	{
+		return this.getClass();
+	}
+
+	@Override
+	public String getUserEmailAddress()
+	{
+		return SMSession.INSTANCE.getLoggedInUser().getEmailAddress();
+	}
+
+	@Override
+	public Enum<?> getReportIdentifier()
+	{
+		return this.reportView;
 	}
 }

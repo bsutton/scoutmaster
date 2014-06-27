@@ -166,7 +166,7 @@ public class DaoFactory
 			if (this.em != null)
 			{
 				dao = (JpaBaseDao<?, ?>) daoClass.getDeclaredConstructor(new Class[]
-				{ EntityManager.class }).newInstance(this.em);
+						{ EntityManager.class }).newInstance(this.em);
 			}
 			else
 			{

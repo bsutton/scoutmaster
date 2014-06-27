@@ -21,7 +21,7 @@ import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.SMSProvider;
 
 public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>,
-CancelListener
+		CancelListener
 {
 	Logger logger = LogManager.getLogger(SendMessageTask.class);
 	private final Message message;

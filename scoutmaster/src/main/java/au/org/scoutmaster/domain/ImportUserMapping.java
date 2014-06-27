@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,7 +24,7 @@ import javax.persistence.Table;
 @Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(
-{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
+		{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
 public class ImportUserMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +35,7 @@ public class ImportUserMapping extends BaseEntity
 	@Column(unique = true)
 	private String mappingName;
 
-	@OneToMany(mappedBy = "userMapping", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = ImportColumnFieldMapping.class)
+	@OneToMany(mappedBy = "userMapping", fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = ImportColumnFieldMapping.class)
 	// @JoinColumn(name="importUserMappingId")
 	private final List<ImportColumnFieldMapping> columnFieldMappings = new ArrayList<>();
 

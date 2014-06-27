@@ -94,7 +94,7 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
-				.setDescription("The date the raffle ticksets need to be collected by.");
+		.setDescription("The date the raffle ticksets need to be collected by.");
 		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
 				"The date the raffle ticksets need to be returned to Branch.");
 
@@ -137,7 +137,7 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 
 		final Builder<Raffle> builder = new HeadingPropertySet.Builder<Raffle>();
 		builder.addColumn("Name", Raffle_.name).addColumn("Start Date", Raffle_.startDate)
-				.addColumn("Collection Date", Raffle_.collectionsDate);
+		.addColumn("Collection Date", Raffle_.collectionsDate);
 
 		super.init(Raffle.class, container, builder.build());
 	}

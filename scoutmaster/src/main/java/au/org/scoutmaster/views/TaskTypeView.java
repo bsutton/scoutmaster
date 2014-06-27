@@ -59,8 +59,8 @@ public class TaskTypeView extends BaseCrudView<TaskType> implements View, Select
 	{
 		final JPAContainer<TaskType> container = DaoFactory.getGenericDao(TaskType.class).createVaadinContainer();
 		container.sort(new String[]
-		{ TaskType_.name.getName() }, new boolean[]
-		{ true });
+				{ TaskType_.name.getName() }, new boolean[]
+						{ true });
 
 		final Builder<TaskType> builder = new HeadingPropertySet.Builder<TaskType>();
 		builder.addColumn("TaskType", TaskType_.name).addColumn("Description", TaskType_.description);

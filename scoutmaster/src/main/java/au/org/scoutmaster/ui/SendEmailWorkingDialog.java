@@ -27,7 +27,7 @@ import com.vaadin.ui.UI;
  * Designed to show a 'working' dialog whilst sending a single email.
  *
  * Uses a builder pattern to construct the email.
- * 
+ *
  * @author bsutton
  *
  */
@@ -83,50 +83,41 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 	{
 
 		UI.getCurrent().addWindow(this);
-		setWorker(new Runnable() // (String fromEmailAddress, ArrayList<String>
-									// toEmailAddresses, String subject, String
-									// message)
+		setWorker(() -> {
+			final EntityManager em = EntityManagerProvider.createEntityManager();
+			try (Transaction t = new Transaction(em))
+			{
+
+				final SMTPSettingsDao settingsDao = new DaoFactory(em).getSMTPSettingsDao();
+				final SMTPServerSettings settings = settingsDao.findSettings();
+
+				final Email email = new SimpleEmail();
+				email.setHostName(settings.getSmtpFQDN());
+				email.setSmtpPort(settings.getSmtpPort());
+				if (settings.isAuthRequired())
 				{
+					email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings.getPassword()));
+				}
+				email.setSSLOnConnect(true);
+				try
+				{
+					email.setFrom(SendEmailWorkingDialog.this.fromEmailAddress);
+					email.setSubject(SendEmailWorkingDialog.this.subject);
+					email.setMsg(SendEmailWorkingDialog.this.message);
+					email.addTo(SendEmailWorkingDialog.this.toEmailAddresses.toArray(new String[]
+							{}));
+					email.send();
+				}
+				catch (final EmailException e)
+				{
+					SendEmailWorkingDialog.logger.error(e, e);
+					SMNotification.show(e, Type.ERROR_MESSAGE);
+				}
+				t.commit();
 
-					@Override
-					public void run()
-					{
-						final EntityManager em = EntityManagerProvider.createEntityManager();
-						try (Transaction t = new Transaction(em))
-						{
+			}
 
-							final SMTPSettingsDao settingsDao = new DaoFactory(em).getSMTPSettingsDao();
-							final SMTPServerSettings settings = settingsDao.findSettings();
-
-							final Email email = new SimpleEmail();
-							email.setHostName(settings.getSmtpFQDN());
-							email.setSmtpPort(settings.getSmtpPort());
-							if (settings.isAuthRequired())
-							{
-								email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings
-										.getPassword()));
-							}
-							email.setSSLOnConnect(true);
-							try
-							{
-								email.setFrom(SendEmailWorkingDialog.this.fromEmailAddress);
-								email.setSubject(SendEmailWorkingDialog.this.subject);
-								email.setMsg(SendEmailWorkingDialog.this.message);
-								email.addTo(SendEmailWorkingDialog.this.toEmailAddresses.toArray(new String[]
-								{}));
-								email.send();
-							}
-							catch (final EmailException e)
-							{
-								SendEmailWorkingDialog.logger.error(e, e);
-								SMNotification.show(e, Type.ERROR_MESSAGE);
-							}
-							t.commit();
-
-						}
-
-					}
-				}, this);
+		}, this);
 
 	}
 

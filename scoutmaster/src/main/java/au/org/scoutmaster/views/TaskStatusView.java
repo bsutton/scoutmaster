@@ -59,8 +59,8 @@ public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Se
 	{
 		final JPAContainer<TaskStatus> container = DaoFactory.getGenericDao(TaskStatus.class).createVaadinContainer();
 		container.sort(new String[]
-		{ TaskStatus_.name.getName() }, new boolean[]
-		{ true });
+				{ TaskStatus_.name.getName() }, new boolean[]
+						{ true });
 
 		final Builder<TaskStatus> builder = new HeadingPropertySet.Builder<TaskStatus>();
 		builder.addColumn("TaskStatus", TaskStatus_.name).addColumn("Description", TaskStatus_.description);

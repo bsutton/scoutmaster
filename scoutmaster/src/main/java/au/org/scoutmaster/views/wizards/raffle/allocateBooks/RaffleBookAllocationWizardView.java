@@ -28,7 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Allocate Books", path = "Raffle")
 public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener,
-		HelpProvider
+HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 

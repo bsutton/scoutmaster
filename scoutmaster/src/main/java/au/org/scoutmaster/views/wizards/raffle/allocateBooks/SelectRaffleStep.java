@@ -63,8 +63,8 @@ public class SelectRaffleStep implements WizardStep
 		Raffle raffle = null;
 		@SuppressWarnings("unchecked")
 		final List<Raffle> list = daoRaffle.findAll(new SingularAttribute[]
-		{ Raffle_.startDate }, new boolean[]
-		{ false });
+				{ Raffle_.startDate }, new boolean[]
+						{ false });
 
 		if (list.size() > 0)
 		{

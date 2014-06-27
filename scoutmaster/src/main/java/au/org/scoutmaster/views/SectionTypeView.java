@@ -69,21 +69,21 @@ public class SectionTypeView extends BaseCrudView<SectionType> implements View, 
 		final QualificationTypeDao daoQualificationType = new DaoFactory().getDao(QualificationTypeDao.class);
 
 		overviewForm.getFormHelper().new TwinColSelectBuilder<QualificationType>()
-		.setField(SectionType_.leaderRequirements).setContainer(daoQualificationType.createVaadinContainer())
-		.setForm(overviewForm).setListFieldName(QualificationType_.name).setLabel("Leader Qualifications")
-		.build();
+				.setField(SectionType_.leaderRequirements).setContainer(daoQualificationType.createVaadinContainer())
+				.setForm(overviewForm).setListFieldName(QualificationType_.name).setLabel("Leader Qualifications")
+				.build();
 		overviewForm.newLine();
 
 		overviewForm.getFormHelper().new TwinColSelectBuilder<QualificationType>()
-		.setField(SectionType_.assistentLeaderRequirements)
-		.setContainer(daoQualificationType.createVaadinContainer()).setForm(overviewForm)
-		.setListFieldName(QualificationType_.name).setLabel("Assistant Leader Qualifications").build();
+				.setField(SectionType_.assistentLeaderRequirements)
+				.setContainer(daoQualificationType.createVaadinContainer()).setForm(overviewForm)
+				.setListFieldName(QualificationType_.name).setLabel("Assistant Leader Qualifications").build();
 		overviewForm.newLine();
 
 		overviewForm.getFormHelper().new TwinColSelectBuilder<QualificationType>()
-		.setField(SectionType_.parentHelperRequirements)
-		.setContainer(daoQualificationType.createVaadinContainer()).setForm(overviewForm)
-		.setListFieldName(QualificationType_.name).setLabel("Parent Helper Qualifications").build();
+				.setField(SectionType_.parentHelperRequirements)
+				.setContainer(daoQualificationType.createVaadinContainer()).setForm(overviewForm)
+				.setListFieldName(QualificationType_.name).setLabel("Parent Helper Qualifications").build();
 
 		layout.addComponent(overviewForm);
 
@@ -95,12 +95,12 @@ public class SectionTypeView extends BaseCrudView<SectionType> implements View, 
 	{
 		final JPAContainer<SectionType> container = new DaoFactory().getSectionTypeDao().createVaadinContainer();
 		container.sort(new String[]
-				{ SectionType_.name.getName() }, new boolean[]
-						{ false });
+		{ SectionType_.name.getName() }, new boolean[]
+		{ false });
 
 		final Builder<SectionType> builder = new HeadingPropertySet.Builder<SectionType>();
 		builder.addColumn("Section", SectionType_.name).addColumn("Description", SectionType_.description)
-				.addColumn("Starting Age", SectionType_.startingAge).addColumn("End Age", SectionType_.endingAge);
+		.addColumn("Starting Age", SectionType_.startingAge).addColumn("End Age", SectionType_.endingAge);
 
 		super.init(SectionType.class, container, builder.build());
 

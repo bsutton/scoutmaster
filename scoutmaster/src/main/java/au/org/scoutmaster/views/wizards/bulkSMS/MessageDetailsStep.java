@@ -94,7 +94,7 @@ public class MessageDetailsStep implements WizardStep
 		}
 		this.from.setValue(senderID);
 		this.from
-		.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
+				.setDescription("Enter your mobile phone no. so that all messages appear to come from you and recipients can send a text directly back to your phone.");
 		this.subject = this.formLayout.bindTextField("Subject", "subject");
 		this.subject.addValidator(new StringLengthValidator("'Subject' must be supplied", 1, 255, false));
 		this.message = this.formLayout.bindTextAreaField("Message", "message", 4);

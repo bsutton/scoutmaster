@@ -1,7 +1,6 @@
 package au.org.scoutmaster.util;
 
 import rx.Observable;
-import rx.Observable.OnSubscribeFunc;
 import rx.Observer;
 import rx.Subscription;
 import au.com.vaadinutils.listener.ClickEventLogged.ClickListener;
@@ -40,28 +39,13 @@ public enum ButtonEventSource
 		@Override
 		public void unsubscribe()
 		{
-			UI.getCurrent().access(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					ClickSubscription.this.button.removeClickListener(ClickSubscription.this.listener);
-
-				}
-			});
+			UI.getCurrent().access(
+					() -> ClickSubscription.this.button.removeClickListener(ClickSubscription.this.listener));
 		}
 	}
 
 	public static Observable<ClickEvent> fromActionOf(final Button button)
 	{
-		return Observable.create(new OnSubscribeFunc<ClickEvent>()
-				{
-			@Override
-			public Subscription onSubscribe(final Observer<? super ClickEvent> observer)
-			{
-				return new ClickSubscription(observer, button);
-			}
-
-		});
+		return Observable.create(observer -> new ClickSubscription(observer, button));
 	}
 }

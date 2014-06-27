@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -58,7 +57,7 @@ public class Invoice extends BaseEntity
 	@Transient
 	Date dueDate;
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = InvoiceLine.class)
+	@OneToMany(targetEntity = InvoiceLine.class)
 	List<InvoiceLine> invoiceLines = new ArrayList<>();
 
 	/**
