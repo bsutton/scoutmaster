@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Fixed mis-spelt column name. -->
+
+	<changeSet author="bsutton" id="1.0.53">
+		<renameColumn tableName="PurchaseLine" oldColumnName="itemCostTaxPrecentageValue"
+			newColumnName="itemCostTaxPercentageValue" columnDataType="float" />
+		<renameColumn tableName="PurchaseLine" oldColumnName="lineTotalTaxPrecentageValue"
+			newColumnName="lineTotalTaxPercentageValue" columnDataType="float" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.53.1">
+		<addColumn tableName="SectionTryout">
+			<column name="costtMoneyValue" type="float" />
+			<column name="costMoneyPrecision" type="int(8)" />
+			<column name="costTaxPrecentageValue" type="float" />
+			<column name="costTaxPercentagePrecision" type="int(8)" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.53.2">
+		<dropColumn columnName="FIXEDDOUBLEVALUE" tableName="SectionTryout" />
+		<dropColumn columnName="TAXPERCENTAGE" tableName="SectionTryout" />
+		<dropColumn columnName="MONEY" tableName="SectionTryout" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.53.3">
+		<createTable tableName="TransitionMember">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="youthMember_ID" type="BIGINT(19)" />
+			<column name="transitionSupervisor_ID" type="BIGINT(19)" />
+			<column name="fromSection_ID" type="BIGINT(19)" />
+			<column name="toSection_ID" type="BIGINT(19)" />
+			<column name="expectedStartDate" type="date" />
+			<column name="expextedCompletionDate" type="date" />
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.53.4">
+		<addForeignKeyConstraint baseColumnNames="youthMember_ID"
+			baseTableName="TransitionMember" constraintName="FK_TransitionMember_YouthMember_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="transitionSupervisor_ID"
+			baseTableName="TransitionMember" constraintName="FK_TransitionMember_TransitionSupervisor_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="fromSection_ID"
+			baseTableName="TransitionMember" constraintName="FK_TransitionMember_fromSection_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+		<addForeignKeyConstraint baseColumnNames="toSection_ID"
+			baseTableName="TransitionMember" constraintName="FK_TransitionMember_toSection_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Section" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.53.5">
+		<addColumn tableName="GroupRole_Tag">
+			<column name="contact_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="Household_Tag">
+			<column name="contact_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="Organisation_Tag">
+			<column name="contact_id" type="BIGINT(19)" />
+		</addColumn>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.53.6">
+		<addForeignKeyConstraint baseColumnNames="contact_id"
+			baseTableName="GroupRole_Tag" constraintName="FK_GroupRoleTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="contact_id"
+			baseTableName="Household_Tag" constraintName="FK_HouseholdTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="contact_id"
+			baseTableName="Organisation_Tag" constraintName="FK_OrganisationTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.53.7">
+		<renameColumn tableName="SectionTryout" oldColumnName="costtMoneyValue"
+			newColumnName="costMoneyValue" columnDataType="float" />
+		<renameColumn tableName="SectionTryout" oldColumnName="costTaxPrecentageValue"
+			newColumnName="costTaxPercentageValue" columnDataType="float" />
+		<renameColumn tableName="PurchaseLine" oldColumnName="itemCostTaxPrecentageValue"
+			newColumnName="itemCostTaxPercentageValue" columnDataType="float" />
+		<renameColumn tableName="PurchaseLine" oldColumnName="lineTotalTaxPrecentageValue"
+			newColumnName="lineTotalTaxPercentageValue" columnDataType="float" />
+			
+			
+	</changeSet>
+
+
+</databaseChangeLog>
