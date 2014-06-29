@@ -51,7 +51,9 @@
     <inherits name="org.vaadin.peter.buttongroup.ButtonGroupWidgetset" />
     
 
-    <inherits name="org.vaadin.hene.popupbutton.widgetset.PopupbuttonWidgetset" />
+    
 
-    <inherits name="org.tepi.filtertable.gwt.FilterTableWidgetset" />
+    
+
+    <inherits name="com.github.wolfie.refresher.RefresherWidgetset" />
 </module>
