@@ -93,6 +93,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 			(Maven artifact log4j-jcl) are on your classpath and add the following property 
 			to your persistence unit: -->
 			<!-- property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog"/ -->
+			<!--property name="eclipselink.weaving" value="static"/-->
 		</properties>
 	</persistence-unit>
 
