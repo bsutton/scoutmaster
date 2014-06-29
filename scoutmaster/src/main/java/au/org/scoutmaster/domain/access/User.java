@@ -171,6 +171,7 @@ public class User extends BaseEntity
 	/*
 	 * returns a hashed and salted version of the password
 	 */
+	@Transient
 	public String getPassword()
 	{
 		// You can't really get the password.

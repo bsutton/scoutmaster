@@ -4,6 +4,9 @@ import java.sql.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -64,6 +67,12 @@ public class SectionTryout extends BaseEntity
 	 * leader may organise a discount for this youth to do a tryout.
 	 */
 	@Embedded
+	@AttributeOverrides(
+			{
+				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue")),
+				@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision")),
+				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue")),
+				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision")) })
 	MoneyWithTax cost;
 
 	/*
