@@ -5,7 +5,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class InvoiceView implements View
 {
-
+	private static final long serialVersionUID = 1L;
 	public static final String NAME = "InvoiceView";
 
 	@Override
