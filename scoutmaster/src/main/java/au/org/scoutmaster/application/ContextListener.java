@@ -33,7 +33,7 @@ public class ContextListener implements ServletContextListener
 		try (Connection conn = getConnection())
 		{
 			final String masterPath = sce.getServletContext().getRealPath(
-					new File("WEB-INF/classes/", ContextListener.MASTER_XML).getPath());
+					new File("/WEB-INF/classes/", ContextListener.MASTER_XML).getPath());
 			ContextListener.logger.info("Initialising liquibase");
 
 			final File masterFile = new File(masterPath);
