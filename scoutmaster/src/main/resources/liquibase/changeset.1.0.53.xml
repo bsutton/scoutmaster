@@ -18,7 +18,7 @@
 		<addColumn tableName="SectionTryout">
 			<column name="costtMoneyValue" type="float" />
 			<column name="costMoneyPrecision" type="int(8)" />
-			<column name="costTaxPrecentageValue" type="float" />
+			<column name="costTaxPercentageValue" type="float" />
 			<column name="costTaxPercentagePrecision" type="int(8)" />
 		</addColumn>
 	</changeSet>
@@ -94,20 +94,5 @@
 			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
 			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
 	</changeSet>
-
-
-	<changeSet author="bsutton" id="1.0.53.7">
-		<renameColumn tableName="SectionTryout" oldColumnName="costtMoneyValue"
-			newColumnName="costMoneyValue" columnDataType="float" />
-		<renameColumn tableName="SectionTryout" oldColumnName="costTaxPrecentageValue"
-			newColumnName="costTaxPercentageValue" columnDataType="float" />
-		<renameColumn tableName="PurchaseLine" oldColumnName="itemCostTaxPrecentageValue"
-			newColumnName="itemCostTaxPercentageValue" columnDataType="float" />
-		<renameColumn tableName="PurchaseLine" oldColumnName="lineTotalTaxPrecentageValue"
-			newColumnName="lineTotalTaxPercentageValue" columnDataType="float" />
-			
-			
-	</changeSet>
-
 
 </databaseChangeLog>

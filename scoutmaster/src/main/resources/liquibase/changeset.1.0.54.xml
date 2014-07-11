@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Fixed mis-spelt column name. -->
+
+
+	<changeSet author="bsutton" id="1.0.54.1">
+		<dropForeignKeyConstraint baseTableName="GroupRole_Tag"
+			constraintName="FK_GroupRoleTag_CONTACT_ID" />
+		<dropForeignKeyConstraint baseTableName="Household_Tag"
+			constraintName="FK_HouseholdTag_CONTACT_ID" />
+		<dropForeignKeyConstraint baseTableName="Organisation_Tag"
+			constraintName="FK_OrganisationTag_CONTACT_ID" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.54.2">
+		<renameColumn tableName="GroupRole_Tag" oldColumnName="contact_id"
+			newColumnName="contacts_id" columnDataType="bigint(19)" />
+		<renameColumn tableName="Household_Tag" oldColumnName="contact_id"
+			newColumnName="contacts_id" columnDataType="bigint(19)" />
+		<renameColumn tableName="Organisation_Tag" oldColumnName="contact_id"
+			newColumnName="contacts_id" columnDataType="bigint(19)" />
+
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.54.3">
+		<addForeignKeyConstraint baseColumnNames="contacts_id"
+			baseTableName="GroupRole_Tag" constraintName="FK_GroupRoleTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="contacts_id"
+			baseTableName="Household_Tag" constraintName="FK_HouseholdTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+		<addForeignKeyConstraint baseColumnNames="contacts_id"
+			baseTableName="Organisation_Tag" constraintName="FK_OrganisationTag_CONTACT_ID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="ID" referencedTableName="Contact" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.54.4">
+		<createTable tableName="Section_TransitionMember">
+			<column name="Section_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="TransitionMember_ID" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+
+
+</databaseChangeLog>
