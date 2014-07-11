@@ -91,12 +91,12 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-		.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-		.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
+				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
+				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
 		final JPAContainer<Contact> container = new DaoFactory().getContactDao().createVaadinContainer();
 		this.selectableTable = new SearchableSelectableEntityTable<Contact>(container, builder.build())
-				{
+		{
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -118,16 +118,22 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 				}
 
 			}
-				};
 
-				this.selectableTable.setSizeFull();
-				layout.addComponent(this.selectableTable);
+			@Override
+			public String getTitle()
+			{
+				return "Contacts";
+			}
+		};
 
-				layout.addComponent(overviewForm);
+		this.selectableTable.setSizeFull();
+		layout.addComponent(this.selectableTable);
 
-				final Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
+		layout.addComponent(overviewForm);
 
-				layout.addComponent(labelAllocate);
+		final Label labelAllocate = new Label("<h1>Clicking Next will Allocate the books!</h1>", ContentMode.HTML);
+
+		layout.addComponent(labelAllocate);
 
 		return layout;
 	}
