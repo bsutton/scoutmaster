@@ -55,19 +55,19 @@ public class Household extends BaseEntity
 	 * Members of the household and their relationship to the household.
 	 */
 	@OneToMany(targetEntity = Relationship.class)
-	private final List<Relationship> members = new ArrayList<>();
+	private List<Relationship> members = new ArrayList<>();
 
 	@OneToMany(targetEntity = Note.class)
-	private final List<Note> notes = new ArrayList<>();
+	private List<Note> notes = new ArrayList<>();
 
 	@ManyToMany(targetEntity = Tag.class)
-	private final List<Tag> tags = new ArrayList<>();
+	private List<Tag> tags = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
 	@OneToMany(targetEntity = CommunicationLog.class)
-	private final List<CommunicationLog> activites = new ArrayList<>();
+	private List<CommunicationLog> activites = new ArrayList<>();
 
 	@Override
 	public String getName()

@@ -48,7 +48,7 @@ public class LoginAttempt extends BaseEntity
 	 * The date time that the user attempted to login.
 	 */
 	@Temporal(value = TemporalType.TIMESTAMP)
-	private final Date dateOfAttempt = new Date();
+	private Date dateOfAttempt = new Date();
 
 	/**
 	 * True if the login attempt was successful.

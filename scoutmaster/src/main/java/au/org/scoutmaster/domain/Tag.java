@@ -75,7 +75,7 @@ public class Tag extends BaseEntity
 	@ManyToMany(mappedBy = "tags")
 	@Property(policy = PojomaticPolicy.NONE)
 	// stop pojomatic generating a circular reference.
-	private final Set<Contact> contacts = new HashSet<>();
+	private Set<Contact> contacts = new HashSet<>();
 
 	//
 	// @ManyToMany

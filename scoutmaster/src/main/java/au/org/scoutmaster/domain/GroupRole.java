@@ -76,7 +76,7 @@ public class GroupRole extends BaseEntity
 	 * assigned to the contact.
 	 */
 	@ManyToMany(targetEntity = Tag.class, fetch = FetchType.EAGER)
-	private final Set<Tag> tags = new HashSet<Tag>();
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	public Set<Tag> getTags()
 	{

@@ -37,7 +37,7 @@ public class ImportUserMapping extends BaseEntity
 
 	@OneToMany(mappedBy = "userMapping", fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = ImportColumnFieldMapping.class)
 	// @JoinColumn(name="importUserMappingId")
-	private final List<ImportColumnFieldMapping> columnFieldMappings = new ArrayList<>();
+	private List<ImportColumnFieldMapping> columnFieldMappings = new ArrayList<>();
 
 	public ImportUserMapping()
 	{

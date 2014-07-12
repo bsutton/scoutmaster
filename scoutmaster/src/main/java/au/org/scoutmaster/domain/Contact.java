@@ -244,7 +244,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private String privateMedicalFundName = "";
 
 	@FormField(displayName = "Medical Fund No.")
-	private final String medicalFundNo = "";
+	private String medicalFundNo = "";
 
 	/**
 	 * Affiliated Adults
@@ -256,7 +256,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	private String jobTitle = "";
 
 	@FormField(displayName = "Has License")
-	private final Boolean hasLicense = false;
+	private Boolean hasLicense = false;
 
 	@FormField(displayName = "Has WWC")
 	private Boolean hasWWC = false;
@@ -288,7 +288,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * Brett is on the LHS of the relationship
 	 */
 	@OneToMany(mappedBy = "lhs", targetEntity = Relationship.class, orphanRemoval = true)
-	private final Set<Relationship> lhsrelationships = new HashSet<>();
+	private Set<Relationship> lhsrelationships = new HashSet<>();
 
 	/**
 	 * Contacts this contact is related to on the Right Hand Side (RHS) of the
@@ -299,7 +299,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	 * Tristan is on the RHS of the relationship
 	 */
 	@OneToMany(mappedBy = "rhs", targetEntity = Relationship.class, orphanRemoval = true)
-	private final Set<Relationship> rhsrelationships = new HashSet<>();
+	private Set<Relationship> rhsrelationships = new HashSet<>();
 
 	/**
 	 * List of tags used to describe this Contact.

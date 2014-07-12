@@ -38,7 +38,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "Organisation")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"), })
+{ @NamedQuery(name = Organisation.FIND_OUR_SCOUT_GROUP, query = "SELECT organisation FROM Organisation organisation where organisation.isOurScoutGroup = true"), })
 public class Organisation extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -76,7 +76,7 @@ public class Organisation extends BaseEntity
 	 * The list of contacts at the organsiation that the group associates with.
 	 */
 	@OneToMany(targetEntity = Contact.class)
-	private final List<Contact> contacts = new ArrayList<>();
+	private List<Contact> contacts = new ArrayList<>();
 
 	/**
 	 * The location of the organisation.
@@ -89,45 +89,45 @@ public class Organisation extends BaseEntity
 
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
 
-			})
+	})
 	private Phone phone1 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
 
-			})
+	})
 	private Phone phone2 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
 
-			})
+	})
 	private Phone phone3 = new Phone();
 
 	/**
 	 * The list of tags used to describe the organisation.
 	 */
 	@ManyToMany(targetEntity = Tag.class)
-	private final List<Tag> tags = new ArrayList<>();
+	private List<Tag> tags = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Note.class)
-	private final List<Note> notes = new ArrayList<>();
+	private List<Note> notes = new ArrayList<>();
 
 	/**
 	 * List of interactions with this contact.
 	 */
 	@OneToMany(targetEntity = CommunicationLog.class)
-	private final List<CommunicationLog> activites = new ArrayList<>();
+	private List<CommunicationLog> activites = new ArrayList<>();
 
 	public Boolean isOurScoutGroup()
 	{

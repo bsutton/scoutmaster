@@ -98,7 +98,7 @@ public class Event extends BaseEntity implements CrudEntity
 	 * The Colour to display the event with.
 	 */
 	@Embedded
-	private final Color color = new Color();
+	private Color color = new Color();
 
 	public Event()
 	{

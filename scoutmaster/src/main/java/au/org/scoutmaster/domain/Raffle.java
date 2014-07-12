@@ -125,14 +125,14 @@ public class Raffle extends BaseEntity
 	 * to a contact.
 	 */
 	@OneToMany(mappedBy = "raffle", orphanRemoval = true)
-	private final Set<RaffleBook> available = new HashSet<>();
+	private Set<RaffleBook> available = new HashSet<>();
 
 	/**
 	 * The set of allocations. Allocations represent a set of books that have
 	 * been allocated to contacts.
 	 */
 	@OneToMany(mappedBy = "raffle", orphanRemoval = true)
-	private final Set<RaffleAllocation> allocated = new HashSet<>();
+	private Set<RaffleAllocation> allocated = new HashSet<>();
 
 	@Override
 	public String getName()

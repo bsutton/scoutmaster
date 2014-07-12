@@ -10,12 +10,12 @@ public class Money
 {
 	static final private int defaultPrecision = 2;
 
-	private final double fixedDoubleValue;
+	private double fixedDoubleValue;
 
 	/**
 	 * The no. of decimal places to store the number to.
 	 */
-	private final int precision;
+	private int precision;
 
 	Money()
 	{

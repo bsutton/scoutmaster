@@ -23,13 +23,13 @@ public class FixedDouble
 	 *
 	 */
 	@Column(name = "fixedDoubleValue")
-	private final double fixedDoubleValue;
+	private double fixedDoubleValue;
 
 	/**
 	 * The no. of decimal places to store the number to.
 	 */
 	@Column(name = "precision")
-	private final int precision;
+	private int precision;
 
 	public FixedDouble()
 	{
