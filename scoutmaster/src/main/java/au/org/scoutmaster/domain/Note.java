@@ -40,7 +40,7 @@ public class Note extends BaseEntity
 
 	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
-	private final Date noteDate = new Date();
+	private Date noteDate = new Date();
 
 	@NotBlank
 	@Size(max = 255)
