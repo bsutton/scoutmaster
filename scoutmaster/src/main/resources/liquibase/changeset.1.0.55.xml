@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Report scheduling.. -->
+
+	<changeSet author="bsutton" id="1.0.55.1">
+		<createTable tableName="tblReportEmailSchedule">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="JasperReportPropertiesClassName" type="VARCHAR(255)" />
+
+			<column name="enabled" type="BIT(1)" defaultValueBoolean="false" />
+			<column name="sender_IID" type="BIGINT(19)" />
+			<column name="lastRuntime" type="datetime" />
+			<column name="scheduleMode" type="VARCHAR(255)" />
+			<column name="oneTimeRunDateTime" type="datetime" />
+			<column name="timeOfDayToRun" type="datetime" />
+			<column name="scheduledDayOfMonth" type="INT(11)" />
+			<column name="scheduledDaysOfWeek" type="VARCHAR(255)" />
+
+			<column name="outputFormat" type="VARCHAR(255)" />
+			<column name="message" type="VARCHAR(4096)" />
+			<column name="subject" type="VARCHAR(255)" />
+			<column name="reportLog" type="VARCHAR(255)" />
+
+			<column name="reportFileName" type="VARCHAR(255)" />
+			<column name="reportTitle" type="VARCHAR(255)" />
+			<column name="reportIdentifier" type="VARCHAR(255)" />
+			<column name="nextScheduledTime" type="datetime" />
+
+		</createTable>
+	</changeSet>
+	
+	
+
+	<changeSet author="bsutton" id="1.0.55.2">
+		<createTable tableName="tblReportEmailRecipient">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="EmailAddress" type="VARCHAR(255)" />
+			<column name="Visibility" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.3">
+		<createTable tableName="tblReportEmailParameterEntity">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="Label" type="VARCHAR(255)" />
+			<column name="Name" type="VARCHAR(255)" />
+			<column name="Value" type="VARCHAR(8192)" />
+			<column name="DisplayValue" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.4">
+		<createTable tableName="tblReportEmailSender">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="EmailAddress" type="VARCHAR(255)" />
+			<column name="IsAdmin" type="tinyint(1)" defaultValueNumeric="0" />
+			<column name="Username" type="VARCHAR(255)" />
+		</createTable>
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.55.4.1">
+		<addForeignKeyConstraint baseColumnNames="sender_IID"
+			baseTableName="tblReportEmailSchedule"
+			constraintName="FK_tblReportEmailSchedule_SENDER_IID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailSender" />
+	</changeSet>
+	
+
+	<changeSet author="bsutton" id="1.0.55.5">
+		<createTable tableName="tblReportEmailScheduledDateParameter">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="StartDate" type="date" />
+			<column name="StartName" type="VARCHAR(255)" />
+			<column name="EndDate" type="date" />
+			<column name="EndName" type="VARCHAR(255)" />
+			<column name="Label" type="VARCHAR(255)" />
+			<column name="OffsetType" type="VARCHAR(255)" />
+			<column name="Type" type="VARCHAR(255)" />
+
+
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.6">
+		<createTable
+			tableName="tblReportEmailSchedule_tblReportEmailParameterEntity">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="ReportEmailScheduleEntity_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="ReportParameters_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.6.1">
+		<addForeignKeyConstraint baseColumnNames="ReportParameters_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailParameterEntity"
+			constraintName="tblRprtmlSchdltblRprtmilParameterEntityrprtPrmtrsD"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID"
+			referencedTableName="tblReportEmailParameterEntity" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.6.2">
+		<addForeignKeyConstraint baseColumnNames="ReportEmailScheduleEntity_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailParameterEntity"
+			constraintName="tblRprtmlSchdltblRprtmlPrmtrEntityRprtmlSchdlnttyD"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailSchedule" />
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.55.8">
+		<createTable tableName="tblReportEmailSchedule_tblReportEmailRecipient">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="ReportEmailScheduleEntity_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="Recipients_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.55.8.1">
+		<addForeignKeyConstraint baseColumnNames="Recipients_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailRecipient"
+			constraintName="tblRprtmailScheduletblReportEmailRecipientrcpntsID"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailRecipient" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.8.2">
+		<addForeignKeyConstraint baseColumnNames="ReportEmailScheduleEntity_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailRecipient"
+			constraintName="tblRprtmlSchdltblRprtmailRecipientRprtmlSchdlnttyD"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailSchedule" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.9">
+		<createTable
+			tableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter">
+			<column autoIncrement="true" name="IID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" />
+			<column name="UPDATED" type="date" />
+
+			<column name="ReportEmailScheduleEntity_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="DateParameters_IID" type="bigint(19)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.55.9.1">
+		<addForeignKeyConstraint baseColumnNames="DateParameters_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter"
+			constraintName="tblRprtmlSchdltblRprtmlSchdldDteParameterdtPrmtrsD"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailRecipient" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.55.9.2">
+		<addForeignKeyConstraint baseColumnNames="ReportEmailScheduleEntity_IID"
+			baseTableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter"
+			constraintName="tblRprtmlSchdltblRprtmlSchdldDtPrmRprtmlSchdlnttyD"
+			deferrable="false" initiallyDeferred="false" onDelete="NO ACTION"
+			onUpdate="NO ACTION" referencedColumnNames="IID" referencedTableName="tblReportEmailSchedule" />
+	</changeSet>
+
+</databaseChangeLog>

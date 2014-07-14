@@ -65,6 +65,14 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.Color</class>
 		<class>au.org.scoutmaster.domain.RaffleAllocation</class>
 		<class>au.org.scoutmaster.domain.access.LoginAttempt</class>
+		
+		<!--  Vaadin Utils entities -->
+		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailParameterEntity</class>
+		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailRecipient</class>
+		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailScheduledDateParameter</class>
+		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailScheduleEntity</class>
+		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailSender</class>
+		
 
 		<properties>
 			<property name="eclipselink.session.customizer"
@@ -151,6 +159,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.accounting.InvoiceLine</class>
 		<class>au.org.scoutmaster.domain.accounting.Payment</class>
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
+		
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
