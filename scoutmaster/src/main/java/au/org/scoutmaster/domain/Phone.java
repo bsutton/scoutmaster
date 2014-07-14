@@ -1,5 +1,7 @@
 package au.org.scoutmaster.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
@@ -16,8 +18,10 @@ import javax.persistence.NamedQuery;
 @Access(AccessType.FIELD)
 @NamedQueries(
 		{ @NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"), })
-public class Phone
+public class Phone implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	public static final String FIND_BY_NO = "Phone.findByNo";
 
 	/**
