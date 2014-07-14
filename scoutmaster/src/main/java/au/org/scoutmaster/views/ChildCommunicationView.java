@@ -45,6 +45,8 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 		.addColumn("Added By", CommunicationLog_.addedBy);
 
 		super.init(CommunicationLog.class, container, builder.build());
+		super.activateEditMode(false);
+		showNew(false);
 
 	}
 
@@ -58,8 +60,6 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 		super.fieldGroup.bind(detailsEditor, CommunicationLog_.details.getName());
 		layout.addComponent(detailsEditor);
 
-		super.activateEditMode(false);
-		showNew(false);
 
 		return layout;
 	}

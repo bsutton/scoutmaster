@@ -86,8 +86,6 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 
 		layout.addComponent(overviewForm);
 
-		super.disallowEdit(true, true);
-		super.disallowNew(true);
 
 		return layout;
 	}
@@ -107,6 +105,9 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 		.addColumn("Added By", CommunicationLog_.addedBy);
 
 		super.init(CommunicationLog.class, container, builder.build());
+		super.disallowEdit(true, true);
+		super.disallowNew(true);
+
 
 	}
 
