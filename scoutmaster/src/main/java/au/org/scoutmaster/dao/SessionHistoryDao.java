@@ -1,11 +1,9 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.access.SessionHistory;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 
 public class SessionHistoryDao extends JpaBaseDao<SessionHistory, Long> implements Dao<SessionHistory, Long>
@@ -16,10 +14,6 @@ public class SessionHistoryDao extends JpaBaseDao<SessionHistory, Long> implemen
 		// inherit the default per request em.
 	}
 
-	public SessionHistoryDao(final EntityManager em)
-	{
-		super(em);
-	}
 
 	@Override
 	public JPAContainer<SessionHistory> createVaadinContainer()

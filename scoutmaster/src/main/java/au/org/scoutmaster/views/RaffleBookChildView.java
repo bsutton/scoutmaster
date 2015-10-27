@@ -2,6 +2,8 @@ package au.org.scoutmaster.views;
 
 import java.util.ArrayList;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.FormHelper;
@@ -163,5 +165,11 @@ public class RaffleBookChildView extends ChildCrudView<Raffle, RaffleBook>
 	public String getNewButtonActionLabel()
 	{
 		return "New Raffle Book";
+	}
+
+	@Override
+	public SingularAttribute<RaffleBook, String> getGuidAttribute()
+	{
+		return RaffleBook_.guid;
 	}
 }

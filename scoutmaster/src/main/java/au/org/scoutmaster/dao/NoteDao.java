@@ -2,11 +2,11 @@ package au.org.scoutmaster.dao;
 
 import java.util.List;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Note_;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class NoteDao extends JpaBaseDao<Note, Long>
 {

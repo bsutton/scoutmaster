@@ -5,7 +5,9 @@ import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -16,7 +18,10 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.eclipse.persistence.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.NotBlank;
+
+import au.com.vaadinutils.crud.ChildCrudEntity;
 
 @Entity
 @Table(name = "Note")
@@ -24,12 +29,21 @@ import org.hibernate.validator.constraints.NotBlank;
 @NamedQueries(
 		{ @NamedQuery(name = "Note.findAll", query = "SELECT note FROM Note note"),
 			@NamedQuery(name = "Note.findMatching", query = "SELECT note FROM Note note WHERE note.subject = :subject") })
-public class Note extends BaseEntity
+public class Note extends BaseEntity implements ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+	/**
+	 * Entities used in child cruds must have a guid
+	 * to help uniquely identify each child.
+	 */
+	@UuidGenerator(name = "UUID")
+	@GeneratedValue(generator = "UUID")
+	@Column(name = "guid")
+	String guid;
 
 	/**
 	 * The contact that this note was made against.
@@ -80,6 +94,12 @@ public class Note extends BaseEntity
 	public String getName()
 	{
 		return "Note: " + toString();
+	}
+
+	@Override
+	public String getGuid()
+	{
+		return guid;
 	}
 
 }

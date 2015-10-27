@@ -2,7 +2,7 @@ package au.org.scoutmaster.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
@@ -13,8 +13,6 @@ import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.RaffleBook_;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-
 public class RaffleBookDao extends JpaBaseDao<RaffleBook, Long> implements Dao<RaffleBook, Long>
 {
 
@@ -23,10 +21,7 @@ public class RaffleBookDao extends JpaBaseDao<RaffleBook, Long> implements Dao<R
 		// inherit the default per request em.
 	}
 
-	public RaffleBookDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public JPAContainer<RaffleBook> createVaadinContainer()

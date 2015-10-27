@@ -9,11 +9,15 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.UuidGenerator;
+
+import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.org.scoutmaster.domain.accounting.Money;
 
 /**
@@ -26,16 +30,25 @@ import au.org.scoutmaster.domain.accounting.Money;
 @Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{
-			@NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
-			@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
-public class RaffleBook extends BaseEntity
+{ @NamedQuery(name = RaffleBook.FIND_ALL_UNALLOCATED, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffle = :raffle and rafflebook.raffleAllocation is null order by rafflebook.firstNo"),
+		@NamedQuery(name = RaffleBook.FIND_BY_ALLOCATION, query = "SELECT rafflebook FROM RaffleBook rafflebook WHERE rafflebook.raffleAllocation.id  = :raffleAllocationId") })
+public class RaffleBook extends BaseEntity implements ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_ALL_UNALLOCATED = "RaffleBook.findAllUnallocated";
 
 	public static final String FIND_BY_ALLOCATION = "RaffleBook.findByAllocation";
+
+	/**
+	 * Entities used in child cruds must have a guid
+	 * to help uniquely identify each child.
+	 */
+	@UuidGenerator(name = "UUID")
+	@GeneratedValue(generator = "UUID")
+	@Column(name = "guid")
+	String guid;
+
 
 	/**
 	 * The raffle this book is attached to.
@@ -56,7 +69,7 @@ public class RaffleBook extends BaseEntity
 	private Integer ticketCount = new Integer(10);
 
 	/**
-	 * The first ticket no in the book.
+	 * The first ticket no. in the book.
 	 */
 	private Integer firstNo = new Integer(0);
 
@@ -91,8 +104,8 @@ public class RaffleBook extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "amountReturnedMoneyValue") ),
+			@AttributeOverride(name = "precision", column = @Column(name = "amountReturnedMoneyPrecision") ) })
 	private Money amountReturned = new Money(0);
 
 	/**
@@ -118,9 +131,8 @@ public class RaffleBook extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return this.firstNo
-				+ (this.raffleAllocation == null ? " Available" : " Allocated To: "
-						+ this.raffleAllocation.getAllocatedTo().getFullname());
+		return this.firstNo + (this.raffleAllocation == null ? " Available"
+				: " Allocated To: " + this.raffleAllocation.getAllocatedTo().getFullname());
 	}
 
 	public Integer getTicketCount()
@@ -182,7 +194,7 @@ public class RaffleBook extends BaseEntity
 	{
 		this.collectedBy = collectedBy;
 	}
-
+	
 	public Boolean getReceiptIssued()
 	{
 		return this.receiptIssued;
@@ -224,10 +236,21 @@ public class RaffleBook extends BaseEntity
 		return this.firstNo + this.ticketCount - 1;
 	}
 
+	public String getGUID()
+	{
+		return guid;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "First Ticket No.: " + this.firstNo + ", Last Ticket No: " + getLastTicketNo();
+	}
+
+	@Override
+	public String getGuid()
+	{
+		return guid;
 	}
 
 }

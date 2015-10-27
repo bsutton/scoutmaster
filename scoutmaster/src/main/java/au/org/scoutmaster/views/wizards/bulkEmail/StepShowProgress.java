@@ -7,8 +7,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.fields.PoJoTable;
-import au.com.vaadinutils.ui.UIUpdater;
 import au.com.vaadinutils.ui.WorkingDialog;
 import au.com.vaadinutils.util.MutableInteger;
 import au.com.vaadinutils.util.ProgressBarWorker;
@@ -18,15 +26,6 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.SMNotification;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailTransmission>
 {
@@ -165,7 +164,8 @@ public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailT
 	@Override
 	public final void taskProgress(final int count, final int max, final EmailTransmission status)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 			final String message = "Sending: " + count + " of " + max + " messages.";
 			StepShowProgress.this.progressDescription.setValue(message);
 			StepShowProgress.this.indicator.setValue((float) count / max);
@@ -177,28 +177,24 @@ public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailT
 	@Override
 	public final void taskComplete(final int sent)
 	{
-		new UIUpdater(
-				() -> {
-					StepShowProgress.this.sendComplete = true;
-					StepShowProgress.this.indicator.setValue(1.0f);
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
+			StepShowProgress.this.sendComplete = true;
+			StepShowProgress.this.indicator.setValue(1.0f);
 
-					if (StepShowProgress.this.rejected.intValue() == 0
-							&& StepShowProgress.this.queued.intValue() == sent)
-					{
-						StepShowProgress.this.progressDescription
-								.setValue("All Email Messages have been sent successfully.");
-					}
-					else
-					{
-						StepShowProgress.this.progressDescription
-								.setValue(sent
-										+ " Email Message "
-										+ (sent == 1 ? "has" : "s have")
-										+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
-					}
-					SMNotification.show("Email batch send complete", Type.TRAY_NOTIFICATION);
-					StepShowProgress.this.workDialog.complete(sent);
-				});
+			if (StepShowProgress.this.rejected.intValue() == 0 && StepShowProgress.this.queued.intValue() == sent)
+			{
+				StepShowProgress.this.progressDescription.setValue("All Email Messages have been sent successfully.");
+			}
+			else
+			{
+				StepShowProgress.this.progressDescription.setValue(sent + " Email Message "
+						+ (sent == 1 ? "has" : "s have")
+						+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
+			}
+			SMNotification.show("Email batch send complete", Type.TRAY_NOTIFICATION);
+			StepShowProgress.this.workDialog.complete(sent);
+		});
 	}
 
 	@Override

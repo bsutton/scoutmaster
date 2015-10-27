@@ -7,15 +7,15 @@ import javax.persistence.Query;
 
 import org.joda.time.DateTime;
 
+import com.google.gwt.thirdparty.guava.common.base.Preconditions;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.RandomString;
-
-import com.google.gwt.thirdparty.guava.common.base.Preconditions;
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements
 		Dao<ForgottenPasswordReset, Long>
@@ -26,10 +26,7 @@ public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset
 		// inherit the default per request em.
 	}
 
-	public ForgottenPasswordResetDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@SuppressWarnings("unchecked")
 	boolean hasExpired(final String resetid)

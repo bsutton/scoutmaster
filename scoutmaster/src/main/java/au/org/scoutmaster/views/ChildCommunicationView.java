@@ -17,6 +17,8 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.access.User_;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -105,6 +107,12 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 	public String getNewButtonActionLabel()
 	{
 		return "New Communication";
+	}
+
+	@Override
+	public SingularAttribute<CommunicationLog, String> getGuidAttribute()
+	{
+		return CommunicationLog_.guid;
 	}
 
 }

@@ -101,14 +101,14 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 			{
 				// You can't edit builin tags.
 				this.detachable.setReadOnly(false);
-				super.disallowEdit(true, false);
+				super.disallowEdit(true);
 				super.disallowDelete(true);
 			}
 			else
 			{
 				this.overviewForm.setReadOnly(false);
 				this.detachable.setReadOnly(false);
-				super.disallowEdit(false, false);
+				super.disallowEdit(false);
 				super.disallowDelete(false);
 			}
 			this.builtin.setReadOnly(true);
@@ -124,11 +124,11 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	}
 
 	@Override
-	protected void postDelete(final Object entityId)
+	protected void postDelete(final Tag entity)
 	{
 		// need to flush the cache as a db cascade delete removed child records.
 		EntityManagerProvider.getEntityManager().getEntityManagerFactory().getCache().evictAll();
-		super.postDelete(entityId);
+		super.postDelete(entity);
 	}
 
 }

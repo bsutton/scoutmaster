@@ -7,8 +7,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.fields.PoJoTable;
-import au.com.vaadinutils.ui.UIUpdater;
 import au.com.vaadinutils.ui.WorkingDialog;
 import au.com.vaadinutils.util.MutableInteger;
 import au.com.vaadinutils.util.ProgressBarWorker;
@@ -20,15 +28,6 @@ import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.SMSProvider;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTransmission>
 {
@@ -150,9 +149,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 		return layout;
 	}
 
-	private void queueTransmission(final MessageDetailsStep detailsStep,
-			final ArrayList<SMSTransmission> transmissions, final HashSet<String> dedupList, final Contact contact,
-			final Phone primaryPhone)
+	private void queueTransmission(final MessageDetailsStep detailsStep, final ArrayList<SMSTransmission> transmissions,
+			final HashSet<String> dedupList, final Contact contact, final Phone primaryPhone)
 	{
 		final SMSTransmission transmission = new SMSTransmission(detailsStep.getActivityTags(), contact,
 				detailsStep.getMessage(), primaryPhone);
@@ -184,7 +182,8 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public final void taskProgress(final int count, final int max, final SMSTransmission status)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 			final String message = "Sending: " + count + " of " + max + " messages.";
 			ShowProgressStep.this.progressDescription.setValue(message);
 			ShowProgressStep.this.indicator.setValue((float) count / max);
@@ -197,28 +196,24 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 	@Override
 	public final void taskComplete(final int sent)
 	{
-		new UIUpdater(
-				() -> {
-					ShowProgressStep.this.sendComplete = true;
-					ShowProgressStep.this.indicator.setValue(1.0f);
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
+			ShowProgressStep.this.sendComplete = true;
+			ShowProgressStep.this.indicator.setValue(1.0f);
 
-					if (ShowProgressStep.this.rejected.intValue() == 0
-							&& ShowProgressStep.this.queued.intValue() == sent)
-					{
-						ShowProgressStep.this.progressDescription
-								.setValue("All SMS Messages have been sent successfully.");
-					}
-					else
-					{
-						ShowProgressStep.this.progressDescription
-								.setValue(sent
-										+ " SMS Message "
-										+ (sent == 1 ? "has" : "s have")
-										+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
-					}
-					ShowProgressStep.this.workDialog.complete(sent);
+			if (ShowProgressStep.this.rejected.intValue() == 0 && ShowProgressStep.this.queued.intValue() == sent)
+			{
+				ShowProgressStep.this.progressDescription.setValue("All SMS Messages have been sent successfully.");
+			}
+			else
+			{
+				ShowProgressStep.this.progressDescription.setValue(sent + " SMS Message "
+						+ (sent == 1 ? "has" : "s have")
+						+ " been sent successfully. Check the list below for the reason why some of the messages failed.");
+			}
+			ShowProgressStep.this.workDialog.complete(sent);
 
-				});
+		});
 	}
 
 	@Override

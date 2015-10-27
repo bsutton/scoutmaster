@@ -3,15 +3,14 @@ package au.org.scoutmaster.dao;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long>
 {
@@ -21,10 +20,7 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 		// inherit the default per request em.
 	}
 
-	public EventDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public JPAContainer<Event> createVaadinContainer()
@@ -45,7 +41,7 @@ public class EventDao extends JpaBaseDao<Event, Long> implements Dao<Event, Long
 
 	public List<Event> findBetween(final Date startDate, final Date endDate)
 	{
-		final Query query = this.entityManager.createNamedQuery(Event.FIND_BETWEEN);
+		final Query query = JpaBaseDao.getEntityManager().createNamedQuery(Event.FIND_BETWEEN);
 		query.setParameter("startDate", startDate);
 		query.setParameter("endDate", endDate);
 		@SuppressWarnings("unchecked")

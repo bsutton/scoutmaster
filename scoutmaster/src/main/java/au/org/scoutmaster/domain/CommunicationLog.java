@@ -6,6 +6,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -13,8 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.eclipse.persistence.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.NotBlank;
 
+import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.org.scoutmaster.domain.access.User;
 
@@ -29,9 +32,18 @@ import au.org.scoutmaster.domain.access.User;
 @Access(AccessType.FIELD)
 @NamedQueries(
 		{})
-public class CommunicationLog extends BaseEntity implements CrudEntity
+public class CommunicationLog extends BaseEntity implements CrudEntity, ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Entities used in child cruds must have a guid
+	 * to help uniquely identify each child.
+	 */
+	@UuidGenerator(name = "UUID")
+	@GeneratedValue(generator = "UUID")
+	@Column(name = "guid")
+	String guid;
 
 	/**
 	 * The type of activity.
@@ -94,7 +106,7 @@ public class CommunicationLog extends BaseEntity implements CrudEntity
 		this.withContact = withContact;
 	}
 
-	public Date getActivityDate()
+	public Date getActivitynullDate()
 	{
 		return this.activityDate;
 	}
@@ -135,6 +147,12 @@ public class CommunicationLog extends BaseEntity implements CrudEntity
 	public String toString()
 	{
 		return getName();
+	}
+
+	@Override
+	public String getGuid()
+	{
+		return guid;
 	}
 
 }

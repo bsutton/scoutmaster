@@ -24,7 +24,7 @@ public class RaffleAllocationsReportView extends JasperReportView
 		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 
 		final Organisation ourGroup = new DaoFactory().getOrganisationDao().findOurScoutGroup();
-		builder.addField(new ReportParameterTable<Raffle>("Raffle", "raffleId", Raffle.class, Raffle_.name, false))
+		builder.addField(new ReportParameterTable<Raffle>("Raffle", "raffleId", Raffle.class, Raffle_.name))
 				.addField(new ReportParameterConstant<String>("groupname", ourGroup.getName()));
 		final SMJasperReportProperties report = new SMJasperReportProperties("Raffle Allocations",
 				"RaffleAllocations.jasper", builder, ScoutmasterViewEnum.RaffleBookAllocationWizard);

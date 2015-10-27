@@ -18,6 +18,8 @@ import au.org.scoutmaster.domain.RelationshipType_;
 import au.org.scoutmaster.domain.Relationship_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -112,6 +114,12 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	public String getNewButtonActionLabel()
 	{
 		return "New Relationship";
+	}
+
+	@Override
+	public SingularAttribute<Relationship, String> getGuidAttribute()
+	{
+		return Relationship_.guid;
 	}
 
 }

@@ -4,19 +4,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements Dao<SMTPServerSettings, Long>
 {
@@ -42,10 +40,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		// inherit the default per request em.
 	}
 
-	public SMTPSettingsDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	public SMTPServerSettings findSettings()
 	{

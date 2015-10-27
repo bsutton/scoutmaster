@@ -56,7 +56,7 @@ public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View
 		overviewForm.newLine();
 		layout.addComponent(overviewForm);
 
-		super.disallowEdit(true, true);
+		super.disallowEdit(true);
 		super.disallowNew(true);
 		// super.disallowDelete(true);
 

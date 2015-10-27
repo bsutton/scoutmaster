@@ -6,6 +6,11 @@ import javax.persistence.metamodel.SetAttribute;
 
 import org.vaadin.tokenfield.TokenField;
 
+import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.ui.AbstractLayout;
+
+import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.org.scoutmaster.domain.BaseEntity;
@@ -13,11 +18,7 @@ import au.org.scoutmaster.domain.Tag_;
 import au.org.scoutmaster.fields.SplitTagField;
 import au.org.scoutmaster.views.Selected;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.ui.AbstractLayout;
-
-public class SMFormHelper<E> extends FormHelper<E> implements Serializable
+public class SMFormHelper<E extends CrudEntity> extends FormHelper<E> implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 

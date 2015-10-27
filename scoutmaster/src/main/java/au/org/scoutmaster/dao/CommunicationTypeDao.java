@@ -1,12 +1,10 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.CommunicationType_;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class CommunicationTypeDao extends JpaBaseDao<CommunicationType, Long> implements Dao<CommunicationType, Long>
 {
@@ -16,11 +14,7 @@ public class CommunicationTypeDao extends JpaBaseDao<CommunicationType, Long> im
 		// inherit the default per request em.
 	}
 
-	public CommunicationTypeDao(final EntityManager em)
-	{
-		super(em);
-	}
-
+	
 	public CommunicationType findByName(final String name)
 	{
 		return super.findSingleBySingleParameter(CommunicationType.FIND_BY_NAME, CommunicationType_.name, name);

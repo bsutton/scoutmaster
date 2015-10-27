@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 
@@ -138,13 +139,6 @@ public class SMJasperReportProperties implements JasperReportProperties
 	}
 
 	@Override
-	public String generateDynamicHeaderImage(final int pageWidth, final String reportTitle)
-	{
-		// NOOP
-		return null;
-	}
-
-	@Override
 	public boolean isDevMode()
 	{
 		return false;
@@ -171,5 +165,26 @@ public class SMJasperReportProperties implements JasperReportProperties
 	public Enum<?> getReportIdentifier()
 	{
 		return this.reportView;
+	}
+
+	@Override
+	public String generateDynamicHeaderImage(int pageWidth, int height, String reportTitle)
+	{
+		// NOOP
+		return null;
+	}
+	
+	@Override
+	public Map<String, Object> getCustomReportParameterMap()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getDynamicJrxmlFileName()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

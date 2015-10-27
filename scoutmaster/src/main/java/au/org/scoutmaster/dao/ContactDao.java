@@ -5,13 +5,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
@@ -25,8 +26,6 @@ import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Section_;
 import au.org.scoutmaster.domain.Tag;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-
 public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact, Long>
 {
 	static private Logger logger = LogManager.getLogger(ContactDao.class);
@@ -36,15 +35,11 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		// inherit the default per request em.
 	}
 
-	public ContactDao(final EntityManager em)
-	{
-		super(em);
-	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<Contact> findByName(final String firstname, final String lastname)
 	{
-		final Query query = this.entityManager.createNamedQuery(Contact.FIND_BY_NAME);
+		final Query query = JpaBaseDao.getEntityManager().createNamedQuery(Contact.FIND_BY_NAME);
 		query.setParameter("firstname", firstname);
 		query.setParameter("lastname", lastname);
 		final List<Contact> resultContacts = query.getResultList();
@@ -59,7 +54,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 	@SuppressWarnings("unchecked")
 	public List<Contact> findByHasEmail()
 	{
-		final Query query = this.entityManager.createNamedQuery(Contact.FIND_BY_HAS_EMAIL);
+		final Query query = JpaBaseDao.getEntityManager().createNamedQuery(Contact.FIND_BY_HAS_EMAIL);
 		final List<Contact> resultContacts = query.getResultList();
 		return resultContacts;
 	}

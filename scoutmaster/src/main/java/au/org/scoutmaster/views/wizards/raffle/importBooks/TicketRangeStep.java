@@ -7,12 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.MultiColumnFormLayout;
-import au.com.vaadinutils.fields.FieldValidator;
-import au.org.scoutmaster.domain.Raffle;
-import au.org.scoutmaster.domain.RaffleBook;
-import au.org.scoutmaster.util.SMNotification;
-
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
@@ -24,6 +18,13 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.com.vaadinutils.fields.FieldValidator;
+import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.domain.RaffleBook;
+import au.org.scoutmaster.util.SMNotification;
+
 public class TicketRangeStep implements WizardStep
 {
 	@SuppressWarnings("unused")
@@ -32,7 +33,7 @@ public class TicketRangeStep implements WizardStep
 	private TextField firstTicketNoField;
 	private TextField noOfBooksField;
 	private TextField lastTicketNoField;
-	private MultiColumnFormLayout<Integer> formLayout;
+	private MultiColumnFormLayout<IntegerCrudEntity> formLayout;
 
 	FieldGroup fieldGroup = new FieldGroup();
 	private FieldValidator fieldValidator;
@@ -55,7 +56,7 @@ public class TicketRangeStep implements WizardStep
 		layout.setMargin(true);
 
 		this.fieldValidator = new FieldValidator();
-		this.formLayout = new MultiColumnFormLayout<Integer>(1, null); // new
+		this.formLayout = new MultiColumnFormLayout<IntegerCrudEntity>(1, null); // new
 		// ValidatingFieldGroup(dynamicFieldItem));
 		this.formLayout.setColumnLabelWidth(0, 150);
 		this.formLayout.setColumnFieldWidth(0, 250);
@@ -188,6 +189,38 @@ public class TicketRangeStep implements WizardStep
 	public int getBookCount()
 	{
 		return ((Integer) this.noOfBooksField.getConvertedValue()).intValue();
+	}
+	
+	// HACK so we can continue using the MultiColumnFormLayout
+	
+	class IntegerCrudEntity implements CrudEntity
+	{
+		private Long id;
+
+		IntegerCrudEntity(Long Id)
+		{
+			this.id = Id;
+		}
+
+		@Override
+		public Long getId()
+		{
+			return id;
+		}
+
+		@Override
+		public void setId(Long id)
+		{
+			this.id = id;
+		}
+
+		@Override
+		public String getName()
+		{
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	}
 
 }

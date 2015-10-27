@@ -1,12 +1,11 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.accounting.Invoice;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice, Long>
 {
@@ -16,10 +15,7 @@ public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice
 		// inherit the default per request em.
 	}
 
-	public InvoiceDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public JPAContainer<Invoice> createVaadinContainer()
@@ -40,7 +36,7 @@ public class InvoiceDao extends JpaBaseDao<Invoice, Long> implements Dao<Invoice
 
 	public Long findHighestNo()
 	{
-		final Query query = this.entityManager.createQuery("select max(i.InvoiceNumber) from Invoice i", Integer.class);
+		final Query query = JpaBaseDao.getEntityManager().createQuery("select max(i.InvoiceNumber) from Invoice i", Integer.class);
 		return (Long) query.getSingleResult();
 	}
 }

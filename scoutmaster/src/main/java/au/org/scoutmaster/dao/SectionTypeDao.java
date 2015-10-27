@@ -2,15 +2,13 @@ package au.org.scoutmaster.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.joda.time.DateTime;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao<SectionType, Long>
 {
@@ -22,10 +20,6 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		// inherit the default per request em.
 	}
 
-	public SectionTypeDao(final EntityManager em)
-	{
-		super(em);
-	}
 
 	public SectionType findByName(final String name)
 	{

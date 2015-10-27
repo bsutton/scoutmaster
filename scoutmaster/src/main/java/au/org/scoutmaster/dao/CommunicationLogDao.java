@@ -1,6 +1,6 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
@@ -10,8 +10,6 @@ import au.org.scoutmaster.domain.CommunicationType_;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.access.User_;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-
 public class CommunicationLogDao extends JpaBaseDao<CommunicationLog, Long> implements Dao<CommunicationLog, Long>
 {
 
@@ -20,10 +18,7 @@ public class CommunicationLogDao extends JpaBaseDao<CommunicationLog, Long> impl
 		// inherit the default per request em.
 	}
 
-	public CommunicationLogDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public JPAContainer<CommunicationLog> createVaadinContainer()

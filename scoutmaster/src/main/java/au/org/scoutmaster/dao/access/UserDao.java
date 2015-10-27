@@ -2,12 +2,12 @@ package au.org.scoutmaster.dao.access;
 
 import javax.persistence.EntityManager;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.domain.access.User;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 {
@@ -17,15 +17,12 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 		// inherit the default per request em.
 	}
 
-	public UserDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public User findById(final Long id)
 	{
-		final User user = this.entityManager.find(this.entityClass, id);
+		final User user = JpaBaseDao.getEntityManager().find(this.entityClass, id);
 		return user;
 	}
 

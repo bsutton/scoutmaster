@@ -1,10 +1,9 @@
 package au.org.scoutmaster.util;
 
-import au.com.vaadinutils.ui.UIUpdater;
-
 import com.vaadin.server.Page;
 import com.vaadin.shared.Position;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.UI;
 
 public class SMNotification extends Notification
 {
@@ -17,8 +16,8 @@ public class SMNotification extends Notification
 
 	public static void show(final String caption, final Type type)
 	{
-
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 			final Notification notification = new Notification(caption, type);
 			if (type == Type.TRAY_NOTIFICATION)
 			{
@@ -31,7 +30,8 @@ public class SMNotification extends Notification
 
 	public static void show(final String caption, final String description, final Type type)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 
 			final Notification notification = new Notification(caption, description, type);
 			if (type == Type.TRAY_NOTIFICATION)
@@ -44,34 +44,36 @@ public class SMNotification extends Notification
 
 	public static void show(final Exception e, final Type type)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 
 			// find root cause.
-				Throwable rootCause = e;
+			Throwable rootCause = e;
 
-				while (rootCause.getCause() != null)
-				{
-					rootCause = rootCause.getCause();
-				}
+			while (rootCause.getCause() != null)
+			{
+				rootCause = rootCause.getCause();
+			}
 
-				SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
-			});
+			SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
+		});
 	}
 
 	public static void show(final Throwable e, final Type type)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 
 			// find root cause.
-				Throwable rootCause = e;
+			Throwable rootCause = e;
 
-				while (rootCause.getCause() != null)
-				{
-					rootCause = rootCause.getCause();
-				}
+			while (rootCause.getCause() != null)
+			{
+				rootCause = rootCause.getCause();
+			}
 
-				SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
-			});
+			SMNotification.show(rootCause.getClass().getSimpleName() + ":" + rootCause.getMessage(), type);
+		});
 	}
 
 }

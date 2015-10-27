@@ -4,14 +4,6 @@ import java.util.ArrayList;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.MultiColumnFormLayout;
-import au.org.scoutmaster.application.SMSession;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.util.VelocityFormatException;
-
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -20,6 +12,15 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Phone;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.util.VelocityFormatException;
 
 public class ConfirmDetailsStep implements WizardStep
 {
@@ -47,7 +48,7 @@ public class ConfirmDetailsStep implements WizardStep
 		this.recipientCount.setContentMode(ContentMode.HTML);
 		this.layout.addComponent(this.recipientCount);
 
-		final MultiColumnFormLayout<Object> formLayout = new MultiColumnFormLayout<>(1, null);
+		final MultiColumnFormLayout<CrudEntity> formLayout = new MultiColumnFormLayout<>(1, null);
 		formLayout.setColumnFieldWidth(0, 500);
 		this.provider = formLayout.bindTextField("Provider", "provider");
 		this.provider.setReadOnly(true);

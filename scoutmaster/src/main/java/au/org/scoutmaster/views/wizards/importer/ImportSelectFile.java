@@ -7,9 +7,6 @@ import java.io.OutputStream;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.ui.UIUpdater;
-import au.org.scoutmaster.util.SMNotification;
-
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
@@ -17,6 +14,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FailedEvent;
 import com.vaadin.ui.Upload.FailedListener;
@@ -24,6 +22,8 @@ import com.vaadin.ui.Upload.ProgressListener;
 import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.Upload.StartedListener;
 import com.vaadin.ui.VerticalLayout;
+
+import au.org.scoutmaster.util.SMNotification;
 
 public class ImportSelectFile implements WizardStep
 {
@@ -97,10 +97,12 @@ public class ImportSelectFile implements WizardStep
 			// mapping.setNullSelectionItemId("--Please Select--");
 			// fl.addComponent(mapping);
 			// fl.addComponent(new
-			// Label("If you have imported this type of file previously you can select a saved field mapping."));
+			// Label("If you have imported this type of file previously you can
+			// select a saved field mapping."));
 			// row.addComponent(fl);
 			// //row.addComponent(new
-			// Label("If you have imported this type of file previously you can select a saved field mapping."));
+			// Label("If you have imported this type of file previously you can
+			// select a saved field mapping."));
 			// content.addComponent(row);
 			this.content.setMargin(true);
 		}
@@ -149,14 +151,15 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void uploadFinished(final Upload.FinishedEvent finishedEvent)
 			{
-				new UIUpdater(() -> {
+				UI ui = UI.getCurrent();
+				ui.access(() -> {
 					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
 					ImportSelectFile.this.uploadComplete = true;
 					ImportSelectFile.this.progress.setVisible(false);
 					ImportSelectFile.this.progressBar.setValue(1.0f);
 					ImportSelectFile.this.progressBar.setVisible(true);
-					ImportSelectFile.this.completionMessage.setValue("The upload of File "
-							+ ImportSelectFile.this.selectedFilename + " has been completed.");
+					ImportSelectFile.this.completionMessage.setValue(
+							"The upload of File " + ImportSelectFile.this.selectedFilename + " has been completed.");
 
 					SMNotification.show("The upload has completed. Click 'Next'", Type.TRAY_NOTIFICATION);
 				});
@@ -174,9 +177,10 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void updateProgress(final long readBytes, final long contentLength)
 			{
-				new UIUpdater(() -> {
-					ImportSelectFile.this.progress.setValue("Uploaded: " + (float) readBytes / (float) contentLength
-							* 100 + "%");
+				UI ui = UI.getCurrent();
+				ui.access(() -> {
+					ImportSelectFile.this.progress
+							.setValue("Uploaded: " + (float) readBytes / (float) contentLength * 100 + "%");
 					ImportSelectFile.this.progressBar.setValue((float) readBytes / (float) contentLength);
 					ImportSelectFile.this.progressBar.setVisible(true);
 				});
@@ -193,9 +197,10 @@ public class ImportSelectFile implements WizardStep
 			@Override
 			public void uploadFailed(final FailedEvent event)
 			{
-				new UIUpdater(() -> {
-					Notification.show("The upload failed. " + event.getReason()
-							+ " Please fix the problem and try again.");
+				UI ui = UI.getCurrent();
+				ui.access(() -> {
+					Notification
+							.show("The upload failed. " + event.getReason() + " Please fix the problem and try again.");
 					ImportSelectFile.this.uploadStarted = true;
 					ImportSelectFile.this.uploadComplete = false;
 				});

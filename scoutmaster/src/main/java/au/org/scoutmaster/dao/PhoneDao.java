@@ -2,12 +2,10 @@ package au.org.scoutmaster.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Phone;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long>
 {
@@ -17,10 +15,7 @@ public class PhoneDao extends JpaBaseDao<Phone, Long> implements Dao<Phone, Long
 		// inherit the default per request em.
 	}
 
-	public PhoneDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	public boolean isEmpty(final Phone phone)
 	{

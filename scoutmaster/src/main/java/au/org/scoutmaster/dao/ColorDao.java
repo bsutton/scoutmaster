@@ -1,13 +1,11 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.domain.iColor;
 import au.com.vaadinutils.domain.iColorFactory;
 import au.org.scoutmaster.domain.Color;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class ColorDao extends JpaBaseDao<Color, Long> implements Dao<Color, Long>
 {
@@ -17,10 +15,6 @@ public class ColorDao extends JpaBaseDao<Color, Long> implements Dao<Color, Long
 		// inherit the default per request em.
 	}
 
-	public ColorDao(final EntityManager em)
-	{
-		super(em);
-	}
 
 	@Override
 	public JPAContainer<Color> createVaadinContainer()

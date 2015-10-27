@@ -1,14 +1,12 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.domain.Document;
 import au.org.scoutmaster.domain.Document_;
 import au.org.scoutmaster.domain.access.User_;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class DocumentDao extends JpaBaseDao<Document, Long> implements Dao<Document, Long>
 {
@@ -18,10 +16,7 @@ public class DocumentDao extends JpaBaseDao<Document, Long> implements Dao<Docum
 		// inherit the default per request em.
 	}
 
-	public DocumentDao(final EntityManager em)
-	{
-		super(em);
-	}
+
 
 	@Override
 	public JPAContainer<Document> createVaadinContainer()

@@ -108,9 +108,9 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 	}
 
 	@Override
-	protected Task preNew() throws InstantiationException, IllegalAccessException
+	protected Task preNew(Task previousEntity) throws InstantiationException, IllegalAccessException
 	{
-		Task task = super.preNew();
+		Task task = super.preNew(previousEntity);
 		final JpaBaseDao<TaskStatus, Long> daoStatus = DaoFactory.getGenericDao(TaskStatus.class);
 		final TaskStatus result = daoStatus.findOneByAttribute(TaskStatus_.name, TaskStatus.NOT_STARTED);
 		task.setStatus(result);

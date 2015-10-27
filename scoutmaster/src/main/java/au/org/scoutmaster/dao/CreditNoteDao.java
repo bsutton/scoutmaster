@@ -1,12 +1,11 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.accounting.CreditNote;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<CreditNote, Long>
 {
@@ -16,10 +15,6 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 		// inherit the default per request em.
 	}
 
-	public CreditNoteDao(final EntityManager em)
-	{
-		super(em);
-	}
 
 	@Override
 	public JPAContainer<CreditNote> createVaadinContainer()
@@ -40,7 +35,7 @@ public class CreditNoteDao extends JpaBaseDao<CreditNote, Long> implements Dao<C
 
 	public Long findHighestNo()
 	{
-		final Query query = this.entityManager.createQuery("select max(cn.creditNoteNumber) from CreditNote cn",
+		final Query query = JpaBaseDao.getEntityManager().createQuery("select max(cn.creditNoteNumber) from CreditNote cn",
 				Integer.class);
 		return (Long) query.getSingleResult();
 	}

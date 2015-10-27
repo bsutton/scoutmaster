@@ -5,7 +5,7 @@
 	<groupId>org.scoutmaster</groupId>
 	<artifactId>scoutmaster</artifactId>
 	<packaging>war</packaging>
-	<name>Vaadin Web Application</name>
+	<name>Scoutmaster Web Application</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -208,9 +208,9 @@
 			<version>2.6</version>
 		</dependency>
 		<dependency>
-			<groupId>io.brooklyn</groupId>
+			<groupId>org.marre.smsj</groupId>
 			<artifactId>org.marre.smsj</artifactId>
-			<version>1.0.0-20051126</version>
+			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>

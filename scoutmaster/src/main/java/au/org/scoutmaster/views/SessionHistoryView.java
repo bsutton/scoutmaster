@@ -57,7 +57,7 @@ public class SessionHistoryView extends BaseCrudView<SessionHistory> implements 
 		overviewForm.newLine();
 		layout.addComponent(overviewForm);
 
-		super.disallowEdit(true, true);
+		super.disallowEdit(true);
 		super.disallowNew(true);
 
 		return layout;

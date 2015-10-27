@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
@@ -193,5 +195,11 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 	public String getNewButtonActionLabel()
 	{
 		return "New Allocation";
+	}
+
+	@Override
+	public SingularAttribute<RaffleAllocation, String> getGuidAttribute()
+	{
+		return RaffleAllocation_.guid;
 	}
 }

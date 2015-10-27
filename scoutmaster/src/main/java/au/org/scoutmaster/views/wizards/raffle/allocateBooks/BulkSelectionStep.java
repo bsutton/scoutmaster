@@ -8,6 +8,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Container.Filterable;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -24,20 +38,6 @@ import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.domain.RaffleBook_;
 import au.org.scoutmaster.util.SMNotification;
-
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 
 public class BulkSelectionStep implements WizardStep, SelectStep
 {
@@ -94,8 +94,7 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
 				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
 
-		final JPAContainer<Contact> container = new DaoFactory().getContactDao().createVaadinContainer();
-		this.selectableTable = new SearchableSelectableEntityTable<Contact>(container, builder.build())
+		this.selectableTable = new SearchableSelectableEntityTable<Contact>("Contact")
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -123,6 +122,18 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 			public String getTitle()
 			{
 				return "Contacts";
+			}
+
+			@Override
+			public HeadingPropertySet<Contact> getHeadingPropertySet()
+			{
+				return builder.build();
+			}
+
+			@Override
+			public Filterable getContainer()
+			{
+				return new DaoFactory().getContactDao().createVaadinContainer();
 			}
 		};
 

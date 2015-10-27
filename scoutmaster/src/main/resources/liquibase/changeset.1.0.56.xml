@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+
+	<!-- add guid to RaffleBook as it is used in a child crud -->
+	<changeSet author="bsutton" id="1.0.56.1">
+		<addColumn tableName="RaffleBook">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+
+<changeSet author="bsutton" id="1.0.56.1">
+		<addColumn tableName="RaffleBook">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+	
+	
+	<changeSet author="bsutton" id="1.0.56.2">
+		<addColumn tableName="CommunicationLog">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.56.3">
+		<addColumn tableName="Note">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+	<changeSet author="bsutton" id="1.0.56.4">
+		<addColumn tableName="Relationship">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.56.5">
+		<addColumn tableName="RaffleAllocation">
+			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+		</addColumn>
+	</changeSet>
+	
+</databaseChangeLog>

@@ -2,10 +2,16 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.eclipse.persistence.annotations.UuidGenerator;
+
+import au.com.vaadinutils.crud.ChildCrudEntity;
 
 /**
  * Defines a relationship to an contact.
@@ -19,10 +25,20 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "Relationship")
 @Table(name = "Relationship")
 @Access(AccessType.FIELD)
-public class Relationship extends BaseEntity
+public class Relationship extends BaseEntity implements ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Entities used in child cruds must have a guid
+	 * to help uniquely identify each child.
+	 */
+	@UuidGenerator(name = "UUID")
+	@GeneratedValue(generator = "UUID")
+	@Column(name = "guid")
+	String guid;
+
+	
 	/**
 	 * The contact on the Left Hand Side (LHS) of the relationship type.
 	 *
@@ -58,6 +74,12 @@ public class Relationship extends BaseEntity
 	public String getName()
 	{
 		return toString();
+	}
+
+	@Override
+	public String getGuid()
+	{
+		return guid;
 	}
 
 }

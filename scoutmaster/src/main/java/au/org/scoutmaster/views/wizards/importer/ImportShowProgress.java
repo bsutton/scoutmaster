@@ -6,14 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.fields.PoJoTable;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.com.vaadinutils.ui.UIUpdater;
-import au.com.vaadinutils.util.ProgressBarWorker;
-import au.com.vaadinutils.util.ProgressTaskListener;
-import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.util.SMNotification;
-
 import com.vaadin.addon.tableexport.CsvExport;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -22,7 +14,15 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.fields.PoJoTable;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.util.ProgressBarWorker;
+import au.com.vaadinutils.util.ProgressTaskListener;
+import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.util.SMNotification;
 
 public class ImportShowProgress implements WizardStep, ProgressTaskListener<ImportItemStatus>
 {
@@ -98,8 +98,8 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 		final File tempFile = this.importView.getFile().getTempFile();
 		final Class<? extends Importable> clazz = this.importView.getType().getEntityClass();
 
-		final ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(new ImportTask(this, tempFile,
-				clazz, this.importView.getMatch().getFieldMap()));
+		final ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(
+				new ImportTask(this, tempFile, clazz, this.importView.getMatch().getFieldMap()));
 		worker.start();
 
 		return layout;
@@ -120,7 +120,8 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public void taskProgress(final int count, final int max, final ImportItemStatus status)
 	{
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 			ImportShowProgress.this.progressDescription.setValue("Imported: " + count + " records.");
 			if (status != null)
 			{
@@ -134,7 +135,8 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	public void taskComplete(final int sent)
 	{
 
-		new UIUpdater(() -> {
+		UI ui = UI.getCurrent();
+		ui.access(() -> {
 			ImportShowProgress.this.indicator.setValue(1.0f);
 			ImportShowProgress.this.indicator.setVisible(false);
 			ImportShowProgress.this.indicator.setEnabled(false);
@@ -148,7 +150,8 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 	@Override
 	public void taskItemError(final ImportItemStatus status)
 	{
-		new UIUpdater(() -> ImportShowProgress.this.progressTable.addRow(status));
+		UI ui = UI.getCurrent();
+		ui.access(() -> ImportShowProgress.this.progressTable.addRow(status));
 
 	}
 

@@ -1,14 +1,12 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
+import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.RaffleAllocation;
 import au.org.scoutmaster.domain.RaffleAllocation_;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> implements Dao<RaffleAllocation, Long>
 {
@@ -18,10 +16,7 @@ public class RaffleAllocationDao extends JpaBaseDao<RaffleAllocation, Long> impl
 		// inherit the default per request em.
 	}
 
-	public RaffleAllocationDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public JPAContainer<RaffleAllocation> createVaadinContainer()

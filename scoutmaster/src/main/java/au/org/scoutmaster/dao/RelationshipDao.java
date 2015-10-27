@@ -1,9 +1,9 @@
 package au.org.scoutmaster.dao;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Relationship;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class RelationshipDao extends JpaBaseDao<Relationship, Long>
 {

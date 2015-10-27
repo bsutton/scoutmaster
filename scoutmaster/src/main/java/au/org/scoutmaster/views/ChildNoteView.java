@@ -12,6 +12,8 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Note_;
 
+import javax.persistence.metamodel.SingularAttribute;
+
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -85,5 +87,11 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	public String getNewButtonActionLabel()
 	{
 		return "New Note";
+	}
+
+	@Override
+	public SingularAttribute<Note, String> getGuidAttribute()
+	{
+		return Note_.guid;
 	}
 }

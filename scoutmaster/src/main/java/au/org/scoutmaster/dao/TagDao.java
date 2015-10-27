@@ -2,12 +2,12 @@ package au.org.scoutmaster.dao;
 
 import javax.persistence.EntityManager;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Tag;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 {
@@ -17,10 +17,7 @@ public class TagDao extends JpaBaseDao<Tag, Long> implements Dao<Tag, Long>
 		// inherit the default per request em.
 	}
 
-	public TagDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	public Tag findByName(final String name)
 	{

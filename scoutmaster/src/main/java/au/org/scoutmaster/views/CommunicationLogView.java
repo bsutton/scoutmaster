@@ -105,7 +105,7 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 		.addColumn("Added By", CommunicationLog_.addedBy);
 
 		super.init(CommunicationLog.class, container, builder.build());
-		super.disallowEdit(true, true);
+		super.disallowEdit(true);
 		super.disallowNew(true);
 
 

@@ -2,17 +2,16 @@ package au.org.scoutmaster.dao.access;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
 import org.joda.time.DateTime;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.domain.access.LoginAttempt;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
 
 public class LoginAttemptDao extends JpaBaseDao<LoginAttempt, Long> implements Dao<LoginAttempt, Long>
 {
@@ -22,15 +21,12 @@ public class LoginAttemptDao extends JpaBaseDao<LoginAttempt, Long> implements D
 		// inherit the default per request em.
 	}
 
-	public LoginAttemptDao(final EntityManager em)
-	{
-		super(em);
-	}
+	
 
 	@Override
 	public LoginAttempt findById(final Long id)
 	{
-		final LoginAttempt user = this.entityManager.find(this.entityClass, id);
+		final LoginAttempt user = JpaBaseDao.getEntityManager().find(this.entityClass, id);
 		return user;
 	}
 
@@ -68,7 +64,7 @@ public class LoginAttemptDao extends JpaBaseDao<LoginAttempt, Long> implements D
 	public boolean hasExceededAttempts(final String username)
 	{
 
-		final Query query = this.entityManager.createNamedQuery(LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS);
+		final Query query = JpaBaseDao.getEntityManager().createNamedQuery(LoginAttempt.FIND_FIVE_MINUTE_ATTEMPTS);
 		query.setParameter("username", username);
 		final DateTime fiveMinutesAgo = new DateTime().minusMinutes(5);
 		query.setParameter("fiveMinutesAgo", fiveMinutesAgo.toDate(), TemporalType.TIMESTAMP);

@@ -6,11 +6,17 @@ import java.util.Set;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.eclipse.persistence.annotations.UuidGenerator;
+
+import au.com.vaadinutils.crud.ChildCrudEntity;
 
 /**
  * Represents an Allocation of Raffle Books to a contact from a Raffle.
@@ -21,10 +27,18 @@ import javax.persistence.Transient;
 @Entity(name = "RaffleAllocation")
 @Table(name = "RaffleAllocation")
 @Access(AccessType.FIELD)
-public class RaffleAllocation extends BaseEntity
+public class RaffleAllocation extends BaseEntity implements ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Entities used in child cruds must have a guid
+	 * to help uniquely identify each child.
+	 */
+	@UuidGenerator(name = "UUID")
+	@GeneratedValue(generator = "UUID")
+	@Column(name = "guid")
+	String guid;
 	/**
 	 * The raffle this book is attached to.
 	 */
@@ -152,6 +166,12 @@ public class RaffleAllocation extends BaseEntity
 	public Long getBookCount()
 	{
 		return new Long(this.books.size());
+	}
+
+	@Override
+	public String getGuid()
+	{
+		return guid;
 	}
 
 }
