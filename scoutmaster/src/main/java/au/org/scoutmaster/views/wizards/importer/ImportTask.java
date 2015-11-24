@@ -7,12 +7,19 @@ import java.io.Reader;
 import java.util.Hashtable;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.addon.jpacontainer.JPAContainerFactory;
+import com.vaadin.ui.Notification.Type;
+
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.dao.Transaction;
@@ -20,11 +27,6 @@ import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
 import au.org.scoutmaster.util.SMNotification;
-
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
-import com.vaadin.ui.Notification.Type;
 
 public class ImportTask extends ProgressBarTask<ImportItemStatus>
 {
@@ -34,16 +36,16 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	private final Class<? extends Importable> clazz;
 	private final Hashtable<String, FormFieldImpl> fieldMap;
 
-	private EntityManager em;
+	//private EntityManager em;
 
 	ImportTask(final ProgressTaskListener<ImportItemStatus> listener, final File tempFile,
 			final Class<? extends Importable> clazz, final Hashtable<String, FormFieldImpl> fieldMap)
-			{
+	{
 		super(listener);
 		this.tempFile = tempFile;
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
-			}
+	}
 
 	@Override
 	public void run()
@@ -100,12 +102,13 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	protected <T extends Importable> int buildContainerFromCSV(final Class<T> entityClass, final Reader reader)
 			throws IOException, InstantiationException, IllegalAccessException
 	{
-		final JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, this.em);
+		EntityManager em = EntityManagerProvider.createEntityManager();
+		final JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, em);
 
 		CSVReader csvReader = null;
 		int count = 0;
 
-		try (Transaction t = new Transaction(this.em))
+		try (Transaction t = new Transaction(em))
 		{
 			csvReader = new CSVReader(reader);
 
@@ -121,7 +124,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 				{
 					try
 					{
-						addRow(container, entityClass, columnHeaders, record, this.fieldMap);
+						addRow(em, container, entityClass, columnHeaders, record, this.fieldMap);
 						++count;
 						super.taskProgress(count, -1, null);
 					}
@@ -168,9 +171,9 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private <T> void addRow(final JPAContainer<T> container, final Class<T> entityClass, final String[] csvHeaders,
+	private <T> void addRow(EntityManager em, final JPAContainer<T> container, final Class<T> entityClass, final String[] csvHeaders,
 			final String[] fieldValues, final Hashtable<String, FormFieldImpl> fieldMaps)
-			throws InstantiationException, IllegalAccessException
+					throws InstantiationException, IllegalAccessException
 	{
 		final EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 
@@ -178,8 +181,8 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 
 		final T entity = entityItem.getEntity();
 
-		adaptor.save(this.em, entity, csvHeaders, fieldValues, fieldMaps);
+		adaptor.save(em, entity, csvHeaders, fieldValues, fieldMaps);
 
-		this.em.merge(entity);
+		em.merge(entity);
 	}
 }
