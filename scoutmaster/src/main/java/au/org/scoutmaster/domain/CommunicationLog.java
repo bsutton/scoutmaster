@@ -6,19 +6,19 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
-import org.eclipse.persistence.annotations.UuidGenerator;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.dao.JpaEntityHelper;
 import au.org.scoutmaster.domain.access.User;
 
 /**
@@ -31,19 +31,18 @@ import au.org.scoutmaster.domain.access.User;
 @Table(name = "CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{})
+{})
 public class CommunicationLog extends BaseEntity implements CrudEntity, ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Entities used in child cruds must have a guid
-	 * to help uniquely identify each child.
+	 * Entities used in child cruds must have a guid to help uniquely identify
+	 * each child.
 	 */
-	@UuidGenerator(name = "UUID")
-	@GeneratedValue(generator = "UUID")
-	@Column(name = "guid")
-	String guid;
+	@NotNull
+	@Column(updatable = false)
+	String guid = JpaEntityHelper.getGuid(this);
 
 	/**
 	 * The type of activity.

@@ -4,14 +4,12 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.eclipse.persistence.annotations.UuidGenerator;
-
 import au.com.vaadinutils.crud.ChildCrudEntity;
+import au.com.vaadinutils.dao.JpaEntityHelper;
 
 /**
  * Defines a relationship to an contact.
@@ -33,10 +31,9 @@ public class Relationship extends BaseEntity implements ChildCrudEntity
 	 * Entities used in child cruds must have a guid
 	 * to help uniquely identify each child.
 	 */
-	@UuidGenerator(name = "UUID")
-	@GeneratedValue(generator = "UUID")
-	@Column(name = "guid")
-	String guid;
+	 @NotNull
+	 @Column(updatable = false) 
+	 String guid = JpaEntityHelper.getGuid(this);
 
 	
 	/**

@@ -4,7 +4,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2014-07-13T17:00:34.987+1000")
+@Generated(value="Dali", date="2015-11-24T19:08:01.031+1100")
 @StaticMetamodel(SMTPServerSettings.class)
 public class SMTPServerSettings_ extends BaseEntity_ {
 	public static volatile SingularAttribute<SMTPServerSettings, String> smtpFQDN;

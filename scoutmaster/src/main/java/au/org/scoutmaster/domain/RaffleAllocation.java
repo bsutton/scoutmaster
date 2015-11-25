@@ -8,15 +8,14 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.eclipse.persistence.annotations.UuidGenerator;
+import javax.validation.constraints.NotNull;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
+import au.com.vaadinutils.dao.JpaEntityHelper;
 
 /**
  * Represents an Allocation of Raffle Books to a contact from a Raffle.
@@ -32,13 +31,13 @@ public class RaffleAllocation extends BaseEntity implements ChildCrudEntity
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Entities used in child cruds must have a guid
-	 * to help uniquely identify each child.
+	 * Entities used in child cruds must have a guid to help uniquely identify
+	 * each child.
 	 */
-	@UuidGenerator(name = "UUID")
-	@GeneratedValue(generator = "UUID")
-	@Column(name = "guid")
-	String guid;
+	@NotNull
+	@Column(updatable = false)
+	String guid = JpaEntityHelper.getGuid(this);
+	
 	/**
 	 * The raffle this book is attached to.
 	 */

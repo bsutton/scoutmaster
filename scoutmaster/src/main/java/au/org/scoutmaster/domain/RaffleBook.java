@@ -9,15 +9,14 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
-import org.eclipse.persistence.annotations.UuidGenerator;
+import javax.validation.constraints.NotNull;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
+import au.com.vaadinutils.dao.JpaEntityHelper;
 import au.org.scoutmaster.domain.accounting.Money;
 
 /**
@@ -41,14 +40,12 @@ public class RaffleBook extends BaseEntity implements ChildCrudEntity
 	public static final String FIND_BY_ALLOCATION = "RaffleBook.findByAllocation";
 
 	/**
-	 * Entities used in child cruds must have a guid
-	 * to help uniquely identify each child.
+	 * Entities used in child cruds must have a guid to help uniquely identify
+	 * each child.
 	 */
-	@UuidGenerator(name = "UUID")
-	@GeneratedValue(generator = "UUID")
-	@Column(name = "guid")
-	String guid;
-
+	@NotNull
+	@Column(updatable = false)
+	String guid = JpaEntityHelper.getGuid(this);
 
 	/**
 	 * The raffle this book is attached to.
@@ -194,7 +191,7 @@ public class RaffleBook extends BaseEntity implements ChildCrudEntity
 	{
 		this.collectedBy = collectedBy;
 	}
-	
+
 	public Boolean getReceiptIssued()
 	{
 		return this.receiptIssued;

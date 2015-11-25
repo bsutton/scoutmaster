@@ -7,7 +7,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2014-07-13T17:00:34.971+1000")
+@Generated(value="Dali", date="2015-11-24T19:08:01.011+1100")
 @StaticMetamodel(Raffle.class)
 public class Raffle_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Raffle, String> name;

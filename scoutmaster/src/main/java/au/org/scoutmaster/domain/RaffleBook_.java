@@ -6,9 +6,10 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2015-10-27T22:28:03.890+1100")
+@Generated(value="Dali", date="2015-10-28T08:20:22.031+1100")
 @StaticMetamodel(RaffleBook.class)
 public class RaffleBook_ extends BaseEntity_ {
+	public static volatile SingularAttribute<RaffleBook, String> guid;
 	public static volatile SingularAttribute<RaffleBook, Raffle> raffle;
 	public static volatile SingularAttribute<RaffleBook, RaffleAllocation> raffleAllocation;
 	public static volatile SingularAttribute<RaffleBook, Integer> ticketCount;
@@ -19,5 +20,4 @@ public class RaffleBook_ extends BaseEntity_ {
 	public static volatile SingularAttribute<RaffleBook, Contact> collectedBy;
 	public static volatile SingularAttribute<RaffleBook, Boolean> receiptIssued;
 	public static volatile SingularAttribute<RaffleBook, String> notes;
-	public static volatile SingularAttribute<RaffleBook, String> guid;
 }
