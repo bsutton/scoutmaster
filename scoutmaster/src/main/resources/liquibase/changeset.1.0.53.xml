@@ -24,7 +24,6 @@
 	</changeSet>
 
 	<changeSet author="bsutton" id="1.0.53.2">
-		<dropColumn columnName="FIXEDDOUBLEVALUE" tableName="SectionTryout" />
 		<dropColumn columnName="TAXPERCENTAGE" tableName="SectionTryout" />
 		<dropColumn columnName="MONEY" tableName="SectionTryout" />
 	</changeSet>
