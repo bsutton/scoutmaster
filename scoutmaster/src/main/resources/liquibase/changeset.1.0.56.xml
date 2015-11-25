@@ -9,36 +9,29 @@
 	<!-- add guid to RaffleBook as it is used in a child crud -->
 	<changeSet author="bsutton" id="1.0.56.1">
 		<addColumn tableName="RaffleBook">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+			<column name="GUID" type="VARCHAR(255)"  />
 		</addColumn>
 	</changeSet>
 
-<changeSet author="bsutton" id="1.0.56.1">
-		<addColumn tableName="RaffleBook">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
-		</addColumn>
-	</changeSet>
-	
-	
 	<changeSet author="bsutton" id="1.0.56.2">
 		<addColumn tableName="CommunicationLog">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+			<column name="GUID" type="VARCHAR(255)"  />
 		</addColumn>
 	</changeSet>
 	<changeSet author="bsutton" id="1.0.56.3">
 		<addColumn tableName="Note">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+			<column name="GUID" type="VARCHAR(255)"  />
 		</addColumn>
 	</changeSet>
 	<changeSet author="bsutton" id="1.0.56.4">
 		<addColumn tableName="Relationship">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+			<column name="GUID" type="VARCHAR(255)"  />
 		</addColumn>
 	</changeSet>
 	
 	<changeSet author="bsutton" id="1.0.56.5">
 		<addColumn tableName="RaffleAllocation">
-			<column name="GUID" type="VARCHAR(255)" valueComputed="UUID()" />
+			<column name="GUID" type="VARCHAR(255)"  />
 		</addColumn>
 	</changeSet>
 	
