@@ -7,7 +7,8 @@ import java.net.URLConnection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.markdown4j.Markdown4jProcessor;
 
 import com.google.common.cache.CacheBuilder;
@@ -24,7 +25,7 @@ import com.google.common.cache.LoadingCache;
 public class HelpPageCache
 {
 
-	static Logger logger = Logger.getLogger(HelpPageCache.class);
+	static Logger logger = LogManager.getLogger();
 
 	static LoadingCache<HelpPageIdentifier, String> cache = CacheBuilder.newBuilder().maximumSize(10)
 			.expireAfterWrite(1, TimeUnit.SECONDS)

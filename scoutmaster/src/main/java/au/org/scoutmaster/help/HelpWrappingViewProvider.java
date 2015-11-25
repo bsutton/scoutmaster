@@ -3,13 +3,14 @@ package au.org.scoutmaster.help;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-import au.org.scoutmaster.application.ScoutmasterViewEnum;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
+
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
 
 /**
  * View Provider, to replace the default one that Vaadin uses.
@@ -35,7 +36,7 @@ public class HelpWrappingViewProvider implements ViewProvider
 
 	ScoutmasterViewEnum defaultView = null;
 
-	Logger logger = Logger.getLogger(HelpWrappingViewProvider.class);
+	Logger logger = LogManager.getLogger();
 
 	/**
 	 * The list of views is automatically retrieved from the VaadinPageEnum enum
