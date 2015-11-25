@@ -121,7 +121,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 
 			String url = VaadinServletService.getCurrentServletRequest().getRequestURL().toString();
 
-			// The click event seesm to come from a vaading PUSH service so we
+			// The click event seems to come from a vaading PUSH service so we
 			// need to remove the /PUSH/ from the path.
 			if (url.contains("/PUSH"))
 			{
