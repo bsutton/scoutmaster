@@ -2,10 +2,14 @@ package au.org.scoutmaster.views.wizards.bulkEmail;
 
 import java.io.File;
 
+import javax.activation.FileDataSource;
+
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
-public class AttachedFile
+import au.org.scoutmaster.dao.AttachedFile;
+
+public class AttachedFileLayout implements AttachedFile
 {
 	/**
 	 *
@@ -14,7 +18,7 @@ public class AttachedFile
 	private final File file;
 	private final AbstractLayout line;
 
-	public AttachedFile(final VerticalLayout attachedFilesLayout, final File file, final AbstractLayout line)
+	public AttachedFileLayout(final VerticalLayout attachedFilesLayout, final File file, final AbstractLayout line)
 	{
 		this.attachedFilesLayout = attachedFilesLayout;
 		this.file = file;
@@ -27,8 +31,14 @@ public class AttachedFile
 		this.file.delete();
 	}
 
+	@Override
 	public File getFile()
 	{
 		return this.file;
+	}
+
+	public FileDataSource getDataSource()
+	{
+		return new FileDataSource(this.file);
 	}
 }

@@ -4,15 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.activation.FileDataSource;
+
 import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
 import org.vaadin.teemu.wizards.WizardStep;
-
-import au.com.vaadinutils.fields.CKEditorEmailField;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -29,6 +25,12 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.TagField;
+
 public class StepEnterDetails implements WizardStep
 {
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();
@@ -43,7 +45,7 @@ public class StepEnterDetails implements WizardStep
 
 	VerticalLayout attachedFiles;
 
-	private final HashSet<AttachedFile> fileList = new HashSet<>();
+	private final HashSet<AttachedFileLayout> fileList = new HashSet<>();
 
 	/**
 	 * Used to tag the set of contacts that we successfully send the email to.
@@ -74,8 +76,8 @@ public class StepEnterDetails implements WizardStep
 		this.layout.addComponent(this.from);
 		this.from.setWidth("100%");
 		this.from.addValidator(new EmailValidator("'From Email address' must be supplied"));
-		this.from
-				.setDescription("Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
+		this.from.setDescription(
+				"Enter your email address so that all emails appear to come from you and recipients can directly reply to you.");
 
 		final User user = (User) VaadinSession.getCurrent().getAttribute("user");
 		this.from.setValue(user.getEmailAddress());
@@ -120,8 +122,7 @@ public class StepEnterDetails implements WizardStep
 	public Component getContent()
 	{
 		final int recipientCount = this.wizard.getRecipientStep().getRecipientCount();
-		this.recipientCount
-		.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
+		this.recipientCount.setValue("<p><b>" + recipientCount + pluralize(" recipient", recipientCount)
 				+ pluralize(" has", " have", recipientCount)
 				+ " been selected to recieve the following Email.</b></p>");
 
@@ -220,7 +221,7 @@ public class StepEnterDetails implements WizardStep
 		line.addComponent(new Label(file.getName()));
 		StepEnterDetails.this.attachedFiles.addComponent(line);
 
-		final AttachedFile attachedFile = new AttachedFile(this.attachedFiles, file, line);
+		final AttachedFileLayout attachedFile = new AttachedFileLayout(this.attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
 
@@ -231,7 +232,7 @@ public class StepEnterDetails implements WizardStep
 			@Override
 			public void clicked(final ClickEvent event)
 			{
-				final AttachedFile file = (AttachedFile) event.getButton().getData();
+				final AttachedFileLayout file = (AttachedFileLayout) event.getButton().getData();
 				file.remove();
 				StepEnterDetails.this.fileList.remove(file);
 
@@ -240,9 +241,15 @@ public class StepEnterDetails implements WizardStep
 
 	}
 
-	public HashSet<AttachedFile> getAttachedFiles()
+	public HashSet<FileDataSource> getAttachedFiles()
 	{
-		return this.fileList;
+		HashSet<FileDataSource> sourceList = new HashSet<>();
+
+		for (AttachedFileLayout file : fileList)
+		{
+			sourceList.add(file.getDataSource());
+		}
+		return sourceList;
 	}
 
 	public ArrayList<Tag> getActivityTags()

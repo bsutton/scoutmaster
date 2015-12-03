@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.activation.DataSource;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.vaadin.ui.Notification.Type;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.listener.CancelListener;
@@ -31,20 +34,17 @@ import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.util.VelocityFormatException;
 
-import com.vaadin.ui.Notification.Type;
-
 public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements CancelListener
 {
 	Logger logger = LogManager.getLogger(SendEmailTask.class);
 	private final Message message;
 	private final List<EmailTransmission> transmissions;
 	private final User user;
-	private final HashSet<AttachedFile> attachedFiles;
+	private final HashSet<? extends DataSource> attachedFiles;
 	private boolean cancel = false;
 
-	public SendEmailTask(final ProgressTaskListener<EmailTransmission> listener, final User user,
-			final Message message, final ArrayList<EmailTransmission> transmissions,
-			final HashSet<AttachedFile> attachedFiles)
+	public SendEmailTask(final ProgressTaskListener<EmailTransmission> listener, final User user, final Message message,
+			final ArrayList<EmailTransmission> transmissions, final HashSet<? extends DataSource> attachedFiles)
 	{
 		super(listener);
 		this.message = message;
