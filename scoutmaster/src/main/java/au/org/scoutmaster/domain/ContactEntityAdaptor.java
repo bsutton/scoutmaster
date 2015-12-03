@@ -27,7 +27,18 @@ public class ContactEntityAdaptor extends EntityAdaptor<Contact>
 
 		for (final Field field : fields)
 		{
-			if (field.isAnnotationPresent(FormField.class))
+			if (field.isAnnotationPresent(FormField.class) && (field.getType().equals(String.class) 
+					|| field.getType().equals(Phone.class)  
+					|| field.getType().equals(java.sql.Date.class)
+					|| field.getType().equals(Gender.class)
+					|| field.getType().equals(Boolean.class)
+					|| field.getType().equals(Age.class)
+					//|| field.getType().equals(PreferredEmail.class)
+					//|| field.getType().equals(PreferredCommunications.class)
+					//|| field.getType().equals(SectionType.class)
+					|| field.getType().equals(Address.class)
+					//|| field.getType().equals(GroupRole.class)
+					))
 			{
 				final FormField singleAnnotation = field.getAnnotation(FormField.class);
 
