@@ -9,37 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.vaadin.tokenfield.TokenField;
 
-import rx.util.functions.Action1;
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.FormHelper;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.listener.MouseEventLogged;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.ContactDao;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.GroupRoleDao;
-import au.org.scoutmaster.dao.SectionTypeDao;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.Gender;
-import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupRole_;
-import au.org.scoutmaster.domain.PhoneType;
-import au.org.scoutmaster.domain.Phone_;
-import au.org.scoutmaster.domain.PreferredCommunications;
-import au.org.scoutmaster.domain.SectionType;
-import au.org.scoutmaster.domain.SectionType_;
-import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.fields.TagField;
-import au.org.scoutmaster.forms.EmailForm;
-import au.org.scoutmaster.help.HelpPageIdentifier;
-import au.org.scoutmaster.help.HelpProvider;
-import au.org.scoutmaster.util.ButtonEventSource;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.EntityProvider;
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -68,6 +37,37 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.FormHelper;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.help.HelpProvider;
+import au.com.vaadinutils.listener.MouseEventLogged;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.GroupRoleDao;
+import au.org.scoutmaster.dao.SectionTypeDao;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.Gender;
+import au.org.scoutmaster.domain.GroupRole;
+import au.org.scoutmaster.domain.GroupRole_;
+import au.org.scoutmaster.domain.PhoneType;
+import au.org.scoutmaster.domain.Phone_;
+import au.org.scoutmaster.domain.PreferredCommunications;
+import au.org.scoutmaster.domain.SectionType;
+import au.org.scoutmaster.domain.SectionType_;
+import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.fields.TagField;
+import au.org.scoutmaster.forms.EmailForm;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.util.ButtonEventSource;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+import rx.util.functions.Action1;
 
 @Menu(display = "Contact Management", path = "Members")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
@@ -133,7 +133,6 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		this.changeListener = new ChangeListener();
 
 		overviewTab();
-		// contactTab();
 		relationshipTab();
 		youthTab();
 		memberTab();
@@ -198,7 +197,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.bindTextField("Lastname", Contact_.lastname);
 
 		overviewForm.newLine();
-		this.birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy-MM-dd", Resolution.DAY);
+		this.birthDate = overviewForm.bindDateField("Birth Date", Contact_.birthDate, "yyyy/MM/dd", Resolution.DAY);
 		// fieldOverviewSectionEligibity = overviewForm.addTextField(null);
 		// fieldOverviewSectionEligibity.setReadOnly(true);
 		this.ageField = overviewForm.bindLabel("Age");
@@ -262,8 +261,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		overviewForm.bindTextField("Phone 1", "phone1.phoneNo");
 		overviewForm.bindEnumField(null, "phone1.phoneType", PhoneType.class);
-		this.primaryPhone1 = overviewForm.bindBooleanField("Primary", Contact_.phone1.getName() + "."
-				+ Phone_.primaryPhone.getName());
+		this.primaryPhone1 = overviewForm.bindBooleanField("Primary",
+				Contact_.phone1.getName() + "." + Phone_.primaryPhone.getName());
 		this.primaryPhone1.addValueChangeListener(new PhoneChangeListener());
 
 		overviewForm.newLine();
@@ -389,6 +388,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private void medicalTab()
 	{
+		// SMSession.INSTANCE.getLoggedInUser().getBelongsTo().contains(Role)
 		// Medical Tab
 		final SMMultiColumnFormLayout<Contact> medicalForm = new SMMultiColumnFormLayout<Contact>(2, this.fieldGroup);
 		medicalForm.setColumnLabelWidth(0, 140);
@@ -565,8 +565,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 				if (this.currentBirthDate != null)
 				{
 					ContactView.this.fieldMemberSectionEligibity.setReadOnly(false);
-					ContactView.this.fieldMemberSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate)
-							.getId());
+					ContactView.this.fieldMemberSectionEligibity
+							.setValue(daoContact.getSectionEligibilty(newBirthDate).getId());
 					ContactView.this.fieldMemberSectionEligibity.setReadOnly(true);
 					// fieldOverviewSectionEligibity.setReadOnly(false);
 					// fieldOverviewSectionEligibity.setValue(daoContact.getSectionEligibilty(newBirthDate).getName());
@@ -754,8 +754,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 		// hook the query delegate so we can fix the jpa query on the way
 		// through.
-		provider.setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(this.tagSearchField.getTags(), null,
-				filterString, false));
+		provider.setQueryModifierDelegate(
+				new ContactDefaultQueryModifierDelegate(this.tagSearchField.getTags(), null, filterString, false));
 
 	}
 
