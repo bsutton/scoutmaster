@@ -2,32 +2,41 @@ package au.org.scoutmaster.application;
 
 import java.util.HashMap;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin.dialogs.DefaultConfirmDialogFactory;
 
+import com.vaadin.annotations.Push;
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Title;
+import com.vaadin.annotations.Widgetset;
+import com.vaadin.navigator.Navigator;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
+import com.vaadin.ui.ComponentContainer;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.errorHandling.ErrorSettingsFactory;
+import au.com.vaadinutils.help.HelpIndexFactory;
 import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.util.DeadlockFinder;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
+import au.org.scoutmaster.help.HelpIndexImpl;
 import au.org.scoutmaster.help.HelpWrappingViewProvider;
+import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
 import au.org.scoutmaster.views.wizards.setup.GroupSetupWizardView;
-
-import com.vaadin.annotations.Push;
-import com.vaadin.annotations.Title;
-import com.vaadin.annotations.Widgetset;
-import com.vaadin.navigator.Navigator;
-import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
 /*
  * UI class is the starting point for your app. You may deploy it with
@@ -37,16 +46,24 @@ import com.vaadin.ui.VerticalLayout;
  */
 @Title("Scoutmaster")
 // @PreserveOnRefresh
-// @Theme("scoutmaster")
-@Push
+@Theme("valo")
+@Push // (transport = Transport.LONG_POLLING)
 @Widgetset(value = "au.org.scoutmaster.AppWidgetSet")
 public class NavigatorUI extends UI
 {
+	private Logger logger = LogManager.getLogger();
+
 	private static final long serialVersionUID = 1L;
 
 	private MenuBar menubar;
 
 	private VerticalLayout mainLayout;
+
+	private View currentView;
+
+	private String initalFrag;
+
+	private boolean configured = false;
 
 	/*
 	 * After UI class is created, init() is executed. You should build and wire
@@ -55,8 +72,18 @@ public class NavigatorUI extends UI
 	@Override
 	protected void init(final VaadinRequest request)
 	{
+		storeUrlFragment();
 
-		DeadlockFinder.SINGLETON.start();
+		if (!configured)
+		{
+			DeadlockFinder.SINGLETON.start();
+
+			ErrorSettingsFactory.setErrorSettings(new ErrorString(this));
+
+			HelpIndexFactory.registerHelpIndex(new HelpIndexImpl());
+
+			configured = true;
+		}
 
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
@@ -72,12 +99,15 @@ public class NavigatorUI extends UI
 		final VerticalLayout viewContainer = new VerticalLayout();
 		viewContainer.setHeight("100%");
 
-		final Navigator navigator = new Navigator(this, viewContainer);
-		navigator.addView("", ScoutmasterViewEnum.getDefaultView());
+		// final Navigator navigator = new Navigator(this, viewContainer);
+
+		final Navigator navigator = new CustomNavigator(this, viewContainer, "");
+
+		// navigator.addView("", ScoutmasterViewEnum.getDefaultView());
 
 		// create our custom provider which will wrap all views in a
 		// helpSplitPannel
-		final HelpWrappingViewProvider provider = new HelpWrappingViewProvider();
+		final HelpWrappingViewProvider provider = new HelpWrappingViewProvider(ContactView.NAME);
 		navigator.addProvider(provider);
 
 		//
@@ -173,10 +203,46 @@ public class NavigatorUI extends UI
 				// For some reason the page title is set to null after each
 				// navigation transition.
 				getPage().setTitle("Scoutmaster");
+				currentView = event.getNewView();
 			}
 
 		});
 
+	}
+
+	public class CustomNavigator extends Navigator
+	{
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * the purpose of this class is to prevent views being initialized twice
+		 *
+		 * @param ui
+		 * @param container
+		 * @param initialState
+		 */
+		public CustomNavigator(UI ui, ComponentContainer container, String initialState)
+		{
+			super(ui, container);
+
+			// get the fragment when the page is first loaded!!!!!
+			if (initalFrag != null)
+			{
+
+				getStateManager().setState(initalFrag);
+				initalFrag = null;
+
+			}
+			else
+			{
+				// prevent views being initialized twice
+				getStateManager().setState(initialState);
+			}
+
+		}
 	}
 
 	void styleConfirmDialog()
@@ -224,6 +290,35 @@ public class NavigatorUI extends UI
 			}
 		}
 		return paramMap;
+	}
+
+	public View getCurrentView()
+	{
+		return currentView;
+
+	}
+
+	private void storeUrlFragment()
+	{
+		initalFrag = getPage().getUriFragment();
+		if (initalFrag != null)
+		{
+			if (initalFrag.startsWith("#"))
+			{
+				initalFrag = initalFrag.substring(1);
+			}
+			if (initalFrag.startsWith("!"))
+			{
+				initalFrag = initalFrag.substring(1);
+			}
+			if (initalFrag.equalsIgnoreCase(ScoutmasterViewEnum.Login.getTitle()))
+			{
+				initalFrag = "";
+			}
+		}
+		logger.info("Setting initial URL Fragment to {}", initalFrag);
+		UI.getCurrent().getSession().setAttribute(LoginView.LOGIN_TARGET, initalFrag);
+
 	}
 
 }
