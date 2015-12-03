@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration>
+<Configuration status="trace">
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      <PatternLayout pattern="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
     </Console>
 
-    <RollingFile name="RollingFile" fileName="logs/logging.log"
-                 filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+    <RollingRandomAccessFile name="RandomRollingFile" fileName="logs/scoutmaster/logging.log"
+                 filePattern="logs/scoutmaster/%d{MM-dd-yyyy}-%i.log.gz">
       <PatternLayout>
-        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        <Pattern>%d{ABSOLUTE} %-5p [%c{1}] %m%n</Pattern>
       </PatternLayout>
       <Policies>
         <TimeBasedTriggeringPolicy />
         <SizeBasedTriggeringPolicy size="250 MB"/>
       </Policies>
-    </RollingFile>
+    </RollingRandomAccessFile>
     
-    <File name="logging" fileName="logs/logging.log" append="false">
-      <PatternLayout pattern="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
-    </File>
+   
 	 <Async name="ASYNC">
-      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="RandomRollingFile"/>
       <AppenderRef ref="Console"/>
     </Async>    
   </Appenders>
