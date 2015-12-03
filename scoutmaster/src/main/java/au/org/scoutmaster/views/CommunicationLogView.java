@@ -3,6 +3,16 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -21,16 +31,6 @@ import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Communication Log", path = "Communication")
 public class CommunicationLogView extends BaseCrudView<CommunicationLog> implements View, Selected<CommunicationLog>
@@ -52,7 +52,7 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 		final SMMultiColumnFormLayout<CommunicationLog> overviewForm = new SMMultiColumnFormLayout<CommunicationLog>(2,
 				this.fieldGroup);
 		overviewForm.setColumnFieldWidth(0, 280);
-		overviewForm.setColumnLabelWidth(0, 70);
+		overviewForm.setColumnLabelWidth(0, 100);
 		overviewForm.setColumnExpandRatio(1, 1.0f);
 		overviewForm.setSizeFull();
 		overviewForm.getFieldGroup().setReadOnly(true);
@@ -86,7 +86,6 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 
 		layout.addComponent(overviewForm);
 
-
 		return layout;
 	}
 
@@ -101,27 +100,29 @@ public class CommunicationLogView extends BaseCrudView<CommunicationLog> impleme
 
 		final Builder<CommunicationLog> builder = new HeadingPropertySet.Builder<CommunicationLog>();
 		builder.addColumn("Contact", CommunicationLog_.withContact).addColumn("Subject", CommunicationLog_.subject)
-		.addColumn("Type", CommunicationLog_.type).addColumn("Activity Date", CommunicationLog_.activityDate)
-		.addColumn("Added By", CommunicationLog_.addedBy);
+				.addColumn("Type", CommunicationLog_.type).addColumn("Activity Date", CommunicationLog_.activityDate)
+				.addColumn("Added By", CommunicationLog_.addedBy);
 
-		super.init(CommunicationLog.class, container, builder.build());
 		super.disallowEdit(true);
 		super.disallowNew(true);
-
+		super.init(CommunicationLog.class, container, builder.build());
 
 	}
 
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(),
-				filterString, true, false), new SimpleStringFilter(new Path(CommunicationLog_.type,
-				CommunicationType_.name).getName(), filterString, true, false)), new SimpleStringFilter(new Path(
-				CommunicationLog_.withContact, Contact_.lastname).getName(), filterString, true, false)),
+		return new Or(new Or(new Or(new Or(
+				new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(), filterString, true, false),
+						new SimpleStringFilter(new Path(CommunicationLog_.type, CommunicationType_.name).getName(),
+								filterString, true, false)),
+				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.lastname).getName(),
+						filterString, true, false)),
 				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.firstname).getName(),
-						filterString, true, false)), new SimpleStringFilter(new Path(CommunicationLog_.addedBy,
-				User_.username).getName(), filterString, true, false)), new SimpleStringFilter(
-				CommunicationLog_.subject.getName(), filterString, true, false));
+						filterString, true, false)),
+				new SimpleStringFilter(new Path(CommunicationLog_.addedBy, User_.username).getName(), filterString,
+						true, false)),
+				new SimpleStringFilter(CommunicationLog_.subject.getName(), filterString, true, false));
 	}
 
 	@Override
