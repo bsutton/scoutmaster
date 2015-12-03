@@ -4,28 +4,30 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Date;
 import java.util.Hashtable;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.ibm.icu.text.SimpleDateFormat;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.JPAContainerFactory;
 import com.vaadin.ui.Notification.Type;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
+import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.EntityAdaptor;
 import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.Importable;
+import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.util.SMNotification;
 
 public class ImportTask extends ProgressBarTask<ImportItemStatus>
@@ -36,13 +38,17 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	private final Class<? extends Importable> clazz;
 	private final Hashtable<String, FormFieldImpl> fieldMap;
 
-	//private EntityManager em;
+	private Tag tag;
 
-	ImportTask(final ProgressTaskListener<ImportItemStatus> listener, final File tempFile,
+	// private EntityManager em;
+
+	ImportTask(final ProgressTaskListener<ImportItemStatus> listener, final File tempFile, final File originalFile,
 			final Class<? extends Importable> clazz, final Hashtable<String, FormFieldImpl> fieldMap)
 	{
 		super(listener);
 		this.tempFile = tempFile;
+		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd");
+		this.tag = new Tag("Contact Import: " + sdf.format(new Date()), "Imported: " + originalFile.getName());
 		this.clazz = clazz;
 		this.fieldMap = fieldMap;
 	}
@@ -103,7 +109,10 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 			throws IOException, InstantiationException, IllegalAccessException
 	{
 		EntityManager em = EntityManagerProvider.createEntityManager();
-		final JPAContainer<T> container = JPAContainerFactory.makeBatchable(entityClass, em);
+		// final JPAContainer<T> container =
+		// JPAContainerFactory.makeBatchable(entityClass, em);
+
+		final JPAContainer<T> container = DaoFactory.getGenericDao(entityClass).createVaadinContainer();
 
 		CSVReader csvReader = null;
 		int count = 0;
@@ -171,15 +180,17 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 */
-	private <T> void addRow(EntityManager em, final JPAContainer<T> container, final Class<T> entityClass, final String[] csvHeaders,
-			final String[] fieldValues, final Hashtable<String, FormFieldImpl> fieldMaps)
-					throws InstantiationException, IllegalAccessException
+
+	private <T extends Importable> void addRow(EntityManager em, final JPAContainer<T> container,
+			final Class<T> entityClass, final String[] csvHeaders, final String[] fieldValues,
+			final Hashtable<String, FormFieldImpl> fieldMaps) throws InstantiationException, IllegalAccessException
 	{
 		final EntityItem<T> entityItem = container.createEntityItem(entityClass.newInstance());
 
 		final EntityAdaptor<T> adaptor = EntityAdaptor.create(entityClass);
 
 		final T entity = entityItem.getEntity();
+		entity.addTag(this.tag);
 
 		adaptor.save(em, entity, csvHeaders, fieldValues, fieldMaps);
 
