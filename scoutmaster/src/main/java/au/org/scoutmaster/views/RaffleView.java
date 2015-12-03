@@ -5,24 +5,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.CrudAction;
-import au.com.vaadinutils.crud.FormHelper;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.Raffle;
-import au.org.scoutmaster.domain.Raffle_;
-import au.org.scoutmaster.help.HelpPageIdentifier;
-import au.org.scoutmaster.help.HelpProvider;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-import au.org.scoutmaster.views.actions.RaffleActionAllocateBooks;
-import au.org.scoutmaster.views.actions.RaffleActionImportBooks;
-
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -35,6 +17,24 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.CrudAction;
+import au.com.vaadinutils.crud.FormHelper;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.help.HelpProvider;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Contact_;
+import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.domain.Raffle_;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+import au.org.scoutmaster.views.actions.RaffleActionAllocateBooks;
+import au.org.scoutmaster.views.actions.RaffleActionImportBooks;
 
 @Menu(display = "Raffle Management", path = "Raffle")
 public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvider
@@ -94,9 +94,9 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 		overviewForm.bindTextAreaField("Notes", Raffle_.notes, 6);
 		overviewForm.bindDateField("Start Date", Raffle_.startDate, "yyyy/MM/dd", Resolution.DAY);
 		overviewForm.bindDateField("Collect By Date", Raffle_.collectionsDate, "yyyy/MM/dd", Resolution.DAY)
-		.setDescription("The date the raffle ticksets need to be collected by.");
-		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY).setDescription(
-				"The date the raffle ticksets need to be returned to Branch.");
+				.setDescription("The date the raffle ticksets need to be collected by.");
+		overviewForm.bindDateField("Return Date", Raffle_.returnDate, "yyyy/MM/dd", Resolution.DAY)
+				.setDescription("The date the raffle ticksets need to be returned to Branch.");
 
 		final FormHelper<Raffle> formHelper = overviewForm.getFormHelper();
 		final ComboBox groupRaffleManager = formHelper.new EntityFieldBuilder<Contact>()
@@ -113,15 +113,15 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 		branchRaffleConact.setTextInputAllowed(true);
 		branchRaffleConact.setDescription("The Branch person who is a main contact for Raffle issues.");
 
-		overviewForm.bindTextField("Book No. Prefix", Raffle_.raffleNoPrefix).setDescription(
-				"If raffle books have a non-numeric prefix for the ticket no's enter it here.");
+		overviewForm.bindTextField("Book No. Prefix", Raffle_.raffleNoPrefix)
+				.setDescription("If raffle books have a non-numeric prefix for the ticket no's enter it here.");
 		overviewForm.bindTextField("Tickets per Book", Raffle_.ticketsPerBook);
 		overviewForm.bindTextField("Total Tickets Sold", Raffle_.totalTicketsSold).setReadOnly(true);
 		overviewForm.bindTextField("Tickets Outstanding", Raffle_.ticketsOutstanding).setReadOnly(true);
-		overviewForm.bindTextField("Sales Price per Ticket", Raffle_.salePricePerTicket).setDescription(
-				"The amount each ticket is to be sold for.");
-		overviewForm.bindTextField("Revenue Target", Raffle_.revenueTarget).setDescription(
-				"The amount the Group is aiming to raise via the Raffle.");
+		overviewForm.bindTextField("Sales Price per Ticket", Raffle_.salePricePerTicket)
+				.setDescription("The amount each ticket is to be sold for.");
+		overviewForm.bindTextField("Revenue Target", Raffle_.revenueTarget)
+				.setDescription("The amount the Group is aiming to raise via the Raffle.");
 
 		overviewForm.bindTextField("Revenue Raised", Raffle_.revenueRaised).setReadOnly(true);
 
@@ -136,8 +136,8 @@ public class RaffleView extends BaseCrudView<Raffle> implements View, HelpProvid
 		this.tabs.setSizeFull();
 
 		final Builder<Raffle> builder = new HeadingPropertySet.Builder<Raffle>();
-		builder.addColumn("Name", Raffle_.name).addColumn("Start Date", Raffle_.startDate)
-		.addColumn("Collection Date", Raffle_.collectionsDate);
+		builder.addColumn("Name", Raffle_.name).addColumn("Start Date", Raffle_.startDate).addColumn("Collection Date",
+				Raffle_.collectionsDate);
 
 		super.init(Raffle.class, container, builder.build());
 	}
