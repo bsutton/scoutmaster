@@ -1,9 +1,9 @@
 
-@import "../reindeer/reindeer.scss";
+@import "../valo/valo.scss";
 
 @mixin scoutmaster 
 {
-  @include reindeer;
+  @include valo;
 
 
 	/* Global font styles */
