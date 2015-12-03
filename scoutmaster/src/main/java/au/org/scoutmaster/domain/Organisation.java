@@ -89,27 +89,27 @@ public class Organisation extends BaseEntity
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo") )
 
 	})
 	private Phone phone1 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo") )
 
 	})
 	private Phone phone2 = new Phone();
 
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo") )
 
 	})
 	private Phone phone3 = new Phone();
@@ -124,7 +124,7 @@ public class Organisation extends BaseEntity
 	private List<Note> notes = new ArrayList<>();
 
 	/**
-	 * List of interactions with this contact.
+	 * List of interactions with this organisation.
 	 */
 	@OneToMany(targetEntity = CommunicationLog.class)
 	private List<CommunicationLog> activites = new ArrayList<>();
@@ -223,6 +223,22 @@ public class Organisation extends BaseEntity
 		}
 		return primary;
 
+	}
+
+	/**
+	 * Todo: implement UI to allow selection of the primary contact for an
+	 * organisations. for the moment we are just choosing the first one.
+	 *
+	 * @return
+	 */
+	public Contact getPrimaryContact()
+	{
+		Contact contact = null;
+		if (!this.contacts.isEmpty())
+		{
+			contact = this.contacts.get(0);
+		}
+		return contact;
 	}
 
 	public void setPrimaryPhone(final Phone phoneNo)
