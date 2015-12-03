@@ -47,9 +47,8 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{
-			@NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname"),
-			@NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
+{ @NamedQuery(name = Contact.FIND_BY_NAME, query = "SELECT contact FROM Contact contact WHERE contact.lastname like :lastname and contact.firstname like :firstname"),
+		@NamedQuery(name = Contact.FIND_BY_HAS_EMAIL, query = "SELECT contact FROM Contact contact WHERE contact.homeEmail is not null or contact.workEmail is not null") })
 public class Contact extends BaseEntity implements Importable, CrudEntity
 {
 	static public final String FIND_BY_NAME = "Contact.findByName";
@@ -116,31 +115,31 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Phone 1")
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo") )
 
-			})
+	})
 	private Phone phone1 = new Phone();
 
 	@FormField(displayName = "Phone 2")
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo") )
 
-			})
+	})
 	private Phone phone2 = new Phone();
 
 	@FormField(displayName = "Phone 3")
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
-				@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
-				@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType") ),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone") ),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo") )
 
-			})
+	})
 	private Phone phone3 = new Phone();
 
 	@FormField(displayName = "Home Email")
@@ -373,7 +372,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	public Set<Tag> getTags()
 	{
-		// If some wants the list lets force it to be read from the db.
+		// If someone wants the list lets force it to be read from the db.
 		this.tags.isEmpty();
 		return this.tags;
 	}
@@ -693,6 +692,13 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.tags = tags;
 	}
 
+	@Override
+	public void addTag(Tag tag)
+	{
+		this.tags.isEmpty();
+		this.tags.add(tag);
+	}
+
 	public void setNotes(final List<Note> notes)
 	{
 		// If some wants the list lets force it to be read from the db.
@@ -874,7 +880,7 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public void setBirthDate(final String fieldValue)
 	{
 		final DateTimeParser[] parsers =
-			{ DateTimeFormat.forPattern("yyyy-MM-dd").getParser(), DateTimeFormat.forPattern("yyyy/MM/dd").getParser() };
+		{ DateTimeFormat.forPattern("yyyy-MM-dd").getParser(), DateTimeFormat.forPattern("yyyy/MM/dd").getParser() };
 		final DateTimeFormatter formatter = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
 
 		if (fieldValue != null && fieldValue.length() > 0)
@@ -940,5 +946,33 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public void setDateMemberInvested(final Date dateMemberInvested)
 	{
 		this.dateMemberInvested = dateMemberInvested;
+	}
+
+	/**
+	 * Returns the users preferred email or if no preferred email then their
+	 * home email. If there is no home email then returns their work email.
+	 *
+	 * @return
+	 */
+	public String getEmail()
+	{
+		String email;
+		switch (this.preferredEmail)
+		{
+			case HOME:
+				email = this.homeEmail;
+				break;
+			case WORK:
+				email = this.workEmail;
+				break;
+			default:
+				if (this.homeEmail == null || this.homeEmail.length() == 0)
+					email = this.workEmail;
+				else
+					email = this.homeEmail;
+				break;
+
+		}
+		return email;
 	}
 }
