@@ -9,7 +9,7 @@ public class PasswordValidator implements Validator
 	private final String label;
 	private final PasswordField otherField;
 	
-	public static final String validationRule = "Password must be 8-30 characters, with at least 2 each of digits, letters and special chars e.g. !@#$%^&*()";
+	public static final String validationRule = "Password must be 8-30 characters, with at least 2 each of digits, letters and special chars i.e. !@#$%^&*()";
 
 	public PasswordValidator(final String label)
 	{
