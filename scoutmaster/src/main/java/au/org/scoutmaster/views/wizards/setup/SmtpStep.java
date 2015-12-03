@@ -7,18 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.MultiColumnFormLayout;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.editors.InputDialog;
-import au.com.vaadinutils.editors.Recipient;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.com.vaadinutils.ui.SingleEntityWizardStep;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
-import au.org.scoutmaster.forms.EmailAddressType;
-import au.org.scoutmaster.util.SMNotification;
-
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.validator.CompositeValidator;
@@ -39,8 +27,20 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings> implements WizardStep, ValueChangeListener,
-ClickListener
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.editors.InputDialog;
+import au.com.vaadinutils.editors.Recipient;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.forms.EmailAddressType;
+import au.org.scoutmaster.util.SMNotification;
+
+public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings>
+		implements WizardStep, ValueChangeListener, ClickListener
 {
 	private static Logger logger = LogManager.getLogger(SmtpStep.class);
 	private static final long serialVersionUID = 1L;
@@ -82,8 +82,8 @@ ClickListener
 
 		this.smtpPort = formLayout.bindTextField("SMTP Port:", "smtpPort");
 		this.smtpPort.setDescription("SMTP Port No.");
-		this.smtpPort.addValidator(new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535",
-				1, 65535));
+		this.smtpPort.addValidator(
+				new IntegerRangeValidator("The port no. must be an integer in the range 1 to 65535", 1, 65535));
 
 		this.authRequired = formLayout.bindBooleanField("Authentication Requried", "authRequired");
 		this.authRequired.addValueChangeListener(this);
@@ -195,43 +195,44 @@ ClickListener
 				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
 				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new Recipient()
-				{
-					@Override
-					public boolean onOK(final String input)
-					{
-						final String toEmailAddress = input;
-
-						final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-
-						try
 						{
-							final StringBuilder sb = new StringBuilder();
-							sb.append("If you receive this email then your Scoutmaster email settings are all correct.\n\n");
-							sb.append("So welcome to Scoutmaster.\n\n");
-							sb.append("May you live long and recruit many.\n");
+							@Override
+							public boolean onOK(final String input)
+							{
+								final String toEmailAddress = input;
 
-							daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(),
+								final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+
+								try
+								{
+									final StringBuilder sb = new StringBuilder();
+									sb.append(
+											"If you receive this email then your Scoutmaster email settings are all correct.\n\n");
+									sb.append("So welcome to Scoutmaster.\n\n");
+									sb.append("May you live long and recruit many.\n");
+
+									daoSMTPSettings.sendEmail(settings, settings.getFromEmailAddress(),
 											new SMTPSettingsDao.EmailTarget(EmailAddressType.To, toEmailAddress),
-											"Test email from Scoutmaster setup", sb.toString(), null);
+											"Test email from Scoutmaster setup", sb.toString());
 
-							SMNotification.show("An email has been sent to: " + toEmailAddress
-									+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
+									SMNotification.show("An email has been sent to: " + toEmailAddress
+											+ " please check that the email arrived.", Type.HUMANIZED_MESSAGE);
 
-						}
-						catch (final EmailException e)
-						{
-							SmtpStep.logger.error(e, e);
-							SMNotification.show(e, Type.ERROR_MESSAGE);
-						}
-						return true;
-					}
+								}
+								catch (final EmailException e)
+								{
+									SmtpStep.logger.error(e, e);
+									SMNotification.show(e, Type.ERROR_MESSAGE);
+								}
+								return true;
+							}
 
-					@Override
-					public boolean onCancel()
-					{
-						return true;
-					}
-				}).addValidator(validator);
+							@Override
+							public boolean onCancel()
+							{
+								return true;
+							}
+						}).addValidator(validator);
 
 			}
 		}
