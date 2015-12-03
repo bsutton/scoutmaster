@@ -6,14 +6,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
 
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.ui.SingleEntityWizardStep;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-import au.org.scoutmaster.validator.PasswordValidator;
-import au.org.scoutmaster.validator.UsernameValidator;
-
 import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Component;
@@ -21,6 +13,16 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.FormHelper;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.crud.splitFields.SplitLabel;
+import au.com.vaadinutils.ui.SingleEntityWizardStep;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.validator.PasswordValidator;
+import au.org.scoutmaster.validator.UsernameValidator;
 
 public class NewAccountStep extends SingleEntityWizardStep<User> implements WizardStep
 {
@@ -37,6 +39,8 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 
 	private TextField confirmEmailAddress;
 
+	private VerticalLayout layout;
+
 	public NewAccountStep(final GroupSetupWizardView setupWizardView)
 	{
 		super(new DaoFactory().getUserDao(), User.class);
@@ -51,49 +55,118 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 	@Override
 	protected Component getContent(final ValidatingFieldGroup<User> fieldGroup)
 	{
-		final SMMultiColumnFormLayout<User> formLayout = new SMMultiColumnFormLayout<>(2, fieldGroup);
-		formLayout.setWidth("600px");
-		formLayout.setColumnFieldWidth(0, 400);
-		formLayout.setColumnFieldWidth(1, 20);
+		if (layout == null)
+		{
+			layout = new VerticalLayout();
+			layout.setWidth("100%");
+			layout.setMargin(true);
 
-		formLayout.colspan(2);
-		final Label label = new Label("<h1>Start by creating an account to login to Scoutmaster.</h1>");
-		label.setContentMode(ContentMode.HTML);
-		formLayout.bindLabel(label);
+			final Label label = new SplitLabel("<h1>Start by creating an account to login to Scoutmaster.</h1>");
+			label.setContentMode(ContentMode.HTML);
+			layout.addComponent(label);
 
-		this.username = formLayout.bindTextField("Username:", "username");
-		this.username.setInputPrompt("Enter a username");
-		this.username.addValidator(new UsernameValidator());
-		this.username.setRequired(true);
+			VerticalLayout vertical = new VerticalLayout();
+			vertical.setMargin(true);
+			vertical.setWidth("600");
+			layout.addComponent(vertical);
 
-		// Create the password input field
-		this.password = formLayout.bindPasswordField("Password:", "password");
-		this.password
-				.setDescription("Enter a password  containing at least 2 digits and 2 non alphanumeric characters.");
-		this.password.addValidator(new PasswordValidator("Password"));
-		this.password.setRequired(true);
+			FormHelper<User> helper = new FormHelper<User>(layout, fieldGroup);
 
-		// Create the confirm password input field but we don't bind it.
-		this.confirmPassword = formLayout.addPasswordField("Confirm Password:");
-		this.confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
-		this.confirmPassword.setRequired(true);
+			// final SMMultiColumnFormLayout<User> formLayout = new
+			// SMMultiColumnFormLayout<>(2, fieldGroup);
+			// formLayout.setWidth("600px");
+			// formLayout.setColumnFieldWidth(0, 400);
+			// formLayout.setColumnFieldWidth(1, 20);
+			//
+			// formLayout.colspan(2);
 
-		// Create the email address input field
-		this.emailAddress = formLayout.bindTextField("Email Address:", "emailAddress");
-		this.emailAddress.addValidator(new EmailValidator("Enter your email address."));
-		this.emailAddress.setRequired(true);
-		this.emailAddress.setNullRepresentation("");
+			// formLayout.bindLabel(label);
 
-		// Create the confirmEmail input field
-		this.confirmEmailAddress = formLayout.addTextField("Confirm Email Address:");
-		this.confirmEmailAddress.addValidator(new EmailValidator("Enter your email address."));
-		this.confirmEmailAddress.setRequired(true);
-		this.confirmEmailAddress.setNullRepresentation("");
+			vertical.addComponent(new Label("Username:"));
 
-		// focus the username field when user arrives to the login view
-		this.username.focus();
+			// this.username = formLayout.bindTextField("Username:",
+			// "username");
 
-		return formLayout;
+			this.username = new TextField();
+			fieldGroup.bind(this.username, "username");
+			vertical.addComponent(this.username);
+			this.username.setInputPrompt("Enter a username");
+			this.username.addValidator(new UsernameValidator());
+			this.username.setRequired(true);
+			this.username.setNullRepresentation("");
+			this.username.setImmediate(true);
+
+			// Create the password input field
+			// this.password = formLayout.bindPasswordField("Password:",
+			// "password");
+
+			vertical.addComponent(new Label("Password:"));
+
+			// this.username = formLayout.bindTextField("Username:",
+			// "username");
+
+			this.password = new PasswordField();
+			vertical.addComponent(this.password);
+			// fieldGroup.bind(this.password, "password");
+			this.password.setDescription(PasswordValidator.validationRule);
+			this.password.addValidator(new PasswordValidator("Password"));
+			this.password.setRequired(true);
+			this.password.setValue("");
+			this.password.setImmediate(true);
+
+			// Create the confirm password input field but we don't bind it.
+			// this.confirmPassword = formLayout.addPasswordField("Confirm
+			// Password:");
+
+			vertical.addComponent(new Label("Confirm Password:"));
+
+			this.confirmPassword = new PasswordField();
+			vertical.addComponent(this.confirmPassword);
+
+			this.confirmPassword.addValidator(new PasswordValidator("Confirm Password"));
+			this.confirmPassword.setRequired(true);
+			this.confirmPassword.setDescription("Confirm your password");
+
+			// Create the email address input field
+			// this.emailAddress = formLayout.bindTextField("Email Address:",
+			// "emailAddress");
+
+			vertical.addComponent(new Label("Email Address:"));
+
+			this.emailAddress = new TextField();
+			vertical.addComponent(this.emailAddress);
+			fieldGroup.bind(this.emailAddress, "emailAddress");
+			this.emailAddress.setValue("");
+			this.emailAddress.setWidth("400");
+
+			this.emailAddress.addValidator(new EmailValidator("Enter your email address."));
+			this.emailAddress.setInputPrompt("Enter your email address.");
+			this.emailAddress.setRequired(true);
+			this.emailAddress.setNullRepresentation("");
+			this.emailAddress.setImmediate(true);
+
+			// Create the confirmEmail input field
+			// this.confirmEmailAddress = formLayout.addTextField("Confirm Email
+			// Address:");
+
+			vertical.addComponent(new Label("Confirm Email Address:"));
+
+			this.confirmEmailAddress = new TextField();
+			vertical.addComponent(this.confirmEmailAddress);
+
+			this.confirmEmailAddress.addValidator(new EmailValidator("Enter your email address."));
+			this.confirmEmailAddress.setRequired(true);
+			this.confirmEmailAddress.setNullRepresentation("");
+			this.confirmEmailAddress.setInputPrompt("Confirm your email address.");
+			this.confirmEmailAddress.setImmediate(true);
+
+			this.confirmEmailAddress.setWidth("400");
+
+			// focus the username field when user arrives to the login view
+			this.username.focus();
+		}
+
+		return layout;
 	}
 
 	@Override
@@ -108,7 +181,7 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 			}
 			else
 			{
-				// Non matching email addresses clear the password field
+				// Non matching email addresses
 				// and refocuses it
 				this.confirmEmailAddress.focus();
 				Notification.show("The email and confirm email fields do not match.");
@@ -117,8 +190,8 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 		else
 		{
 			// Non matching password field
-			this.password.setValue(null);
-			this.confirmPassword.setValue(null);
+			this.password.setValue("");
+			this.confirmPassword.setValue("");
 			this.password.focus();
 			Notification.show("The password and confirm password fields do not match.");
 
