@@ -3,17 +3,6 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.Tag_;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
@@ -24,6 +13,17 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.Tag_;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 @Menu(display = "Tags", path = "Members")
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
@@ -49,7 +49,7 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 
 		this.overviewForm = new SMMultiColumnFormLayout<Tag>(2, this.fieldGroup);
 		this.overviewForm.setColumnFieldWidth(0, 280);
-		this.overviewForm.setColumnLabelWidth(0, 70);
+		this.overviewForm.setColumnLabelWidth(0, 80);
 		this.overviewForm.setSizeFull();
 		this.overviewForm.getFieldGroup().setReadOnly(true);
 
@@ -72,12 +72,12 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	{
 		final JPAContainer<Tag> container = new DaoFactory().getTagDao().createVaadinContainer();
 		container.sort(new String[]
-				{ Tag_.name.getName() }, new boolean[]
-						{ true });
+		{ Tag_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
 		builder.addColumn("Tag", Tag_.name).addColumn("Description", Tag_.description)
-		.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
+				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
 
 		super.init(Tag.class, container, builder.build());
 
@@ -86,13 +86,15 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new SimpleStringFilter(Tag_.name.getName(), filterString, true, false), new SimpleStringFilter(
-				Tag_.description.getName(), filterString, true, false));
+		return new Or(new SimpleStringFilter(Tag_.name.getName(), filterString, true, false),
+				new SimpleStringFilter(Tag_.description.getName(), filterString, true, false));
 	}
 
 	@Override
-	public void rowChanged(final EntityItem<Tag> item)
+	public boolean allowCurrentRowEdit(final EntityItem<Tag> item)
 	{
+		boolean allowEditing = false;
+
 		if (item != null)
 		{
 			final Tag entity = item.getEntity();
@@ -100,21 +102,21 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 			if (entity != null && entity.getBuiltin())
 			{
 				// You can't edit builin tags.
-				this.detachable.setReadOnly(false);
-				super.disallowEdit(true);
-				super.disallowDelete(true);
+				this.detachable.setReadOnly(true);
+				this.overviewForm.setReadOnly(true);
 			}
 			else
 			{
+				allowEditing = true;
 				this.overviewForm.setReadOnly(false);
 				this.detachable.setReadOnly(false);
-				super.disallowEdit(false);
-				super.disallowDelete(false);
 			}
+			// You can never modify the built in flag
 			this.builtin.setReadOnly(true);
 
-			super.rowChanged(item);
 		}
+
+		return allowEditing;
 	}
 
 	@Override
