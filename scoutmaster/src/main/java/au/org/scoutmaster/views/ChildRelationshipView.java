@@ -1,5 +1,15 @@
 package au.org.scoutmaster.views;
 
+import javax.persistence.metamodel.SingularAttribute;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.FormHelper;
@@ -17,16 +27,6 @@ import au.org.scoutmaster.domain.RelationshipType;
 import au.org.scoutmaster.domain.RelationshipType_;
 import au.org.scoutmaster.domain.Relationship_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
-import javax.persistence.metamodel.SingularAttribute;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 
 public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 {
@@ -67,8 +67,8 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		/**
 		 * The contact we are related to.
 		 */
-		this.relatedTo = formHelper.new EntityFieldBuilder<Contact>().setLabel("Related To")
-				.setField(Relationship_.rhs).setListFieldName(Contact_.fullname).build();
+		this.relatedTo = formHelper.new EntityFieldBuilder<Contact>().setLabel("Related To").setField(Relationship_.rhs)
+				.setListFieldName(Contact_.fullname).build();
 		this.relatedTo.setFilteringMode(FilteringMode.CONTAINS);
 		this.relatedTo.setTextInputAllowed(true);
 
@@ -76,8 +76,8 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 		final JPAContainer<Relationship> rhscontainer = (JPAContainer<Relationship>) this.relatedTo
 				.getContainerDataSource();
 		rhscontainer.sort(new String[]
-				{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
-						{ true, true });
+		{ Contact_.lastname.getName(), Contact_.firstname.getName() }, new boolean[]
+		{ true, true });
 
 		return relationshipForm;
 	}
@@ -98,9 +98,11 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new SimpleStringFilter(Relationship_.lhs.getName(), filterString, true, false),
-				new SimpleStringFilter(new Path(Relationship_.type, RelationshipType_.lhs).getName(), filterString,
-						true, false))));
+		SimpleStringFilter lhs = new SimpleStringFilter(new Path(Relationship_.lhs, Contact_.fullname).getName(),
+				filterString, true, false);
+		SimpleStringFilter rhs = new SimpleStringFilter(new Path(Relationship_.type, RelationshipType_.lhs).getName(),
+				filterString, true, false);
+		return new Or(lhs, rhs);
 	}
 
 	@Override
