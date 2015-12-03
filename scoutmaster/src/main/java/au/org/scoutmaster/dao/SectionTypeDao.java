@@ -26,6 +26,11 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		return super.findSingleBySingleParameter(SectionType.FIND_BY_NAME, "name", name);
 	}
 
+	public List<SectionType> findAll()
+	{
+		return super.findList(SectionType.FIND_ALL);
+	}
+
 	/**
 	 * Determines which section a youth member is elidgible for.
 	 *
@@ -37,6 +42,10 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		SectionType eligible = null;
 
 		cacheSectionTypes();
+		// We need to guarantee a default section type. The first one should be the youngest
+		// Which allows for a birthDate of 0/0/0.
+		eligible = SectionTypeDao.sectionTypes.get(0);
+		
 		for (final SectionType sectionType : SectionTypeDao.sectionTypes)
 		{
 
