@@ -4,6 +4,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -28,19 +29,19 @@ public class Relationship extends BaseEntity implements ChildCrudEntity
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Entities used in child cruds must have a guid
-	 * to help uniquely identify each child.
+	 * Entities used in child cruds must have a guid to help uniquely identify
+	 * each child.
 	 */
-	 @NotNull
-	 @Column(updatable = false) 
-	 String guid = JpaEntityHelper.getGuid(this);
+	@NotNull
+	@Column(updatable = false)
+	String guid = JpaEntityHelper.getGuid(this);
 
-	
 	/**
 	 * The contact on the Left Hand Side (LHS) of the relationship type.
 	 *
 	 */
 	@ManyToOne(targetEntity = Contact.class)
+	@JoinColumn(name = "lhs_id")
 	Contact lhs;
 
 	/**
