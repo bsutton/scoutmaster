@@ -12,13 +12,13 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.FileSystemResourceAccessor;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ContextListener implements ServletContextListener
 {
@@ -32,15 +32,16 @@ public class ContextListener implements ServletContextListener
 		Liquibase liquibase;
 		try (Connection conn = getConnection())
 		{
-			final String masterPath = sce.getServletContext().getRealPath(
-					new File("/WEB-INF/classes/", ContextListener.MASTER_XML).getPath());
+
+			final String masterPath = sce.getServletContext()
+					.getRealPath(new File("/WEB-INF/classes/", ContextListener.MASTER_XML).getPath());
 			ContextListener.logger.info("Initialising liquibase");
 
 			final File masterFile = new File(masterPath);
 			final File baseDir = masterFile.getParentFile().getParentFile();
 
-			liquibase = new Liquibase(ContextListener.MASTER_XML, new FileSystemResourceAccessor(
-					baseDir.getCanonicalPath()), new JdbcConnection(conn));
+			liquibase = new Liquibase(ContextListener.MASTER_XML,
+					new FileSystemResourceAccessor(baseDir.getCanonicalPath()), new JdbcConnection(conn));
 			liquibase.update("");
 
 			ContextListener.logger.info("Liquibase has completed successfully");
