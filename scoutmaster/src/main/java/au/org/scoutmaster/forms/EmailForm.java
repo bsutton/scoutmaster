@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.activation.DataSource;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
@@ -12,29 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.easyuploads.FileBuffer;
 import org.vaadin.easyuploads.MultiFileUpload;
-
-import rx.Subscription;
-import rx.util.functions.Action1;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.fields.CKEditorEmailField;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.com.vaadinutils.listener.CompleteListener;
-import au.com.vaadinutils.ui.WorkingDialog;
-import au.com.vaadinutils.validator.EmailValidator;
-import au.org.scoutmaster.dao.CommunicationLogDao;
-import au.org.scoutmaster.dao.CommunicationTypeDao;
-import au.org.scoutmaster.dao.ContactDao;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.dao.Transaction;
-import au.org.scoutmaster.domain.CommunicationLog;
-import au.org.scoutmaster.domain.CommunicationType;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.SMTPServerSettings;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.util.ButtonEventSource;
-import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
@@ -55,6 +33,29 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.fields.CKEditorEmailField;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.listener.CompleteListener;
+import au.com.vaadinutils.ui.WorkingDialog;
+import au.com.vaadinutils.validator.EmailValidator;
+import au.org.scoutmaster.dao.CommunicationLogDao;
+import au.org.scoutmaster.dao.CommunicationTypeDao;
+import au.org.scoutmaster.dao.ContactDao;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.SMTPSettingsDao;
+import au.org.scoutmaster.dao.Transaction;
+import au.org.scoutmaster.domain.CommunicationLog;
+import au.org.scoutmaster.domain.CommunicationType;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.util.ButtonEventSource;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFileLayout;
+import rx.Subscription;
+import rx.util.functions.Action1;
+
 public class EmailForm extends VerticalLayout
 {
 	private static Logger logger = LogManager.getLogger(EmailForm.class);
@@ -68,7 +69,7 @@ public class EmailForm extends VerticalLayout
 	private final Button send;
 	private final Contact contact;
 	private final VerticalLayout attachedFiles;
-	private final HashSet<AttachedFile> fileList = new HashSet<>();
+	private final HashSet<AttachedFileLayout> fileList = new HashSet<>();
 
 	private final GridLayout grid;
 
@@ -109,7 +110,7 @@ public class EmailForm extends VerticalLayout
 		final List<EmailAddressType> targetTypes = getTargetTypes();
 
 		this.primaryTypeCombo = new ComboBox(null, targetTypes);
-		this.primaryTypeCombo.setWidth("60");
+		this.primaryTypeCombo.setWidth("100");
 		this.primaryTypeCombo.select(targetTypes.get(0));
 		this.primaryTypeCombo.select(EmailAddressType.To);
 		this.grid.addComponent(this.primaryTypeCombo);
@@ -241,7 +242,7 @@ public class EmailForm extends VerticalLayout
 		line.addComponent(new Label(file.getName()));
 		EmailForm.this.attachedFiles.addComponent(line);
 
-		final AttachedFile attachedFile = new AttachedFile(this.attachedFiles, file, line);
+		final AttachedFileLayout attachedFile = new AttachedFileLayout(this.attachedFiles, file, line);
 		this.fileList.add(attachedFile);
 		removeButton.setData(attachedFile);
 
@@ -252,7 +253,7 @@ public class EmailForm extends VerticalLayout
 			@Override
 			public void clicked(final ClickEvent event)
 			{
-				final AttachedFile file = (AttachedFile) event.getButton().getData();
+				final AttachedFileLayout file = (AttachedFileLayout) event.getButton().getData();
 				file.remove();
 				EmailForm.this.fileList.remove(file);
 
@@ -273,7 +274,7 @@ public class EmailForm extends VerticalLayout
 		line.row = row;
 
 		line.targetTypeCombo = new ComboBox(null, targetTypes);
-		line.targetTypeCombo.setWidth("60");
+		line.targetTypeCombo.setWidth("100");
 		line.targetTypeCombo.select(targetTypes.get(0));
 		this.grid.addComponent(line.targetTypeCombo);
 
@@ -454,15 +455,16 @@ public class EmailForm extends VerticalLayout
 						{
 							if (!isEmpty((String) line.targetAddress.getValue()))
 							{
-								targets.add(new SMTPSettingsDao.EmailTarget((EmailAddressType) line.targetTypeCombo
-										.getValue(), (String) line.targetAddress.getValue()));
+								targets.add(new SMTPSettingsDao.EmailTarget(
+										(EmailAddressType) line.targetTypeCombo.getValue(),
+										(String) line.targetAddress.getValue()));
 							}
 						}
 
 						assert targets.size() != 0 : "Empty list of email targets";
 						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
 								EmailForm.this.subject.getValue(), EmailForm.this.ckEditor.getValue(),
-								EmailForm.this.fileList);
+								EmailForm.this.getAttachements());
 
 						// em.detach(EmailForm.this.sender);
 						// em.detach(EmailForm.this.contact);
@@ -488,7 +490,7 @@ public class EmailForm extends VerticalLayout
 						SMNotification.show(e, Type.ERROR_MESSAGE);
 					}
 
-				}, this);
+				} , this);
 
 			}
 			EmailForm.this.send.setEnabled(true);
@@ -502,6 +504,18 @@ public class EmailForm extends VerticalLayout
 			EmailForm.this.owner.close();
 		}
 
+	}
+
+	public HashSet<? extends DataSource> getAttachements()
+	{
+		HashSet<DataSource> attachements = new HashSet<>();
+
+		for (AttachedFileLayout f : fileList)
+		{
+			attachements.add(f.getDataSource());
+
+		}
+		return attachements;
 	}
 
 }
