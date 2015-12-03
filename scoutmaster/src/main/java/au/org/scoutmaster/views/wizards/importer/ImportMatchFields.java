@@ -15,6 +15,13 @@ import java.util.List;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+
 import au.com.bytecode.opencsv.CSVReader;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ImportUserMappingDao;
@@ -23,13 +30,6 @@ import au.org.scoutmaster.domain.FormFieldImpl;
 import au.org.scoutmaster.domain.ImportColumnFieldMapping;
 import au.org.scoutmaster.domain.ImportUserMapping;
 import au.org.scoutmaster.domain.Importable;
-
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Notification.Type;
 
 public class ImportMatchFields implements WizardStep
 {
@@ -62,7 +62,8 @@ public class ImportMatchFields implements WizardStep
 		// fl.addComponent(fieldMapping);
 		// row.addComponent(fl);
 		// row.addComponent(new Label(
-		// "Enter a Import Mapping name to save the mappings if you plan on repeating this import"));
+		// "Enter a Import Mapping name to save the mappings if you plan on
+		// repeating this import"));
 
 		this.layout = null;
 		this.layout = new GridLayout(3, 1);
@@ -236,7 +237,7 @@ public class ImportMatchFields implements WizardStep
 	@Override
 	public boolean onBack()
 	{
-		this.reset = true;
+		// this.reset = true;
 		return true;
 	}
 
