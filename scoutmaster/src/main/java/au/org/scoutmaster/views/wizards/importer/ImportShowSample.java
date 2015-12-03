@@ -58,7 +58,7 @@ public class ImportShowSample implements WizardStep
 				reader.close();
 
 				/* Finally, let's update the table with the container */
-				table.setCaption("Sample from: " + this.importView.getFile().getSelectedFilename());
+				table.setCaption("Sample from: " + this.importView.getFile().getSelectedFile());
 				table.setContainerDataSource(indexedContainer);
 				table.setVisible(true);
 			}
