@@ -22,6 +22,7 @@ public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implem
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(GroupDetailStep.class);
+	private VerticalLayout layout;
 
 	public GroupDetailStep(final GroupSetupWizardView setupWizardView)
 	{
@@ -37,26 +38,29 @@ public class GroupDetailStep extends SingleEntityWizardStep<Organisation> implem
 	@Override
 	public Component getContent(final ValidatingFieldGroup<Organisation> fieldGroup)
 	{
-		final VerticalLayout layout = new VerticalLayout();
-		layout.setMargin(true);
-		final MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
-		formLayout.setColumnFieldWidth(0, 250);
-		formLayout.setSizeFull();
+		if (layout == null)
+		{
+			layout = new VerticalLayout();
+			layout.setMargin(true);
+			final MultiColumnFormLayout<Organisation> formLayout = new MultiColumnFormLayout<>(1, fieldGroup);
+			formLayout.setColumnFieldWidth(0, 250);
+			formLayout.setSizeFull();
 
-		final Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);
-		label.setContentMode(ContentMode.HTML);
+			final Label label = new Label("<h1>Please enter your Scout Group's details.</h1>", ContentMode.HTML);
+			label.setContentMode(ContentMode.HTML);
 
-		layout.addComponent(label);
-		layout.addComponent(formLayout);
+			layout.addComponent(label);
+			layout.addComponent(formLayout);
 
-		final TextField groupName = formLayout.bindTextField("Scout Group Name", "name");
-		formLayout.bindTextField("Phone No.", "primaryPhone");
-		formLayout.bindTextField("Street", "location.street");
-		formLayout.bindTextField("City", "location.city");
-		formLayout.bindTextField("State", "location.state");
-		formLayout.bindTextField("Postcode", "location.postcode");
+			final TextField groupName = formLayout.bindTextField("Scout Group Name", "name");
+			formLayout.bindTextField("Phone No.", "primaryPhone");
+			formLayout.bindTextField("Street", "location.street");
+			formLayout.bindTextField("City", "location.city");
+			formLayout.bindTextField("State", "location.state");
+			formLayout.bindTextField("Postcode", "location.postcode");
 
-		groupName.addValidator(new StringLengthValidator("Scout Group Name", 6, 255, false));
+			groupName.addValidator(new StringLengthValidator("Scout Group Name", 6, 255, false));
+		}
 
 		return layout;
 	}
