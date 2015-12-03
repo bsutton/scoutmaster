@@ -9,15 +9,6 @@ import org.vaadin.teemu.wizards.event.WizardProgressListener;
 import org.vaadin.teemu.wizards.event.WizardStepActivationEvent;
 import org.vaadin.teemu.wizards.event.WizardStepSetChangedEvent;
 
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.application.NavigatorUI;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.RaffleDao;
-import au.org.scoutmaster.domain.Raffle;
-import au.org.scoutmaster.help.HelpPageIdentifier;
-import au.org.scoutmaster.help.HelpProvider;
-import au.org.scoutmaster.views.RaffleView;
-
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
@@ -26,9 +17,17 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.help.HelpProvider;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.NavigatorUI;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.RaffleDao;
+import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.views.RaffleView;
+
 @Menu(display = "Allocate Books", path = "Raffle")
-public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener,
-HelpProvider
+public class RaffleBookAllocationWizardView extends VerticalLayout implements View, WizardProgressListener, HelpProvider
 {
 	private static final long serialVersionUID = 1L;
 
