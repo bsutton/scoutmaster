@@ -5,22 +5,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.CrudAction;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.menu.Menu;
-import au.com.vaadinutils.validator.MobilePhoneValidator;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.domain.access.User_;
-import au.org.scoutmaster.help.HelpPageIdentifier;
-import au.org.scoutmaster.help.HelpProvider;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-import au.org.scoutmaster.validator.PasswordValidator;
-import au.org.scoutmaster.views.actions.UserActionInviteUser;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
@@ -38,9 +22,25 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.CrudAction;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.help.HelpProvider;
+import au.com.vaadinutils.menu.Menu;
+import au.com.vaadinutils.validator.MobilePhoneValidator;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+import au.org.scoutmaster.validator.PasswordValidator;
+import au.org.scoutmaster.views.actions.UserActionInviteUser;
+
 @Menu(display = "Users", path = "Admin.Security")
-public class UserView extends BaseCrudView<User> implements View, Selected<User>, TextChangeListener, FocusListener,
-		HelpProvider
+public class UserView extends BaseCrudView<User>
+		implements View, Selected<User>, TextChangeListener, FocusListener, HelpProvider
 {
 
 	private static final long serialVersionUID = 1L;
@@ -101,12 +101,12 @@ public class UserView extends BaseCrudView<User> implements View, Selected<User>
 	{
 		final JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
 		container.sort(new String[]
-				{ User_.username.getName() }, new boolean[]
-						{ true });
+		{ User_.username.getName() }, new boolean[]
+		{ true });
 
 		final Builder<User> builder = new HeadingPropertySet.Builder<User>();
-		builder.addColumn("Username", User_.username).addColumn("Enabled", User_.enabled)
-		.addColumn("Email", User_.emailAddress);
+		builder.addColumn("Username", User_.username).addColumn("Enabled", User_.enabled).addColumn("Email",
+				User_.emailAddress);
 
 		super.init(User.class, container, builder.build());
 	}
