@@ -10,6 +10,10 @@ import com.google.gwt.thirdparty.guava.common.base.Preconditions;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewProvider;
 
+import au.com.vaadinutils.crud.CrudSecurityManager;
+import au.com.vaadinutils.crud.security.SecurityManagerFactoryProxy;
+import au.com.vaadinutils.help.HelpSplitPanel;
+import au.org.scoutmaster.application.AccessDeniedView;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 
 /**
@@ -30,22 +34,29 @@ public class HelpWrappingViewProvider implements ViewProvider
 	 *
 	 */
 	private static final long serialVersionUID = 1300354248455962125L;
-	private final Map<String, Class<? extends View>> views = new HashMap<String, Class<? extends View>>();
+	private Map<String, Class<? extends View>> views = new HashMap<String, Class<? extends View>>();
 
-	private final Map<String, Class<? extends View>> viewsWithoutHelp = new HashMap<String, Class<? extends View>>();
+	private Map<String, Class<? extends View>> viewsWithoutHelp = new HashMap<String, Class<? extends View>>();
 
-	ScoutmasterViewEnum defaultView = null;
+	transient Logger logger = LogManager.getLogger();
 
-	Logger logger = LogManager.getLogger();
+	String lastViewName = null;
+	private ScoutmasterViewEnum defaultView;
 
 	/**
 	 * The list of views is automatically retrieved from the VaadinPageEnum enum
 	 */
-	public HelpWrappingViewProvider()
+	public HelpWrappingViewProvider(String defaultViewName)
 	{
-		for (final ScoutmasterViewEnum page : ScoutmasterViewEnum.values())
+
+		for (ScoutmasterViewEnum page : ScoutmasterViewEnum.values())
 		{
 			addView(page);
+			if (page.getTitle().equals(defaultViewName))
+			{
+				this.defaultView = page;
+			}
+
 		}
 
 	}
@@ -53,47 +64,42 @@ public class HelpWrappingViewProvider implements ViewProvider
 	@Override
 	public String getViewName(String viewAndParameters)
 	{
-		this.logger.info(viewAndParameters);
+		logger.info(viewAndParameters);
 
-		if (viewAndParameters.contains("&"))
-		{
-			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("&"));
-		}
+		viewAndParameters = viewAndParameters.split("&")[0];
+		viewAndParameters = viewAndParameters.split("/")[0];
 
-		if (viewAndParameters.contains("/"))
+		if (!views.containsKey(viewAndParameters) && !viewsWithoutHelp.containsKey(viewAndParameters))
 		{
-			viewAndParameters = viewAndParameters.substring(0, viewAndParameters.indexOf("/"));
+			logger.warn("Couldn't match view '" + viewAndParameters + "'");
+			return defaultView.getTitle();
 		}
-
-		if (viewAndParameters.length() == 0)
-		{
-			viewAndParameters = this.defaultView.getTitle();
-		}
-
-		if (!this.views.containsKey(viewAndParameters) && !this.viewsWithoutHelp.containsKey(viewAndParameters))
-		{
-			this.logger.error("Couldn't match view " + viewAndParameters);
-			return null;
-		}
+		lastViewName = viewAndParameters;
 		return viewAndParameters;
 	}
 
 	@Override
-	public View getView(final String viewName)
+	public View getView(String viewName)
 	{
 		boolean noHelp = false;
 		View helpPanel = null;
 		try
 		{
-			Class<? extends View> viewClass = this.views.get(viewName);
+			Class<? extends View> viewClass = views.get(viewName);
 			if (viewClass == null)
 			{
 				noHelp = true;
-				viewClass = this.viewsWithoutHelp.get(viewName);
+				viewClass = viewsWithoutHelp.get(viewName);
 			}
 			Preconditions.checkNotNull(viewClass, "Couldn't find the view " + viewName);
 
+			CrudSecurityManager model = SecurityManagerFactoryProxy.getSecurityManager(viewClass);
+			if (!model.canUserView())
+			{
+				return new AccessDeniedView(model.getFeatureName());
+			}
 			helpPanel = viewClass.newInstance();
+
 			if (!noHelp)
 			{
 				// wrap the view in a help panel
@@ -101,32 +107,28 @@ public class HelpWrappingViewProvider implements ViewProvider
 			}
 
 		}
-		catch (final InstantiationException e)
+		catch (InstantiationException e)
 		{
-			this.logger.error(e, e);
+			logger.error(e, e);
 		}
-		catch (final IllegalAccessException e)
+		catch (IllegalAccessException e)
 		{
-			this.logger.error(e, e);
+			logger.error(e, e);
 		}
 		return helpPanel;
 	}
 
-	private void addView(final ScoutmasterViewEnum view)
+	private void addView(ScoutmasterViewEnum page2)
 	{
-		if (view.noHelp())
+		if (page2.noHelp())
 		{
-			this.viewsWithoutHelp.put(view.getTitle(), view.getViewClass());
+			viewsWithoutHelp.put(page2.getTitle(), page2.getViewClass());
 		}
 		else
 		{
-			this.views.put(view.getTitle(), view.getViewClass());
+			views.put(page2.getTitle(), page2.getViewClass());
 		}
 
-		if (view.isDefaultView())
-		{
-			this.defaultView = view;
-		}
 	}
 
 }

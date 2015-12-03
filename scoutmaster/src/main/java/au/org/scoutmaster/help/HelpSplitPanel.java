@@ -20,6 +20,8 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.help.HelpProvider;
+
 public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPageListener
 {
 
@@ -67,7 +69,7 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 		this.component.enter(event);
 	}
 
-	public void setHelpPageId(final HelpPageIdentifier helpId)
+	public void setHelpPageId(final Enum helpId)
 	{
 		setHelp(helpId);
 
@@ -108,54 +110,50 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 	}
 
 	@Override
-	public void setHelp(final HelpPageIdentifier helpId)
+	public void setHelp(final Enum helpId)
 	{
-		final Thread loadPage = new Thread(
-				() -> {
-					String helpSource = null;
-					try
-					{
-						helpSource = HelpSplitPanel.this.page.lookupHelpPage(helpId);
-					}
-					catch (final ExecutionException e)
-					{
-						HelpSplitPanel.this.logger.error(e, e);
-					}
+		final Thread loadPage = new Thread(() -> {
+			String helpSource = null;
+			try
+			{
+				helpSource = HelpSplitPanel.this.page.lookupHelpPage(helpId);
+			}
+			catch (final ExecutionException e)
+			{
+				HelpSplitPanel.this.logger.error(e, e);
+			}
 
-					final String pageSource = helpSource;
-					UI.getCurrent()
-							.access(() -> {
-								if (pageSource != null)
-								{
-									HelpSplitPanel.this.helpContainer.removeAllComponents();
+			final String pageSource = helpSource;
+			UI.getCurrent().access(() -> {
+				if (pageSource != null)
+				{
+					HelpSplitPanel.this.helpContainer.removeAllComponents();
 
-									HelpSplitPanel.this.helpContainer.addComponent(new Label("Help page is 'Help-"
-											+ helpId + "'"));
+					HelpSplitPanel.this.helpContainer.addComponent(new Label("Help page is 'Help-" + helpId + "'"));
 
-									final Label help1 = new Label(pageSource, ContentMode.HTML);
-									HelpSplitPanel.this.helpContainer.addComponent(help1);
-								}
-								else
-								{
-									final VerticalLayout help2 = new VerticalLayout();
-									help2.setSizeFull();
+					final Label help1 = new Label(pageSource, ContentMode.HTML);
+					HelpSplitPanel.this.helpContainer.addComponent(help1);
+				}
+				else
+				{
+					final VerticalLayout help2 = new VerticalLayout();
+					help2.setSizeFull();
 
-									final Link link = new Link("To create a help page click here",
-											new ExternalResource(
-													"https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"),
-											"wiki", 0, 0, BorderStyle.DEFAULT);
+					final Link link = new Link("To create a help page click here",
+							new ExternalResource("https://github.com/bsutton/scoutmaster/wiki/ContextHelpIndex"),
+							"wiki", 0, 0, BorderStyle.DEFAULT);
 
-									help2.addComponent(new Label(
-											"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
-													+ helpId + " in the wiki."));
-									help2.addComponent(link);
-									help2.addComponent(new Label("Help id is " + helpId));
-									HelpSplitPanel.this.helpPane.setContent(help2);
-								}
+					help2.addComponent(new Label(
+							"Please create a help page in the wiki. The hyper link will take you to the help page guide in the wiki. You should create new page for "
+									+ helpId + " in the wiki."));
+					help2.addComponent(link);
+					help2.addComponent(new Label("Help id is " + helpId));
+					HelpSplitPanel.this.helpPane.setContent(help2);
+				}
 
-							});
+			});
 
-				});
+		});
 		loadPage.start();
 
 	}
