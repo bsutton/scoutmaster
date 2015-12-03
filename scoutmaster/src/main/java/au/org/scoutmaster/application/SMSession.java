@@ -1,15 +1,15 @@
 package au.org.scoutmaster.application;
 
-import au.org.scoutmaster.domain.access.User;
-
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
+
+import au.org.scoutmaster.domain.access.User;
 
 public enum SMSession
 {
 	INSTANCE;
 
-	static final String USER = "user";
+	static private final String USER = "user";
 
 	public User getLoggedInUser()
 	{

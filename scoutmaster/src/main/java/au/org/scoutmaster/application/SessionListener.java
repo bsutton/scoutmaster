@@ -48,7 +48,7 @@ public class SessionListener implements HttpSessionListener
 		{
 			final JpaBaseDao<SessionHistory, Long> daoSession = new DaoFactory(em).getSessionHistoryDao();
 			final HttpSession session = arg0.getSession();
-			final User user = (User) session.getAttribute(SMSession.USER);
+			final User user = SMSession.INSTANCE.getLoggedInUser();
 
 			final SessionHistory sessionHistory = new SessionHistory();
 			sessionHistory.setUser(user);
