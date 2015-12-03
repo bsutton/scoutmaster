@@ -32,7 +32,7 @@ public class ImportSelectFile implements WizardStep
 	protected Table table;
 
 	private boolean uploadComplete = false;
-	protected String selectedFilename;
+	protected File selectedFilename;
 	private Upload upload;
 	private final ProgressBar progressBar;
 	private final Label progress = new Label();
@@ -127,7 +127,7 @@ public class ImportSelectFile implements WizardStep
 					 * reader around it, use ProgressListener (and a progress
 					 * bar) and a separate reader thread to populate a container
 					 * *during* the update.
-					 * 
+					 *
 					 * This is quick and easy example, though.
 					 */
 					ImportSelectFile.this.tempFile = File.createTempFile("temp", ".csv");
@@ -153,11 +153,15 @@ public class ImportSelectFile implements WizardStep
 			{
 				UI ui = UI.getCurrent();
 				ui.access(() -> {
-					ImportSelectFile.this.selectedFilename = finishedEvent.getFilename();
+					ImportSelectFile.this.selectedFilename = new File(finishedEvent.getFilename());
 					ImportSelectFile.this.uploadComplete = true;
 					ImportSelectFile.this.progress.setVisible(false);
 					ImportSelectFile.this.progressBar.setValue(1.0f);
 					ImportSelectFile.this.progressBar.setVisible(true);
+
+					ImportSelectFile.this.progressBar
+							.setCaption("Completed uploading file: " + ImportSelectFile.this.selectedFilename.getName()
+									+ " Total size: " + finishedEvent.getLength() + " bytes");
 					ImportSelectFile.this.completionMessage.setValue(
 							"The upload of File " + ImportSelectFile.this.selectedFilename + " has been completed.");
 
@@ -179,8 +183,8 @@ public class ImportSelectFile implements WizardStep
 			{
 				UI ui = UI.getCurrent();
 				ui.access(() -> {
-					ImportSelectFile.this.progress
-							.setValue("Uploaded: " + (float) readBytes / (float) contentLength * 100 + "%");
+					ImportSelectFile.this.progressBar
+							.setCaption("Uploaded: " + (float) readBytes / (float) contentLength * 100 + "%");
 					ImportSelectFile.this.progressBar.setValue((float) readBytes / (float) contentLength);
 					ImportSelectFile.this.progressBar.setVisible(true);
 				});
@@ -249,7 +253,7 @@ public class ImportSelectFile implements WizardStep
 		return this.tempFile;
 	}
 
-	public String getSelectedFilename()
+	public File getSelectedFile()
 	{
 		return this.selectedFilename;
 	}
