@@ -8,6 +8,7 @@
 	<!-- Set default values otherwise we get validation errors when trying to 
 		load the entity.. -->
 	<changeSet author="bsutton" id="1.0.14">
+	<validCheckSum>7:7917ab8be9af0ce31968a2d8ca2d1c23</validCheckSum>
 		<update tableName="Tag">
 			<column name="name" value="Joeys" />
 			<where>NAME="Joey"</where>

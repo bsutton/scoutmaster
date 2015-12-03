@@ -23,6 +23,7 @@
 	</changeSet>
 
 		<changeSet failOnError="false" author="bsutton" id="1.0.16.6">
+		<validCheckSum>7:d67d5e44258e9d97a3c01d729e787e6e</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -32,7 +33,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.7">
-
+<validCheckSum>7:aa357ed9657a893614862bcc78cba13c</validCheckSum>
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
 			<column name="DETACHABLE" valueNumeric="1" />
@@ -40,6 +41,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.8">
+	<validCheckSum>7:a78154f8b7ad17b43c9d338716952796</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -50,6 +52,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.10">
+	<validCheckSum>7:2ecd3538affd0f9c064c169012df4869</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -59,6 +62,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.11">
+	<validCheckSum>7:77c79e3d25266dfac2e5c1a028af117c</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -68,6 +72,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.12">
+	<validCheckSum>7:8affb0ee808cd613288848ab67c99f95</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -77,6 +82,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.13">
+	<validCheckSum>7:2f90f21638fe5ef9528b2a5896854399</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -85,6 +91,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.14">
+	<validCheckSum>7:cacd957af4d1395ed269a37e278eafc8</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -95,6 +102,7 @@
 
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.15">
+	<validCheckSum>7:3f3cf14199757773ba7a81cf297f1c36</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -103,6 +111,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.16">
+	<validCheckSum>7:9cac6fde34fbd9955b8f34aa8d5de531</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -113,6 +122,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.17">
+	<validCheckSum>7:0fd3761b4c9c62269d1f294152948c1f</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -121,6 +131,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.18">
+	<validCheckSum>7:edd7d6244c4516dd45bce3a83d0863c2</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -130,6 +141,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.19">
+	<validCheckSum>7:f569cc28b8d58a7067d0da6a050aa3fd</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -138,6 +150,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.20">
+	<validCheckSum>7:16628b0402518366428f01f8f0e90051</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -148,6 +161,7 @@
 
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.21">
+	<validCheckSum>7:2bc1d540031dded8b9bb434b5222c4e5</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -156,6 +170,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.22">
+	<validCheckSum>7:e5eab46f9714879b14aa99d32d8a7ccf</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -164,6 +179,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.23">
+	<validCheckSum>7:8affb0ee808cd613288848ab67c99f95</validCheckSum>
 
 
 		<update tableName="Tag">
@@ -173,6 +189,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.24">
+	<validCheckSum>7:0fa7bd86bdae098ca8f187f29cdcaa5b</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -182,6 +199,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.25">
+	<validCheckSum>7:1f0e6afe9f1d193becc1977894944bda</validCheckSum>
 
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
@@ -190,6 +208,7 @@
 		</update>
 	</changeSet>
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.26">
+	<validCheckSum>7:fc91d2a8a4be8dafc12c041e921891bb</validCheckSum>
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
 			<column name="DETACHABLE" valueNumeric="1" />
@@ -199,6 +218,7 @@
 
 	
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.28">
+	<validCheckSum>7:f1afa0e734c4cf1068f682b1ceab40a7</validCheckSum>
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
 			<column name="DETACHABLE" valueNumeric="1" />
@@ -220,6 +240,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.31">
+	<validCheckSum>7:fae21b821b9332cae96160a8ad388eef</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Joey Leader"</where>
@@ -227,6 +248,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.32">
+	<validCheckSum>7:2d7fb9cf3e575321a17eabd292b8b94d</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Cub Leader"</where>
@@ -235,6 +257,7 @@
 
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.33">
+	<validCheckSum>7:e855ef93db3775344d0dfd421bd55fc8</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Scout Leader"</where>
@@ -242,6 +265,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.34">
+	<validCheckSum>7:2b6eab8b607599de52cc3da3a661e6a1</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Venturer Leader"</where>
@@ -249,6 +273,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.35">
+	<validCheckSum>7:a1c4d1fd37ca4c5ebe9460dbdfb894b7</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Rover Leader"</where>
@@ -256,6 +281,7 @@
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.36">
+	<validCheckSum>7:7f1819e850e4b4c753a4083bcce78d22</validCheckSum>
 		<update tableName="Tag">
 			<column name="DETACHABLE" valueNumeric="0" />
 			<where>NAME="Recruitment Officer"</where>
@@ -263,12 +289,14 @@
 	</changeSet>
 
 	<changeSet author="bsutton" id="1.0.16.37">
+	<validCheckSum>7:9ee94a5f7f7547a370cfb0ede3a34ef1</validCheckSum>
 		<delete tableName="Tag">
 			<where>NAME="Gardian"</where>
 		</delete>
 	</changeSet>
 
 	<changeSet failOnError="false" author="bsutton" id="1.0.16.38">
+	<validCheckSum>7:1d9337faca74e8ace6a8f02a570c103d</validCheckSum>
 		<update tableName="Tag">
 			<column name="Description" value="Responsible for upkeep of the hall grounds." />
 			<column name="BUILTIN" valueNumeric="1" />

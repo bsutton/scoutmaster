@@ -7,6 +7,7 @@
 
 	<!-- Add Friend of -->
 	<changeSet author="bsutton" id="1.0.39">
+	<validCheckSum>7:c24bd78d4c4cb30bb60ffef5c3dfa5d5</validCheckSum>
 		<insert tableName="RelationshipType">
 			<column name="CREATED" valueComputed="now()" />
 			<column name="CONSISTENCYVERSION" value="1" />
@@ -19,6 +20,7 @@
 
 	</changeSet>
 	<changeSet author="bsutton" id="1.0.39.1">
+	<validCheckSum>7:c24bd78d4c4cb30bb60ffef5c3dfa5d5</validCheckSum>
 		<delete tableName="RelationshipType">
 			<where>ID="21"</where>
 		</delete>

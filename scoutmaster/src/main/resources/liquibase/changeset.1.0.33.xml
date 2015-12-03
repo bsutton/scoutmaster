@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet author="bsutton" id="1.0.33">
-
+<validCheckSum>7:fa304ca7ae9f69b48f677beb19c29eea</validCheckSum>
 		<!-- Section tags are not detachable. -->
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />

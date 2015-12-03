@@ -6,7 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet author="bsutton" id="1.0.34">
-
+<validCheckSum>7:9b6b986c46c5f4db5efb4109c7d2716b</validCheckSum>
 		<!-- Correct spelling of Guardian. -->
 		<update tableName="GroupRole">
 			<column name="enumName" value="Guardian" />

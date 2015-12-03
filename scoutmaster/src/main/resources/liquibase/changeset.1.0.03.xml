@@ -7,6 +7,7 @@
 
 	<!-- Add standard Section Types -->
 	<changeSet author="bsutton" id="1.0.03">
+	<validCheckSum>7:3e74f7484119f9c953eed6fcfd18f7af</validCheckSum>
 		<update tableName="SectionType">
 			<column name="NAME" value="Rovers" />
 			<where>NAME="Rover"</where>

@@ -6,6 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 	<changeSet author="bsutton" id="1.0.15">
+	<validCheckSum>7:193db63baef24dfa97f3a31efec88f0a</validCheckSum>
 		<update tableName="Tag">
 			<column name="BUILTIN" valueNumeric="1" />
 			<column name="DETACHABLE" valueNumeric="1" />
