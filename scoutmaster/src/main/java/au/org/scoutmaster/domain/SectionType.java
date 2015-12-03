@@ -31,12 +31,17 @@ import org.hibernate.validator.constraints.NotBlank;
 @Access(AccessType.FIELD)
 @NamedQueries(
 
-		{ @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") })
+		{ @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") 
+		,  @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype order by sectiontype.startingAge") 
+		}
+		
+		)
 public class SectionType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_BY_NAME = "SectionType.FindByName";
+	public static final String FIND_ALL = "SectionType.FindAll";
 
 	/**
 	 * The name of the section type. e.g Cubs.
