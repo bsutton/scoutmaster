@@ -4,14 +4,6 @@ import java.io.File;
 
 import org.joda.time.DateTime;
 
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.org.scoutmaster.application.SMSession;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.LoginAttemptDao;
-import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.LoginAttempt;
-import au.org.scoutmaster.domain.access.User;
-
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -34,11 +26,21 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.access.LoginAttemptDao;
+import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.domain.access.LoginAttempt;
+import au.org.scoutmaster.domain.access.User;
+
 public class LoginView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "login";
+
+	public static final String LOGIN_TARGET = "LOGIN_TARGET";
 
 	private final TextField usernameField;
 
@@ -55,7 +57,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		// The view root layout
 		final VerticalLayout viewLayout = new VerticalLayout();
 		viewLayout.setSizeFull();
-		viewLayout.setStyleName(Reindeer.LAYOUT_BLACK);
+		// viewLayout.setStyleName(ValoTheme.LAYOUT_BLACK);
 
 		final HorizontalLayout logo = new HorizontalLayout();
 		logo.setWidth("100%");
@@ -167,7 +169,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 
 					// Wrong password clear the password field and refocuses it
 					this.usernameField.focus();
-					Notification.show("Invalid username or password!", Type.TRAY_NOTIFICATION);
+					Notification.show("Invalid username or password!", Type.ERROR_MESSAGE);
 				}
 			}
 			else
@@ -178,7 +180,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				blockedUntil = blockedUntil.plusMinutes(1);
 				blockedUntil = blockedUntil.minusSeconds(blockedUntil.getSecondOfMinute());
 				Notification.show("Login Attempts have been exceed.",
-						"You are now blocked until " + blockedUntil.toString("h:mm") + ".", Type.TRAY_NOTIFICATION);
+						"You are now blocked until " + blockedUntil.toString("h:mm") + ".", Type.ERROR_MESSAGE);
 			}
 		}
 	}
