@@ -30,6 +30,8 @@
 	</listener>
 
 	<!-- per request Entity Manager injection -->
+
+
 	<filter>
 		<filter-name>EntityManagerInjectorFilter</filter-name>
 		<filter-class>au.com.vaadinutils.servlet.EntityManagerInjectorFilter
@@ -56,6 +58,11 @@
 			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
 			</param-value>
 		</init-param>
+
+		<init-param>
+			<param-name>pushmode</param-name>
+			<param-value>automatic</param-value>
+		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
 
@@ -74,15 +81,19 @@
 			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
 			</param-value>
 		</init-param>
+		<init-param>
+			<param-name>pushmode</param-name>
+			<param-value>automatic</param-value>
+		</init-param>
 		<async-supported>true</async-supported>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>ImageServlet</servlet-name>
 		<servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet
 		</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>ImageServlet</servlet-name>
 		<url-pattern>/images</url-pattern>
