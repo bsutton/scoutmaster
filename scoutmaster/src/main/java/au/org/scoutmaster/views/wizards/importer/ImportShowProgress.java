@@ -98,8 +98,10 @@ public class ImportShowProgress implements WizardStep, ProgressTaskListener<Impo
 		final File tempFile = this.importView.getFile().getTempFile();
 		final Class<? extends Importable> clazz = this.importView.getType().getEntityClass();
 
-		final ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(
-				new ImportTask(this, tempFile, clazz, this.importView.getMatch().getFieldMap()));
+		ImportTask importTask = new ImportTask(this, tempFile, this.importView.getFile().getSelectedFile(), clazz,
+				this.importView.getMatch().getFieldMap());
+
+		final ProgressBarWorker<ImportItemStatus> worker = new ProgressBarWorker<>(importTask);
 		worker.start();
 
 		return layout;
