@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
+
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +17,15 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.forms.EmailAddressType;
-import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFile;
 
 public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements Dao<SMTPServerSettings, Long>
 {
+	/**
+	 * Helper class to store an emailAddress and the Address Type (To, BCC, CC).
+	 *
+	 * @author bsutton
+	 *
+	 */
 	static public class EmailTarget
 	{
 
@@ -39,8 +47,6 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	{
 		// inherit the default per request em.
 	}
-
-	
 
 	public SMTPServerSettings findSettings()
 	{
@@ -75,12 +81,30 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	}
 
 	public void sendEmail(final SMTPServerSettings settings, final String fromAddress, final EmailTarget target,
-			final String subject, final String body, final HashSet<AttachedFile> attachedFiles) throws EmailException
+			final String subject, final String body, final HashSet<? extends DataSource> attachedFiles)
+					throws EmailException
 	{
 		final ArrayList<EmailTarget> list = new ArrayList<>();
 		list.add(target);
 
 		sendEmail(settings, fromAddress, list, subject, body, attachedFiles);
+
+	}
+
+	public void sendEmail(SMTPServerSettings settings, String fromEmailAddress, EmailTarget emailTarget, String subject,
+			String body) throws EmailException
+	{
+		sendEmail(settings, fromEmailAddress, emailTarget, subject, body, new HashSet<DataSource>());
+
+	}
+
+	public void sendEmail(SMTPServerSettings settings, String fromAddress, EmailTarget target, String subject,
+			String bodyText, ByteArrayDataSource byteArrayDataSource)
+	{
+		final HashSet<DataSource> attachedFiles = new HashSet<>();
+		attachedFiles.add(byteArrayDataSource);
+
+		sendEmail(settings, fromAddress, target, subject, bodyText, byteArrayDataSource);
 
 	}
 
@@ -99,7 +123,8 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	 * @throws EmailException
 	 */
 	public void sendEmail(final SMTPServerSettings settings, final String fromAddress, final List<EmailTarget> targets,
-			final String subject, final String body, final HashSet<AttachedFile> attachedFiles) throws EmailException
+			final String subject, final String body, final HashSet<? extends DataSource> attachedFiles)
+					throws EmailException
 	{
 		final HtmlEmail email = new HtmlEmail();
 
@@ -129,9 +154,9 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		email.setTextMsg("Your email client does not support HTML messages");
 		if (attachedFiles != null)
 		{
-			for (final AttachedFile attachedFile : attachedFiles)
+			for (final DataSource attachedFile : attachedFiles)
 			{
-				email.attach(attachedFile.getFile());
+				email.attach(attachedFile, attachedFile.getName(), attachedFile.getContentType());
 			}
 		}
 
