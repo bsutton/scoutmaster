@@ -29,7 +29,7 @@ import au.org.scoutmaster.views.calendar.PublicCalendarView;
  */
 @Title("Scoutmaster")
 // @PreserveOnRefresh
-@Theme("valo")
+@Theme("scoutmaster")
 @Push // (transport = Transport.LONG_POLLING)
 @Widgetset(value = "au.org.scoutmaster.AppWidgetSet")
 public class PublicUI extends UI
