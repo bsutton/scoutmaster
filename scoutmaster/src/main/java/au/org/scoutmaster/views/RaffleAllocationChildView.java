@@ -6,7 +6,17 @@ import java.util.List;
 
 import javax.persistence.metamodel.SingularAttribute;
 
-import net.sf.jasperreports.engine.JRException;
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.combobox.FilteringMode;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.TextField;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.CrudAction;
@@ -32,17 +42,7 @@ import au.org.scoutmaster.domain.RaffleAllocation;
 import au.org.scoutmaster.domain.RaffleAllocation_;
 import au.org.scoutmaster.domain.RaffleBook;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
-
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.TextField;
+import net.sf.jasperreports.engine.JRException;
 
 public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAllocation>
 {
@@ -80,9 +80,36 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 			final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 			builder.addField(new ReportParameterConstant<Long>("allocationIds", allocation.getId()));
 
-			final SMJasperReportProperties properties = new SMJasperReportProperties("Raffle Allocation",
-					"RaffleAllocation.jasper", builder, ScoutmasterViewEnum.RaffleAllocationsReport);
+			final SMJasperReportProperties properties = new SMJasperReportProperties(
+					ScoutmasterViewEnum.RaffleAllocationsReport)
+			{
+				@Override
+				public String getReportTitle()
+				{
+					return "Raffle Allocation";
+				}
+
+				@Override
+				public String getReportFileName()
+				{
+					return "RaffleAllocation.jasper";
+				}
+
+				@Override
+				public ReportFilterUIBuilder getFilterBuilder()
+				{
+					return builder;
+				}
+			};
+
 			return properties;
+		}
+
+		@Override
+		public boolean showPreparingDialog()
+		{
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 

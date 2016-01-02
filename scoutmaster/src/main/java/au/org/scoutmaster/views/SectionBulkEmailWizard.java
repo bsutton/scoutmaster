@@ -4,11 +4,23 @@ import java.util.List;
 
 import javax.persistence.metamodel.SingularAttribute;
 
-import net.sf.jasperreports.engine.JRException;
+import com.vaadin.navigator.View;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.fields.DependantComboBox;
 import au.com.vaadinutils.fields.EntityComboBox;
+import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.wizards.bulkJasperEmail.JasperProxy;
 import au.com.vaadinutils.wizards.bulkJasperEmail.Recipient;
@@ -24,18 +36,7 @@ import au.org.scoutmaster.jasper.JasperEmailSettingsImpl;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.SectionBulkEmailWizard.ContactRecipient;
-
-import com.vaadin.navigator.View;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import net.sf.jasperreports.engine.JRException;
 
 @Menu(display = "Section", path = "Test")
 public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, ContactRecipient> implements View
@@ -65,8 +66,8 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 
 	public SectionBulkEmailWizard()
 	{
-		super(new DaoFactory().getSectionTypeDao().createVaadinContainer(), new DaoFactory().getContactDao()
-				.createVaadinContainer());
+		super(new DaoFactory().getSectionTypeDao().createVaadinContainer(),
+				new DaoFactory().getContactDao().createVaadinContainer());
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	{
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
-		.addColumn("Birth Date", Contact_.birthDate);
+				.addColumn("Birth Date", Contact_.birthDate);
 
 		return builder.build();
 	}
@@ -148,9 +149,29 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 	@Override
 	public JasperProxy getJasperProxy() throws JRException
 	{
-		final SMJasperReportProperties properties = new SMJasperReportProperties("Member Report", getJasperReport(), ScoutmasterViewEnum.Member);
-		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(), properties);
-				
+		final SMJasperReportProperties properties = new SMJasperReportProperties(ScoutmasterViewEnum.Member)
+		{
+			@Override
+			public String getReportTitle()
+			{
+				return "Member Report";
+			}
+
+			@Override
+			public String getReportFileName()
+			{
+				return getJasperReport();
+			}
+
+			@Override
+			public ReportFilterUIBuilder getFilterBuilder()
+			{
+				return new ReportFilterUIBuilder();
+			}
+		};
+		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(),
+				properties);
+
 	}
 
 	@Override
