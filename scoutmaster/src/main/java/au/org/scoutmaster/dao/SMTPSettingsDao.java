@@ -20,6 +20,9 @@ import au.org.scoutmaster.forms.EmailAddressType;
 
 public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements Dao<SMTPServerSettings, Long>
 {
+	@SuppressWarnings("unused")
+	private static Logger logger = LogManager.getLogger(SMTPSettingsDao.class);
+
 	/**
 	 * Helper class to store an emailAddress and the Address Type (To, BCC, CC).
 	 *
@@ -37,11 +40,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 			this.type = type;
 			this.emailAddress = emailAddress;
 		}
-
 	}
-
-	@SuppressWarnings("unused")
-	private static Logger logger = LogManager.getLogger(SMTPSettingsDao.class);
 
 	public SMTPSettingsDao()
 	{
