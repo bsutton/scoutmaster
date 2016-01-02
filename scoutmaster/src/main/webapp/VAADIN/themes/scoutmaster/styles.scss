@@ -1,39 +1,18 @@
 
-@import "../valo/valo.scss";
+// Import valo after setting any parameters
+@import "../valo/valo";
 
-@mixin scoutmaster 
-{
+
+.scoutmaster {
   @include valo;
 
 
-	/* Global font styles */
-	.v-app,
-	.v-window,
-	.v-popupview-popup,
-	.v-tooltip,
-	.v-app input,
-	.v-app select,
-	.v-app button,
-	.v-app textarea,
-	.v-window input,
-	.v-window select,
-	.v-window button,
-	.v-window textarea,
-	.v-popupview-popup input,
-	.v-popupview-popup select,
-	.v-popupview-popup button,
-	.v-popupview-popup textarea,
-	.v-filterselect-suggestpopup,
-	.v-datefield-popup,
-	.v-contextmenu,
-	.v-Notification,
-	.v-menubar-submenu,
-	.v-drag-element,
-	.v-table-header-drag 
-	{
-		font-family: Arial, Helvetica, Tahoma, Verdana, sans-serif;
-		font-size: 14px;
-		line-height: normal;
-		color: #222;
+// Your theme's rules go here
+  
+	// fix for notification box to have a close button
+	.v-Notification.error 
+	{	
+    	  @include valo-notification-error-style;
+      	@include valo-notification-closable-style;
 	}
 }
