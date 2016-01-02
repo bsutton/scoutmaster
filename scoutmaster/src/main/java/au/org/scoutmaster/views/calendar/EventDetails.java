@@ -7,20 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.vaadin.dialogs.ConfirmDialog;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.CrudAction;
-import au.com.vaadinutils.crud.CrudEntity;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.domain.iColorFactory;
-import au.org.scoutmaster.dao.ColorDao;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.EventDao;
-import au.org.scoutmaster.domain.Event_;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.validator.DateRangeValidator;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -40,6 +26,20 @@ import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.CrudAction;
+import au.com.vaadinutils.crud.CrudEntity;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.domain.iColorFactory;
+import au.org.scoutmaster.dao.ColorDao;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.EventDao;
+import au.org.scoutmaster.domain.Event_;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+import au.org.scoutmaster.util.SMNotification;
+import au.org.scoutmaster.validator.DateRangeValidator;
 
 public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button.ClickListener, ValueChangeListener
 {
@@ -304,22 +304,23 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 			if (EventDetails.this.event != null)
 			{
 
-				ConfirmDialog.show(UI.getCurrent(), "Confirm Delete", "Are you sure you want to delete "
-						+ EventDetails.this.event.getSubject() + "?", "Delete", "Cancel", new ConfirmDialog.Listener()
-				{
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClose(final ConfirmDialog dialog)
-					{
-						if (dialog.isConfirmed())
+				ConfirmDialog.show(UI.getCurrent(), "Confirm Delete",
+						"Are you sure you want to delete " + EventDetails.this.event.getSubject() + "?", "Delete",
+						"Cancel", new ConfirmDialog.Listener()
 						{
+							private static final long serialVersionUID = 1L;
 
-							EventDetails.this.delete();
-						}
-					}
+							@Override
+							public void onClose(final ConfirmDialog dialog)
+							{
+								if (dialog.isConfirmed())
+								{
 
-				});
+									EventDetails.this.delete();
+								}
+							}
+
+						});
 			}
 		}
 
@@ -385,22 +386,23 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		@Override
 		public void exec(final BaseCrudView<E> crud, final EntityItem<E> entity)
 		{
-			ConfirmDialog.show(UI.getCurrent(), "Confirm Delete", "Are you sure you want to delete "
-					+ entity.getEntity().getName() + "?", "Delete", "Cancel", new ConfirmDialog.Listener()
-			{
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public void onClose(final ConfirmDialog dialog)
-				{
-					if (dialog.isConfirmed())
+			ConfirmDialog.show(UI.getCurrent(), "Confirm Delete",
+					"Are you sure you want to delete " + entity.getEntity().getName() + "?", "Delete", "Cancel",
+					new ConfirmDialog.Listener()
 					{
+						private static final long serialVersionUID = 1L;
 
-						crud.delete();
-					}
-				}
+						@Override
+						public void onClose(final ConfirmDialog dialog)
+						{
+							if (dialog.isConfirmed())
+							{
 
-			});
+								crud.delete();
+							}
+						}
+
+					});
 
 		}
 
@@ -419,6 +421,12 @@ public class EventDetails extends VerticalLayout implements com.vaadin.ui.Button
 		public void setIsDefault(final boolean isDefault)
 		{
 			this.isDefault = isDefault;
+		}
+
+		@Override
+		public boolean showPreparingDialog()
+		{
+			return false;
 		}
 	}
 

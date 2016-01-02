@@ -1,12 +1,12 @@
 package au.org.scoutmaster.views.actions;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.EventDao;
 import au.org.scoutmaster.domain.Event;
-
-import com.vaadin.addon.jpacontainer.EntityItem;
 
 public class EventActionCopy implements CrudAction<Event>
 {
@@ -31,6 +31,12 @@ public class EventActionCopy implements CrudAction<Event>
 	public String toString()
 	{
 		return "Copy";
+	}
+
+	@Override
+	public boolean showPreparingDialog()
+	{
+		return false;
 	}
 
 }

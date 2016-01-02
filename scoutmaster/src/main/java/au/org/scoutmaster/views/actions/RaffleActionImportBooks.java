@@ -1,12 +1,12 @@
 package au.org.scoutmaster.views.actions;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.ui.UI;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.views.wizards.raffle.importBooks.RaffleBookImportWizardView;
-
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.ui.UI;
 
 public class RaffleActionImportBooks implements CrudAction<Raffle>
 {
@@ -30,6 +30,12 @@ public class RaffleActionImportBooks implements CrudAction<Raffle>
 	public String toString()
 	{
 		return "Import Books";
+	}
+
+	@Override
+	public boolean showPreparingDialog()
+	{
+		return false;
 	}
 
 }
