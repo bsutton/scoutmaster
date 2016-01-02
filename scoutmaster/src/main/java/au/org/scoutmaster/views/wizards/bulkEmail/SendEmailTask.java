@@ -6,15 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.activation.DataSource;
-import javax.persistence.EntityManager;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.UI;
 
-import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.CallableUI;
+import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
@@ -24,7 +25,6 @@ import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.TagDao;
-import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.SMTPServerSettings;
@@ -55,11 +55,11 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 	}
 
 	@Override
-	public void run()
+	public void runUI(UI ui)
 	{
 		try
 		{
-			sendMessages(this.user, this.transmissions, this.message);
+			sendMessages(ui, this.user, this.transmissions, this.message);
 		}
 		catch (final Exception e)
 		{
@@ -69,88 +69,86 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 
 	}
 
-	private void sendMessages(final User user, final List<EmailTransmission> targets, final Message message)
+	private void sendMessages(UI ui, final User user, final List<EmailTransmission> targets, final Message message)
 			throws IOException
 	{
 
-		final EntityManager em = EntityManagerProvider.createEntityManager();
-		int sent = 0;
-
-		try (Transaction t = new Transaction(em))
+		new EntityManagerThread<Void>(new CallableUI<Void>(ui)
 		{
-			// We are in a background thread so we have to get our own entity
-			// manager.
-			EntityManagerProvider.setCurrentEntityManager(em);
 
-			final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-			final SMTPServerSettings settings = daoSMTPSettings.findSettings();
-
-			for (final EmailTransmission transmission : targets)
+			@Override
+			public Void call(UI ui)
 			{
-				if (this.cancel == true)
+				int sent = 0;
+
+				final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+				final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+
+				for (final EmailTransmission transmission : targets)
 				{
-					break;
-				}
-
-				try
-				{
-					final String expandedBody = message.expandBody(user, transmission.getContact());
-					final StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
-					daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(),
-							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
-							expandedSubject.toString(), expandedBody.toString(), this.attachedFiles);
-
-					// Log the activity
-					final CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
-					final CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
-					final CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
-					final CommunicationLog activity = new CommunicationLog();
-					activity.setAddedBy(user);
-					activity.setWithContact(transmission.getContact());
-					activity.setSubject(message.getSubject());
-					activity.setDetails(message.getBody());
-					activity.setType(type);
-					daoActivity.persist(activity);
-
-					// Tag the contact
-					final ContactDao daoContact = new DaoFactory().getContactDao();
-					final TagDao daoTag = new DaoFactory().getTagDao();
-					for (Tag tag : transmission.getActivityTags())
+					if (SendEmailTask.this.cancel == true)
 					{
-						tag = daoTag.merge(tag);
-						daoContact.attachTag(transmission.getContact(), tag);
+						break;
 					}
-					daoContact.merge(transmission.getContact());
-					sent++;
-					super.taskProgress(sent, targets.size(), transmission);
-					SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
 
-					// SMNotification.show("Message sent",
-					// Type.TRAY_NOTIFICATION);
+					try
+					{
+						final String expandedBody = message.expandBody(user, transmission.getContact());
+						final StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
+						daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(),
+								new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
+								expandedSubject.toString(), expandedBody.toString(), SendEmailTask.this.attachedFiles);
+
+						// Log the activity
+						final CommunicationLogDao daoActivity = new DaoFactory().getCommunicationLogDao();
+						final CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
+						final CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
+						final CommunicationLog activity = new CommunicationLog();
+						activity.setAddedBy(user);
+						activity.setWithContact(transmission.getContact());
+						activity.setSubject(message.getSubject());
+						activity.setDetails(message.getBody());
+						activity.setType(type);
+						daoActivity.persist(activity);
+
+						// Tag the contact
+						final ContactDao daoContact = new DaoFactory().getContactDao();
+						final TagDao daoTag = new DaoFactory().getTagDao();
+						for (Tag tag : transmission.getActivityTags())
+						{
+							tag = daoTag.merge(tag);
+							daoContact.attachTag(transmission.getContact(), tag);
+						}
+						daoContact.merge(transmission.getContact());
+						sent++;
+						SendEmailTask.super.taskProgress(sent, targets.size(), transmission);
+						SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
+
+						// SMNotification.show("Message sent",
+						// Type.TRAY_NOTIFICATION);
+					}
+					catch (final EmailException e)
+					{
+						SendEmailTask.this.logger.error(e, e);
+						transmission.setException(e);
+						SendEmailTask.super.taskItemError(transmission);
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+					catch (final VelocityFormatException e)
+					{
+						SMNotification.show(e, Type.ERROR_MESSAGE);
+					}
+
+					SendEmailTask.super.taskComplete(sent);
+
 				}
-				catch (final EmailException e)
-				{
-					this.logger.error(e, e);
-					transmission.setException(e);
-					super.taskItemError(transmission);
-					SMNotification.show(e, Type.ERROR_MESSAGE);
-				}
-				catch (final VelocityFormatException e)
-				{
-					SMNotification.show(e, Type.ERROR_MESSAGE);
-				}
+
+				return null;
 
 			}
 
-			t.commit();
-		}
-		finally
-		{
-			super.taskComplete(sent);
+		});
 
-			// Reset the entity manager
-			EntityManagerProvider.setCurrentEntityManager(null);
-		}
 	}
 
 	@Override
