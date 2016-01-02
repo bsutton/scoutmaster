@@ -8,61 +8,36 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import com.vaadin.server.VaadinSession;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.jasper.JasperManager.OutputFormat;
-import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
 import au.com.vaadinutils.jasper.parameter.ReportParameter;
 import au.com.vaadinutils.jasper.ui.CleanupCallback;
 import au.com.vaadinutils.jasper.ui.JasperReportProperties;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 
-import com.vaadin.server.VaadinSession;
-
-public class SMJasperReportProperties implements JasperReportProperties
+public abstract class SMJasperReportProperties implements JasperReportProperties
 {
 
 	private EntityManager em;
 	private Connection connection;
-	private final String reportTitle;
-	private final String reportFilename;
-	private final ReportFilterUIBuilder builder;
 	private final ScoutmasterViewEnum reportView;
 
-	public SMJasperReportProperties(final String reportTitle, final String reportFilename,
-			ScoutmasterViewEnum reportView)
+	// public SMJasperReportProperties(final String reportTitle, final String
+	// reportFilename,
+	// ScoutmasterViewEnum reportView)
+	// {
+	// this.reportTitle = reportTitle;
+	// this.reportFilename = reportFilename;
+	// this.builder = null;
+	// this.reportView = reportView;
+	// }
+	//
+	public SMJasperReportProperties(ScoutmasterViewEnum reportView)
 	{
-		this.reportTitle = reportTitle;
-		this.reportFilename = reportFilename;
-		this.builder = null;
 		this.reportView = reportView;
-	}
-
-	public SMJasperReportProperties(final String reportTitle, final String reportFilename,
-			final ReportFilterUIBuilder builder, ScoutmasterViewEnum reportView)
-	{
-		this.reportTitle = reportTitle;
-		this.reportFilename = reportFilename;
-		this.builder = builder;
-		this.reportView = reportView;
-	}
-
-	@Override
-	public String getReportTitle()
-	{
-		return this.reportTitle;
-	}
-
-	@Override
-	public String getReportFileName()
-	{
-		return this.reportFilename;
-	}
-
-	@Override
-	public ReportFilterUIBuilder getFilterBuilder()
-	{
-		return this.builder;
 	}
 
 	/**
@@ -79,7 +54,7 @@ public class SMJasperReportProperties implements JasperReportProperties
 	@Override
 	public String getHeaderFooterTemplateName()
 	{
-		return "SMStandardHeaderFooter.jasper";
+		return null;
 	}
 
 	@Override
@@ -111,6 +86,7 @@ public class SMJasperReportProperties implements JasperReportProperties
 	@Override
 	public void closeDBConnection()
 	{
+		this.em.getTransaction().commit();
 		this.em.close();
 
 	}
@@ -119,16 +95,14 @@ public class SMJasperReportProperties implements JasperReportProperties
 	public void initDBConnection()
 	{
 		this.em = EntityManagerProvider.createEntityManager();
+		this.em.getTransaction().begin();
+		this.connection = this.em.unwrap(Connection.class);
 
 	}
 
 	@Override
 	public Connection getConnection()
 	{
-		if (this.connection == null)
-		{
-			this.connection = this.em.unwrap(Connection.class);
-		}
 		return this.connection;
 	}
 
@@ -173,7 +147,7 @@ public class SMJasperReportProperties implements JasperReportProperties
 		// NOOP
 		return null;
 	}
-	
+
 	@Override
 	public Map<String, Object> getCustomReportParameterMap()
 	{
