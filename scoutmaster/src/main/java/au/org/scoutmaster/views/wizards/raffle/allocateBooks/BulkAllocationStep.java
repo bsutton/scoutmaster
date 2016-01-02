@@ -4,35 +4,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.teemu.wizards.WizardStep;
-
-import au.com.vaadinutils.crud.EntityTable;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.MultiColumnFormLayout;
-import au.com.vaadinutils.dao.EntityManagerProvider;
-import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
-import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
-import au.com.vaadinutils.jasper.ui.JasperReportPopUp;
-import au.com.vaadinutils.jasper.ui.JasperReportProperties;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.org.scoutmaster.application.ScoutmasterViewEnum;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.RaffleAllocationDao;
-import au.org.scoutmaster.dao.RaffleBookDao;
-import au.org.scoutmaster.dao.Transaction;
-import au.org.scoutmaster.domain.BaseEntity_;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.domain.Raffle;
-import au.org.scoutmaster.domain.RaffleAllocation;
-import au.org.scoutmaster.domain.RaffleAllocation_;
-import au.org.scoutmaster.domain.RaffleBook;
-import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
@@ -47,6 +21,29 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.EntityTable;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.MultiColumnFormLayout;
+import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
+import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
+import au.com.vaadinutils.jasper.ui.JasperReportPopUp;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.application.ScoutmasterViewEnum;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.RaffleAllocationDao;
+import au.org.scoutmaster.dao.RaffleBookDao;
+import au.org.scoutmaster.dao.Transaction;
+import au.org.scoutmaster.domain.BaseEntity_;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Organisation;
+import au.org.scoutmaster.domain.Raffle;
+import au.org.scoutmaster.domain.RaffleAllocation;
+import au.org.scoutmaster.domain.RaffleAllocation_;
+import au.org.scoutmaster.domain.RaffleBook;
+import au.org.scoutmaster.jasper.SMJasperReportProperties;
 
 public class BulkAllocationStep implements WizardStep, ClickListener, AllocationStep
 {
@@ -135,7 +132,7 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	}
 
 	/**
-	 * Man what a pain this method was to right. I couldn't get the id on
+	 * Man what a pain this method was to wwrite. I couldn't get the id on
 	 * raffleallocation to return after the persist even after calling flush
 	 * which all of the doco says should work. The eventual trick was to merge
 	 * the allocation after the persist which then had the correct id.
@@ -148,15 +145,14 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 	{
 		final RaffleBookDao daoRaffleBook = new DaoFactory().getRaffleBookDao();
 
-		final EntityManager em = EntityManagerProvider.createEntityManager();
-		final RaffleAllocationDao daoLocalRaffleAllocation = new DaoFactory(em).getRaffleAllocationDao();
-		final RaffleBookDao daoLocalRaffleBook = new DaoFactory(em).getRaffleBookDao();
+		final RaffleAllocationDao daoLocalRaffleAllocation = new DaoFactory().getRaffleAllocationDao();
+		final RaffleBookDao daoLocalRaffleBook = new DaoFactory().getRaffleBookDao();
 
 		for (final Allocation allocation : preallocation)
 		{
 			// Placed this in its own transaction as I need the allocation id
 			// which is only available after we commit.
-			try (Transaction t = new Transaction(em))
+			try (Transaction t = new Transaction(EntityManagerProvider.getEntityManager()))
 			{
 				final List<RaffleBook> books = new ArrayList<>();
 				// Move the books from the request em to our local em.
@@ -223,8 +219,29 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 
 		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 		builder.addField(new ReportParameterConstant<String>("allocationIds", ids.toString()));
-		final JasperReportProperties properties = new SMJasperReportProperties("Raffle Allocation",
-				"RaffleAllocation.jasper", builder, ScoutmasterViewEnum.RaffleBookAllocationWizard);
+
+		final SMJasperReportProperties properties = new SMJasperReportProperties(
+				ScoutmasterViewEnum.RaffleBookAllocationWizard)
+		{
+			@Override
+			public String getReportTitle()
+			{
+				return "Raffle Allocation";
+			}
+
+			@Override
+			public String getReportFileName()
+			{
+				return "RaffleAllocation.jasper";
+			}
+
+			@Override
+			public ReportFilterUIBuilder getFilterBuilder()
+			{
+				return builder;
+			}
+		};
+
 		final JasperReportPopUp window = new JasperReportPopUp(properties);
 
 		UI.getCurrent().addWindow(window);
