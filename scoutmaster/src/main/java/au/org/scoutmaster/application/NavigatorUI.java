@@ -23,11 +23,11 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import au.com.vaadinutils.errorHandling.ErrorSettingsFactory;
+import au.com.vaadinutils.errorHandling.ErrorWindow;
 import au.com.vaadinutils.help.HelpIndexFactory;
 import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.util.DeadlockFinder;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.help.HelpIndexImpl;
@@ -46,7 +46,7 @@ import au.org.scoutmaster.views.wizards.setup.GroupSetupWizardView;
  */
 @Title("Scoutmaster")
 // @PreserveOnRefresh
-@Theme("valo")
+@Theme("scoutmaster")
 @Push // (transport = Transport.LONG_POLLING)
 @Widgetset(value = "au.org.scoutmaster.AppWidgetSet")
 public class NavigatorUI extends UI
@@ -78,18 +78,23 @@ public class NavigatorUI extends UI
 		{
 			DeadlockFinder.SINGLETON.start();
 
+			// SecurityFactoryImpl.defaultSecurityManager = new
+			// AllowAllSecurityManager();
+
 			ErrorSettingsFactory.setErrorSettings(new ErrorString(this));
 
 			HelpIndexFactory.registerHelpIndex(new HelpIndexImpl());
 
+			this.getReconnectDialogConfiguration().setDialogText(
+					"You may have a problem with your Internet connection. Server connection lost, trying to reconnect...");
+
 			configured = true;
 		}
 
+		new ErrorWindow();
+
 		VaadinSession.getCurrent().setConverterFactory(new ScoutmasterConverterFactory());
 		styleConfirmDialog();
-
-		final SectionTypeDao daoSectionType = new DaoFactory().getSectionTypeDao();
-		daoSectionType.cacheSectionTypes();
 
 		this.mainLayout = new VerticalLayout();
 		this.mainLayout.setMargin(false);
