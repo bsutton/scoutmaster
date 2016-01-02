@@ -3,9 +3,11 @@ package au.org.scoutmaster.application;
 import java.io.ByteArrayOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.Callable;
 
 import javax.mail.util.ByteArrayDataSource;
 
+import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.errorHandling.ErrorSettings;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.OrganisationDao;
@@ -28,12 +30,33 @@ final class ErrorString implements ErrorSettings
 	public void sendEmail(String emailAddress, String subject, String bodyText, ByteArrayOutputStream attachment,
 			String filename, String MIMEType)
 	{
-		final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-		final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+		new EntityManagerThread<Void>(new Callable<Void>()
+		{
 
-		daoSMTPSettings.sendEmail(settings, "error@scoutmaster.org.au",
-				new SMTPSettingsDao.EmailTarget(EmailAddressType.To, emailAddress), subject, bodyText,
-				new ByteArrayDataSource(attachment.toByteArray(), MIMEType));
+			@Override
+			public Void call() throws Exception
+			{
+				final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
+				final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+
+				if (attachment != null)
+				{
+
+					daoSMTPSettings.sendEmail(settings, "error@scoutmaster.org.au",
+							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, emailAddress), subject, bodyText,
+							new ByteArrayDataSource(attachment.toByteArray(), MIMEType));
+				}
+				else
+				{
+					daoSMTPSettings.sendEmail(settings, "error@scoutmaster.org.au",
+							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, emailAddress), subject, bodyText);
+
+				}
+
+				return null;
+			}
+
+		});
 
 	}
 
@@ -61,7 +84,7 @@ final class ErrorString implements ErrorSettings
 		final OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
 
 		Organisation group = daoOrganisation.findOurScoutGroup();
-		String email = group.getPrimaryContact().getEmail();
+		String email = (group.getPrimaryContact() != null ? group.getPrimaryContact().getEmail() : null);
 		if (email == null)
 			email = "bsutton" + "@" + "noojee.com.au";
 
