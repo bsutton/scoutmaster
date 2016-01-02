@@ -69,14 +69,14 @@ import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import rx.util.functions.Action1;
 
-@Menu(display = "Contact Management", path = "Members")
+@Menu(display = "Contacts", path = "Members")
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
 	@Override
 	protected String getTitleText()
 	{
-		return "Contact Management";
+		return "Contacts";
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -220,7 +220,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		final TextField homeEmail = overviewForm.bindTextField("Home Email", Contact_.homeEmail);
 		final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 
-		final FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/email.png"));
+		final FileResource resource = new FileResource(new File(basepath + "/images/email.png"));
 
 		this.homeEmailImage = new Image(null, resource);
 		this.homeEmailImage.setDescription("Click to send an email");
