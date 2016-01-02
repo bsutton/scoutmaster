@@ -6,9 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.activation.DataSource;
-import javax.persistence.EntityManager;
 
-import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.vaadin.easyuploads.FileBuffer;
@@ -33,22 +31,15 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.Reindeer;
 
-import au.com.vaadinutils.dao.EntityManagerProvider;
+import au.com.vaadinutils.dao.EntityManagerRunnable;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.listener.CompleteListener;
 import au.com.vaadinutils.ui.WorkingDialog;
 import au.com.vaadinutils.validator.EmailValidator;
-import au.org.scoutmaster.dao.CommunicationLogDao;
-import au.org.scoutmaster.dao.CommunicationTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.dao.Transaction;
-import au.org.scoutmaster.domain.CommunicationLog;
-import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.SMTPServerSettings;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMNotification;
@@ -110,17 +101,17 @@ public class EmailForm extends VerticalLayout
 		final List<EmailAddressType> targetTypes = getTargetTypes();
 
 		this.primaryTypeCombo = new ComboBox(null, targetTypes);
-		this.primaryTypeCombo.setWidth("100");
-		this.primaryTypeCombo.select(targetTypes.get(0));
-		this.primaryTypeCombo.select(EmailAddressType.To);
-		this.grid.addComponent(this.primaryTypeCombo);
+		this.getPrimaryTypeCombo().setWidth("100");
+		this.getPrimaryTypeCombo().select(targetTypes.get(0));
+		this.getPrimaryTypeCombo().select(EmailAddressType.To);
+		this.grid.addComponent(this.getPrimaryTypeCombo());
 
 		this.primaryTargetAddress = new TextField(null, toEmailAddress);
-		this.primaryTargetAddress.setWidth("100%");
+		this.getPrimaryTargetAddress().setWidth("100%");
 		// primaryTargetAddress.setReadOnly(true);
-		this.primaryTargetAddress.addValidator(new EmailValidator("Please enter a valid email address."));
-		this.primaryTargetAddress.setImmediate(true);
-		this.grid.addComponent(this.primaryTargetAddress);
+		this.getPrimaryTargetAddress().addValidator(new EmailValidator("Please enter a valid email address."));
+		this.getPrimaryTargetAddress().setImmediate(true);
+		this.grid.addComponent(this.getPrimaryTargetAddress());
 
 		this.primaryPlusButton = new Button("+");
 		this.primaryPlusButton.setDescription("Click to add another email address line.");
@@ -130,27 +121,27 @@ public class EmailForm extends VerticalLayout
 		ButtonEventSource.fromActionOf(this.primaryPlusButton).subscribe(plusClickAction);
 
 		this.send = new Button("Send");
-		this.send.setDescription("Click to send this email.");
+		this.getSend().setDescription("Click to send this email.");
 		final Action1<ClickEvent> sendClickAction = new SendClickAction();
-		ButtonEventSource.fromActionOf(this.send).subscribe(sendClickAction);
+		ButtonEventSource.fromActionOf(this.getSend()).subscribe(sendClickAction);
 
-		this.send.setImmediate(true);
+		this.getSend().setImmediate(true);
 
 		this.grid.newLine();
-		this.grid.addComponent(this.send);
+		this.grid.addComponent(this.getSend());
 
 		this.addComponent(this.grid);
 		this.subject = new TextField("Subject");
-		this.subject.setWidth("100%");
+		this.getSubject().setWidth("100%");
 
-		this.addComponent(this.subject);
+		this.addComponent(this.getSubject());
 		this.ckEditor = new CKEditorEmailField(false);
-		this.addComponent(this.ckEditor);
-		setExpandRatio(this.ckEditor, 1.0f);
+		this.addComponent(this.getCkEditor());
+		setExpandRatio(this.getCkEditor(), 1.0f);
 
 		if (sender.getEmailSignature() != null)
 		{
-			this.ckEditor.setValue("</br></br>" + sender.getEmailSignature());
+			this.getCkEditor().setValue("</br></br>" + sender.getEmailSignature());
 		}
 
 		final HorizontalLayout uploadArea = new HorizontalLayout();
@@ -167,7 +158,7 @@ public class EmailForm extends VerticalLayout
 
 		this.addComponent(uploadArea);
 
-		this.subject.focus();
+		this.getSubject().focus();
 
 	}
 
@@ -416,8 +407,8 @@ public class EmailForm extends VerticalLayout
 		@Override
 		public void call(final ClickEvent t1)
 		{
-			EmailForm.this.send.setEnabled(false);
-			if (isEmpty(EmailForm.this.subject.getValue()))
+			EmailForm.this.getSend().setEnabled(false);
+			if (isEmpty(EmailForm.this.getSubject().getValue()))
 			{
 				SMNotification.show("The subject may not be blank", Type.WARNING_MESSAGE);
 			}
@@ -425,7 +416,7 @@ public class EmailForm extends VerticalLayout
 			{
 				SMNotification.show("All Email adddresses must be valid", Type.WARNING_MESSAGE);
 			}
-			else if (isEmpty(EmailForm.this.ckEditor.getValue()))
+			else if (isEmpty(EmailForm.this.getCkEditor().getValue()))
 			{
 				SMNotification.show("The body of the email may not be blank", Type.WARNING_MESSAGE);
 			}
@@ -434,66 +425,12 @@ public class EmailForm extends VerticalLayout
 			{
 				final WorkingDialog working = new WorkingDialog("Sending Email", "Sending...");
 				UI.getCurrent().addWindow(working);
-				working.setWorker(() -> {
-					final EntityManager em = EntityManagerProvider.createEntityManager();
-					try (Transaction t = new Transaction(em))
-					{
-						final SMTPSettingsDao daoSMTPSettings = new DaoFactory(em).getSMTPSettingsDao();
-						final SMTPServerSettings settings = daoSMTPSettings.findSettings();
 
-						final ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
-
-						// First add in the primary address.
-						if (!isEmpty(EmailForm.this.primaryTargetAddress.getValue()))
-						{
-							targets.add(new SMTPSettingsDao.EmailTarget(
-									(EmailAddressType) EmailForm.this.primaryTypeCombo.getValue(),
-									EmailForm.this.primaryTargetAddress.getValue()));
-						}
-
-						for (final TargetLine line : EmailForm.this.lines)
-						{
-							if (!isEmpty((String) line.targetAddress.getValue()))
-							{
-								targets.add(new SMTPSettingsDao.EmailTarget(
-										(EmailAddressType) line.targetTypeCombo.getValue(),
-										(String) line.targetAddress.getValue()));
-							}
-						}
-
-						assert targets.size() != 0 : "Empty list of email targets";
-						daoSMTPSettings.sendEmail(settings, EmailForm.this.sender.getEmailAddress(), targets,
-								EmailForm.this.subject.getValue(), EmailForm.this.ckEditor.getValue(),
-								EmailForm.this.getAttachements());
-
-						// em.detach(EmailForm.this.sender);
-						// em.detach(EmailForm.this.contact);
-						// Log the activity
-						final CommunicationLogDao daoActivity = new DaoFactory(em).getCommunicationLogDao();
-						final CommunicationTypeDao daoActivityType = new DaoFactory(em).getActivityTypeDao();
-						final CommunicationType type = daoActivityType.findByName(CommunicationType.EMAIL);
-						final CommunicationLog activity = new CommunicationLog();
-						activity.setAddedBy(EmailForm.this.sender);
-						activity.setWithContact(EmailForm.this.contact);
-						activity.setSubject(EmailForm.this.subject.getValue());
-						activity.setDetails(EmailForm.this.ckEditor.getValue());
-						activity.setType(type);
-
-						daoActivity.persist(activity);
-						t.commit();
-
-					}
-					catch (final EmailException e)
-					{
-						EmailForm.logger.error(e, e);
-						EmailForm.this.send.setEnabled(true);
-						SMNotification.show(e, Type.ERROR_MESSAGE);
-					}
-
-				} , this);
+				// working.setWorker(runnable, listener);
+				working.setWorker(new EntityManagerRunnable(new EmailWorker(UI.getCurrent(), EmailForm.this)), this);
 
 			}
-			EmailForm.this.send.setEnabled(true);
+			EmailForm.this.getSend().setEnabled(true);
 
 		}
 
@@ -516,6 +453,41 @@ public class EmailForm extends VerticalLayout
 
 		}
 		return attachements;
+	}
+
+	public TextField getPrimaryTargetAddress()
+	{
+		return primaryTargetAddress;
+	}
+
+	public ComboBox getPrimaryTypeCombo()
+	{
+		return primaryTypeCombo;
+	}
+
+	public CKEditorEmailField getCkEditor()
+	{
+		return ckEditor;
+	}
+
+	public User getSender()
+	{
+		return sender;
+	}
+
+	public TextField getSubject()
+	{
+		return subject;
+	}
+
+	public Contact getContact()
+	{
+		return contact;
+	}
+
+	public Button getSend()
+	{
+		return send;
 	}
 
 }
