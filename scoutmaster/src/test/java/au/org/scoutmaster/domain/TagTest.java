@@ -9,12 +9,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vaadin.ui.Notification;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.TagDao;
-
-import com.vaadin.ui.Notification;
 
 public class TagTest
 {
@@ -43,7 +43,7 @@ public class TagTest
 		final String tokenName = "test";
 		final Contact contact = new Contact();
 
-		final TagDao daoTag = new DaoFactory(this.em).getTagDao();
+		final TagDao daoTag = new DaoFactory().getTagDao();
 		final Tag tag = daoTag.findByName(tokenName);
 		if (tag != null)
 		{

@@ -42,9 +42,9 @@ public class ImportMatchFieldsTest
 	{
 		final String existingFieldMapping = "AMapping";
 
-		try (Transaction t = new Transaction(this.em))
+		try (Transaction t = new Transaction(EntityManagerProvider.getEntityManager()))
 		{
-			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 
 			// Create the mapping
 			final ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
@@ -65,9 +65,9 @@ public class ImportMatchFieldsTest
 		{
 		}
 
-		try (Transaction t = new Transaction(this.em))
+		try (Transaction t = new Transaction(EntityManagerProvider.getEntityManager()))
 		{
-			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 
 			// Now replace the children.
 			final List<ImportUserMapping> userMappings = daoImportUserMapping.findByName(existingFieldMapping);
@@ -94,6 +94,7 @@ public class ImportMatchFieldsTest
 		finally
 		{
 		}
+
 	}
 
 	@Test
@@ -101,11 +102,11 @@ public class ImportMatchFieldsTest
 	{
 		final String existingFieldMapping = "AMapping";
 
-		try (Transaction t = new Transaction(this.em))
+		try (Transaction t = new Transaction(EntityManagerProvider.getEntityManager()))
 		{
 
 			// Create the mapping
-			final ImportUserMappingDao daoImportUserMapping = new DaoFactory(this.em).getImportUserMappingDao();
+			final ImportUserMappingDao daoImportUserMapping = new DaoFactory().getImportUserMappingDao();
 			final ImportUserMapping userMapping = new ImportUserMapping(existingFieldMapping);
 
 			final Hashtable<String, String> mappings = new Hashtable<>();
