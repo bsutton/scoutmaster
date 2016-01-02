@@ -17,8 +17,18 @@ import com.vaadin.shared.ui.Connect.LoadStyle;
 public class OptimizedConnectorBundleLoaderFactory extends ConnectorBundleLoaderFactory
 {
 	private final Set<String> eagerConnectors = new HashSet<String>();
+
 	{
-		this.eagerConnectors.add(com.vaadin.client.ui.ui.UIConnector.class.getName());
+		// eagerConnectors.add(PasswordFieldConnector.class.getName());
+		// eagerConnectors.add(VerticalLayoutConnector.class.getName());
+		// eagerConnectors.add(HorizontalLayoutConnector.class.getName());
+		// eagerConnectors.add(ButtonConnector.class.getName());
+		// eagerConnectors.add(UIConnector.class.getName());
+		// eagerConnectors.add(CssLayoutConnector.class.getName());
+		// eagerConnectors.add(TextFieldConnector.class.getName());
+		// eagerConnectors.add(PanelConnector.class.getName());
+		// eagerConnectors.add(LabelConnector.class.getName());
+		// eagerConnectors.add(WindowConnector.class.getName());
 	}
 
 	@Override
