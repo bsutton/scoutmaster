@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Report scheduling from vaadin utils doesn't support @Version so just 
+		drop the consistency column -->
+
+	<changeSet author="bsutton" id="1.0.58.1">
+
+		<dropColumn tableName="tblReportEmailSchedule" columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailSchedule" columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailSchedule" columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailRecipient" columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailRecipient" columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailRecipient" columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailParameterEntity"
+			columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailParameterEntity"
+			columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailParameterEntity"
+			columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailSender" columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailSender" columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailSender" columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailScheduledDateParameter"
+			columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailScheduledDateParameter"
+			columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailScheduledDateParameter"
+			columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailParameterEntity"
+			columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailParameterEntity"
+			columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailParameterEntity"
+			columnName="UPDATED" />
+
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailRecipient"
+			columnName="CONSISTENCYVERSION" />
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailRecipient"
+			columnName="CREATED" />
+		<dropColumn tableName="tblReportEmailSchedule_tblReportEmailRecipient"
+			columnName="UPDATED" />
+
+		<dropColumn
+			tableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter"
+			columnName="CONSISTENCYVERSION" />
+		<dropColumn
+			tableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter"
+			columnName="CREATED" />
+		<dropColumn
+			tableName="tblReportEmailSchedule_tblReportEmailScheduledDateParameter"
+			columnName="UPDATED" />
+
+
+	</changeSet>
+
+
+</databaseChangeLog>
