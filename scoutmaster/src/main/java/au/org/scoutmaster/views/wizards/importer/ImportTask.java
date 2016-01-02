@@ -17,6 +17,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.UI;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.vaadinutils.dao.EntityManagerProvider;
@@ -54,7 +55,7 @@ public class ImportTask extends ProgressBarTask<ImportItemStatus>
 	}
 
 	@Override
-	public void run()
+	public void runUI(UI ui)
 	{
 		FileReader reader = null;
 		try

@@ -4,24 +4,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.marre.sms.SmsException;
 
-import au.com.vaadinutils.dao.EntityManagerProvider;
+import com.vaadin.ui.UI;
+
+import au.com.vaadinutils.dao.CallableUI;
+import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.listener.ProgressListener;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMSProviderDao;
-import au.org.scoutmaster.dao.Transaction;
 import au.org.scoutmaster.domain.SMSProvider;
 
-public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements ProgressListener<SMSTransmission>,
-		CancelListener
+public class SendMessageTask extends ProgressBarTask<SMSTransmission>
+		implements ProgressListener<SMSTransmission>, CancelListener
 {
 	Logger logger = LogManager.getLogger(SendMessageTask.class);
 	private final Message message;
@@ -39,11 +39,11 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 	}
 
 	@Override
-	public void run()
+	public void runUI(UI ui)
 	{
 		try
 		{
-			sendMessage(this.provider, this.transmissions, this.message);
+			sendMessage(ui, this.provider, this.transmissions, this.message);
 		}
 		catch (final Exception e)
 		{
@@ -55,24 +55,31 @@ public class SendMessageTask extends ProgressBarTask<SMSTransmission> implements
 
 	}
 
-	private void sendMessage(final SMSProvider provider, final List<SMSTransmission> targets, final Message message)
-			throws SmsException, IOException
+	private void sendMessage(UI ui, final SMSProvider provider, final List<SMSTransmission> targets,
+			final Message message)
 	{
-		final EntityManager em = EntityManagerProvider.createEntityManager();
-		try (Transaction t = new Transaction(em))
+		new EntityManagerThread<Void>(new CallableUI<Void>(ui)
 		{
-			// We are in a background thread so we have to get our own entity
-			// manager.
-			EntityManagerProvider.setCurrentEntityManager(em);
 
-			final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-			this.listener = daoSMSProvider.send(provider, targets, message, this);
+			@Override
+			public Void call(UI ui)
+			{
+				final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
+				try
+				{
+					SendMessageTask.this.listener = daoSMSProvider.send(provider, targets, message,
+							SendMessageTask.this);
+				}
+				catch (SmsException | IOException e)
+				{
 
-			t.commit();
-		}
-		finally
-		{
-		}
+					logger.error(e, e);
+					SendMessageTask.super.taskException(e);
+				}
+				return null;
+
+			}
+		});
 	}
 
 	@Override
