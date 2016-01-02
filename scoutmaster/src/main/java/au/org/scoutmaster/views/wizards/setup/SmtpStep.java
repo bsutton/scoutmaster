@@ -193,7 +193,7 @@ public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings>
 				final CompositeValidator validator = new CompositeValidator();
 				validator.addValidator(new EmailValidator("Please input your email address"));
 				validator.addValidator(new StringLengthValidator("Please enter an email address.", 6, 255, false));
-				new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
+				InputDialog d = new InputDialog(UI.getCurrent(), "Test SMTP Settings.",
 						"Enter your email address to recieve a test Email", new Recipient()
 						{
 							@Override
@@ -232,7 +232,11 @@ public class SmtpStep extends SingleEntityWizardStep<SMTPServerSettings>
 							{
 								return true;
 							}
-						}).addValidator(validator);
+						});
+				d.addValidator(validator);
+
+				d.setWidth("600");
+				d.setHeight("250");
 
 			}
 		}
