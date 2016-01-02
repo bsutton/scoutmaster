@@ -1,7 +1,5 @@
 package au.org.scoutmaster.dao;
 
-import javax.persistence.EntityManager;
-
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.access.LoginAttemptDao;
 import au.org.scoutmaster.dao.access.SessionHistoryDao;
@@ -10,24 +8,8 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 public class DaoFactory
 {
-	private final EntityManager em;
-
-	/**
-	 * This version uses the injected em.
-	 */
 	public DaoFactory()
 	{
-		this.em = null;
-	}
-
-	/**
-	 * Allows us to control the used em. This is normally used for unit testing.
-	 *
-	 * @param em
-	 */
-	public DaoFactory(final EntityManager em)
-	{
-		this.em = em;
 	}
 
 	public CommunicationLogDao getCommunicationLogDao()
@@ -162,16 +144,7 @@ public class DaoFactory
 	{
 		try
 		{
-			JpaBaseDao<?, ?> dao = null;
-			if (this.em != null)
-			{
-				dao = (JpaBaseDao<?, ?>) daoClass.getDeclaredConstructor(new Class[]
-						{ EntityManager.class }).newInstance(this.em);
-			}
-			else
-			{
-				dao = (JpaBaseDao<?, ?>) daoClass.newInstance();
-			}
+			JpaBaseDao<?, ?> dao = (JpaBaseDao<?, ?>) daoClass.newInstance();
 			return dao;
 		}
 		catch (final Exception ex)
