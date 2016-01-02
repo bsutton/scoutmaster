@@ -40,8 +40,8 @@ public class ConfirmDetailsStep implements WizardStep
 		this.details = messagingWizardView.getDetails();
 
 		this.layout = new VerticalLayout();
-		this.layout.addComponent(new Label(
-				"Please review the details before clicking next as messages will be sent immediately."));
+		this.layout.addComponent(
+				new Label("Please review the details before clicking next as messages will be sent immediately."));
 		this.layout.setWidth("100%");
 
 		this.recipientCount = new Label();
@@ -79,7 +79,7 @@ public class ConfirmDetailsStep implements WizardStep
 	{
 
 		this.recipientCount.setValue("<p><b>" + this.messagingWizardView.getRecipientStep().getRecipientCount()
-				+ " recipients have been selected to recieve the following Email.</b></p>");
+				+ " recipients have been selected to recieve the following SMS.</b></p>");
 
 		final ArrayList<Contact> recipients = this.messagingWizardView.getRecipientStep().getRecipients();
 		final Contact sampleContact = recipients.get(0);
