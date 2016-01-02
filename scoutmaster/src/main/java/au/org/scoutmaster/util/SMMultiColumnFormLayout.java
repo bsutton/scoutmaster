@@ -29,16 +29,16 @@ public class SMMultiColumnFormLayout<E extends BaseEntity> extends MultiColumnFo
 	public <L> TokenField bindTagField(final Selected<E> selected, final String fieldLabel,
 			final SetAttribute<E, L> entityField)
 	{
-		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(),
-				selected, fieldLabel, entityField);
+		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(), selected,
+				fieldLabel, entityField);
 		getFieldList().add(field);
 		return field;
 	}
 
 	public <L> TokenField bindTokenField(final Selected<E> selected, final String fieldLabel, final String fieldName)
 	{
-		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(),
-				selected, fieldLabel, fieldName);
+		final TokenField field = ((SMFormHelper<E>) getFormHelper()).bindTagField(this, super.getFieldGroup(), selected,
+				fieldLabel, fieldName);
 		getFieldList().add(field);
 		return field;
 	}
