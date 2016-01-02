@@ -1,7 +1,5 @@
 package au.org.scoutmaster.views.reports;
 
-import net.sf.jasperreports.engine.JRException;
-
 import org.joda.time.DateTime;
 
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
@@ -9,24 +7,49 @@ import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
+import net.sf.jasperreports.engine.JRException;
 
 @Menu(display = "Calendar Report", path = "Calendar")
 public class CalendarReportView extends JasperReportView
 {
+	static public final class ReportProperties extends SMJasperReportProperties
+	{
+		private final ReportFilterUIBuilder builder;
+
+		public ReportProperties()
+		{
+			super(ScoutmasterViewEnum.CalendarReport);
+			builder = new ReportFilterUIBuilder();
+
+			builder.addDateField("Date Range", "StartDate", "EndDate").setDateRange(new DateTime(),
+					new DateTime().plusMonths(1));
+		}
+
+		@Override
+		public String getReportTitle()
+		{
+			return "Calendar";
+		}
+
+		@Override
+		public String getReportFileName()
+		{
+			return "EventCalendar.jasper";
+		}
+
+		@Override
+		public ReportFilterUIBuilder getFilterBuilder()
+		{
+			return this.builder;
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "CalendarReport";
 
 	public CalendarReportView() throws JRException
 	{
-		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
-
-		builder.addDateField("Date Range", "StartDate", "EndDate")
-				.setDateRange(new DateTime(), new DateTime().plusMonths(1));
-		final SMJasperReportProperties report = new SMJasperReportProperties("Calendar", "EventCalendar.jasper",
-				builder, ScoutmasterViewEnum.CalendarReport);
-
-		super.setReport(report);
-
+		super.setReport(new ReportProperties());
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package au.org.scoutmaster.views.reports;
 
-import net.sf.jasperreports.engine.JRException;
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
 import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.jasper.parameter.ReportParameterTable;
@@ -12,24 +11,54 @@ import au.org.scoutmaster.domain.Organisation;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.Raffle_;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
+import net.sf.jasperreports.engine.JRException;
 
 @Menu(display = "Raffle Allocations Report", path = "Raffle")
 public class RaffleAllocationsReportView extends JasperReportView
 {
+	public static final class ReportProperties extends SMJasperReportProperties
+	{
+		private final ReportFilterUIBuilder builder;
+
+		public ReportProperties()
+		{
+			super(ScoutmasterViewEnum.RaffleBookAllocationWizard);
+
+			final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
+
+			final Organisation ourGroup = new DaoFactory().getOrganisationDao().findOurScoutGroup();
+
+			builder.addField(new ReportParameterTable<Raffle>("Raffle", "raffleId", Raffle.class, Raffle_.name))
+					.addField(new ReportParameterConstant<String>("groupname", ourGroup.getName()));
+
+			this.builder = builder;
+		}
+
+		@Override
+		public String getReportTitle()
+		{
+			return "Raffle Allocations";
+		}
+
+		@Override
+		public String getReportFileName()
+		{
+			return "RaffleAllocations.jasper";
+		}
+
+		@Override
+		public ReportFilterUIBuilder getFilterBuilder()
+		{
+			return this.builder;
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 	public static final String NAME = "RaffleAllocations";
 
 	public RaffleAllocationsReportView() throws JRException
 	{
-		final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
-
-		final Organisation ourGroup = new DaoFactory().getOrganisationDao().findOurScoutGroup();
-		builder.addField(new ReportParameterTable<Raffle>("Raffle", "raffleId", Raffle.class, Raffle_.name))
-				.addField(new ReportParameterConstant<String>("groupname", ourGroup.getName()));
-		final SMJasperReportProperties report = new SMJasperReportProperties("Raffle Allocations",
-				"RaffleAllocations.jasper", builder, ScoutmasterViewEnum.RaffleBookAllocationWizard);
-
-		super.setReport(report);
+		super.setReport(new ReportProperties());
 
 	}
 
