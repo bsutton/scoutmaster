@@ -7,6 +7,20 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
+import com.vaadin.addon.jpacontainer.EntityItem;
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.CrudAction;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -26,23 +40,9 @@ import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.DateRangeValidator;
 import au.org.scoutmaster.views.actions.EventActionCopy;
 
-import com.vaadin.addon.jpacontainer.EntityItem;
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.VerticalLayout;
-
 @Menu(display = "Events", path = "Calendar")
-public class EventView extends BaseCrudView<Event> implements View, Selected<Event>, AutoCompleteParent<Contact>,
-		ValueChangeListener
+public class EventView extends BaseCrudView<Event>
+		implements View, Selected<Event>, AutoCompleteParent<Contact>, ValueChangeListener
 {
 
 	private static final long serialVersionUID = 1L;
@@ -70,7 +70,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 
 		final Builder<au.org.scoutmaster.domain.Event> builder = new HeadingPropertySet.Builder<au.org.scoutmaster.domain.Event>();
 		builder.addColumn("Subject", Event_.subject).addColumn("All Day", Event_.allDayEvent)
-		.addColumn("Start Date", Event_.eventStartDateTime).addColumn("End Date", Event_.eventEndDateTime);
+				.addColumn("Start Date", Event_.eventStartDateTime).addColumn("End Date", Event_.eventEndDateTime);
 
 		super.init(au.org.scoutmaster.domain.Event.class, this.container, builder.build());
 
@@ -133,6 +133,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 		this.endDateField = overviewForm.bindDateField("End", Event_.eventEndDateTime, "yyyy-MM-dd hh:mm a",
 				Resolution.MINUTE);
 		this.endDateField.setRangeStart(new Date());
+		this.endDateField.setValue(new DateTime().plusHours(2).toDate());
 
 		this.startDateField.addValidator(new DateRangeValidator(this.startDateField.getCaption(), this.endDateField));
 		this.startDateField.addValueChangeListener(this);
@@ -186,8 +187,9 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new SimpleStringFilter(Event_.eventStartDateTime.getName(), filterString, true, false),
-				new SimpleStringFilter(Event_.eventEndDateTime.getName(), filterString, true, false)),
+		return new Or(
+				new Or(new SimpleStringFilter(Event_.eventStartDateTime.getName(), filterString, true, false),
+						new SimpleStringFilter(Event_.eventEndDateTime.getName(), filterString, true, false)),
 				new SimpleStringFilter(Event_.subject.getName(), filterString, true, false));
 	}
 
@@ -238,7 +240,7 @@ public class EventView extends BaseCrudView<Event> implements View, Selected<Eve
 
 		final DateTime startDate = new DateTime(startDateField.getValue());
 
-		if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDateField.getValue()))
+		if (this.endDateField.getValue() != null && this.endDateField.getValue().before(startDate.toDate()))
 		{
 			this.endDateField.setValue(startDate.plusHours(2).toDate());
 		}
