@@ -63,7 +63,7 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 		logo.setWidth("100%");
 
 		final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		final FileResource resource = new FileResource(new File(basepath + "/WEB-INF/images/scoutmaster-logo.png"));
+		final FileResource resource = new FileResource(new File(basepath + "/images/scoutmaster-logo.png"));
 
 		final Image image = new Image(null, resource);
 		image.setAlternateText("Scoutmaster Logo");
@@ -154,6 +154,8 @@ public class LoginView extends CustomComponent implements View, Button.ClickList
 				if (user != null && user.isEnabled() && user.isValidPassword(password))
 				{
 					// Store the current user in the service session
+					// This also sets the Tenant into the Entity Manager (and
+					// all subsequent entity managers for this session).
 					SMSession.INSTANCE.setLoggedInUser(user);
 
 					final LoginAttempt attempt = new LoginAttempt(user, true);
