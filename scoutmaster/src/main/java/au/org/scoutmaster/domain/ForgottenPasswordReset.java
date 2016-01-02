@@ -10,6 +10,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.joda.time.DateTime;
 
 import au.org.scoutmaster.domain.access.User;
@@ -25,12 +26,13 @@ import au.org.scoutmaster.domain.access.User;
  */
 
 @Entity(name = "ForgottenPasswordReset")
+@Multitenant
 @Table(name = "ForgottenPasswordReset")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		// We order the set just incase we get two identical random strings (but almost
-		// impossible)
-		{ @NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
+// We order the set just incase we get two identical random strings (but almost
+// impossible)
+{ @NamedQuery(name = ForgottenPasswordReset.FIND_BY_RESET_ID, query = "SELECT forgotten FROM ForgottenPasswordReset forgotten where forgotten.resetid = :resetid order by forgotten.created desc"), })
 public class ForgottenPasswordReset extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

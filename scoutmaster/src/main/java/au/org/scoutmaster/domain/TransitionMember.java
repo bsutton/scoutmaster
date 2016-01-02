@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 /**
  * A youth members that are currently transitioning from one section to another
  * e.g. moving from cubs to scouts.
@@ -17,6 +19,7 @@ import javax.persistence.Table;
  *
  */
 @Entity(name = "TransitionMember")
+@Multitenant
 @Table(name = "TransitionMember")
 @Access(AccessType.FIELD)
 public class TransitionMember extends BaseEntity

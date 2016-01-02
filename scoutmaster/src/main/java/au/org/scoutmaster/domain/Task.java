@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.CrudEntity;
@@ -26,9 +27,10 @@ import au.org.scoutmaster.domain.access.User;
  */
 @Entity
 @Table(name = "Task")
+@Multitenant
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{})
+{})
 public class Task extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.domain.accounting.MoneyWithTax;
 
 /**
@@ -20,6 +22,7 @@ import au.org.scoutmaster.domain.accounting.MoneyWithTax;
  * a Section.
  */
 @Entity(name = "SectionTryout")
+@Multitenant
 @Table(name = "SectionTryout")
 @Access(AccessType.FIELD)
 public class SectionTryout extends BaseEntity
@@ -68,11 +71,10 @@ public class SectionTryout extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{
-				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue")),
-				@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision")),
-				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue")),
-				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision")) })
+	{ @AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue") ),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision") ),
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue") ),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision") ) })
 	MoneyWithTax cost;
 
 	/*

@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.domain.BaseEntity;
 
 /**
@@ -20,6 +22,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  *
  */
 @Entity
+@Multitenant
 @Table(name = "SessionHistory")
 @Access(AccessType.FIELD)
 public class SessionHistory extends BaseEntity

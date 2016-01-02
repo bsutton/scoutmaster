@@ -15,6 +15,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -27,15 +28,15 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @Entity(name = "SectionType")
+@Multitenant
 @Table(name = "SectionType")
 @Access(AccessType.FIELD)
 @NamedQueries(
 
-		{ @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name") 
-		,  @NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype order by sectiontype.startingAge") 
-		}
-		
-		)
+{ @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name"),
+		@NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype order by sectiontype.startingAge") }
+
+)
 public class SectionType extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
@@ -58,16 +59,16 @@ public class SectionType extends BaseEntity
 
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "years", column = @Column(name = "startingAgeYears")),
-				@AttributeOverride(name = "months", column = @Column(name = "startingAgeMonths")),
-				@AttributeOverride(name = "days", column = @Column(name = "startingAgeDays")) })
+	{ @AttributeOverride(name = "years", column = @Column(name = "startingAgeYears") ),
+			@AttributeOverride(name = "months", column = @Column(name = "startingAgeMonths") ),
+			@AttributeOverride(name = "days", column = @Column(name = "startingAgeDays") ) })
 	private Age startingAge;
 
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "years", column = @Column(name = "endingAgeYears")),
-				@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths")),
-				@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays")) })
+	{ @AttributeOverride(name = "years", column = @Column(name = "endingAgeYears") ),
+			@AttributeOverride(name = "months", column = @Column(name = "endingAgeMonths") ),
+			@AttributeOverride(name = "days", column = @Column(name = "endingAgeDays") ) })
 	private Age endingAge;
 
 	/**

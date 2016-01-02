@@ -8,13 +8,15 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name = "SMSProvider")
+@Multitenant
 @Table(name = "SMSProvider")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name") })
+{ @NamedQuery(name = SMSProvider.FIND_BY_NAME, query = "SELECT smsprovider FROM SMSProvider smsprovider WHERE smsprovider.providerName like :name") })
 public class SMSProvider extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

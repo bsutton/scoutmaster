@@ -6,7 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 @Entity(name = "SectionMeeting")
+@Multitenant
 @Table(name = "SectionMeeting")
 @Access(AccessType.FIELD)
 public class SectionMeeting extends Event

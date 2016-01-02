@@ -11,11 +11,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.dao.CreditNoteDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
+@Multitenant
 @Table(name = "CreditNote")
 @Access(AccessType.FIELD)
 public class CreditNote extends BaseEntity

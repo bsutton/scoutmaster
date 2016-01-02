@@ -15,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
 import au.org.scoutmaster.domain.accounting.Money;
@@ -26,6 +28,7 @@ import au.org.scoutmaster.domain.accounting.Money;
  *
  */
 @Entity(name = "RaffleBook")
+@Multitenant
 @Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
 @NamedQueries(

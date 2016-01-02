@@ -8,6 +8,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -17,10 +18,11 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @Entity(name = "TaskStatus")
+@Multitenant
 @Table(name = "TaskStatus")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = TaskStatus.FIND_BY_NAME, query = "SELECT taskstatus FROM TaskStatus taskstatus where taskstatus.name = :name"), })
+{ @NamedQuery(name = TaskStatus.FIND_BY_NAME, query = "SELECT taskstatus FROM TaskStatus taskstatus where taskstatus.name = :name"), })
 public class TaskStatus extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

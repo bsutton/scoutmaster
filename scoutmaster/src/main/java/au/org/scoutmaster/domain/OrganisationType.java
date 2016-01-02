@@ -6,8 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 @Entity
 @Table(name = "OrganisationType")
+@Multitenant
 @Access(AccessType.FIELD)
 public class OrganisationType extends BaseEntity
 {

@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -20,6 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @Entity(name = "School")
+@Multitenant
 @Table(name = "School")
 @Access(AccessType.FIELD)
 public class School extends BaseEntity

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @Entity(name = "SectionMeetingDefaults")
+@Multitenant
 @Table(name = "SectionMeetingDefaults")
 @Access(AccessType.FIELD)
 public class SectionMeetingDefaults extends BaseEntity

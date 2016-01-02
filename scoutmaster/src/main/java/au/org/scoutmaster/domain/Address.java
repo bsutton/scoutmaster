@@ -13,13 +13,16 @@ import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity(name = "Address")
+@Multitenant
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
+{ @NamedQuery(name = Address.FIND_MATCHING, query = "SELECT address FROM Address address WHERE address.street = :street "
 		+ "and address.city = :city and address.postcode = :postcode and address.state = :state") })
 public class Address extends BaseEntity
 {

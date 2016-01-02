@@ -13,6 +13,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 /**
  * Used to save the set of 'csv field' to 'Entity field' mappings that the user
  * has selected during the import.
@@ -21,10 +23,11 @@ import javax.persistence.Table;
  *
  */
 @Entity(name = "ImportUserMapping")
+@Multitenant
 @Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
+{ @NamedQuery(name = ImportUserMapping.FIND_BY_NAME, query = "SELECT import FROM ImportUserMapping import WHERE import.mappingName = :name"), })
 public class ImportUserMapping extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

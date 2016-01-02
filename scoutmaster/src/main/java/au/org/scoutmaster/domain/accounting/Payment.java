@@ -13,9 +13,12 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
+@Multitenant
 @Table(name = "Payment")
 @Access(AccessType.FIELD)
 public class Payment extends BaseEntity
@@ -42,11 +45,10 @@ public class Payment extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{
-				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue")),
-				@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision")),
-				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue")),
-				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision")) })
+	{ @AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "amountMoneyValue") ),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "amountMoneyPrecision") ),
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "amountTaxPrecentageValue") ),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "amountTaxPercentagePrecision") ) })
 	MoneyWithTax amount;
 
 	/**

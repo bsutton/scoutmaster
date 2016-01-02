@@ -14,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
@@ -28,6 +29,7 @@ import au.org.scoutmaster.domain.access.User;
  *
  */
 @Entity
+@Multitenant
 @Table(name = "CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(

@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.CrudEntity;
@@ -20,10 +21,11 @@ import au.org.scoutmaster.domain.access.User;
  *
  */
 @Entity
+@Multitenant
 @Table(name = "Document")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{})
+{})
 public class Document extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

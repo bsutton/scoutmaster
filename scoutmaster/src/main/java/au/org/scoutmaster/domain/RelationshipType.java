@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @Entity(name = "RelationshipType")
+@Multitenant
 @Table(name = "RelationshipType")
 @Access(AccessType.FIELD)
 public class RelationshipType extends BaseEntity

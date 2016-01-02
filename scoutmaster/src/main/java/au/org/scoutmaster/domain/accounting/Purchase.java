@@ -13,11 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Organisation;
 
 @Entity
+@Multitenant
 @Table(name = "Purchase")
 @Access(AccessType.FIELD)
 public class Purchase extends BaseEntity

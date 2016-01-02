@@ -9,7 +9,9 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,9 +29,8 @@ import au.org.scoutmaster.util.PasswordHash;
 @Entity
 @Table(name = "User")
 @NamedQueries(
-		{
-			@NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
-			@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
+{ @NamedQuery(name = User.FIND_BY_NAME, query = "SELECT user FROM User user WHERE user.username = :username"),
+		@NamedQuery(name = User.FIND_BY_EMAIL, query = "SELECT user FROM User user WHERE user.emailAddress = :emailAddress"), })
 public class User extends BaseEntity
 {
 
@@ -40,6 +41,18 @@ public class User extends BaseEntity
 
 	public static final String FIND_BY_NAME = "User.findByName";
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
+
+	/**
+	 * Whilst a user doesn't have the @Tenant attribute we do store the users
+	 * Tenant ID on the user.
+	 *
+	 * We can't use JPA's @Tenant annotation on the user as during login we have
+	 * to access every user until we know which user is logging and therefore
+	 * which Tenant to configure JPA for.
+	 */
+	@JoinColumn(name = "Tenant_ID")
+	@ManyToOne(targetEntity = Tenant.class)
+	private Tenant tenant;
 
 	@NotBlank
 	@Column(unique = true)
@@ -85,6 +98,11 @@ public class User extends BaseEntity
 	 */
 	@Size(max = 1024)
 	private String emailSignature;
+
+	public Tenant getTenant()
+	{
+		return this.tenant;
+	}
 
 	public String getSenderMobile()
 	{
@@ -161,6 +179,7 @@ public class User extends BaseEntity
 	@Access(value = AccessType.PROPERTY)
 	/**
 	 * Takes a clear text password and hashes and salts it for storage.
+	 *
 	 * @param password
 	 */
 	public void setPassword(final String password)

@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.domain.accounting.Money;
@@ -26,6 +27,7 @@ import au.org.scoutmaster.domain.accounting.Money;
  *
  */
 @Entity(name = "Raffle")
+@Multitenant
 @Table(name = "Raffle")
 @Access(AccessType.FIELD)
 public class Raffle extends BaseEntity
@@ -98,8 +100,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "salePricePerTicketMoneyValue") ),
+			@AttributeOverride(name = "precision", column = @Column(name = "salePricePerTicketMoneyPrecision") ) })
 	Money salePricePerTicket;
 
 	/**
@@ -107,8 +109,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueTargetMoneyValue") ),
+			@AttributeOverride(name = "precision", column = @Column(name = "revenueTargetMoneyPrecision") ) })
 	Money revenueTarget;
 
 	/*
@@ -116,8 +118,8 @@ public class Raffle extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue")),
-				@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision")) })
+	{ @AttributeOverride(name = "fixedDoubleValue", column = @Column(name = "revenueRaisedMoneyValue") ),
+			@AttributeOverride(name = "precision", column = @Column(name = "revenueRaisedMoneyPrecision") ) })
 	Money revenueRaised;
 
 	/**

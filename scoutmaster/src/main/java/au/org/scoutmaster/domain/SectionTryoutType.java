@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.money.Money;
 
@@ -21,6 +22,7 @@ import org.joda.money.Money;
  *
  */
 @Entity(name = "SectionTryoutType")
+@Multitenant
 @Table(name = "SectionTryoutType")
 @Access(AccessType.FIELD)
 public class SectionTryoutType extends BaseEntity

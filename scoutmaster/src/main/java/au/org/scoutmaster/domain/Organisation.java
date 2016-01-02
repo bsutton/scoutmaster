@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -35,6 +36,7 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @Entity(name = "Organisation")
+@Multitenant
 @Table(name = "Organisation")
 @Access(AccessType.FIELD)
 @NamedQueries(

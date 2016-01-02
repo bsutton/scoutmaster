@@ -15,6 +15,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 /**
  * A Role within the Scout Group.
  *
@@ -27,10 +29,11 @@ import javax.persistence.Table;
  *
  */
 @Entity(name = "GroupRole")
+@Multitenant
 @Table(name = "GroupRole")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = GroupRole.FIND_BY_NAME, query = "SELECT grouprole FROM GroupRole grouprole WHERE grouprole.name like :name") })
+{ @NamedQuery(name = GroupRole.FIND_BY_NAME, query = "SELECT grouprole FROM GroupRole grouprole WHERE grouprole.name like :name") })
 public class GroupRole extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;

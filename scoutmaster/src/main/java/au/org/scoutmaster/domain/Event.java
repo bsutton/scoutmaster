@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import au.com.vaadinutils.crud.CrudEntity;
@@ -31,10 +32,11 @@ import au.com.vaadinutils.crud.CrudEntity;
  */
 
 @Entity(name = "Event")
+@Multitenant
 @Table(name = "Event")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
+{ @NamedQuery(name = Event.FIND_BETWEEN, query = "SELECT event FROM Event event WHERE event.eventStartDateTime >= :startDate and event.eventEndDateTime <= :endDate") })
 public class Event extends BaseEntity implements CrudEntity
 {
 	private static final long serialVersionUID = 1L;

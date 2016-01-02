@@ -29,6 +29,7 @@ import javax.validation.constraints.Past;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -44,6 +45,7 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
+@Multitenant
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(

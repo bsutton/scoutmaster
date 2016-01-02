@@ -17,12 +17,14 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
 
 @Entity
+@Multitenant
 @Table(name = "Note")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -42,7 +44,7 @@ public class Note extends BaseEntity implements ChildCrudEntity
 	@NotNull
 	@Column(updatable = false)
 	String guid = JpaEntityHelper.getGuid(this);
-	
+
 	/**
 	 * The contact that this note was made against.
 	 */

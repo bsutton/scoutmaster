@@ -7,12 +7,14 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 
 /*
  * Used to define different types of qualifications required by leaders, parents and scouts.
  */
 @Entity(name = "QualificationType")
+@Multitenant
 @Table(name = "QualificationType")
 @Access(AccessType.FIELD)
 public class QualificationType extends BaseEntity

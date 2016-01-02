@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 /**
  * Used to define the set of qualifications the associated leader has.
  *
@@ -15,6 +17,7 @@ import javax.persistence.Table;
  *
  */
 @Entity(name = "Qualification")
+@Multitenant
 @Table(name = "Qualification")
 @Access(AccessType.FIELD)
 public class Qualification extends BaseEntity

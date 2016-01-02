@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
@@ -29,10 +30,11 @@ import org.pojomatic.annotations.Property;
  *
  */
 @Entity(name = "Tag")
+@Multitenant
 @Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
+{ @NamedQuery(name = Tag.FIND_BY_NAME, query = "SELECT tag FROM Tag tag WHERE tag.name = :tagName") })
 @AutoProperty
 public class Tag extends BaseEntity
 {

@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Organisation;
 
@@ -22,6 +24,7 @@ import au.org.scoutmaster.domain.Organisation;
  *
  */
 @Entity
+@Multitenant
 @Table(name = "Product")
 @Access(AccessType.FIELD)
 public class Product extends BaseEntity
@@ -42,13 +45,12 @@ public class Product extends BaseEntity
 	 * The cost of the product or service.
 	 */
 	@AttributeOverrides(
-			{
-				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue")),
-				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision")),
-				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue")),
-				@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision")),
+	{ @AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "costTaxPercentageValue") ),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "costTaxPercentagePrecision") ),
+			@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "costMoneyValue") ),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "costMoneyPrecision") ),
 
-			})
+	})
 	MoneyWithTax cost;
 
 	/**
@@ -56,13 +58,12 @@ public class Product extends BaseEntity
 	 */
 	@Embedded
 	@AttributeOverrides(
-			{
-				@AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "chargeMoneyValue")),
-				@AttributeOverride(name = "money.precision", column = @Column(name = "chargeMoneyPrecision")),
-				@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "chargeTaxPercentageValue")),
-				@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "chargeTaxPercentagePrecision"))
+	{ @AttributeOverride(name = "money.fixedDoubleValue", column = @Column(name = "chargeMoneyValue") ),
+			@AttributeOverride(name = "money.precision", column = @Column(name = "chargeMoneyPrecision") ),
+			@AttributeOverride(name = "taxPercentage.fixedDoubleValue", column = @Column(name = "chargeTaxPercentageValue") ),
+			@AttributeOverride(name = "taxPercentage.precision", column = @Column(name = "chargeTaxPercentagePrecision") )
 
-			})
+	})
 	MoneyWithTax charge;
 
 	/**

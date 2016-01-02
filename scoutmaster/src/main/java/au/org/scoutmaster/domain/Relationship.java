@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
 
@@ -22,6 +24,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
  *
  */
 @Entity(name = "Relationship")
+@Multitenant
 @Table(name = "Relationship")
 @Access(AccessType.FIELD)
 public class Relationship extends BaseEntity implements ChildCrudEntity

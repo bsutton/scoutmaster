@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.eclipse.persistence.annotations.Multitenant;
+
 /**
  * A scouts section such as Joeys or Cubs
  *
@@ -22,6 +24,7 @@ import javax.persistence.Table;
  *
  */
 @Entity(name = "Section")
+@Multitenant
 @Table(name = "Section")
 @Access(AccessType.FIELD)
 public class Section extends BaseEntity
