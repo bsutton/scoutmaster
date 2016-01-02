@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<!-- Setup multi-tenancy The organisation that is created for each Scout 
+		group becomes the 'tenant' and it's ID is used as the tenant_id on each 
+		table. -->
+
+	<changeSet author="bsutton" id="1.0.59.1">
+
+		<!-- <addColumn tableName="databasechangelog"><column defaultValueNumeric="0" 
+			name="tenant_id" type="BIGINT(19)" /></addColumn> <addColumn tableName="databasechangeloglock"><column 
+			defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" /></addColumn> 
+			<addColumn tableName="feature"><column defaultValueNumeric="0" name="tenant_id" 
+			type="BIGINT(19)" /></addColumn> <addColumn tableName="role"><column defaultValueNumeric="0" 
+			name="tenant_id" type="BIGINT(19)" /></addColumn> <addColumn tableName="role_feature"><column 
+			defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" /></addColumn> 
+			
+			
+			<addColumn tableName="user_role"><column 
+			defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" /></addColumn> 
+			<addColumn tableName="version"><column defaultValueNumeric="0" name="tenant_id" 
+			type="BIGINT(19)" /></addColumn> <addColumn tableName="communicationtype"><column 
+			defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" /></addColumn> 
+			<addColumn tableName="emailserversettings"><column defaultValueNumeric="0" 
+			name="tenant_id" type="BIGINT(19)" /></addColumn> <addColumn tableName="loginattempt"> 
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" /> </addColumn> -->
+
+		<addColumn tableName="address">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="communicationlog">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="contact">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="contact_relationship">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="contact_tag">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="creditnote">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="creditnote_creditnoteline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="creditnoteline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+
+		<addColumn tableName="document">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="event">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="event_contact">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="event_document">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="forgottenpasswordreset">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="grouprole">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="grouprole_tag">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="household">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="household_communicationlog">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="household_note">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="household_relationship">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="household_tag">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="importcolumnfieldmapping">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="importusermapping">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="invoice">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="invoice_invoiceline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="invoice_payment">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="invoiceline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="note">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisation">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisation_communicationlog">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisation_contact">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisation_note">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisation_tag">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="organisationtype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="payment">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="payment_invoice">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="product">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="purchase">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="purchase_purchaseline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="purchaseline">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="qualification">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="qualificationtype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="raffle">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="raffleallocation">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="rafflebook">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="relationship">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="relationshiptype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="school">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="school_address">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="school_contact">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="section">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="section_communicationlog">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="section_contact">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="section_sectiontryout">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="section_transitionmember">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="sectionmeetingdefaults">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="sectiontryout">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="sectiontryouttype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="sectiontryouttype_section">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="sectiontype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="sectiontype_qualificationtype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+
+		<addColumn tableName="sessionhistory">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="smsprovider">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tag">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="task">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="taskstatus">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tasktype">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailparameterentity">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailrecipient">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailschedule">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailschedule_tblreportemailparameterentity">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailschedule_tblreportemailrecipient">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn
+			tableName="tblreportemailschedule_tblreportemailscheduleddateparameter">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailscheduleddateparameter">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="tblreportemailsender">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		<addColumn tableName="transitionmember">
+			<column defaultValueNumeric="0" name="tenant_id" type="BIGINT(19)" />
+		</addColumn>
+		
+		<addColumn tableName="user"><column defaultValueNumeric="0" name="tenant_id" 
+			type="BIGINT(19)" /></addColumn> 
+			
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.59.2">
+
+		<createTable tableName="tenant">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" valueComputed="now()" />
+			<column name="UPDATED" type="date" valueComputed="now()" />
+
+			<column name="organisation_ID" type="BIGINT(19)" />
+		</createTable>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.59.3">
+
+		<sql>insert into tenant (organisation_id, CONSISTENCYVERSION)
+			select
+			id, 1 from organisation
+			where organisation.isourscoutgroup = 1
+		</sql>
+
+		<sql>update organisation
+
+			set tenant_id = (select id from tenant)
+
+		</sql>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.59.4">
+		<sql>update address
+			join organisation
+			on organisation.isourscoutgroup =
+			1
+			set address.tenant_id =
+			organisation.tenant_id
+		</sql>
+
+
+	</changeSet>
+
+
+
+	<changeSet author="bsutton" id="1.0.59.5">
+		<sql>update address join organisation on organisation.isourscoutgroup
+			= 1 set address.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update communicationlog join organisation on
+			organisation.isourscoutgroup = 1 set communicationlog.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update contact join organisation on organisation.isourscoutgroup
+			= 1 set contact.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update contact_relationship join organisation on
+			organisation.isourscoutgroup = 1 set contact_relationship.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update contact_tag join organisation on
+			organisation.isourscoutgroup = 1 set contact_tag.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update creditnote join organisation on
+			organisation.isourscoutgroup = 1 set creditnote.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update creditnote_creditnoteline join organisation on
+			organisation.isourscoutgroup = 1 set
+			creditnote_creditnoteline.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update creditnoteline join organisation on
+			organisation.isourscoutgroup = 1 set creditnoteline.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update document join organisation on organisation.isourscoutgroup
+			= 1 set document.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update event join organisation on organisation.isourscoutgroup =
+			1 set event.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update event_contact join organisation on
+			organisation.isourscoutgroup = 1 set event_contact.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update event_document join organisation on
+			organisation.isourscoutgroup = 1 set event_document.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update forgottenpasswordreset join organisation on
+			organisation.isourscoutgroup = 1 set
+			forgottenpasswordreset.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update grouprole join organisation on
+			organisation.isourscoutgroup = 1 set grouprole.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update grouprole_tag join organisation on
+			organisation.isourscoutgroup = 1 set grouprole_tag.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update household join organisation on
+			organisation.isourscoutgroup = 1 set household.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update household_communicationlog join organisation on
+			organisation.isourscoutgroup = 1 set
+			household_communicationlog.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update household_note join organisation on
+			organisation.isourscoutgroup = 1 set household_note.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update household_relationship join organisation on
+			organisation.isourscoutgroup = 1 set
+			household_relationship.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update household_tag join organisation on
+			organisation.isourscoutgroup = 1 set household_tag.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update importcolumnfieldmapping join organisation on
+			organisation.isourscoutgroup = 1 set
+			importcolumnfieldmapping.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update importusermapping join organisation on
+			organisation.isourscoutgroup = 1 set importusermapping.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update invoice join organisation on organisation.isourscoutgroup
+			= 1 set invoice.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update invoice_invoiceline join organisation on
+			organisation.isourscoutgroup = 1 set invoice_invoiceline.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update invoice_payment join organisation on
+			organisation.isourscoutgroup = 1 set invoice_payment.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update invoiceline join organisation on
+			organisation.isourscoutgroup = 1 set invoiceline.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update note join organisation on organisation.isourscoutgroup = 1
+			set note.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update organisation_communicationlog join organisation on
+			organisation.isourscoutgroup = 1 set
+			organisation_communicationlog.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update organisation_contact join organisation on
+			organisation.isourscoutgroup = 1 set organisation_contact.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update organisation_note join organisation on
+			organisation.isourscoutgroup = 1 set organisation_note.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update organisation_tag join organisation on
+			organisation.isourscoutgroup = 1 set organisation_tag.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update organisationtype join organisation on
+			organisation.isourscoutgroup = 1 set organisationtype.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update payment join organisation on organisation.isourscoutgroup
+			= 1 set payment.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update payment_invoice join organisation on
+			organisation.isourscoutgroup = 1 set payment_invoice.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update product join organisation on organisation.isourscoutgroup
+			= 1 set product.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update purchase join organisation on organisation.isourscoutgroup
+			= 1 set purchase.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update purchase_purchaseline join organisation on
+			organisation.isourscoutgroup = 1 set purchase_purchaseline.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update purchaseline join organisation on
+			organisation.isourscoutgroup = 1 set purchaseline.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update qualification join organisation on
+			organisation.isourscoutgroup = 1 set qualification.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update qualificationtype join organisation on
+			organisation.isourscoutgroup = 1 set qualificationtype.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update raffle join organisation on organisation.isourscoutgroup =
+			1 set raffle.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update raffleallocation join organisation on
+			organisation.isourscoutgroup = 1 set raffleallocation.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update rafflebook join organisation on
+			organisation.isourscoutgroup = 1 set rafflebook.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update relationship join organisation on
+			organisation.isourscoutgroup = 1 set relationship.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update relationshiptype join organisation on
+			organisation.isourscoutgroup = 1 set relationshiptype.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update school join organisation on organisation.isourscoutgroup =
+			1 set school.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update school_address join organisation on
+			organisation.isourscoutgroup = 1 set school_address.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update school_contact join organisation on
+			organisation.isourscoutgroup = 1 set school_contact.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update section join organisation on organisation.isourscoutgroup
+			= 1 set section.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update section_communicationlog join organisation on
+			organisation.isourscoutgroup = 1 set
+			section_communicationlog.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update section_contact join organisation on
+			organisation.isourscoutgroup = 1 set section_contact.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update section_sectiontryout join organisation on
+			organisation.isourscoutgroup = 1 set section_sectiontryout.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update section_transitionmember join organisation on
+			organisation.isourscoutgroup = 1 set
+			section_transitionmember.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update sectionmeetingdefaults join organisation on
+			organisation.isourscoutgroup = 1 set
+			sectionmeetingdefaults.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update sectiontryout join organisation on
+			organisation.isourscoutgroup = 1 set sectiontryout.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update sectiontryouttype join organisation on
+			organisation.isourscoutgroup = 1 set sectiontryouttype.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update sectiontryouttype_section join organisation on
+			organisation.isourscoutgroup = 1 set
+			sectiontryouttype_section.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update sectiontype join organisation on
+			organisation.isourscoutgroup = 1 set sectiontype.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update sectiontype_qualificationtype join organisation on
+			organisation.isourscoutgroup = 1 set
+			sectiontype_qualificationtype.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update sessionhistory join organisation on
+			organisation.isourscoutgroup = 1 set sessionhistory.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update smsprovider join organisation on
+			organisation.isourscoutgroup = 1 set smsprovider.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update tag join organisation on organisation.isourscoutgroup = 1
+			set tag.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update task join organisation on organisation.isourscoutgroup = 1
+			set task.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update taskstatus join organisation on
+			organisation.isourscoutgroup = 1 set taskstatus.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update tasktype join organisation on organisation.isourscoutgroup
+			= 1 set tasktype.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailparameterentity join organisation on
+			organisation.isourscoutgroup = 1 set
+			tblreportemailparameterentity.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailrecipient join organisation on
+			organisation.isourscoutgroup = 1 set
+			tblreportemailrecipient.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailschedule join organisation on
+			organisation.isourscoutgroup = 1 set
+			tblreportemailschedule.tenant_id = organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailschedule_tblreportemailparameterentity join
+			organisation on organisation.isourscoutgroup = 1 set
+			tblreportemailschedule_tblreportemailparameterentity.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailschedule_tblreportemailrecipient join
+			organisation on organisation.isourscoutgroup = 1 set
+			tblreportemailschedule_tblreportemailrecipient.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update
+			tblreportemailschedule_tblreportemailscheduleddateparameter join
+			organisation on organisation.isourscoutgroup = 1 set
+			tblreportemailschedule_tblreportemailscheduleddateparameter.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailscheduleddateparameter join organisation on
+			organisation.isourscoutgroup = 1 set
+			tblreportemailscheduleddateparameter.tenant_id =
+			organisation.tenant_id
+		</sql>
+		<sql>update tblreportemailsender join organisation on
+			organisation.isourscoutgroup = 1 set tblreportemailsender.tenant_id
+			= organisation.tenant_id
+		</sql>
+		<sql>update transitionmember join organisation on
+			organisation.isourscoutgroup = 1 set transitionmember.tenant_id =
+			organisation.tenant_id
+		</sql>
+
+		<sql>update user join organisation on
+			organisation.isourscoutgroup = 1 set user.tenant_id =
+			organisation.tenant_id
+		</sql>
+
+	</changeSet>
+</databaseChangeLog>
