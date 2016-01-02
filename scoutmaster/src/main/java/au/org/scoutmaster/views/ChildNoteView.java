@@ -1,5 +1,16 @@
 package au.org.scoutmaster.views;
 
+import javax.persistence.metamodel.SingularAttribute;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -12,17 +23,6 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Note;
 import au.org.scoutmaster.domain.Note_;
 
-import javax.persistence.metamodel.SingularAttribute;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
-
 public class ChildNoteView extends ChildCrudView<Contact, Note>
 {
 	private static final long serialVersionUID = 1L;
@@ -33,8 +33,8 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 
 		final JPAContainer<Note> container = new DaoFactory().getNoteDao().createVaadinContainer();
 		container.sort(new String[]
-				{ BaseEntity_.created.getName() }, new boolean[]
-						{ false });
+		{ BaseEntity_.created.getName() }, new boolean[]
+		{ false });
 
 		final Builder<Note> builder = new HeadingPropertySet.Builder<Note>();
 		builder.addColumn("Subject", Note_.subject).addColumn("Date", Note_.noteDate);
@@ -50,7 +50,7 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 		layout.setSizeFull();
 
 		final MultiColumnFormLayout<Note> overviewForm = new MultiColumnFormLayout<Note>(1, this.fieldGroup);
-		overviewForm.setColumnFieldWidth(0, 180);
+		overviewForm.setColumnFieldWidth(0, 500);
 		overviewForm.setColumnLabelWidth(0, 70);
 		// overviewForm.setColumnExpandRatio(0, 1.0f);
 		overviewForm.setSizeFull();
@@ -72,8 +72,9 @@ public class ChildNoteView extends ChildCrudView<Contact, Note>
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(BaseEntity_.created.getName(), filterString,
-				true, false), new SimpleStringFilter(Note_.subject.getName(), filterString, true, false)),
+		return new Or(new Or(new Or(new Or(
+				new Or(new SimpleStringFilter(BaseEntity_.created.getName(), filterString, true, false),
+						new SimpleStringFilter(Note_.subject.getName(), filterString, true, false)),
 				new SimpleStringFilter(Note_.body.getName(), filterString, true, false)))));
 	}
 
