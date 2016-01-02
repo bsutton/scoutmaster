@@ -7,25 +7,24 @@ import org.joda.time.DateTime;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 
 public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao<SectionType, Long>
 {
 
-	static private List<SectionType> sectionTypes;
-
 	public SectionTypeDao()
 	{
 		// inherit the default per request em.
 	}
-
 
 	public SectionType findByName(final String name)
 	{
 		return super.findSingleBySingleParameter(SectionType.FIND_BY_NAME, "name", name);
 	}
 
+	@Override
 	public List<SectionType> findAll()
 	{
 		return super.findList(SectionType.FIND_ALL);
@@ -41,12 +40,13 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 	{
 		SectionType eligible = null;
 
-		cacheSectionTypes();
-		// We need to guarantee a default section type. The first one should be the youngest
+		// We need to guarantee a default section type. The first one should be
+		// the youngest
 		// Which allows for a birthDate of 0/0/0.
-		eligible = SectionTypeDao.sectionTypes.get(0);
-		
-		for (final SectionType sectionType : SectionTypeDao.sectionTypes)
+		List<SectionType> sectionTypes = SMSession.INSTANCE.getSectionTypeCache();
+		eligible = sectionTypes.get(0);
+
+		for (final SectionType sectionType : sectionTypes)
 		{
 
 			if (isEligible(sectionType, birthDate))
@@ -57,19 +57,6 @@ public class SectionTypeDao extends JpaBaseDao<SectionType, Long> implements Dao
 		}
 		assert eligible != null : "All dates should map to a valid SectionType";
 		return eligible;
-	}
-
-	public void cacheSectionTypes()
-	{
-		/**
-		 * We are caching the section types to get around a bug in jpa that
-		 * causes the system to lock up when trying to fetch section types from
-		 * the Contact during startup. Remove the cache to see the problem :D
-		 */
-		if (SectionTypeDao.sectionTypes == null)
-		{
-			SectionTypeDao.sectionTypes = findAll();
-		}
 	}
 
 	private boolean isEligible(final SectionType sectionType, final DateTime birthDate)
