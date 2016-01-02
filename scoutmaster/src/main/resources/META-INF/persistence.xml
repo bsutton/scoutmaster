@@ -52,6 +52,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.access.Feature</class>
 		<class>au.org.scoutmaster.domain.access.Role</class>
 		<class>au.org.scoutmaster.domain.access.SessionHistory</class>
+		<class>au.org.scoutmaster.domain.access.Tenant</class>
 		<class>au.org.scoutmaster.domain.access.User</class>
 		<class>au.org.scoutmaster.domain.accounting.Money</class>
 		<class>au.org.scoutmaster.domain.accounting.MoneyWithTax</class>
