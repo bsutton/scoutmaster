@@ -46,7 +46,7 @@
 	<!-- Vaadin servlet - where the action happens -->
 	<servlet>
 		<servlet-name>Scoutmaster Private Application Servlet</servlet-name>
-		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+		<servlet-class>au.org.scoutmaster.servlets.VaadinServlet</servlet-class>
 		<init-param>
 			<description>Scoutmaster Private UI</description>
 			<param-name>UI</param-name>
@@ -55,7 +55,7 @@
 		<init-param>
 			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
 			<!-- comma-separated list of fully-qualified class names -->
-			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
+			<param-value>au.org.scoutmaster.servlets.AtmosphereFilter
 			</param-value>
 		</init-param>
 
@@ -69,7 +69,7 @@
 	<!-- Vaadin servlet - this is the public interface -->
 	<servlet>
 		<servlet-name>Scoutmaster Public Application Servlet</servlet-name>
-		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
+		<servlet-class>au.org.scoutmaster.servlets.VaadinServlet</servlet-class>
 		<init-param>
 			<description>Scoutmaster Public UI</description>
 			<param-name>UI</param-name>
@@ -78,7 +78,7 @@
 		<init-param>
 			<param-name>org.atmosphere.cpr.AtmosphereInterceptor</param-name>
 			<!-- comma-separated list of fully-qualified class names -->
-			<param-value>au.com.vaadinutils.servlet.AtmosphereFilter
+			<param-value>au.org.scoutmaster.servlets.AtmosphereFilter
 			</param-value>
 		</init-param>
 		<init-param>
@@ -88,15 +88,42 @@
 		<async-supported>true</async-supported>
 	</servlet>
 
+
 	<servlet>
-		<servlet-name>ImageServlet</servlet-name>
+		<servlet-name>JasperImageServlet</servlet-name>
 		<servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet
 		</servlet-class>
 	</servlet>
 
+<!-- 
 	<servlet-mapping>
-		<servlet-name>ImageServlet</servlet-name>
-		<url-pattern>/images</url-pattern>
+		<servlet-name>JasperImageServlet</servlet-name>
+		<url-pattern>/jasperImages/*</url-pattern>
+	</servlet-mapping>
+-->
+	
+	<servlet>
+		<servlet-name>VaadinJasperPrintServlet</servlet-name>
+		<servlet-class>au.com.vaadinutils.jasper.servlet.VaadinJasperPrintServlet
+		</servlet-class>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>VaadinJasperPrintServlet</servlet-name>
+		<url-pattern>/VaadinJasperPrintServlet</url-pattern>
+	</servlet-mapping>
+	
+
+	<servlet>
+		<servlet-name>StaticContentServlet</servlet-name>
+		<servlet-class>au.com.vaadinutils.servlet.StaticContentServlet
+		</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>StaticContentServlet</servlet-name>
+		<url-pattern>/images/*</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
