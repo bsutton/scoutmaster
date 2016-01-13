@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.6.0.beta1</vaadin.version>
+		<vaadin.version>7.6.0</vaadin.version>
 		<liquibase.version>3.4.2</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jasperreports.version>6.2.0</jasperreports.version>
@@ -239,25 +239,15 @@ work around until 1.2 is released to vaadon addon directory.
 			<groupId>au.com.vaadinutils</groupId>
 			<artifactId>VaadinUtils</artifactId>
 			<version>0.1.2</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>stax</artifactId>
+					<groupId>stax</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-core</artifactId>
-			<version>3.2.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-apt</artifactId>
-			<version>3.2.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.mysema.querydsl</groupId>
-			<artifactId>querydsl-jpa</artifactId>
-			<version>3.2.3</version>
-		</dependency>
-
+	
 		<dependency>
 			<groupId>org.vaadin.addons</groupId>
 			<artifactId>tableexport</artifactId>
@@ -335,6 +325,23 @@ work around until 1.2 is released to vaadon addon directory.
 			<artifactId>core</artifactId>
 			<version>3.1.1</version>
 		</dependency>
+		
+		<dependency>
+		<groupId>org.simpleframework</groupId>
+			<artifactId>simple-xml</artifactId>
+			<version>2.7</version>
+
+			<exclusions>
+				<exclusion>
+					<artifactId>stax-api</artifactId>
+					<groupId>stax</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>stax</artifactId>
+					<groupId>stax</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -373,7 +380,7 @@ work around until 1.2 is released to vaadon addon directory.
 			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
-				<version>7.4.5</version>
+				<version>7.6.0</version>
 				<configuration>
 					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 					<!-- <runTarget>mobilemail</runTarget> -->
@@ -398,6 +405,7 @@ work around until 1.2 is released to vaadon addon directory.
 							<!-- <modules> <module>com.vaadin.demo.mobilemail.gwt.ColorPickerWidgetSet</module> 
 								</modules> -->
 						</configuration>
+						<!--  Use vaadin:compile to compile the widgetset -->
 						<goals>
 							<goal>resources</goal>
 							<goal>update-widgetset</goal>
