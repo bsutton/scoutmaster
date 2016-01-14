@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 @Embeddable
 @Access(AccessType.FIELD)
 @NamedQueries(
-		{ @NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"), })
+{ @NamedQuery(name = Phone.FIND_BY_NO, query = "SELECT phone FROM Phone phone where phone.phoneNo = :phoneNo"), })
 public class Phone implements Serializable
 {
 	private static final long serialVersionUID = 1L;
@@ -51,7 +51,7 @@ public class Phone implements Serializable
 		this.phoneNo = phoneNo.replaceAll("\\s", "");
 	}
 
-	public Boolean getPrimaryPhone()
+	public Boolean isPrimaryPhone()
 	{
 		return this.primaryPhone;
 	}
@@ -78,7 +78,7 @@ public class Phone implements Serializable
 
 	public String getPhoneNo()
 	{
-		return this.phoneNo.replaceAll("\\s", "");
+		return (phoneNo == null ? "" : this.phoneNo.replaceAll("\\s", ""));
 	}
 
 	@Override

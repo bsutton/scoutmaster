@@ -19,6 +19,7 @@ import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.listener.CancelListener;
 import au.com.vaadinutils.util.ProgressBarTask;
 import au.com.vaadinutils.util.ProgressTaskListener;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.CommunicationLogDao;
 import au.org.scoutmaster.dao.CommunicationTypeDao;
 import au.org.scoutmaster.dao.ContactDao;
@@ -27,7 +28,7 @@ import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationType;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.forms.EmailAddressType;
@@ -82,7 +83,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 				int sent = 0;
 
 				final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-				final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+				final SMTPServerSetting settings = daoSMTPSettings.findSettings();
 
 				for (final EmailTransmission transmission : targets)
 				{
@@ -96,6 +97,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 						final String expandedBody = message.expandBody(user, transmission.getContact());
 						final StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
 						daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(),
+								SMSession.INSTANCE.getLoggedInUser().getEmailAddress(),
 								new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
 								expandedSubject.toString(), expandedBody.toString(), SendEmailTask.this.attachedFiles);
 

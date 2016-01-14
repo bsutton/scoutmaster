@@ -3,6 +3,15 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -12,15 +21,6 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.TaskStatus;
 import au.org.scoutmaster.domain.TaskStatus_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Task Status'", path = "Admin.Lists")
 public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Selected<TaskStatus>
@@ -59,8 +59,8 @@ public class TaskStatusView extends BaseCrudView<TaskStatus> implements View, Se
 	{
 		final JPAContainer<TaskStatus> container = DaoFactory.getGenericDao(TaskStatus.class).createVaadinContainer();
 		container.sort(new String[]
-				{ TaskStatus_.name.getName() }, new boolean[]
-						{ true });
+		{ TaskStatus_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<TaskStatus> builder = new HeadingPropertySet.Builder<TaskStatus>();
 		builder.addColumn("TaskStatus", TaskStatus_.name).addColumn("Description", TaskStatus_.description);

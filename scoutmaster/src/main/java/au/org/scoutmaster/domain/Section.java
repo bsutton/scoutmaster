@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 /**
  * A scouts section such as Joeys or Cubs
@@ -25,6 +26,7 @@ import org.eclipse.persistence.annotations.Multitenant;
  */
 @Entity(name = "Section")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Section")
 @Access(AccessType.FIELD)
 public class Section extends BaseEntity

@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -37,6 +38,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name = "Organisation")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Organisation")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -83,7 +85,8 @@ public class Organisation extends BaseEntity
 	/**
 	 * The location of the organisation.
 	 */
-	@OneToOne(targetEntity = Address.class)
+	@OneToOne(targetEntity = Address.class, cascade =
+	{ CascadeType.MERGE })
 	private Address location = new Address();
 
 	@Transient
@@ -211,15 +214,15 @@ public class Organisation extends BaseEntity
 	public Phone getPrimaryPhone()
 	{
 		Phone primary = null;
-		if (this.phone1.getPrimaryPhone())
+		if (this.phone1.isPrimaryPhone())
 		{
 			primary = this.phone1;
 		}
-		else if (this.phone2.getPrimaryPhone())
+		else if (this.phone2.isPrimaryPhone())
 		{
 			primary = this.phone2;
 		}
-		else if (this.phone3.getPrimaryPhone())
+		else if (this.phone3.isPrimaryPhone())
 		{
 			primary = this.phone3;
 		}

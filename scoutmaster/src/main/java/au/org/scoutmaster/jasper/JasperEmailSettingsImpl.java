@@ -1,13 +1,14 @@
 package au.org.scoutmaster.jasper;
 
 import au.com.vaadinutils.jasper.JasperEmailSettings;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 
 public class JasperEmailSettingsImpl implements JasperEmailSettings
 {
-	private final SMTPServerSettings smtpSettings;
+	private final SMTPServerSetting smtpSettings;
 
 	public JasperEmailSettingsImpl()
 	{
@@ -54,7 +55,7 @@ public class JasperEmailSettingsImpl implements JasperEmailSettings
 	@Override
 	public String getBounceEmailAddress()
 	{
-		return this.smtpSettings.getBounceEmailAddress();
+		return SMSession.INSTANCE.getLoggedInUser().getEmailAddress();
 	}
 
 }

@@ -13,11 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "PurchaseLine")
 @Access(AccessType.FIELD)
 public class PurchaseLine extends BaseEntity

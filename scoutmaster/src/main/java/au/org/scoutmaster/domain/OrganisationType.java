@@ -7,10 +7,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 @Entity
 @Table(name = "OrganisationType")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Access(AccessType.FIELD)
 public class OrganisationType extends BaseEntity
 {

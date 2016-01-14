@@ -4,7 +4,7 @@ import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -28,7 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 
 @Menu(display = "SMTP Settings", path = "Admin")
-public class SMTPSettingsView extends CustomComponent implements View, ValueChangeListener, ClickListener
+public class SMTPSettingView extends CustomComponent implements View, ValueChangeListener, ClickListener
 {
 	private static final long serialVersionUID = 1L;
 
@@ -48,12 +48,12 @@ public class SMTPSettingsView extends CustomComponent implements View, ValueChan
 
 	private final Button saveButton;
 
-	public SMTPSettingsView()
+	public SMTPSettingView()
 	{
 		setSizeFull();
 
-		final SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
-		final SMTPServerSettings settings = daoEMailServerSettings.findSettings();
+		final SMTPSettingsDao daoSMTPServerSetting = new DaoFactory().getSMTPSettingsDao();
+		final SMTPServerSetting settings = daoSMTPServerSetting.findSettings();
 
 		if (settings == null)
 		{
@@ -140,7 +140,7 @@ public class SMTPSettingsView extends CustomComponent implements View, ValueChan
 	public void buttonClick(final ClickEvent event)
 	{
 		final SMTPSettingsDao daoEMailServerSettings = new DaoFactory().getSMTPSettingsDao();
-		final SMTPServerSettings settings = daoEMailServerSettings.findSettings();
+		final SMTPServerSetting settings = daoEMailServerSettings.findSettings();
 
 		if (settings == null)
 		{

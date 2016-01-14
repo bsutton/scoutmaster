@@ -3,6 +3,16 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -14,16 +24,6 @@ import au.org.scoutmaster.domain.access.SessionHistory;
 import au.org.scoutmaster.domain.access.SessionHistory_;
 import au.org.scoutmaster.domain.access.User_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
 
 @Menu(display = "Session History", path = "Admin.Security")
 public class SessionHistoryView extends BaseCrudView<SessionHistory> implements View, Selected<SessionHistory>
@@ -57,27 +57,26 @@ public class SessionHistoryView extends BaseCrudView<SessionHistory> implements 
 		overviewForm.newLine();
 		layout.addComponent(overviewForm);
 
-		super.disallowEdit(true);
-		super.disallowNew(true);
-
 		return layout;
 	}
 
 	@Override
 	public void enter(final ViewChangeEvent event)
 	{
-		new DaoFactory();
-		final JPAContainer<SessionHistory> container = DaoFactory.getGenericDao(SessionHistory.class)
-				.createVaadinContainer();
+		final JPAContainer<SessionHistory> container = new DaoFactory().getSessionHistoryDao().createVaadinContainer();
 		container.sort(new String[]
 		{ SessionHistory_.start.getName() }, new boolean[]
 		{ false });
 
 		final Builder<SessionHistory> builder = new HeadingPropertySet.Builder<SessionHistory>();
 		builder.addColumn("User", SessionHistory_.user).addColumn("Start Time", SessionHistory_.start)
-		.addColumn("End Time", SessionHistory_.end);
+				.addColumn("End Time", SessionHistory_.end);
+
+		super.disallowNew(true);
+		super.disallowEdit(true);
 
 		super.init(SessionHistory.class, container, builder.build());
+		super.disallowDelete(true);
 
 	}
 

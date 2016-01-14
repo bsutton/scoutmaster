@@ -9,6 +9,7 @@ import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.util.filter.Compare;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents.FocusEvent;
@@ -30,6 +31,7 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.help.HelpProvider;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.validator.MobilePhoneValidator;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
@@ -78,7 +80,7 @@ public class UserView extends BaseCrudView<User>
 		emailAddress.addValidator(new com.vaadin.data.validator.EmailValidator("Enter a valid Email Address."));
 		layout.addComponent(overviewForm);
 		overviewForm.bindTextField("Firstname", User_.firstname);
-		overviewForm.bindTextField("Surname", User_.surname);
+		overviewForm.bindTextField("Lastname", User_.lastname);
 		final TextField mobile = overviewForm.bindTextField("Sender Mobile", User_.senderMobile);
 		mobile.addValidator(new MobilePhoneValidator("Enter a valid Mobile No."));
 		mobile.setDescription("Used when sending bulk emails as the sender phone no.");
@@ -100,6 +102,7 @@ public class UserView extends BaseCrudView<User>
 	public void enter(final ViewChangeEvent event)
 	{
 		final JPAContainer<User> container = new DaoFactory().getUserDao().createVaadinContainer();
+
 		container.sort(new String[]
 		{ User_.username.getName() }, new boolean[]
 		{ true });
@@ -112,10 +115,19 @@ public class UserView extends BaseCrudView<User>
 	}
 
 	@Override
+	protected void resetFilters()
+	{
+		super.resetFilters();
+		// We must force the group filter as the user table is not multi-tenant.
+		getContainer().addContainerFilter(new Compare.Equal(User_.group.getName(), SMSession.INSTANCE.getGroup()));
+	}
+
+	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
+		//
 		return new Or(new SimpleStringFilter(User_.username.getName(), filterString, true, false),
-				new SimpleStringFilter(User_.emailAddress, filterString, true, false));
+				new SimpleStringFilter(User_.emailAddress.getName(), filterString, true, false));
 	}
 
 	@Override

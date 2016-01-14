@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
@@ -30,6 +31,7 @@ import au.org.scoutmaster.domain.access.User;
  */
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "CommunicationLog")
 @Access(AccessType.FIELD)
 @NamedQueries(

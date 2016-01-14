@@ -9,10 +9,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name = "SMSProvider")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "SMSProvider")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -24,7 +26,7 @@ public class SMSProvider extends BaseEntity
 	public static final String FIND_BY_NAME = "SMSProvider.findByName";
 
 	/**
-	 * The name of the provider used to display the provider to th e user.
+	 * The name of the provider used to display the provider to the user.
 	 */
 	@NotBlank
 	@Column(unique = true)

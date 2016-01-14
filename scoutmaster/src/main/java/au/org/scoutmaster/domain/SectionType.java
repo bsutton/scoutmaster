@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -29,10 +30,10 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name = "SectionType")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "SectionType")
 @Access(AccessType.FIELD)
 @NamedQueries(
-
 { @NamedQuery(name = SectionType.FIND_BY_NAME, query = "SELECT sectiontype FROM SectionType sectiontype WHERE sectiontype.name = :name"),
 		@NamedQuery(name = SectionType.FIND_ALL, query = "SELECT sectiontype FROM SectionType sectiontype order by sectiontype.startingAge") }
 
@@ -86,6 +87,20 @@ public class SectionType extends BaseEntity
 	Set<QualificationType> assistentLeaderRequirements = new TreeSet<>();
 	@ManyToMany(targetEntity = QualificationType.class)
 	Set<QualificationType> parentHelperRequirements = new TreeSet<>();
+
+	public SectionType()
+	{
+
+	}
+
+	public SectionType(String name, String description, Age startingAge, Age endingAge, Color colour)
+	{
+		this.name = name;
+		this.description = description;
+		this.startingAge = startingAge;
+		this.endingAge = endingAge;
+		this.colour = colour;
+	}
 
 	@Override
 	public String getName()

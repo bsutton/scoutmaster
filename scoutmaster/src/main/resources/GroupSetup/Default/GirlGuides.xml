@@ -1,0 +1,168 @@
+<Group>
+
+	<Tag name="Rainbow" description="Rainbow" />
+	<Tag name="Brownies" description="Brownies" />
+	<Tag name="Guides" description="Guides" />
+	<Tag name="Senior" description="Senior" />
+	<Tag name="Olave" description="Olave" />
+	<Tag name="Rainbow Leaders" description="Rainbow Leader" />
+	<Tag name="Brownies Leaders" description="Brownies Leader" />
+	<Tag name="Guides Leaders" description="Guides Leader" />
+	<Tag name="Senior Leaders" description="Senior Leader" />
+	<Tag name="Olave Leaders" description="Olave Leader" />
+	<Tag name="Parent" description="Parent" />
+	<Tag name="Council Member" description="Council Member" />
+	<Tag name="Committee Member" description="Committee Member" />
+	<Tag name="Section Helpers" description="Adult Helper" />
+	<Tag name="Volunteer" description="Vounteer" />
+	<Tag name="President" description="President" />
+	<Tag name="Secretary" description="Secretary" />
+	<Tag name="Treasurer" description="Treasurer" />
+	<Tag name="Youth Member" description="Youth Member" />
+	<Tag name="Prospect" description="Prospect" />
+	<Tag name="Youth Trial" description="Youth Trial" />
+	<Tag name="Quartermaster" description="Equipment manager" />
+	<Tag name="Leaders" description="Leaders" />
+	<Tag name="Group Leader" description="Group Leader" />
+	<Tag name="District Leaders" description="District Leader" />
+	<Tag name="Region Leaders" description="Region Leader" />
+	<Tag name="Branch Leaders" description="Branch Leader" />
+	<Tag name="Branch Staff" description="Branch Staff" />
+	<Tag name="Gardener" description="Looks after the halls gardens." />
+	<Tag name="Rainbow Parent" description="Parent of a Rainbow" />
+	<Tag name="Brownies Parent" description="Parent of a Brownies" />
+	<Tag name="Guides Parent" description="Parent of a Guides" />
+	<Tag name="Olave Parent" description="Parent of a Olave" />
+	<Tag name="Assistant Leaders" description="Assistant Section Leader" />
+	<Tag name="Recruitment Officer" description="Responsible for group recruitment" />
+	<Tag name="Grounds Keeper" description="Responsible for upkeep of the hall grounds." />
+	<Tag name="Too Young" description="Too young to be a youth member." />
+
+
+	<GroupRole enumName="None"
+		description="Any contact that doesn't have a role within the Guide Group."
+		name="None" />
+	<GroupRole enumName="GroupLeader" description="The Guide Group's CEO"
+		name="Group Leader" primaryRole="1">
+		<RoleTag name="Group Leader" />
+		<RoleTag name="Council Member" />
+		<RoleTag name="Committee Member" />
+	</GroupRole>
+
+	<GroupRole enumName="Leaders" description=" A leader of a Section"
+		name="Leaders">
+		<RoleTag name="Leaders" />
+	</GroupRole>
+	<GroupRole enumName="Custom" description="An under 18 yo Leader. "
+		name="Junior Leader">
+		<RoleTag name="Leaders" />
+		<RoleTag name="Council Member" />
+	</GroupRole>
+
+	<GroupRole enumName="YouthMember"
+		description="A youth who is an member of the Guide Group." name="Youth Member">
+		<RoleTag name="Youth Member" />
+	</GroupRole>
+	<GroupRole enumName="SectionHelper"
+		description="An adult that assists with delivering section programs but who is not a Leader. "
+		name="Section Helpers">
+		<RoleTag name="Section Helpers" />
+	</GroupRole>
+	<GroupRole enumName="AssistantLeader"
+		description="An qualified Leader that assists the Section Leader in delivering programs."
+		name="Assistant Leaders">
+		<RoleTag name="Assistant Leaders" />
+		<RoleTag name="Leaders" />
+		<RoleTag name="Council Member" />
+	</GroupRole>
+	<GroupRole enumName="CommitteeMember"
+		description="A member of the Group's organising committee." name="Committee Member">
+		<RoleTag name="Committee Member" />
+	</GroupRole>
+	<GroupRole enumName="CouncilMember"
+		description="A member of the Group's Council, normally a Section Leader."
+		name="Council Member">
+		<RoleTag name="Council Member" />
+	</GroupRole>
+	<GroupRole enumName="Guardian" description="A Legal Guardian of a Youth Member."
+		name="Guardian">
+		<RoleTag name="Parent" />
+	</GroupRole>
+	<GroupRole enumName="Parent"
+		description="A Parent of a Youth Member or a Prospective Youth Member"
+		name="Parent">
+		<RoleTag name="Parent" />
+	</GroupRole>
+	<GroupRole enumName="President"
+		description=" The President of the Guide Group's organising Committee."
+		name="President">
+		<RoleTag name="Committee Member" />
+		<RoleTag name="President" />
+	</GroupRole>
+	<GroupRole enumName="QuarterMaster"
+		description=" The QuarterMaster responsible for equipment management."
+		name="QuarterMaster">
+		<RoleTag name="Quartermaster" />
+	</GroupRole>
+	<GroupRole enumName="RecruitmentOfficer"
+		description="The committee member responsible recruitment." name="Recruitment Officer">
+		<RoleTag name="Committee Member" />
+	</GroupRole>
+	<GroupRole enumName="Secretary"
+		description="The Secretary of the Guide Group's organising Committee."
+		name="Secretary">
+		<RoleTag name="Secretary" />
+		<RoleTag name="Committee Member" />
+	</GroupRole>
+
+	<GroupRole enumName="Treasurer"
+		description="The Treasurer of the Guide Group's organising Committee."
+		name="Treasurer">
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Treasurer" />
+	</GroupRole>
+
+	<GroupRole enumName="Volunteer"
+		description="A person who Volunteers time within the Guide Group."
+		name="Volunteer">
+		<RoleTag name="Volunteer" />
+	</GroupRole>
+
+	<SectionType name="Rainbow Guides" description="Rainbow Guides Section">
+		<StartingAge days="0" months="0" years="5" />
+		<EndingAge days="30" months="11" years="7" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Brownies" description="Brownies Section">
+		<StartingAge days="0" months="0" years="8" />
+		<EndingAge days="30" months="11" years="10" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Guides" description="Guides Section">
+		<StartingAge days="0" months="0" years="11" />
+		<EndingAge days="29" months="5" years="14" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Senior Section" description="Senior Section">
+		<StartingAge days="0" months="6" years="14" />
+		<EndingAge days="30" months="11" years="26" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Olave" description="Olave Section">
+		<StartingAge days="0" months="6" years="18" />
+		<EndingAge days="30" months="11" years="25" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Too Young" description="Too Young to join Guides">
+		<StartingAge days="0" months="0" years="0" />
+		<EndingAge days="0" months="0" years="5" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Leaders" description="Too old for youth membership">
+		<StartingAge days="0" months="0" years="18" />
+		<EndingAge days="0" months="0" years="120" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+
+
+</Group>

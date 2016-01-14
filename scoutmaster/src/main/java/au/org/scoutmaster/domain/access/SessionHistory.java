@@ -11,6 +11,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.org.scoutmaster.domain.BaseEntity;
 
@@ -23,6 +24,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  */
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "SessionHistory")
 @Access(AccessType.FIELD)
 public class SessionHistory extends BaseEntity

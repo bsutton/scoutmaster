@@ -1,0 +1,2 @@
+00:02:04,280 INFO  [Version] Hibernate Validator 4.1.0.Final
+00:02:04,285 INFO  [DefaultTraversableResolver] Instantiated an instance of org.hibernate.validator.engine.resolver.JPATraversableResolver.

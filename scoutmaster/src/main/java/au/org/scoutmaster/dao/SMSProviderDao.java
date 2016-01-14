@@ -86,6 +86,34 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 	 * @throws SmsException
 	 * @throws IOException
 	 */
+	public void sendNoLogging(final SMSProvider provider, final SMSTransmission transmission,
+			final ProgressListener<SMSTransmission> listener) throws SmsException, IOException
+	{
+
+		try (SMSSession session = new SMSSession(provider))
+		{
+
+			session.send(transmission, false);
+			listener.progress(1, 1, transmission);
+			listener.complete(1);
+		}
+		catch (final IOException e)
+		{
+			this.logger.error(e, e);
+			throw e;
+		}
+
+	}
+
+	/**
+	 * Sends a single SMS messaging using its own session.
+	 *
+	 * @param provider
+	 * @param transmission
+	 * @param listener
+	 * @throws SmsException
+	 * @throws IOException
+	 */
 	public void send(final SMSProvider provider, final SMSTransmission transmission,
 			final ProgressListener<SMSTransmission> listener) throws SmsException, IOException
 	{
@@ -93,7 +121,7 @@ public class SMSProviderDao extends JpaBaseDao<SMSProvider, Long> implements Dao
 		try (SMSSession session = new SMSSession(provider))
 		{
 
-			session.send(transmission);
+			session.send(transmission, true);
 			listener.progress(1, 1, transmission);
 			listener.complete(1);
 		}

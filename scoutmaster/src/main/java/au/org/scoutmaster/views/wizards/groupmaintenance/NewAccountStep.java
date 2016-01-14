@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.wizards.setup;
+package au.org.scoutmaster.views.wizards.groupmaintenance;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 
 	private VerticalLayout layout;
 
-	public NewAccountStep(final GroupSetupWizardView setupWizardView)
+	public NewAccountStep(final GroupMaintenanceWizardView setupWizardView)
 	{
 		super(new DaoFactory().getUserDao(), User.class);
 	}

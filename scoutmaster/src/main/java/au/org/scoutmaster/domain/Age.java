@@ -9,6 +9,7 @@ import javax.validation.constraints.Min;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.simpleframework.xml.Attribute;
 
 /**
  * Used to represent the age of a person in Years, Months and days
@@ -22,14 +23,17 @@ public class Age
 {
 	@Basic
 	@Min(value = 0)
+	@Attribute
 	protected Integer years;
 
 	@Basic
 	@Min(value = 0)
+	@Attribute
 	protected Integer months;
 
 	@Basic
 	@Min(value = 0)
+	@Attribute
 	protected Integer days;
 
 	public Age()
@@ -206,9 +210,9 @@ public class Age
 
 	public DateTime getBirthDate()
 	{
-		return new DateMidnight(DateTime.now().minus(
-				new org.joda.time.Period().withYears(getYears()).withMonths(getMonths()).withDays(getDays())))
-		.toDateTime();
+		return new DateMidnight(DateTime.now()
+				.minus(new org.joda.time.Period().withYears(getYears()).withMonths(getMonths()).withDays(getDays())))
+						.toDateTime();
 	}
 
 }

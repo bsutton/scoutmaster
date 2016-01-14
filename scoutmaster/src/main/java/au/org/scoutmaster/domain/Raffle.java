@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.domain.accounting.Money;
@@ -28,6 +29,7 @@ import au.org.scoutmaster.domain.accounting.Money;
  */
 @Entity(name = "Raffle")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Raffle")
 @Access(AccessType.FIELD)
 public class Raffle extends BaseEntity

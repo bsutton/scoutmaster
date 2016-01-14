@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
@@ -25,6 +26,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
 
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Note")
 @Access(AccessType.FIELD)
 @NamedQueries(

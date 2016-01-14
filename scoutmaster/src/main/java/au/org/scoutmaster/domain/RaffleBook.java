@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
@@ -29,6 +30,7 @@ import au.org.scoutmaster.domain.accounting.Money;
  */
 @Entity(name = "RaffleBook")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "RaffleBook")
 @Access(AccessType.FIELD)
 @NamedQueries(

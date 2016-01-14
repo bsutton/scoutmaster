@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
@@ -25,6 +26,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
  */
 @Entity(name = "Relationship")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Relationship")
 @Access(AccessType.FIELD)
 public class Relationship extends BaseEntity implements ChildCrudEntity

@@ -10,13 +10,14 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.UI;
 
 import au.com.vaadinutils.dao.RunnableUI;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.CommunicationLogDao;
 import au.org.scoutmaster.dao.CommunicationTypeDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationType;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.forms.EmailForm.TargetLine;
 import au.org.scoutmaster.util.SMNotification;
 
@@ -38,7 +39,7 @@ public class EmailWorker extends RunnableUI
 		try
 		{
 			final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-			final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+			final SMTPServerSetting settings = daoSMTPSettings.findSettings();
 
 			final ArrayList<SMTPSettingsDao.EmailTarget> targets = new ArrayList<>();
 
@@ -60,8 +61,9 @@ public class EmailWorker extends RunnableUI
 			}
 
 			assert targets.size() != 0 : "Empty list of email targets";
-			daoSMTPSettings.sendEmail(settings, emailForm.getSender().getEmailAddress(), targets,
-					emailForm.getSubject().getValue(), emailForm.getCkEditor().getValue(), emailForm.getAttachements());
+			daoSMTPSettings.sendEmail(settings, emailForm.getSender().getEmailAddress(),
+					SMSession.INSTANCE.getLoggedInUser().getEmailAddress(), targets, emailForm.getSubject().getValue(),
+					emailForm.getCkEditor().getValue(), emailForm.getAttachements());
 
 			// em.detach(EmailForm.this.sender);
 			// em.detach(EmailForm.this.contact);

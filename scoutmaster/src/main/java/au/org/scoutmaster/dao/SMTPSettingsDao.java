@@ -15,10 +15,10 @@ import org.apache.logging.log4j.Logger;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.forms.EmailAddressType;
 
-public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implements Dao<SMTPServerSettings, Long>
+public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSetting, Long> implements Dao<SMTPServerSetting, Long>
 {
 	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SMTPSettingsDao.class);
@@ -47,10 +47,10 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		// inherit the default per request em.
 	}
 
-	public SMTPServerSettings findSettings()
+	public SMTPServerSetting findSettings()
 	{
-		SMTPServerSettings settings = null;
-		final List<SMTPServerSettings> list = findAll();
+		SMTPServerSetting settings = null;
+		final List<SMTPServerSetting> list = findAll();
 
 		if (list.size() > 1)
 		{
@@ -63,7 +63,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 		else if (list.size() == 0)
 		{
 			// If not initialised before then do it now.
-			settings = new SMTPServerSettings();
+			settings = new SMTPServerSetting();
 			settings.setAuthRequired(false);
 			settings.setSmtpPort(25);
 			settings.setSmtpFQDN("localhost");
@@ -74,36 +74,37 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	}
 
 	@Override
-	public JPAContainer<SMTPServerSettings> createVaadinContainer()
+	public JPAContainer<SMTPServerSetting> createVaadinContainer()
 	{
 		return super.createVaadinContainer();
 	}
 
-	public void sendEmail(final SMTPServerSettings settings, final String fromAddress, final EmailTarget target,
-			final String subject, final String body, final HashSet<? extends DataSource> attachedFiles)
-					throws EmailException
+	public void sendEmail(final SMTPServerSetting settings, final String fromAddress, final String bounceEmailAddress,
+			final EmailTarget target, final String subject, final String body,
+			final HashSet<? extends DataSource> attachedFiles) throws EmailException
 	{
 		final ArrayList<EmailTarget> list = new ArrayList<>();
 		list.add(target);
 
-		sendEmail(settings, fromAddress, list, subject, body, attachedFiles);
+		sendEmail(settings, fromAddress, bounceEmailAddress, list, subject, body, attachedFiles);
 
 	}
 
-	public void sendEmail(SMTPServerSettings settings, String fromEmailAddress, EmailTarget emailTarget, String subject,
-			String body) throws EmailException
+	public void sendEmail(SMTPServerSetting settings, String fromEmailAddress, String bounceEmailAddress,
+			EmailTarget emailTarget, String subject, String body) throws EmailException
 	{
-		sendEmail(settings, fromEmailAddress, emailTarget, subject, body, new HashSet<DataSource>());
+		sendEmail(settings, fromEmailAddress, bounceEmailAddress, emailTarget, subject, body,
+				new HashSet<DataSource>());
 
 	}
 
-	public void sendEmail(SMTPServerSettings settings, String fromAddress, EmailTarget target, String subject,
-			String bodyText, ByteArrayDataSource byteArrayDataSource)
+	public void sendEmail(SMTPServerSetting settings, String fromAddress, String bounceEmailAddress,
+			EmailTarget target, String subject, String bodyText, ByteArrayDataSource byteArrayDataSource)
 	{
 		final HashSet<DataSource> attachedFiles = new HashSet<>();
 		attachedFiles.add(byteArrayDataSource);
 
-		sendEmail(settings, fromAddress, target, subject, bodyText, byteArrayDataSource);
+		sendEmail(settings, fromAddress, bounceEmailAddress, target, subject, bodyText, byteArrayDataSource);
 
 	}
 
@@ -121,9 +122,9 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 	 * @param string
 	 * @throws EmailException
 	 */
-	public void sendEmail(final SMTPServerSettings settings, final String fromAddress, final List<EmailTarget> targets,
-			final String subject, final String body, final HashSet<? extends DataSource> attachedFiles)
-					throws EmailException
+	public void sendEmail(final SMTPServerSetting settings, final String fromAddress, String bounceEmailAddress,
+			final List<EmailTarget> targets, final String subject, final String body,
+			final HashSet<? extends DataSource> attachedFiles) throws EmailException
 	{
 		final HtmlEmail email = new HtmlEmail();
 
@@ -141,7 +142,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSettings, Long> implem
 			email.setSSLCheckServerIdentity(false);
 		}
 		email.setFrom(fromAddress);
-		email.setBounceAddress(settings.getBounceEmailAddress());
+		email.setBounceAddress(bounceEmailAddress);
 
 		for (final EmailTarget target : targets)
 		{

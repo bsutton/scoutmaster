@@ -1,6 +1,7 @@
 package au.org.scoutmaster.help;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -49,6 +50,10 @@ public class HelpPageCache
 						page = processor.process(in);
 						in.close();
 					}
+					catch (FileNotFoundException e)
+					{
+						logger.warn("The Help page: " + helpId + " was not found. Please create it at: " + url);
+					}
 					catch (final Exception e)
 					{
 						HelpPageCache.logger.error(e, e);
@@ -57,9 +62,16 @@ public class HelpPageCache
 				}
 			});
 
-	static public String lookupHelpPage(final Enum id) throws ExecutionException
+	/**
+	 * Retrieves the help text for the given Id.
+	 *
+	 * @param helpId
+	 * @return
+	 * @throws ExecutionException
+	 */
+	static public String lookupHelpPage(final Enum helpId) throws ExecutionException
 	{
-		return HelpPageCache.cache.get(id);
+		return HelpPageCache.cache.get(helpId);
 
 	}
 

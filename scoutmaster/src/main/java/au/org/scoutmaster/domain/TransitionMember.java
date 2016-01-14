@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 /**
  * A youth members that are currently transitioning from one section to another
@@ -20,6 +21,7 @@ import org.eclipse.persistence.annotations.Multitenant;
  */
 @Entity(name = "TransitionMember")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "TransitionMember")
 @Access(AccessType.FIELD)
 public class TransitionMember extends BaseEntity

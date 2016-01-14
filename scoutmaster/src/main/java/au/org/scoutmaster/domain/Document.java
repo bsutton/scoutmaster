@@ -9,6 +9,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.com.vaadinutils.crud.CrudEntity;
@@ -22,6 +23,7 @@ import au.org.scoutmaster.domain.access.User;
  */
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Document")
 @Access(AccessType.FIELD)
 @NamedQueries(

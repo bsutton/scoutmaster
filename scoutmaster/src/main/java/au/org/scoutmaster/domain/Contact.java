@@ -11,6 +11,7 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ import javax.validation.constraints.Past;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -46,6 +48,7 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -177,7 +180,8 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@Transient
 	private SectionType sectionEligibility;
 
-	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class, cascade =
+	{ CascadeType.MERGE })
 	@FormField(displayName = "Address")
 	private Address address = new Address();
 
@@ -508,15 +512,15 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public Phone getPrimaryPhone()
 	{
 		Phone primary = null;
-		if (this.phone1.getPrimaryPhone())
+		if (this.phone1.isPrimaryPhone())
 		{
 			primary = this.phone1;
 		}
-		else if (this.phone2.getPrimaryPhone())
+		else if (this.phone2.isPrimaryPhone())
 		{
 			primary = this.phone2;
 		}
-		else if (this.phone3.getPrimaryPhone())
+		else if (this.phone3.isPrimaryPhone())
 		{
 			primary = this.phone3;
 		}

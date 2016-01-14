@@ -34,9 +34,10 @@ import au.org.scoutmaster.help.HelpIndexImpl;
 import au.org.scoutmaster.help.HelpWrappingViewProvider;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.ForgottenPasswordView;
+import au.org.scoutmaster.views.HomeView;
 import au.org.scoutmaster.views.LoginView;
 import au.org.scoutmaster.views.ResetPasswordView;
-import au.org.scoutmaster.views.wizards.setup.GroupSetupWizardView;
+import au.org.scoutmaster.views.wizards.groupsetup.GroupSetupWizardView;
 
 /*
  * UI class is the starting point for your app. You may deploy it with
@@ -142,64 +143,68 @@ public class NavigatorUI extends UI
 				// Check if a user has logged in
 				final boolean isLoggedIn = getSession().getAttribute("user") != null;
 				final boolean isLoginView = event.getNewView() instanceof LoginView;
+				final boolean isHomeView = event.getNewView() instanceof HomeView;
 				final boolean isForgottenPasswordView = event.getNewView() instanceof ForgottenPasswordView;
 				final boolean isResetPasswordView = event.getNewView() instanceof ResetPasswordView;
+				final boolean isSetupWizard = event.getNewView() instanceof GroupSetupWizardView;
 
 				// TODO: should we cache this?
 				// during dev its easier if we don't.
 				final UserDao daoUser = new DaoFactory().getUserDao();
-				final long userCount = daoUser.getCount();
 
-				if (userCount == 0)
+				if (isLoggedIn)
 				{
-					// Deal with recursion. When we navigateTo the setupwizard
-					// it comes back through
-					// beforeViewChange so we have to check that aren't aready
-					// on our way to the
-					// setupview.
-					if (event.getNewView() instanceof GroupSetupWizardView)
+					if (isLoginView || isForgottenPasswordView || isResetPasswordView)
 					{
+						// If someone tries to access to login related pages
+						// whilst logged in. Reject them.
+						// then cancel
+						return false;
+					}
+					else
+					{
+						// check if the menu bar has been added and if not then
+						// add
+						// it.
+						if (NavigatorUI.this.menubar == null)
+						{
+							NavigatorUI.this.menubar = new MenuBuilder(navigator, ScoutmasterViewEnum.getViewMap())
+									.build();
+							NavigatorUI.this.menubar.setWidth("100%");
+							NavigatorUI.this.mainLayout.addComponentAsFirst(NavigatorUI.this.menubar);
+						}
+
+						// Reset the sizing as HomeView may have made it
+						// undefined.
+						NavigatorUI.this.mainLayout.setSizeFull();
+						return true;
+					}
+				}
+				else
+				{
+					// We arn't currently logged in.
+					if (isHomeView)
+					{
+						// HomeView needs scroll bars so set size undefined.
+						NavigatorUI.this.mainLayout.setSizeUndefined();
+						return true;
+					}
+					else if (isLoginView || isForgottenPasswordView || isResetPasswordView || isSetupWizard)
+					{
+						// Reset the sizing as HomeView may have made it
+						// undefined.
+						NavigatorUI.this.mainLayout.setSizeFull();
 						return true;
 					}
 					else
 					{
-						// Must be a first time login so lets go and run the
-						// setup wizard.
-						getNavigator().navigateTo(GroupSetupWizardView.NAME);
+						// not logged in, don't know where they are going to so
+						// send them home.
+						getNavigator().navigateTo(HomeView.NAME);
 						return false;
 					}
 				}
 
-				if (!isLoggedIn && !isLoginView && !isForgottenPasswordView && !isResetPasswordView)
-				{
-					// Redirect to login view always if a user has not yet
-					// logged in
-					getNavigator().navigateTo(LoginView.NAME);
-					return false;
-
-				}
-				else if (isForgottenPasswordView)
-				{
-					return true;
-				}
-				else if (isLoggedIn && isLoginView)
-				{
-					// If someone tries to access to login view while logged in,
-					// then cancel
-					return false;
-				}
-				else if (isLoggedIn)
-				{
-					// check if the menu bar has been added and if not then add
-					// it.
-					if (NavigatorUI.this.menubar == null)
-					{
-						NavigatorUI.this.menubar = new MenuBuilder(navigator, ScoutmasterViewEnum.getViewMap()).build();
-						NavigatorUI.this.menubar.setWidth("100%");
-						NavigatorUI.this.mainLayout.addComponentAsFirst(NavigatorUI.this.menubar);
-					}
-				}
-				return true;
 			}
 
 			@Override

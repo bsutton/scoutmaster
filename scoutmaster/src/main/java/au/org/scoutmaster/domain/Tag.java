@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
@@ -31,6 +32,7 @@ import org.pojomatic.annotations.Property;
  */
 @Entity(name = "Tag")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -102,14 +104,15 @@ public class Tag extends BaseEntity
 
 	public Tag(final String name, final String description)
 	{
-		this.name = name;
-		this.description = description;
+		this(name, description, false);
 	}
 
-	// public void addContact(Contact contact)
-	// {
-	// this.contacts.add(contact);
-	// }
+	public Tag(String name, String description, Boolean builtin)
+	{
+		this.name = name;
+		this.description = description;
+		this.builtin = builtin;
+	}
 
 	public Boolean isTag(final String tagName)
 	{

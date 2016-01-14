@@ -1,9 +1,5 @@
 package au.org.scoutmaster.dao;
 
-import java.util.List;
-
-import javax.persistence.Query;
-
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
@@ -16,7 +12,6 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 	{
 		// inherit the default per request em.
 	}
-
 
 	@Override
 	public JPAContainer<Organisation> createVaadinContainer()
@@ -42,20 +37,4 @@ public class OrganisationDao extends JpaBaseDao<Organisation, Long> implements D
 
 		return contactContainer;
 	}
-
-	public Organisation findOurScoutGroup()
-	{
-		Organisation entity = null;
-		final Query query = JpaBaseDao.getEntityManager().createNamedQuery(Organisation.FIND_OUR_SCOUT_GROUP);
-
-		@SuppressWarnings("unchecked")
-		final List<Organisation> entities = query.getResultList();
-		if (entities.size() > 0)
-		{
-			entity = entities.get(0);
-		}
-		return entity;
-
-	}
-
 }

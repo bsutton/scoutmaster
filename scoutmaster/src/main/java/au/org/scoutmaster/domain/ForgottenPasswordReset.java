@@ -11,6 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.joda.time.DateTime;
 
 import au.org.scoutmaster.domain.access.User;
@@ -27,6 +28,7 @@ import au.org.scoutmaster.domain.access.User;
 
 @Entity(name = "ForgottenPasswordReset")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "ForgottenPasswordReset")
 @Access(AccessType.FIELD)
 @NamedQueries(

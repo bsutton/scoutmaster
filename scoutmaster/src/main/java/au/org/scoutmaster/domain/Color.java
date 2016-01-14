@@ -2,6 +2,8 @@ package au.org.scoutmaster.domain;
 
 import javax.persistence.Embeddable;
 
+import org.simpleframework.xml.Attribute;
+
 import au.com.vaadinutils.domain.iColor;
 
 /**
@@ -14,9 +16,13 @@ import au.com.vaadinutils.domain.iColor;
 @Embeddable
 public class Color implements iColor
 {
+	@Attribute
 	private int red;
+	@Attribute
 	private int green;
+	@Attribute
 	private int blue;
+	@Attribute
 	private int alpha;
 
 	public Color()

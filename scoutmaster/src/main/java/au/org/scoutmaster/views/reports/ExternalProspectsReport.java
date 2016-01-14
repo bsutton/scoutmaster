@@ -1,8 +1,10 @@
 package au.org.scoutmaster.views.reports;
 
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
+import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
 import net.sf.jasperreports.engine.JRException;
@@ -32,7 +34,13 @@ public class ExternalProspectsReport extends JasperReportView
 		@Override
 		public ReportFilterUIBuilder getFilterBuilder()
 		{
-			return new ReportFilterUIBuilder();
+			ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
+
+			ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+					"" + SMSession.INSTANCE.getGroup().getId());
+			builder.getReportParameters().add(param);
+
+			return builder;
 		}
 	}
 

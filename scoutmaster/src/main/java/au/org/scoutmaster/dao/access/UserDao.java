@@ -6,6 +6,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.domain.access.User;
 
@@ -17,8 +18,6 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 		// inherit the default per request em.
 	}
 
-	
-
 	@Override
 	public User findById(final Long id)
 	{
@@ -29,6 +28,7 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 	public User addUser(final String username, final String password)
 	{
 		final User user = new User(username, password);
+		user.setGroup(SMSession.INSTANCE.getGroup());
 		persist(user);
 		return user;
 
@@ -39,7 +39,7 @@ public class UserDao extends JpaBaseDao<User, Long> implements Dao<User, Long>
 		user.setPassword(password);
 
 		final EntityManager em = EntityManagerProvider.getEntityManager();
-		em.merge(user);
+		SMSession.INSTANCE.setLoggedInUser(em.merge(user));
 	}
 
 	public User findByName(final String username)
