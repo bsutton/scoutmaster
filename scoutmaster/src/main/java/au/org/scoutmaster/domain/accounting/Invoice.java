@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.InvoiceDao;
@@ -23,6 +24,7 @@ import au.org.scoutmaster.domain.Contact;
 
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Invoice")
 @Access(AccessType.FIELD)
 public class Invoice extends BaseEntity

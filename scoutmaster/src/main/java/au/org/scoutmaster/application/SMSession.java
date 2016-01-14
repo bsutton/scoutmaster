@@ -10,8 +10,8 @@ import com.vaadin.ui.UI;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
+import au.org.scoutmaster.domain.Group;
 import au.org.scoutmaster.domain.SectionType;
-import au.org.scoutmaster.domain.access.Tenant;
 import au.org.scoutmaster.domain.access.User;
 
 public enum SMSession
@@ -21,9 +21,10 @@ public enum SMSession
 	static private final String USER = "user";
 
 	/**
-	 * Holds the tenant of the currently logged in user.
+	 * Holds the Group (used by JPA for the Tenant) of the currently logged in
+	 * user.
 	 */
-	private Tenant tenant;
+	private Group group;
 
 	/**
 	 * Cache of section types to get around some odd jpa bug.
@@ -46,12 +47,7 @@ public enum SMSession
 			// so we can write session history when the session collapses.
 			session.getSession().setAttribute(SMSession.USER, user);
 
-			this.tenant = user.getTenant();
-
-			// We now know who the tenant is so we can make the transition to
-			// JPA based Tenant management.
-			EntityManager em = EntityManagerProvider.getEntityManager();
-			em.setProperty("eclipselink.tenant-id", "" + tenant.getId());
+			setGroup(user.getGroup());
 
 			/**
 			 * We are caching the section types to get around a bug in jpa that
@@ -66,19 +62,30 @@ public enum SMSession
 		{
 			session.setAttribute(SMSession.USER, null);
 			session.getSession().removeAttribute(SMSession.USER);
-			this.tenant = null;
+			this.group = null;
 		}
 
 	}
 
+	public void setGroup(Group group)
+	{
+		// We now know who the tenant (group) is so we can make the transition
+		// to
+		// JPA based Tenant management.
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		em.setProperty("eclipselink.tenant-id", "" + group.getId());
+
+		this.group = group;
+	}
+
 	/**
 	 *
-	 * @return The tenant of the currently logged in user or null if there is no
-	 *         logged in user.
+	 * @return The Group (JPA tenant) of the currently logged in user or null if
+	 *         there is no logged in user.
 	 */
-	public Tenant getTenant()
+	public Group getGroup()
 	{
-		return tenant;
+		return group;
 	}
 
 	public List<SectionType> getSectionTypeCache()

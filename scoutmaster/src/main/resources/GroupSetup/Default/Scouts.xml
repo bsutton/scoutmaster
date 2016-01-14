@@ -1,0 +1,161 @@
+<Group>
+
+<Tag name="Joeys" description="Joey" />
+	<Tag name="Cubs" description="Cub" />
+	<Tag name="Scouts" description="Scout" />
+	<Tag name="Venturers" description="Venturer" />
+	<Tag name="Rovers" description="Rover" />
+	<Tag name="Leaders" description="Leader" />
+	<Tag name="Joey Leaders" description="Joey Leader" />
+	<Tag name="Cub Leaders" description="Cub Leader" />
+	<Tag name="Scout Leaders" description="Scout Leader" />
+	<Tag name="Venturer Leaders" description="Venturer Leader" />
+	<Tag name="Rover Leaders" description="Rover Leader" />
+	<Tag name="Parent" description="Parent" />
+	<Tag name="Council Member" description="Council Member" />
+	<Tag name="Committee Member" description="Committee Member" />
+	<Tag name="Section Helpers" description="Adult Helper" />
+	<Tag name="Volunteer" description="Vounteer" />
+	<Tag name="President" description="President" />
+	<Tag name="Secretary" description="Secretary" />
+	<Tag name="Treasurer" description="Treasurer" />
+	<Tag name="Youth Member" description="Youth Member" />
+	<Tag name="Prospect" description="Prospect" />
+	<Tag name="Youth Trial" description="Youth Trial" />
+	<Tag name="Quartermaster" description="Equipment manager" />
+	<Tag name="Group Leader" description="Group Leader" />
+	<Tag name="District Leaders" description="District Leader" />
+	<Tag name="Region Leaders" description="Region Leader" />
+	<Tag name="Branch Leaders" description="Branch Leader" />
+	<Tag name="Branch Staff" description="Branch Staff" />
+	<Tag name="Gardener" description="Looks after the halls gardens." />
+	<Tag name="Cub Parent" description="Parent of a cub" />
+	<Tag name="Joey Parent" description="Parent of a Joey" />
+	<Tag name="Scout Parent" description="Parent of a Scout" />
+	<Tag name="Venturer Parent" description="Parent of a Venturer" />
+	<Tag name="Assistant Leaders" description="Assistant Section Leader" />
+	<Tag name="Recruitment Officer" description="Responsible for group recruitment" />
+	<Tag name="Rover Parent" description="Parent of a Rover member" />
+	<Tag name="Grounds Keeper" description="Responsible for upkeep of the hall grounds." />
+	<Tag name="Too Young" description="Too young to be a youth member." />
+	
+	<GroupRole enumName="None"
+		description="Any contact that doesn't have a role within the Scout Group."
+		name="None" />
+	<GroupRole enumName="SectionHelper"
+		description="An adult that assists with delivering section programs but who is not a Leader. "
+		name="Section Helpers">
+		<RoleTag name="Section Helpers" />
+	</GroupRole>
+	<GroupRole enumName="AssistantLeader"
+		description="An qualified Leader that assists the Section Leader in delivering programs."
+		name="Assistant Leaders" >
+		<RoleTag name="Assistant Leaders" />
+		<RoleTag name="Leaders" />
+		</GroupRole>
+	<GroupRole enumName="CommitteeMember"
+		description="A member of the Group's organising committee." name="Committee Member" >
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="CouncilMember"
+		description="A member of the Group's Council, normally a Section Leader."
+		name="Council Member" >
+		<RoleTag name="Council Member" />
+		</GroupRole>
+		
+	<GroupRole enumName="Guardian" description="A Legal Guardian of a Youth Member."
+		name="Guardian" >
+		<RoleTag name="Parent" />
+		</GroupRole>
+	<GroupRole enumName="GroupLeader" description="The Scout Group's CEO"
+		name="Group Leader" primaryRole="1" >
+		<RoleTag name="Group Leader" />
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Council Member" />
+		</GroupRole>
+		
+	<GroupRole enumName="Leaders" description=" A leader of a Section"
+		name="Leaders" >
+			<RoleTag name="Leaders" />
+		</GroupRole>
+	<GroupRole enumName="Parent"
+		description="A Parent of a Youth Member or a Prospective Youth Member"
+		name="Parent" >
+		<RoleTag name="Parent" />
+		</GroupRole>
+	<GroupRole enumName="President"
+		description=" The President of the Scout Group's organising Committee."
+		name="President" >
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="QuarterMaster"
+		description=" The QuarterMaster responsible for equipment management."
+		name="QuarterMaster" >
+		<RoleTag name="Quartermaster" />
+		</GroupRole>
+	<GroupRole enumName="RecruitmentOfficer"
+		description="The committee member responsible recruitment." name="Recruitment Officer" >
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="Secretary"
+		description="The Secretary of the Scout Group's organising Committee."
+		name="Secretary" >
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Secretary" />
+		</GroupRole>
+	<GroupRole enumName="Treasurer"
+		description="The Treasurer of the Scout Group's organising Committee."
+		name="Treasurer" >
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Treasurer" />
+		</GroupRole>
+	<GroupRole enumName="Volunteer"
+		description="A person who Volunteers time within the Scout Group."
+		name="Volunteer" >
+		<RoleTag name="Volunteer" />
+		</GroupRole>
+	<GroupRole enumName="YouthMember"
+		description="A youth who is an member of the Scout Group." name="Youth Member" >
+		<RoleTag name="Youth Member" />
+		</GroupRole>
+
+
+	<SectionType name="Joeys" description="Joey Section">
+		<StartingAge days="0" months="0" years="6" />
+		<EndingAge days="30" months="11" years="7" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Cubs" description="Cub Section">
+		<StartingAge days="0" months="0" years="8" />
+		<EndingAge days="30" months="11" years="10" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Scouts" description="Scout Section">
+		<StartingAge days="0" months="0" years="11" />
+		<EndingAge days="29" months="5" years="14" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Venturers" description="Venturer Section">
+		<StartingAge days="0" months="6" years="14" />
+		<EndingAge days="30" months="11" years="20" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Rovers" description="Rover Section">
+		<StartingAge days="0" months="6" years="18" />
+		<EndingAge days="30" months="11" years="25" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Too Young" description="Too Young to join Scouts">
+		<StartingAge days="0" months="0" years="0" />
+		<EndingAge days="30" months="11" years="5" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+	<SectionType name="Leaders" description="Too old for youth membership">
+		<StartingAge days="0" months="0" years="26" />
+		<EndingAge days="0" months="0" years="120" />
+		<Colour red="255" green="255" blue="255" alpha="255" />
+	</SectionType>
+
+
+	
+</Group>

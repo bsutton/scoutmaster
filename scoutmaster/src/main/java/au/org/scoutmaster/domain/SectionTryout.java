@@ -14,15 +14,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.org.scoutmaster.domain.accounting.MoneyWithTax;
 
 /**
- * A youth member who are currently trying out to see if they would like to join
+ * A youth member who is currently trying out to see if they would like to join
  * a Section.
  */
 @Entity(name = "SectionTryout")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "SectionTryout")
 @Access(AccessType.FIELD)
 public class SectionTryout extends BaseEntity

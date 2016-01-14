@@ -7,7 +7,7 @@ import javax.servlet.ServletContextEvent;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.servlet.VUEntityManagerContextListener;
-import au.org.scoutmaster.domain.access.Tenant;
+import au.org.scoutmaster.domain.Group;
 
 /**
  * You need to hook this class as a servlet context listener in your web.xml
@@ -41,12 +41,12 @@ public class LocalEntityManagerContextListener extends VUEntityManagerContextLis
 			@Override
 			public void run(EntityManager em)
 			{
-				Tenant tenant = SMSession.INSTANCE.getTenant();
+				Group group = SMSession.INSTANCE.getGroup();
 
-				if (tenant != null)
+				if (group != null)
 				{
 					// If we know the tenant then lets tell eclipselink
-					em.setProperty("eclipselink.tenant-id", "" + tenant.getId());
+					em.setProperty("eclipselink.tenant-id", "" + group.getId());
 				}
 			}
 

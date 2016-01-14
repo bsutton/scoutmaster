@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -20,6 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name = "RelationshipType")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "RelationshipType")
 @Access(AccessType.FIELD)
 public class RelationshipType extends BaseEntity

@@ -57,7 +57,7 @@ public class LoginAttempt extends BaseEntity
 	/**
 	 * For jpa.
 	 */
-	LoginAttempt()
+	public LoginAttempt()
 	{
 	}
 

@@ -7,9 +7,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 @Entity(name = "ImportColumnFieldMapping")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "ImportColumnFieldMapping")
 @Access(AccessType.FIELD)
 public class ImportColumnFieldMapping extends BaseEntity

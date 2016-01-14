@@ -13,7 +13,7 @@ import com.vaadin.ui.UI;
 import au.com.vaadinutils.dao.RunnableUI;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.util.SMNotification;
 
 public class EmailWorker extends RunnableUI
@@ -33,7 +33,7 @@ public class EmailWorker extends RunnableUI
 	{
 
 		final SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
-		final SMTPServerSettings settings = settingsDao.findSettings();
+		final SMTPServerSetting settings = settingsDao.findSettings();
 
 		final Email email = new SimpleEmail();
 		email.setHostName(settings.getSmtpFQDN());

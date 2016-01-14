@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 /**
  * Used to save the set of 'csv field' to 'Entity field' mappings that the user
@@ -24,6 +25,7 @@ import org.eclipse.persistence.annotations.Multitenant;
  */
 @Entity(name = "ImportUserMapping")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(

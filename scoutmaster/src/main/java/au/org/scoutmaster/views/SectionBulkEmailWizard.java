@@ -21,10 +21,12 @@ import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
 import au.com.vaadinutils.fields.DependantComboBox;
 import au.com.vaadinutils.fields.EntityComboBox;
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
+import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.wizards.bulkJasperEmail.JasperProxy;
 import au.com.vaadinutils.wizards.bulkJasperEmail.Recipient;
 import au.com.vaadinutils.wizards.bulkJasperEmail.WizardView;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
@@ -166,7 +168,13 @@ public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, Con
 			@Override
 			public ReportFilterUIBuilder getFilterBuilder()
 			{
-				return new ReportFilterUIBuilder();
+				ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
+
+				ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+						"" + SMSession.INSTANCE.getGroup().getId());
+				builder.getReportParameters().add(param);
+
+				return builder;
 			}
 		};
 		return new JasperProxy(this.subjectField.getValue(), "support@noojee.com.au", new JasperEmailSettingsImpl(),

@@ -17,8 +17,9 @@ import au.org.scoutmaster.domain.BaseEntity;
 /**
  * A user can belong to one or more roles.
  *
- * A role is really defined by the set of features that a User that belongs to
- * that role has accessed to.
+ * A role is really defined by the set of features associated with the Role.
+ *
+ * A feature describes a UI feature such as the ability to create new Contacts.
  *
  * A user has access to the sum of features defined by the roles they belong to.
  *

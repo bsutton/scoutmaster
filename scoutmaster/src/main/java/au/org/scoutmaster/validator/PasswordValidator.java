@@ -8,7 +8,7 @@ public class PasswordValidator implements Validator
 	private static final long serialVersionUID = 1L;
 	private final String label;
 	private final PasswordField otherField;
-	
+
 	public static final String validationRule = "Password must be 8-30 characters, with at least 2 each of digits, letters and special chars i.e. !@#$%^&*()";
 
 	public PasswordValidator(final String label)
@@ -36,11 +36,7 @@ public class PasswordValidator implements Validator
 		int letters = 0, numbers = 0, specialChars = 0;
 		for (final char c : value.toCharArray())
 		{
-			if (c == ' ')
-			{
-				throw new InvalidValueException("Your  " + this.label + " may not contain a space.");
-			}
-			else if (Character.isLetter(c))
+			if (Character.isLetter(c))
 			{
 				++letters;
 			}
@@ -65,8 +61,8 @@ public class PasswordValidator implements Validator
 
 		if (specialChars < 2)
 		{
-			throw new InvalidValueException("Your  " + this.label
-					+ " must have at least 2 special chars e.g. !@#$%^&*().");
+			throw new InvalidValueException(
+					"Your  " + this.label + " must have at least 2 special chars e.g. !@#$%^&*().");
 		}
 
 		if (this.otherField != null)

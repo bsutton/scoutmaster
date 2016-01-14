@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +21,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import au.com.vaadinutils.crud.CrudEntity;
@@ -33,6 +35,7 @@ import au.com.vaadinutils.crud.CrudEntity;
 
 @Entity(name = "Event")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Event")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -84,7 +87,8 @@ public class Event extends BaseEntity implements CrudEntity
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date eventEndDateTime = new Date();
 
-	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class)
+	@OneToOne(fetch = FetchType.EAGER, orphanRemoval = true, targetEntity = Address.class, cascade =
+	{ CascadeType.MERGE })
 	private Address location = new Address();
 
 	/**

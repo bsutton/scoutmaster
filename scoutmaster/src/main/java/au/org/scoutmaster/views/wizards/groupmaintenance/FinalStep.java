@@ -1,4 +1,4 @@
-package au.org.scoutmaster.views.wizards.setup;
+package au.org.scoutmaster.views.wizards.groupmaintenance;
 
 import org.vaadin.teemu.wizards.WizardStep;
 
@@ -13,7 +13,7 @@ import com.vaadin.ui.VerticalLayout;
 public class FinalStep implements WizardStep
 {
 
-	public FinalStep(final GroupSetupWizardView setupWizardView)
+	public FinalStep(final GroupMaintenanceWizardView setupWizardView)
 	{
 	}
 

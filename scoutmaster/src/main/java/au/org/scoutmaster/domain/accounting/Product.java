@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.org.scoutmaster.domain.BaseEntity;
 import au.org.scoutmaster.domain.Organisation;
@@ -25,6 +26,7 @@ import au.org.scoutmaster.domain.Organisation;
  */
 @Entity
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Product")
 @Access(AccessType.FIELD)
 public class Product extends BaseEntity

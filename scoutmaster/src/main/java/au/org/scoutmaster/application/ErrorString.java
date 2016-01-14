@@ -10,10 +10,9 @@ import javax.mail.util.ByteArrayDataSource;
 import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.errorHandling.ErrorSettings;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.OrganisationDao;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.Organisation;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.forms.EmailAddressType;
 
 final class ErrorString implements ErrorSettings
@@ -37,18 +36,20 @@ final class ErrorString implements ErrorSettings
 			public Void call() throws Exception
 			{
 				final SMTPSettingsDao daoSMTPSettings = new DaoFactory().getSMTPSettingsDao();
-				final SMTPServerSettings settings = daoSMTPSettings.findSettings();
+				final SMTPServerSetting settings = daoSMTPSettings.findSettings();
 
 				if (attachment != null)
 				{
 
 					daoSMTPSettings.sendEmail(settings, "error@scoutmaster.org.au",
+							SMSession.INSTANCE.getLoggedInUser().getEmailAddress(),
 							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, emailAddress), subject, bodyText,
 							new ByteArrayDataSource(attachment.toByteArray(), MIMEType));
 				}
 				else
 				{
 					daoSMTPSettings.sendEmail(settings, "error@scoutmaster.org.au",
+							SMSession.INSTANCE.getLoggedInUser().getEmailAddress(),
 							new SMTPSettingsDao.EmailTarget(EmailAddressType.To, emailAddress), subject, bodyText);
 
 				}
@@ -69,22 +70,27 @@ final class ErrorString implements ErrorSettings
 	@Override
 	public String getUserName()
 	{
-		return SMSession.INSTANCE.getLoggedInUser().getFullname();
+		if (SMSession.INSTANCE.getLoggedInUser() != null)
+			return SMSession.INSTANCE.getLoggedInUser().getFullname();
+		else
+			return "No user logged in";
 	}
 
 	@Override
 	public String getUserEmail()
 	{
-		return SMSession.INSTANCE.getLoggedInUser().getEmailAddress();
+		if (SMSession.INSTANCE.getLoggedInUser() != null)
+			return SMSession.INSTANCE.getLoggedInUser().getEmailAddress();
+		else
+			return "errors@scoutmaster.org.au";
 	}
 
 	@Override
 	public String getTargetEmailAddress()
 	{
-		final OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
-
-		Organisation group = daoOrganisation.findOurScoutGroup();
-		String email = (group.getPrimaryContact() != null ? group.getPrimaryContact().getEmail() : null);
+		final Group group = SMSession.INSTANCE.getGroup();
+		String email = (group != null && group.getPrimaryContact() != null ? group.getPrimaryContact().getEmail()
+				: null);
 		if (email == null)
 			email = "bsutton" + "@" + "noojee.com.au";
 
@@ -107,11 +113,9 @@ final class ErrorString implements ErrorSettings
 	@Override
 	public String getSupportCompanyName()
 	{
-		final OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
+		final Group group = SMSession.INSTANCE.getGroup();
 
-		Organisation group = daoOrganisation.findOurScoutGroup();
-
-		return group.getName();
+		return (group != null ? group.getName() : "Scoutmaster System");
 	}
 
 	@Override

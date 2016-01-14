@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
+import org.simpleframework.xml.Attribute;
 
 /**
  * A Role within the Scout Group.
@@ -30,6 +32,7 @@ import org.eclipse.persistence.annotations.Multitenant;
  */
 @Entity(name = "GroupRole")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "GroupRole")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -54,16 +57,31 @@ public class GroupRole extends BaseEntity
 
 	}
 
+	GroupRole()
+	{
+
+	}
+
+	public GroupRole(String name, BuiltIn enumName, String description, boolean primaryRole)
+	{
+		super();
+		this.name = name;
+		this.enumName = enumName;
+		this.description = description;
+		this.primaryRole = primaryRole;
+	}
+
 	/**
 	 * Name of the section.
 	 */
 	@Column(unique = true)
+	@Attribute(name = "name") // xml descriptor for TenantSetup resource file
 	private String name;
 
 	/**
 	 * If a group role is one of the built in roles then this field will provide
 	 * a link between the role and the BuiltIn enum. Non-builtin roles will use
-	 * the Builtin type of 'Other'.
+	 * the Builtin type of 'Custom'.
 	 */
 	@Enumerated(EnumType.STRING)
 	private BuiltIn enumName;
@@ -73,6 +91,13 @@ public class GroupRole extends BaseEntity
 	 */
 	@Column(unique = true)
 	private String description;
+
+	/**
+	 * Indicates that the person with this role is the CEO of the group. Only
+	 * one role may have this flag
+	 */
+	@Attribute(name = "primaryRole", required = false)
+	private boolean primaryRole;
 
 	/**
 	 * The set of tags that should be added to a contact when this role is
@@ -105,7 +130,14 @@ public class GroupRole extends BaseEntity
 	@Override
 	public String toString()
 	{
-		return this.name;
+		// Change camel case used in enum name to separate words.
+		return String.join(" ", this.name.split("(?<!^)(?=[A-Z])"));
+	}
+
+	public void addTag(Tag tag)
+	{
+		this.tags.add(tag);
+
 	}
 
 }

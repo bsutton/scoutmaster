@@ -31,6 +31,7 @@ import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.jasper.filter.ReportFilterUIBuilder;
 import au.com.vaadinutils.jasper.parameter.ReportParameterConstant;
 import au.com.vaadinutils.jasper.ui.JasperReportProperties;
+import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.RaffleBookDao;
@@ -98,6 +99,12 @@ public class RaffleAllocationChildView extends ChildCrudView<Raffle, RaffleAlloc
 				@Override
 				public ReportFilterUIBuilder getFilterBuilder()
 				{
+					ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
+
+					ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+							"" + SMSession.INSTANCE.getGroup().getId());
+					builder.getReportParameters().add(param);
+
 					return builder;
 				}
 			};

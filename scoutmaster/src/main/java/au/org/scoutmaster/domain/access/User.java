@@ -24,6 +24,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.domain.BaseEntity;
+import au.org.scoutmaster.domain.Group;
 import au.org.scoutmaster.util.PasswordHash;
 
 @Entity
@@ -43,16 +44,18 @@ public class User extends BaseEntity
 	public static final String FIND_BY_EMAIL = "User.findByEmail";
 
 	/**
-	 * Whilst a user doesn't have the @Tenant attribute we do store the users
-	 * Tenant ID on the user.
+	 * Whilst a user doesn't have the @Tenant attribute we do store the user's
+	 * Tenant ID (Group_ID) on the user.
 	 *
 	 * We can't use JPA's @Tenant annotation on the user as during login we have
 	 * to access every user until we know which user is logging and therefore
 	 * which Tenant to configure JPA for.
+	 *
+	 * For Scoutmaster the Group entity acts as the Tenant.
 	 */
-	@JoinColumn(name = "Tenant_ID")
-	@ManyToOne(targetEntity = Tenant.class)
-	private Tenant tenant;
+	@JoinColumn(name = "Group_ID")
+	@ManyToOne(targetEntity = Group.class)
+	private Group group;
 
 	@NotBlank
 	@Column(unique = true)
@@ -66,7 +69,7 @@ public class User extends BaseEntity
 
 	private String firstname;
 
-	private String surname;
+	private String lastname;
 
 	/**
 	 * The users email address used when they forget their password.
@@ -99,9 +102,9 @@ public class User extends BaseEntity
 	@Size(max = 1024)
 	private String emailSignature;
 
-	public Tenant getTenant()
+	public Group getGroup()
 	{
-		return this.tenant;
+		return this.group;
 	}
 
 	public String getSenderMobile()
@@ -265,23 +268,29 @@ public class User extends BaseEntity
 		this.firstname = firstname;
 	}
 
-	public String getSurname()
+	public String getLastname()
 	{
-		return this.surname;
+		return this.lastname;
 	}
 
-	public void setSurname(final String surname)
+	public void setLastname(final String lastname)
 	{
-		this.surname = surname;
+		this.lastname = lastname;
 	}
 
 	public String getFullname()
 	{
-		return this.firstname + " " + this.surname;
+		return this.firstname + " " + this.lastname;
 	}
 
 	public String getEmailSignature()
 	{
 		return this.emailSignature;
+	}
+
+	public void setGroup(Group group)
+	{
+		this.group = group;
+
 	}
 }

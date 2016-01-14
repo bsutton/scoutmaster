@@ -10,7 +10,7 @@ import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
-import au.org.scoutmaster.domain.SMTPServerSettings;
+import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.ui.SendEmailWorkingDialog;
 import au.org.scoutmaster.util.SMNotification;
@@ -109,7 +109,7 @@ public class ForgottenPasswordView extends CustomComponent implements View, Butt
 			final SendEmailWorkingDialog dialog = new SendEmailWorkingDialog("Sending",
 					"Sending a reset link to you via email.<br> It should arrive in a few moments.");
 			final SMTPSettingsDao settingsDao = new DaoFactory().getSMTPSettingsDao();
-			final SMTPServerSettings settings = settingsDao.findSettings();
+			final SMTPServerSetting settings = settingsDao.findSettings();
 
 			dialog.setFrom(settings.getFromEmailAddress());
 			dialog.setSubject("[Scoutmaster] Password reset request");

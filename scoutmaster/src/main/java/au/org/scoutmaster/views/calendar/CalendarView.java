@@ -78,33 +78,36 @@ public class CalendarView extends VerticalLayout
 	@Override
 	public void enter(final ViewChangeEvent event)
 	{
-		// extract the group id from the paramter
-		// expected URL format is:
-		// https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1
-		if (event.getParameters() != null)
+		if (SMSession.INSTANCE.getGroup() == null)
 		{
-			String[] msgs = event.getParameters().split("=");
-			if (msgs.length != 2)
-				throw new IllegalArgumentException(
-						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+			// extract the group id from the paramter
+			// expected URL format is:
+			// https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1
+			if (event.getParameters() != null)
+			{
+				String[] msgs = event.getParameters().split("=");
+				if (msgs.length != 2)
+					throw new IllegalArgumentException(
+							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
 
-			if (!msgs[0].equals("group_id"))
-				throw new IllegalArgumentException(
-						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+				if (!msgs[0].equals("group_id"))
+					throw new IllegalArgumentException(
+							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
 
-			int groupId = Integer.valueOf(msgs[1]);
+				int groupId = Integer.valueOf(msgs[1]);
 
-			GroupDao daoGroup = new DaoFactory().getGroupDao();
-			Group group = daoGroup.findById(groupId);
-			if (group == null)
-				throw new IllegalArgumentException("Unknown Group ID passed.");
+				GroupDao daoGroup = new DaoFactory().getGroupDao();
+				Group group = daoGroup.findById(groupId);
+				if (group == null)
+					throw new IllegalArgumentException("Unknown Group ID passed.");
+				else
+					SMSession.INSTANCE.setGroup(group);
+
+			}
 			else
-				SMSession.INSTANCE.setGroup(group);
-
+				throw new IllegalArgumentException(
+						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
 		}
-		else
-			throw new IllegalArgumentException(
-					"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
 		final HorizontalLayout calendarLabel = buildTitleArea();
 		this.addComponent(calendarLabel);
 		calendarLabel.setWidth("100%");

@@ -9,6 +9,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -19,6 +20,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name = "TaskStatus")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "TaskStatus")
 @Access(AccessType.FIELD)
 @NamedQueries(

@@ -8,7 +8,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.eclipse.persistence.annotations.Multitenant;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -17,16 +16,17 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  * There should only ever be a single row in this table.
  *
+ * All tenants share the same email server so this table isn't multi-tenant.
+ *
  * @author bsutton
  *
  */
-@Entity(name = "EMailServerSettings")
-@Multitenant
-@Table(name = "EMailServerSettings")
+@Entity(name = "SMTPServerSetting")
+@Table(name = "SMTPServerSetting")
 @Access(AccessType.FIELD)
 @NamedQueries(
 {})
-public class SMTPServerSettings extends BaseEntity
+public class SMTPServerSetting extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
@@ -65,9 +65,11 @@ public class SMTPServerSettings extends BaseEntity
 	private String fromEmailAddress;
 
 	/**
-	 * The email address to which the receiving SMTP server should send bounced
-	 * emails.
+	 * The default email address that bounce messages should be sent to. As this
+	 * is a system wide variable we usually just passing in
+	 * bounce@scoutmaster.org.au and they are ignored. emails.
 	 */
+	@NotBlank
 	@Email
 	private String bounceEmailAddress;
 
@@ -151,16 +153,6 @@ public class SMTPServerSettings extends BaseEntity
 	public void setUseSSL(final Boolean useSSL)
 	{
 		this.useSSL = useSSL;
-	}
-
-	public String getBounceEmailAddress()
-	{
-		return this.bounceEmailAddress;
-	}
-
-	public void setBounceEmailAddress(final String bounceEmailAddress)
-	{
-		this.bounceEmailAddress = bounceEmailAddress;
 	}
 
 	@Override

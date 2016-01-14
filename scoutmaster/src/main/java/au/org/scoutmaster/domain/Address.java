@@ -14,11 +14,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity(name = "Address")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -42,6 +44,23 @@ public class Address extends BaseEntity
 	@Size(max = 255)
 	private String state = "";
 
+	@Size(max = 255)
+	private String country = "";
+
+	// Required by jpa.
+	public Address()
+	{
+	}
+
+	public Address(final String street, final String city, final String state, final String postcode, String country)
+	{
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.postcode = postcode;
+		this.country = country;
+	}
+
 	public void setStreet(final String street)
 	{
 		this.street = street;
@@ -60,19 +79,6 @@ public class Address extends BaseEntity
 	public void setState(final String state)
 	{
 		this.state = state;
-	}
-
-	public Address()
-	{
-
-	}
-
-	public Address(final String street, final String city, final String state, final String postcode)
-	{
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.postcode = postcode;
 	}
 
 	@Override
@@ -96,6 +102,11 @@ public class Address extends BaseEntity
 		return this.city;
 	}
 
+	public String getCountry()
+	{
+		return this.country;
+	}
+
 	public String getPostcode()
 	{
 		return this.postcode;
@@ -103,7 +114,7 @@ public class Address extends BaseEntity
 
 	@SuppressWarnings("unchecked")
 	static public List<Address> findAddress(final String street, final String city, final String state,
-			final String postcode)
+			final String postcode, String country)
 	{
 		List<Address> addressList = new ArrayList<Address>();
 		final EntityManager em = EntityManagerProvider.getEntityManager();
@@ -113,6 +124,7 @@ public class Address extends BaseEntity
 		query.setParameter("city", city);
 		query.setParameter("state", state);
 		query.setParameter("postcode", postcode);
+		query.setParameter("country", country);
 		addressList = query.getResultList();
 
 		return addressList;
@@ -121,6 +133,6 @@ public class Address extends BaseEntity
 	@Override
 	public String getName()
 	{
-		return this.street + " " + this.city;
+		return this.street + ", " + this.city + ", " + this.state + "," + this.country;
 	}
 }

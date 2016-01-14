@@ -1,13 +1,6 @@
 package au.org.scoutmaster.views;
 
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.application.SMSession;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.validator.PasswordValidator;
-
+import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
@@ -15,13 +8,24 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
+
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.validator.PasswordValidator;
 
 @Menu(display = "Change Password", path = "Admin")
 public class ChangePasswordView extends CustomComponent implements View, Button.ClickListener
@@ -34,7 +38,9 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 
 	private final PasswordField confirm;
 
-	private final Button resetButton;
+	private final Button changeButton;
+
+	private Button cancelButton;
 
 	public ChangePasswordView()
 	{
@@ -56,13 +62,24 @@ public class ChangePasswordView extends CustomComponent implements View, Button.
 		this.confirm.setValue("");
 		this.confirm.setNullRepresentation("");
 
-		// Create login button
-		this.resetButton = new Button("Reset", new ClickEventLogged.ClickAdaptor(this));
+		this.cancelButton = new Button("Cancel", (ClickListener) event -> {
+			getUI().getNavigator().navigateTo(ContactView.NAME);
+
+		});
+
+		// Create change password button
+		this.changeButton = new Button("Change", new ClickEventLogged.ClickAdaptor(this));
+		this.changeButton.addStyleName(ValoTheme.BUTTON_PRIMARY);
+		this.changeButton.setClickShortcut(KeyCode.ENTER);
+
+		HorizontalLayout buttons;
+		buttons = new HorizontalLayout(this.cancelButton, this.changeButton);
+		buttons.setSpacing(true);
 
 		// Add both to a panel
 		final Label title = new Label("<b>Please enter your new password.</b>");
 		title.setContentMode(ContentMode.HTML);
-		final VerticalLayout fields = new VerticalLayout(title, this.password, this.confirm, this.resetButton);
+		final VerticalLayout fields = new VerticalLayout(title, this.password, this.confirm, buttons);
 
 		fields.setSpacing(true);
 		fields.setMargin(new MarginInfo(true, true, true, false));

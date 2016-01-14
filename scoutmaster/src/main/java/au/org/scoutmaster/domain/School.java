@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -22,6 +23,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity(name = "School")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "School")
 @Access(AccessType.FIELD)
 public class School extends BaseEntity

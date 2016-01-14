@@ -3,6 +3,7 @@ package au.org.scoutmaster.dao;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
+import au.org.scoutmaster.dao.Dao;
 import au.org.scoutmaster.domain.access.SessionHistory;
 
 

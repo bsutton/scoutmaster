@@ -128,6 +128,12 @@ public class DaoFactory
 		return (UserDao) instantiateDAO(UserDao.class);
 	}
 
+	public GroupDao getGroupDao()
+
+	{
+		return (GroupDao) instantiateDAO(GroupDao.class);
+	}
+
 	public static <E> JpaBaseDao<E, Long> getGenericDao(final Class<E> class1)
 	{
 		return new JpaBaseDao<E, Long>(class1);
@@ -152,5 +158,4 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
-
 }

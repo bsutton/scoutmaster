@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
@@ -27,6 +28,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
  */
 @Entity(name = "RaffleAllocation")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "RaffleAllocation")
 @Access(AccessType.FIELD)
 public class RaffleAllocation extends BaseEntity implements ChildCrudEntity

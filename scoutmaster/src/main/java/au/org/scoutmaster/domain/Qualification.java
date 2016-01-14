@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 
 /**
  * Used to define the set of qualifications the associated leader has.
@@ -18,6 +19,7 @@ import org.eclipse.persistence.annotations.Multitenant;
  */
 @Entity(name = "Qualification")
 @Multitenant
+@TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Qualification")
 @Access(AccessType.FIELD)
 public class Qualification extends BaseEntity
