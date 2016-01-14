@@ -5,11 +5,6 @@ import java.util.Date;
 import org.joda.time.DateTime;
 import org.vaadin.peter.buttongroup.ButtonGroup;
 
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.OrganisationDao;
-import au.org.scoutmaster.domain.Organisation;
-
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.MarginInfo;
@@ -30,10 +25,16 @@ import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeEvent;
 import com.vaadin.ui.components.calendar.event.CalendarEvent.EventChangeListener;
 import com.vaadin.ui.themes.Reindeer;
 
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.application.SMSession;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.GroupDao;
+import au.org.scoutmaster.domain.Group;
+
 /** A start view for navigating to the main view */
 @Menu(display = "Month View", path = "Calendar")
-public class CalendarView extends VerticalLayout implements View,
-		au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeListener
+public class CalendarView extends VerticalLayout
+		implements View, au.org.scoutmaster.views.calendar.EventDetails.SaveEventListener, EventChangeListener
 {
 	public static final String NAME = "Calendar";
 
@@ -77,6 +78,33 @@ public class CalendarView extends VerticalLayout implements View,
 	@Override
 	public void enter(final ViewChangeEvent event)
 	{
+		// extract the group id from the paramter
+		// expected URL format is:
+		// https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1
+		if (event.getParameters() != null)
+		{
+			String[] msgs = event.getParameters().split("=");
+			if (msgs.length != 2)
+				throw new IllegalArgumentException(
+						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+
+			if (!msgs[0].equals("group_id"))
+				throw new IllegalArgumentException(
+						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+
+			int groupId = Integer.valueOf(msgs[1]);
+
+			GroupDao daoGroup = new DaoFactory().getGroupDao();
+			Group group = daoGroup.findById(groupId);
+			if (group == null)
+				throw new IllegalArgumentException("Unknown Group ID passed.");
+			else
+				SMSession.INSTANCE.setGroup(group);
+
+		}
+		else
+			throw new IllegalArgumentException(
+					"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
 		final HorizontalLayout calendarLabel = buildTitleArea();
 		this.addComponent(calendarLabel);
 		calendarLabel.setWidth("100%");
@@ -121,8 +149,7 @@ public class CalendarView extends VerticalLayout implements View,
 		final HorizontalLayout layout = new HorizontalLayout();
 		layout.setWidth("100%");
 
-		final OrganisationDao daoOrganisation = new DaoFactory().getOrganisationDao();
-		final Organisation ourGroup = daoOrganisation.findOurScoutGroup();
+		final Group ourGroup = SMSession.INSTANCE.getGroup();
 		final Label calendarLabel = new Label("<b>" + ourGroup.getName() + " Calendar</b>");
 		calendarLabel.setContentMode(ContentMode.HTML);
 		layout.addComponent(calendarLabel);
