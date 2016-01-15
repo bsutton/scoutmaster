@@ -16,7 +16,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.Document</class>
 		<class>au.org.scoutmaster.domain.Event</class>
 		<class>au.org.scoutmaster.domain.GroupRole</class>
-		<class>au.org.scoutmaster.domain.SMTPServerSettings</class>
+		<class>au.org.scoutmaster.domain.SMTPServerSetting</class>
 		<class>au.org.scoutmaster.domain.ForgottenPasswordReset</class>
 		<class>au.org.scoutmaster.domain.Household</class>
 		<class>au.org.scoutmaster.domain.ImportUserMapping</class>
@@ -52,7 +52,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.access.Feature</class>
 		<class>au.org.scoutmaster.domain.access.Role</class>
 		<class>au.org.scoutmaster.domain.access.SessionHistory</class>
-		<class>au.org.scoutmaster.domain.access.Tenant</class>
+		<class>au.org.scoutmaster.domain.Group</class>
 		<class>au.org.scoutmaster.domain.access.User</class>
 		<class>au.org.scoutmaster.domain.accounting.Money</class>
 		<class>au.org.scoutmaster.domain.accounting.MoneyWithTax</class>

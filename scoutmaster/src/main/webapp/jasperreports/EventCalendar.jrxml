@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2015-12-09T10:32:55 -->
+<!-- 2016-01-11T18:16:50 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Event Calendar" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="557" leftMargin="19" rightMargin="19" topMargin="19" bottomMargin="19" uuid="477a32a3-48c6-4515-84bb-4e7c4a8b9470">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Scoutmaster"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="StartDate" class="java.lang.String">
 		<defaultValueExpression><![CDATA[new Date("2014/1/1")]]></defaultValueExpression>
 	</parameter>
 	<parameter name="EndDate" class="java.lang.String">
 		<defaultValueExpression><![CDATA[new Date("2016/7/30")]]></defaultValueExpression>
 	</parameter>
+	<parameter name="group_id" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select Subject, ifnull(Details, "") Details, EventStartDateTime
 , if(date(EventEndDateTime) = date(EventStartDateTime),  DATE_FORMAT(EventEndDateTime, '%h:%i %p'), DATE_FORMAT(EventEndDateTime, '%a %d %b %h:%i %p')) as EventEndDateTime
@@ -22,6 +25,7 @@
 
 from Event
 where EventStartDateTime > $P{StartDate} and EventStartDateTime < $P{EndDate}
+and Event.group_id = $P{group_id}
 order by month(EventStartDateTime), EventStartDateTime;]]>
 	</queryString>
 	<field name="Subject" class="java.lang.String">

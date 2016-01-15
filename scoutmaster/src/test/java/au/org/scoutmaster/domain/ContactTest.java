@@ -64,7 +64,7 @@ public class ContactTest
 			contact.setPhone1(new Phone("83208100"));
 			daoContact.addNote(contact, ContactTest.MY_FIRST_NOTE_GOES_HERE, ContactTest.THE_NOTE_BODY_1_IS_HERE);
 			daoContact.addNote(contact, ContactTest.MY_SECOND_NOTE_GOES_HERE, ContactTest.THE_NOTE_BODY_2_IS_HERE);
-			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
+			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000", "Australia"));
 			daoContact.attachTag(contact, new Tag(ContactTest.TAG1, "The Tag1"));
 			daoContact.attachTag(contact, new Tag(ContactTest.TAG2, "The Tag2"));
 
@@ -107,7 +107,8 @@ public class ContactTest
 			Assert.assertTrue(daoTag.findByName(ContactTest.TAG1) == null);
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_FIRST_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_SECOND_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Address.findAddress("10 smith drv", "Sometown", "Victoria", "3000").size() == 0);
+			Assert.assertTrue(
+					Address.findAddress("10 smith drv", "Sometown", "Victoria", "3000", "Australia").size() == 0);
 			t.commit();
 		}
 		finally
@@ -129,7 +130,7 @@ public class ContactTest
 			contact.setLastname(ContactTest.SUTTON);
 			daoContact.addNote(contact, ContactTest.MY_FIRST_NOTE_GOES_HERE, ContactTest.THE_NOTE_BODY_1_IS_HERE);
 			daoContact.addNote(contact, ContactTest.MY_SECOND_NOTE_GOES_HERE, ContactTest.THE_NOTE_BODY_2_IS_HERE);
-			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000"));
+			contact.setAddress(new Address("10 smith drv", "Sometown", "Victoria", "3000", "Australia"));
 			daoContact.attachTag(contact, new Tag(ContactTest.TAG1, "The Tag1"));
 			daoContact.attachTag(contact, new Tag(ContactTest.TAG2, "The Tag2"));
 			daoContact.persist(contact);
@@ -164,7 +165,7 @@ public class ContactTest
 				daoContact.addNote(contact, "Note 3", "Note 3 body");
 				daoContact.detachTag(contact, ContactTest.TAG2);
 				daoContact.attachTag(contact, new Tag("Tag3", "The Tag3"));
-				contact.setAddress(new Address("20 replacement drv", "Othertown", "Victoria", "3000"));
+				contact.setAddress(new Address("20 replacement drv", "Othertown", "Victoria", "3000", "Australia"));
 			}
 			t.commit();
 		}
@@ -220,7 +221,8 @@ public class ContactTest
 			Assert.assertTrue(!contactExists(ContactTest.STEPHEN, ContactTest.SUTTON));
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_FIRST_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_SECOND_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Address.findAddress("20 replacement drv", "Othertown", "Victoria", "3000").size() == 0);
+			Assert.assertTrue(Address.findAddress("20 replacement drv", "Othertown", "Victoria", "3000", "Australia")
+					.size() == 0);
 			// tags exists even after they are detached from the
 			// contact.
 			Assert.assertTrue(daoTag.findByName(ContactTest.TAG1) != null);
@@ -230,7 +232,7 @@ public class ContactTest
 
 			final Organisation org = new Organisation();
 			org.setName("Heidelberg Scouts");
-			org.setLocation(new Address("31 Outhwaite Rd", "Heidelberg Heights", "Victoria", "3081"));
+			org.setLocation(new Address("31 Outhwaite Rd", "Heidelberg Heights", "Victoria", "3081", "Australia"));
 			final Tag tag4 = TagDao.addTag("Tag4", "Yet another tag");
 			org.addTag(tag4);
 			final Tag tag2 = daoTag.findByName(ContactTest.TAG2);
@@ -274,7 +276,7 @@ public class ContactTest
 			Assert.assertTrue(contact.getTags().size() == 0);
 
 			contact.setMiddlename("Paige");
-			contact.setAddress(new Address("10 Mossman Drv", "Eaglemont", "Victoria", "3084"));
+			contact.setAddress(new Address("10 Mossman Drv", "Eaglemont", "Victoria", "3084", "Australia"));
 			daoContact.persist(contact);
 			t.commit();
 		}
@@ -318,7 +320,8 @@ public class ContactTest
 			Assert.assertTrue(daoTag.findByName(ContactTest.TAG1) == null);
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_FIRST_NOTE_GOES_HERE).size() == 0);
 			Assert.assertTrue(daoNote.findNoteBySubject(ContactTest.MY_SECOND_NOTE_GOES_HERE).size() == 0);
-			Assert.assertTrue(Address.findAddress("10 Mossman Drv", "Eaglemont", "Victoria", "3084").size() == 0);
+			Assert.assertTrue(
+					Address.findAddress("10 Mossman Drv", "Eaglemont", "Victoria", "3084", "Australia").size() == 0);
 			t.commit();
 		}
 		finally

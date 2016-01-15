@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet author="bsutton" id="1.0.60">
+		<!-- Start of internationalisation - add contry to address -->
+
+		<addColumn tableName="Address">
+			<column defaultValue="Australia" name="country" type="varchar(256)" />
+		</addColumn>
+
+
+		<!-- rename the User column from surname to lastname so it is the same 
+			as the contact table's column names -->
+		<renameColumn tableName="User" oldColumnName="surname"
+			newColumnName="lastname" columnDataType="varchar(256)" />
+
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.1">
+
+
+		<dropIndex tableName="Household" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="Household"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+
+	<changeSet author="bsutton" id="1.0.60.2">
+
+
+		<dropIndex tableName="ImportUserMapping" indexName="MAPPINGNAME" />
+
+		<createIndex indexName="MAPPINGNAME" tableName="ImportUserMapping"
+			unique="true">
+			<column name="group_id" />
+			<column name="MAPPINGNAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.3">
+
+
+		<dropIndex tableName="Organisation" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="Organisation"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.4">
+
+
+		<dropIndex tableName="QualificationType" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="QualificationType"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.6">
+
+		<dropIndex tableName="School" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="School" unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.7">
+
+		<dropIndex tableName="Section" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="Section" unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.9">
+
+		<dropIndex tableName="SectionTryoutType" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="SectionTryoutType"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.10">
+
+		<dropIndex tableName="SectionType" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="SectionType"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.11">
+		<dropIndex tableName="SMSProvider" indexName="PROVIDERNAME" />
+
+		<createIndex indexName="PROVIDERNAME" tableName="SMSProvider"
+			unique="true">
+			<column name="group_id" />
+			<column name="PROVIDERNAME" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.12">
+		<dropIndex tableName="Tag" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="Tag" unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.13">
+		<dropIndex tableName="TaskStatus" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="TaskStatus"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+
+
+	<changeSet author="bsutton" id="1.0.60.14">
+		<dropIndex tableName="TaskType" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="TaskType" unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.15">
+		<dropIndex tableName="GroupRole" indexName="NAME" />
+
+		<createIndex indexName="NAME" tableName="GroupRole"
+			unique="true">
+			<column name="group_id" />
+			<column name="NAME" />
+		</createIndex>
+		<createIndex indexName="EnumName" tableName="GroupRole"
+			unique="true">
+			<column name="group_id" />
+			<column name="enumName" />
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.16">
+
+		<addColumn tableName="GroupRole">
+			<column defaultValueNumeric="0" name="PrimaryRole" type="bit(1)" />
+		</addColumn>
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.17">
+
+		<renameTable newTableName="SMTPServerSetting"
+			oldTableName="EMAILServerSettings" />
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.60.18">
+		<update tableName="SMTPServerSetting">
+			<column name="bounceEmailAddress" value="bounce@scoutmaster.org.au" />
+		</update>
+	</changeSet>
+
+
+
+</databaseChangeLog>

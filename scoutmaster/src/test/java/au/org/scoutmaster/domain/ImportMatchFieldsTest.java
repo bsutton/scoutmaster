@@ -51,7 +51,7 @@ public class ImportMatchFieldsTest
 
 			final Hashtable<String, String> mappings = new Hashtable<>();
 			mappings.put("christian", "firstname");
-			mappings.put("surname", "lastname");
+			mappings.put("lastname", "lastname");
 			for (final String mapping : mappings.keySet())
 			{
 				final ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping,
@@ -79,7 +79,7 @@ public class ImportMatchFieldsTest
 
 			mappings = new Hashtable<>();
 			mappings.put("christian1", "firstname");
-			mappings.put("surname1", "lastname");
+			mappings.put("lastname1", "lastname");
 
 			daoImportUserMapping.clearMappings(userMapping);
 			for (final String mapping : mappings.keySet())
@@ -111,7 +111,7 @@ public class ImportMatchFieldsTest
 
 			final Hashtable<String, String> mappings = new Hashtable<>();
 			mappings.put("christian", "firstname");
-			mappings.put("surname", "lastname");
+			mappings.put("lastname", "lastname");
 			for (final String mapping : mappings.keySet())
 			{
 				final ImportColumnFieldMapping columnMapping = new ImportColumnFieldMapping(mapping,
