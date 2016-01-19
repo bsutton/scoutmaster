@@ -23,6 +23,7 @@ public class SendEmailWorkingDialog extends WorkingDialog implements CompleteLis
 {
 	private static final long serialVersionUID = 1L;
 
+	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(SendEmailWorkingDialog.class);
 
 	private String subject;

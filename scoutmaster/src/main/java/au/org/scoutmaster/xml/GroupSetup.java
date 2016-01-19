@@ -105,11 +105,6 @@ public class GroupSetup
 		}
 	}
 
-	private List<XMLTag> getXMLTags()
-	{
-		return this.xmlTags;
-	}
-
 	private List<XMLGroupRole> getXMLGroupRoles()
 	{
 		return this.xmlGroupRoles;

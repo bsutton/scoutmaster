@@ -1,7 +1,6 @@
 package au.org.scoutmaster.ui;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.EmptyValueException;
@@ -21,8 +20,6 @@ public class SimpleFormLayout extends VerticalLayout
 
 	class FieldPair
 	{
-		private Collection<Validator> validators;
-
 		public FieldPair(AbstractField<?> field, Label errorLabel)
 		{
 			this.field = field;

@@ -27,8 +27,6 @@ import au.com.vaadinutils.errorHandling.ErrorWindow;
 import au.com.vaadinutils.help.HelpIndexFactory;
 import au.com.vaadinutils.menu.MenuBuilder;
 import au.com.vaadinutils.util.DeadlockFinder;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.converter.ScoutmasterConverterFactory;
 import au.org.scoutmaster.help.HelpIndexImpl;
 import au.org.scoutmaster.help.HelpWrappingViewProvider;
@@ -150,7 +148,6 @@ public class NavigatorUI extends UI
 
 				// TODO: should we cache this?
 				// during dev its easier if we don't.
-				final UserDao daoUser = new DaoFactory().getUserDao();
 
 				if (isLoggedIn)
 				{

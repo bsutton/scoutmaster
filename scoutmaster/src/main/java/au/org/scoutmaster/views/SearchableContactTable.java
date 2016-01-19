@@ -5,14 +5,6 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.EntityTable;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.RowChangeListener;
-import au.com.vaadinutils.listener.ClickEventLogged;
-import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.fields.TagField;
-
 import com.vaadin.addon.jpacontainer.EntityItem;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -23,6 +15,14 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+
+import au.com.vaadinutils.crud.EntityTable;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.RowChangeListener;
+import au.com.vaadinutils.listener.ClickEventLogged;
+import au.org.scoutmaster.domain.Contact;
+import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.fields.TagField;
 
 public class SearchableContactTable extends VerticalLayout
 {
@@ -54,7 +54,7 @@ public class SearchableContactTable extends VerticalLayout
 
 	public void init()
 	{
-		this.contactTable.init();
+		this.contactTable.init("SearchableContentTable");
 		initSearch();
 		this.addComponent(this.searchLayout);
 		this.addComponent(this.contactTable);
@@ -77,12 +77,12 @@ public class SearchableContactTable extends VerticalLayout
 		tagSearchLayout.addComponent(this.includeTagField);
 		tagSearchLayout.addComponent(this.excludeTagField);
 
-		this.includeTagField.addChangeListener(tags -> resetFilter(tags,
-				SearchableContactTable.this.excludeTagField.getTags(),
-				SearchableContactTable.this.searchField.getValue()));
-		this.excludeTagField.addChangeListener(tags -> resetFilter(
-				SearchableContactTable.this.includeTagField.getTags(), tags,
-				SearchableContactTable.this.searchField.getValue()));
+		this.includeTagField
+				.addChangeListener(tags -> resetFilter(tags, SearchableContactTable.this.excludeTagField.getTags(),
+						SearchableContactTable.this.searchField.getValue()));
+		this.excludeTagField
+				.addChangeListener(tags -> resetFilter(SearchableContactTable.this.includeTagField.getTags(), tags,
+						SearchableContactTable.this.searchField.getValue()));
 
 		tagSearchLayout.setSizeFull();
 		this.searchLayout.addComponent(tagSearchLayout);
@@ -151,9 +151,8 @@ public class SearchableContactTable extends VerticalLayout
 	void resetFilter(final ArrayList<Tag> includeTags, final ArrayList<Tag> excludeTags, final String fullTextSearch)
 	{
 		this.contactContainer.removeAllContainerFilters();
-		this.contactContainer.getEntityProvider().setQueryModifierDelegate(
-				new ContactDefaultQueryModifierDelegate(includeTags, excludeTags, fullTextSearch,
-						this.excludeDoNotSendBulkCommunications));
+		this.contactContainer.getEntityProvider().setQueryModifierDelegate(new ContactDefaultQueryModifierDelegate(
+				includeTags, excludeTags, fullTextSearch, this.excludeDoNotSendBulkCommunications));
 		this.contactTable.refreshRowCache();
 
 	}

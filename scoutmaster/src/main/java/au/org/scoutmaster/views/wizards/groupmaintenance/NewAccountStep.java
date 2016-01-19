@@ -15,7 +15,6 @@ import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.crud.splitFields.SplitLabel;
 import au.com.vaadinutils.ui.SingleEntityWizardStep;
@@ -69,8 +68,6 @@ public class NewAccountStep extends SingleEntityWizardStep<User> implements Wiza
 			vertical.setMargin(true);
 			vertical.setWidth("600");
 			layout.addComponent(vertical);
-
-			FormHelper<User> helper = new FormHelper<User>(layout, fieldGroup);
 
 			// final SMMultiColumnFormLayout<User> formLayout = new
 			// SMMultiColumnFormLayout<>(2, fieldGroup);

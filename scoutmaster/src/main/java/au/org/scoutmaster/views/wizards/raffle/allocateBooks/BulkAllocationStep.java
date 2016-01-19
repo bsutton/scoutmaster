@@ -110,7 +110,7 @@ public class BulkAllocationStep implements WizardStep, ClickListener, Allocation
 		final EntityTable<RaffleAllocation> allocatedBooks = new EntityTable<RaffleAllocation>(container,
 				builder.build());
 		allocatedBooks.setWidth("100%");
-		allocatedBooks.init();
+		allocatedBooks.init("BulkAllocationStep");
 
 		allocatedBooks.setSortEnabled(true);
 		allocatedBooks.setColumnCollapsingAllowed(true);

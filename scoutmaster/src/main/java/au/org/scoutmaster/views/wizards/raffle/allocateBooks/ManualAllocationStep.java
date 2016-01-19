@@ -104,7 +104,7 @@ public class ManualAllocationStep implements WizardStep, ClickListener, Allocati
 				new Path(RaffleBook_.raffleAllocation, RaffleAllocation_.dateIssued).getName());
 
 		final EntityTable<RaffleBook> allocatedBooks = new EntityTable<RaffleBook>(container, builder.build());
-		allocatedBooks.init();
+		allocatedBooks.init("ManualAllocationStep");
 
 		allocatedBooks.setSortEnabled(true);
 		allocatedBooks.setColumnCollapsingAllowed(true);

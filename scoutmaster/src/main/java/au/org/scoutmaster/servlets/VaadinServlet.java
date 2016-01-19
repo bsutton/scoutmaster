@@ -72,6 +72,7 @@ public class VaadinServlet extends com.vaadin.server.VaadinServlet
 
 		}
 
+		@SuppressWarnings("unused")
 		private void addMeta(Element head, String... attributes)
 		{
 			Attributes attr = new Attributes();
@@ -104,6 +105,7 @@ public class VaadinServlet extends com.vaadin.server.VaadinServlet
 
 		}
 
+		@SuppressWarnings("unused")
 		private void addLink(Element head, String rel, String sizes, String href)
 		{
 			Attributes attr = new Attributes();
@@ -135,6 +137,11 @@ public class VaadinServlet extends com.vaadin.server.VaadinServlet
 		super.servletInitialized();
 		getService().addSessionInitListener(new SessionInitListener()
 		{
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void sessionInit(SessionInitEvent event)
 			{

@@ -49,6 +49,7 @@ import rx.util.functions.Action1;
 
 public class EmailForm extends VerticalLayout
 {
+	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger(EmailForm.class);
 	private static final long serialVersionUID = 1L;
 	private static final String TEMP_FILE_DIR = new File(System.getProperty("java.io.tmpdir")).getPath();

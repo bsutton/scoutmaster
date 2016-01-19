@@ -34,8 +34,7 @@
 		value="true" />
 
 
-	
-
+	<!-- 
 	<inherits name="fi.jasoft.dragdroplayouts.DragDropLayoutsWidgetSet" />
 
 	<inherits name="com.vaadin.addon.calendar.gwt.CalendarWidgetset" />
@@ -53,4 +52,7 @@
     <inherits name="org.vaadin.johan.Toolbox7Widgetset" />
 
     <inherits name="org.vaadin.peter.contextmenu.ContextmenuWidgetset"/>
+    
+    took this out.
+    -->
 </module>

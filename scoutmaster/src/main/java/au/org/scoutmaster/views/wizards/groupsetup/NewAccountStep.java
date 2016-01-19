@@ -27,7 +27,6 @@ import au.org.scoutmaster.domain.Group;
 import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.PreferredEmail;
-import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.ui.SimpleFormLayout;
 import au.org.scoutmaster.util.SMNotification;
@@ -257,7 +256,6 @@ public class NewAccountStep implements WizardStep
 		JpaBaseDao<Contact, Long> daoContact = DaoFactory.getGenericDao(Contact.class);
 		JpaBaseDao<GroupRole, Long> daoGroupRole = DaoFactory.getGenericDao(GroupRole.class);
 		JpaBaseDao<Address, Long> daoAddress = DaoFactory.getGenericDao(Address.class);
-		JpaBaseDao<SectionType, Long> daoSectionType = DaoFactory.getGenericDao(SectionType.class);
 
 		Contact contact = new Contact();
 		contact.setFirstname(this.firstname.getValue());

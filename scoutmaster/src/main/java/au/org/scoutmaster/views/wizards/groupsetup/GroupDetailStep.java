@@ -23,7 +23,6 @@ import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupDao;
-import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Group;
 import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.GroupType;
@@ -173,7 +172,6 @@ public class GroupDetailStep implements WizardStep
 		// So looks like they are going to register so lets create the group.
 
 		JpaBaseDao<Group, Long> dao = DaoFactory.getGenericDao(Group.class);
-		JpaBaseDao<Address, Long> daoAddress = DaoFactory.getGenericDao(Address.class);
 
 		Group group = new Group();
 		group.setName(this.groupName.getValue());
