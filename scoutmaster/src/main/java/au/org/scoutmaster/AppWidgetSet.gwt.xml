@@ -5,11 +5,13 @@
 	<!-- Inherit DefaultWidgetSet -->
 	<inherits name="com.vaadin.DefaultWidgetSet" />
 
-	<!-- SBS: Optimisation recommended by the vaadin client debugger -->
+	<!-- SBS: Optimisation recommended by the vaadin client debugger 
 	<generate-with class="au.org.scoutmaster.OptimizedConnectorBundleLoaderFactory">
 		<when-type-assignable
 			class="com.vaadin.client.metadata.ConnectorBundleLoader" />
 	</generate-with>
+	
+	-->
 
 	<!-- Uncomment the following to compile the widgetset for one browser only. 
 		This can reduce the GWT compilation time significantly when debugging. The 

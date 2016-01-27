@@ -38,6 +38,7 @@ public class EmailWorker extends RunnableUI
 		final Email email = new SimpleEmail();
 		email.setHostName(settings.getSmtpFQDN());
 		email.setSmtpPort(settings.getSmtpPort());
+		email.setSSLCheckServerIdentity(false);
 		if (settings.isAuthRequired())
 		{
 			email.setAuthenticator(new DefaultAuthenticator(settings.getUsername(), settings.getPassword()));

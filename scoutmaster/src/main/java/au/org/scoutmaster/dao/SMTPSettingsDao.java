@@ -98,8 +98,8 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSetting, Long> impleme
 
 	}
 
-	public void sendEmail(SMTPServerSetting settings, String fromAddress, String bounceEmailAddress,
-			EmailTarget target, String subject, String bodyText, ByteArrayDataSource byteArrayDataSource)
+	public void sendEmail(SMTPServerSetting settings, String fromAddress, String bounceEmailAddress, EmailTarget target,
+			String subject, String bodyText, ByteArrayDataSource byteArrayDataSource)
 	{
 		final HashSet<DataSource> attachedFiles = new HashSet<>();
 		attachedFiles.add(byteArrayDataSource);
@@ -131,6 +131,7 @@ public class SMTPSettingsDao extends JpaBaseDao<SMTPServerSetting, Long> impleme
 		email.setDebug(true);
 		email.setHostName(settings.getSmtpFQDN());
 		email.setSmtpPort(settings.getSmtpPort());
+		email.setSSLCheckServerIdentity(false);
 		if (settings.isAuthRequired())
 		{
 			email.setAuthentication(settings.getUsername(), settings.getPassword());
