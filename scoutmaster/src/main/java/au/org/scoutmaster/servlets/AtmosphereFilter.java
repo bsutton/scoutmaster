@@ -35,16 +35,23 @@ public class AtmosphereFilter extends AtmosphereInterceptorAdapter
 {
 	Transaction t;
 
+	EntityManager em;
+
 	@Override
 	public Action inspect(AtmosphereResource r)
 	{
 		// do pre-request stuff
+		// In certain circumstances push can be called after the standard filter
+		// which means there will already
+		// be an EM on the thread hence we check if one already exits
+		if (EntityManagerProvider.getEntityManager() == null)
+		{
+			em = EntityManagerProvider.createEntityManager();
+			t = new Transaction(em);
 
-		EntityManager em = EntityManagerProvider.createEntityManager();
-		t = new Transaction(em);
-
-		// Create and set the entity manager
-		EntityManagerProvider.setCurrentEntityManager(em);
+			// Create and set the entity manager
+			EntityManagerProvider.setCurrentEntityManager(em);
+		}
 
 		return super.inspect(r);
 	}
@@ -55,7 +62,16 @@ public class AtmosphereFilter extends AtmosphereInterceptorAdapter
 	{
 		try
 		{
-			t.commit();
+			// In certain circumstances push can be called after the standard
+			// filter which means there will already
+			// be an EM on the thread hence if there is no transaction then we
+			// didn't create the EM.
+			if (t != null)
+			{
+				t.commit();
+				t.close();
+				em.close();
+			}
 		}
 		catch (Throwable e)
 		{
@@ -64,8 +80,9 @@ public class AtmosphereFilter extends AtmosphereInterceptorAdapter
 		finally
 		{
 			// Reset the entity manager as we get a new one everytime we inspect
-			// is called.
-			EntityManagerProvider.setCurrentEntityManager(null);
+			// is called, but only if we own the EM which we do if t!=null
+			if (t != null)
+				EntityManagerProvider.setCurrentEntityManager(null);
 		}
 
 	}
