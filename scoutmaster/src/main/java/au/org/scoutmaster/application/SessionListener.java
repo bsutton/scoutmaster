@@ -70,7 +70,7 @@ public class SessionListener implements HttpSessionListener
 		}
 		catch (InterruptedException | ExecutionException e)
 		{
-			logger.error(e);
+			logger.error(e, e);
 		}
 	}
 
