@@ -68,9 +68,17 @@ public class AtmosphereFilter extends AtmosphereInterceptorAdapter
 			// didn't create the EM.
 			if (t != null)
 			{
-				t.commit();
-				t.close();
-				em.close();
+				try
+				{
+					t.commit();
+				}
+				finally
+				{
+					// we need to guarentee that we cleanup even if the commit
+					// fails.
+					t.close();
+					em.close();
+				}
 			}
 		}
 		catch (Throwable e)
