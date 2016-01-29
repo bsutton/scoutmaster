@@ -33,7 +33,6 @@ import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.util.SMNotification;
-import au.org.scoutmaster.util.VelocityFormatException;
 
 public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements CancelListener
 {
@@ -78,7 +77,7 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 		{
 
 			@Override
-			public Void call(UI ui)
+			public Void call(UI ui) throws Exception
 			{
 				int sent = 0;
 
@@ -118,7 +117,11 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 						final TagDao daoTag = new DaoFactory().getTagDao();
 						for (Tag tag : transmission.getActivityTags())
 						{
-							tag = daoTag.merge(tag);
+							// Make certain we are using the latest version of
+							// the tag
+							// as we get 'flush' side affects during this loop
+							// and the tags version no. can get updated.
+							tag = daoTag.findById(tag.getId());
 							daoContact.attachTag(transmission.getContact(), tag);
 						}
 						daoContact.merge(transmission.getContact());
@@ -136,14 +139,14 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 						SendEmailTask.super.taskItemError(transmission);
 						SMNotification.show(e, Type.ERROR_MESSAGE);
 					}
-					catch (final VelocityFormatException e)
+					catch (final Exception e)
 					{
+						logger.error(e, e);
 						SMNotification.show(e, Type.ERROR_MESSAGE);
+						throw e;
 					}
-
-					SendEmailTask.super.taskComplete(sent);
-
 				}
+				SendEmailTask.super.taskComplete(sent);
 
 				return null;
 
