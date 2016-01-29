@@ -135,9 +135,8 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 					catch (final EmailException e)
 					{
 						SendEmailTask.this.logger.error(e, e);
-						transmission.setException(e);
+						transmission.setException((e.getCause() != null ? e.getCause() : e));
 						SendEmailTask.super.taskItemError(transmission);
-						SMNotification.show(e, Type.ERROR_MESSAGE);
 					}
 					catch (final Exception e)
 					{

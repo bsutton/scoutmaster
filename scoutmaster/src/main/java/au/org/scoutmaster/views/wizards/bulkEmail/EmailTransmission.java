@@ -12,7 +12,7 @@ public class EmailTransmission
 	private final Message message;
 	private String recipientEmailAddress;
 	// If an exception is thrown during transmission it is stored here.
-	private Exception exception;
+	private Throwable exception;
 	private ArrayList<Tag> activityTags;
 
 	public EmailTransmission(final ArrayList<Tag> activityTags, final Contact contact, final Message message,
@@ -54,7 +54,7 @@ public class EmailTransmission
 		return this.recipientEmailAddress;
 	}
 
-	public void setException(final Exception e)
+	public void setException(final Throwable e)
 	{
 		this.exception = e;
 
