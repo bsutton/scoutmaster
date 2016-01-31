@@ -81,7 +81,6 @@ public class Tag extends BaseEntity
 	// stop pojomatic generating a circular reference.
 	private Set<Contact> contacts = new HashSet<>();
 
-	//
 	// @ManyToMany
 	// private final List<School> schools = new ArrayList<>();
 	//

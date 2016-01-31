@@ -77,7 +77,8 @@ public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 
 		final Builder<Tag> builder = new HeadingPropertySet.Builder<Tag>();
 		builder.addColumn("Tag", Tag_.name).addColumn("Description", Tag_.description)
-				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable);
+				.addColumn("Built In", Tag_.builtin).addColumn("Detachable", Tag_.detachable)
+				.addColumn("Created", Tag_.created.getName(), "YYYY-MM-dd", 100);
 
 		super.init(Tag.class, container, builder.build());
 
