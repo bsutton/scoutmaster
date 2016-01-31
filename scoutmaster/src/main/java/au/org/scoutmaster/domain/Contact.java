@@ -963,22 +963,22 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	public String getEmail()
 	{
 		String email;
-		switch (this.preferredEmail)
-		{
-			case HOME:
-				email = this.homeEmail;
-				break;
-			case WORK:
-				email = this.workEmail;
-				break;
-			default:
-				if (this.homeEmail == null || this.homeEmail.length() == 0)
-					email = this.workEmail;
-				else
-					email = this.homeEmail;
-				break;
 
-		}
+		/**
+		 * TODO: UI not yet create to allow the setting of preferred email.
+		 *
+		 * switch (this.preferredEmail) { case HOME: email = this.homeEmail;
+		 * break; case WORK: email = this.workEmail; break; default: if
+		 * (this.homeEmail == null || this.homeEmail.length() == 0) email =
+		 * this.workEmail; else email = this.homeEmail; break;
+		 *
+		 * }
+		 */
+
+		if (this.homeEmail == null || this.homeEmail.length() == 0)
+			email = this.workEmail;
+		else
+			email = this.homeEmail;
 		return email;
 	}
 }
