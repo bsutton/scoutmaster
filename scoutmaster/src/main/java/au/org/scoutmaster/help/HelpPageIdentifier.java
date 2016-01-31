@@ -2,5 +2,5 @@ package au.org.scoutmaster.help;
 
 public enum HelpPageIdentifier
 {
-	ContactView, UserView, RaffleView, RaffleImportWizard, RaffleAllocationWizard, HomeTopLeft, HomeTopRight, HomeSecondLeft, HomeSecondRight
+	ContactView, UserView, RaffleView, RaffleImportWizard, RaffleAllocationWizard, SchoolView, HomeTopLeft, HomeTopRight, HomeSecondLeft, HomeSecondRight
 }

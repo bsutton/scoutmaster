@@ -20,6 +20,7 @@ import au.org.scoutmaster.views.OrganisationView;
 import au.org.scoutmaster.views.QualificationTypeView;
 import au.org.scoutmaster.views.RaffleView;
 import au.org.scoutmaster.views.ResetPasswordView;
+import au.org.scoutmaster.views.SchoolView;
 import au.org.scoutmaster.views.SectionTypeView;
 import au.org.scoutmaster.views.SessionHistoryView;
 import au.org.scoutmaster.views.TagView;
@@ -53,6 +54,7 @@ public enum ScoutmasterViewEnum
 	, Tag(TagView.NAME, TagView.class)
 	, ExternalProspects(ExternalProspectsReport.NAME, ExternalProspectsReport.class)
 	, ImportWizard(ImportWizardView.NAME, ImportWizardView.class)
+	, School(SchoolView.NAME, SchoolView.class, true)
 
 
 	// Communications

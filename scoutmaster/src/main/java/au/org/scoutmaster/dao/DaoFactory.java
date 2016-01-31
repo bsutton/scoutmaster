@@ -134,6 +134,11 @@ public class DaoFactory
 		return (GroupDao) instantiateDAO(GroupDao.class);
 	}
 
+	public SchoolDao getSchoolDao()
+	{
+		return (SchoolDao) instantiateDAO(SchoolDao.class);
+	}
+
 	public static <E> JpaBaseDao<E, Long> getGenericDao(final Class<E> class1)
 	{
 		return new JpaBaseDao<E, Long>(class1);
