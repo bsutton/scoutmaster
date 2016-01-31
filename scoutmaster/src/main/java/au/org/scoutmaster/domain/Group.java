@@ -42,7 +42,7 @@ public class Group extends BaseEntity
 
 	public static final String PRIMARY_PHONE = "primaryPhone";
 
-	public static final String FIND_BY_NAME = "FindByName";
+	public static final String FIND_BY_NAME = "Group.FindByName";
 
 	/**
 	 * The name of the Scout/Guide group
