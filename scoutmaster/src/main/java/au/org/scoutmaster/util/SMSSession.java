@@ -18,6 +18,7 @@ import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationType;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.Tag;
@@ -74,8 +75,15 @@ public class SMSSession implements Closeable
 
 		try
 		{
+			final ContactDao daoContact = new DaoFactory().getContactDao();
+
+			Contact contact = transmission.getContact();
+
+			// re-attach the contact.
+			contact = daoContact.merge(contact);
+
 			// The message that you want to send.
-			final String msg = transmission.getMessage().expandBody(user, transmission.getContact()).toString();
+			final String msg = transmission.getMessage().expandBody(user, contact).toString();
 
 			// International number to target without leading "+"
 			final Phone reciever = transmission.getRecipient();
@@ -91,19 +99,17 @@ public class SMSSession implements Closeable
 				final CommunicationTypeDao daoActivityType = new DaoFactory().getActivityTypeDao();
 				final CommunicationLog activity = new CommunicationLog();
 				activity.setAddedBy(user);
-				activity.setWithContact(transmission.getContact());
+				activity.setWithContact(contact);
 				activity.setSubject(transmission.getMessage().getSubject());
 				activity.setType(daoActivityType.findByName(CommunicationType.BULK_SMS));
 				activity.setDetails(transmission.getMessage().getBody());
 				daoActivity.persist(activity);
 
 				// Tag the contact
-				final ContactDao daoContact = new DaoFactory().getContactDao();
 				for (final Tag tag : transmission.getActivityTags())
 				{
-					daoContact.attachTag(transmission.getContact(), tag);
+					daoContact.attachTag(contact, tag);
 				}
-				daoContact.merge(transmission.getContact());
 			}
 
 		}

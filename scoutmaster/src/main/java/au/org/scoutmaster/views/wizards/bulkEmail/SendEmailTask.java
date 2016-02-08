@@ -28,6 +28,7 @@ import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.TagDao;
 import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationType;
+import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.access.User;
@@ -86,6 +87,12 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 
 				for (final EmailTransmission transmission : targets)
 				{
+					final ContactDao daoContact = new DaoFactory().getContactDao();
+
+					Contact contact = transmission.getContact();
+
+					contact = daoContact.merge(contact);
+
 					if (SendEmailTask.this.cancel == true)
 					{
 						break;
@@ -93,8 +100,8 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 
 					try
 					{
-						final String expandedBody = message.expandBody(user, transmission.getContact());
-						final StringBuffer expandedSubject = message.expandSubject(user, transmission.getContact());
+						final String expandedBody = message.expandBody(user, contact);
+						final StringBuffer expandedSubject = message.expandSubject(user, contact);
 						daoSMTPSettings.sendEmail(settings, message.getSenderEmailAddress(),
 								SMSession.INSTANCE.getLoggedInUser().getEmailAddress(),
 								new SMTPSettingsDao.EmailTarget(EmailAddressType.To, transmission.getRecipient()),
@@ -106,14 +113,13 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 						final CommunicationType type = daoActivityType.findByName(CommunicationType.BULK_EMAIL);
 						final CommunicationLog activity = new CommunicationLog();
 						activity.setAddedBy(user);
-						activity.setWithContact(transmission.getContact());
+						activity.setWithContact(contact);
 						activity.setSubject(message.getSubject());
 						activity.setDetails(message.getBody());
 						activity.setType(type);
 						daoActivity.persist(activity);
 
 						// Tag the contact
-						final ContactDao daoContact = new DaoFactory().getContactDao();
 						final TagDao daoTag = new DaoFactory().getTagDao();
 						for (Tag tag : transmission.getActivityTags())
 						{
@@ -122,9 +128,8 @@ public class SendEmailTask extends ProgressBarTask<EmailTransmission> implements
 							// as we get 'flush' side affects during this loop
 							// and the tags version no. can get updated.
 							tag = daoTag.findById(tag.getId());
-							daoContact.attachTag(transmission.getContact(), tag);
+							daoContact.attachTag(contact, tag);
 						}
-						daoContact.merge(transmission.getContact());
 						sent++;
 						SendEmailTask.super.taskProgress(sent, targets.size(), transmission);
 						SMNotification.show("Email sent to " + transmission.getContactName(), Type.TRAY_NOTIFICATION);
