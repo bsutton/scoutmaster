@@ -131,4 +131,9 @@ public class School extends BaseEntity
 		return (advertisingContact != null ? advertisingContact.getEmail() : null);
 	}
 
+	public SchoolType getSchoolType()
+	{
+		return schoolType;
+	}
+
 }
