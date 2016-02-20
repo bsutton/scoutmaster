@@ -5,6 +5,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 public class AccessDeniedView implements View
 {
+	private static final long serialVersionUID = 1L;
 
 	public AccessDeniedView(String featureName)
 	{

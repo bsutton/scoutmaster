@@ -1,3 +1,5 @@
+
+<!DOCTYPE project>
 <module>
 	<!-- This file is automatically updated based on new dependencies by the 
 		goal "vaadin:update-widgetset". -->
