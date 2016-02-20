@@ -103,6 +103,11 @@ public class DaoFactory
 		return (RelationshipDao) instantiateDAO(RelationshipDao.class);
 	}
 
+	public RelationshipTypeDao getRelationshipTypeDao()
+	{
+		return (RelationshipTypeDao) instantiateDAO(RelationshipTypeDao.class);
+	}
+
 	public SectionTypeDao getSectionTypeDao()
 	{
 		return (SectionTypeDao) instantiateDAO(SectionTypeDao.class);
@@ -163,4 +168,5 @@ public class DaoFactory
 			throw new RuntimeException("Cannot instantiate DAO: " + daoClass, ex);
 		}
 	}
+
 }
