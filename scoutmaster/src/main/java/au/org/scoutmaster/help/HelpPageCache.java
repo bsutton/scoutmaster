@@ -28,15 +28,15 @@ public class HelpPageCache
 
 	static Logger logger = LogManager.getLogger();
 
-	static LoadingCache<Enum, String> cache = CacheBuilder.newBuilder().maximumSize(10)
+	static LoadingCache<Enum<?>, String> cache = CacheBuilder.newBuilder().maximumSize(10)
 			.expireAfterWrite(1, TimeUnit.SECONDS)
 
 			// TODO: put this back to 10 minutes.
 
-			.build(new CacheLoader<Enum, String>()
+			.build(new CacheLoader<Enum<?>, String>()
 			{
 				@Override
-				public String load(final Enum helpId) throws Exception
+				public String load(final Enum<?> helpId) throws Exception
 				{
 					String page = "";
 					BufferedReader in = null;
@@ -69,13 +69,13 @@ public class HelpPageCache
 	 * @return
 	 * @throws ExecutionException
 	 */
-	static public String lookupHelpPage(final Enum helpId) throws ExecutionException
+	static public String lookupHelpPage(final Enum<?> helpId) throws ExecutionException
 	{
 		return HelpPageCache.cache.get(helpId);
 
 	}
 
-	static public String getHelpPageURL(final Enum helpId)
+	static public String getHelpPageURL(final Enum<?> helpId)
 	{
 		return "https://raw.githubusercontent.com/wiki/bsutton/scoutmaster/Help-" + helpId + ".md";
 	}

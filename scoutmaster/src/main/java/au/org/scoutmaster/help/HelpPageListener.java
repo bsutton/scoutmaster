@@ -10,7 +10,7 @@ public interface HelpPageListener
 	 *
 	 *
 	 */
-	public void setHelp(Enum id);
+	public void setHelp(Enum<?> id);
 
 	/**
 	 * The HelpSplitPanel invokes this method on the component that is added to

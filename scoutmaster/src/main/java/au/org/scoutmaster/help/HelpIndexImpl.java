@@ -21,11 +21,6 @@ public class HelpIndexImpl implements HelpIndex
 
 	static transient Logger logger = LogManager.getLogger(HelpIndexImpl.class);
 
-	private String lookupHelpIndex(Enum<?> helpId) throws ExecutionException
-	{
-		return HelpPageCache.lookupHelpPage(helpId);
-	}
-
 	@Override
 	public void setHelpSource(final Enum<?> helpId, final AbstractOrderedLayout layout, HelpDisplayedCallback callback)
 	{

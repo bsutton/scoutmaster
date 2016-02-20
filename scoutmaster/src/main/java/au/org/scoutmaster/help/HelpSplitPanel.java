@@ -69,7 +69,7 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 		this.component.enter(event);
 	}
 
-	public void setHelpPageId(final Enum helpId)
+	public void setHelpPageId(final Enum<?> helpId)
 	{
 		setHelp(helpId);
 
@@ -110,13 +110,13 @@ public class HelpSplitPanel extends HorizontalSplitPanel implements View, HelpPa
 	}
 
 	@Override
-	public void setHelp(final Enum helpId)
+	public void setHelp(final Enum<?> helpId)
 	{
 		final Thread loadPage = new Thread(() -> {
 			String helpSource = null;
 			try
 			{
-				helpSource = HelpSplitPanel.this.page.lookupHelpPage(helpId);
+				helpSource = HelpPageCache.lookupHelpPage(helpId);
 			}
 			catch (final ExecutionException e)
 			{
