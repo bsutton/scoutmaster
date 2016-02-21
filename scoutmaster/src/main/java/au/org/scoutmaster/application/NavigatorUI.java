@@ -84,8 +84,8 @@ public class NavigatorUI extends UI
 
 			HelpIndexFactory.registerHelpIndex(new HelpIndexImpl());
 
-			this.getReconnectDialogConfiguration().setDialogText(
-					"You may have a problem with your Internet connection. Server connection lost, trying to reconnect...");
+			this.getReconnectDialogConfiguration()
+					.setDialogText("You may have a problem with your Internet connection. Trying to reconnect...");
 
 			configured = true;
 		}
