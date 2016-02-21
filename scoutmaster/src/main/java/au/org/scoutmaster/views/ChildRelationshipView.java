@@ -19,6 +19,7 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.RelationshipDao;
 import au.org.scoutmaster.domain.BaseEntity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
@@ -110,6 +111,30 @@ public class ChildRelationshipView extends ChildCrudView<Contact, Relationship>
 	{
 		final ContactDao daoContact = new DaoFactory().getContactDao();
 		daoContact.addRelationship(newParent, child);
+
+		// Now associate the child with the reciprocal contact so the
+		// relationship goes both ways.
+
+		Contact rhsContact = child.getRHS();
+		rhsContact.addRecipricolRelationship(child);
+	}
+
+	@Override
+	protected void preChildDelete(Object entityId)
+	{
+		// We need to delete the other side of the relationship
+
+		RelationshipDao daoRelationship = new DaoFactory().getRelationshipDao();
+
+		// Get a copy of the relationship being deleted.
+		Relationship relationship = daoRelationship.findById((Long) entityId);
+
+		// Get the other contact in the relationship
+		Contact otherContact = relationship.getRHS();
+
+		// Now remove the relationship for the other contact
+		otherContact.removeRecipricolRelationship(relationship);
+
 	}
 
 	@Override

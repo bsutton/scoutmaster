@@ -1,5 +1,7 @@
 package au.org.scoutmaster.dao;
 
+import java.util.List;
+
 import javax.persistence.Query;
 
 import com.vaadin.addon.jpacontainer.JPAContainer;
@@ -25,7 +27,9 @@ public class RelationshipDao extends JpaBaseDao<Relationship, Long>
 		query.setParameter(Relationship_.lhs.getName(), lhs);
 		query.setParameter(Relationship_.type.getName(), relationshipType);
 		query.setParameter(Relationship_.rhs.getName(), rhs);
-		final Relationship result = (Relationship) query.getSingleResult();
+		@SuppressWarnings("unchecked")
+		List<Relationship> list = query.getResultList();
+		Relationship result = list.size() == 0 ? null : list.get(0);
 		return result;
 	}
 

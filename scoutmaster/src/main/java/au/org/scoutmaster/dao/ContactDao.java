@@ -35,7 +35,6 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 		// inherit the default per request em.
 	}
 
-	
 	@SuppressWarnings("unchecked")
 	public List<Contact> findByName(final String firstname, final String lastname)
 	{
@@ -95,7 +94,7 @@ public class ContactDao extends JpaBaseDao<Contact, Long> implements Dao<Contact
 
 	public void addRelationship(final Contact contact, final Relationship child)
 	{
-		contact.getLHSRelationships().add(child);
+		contact.addRelationship(child);
 
 	}
 

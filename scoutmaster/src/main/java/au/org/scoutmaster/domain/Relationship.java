@@ -1,11 +1,17 @@
 package au.org.scoutmaster.domain;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.valid4j.Assertive.require;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -29,9 +35,14 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
 @TenantDiscriminatorColumn(name = "Group_ID")
 @Table(name = "Relationship")
 @Access(AccessType.FIELD)
+@NamedQueries(
+{ @NamedQuery(name = Relationship.FIND, query = "SELECT relationship FROM Relationship relationship WHERE relationship.lhs = :lhs and relationship.type = :type and relationship.rhs = :rhs"), })
+
 public class Relationship extends BaseEntity implements ChildCrudEntity
 {
 	private static final long serialVersionUID = 1L;
+
+	static public final String FIND = "Relationship.find";
 
 	/**
 	 * Entities used in child cruds must have a guid to help uniquely identify
@@ -62,6 +73,21 @@ public class Relationship extends BaseEntity implements ChildCrudEntity
 	@ManyToOne(targetEntity = Contact.class)
 	Contact rhs;
 
+	public Relationship()
+	{
+
+	}
+
+	public Relationship(Contact lhs, RelationshipType type, Contact rhs)
+	{
+		require(lhs, is(notNullValue()));
+		require(type, is(notNullValue()));
+		require(rhs, is(notNullValue()));
+		this.lhs = lhs;
+		this.type = type;
+		this.rhs = rhs;
+	}
+
 	public void setLHS(final Contact lhs)
 	{
 		this.lhs = lhs;
@@ -83,6 +109,26 @@ public class Relationship extends BaseEntity implements ChildCrudEntity
 	public String getGuid()
 	{
 		return guid;
+	}
+
+	public Contact getRHS()
+	{
+		return this.rhs;
+	}
+
+	public Contact getLHS()
+	{
+		return this.lhs;
+	}
+
+	public RelationshipType getReciprocalType()
+	{
+		return this.type.getReciprocalType();
+	}
+
+	public RelationshipType getType()
+	{
+		return this.type;
 	}
 
 }
