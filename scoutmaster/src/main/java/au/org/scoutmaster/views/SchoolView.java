@@ -240,8 +240,8 @@ public class SchoolView extends BaseCrudView<School> implements View, Selected<S
 		{
 			// Long groupRoleId = (Long) this.role.getValue();
 
-			@SuppressWarnings("rawtypes")
-			final Property source = event.getProperty();
+			// @SuppressWarnings("rawtypes")
+			// final Property source = event.getProperty();
 
 		}
 
