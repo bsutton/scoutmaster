@@ -4,9 +4,10 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
 http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2_1.xsd">
 
-	<persistence-unit name="scoutmaster" transaction-type="RESOURCE_LOCAL">
+	<!-- UnitTest database -->
+	<persistence-unit name="scoutmastertest"
+		transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<non-jta-data-source>java:comp/env/jdbc/scoutmaster-ds</non-jta-data-source>
 		<class>au.org.scoutmaster.domain.CommunicationLog</class>
 		<class>au.org.scoutmaster.domain.CommunicationType</class>
 		<class>au.org.scoutmaster.domain.Address</class>
@@ -76,35 +77,22 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		
 
 		<properties>
-			<property name="eclipselink.session.customizer"
-				value="au.org.scoutmaster.application.EclipseLinkSessionCustomizer" />
-			<!-- Following property should create the database schema automatically 
-			You probably want to do this in an alternate db so as not to destroy your test data.
-			Change the ds at the top of this persistence-unit to scoutmaster-test-ds 
-			and create an additional resource in tomcats server.xml (/var/lib/tomcat7/conf/server.xml) similar to:
-			 
-			<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="40" maxIdle="4" 
-			name="jdbc/scoutmaster-test-ds" password="XXXXXX" 
-			type="javax.sql.DataSource" url="jdbc:mysql://localhost/scoutmaster-test?sessionVariables=storage_engine=InnoDB" username="scoutmaster"/>
-			-->
-			
-			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables"/ -->
-			<!--property name="eclipselink.ddl-generation" value="create-or-extend-tables" /-->
-			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:mysql://localhost/scoutmastertest?sessionVariables=storage_engine=InnoDB" />
+			<property name="javax.persistence.jdbc.user" value="scoutmastertest" />
+			<property name="javax.persistence.jdbc.password" value="master$4scout" />
+
+			<!-- EclipseLink should create the database schema automatically -->
 			<property name="eclipselink.ddl-generation" value="none" />
+
+			<!-- property name="eclipselink.ddl-generation" value="drop-and-create-tables" 
+				/ -->
 			<property name="eclipselink.ddl-generation.output-mode"
 				value="database" />
 			<property name="eclipselink.orm.throw.exceptions" value="true" />
 			<property name="eclipselink.logging.level" value="FINE" />
-			<!-- To make eclipse link log via log4j....
-			According to the EclipseLink logging documentation, you just need to make sure 
-			Commons Logging 1.1.x and the Log4j 2 Commons Logging Bridge 
-			(Maven artifact log4j-jcl) are on your classpath and add the following property 
-			to your persistence unit: -->
-			<!-- property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.CommonsLoggingSessionLog"/ -->
-			<!--property name="eclipselink.weaving" value="static"/-->
 		</properties>
 	</persistence-unit>
-
 	
 </persistence>
