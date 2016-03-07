@@ -7,7 +7,7 @@ import javax.servlet.ServletContextEvent;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.servlet.VUEntityManagerContextListener;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 
 /**
  * You need to hook this class as a servlet context listener in your web.xml
@@ -41,7 +41,7 @@ public class LocalEntityManagerContextListener extends VUEntityManagerContextLis
 			@Override
 			public void run(EntityManager em)
 			{
-				Group group = SMSession.INSTANCE.getGroup();
+				ScoutGroup group = SMSession.INSTANCE.getGroup();
 
 				if (group != null)
 				{

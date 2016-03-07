@@ -11,7 +11,7 @@ import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.errorHandling.ErrorSettings;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.forms.EmailAddressType;
 
@@ -88,7 +88,7 @@ final class ErrorString implements ErrorSettings
 	@Override
 	public String getTargetEmailAddress()
 	{
-		final Group group = SMSession.INSTANCE.getGroup();
+		final ScoutGroup group = SMSession.INSTANCE.getGroup();
 		String email = (group != null && group.getPrimaryContact() != null ? group.getPrimaryContact().getEmail()
 				: null);
 		if (email == null)
@@ -113,7 +113,7 @@ final class ErrorString implements ErrorSettings
 	@Override
 	public String getSupportCompanyName()
 	{
-		final Group group = SMSession.INSTANCE.getGroup();
+		final ScoutGroup group = SMSession.INSTANCE.getGroup();
 
 		return (group != null ? group.getName() : "Scoutmaster System");
 	}
