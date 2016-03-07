@@ -26,7 +26,7 @@ import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
  */
 @Entity(name = "Section")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Section")
 @Access(AccessType.FIELD)
 public class Section extends BaseEntity

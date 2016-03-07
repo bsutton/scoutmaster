@@ -12,7 +12,7 @@ import org.simpleframework.xml.core.Persister;
 import org.xml.sax.SAXException;
 
 import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupType;
+import au.org.scoutmaster.domain.ScoutGroupType;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.servlets.VaadinServlet;
@@ -23,7 +23,7 @@ public class GroupSetup
 	// We just parse this once but if the country changes we need to re-do it.
 	private static GroupSetup self = null;
 	private static String country = null;
-	private static GroupType groupType = null;
+	private static ScoutGroupType groupType = null;
 
 	@ElementList(name = "SectionType", inline = true, type = XMLSectionType.class)
 	private List<XMLSectionType> xmlSectionTypes;
@@ -110,7 +110,7 @@ public class GroupSetup
 		return this.xmlGroupRoles;
 	}
 
-	public static GroupSetup load(GroupType groupType, String country) throws IOException, SAXException
+	public static GroupSetup load(ScoutGroupType groupType, String country) throws IOException, SAXException
 	{
 		if (self == null || country.equals(GroupSetup.country) || groupType != GroupSetup.groupType)
 		{
@@ -134,7 +134,7 @@ public class GroupSetup
 
 	}
 
-	private static File getXMLFile(GroupType groupType, String country)
+	private static File getXMLFile(ScoutGroupType groupType, String country)
 	{
 		final String xmlPath = VaadinServlet.getCurrent().getServletContext()
 				.getRealPath(new File("/WEB-INF/classes/GroupSetup", country).getPath());

@@ -10,7 +10,7 @@ import com.vaadin.ui.UI;
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.access.User;
 
@@ -24,7 +24,7 @@ public enum SMSession
 	 * Holds the Group (used by JPA for the Tenant) of the currently logged in
 	 * user.
 	 */
-	private Group group;
+	private ScoutGroup group;
 
 	/**
 	 * Cache of section types to get around some odd jpa bug.
@@ -67,7 +67,7 @@ public enum SMSession
 
 	}
 
-	public void setGroup(Group group)
+	public void setGroup(ScoutGroup group)
 	{
 		// We now know who the tenant (group) is so we can make the transition
 		// to
@@ -83,7 +83,7 @@ public enum SMSession
 	 * @return The Group (JPA tenant) of the currently logged in user or null if
 	 *         there is no logged in user.
 	 */
-	public Group getGroup()
+	public ScoutGroup getGroup()
 	{
 		return group;
 	}

@@ -49,7 +49,7 @@ import au.org.scoutmaster.domain.validation.MemberChecks;
 
 @Entity(name = "Contact")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Contact")
 @Access(AccessType.FIELD)
 @NamedQueries(

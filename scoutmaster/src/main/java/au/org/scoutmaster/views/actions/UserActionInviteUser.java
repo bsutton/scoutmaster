@@ -23,7 +23,7 @@ import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.util.RandomString;
@@ -124,7 +124,7 @@ public class UserActionInviteUser implements CrudAction<User>
 										.getRequestURL();
 
 								final User loggedInUser = SMSession.INSTANCE.getLoggedInUser();
-								final Group scoutGroup = SMSession.INSTANCE.getGroup();
+								final ScoutGroup scoutGroup = SMSession.INSTANCE.getGroup();
 
 								final StringBuilder sb = new StringBuilder();
 								sb.append("You have been invited by " + loggedInUser.getFullname()

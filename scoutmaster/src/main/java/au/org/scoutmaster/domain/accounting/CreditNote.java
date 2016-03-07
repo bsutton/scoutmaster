@@ -21,7 +21,7 @@ import au.org.scoutmaster.domain.BaseEntity;
 
 @Entity
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "CreditNote")
 @Access(AccessType.FIELD)
 public class CreditNote extends BaseEntity

@@ -5,13 +5,13 @@
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="group_id" class="java.lang.String"/>
+	<parameter name="ScoutGroup_ID" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select firstname,lastname, homeemail, phone1phoneno phoneno, memberno, sect.name as section 
 from Contact c
 join SectionType sect
 	on c.section_id = sect.id
-where c.group_id = $P{group_id}
+where c.ScoutGroup_ID = $P{ScoutGroup_ID}
 order by sect.name, lastname]]>
 	</queryString>
 	<field name="firstname" class="java.lang.String">

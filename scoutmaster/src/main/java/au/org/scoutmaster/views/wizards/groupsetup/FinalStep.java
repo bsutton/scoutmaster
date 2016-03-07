@@ -8,7 +8,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.views.ContactView;
 
 public class FinalStep implements WizardStep
@@ -49,7 +49,7 @@ public class FinalStep implements WizardStep
 	{
 		// So they have decided to go with scoutmaster so lets create the group
 		// and account.
-		Group group = createGroup();
+		ScoutGroup group = createGroup();
 
 		// Now the account
 		createUser(group);
@@ -57,13 +57,13 @@ public class FinalStep implements WizardStep
 		return false;
 	}
 
-	private void createUser(Group group)
+	private void createUser(ScoutGroup group)
 	{
 		setupWizard.getNewAccountStep().createUser(group);
 
 	}
 
-	private Group createGroup()
+	private ScoutGroup createGroup()
 	{
 		return setupWizard.getGroupDetailStep().createGroup();
 	}

@@ -9,7 +9,7 @@
 	<parameter name="raffleId" class="java.lang.String">
 		<defaultValueExpression><![CDATA[16]]></defaultValueExpression>
 	</parameter>
-	<parameter name="group_id" class="java.lang.String"/>
+	<parameter name="ScoutGroup_ID" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select r.id raffleId, b.firstNo, b.ticketCount, cTo.fullname allocatedTo, cBy.fullname issuedBy,
 r.name, a.id allocationId, a.dateAllocated, b.ticketsReturned, b.receiptIssued, b.amountReturnedMoneyValue, b.amountReturnedMoneyPrecision
@@ -26,7 +26,7 @@ join Contact cTo
 left join Contact cBy
 	on cBy.id = a.issuedBy_ID
 where r.id in ($P!{raffleId})
- and b.group_id = $P{group_id}
+ and b.ScoutGroup_ID = $P{ScoutGroup_ID}
 order by cTo.fullname, b.firstNo
 ;]]>
 	</queryString>

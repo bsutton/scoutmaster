@@ -20,7 +20,7 @@ import au.com.vaadinutils.dao.EntityManagerProvider;
 
 @Entity(name = "Address")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Address")
 @Access(AccessType.FIELD)
 @NamedQueries(

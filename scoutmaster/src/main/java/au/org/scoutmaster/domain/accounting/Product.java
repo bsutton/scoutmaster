@@ -26,7 +26,7 @@ import au.org.scoutmaster.domain.Organisation;
  */
 @Entity
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Product")
 @Access(AccessType.FIELD)
 public class Product extends BaseEntity

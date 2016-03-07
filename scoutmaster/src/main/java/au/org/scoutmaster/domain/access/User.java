@@ -24,7 +24,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import au.org.scoutmaster.domain.BaseEntity;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
+import au.org.scoutmaster.security.eRole;
 import au.org.scoutmaster.util.PasswordHash;
 
 @Entity
@@ -45,7 +46,7 @@ public class User extends BaseEntity
 
 	/**
 	 * Whilst a user doesn't have the @Tenant attribute we do store the user's
-	 * Tenant ID (Group_ID) on the user.
+	 * Tenant ID (ScoutGroup_ID) on the user.
 	 *
 	 * We can't use JPA's @Tenant annotation on the user as during login we have
 	 * to access every user until we know which user is logging and therefore
@@ -53,9 +54,9 @@ public class User extends BaseEntity
 	 *
 	 * For Scoutmaster the Group entity acts as the Tenant.
 	 */
-	@JoinColumn(name = "Group_ID")
-	@ManyToOne(targetEntity = Group.class)
-	private Group group;
+	@JoinColumn(name = "ScoutGroup_ID")
+	@ManyToOne(targetEntity = ScoutGroup.class)
+	private ScoutGroup scoutGroup;
 
 	@NotBlank
 	@Column(unique = true)
@@ -102,9 +103,31 @@ public class User extends BaseEntity
 	@Size(max = 1024)
 	private String emailSignature;
 
-	public Group getGroup()
+	/**
+	 * The set of roles the user undertakes.
+	 */
+	@ManyToMany
+	private List<Role> belongsTo = new ArrayList<>();
+
+	public User()
 	{
-		return this.group;
+		this.enabled = true;
+		this.deleted = false;
+
+	}
+
+	public User(final String username, final String password)
+	{
+		this.username = username;
+		this.saltedPassword = generatePassword(password);
+		this.enabled = true;
+		this.deleted = false;
+
+	}
+
+	public ScoutGroup getGroup()
+	{
+		return this.scoutGroup;
 	}
 
 	public String getSenderMobile()
@@ -147,36 +170,14 @@ public class User extends BaseEntity
 		this.deleted = deleted;
 	}
 
-	public List<Role> getBelongsTo()
+	public List<Role> getRoles()
 	{
 		return this.belongsTo;
 	}
 
-	public void setBelongsTo(final List<Role> belongsTo)
+	public void setRoles(final List<Role> belongsTo)
 	{
 		this.belongsTo = belongsTo;
-	}
-
-	/**
-	 * The set of roles the user undertakes.
-	 */
-	@ManyToMany
-	private List<Role> belongsTo = new ArrayList<>();
-
-	public User()
-	{
-		this.enabled = true;
-		this.deleted = false;
-
-	}
-
-	public User(final String username, final String password)
-	{
-		this.username = username;
-		this.saltedPassword = generatePassword(password);
-		this.enabled = true;
-		this.deleted = false;
-
 	}
 
 	@Access(value = AccessType.PROPERTY)
@@ -288,9 +289,30 @@ public class User extends BaseEntity
 		return this.emailSignature;
 	}
 
-	public void setGroup(Group group)
+	public void setGroup(ScoutGroup group)
 	{
-		this.group = group;
+		this.scoutGroup = group;
 
+	}
+
+	/**
+	 * Returns true if the belongs to the given role
+	 * 
+	 * @param role
+	 * @return
+	 */
+	public boolean hasRole(eRole role)
+	{
+		boolean hasRole = false;
+		for (Role userRole : this.belongsTo)
+		{
+			if (userRole.getERole() == role)
+			{
+				hasRole = true;
+				break;
+			}
+		}
+
+		return hasRole;
 	}
 }

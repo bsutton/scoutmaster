@@ -26,7 +26,7 @@ public class CalendarReportView extends JasperReportView
 			builder.addDateField("Date Range", "StartDate", "EndDate").setDateRange(new DateTime(),
 					new DateTime().plusMonths(1));
 
-			ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+			ReportParameterConstant<String> param = new ReportParameterConstant<String>("ScoutGroup_ID",
 					"" + SMSession.INSTANCE.getGroup().getId());
 			builder.getReportParameters().add(param);
 		}

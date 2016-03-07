@@ -23,7 +23,7 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.access.UserDao;
 import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.PreferredEmail;
@@ -235,7 +235,7 @@ public class NewAccountStep implements WizardStep
 		return true;
 	}
 
-	public void createUser(Group group)
+	public void createUser(ScoutGroup group)
 	{
 		// So looks like they are going to register so lets create the user.
 

@@ -29,7 +29,7 @@ import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupDao;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 
 /** A start view for navigating to the main view */
 @Menu(display = "Month View", path = "Calendar")
@@ -82,22 +82,22 @@ public class CalendarView extends VerticalLayout
 		{
 			// extract the group id from the paramter
 			// expected URL format is:
-			// https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1
+			// https://www.scoutmaster.org.au/public#!PublicCalendar/ScoutGroup_ID=1
 			if (event.getParameters() != null)
 			{
 				String[] msgs = event.getParameters().split("=");
 				if (msgs.length != 2)
 					throw new IllegalArgumentException(
-							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/ScoutGroup_ID=1");
 
-				if (!msgs[0].equals("group_id"))
+				if (!msgs[0].equals("ScoutGroup_ID"))
 					throw new IllegalArgumentException(
-							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+							"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/ScoutGroup_ID=1");
 
 				int groupId = Integer.valueOf(msgs[1]);
 
 				GroupDao daoGroup = new DaoFactory().getGroupDao();
-				Group group = daoGroup.findById(groupId);
+				ScoutGroup group = daoGroup.findById(groupId);
 				if (group == null)
 					throw new IllegalArgumentException("Unknown Group ID passed.");
 				else
@@ -106,7 +106,7 @@ public class CalendarView extends VerticalLayout
 			}
 			else
 				throw new IllegalArgumentException(
-						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/group_id=1");
+						"The Group ID must be passed in the form of: https://www.scoutmaster.org.au/public#!PublicCalendar/ScoutGroup_ID=1");
 		}
 		final HorizontalLayout calendarLabel = buildTitleArea();
 		this.addComponent(calendarLabel);
@@ -152,7 +152,7 @@ public class CalendarView extends VerticalLayout
 		final HorizontalLayout layout = new HorizontalLayout();
 		layout.setWidth("100%");
 
-		final Group ourGroup = SMSession.INSTANCE.getGroup();
+		final ScoutGroup ourGroup = SMSession.INSTANCE.getGroup();
 		final Label calendarLabel = new Label("<b>" + ourGroup.getName() + " Calendar</b>");
 		calendarLabel.setContentMode(ContentMode.HTML);
 		layout.addComponent(calendarLabel);

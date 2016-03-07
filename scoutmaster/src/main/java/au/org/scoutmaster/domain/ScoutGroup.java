@@ -30,19 +30,19 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @Entity
-@Table(name = "`Group`")
+@Table(name = "ScoutGroup")
 @NamedQueries(
-{ @NamedQuery(name = Group.FIND_BY_NAME, query = "SELECT group FROM Group group WHERE group.name = :name"), })
-public class Group extends BaseEntity
+{ @NamedQuery(name = ScoutGroup.FIND_BY_NAME, query = "SELECT scoutgroup FROM ScoutGroup scoutgroup WHERE scoutgroup.name = :name"), })
+public class ScoutGroup extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private static final Logger logger = LogManager.getLogger(Group.class);
+	private static final Logger logger = LogManager.getLogger(ScoutGroup.class);
 
 	public static final String PRIMARY_PHONE = "primaryPhone";
 
-	public static final String FIND_BY_NAME = "Group.FindByName";
+	public static final String FIND_BY_NAME = "ScoutGroup.FindByName";
 
 	/**
 	 * The name of the Scout/Guide group
@@ -52,14 +52,14 @@ public class Group extends BaseEntity
 	private String name;
 
 	/**
-	 * The Group's Type (scouts or guides)
+	 * The Scout Group's Type (scouts or guides)
 	 */
 	@Enumerated(EnumType.STRING)
-	private GroupType groupType;
+	private ScoutGroupType scoutGroupType;
 
 	/**
 	 * The location of the group. We can't use the 'Address' entity as its
-	 * multi-tenant and Group isn't (and you can't combine the two.
+	 * multi-tenant and ScoutGroup isn't (and you can't combine the two.
 	 */
 
 	@Size(max = 255)
@@ -168,14 +168,14 @@ public class Group extends BaseEntity
 
 	}
 
-	public GroupType getGroupType()
+	public ScoutGroupType getGroupType()
 	{
-		return this.groupType;
+		return this.scoutGroupType;
 	}
 
-	public void setGroupType(GroupType groupType)
+	public void setScoutGroupType(ScoutGroupType scoutGroupType)
 	{
-		this.groupType = groupType;
+		this.scoutGroupType = scoutGroupType;
 	}
 
 	public Contact getPrimaryContact()

@@ -24,7 +24,7 @@ import au.org.scoutmaster.domain.accounting.MoneyWithTax;
  */
 @Entity(name = "SectionTryout")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "SectionTryout")
 @Access(AccessType.FIELD)
 public class SectionTryout extends BaseEntity

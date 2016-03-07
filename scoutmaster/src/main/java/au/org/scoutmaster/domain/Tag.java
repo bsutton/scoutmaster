@@ -32,7 +32,7 @@ import org.pojomatic.annotations.Property;
  */
 @Entity(name = "Tag")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Tag")
 @Access(AccessType.FIELD)
 @NamedQueries(

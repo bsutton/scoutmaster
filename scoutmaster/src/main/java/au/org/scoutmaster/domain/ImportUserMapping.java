@@ -25,7 +25,7 @@ import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
  */
 @Entity(name = "ImportUserMapping")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "ImportUserMapping")
 @Access(AccessType.FIELD)
 @NamedQueries(

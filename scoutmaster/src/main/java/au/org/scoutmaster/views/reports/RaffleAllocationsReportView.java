@@ -7,7 +7,7 @@ import au.com.vaadinutils.jasper.ui.JasperReportView;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.Raffle;
 import au.org.scoutmaster.domain.Raffle_;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
@@ -26,12 +26,12 @@ public class RaffleAllocationsReportView extends JasperReportView
 
 			final ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 
-			final Group ourGroup = SMSession.INSTANCE.getGroup();
+			final ScoutGroup ourGroup = SMSession.INSTANCE.getGroup();
 
 			builder.addField(new ReportParameterTable<Raffle>("Raffle", "raffleId", Raffle.class, Raffle_.name))
 					.addField(new ReportParameterConstant<String>("groupname", ourGroup.getName()));
 
-			ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+			ReportParameterConstant<String> param = new ReportParameterConstant<String>("ScoutGroup_ID",
 					"" + SMSession.INSTANCE.getGroup().getId());
 			builder.getReportParameters().add(param);
 

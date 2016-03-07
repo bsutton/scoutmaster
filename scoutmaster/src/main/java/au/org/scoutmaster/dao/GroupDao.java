@@ -3,9 +3,9 @@ package au.org.scoutmaster.dao;
 import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 
-public class GroupDao extends JpaBaseDao<Group, Long> implements Dao<Group, Long>
+public class GroupDao extends JpaBaseDao<ScoutGroup, Long> implements Dao<ScoutGroup, Long>
 {
 
 	public GroupDao()
@@ -14,19 +14,19 @@ public class GroupDao extends JpaBaseDao<Group, Long> implements Dao<Group, Long
 	}
 
 	@Override
-	public Group findById(final Long id)
+	public ScoutGroup findById(final Long id)
 	{
-		final Group group = JpaBaseDao.getEntityManager().find(this.entityClass, id);
+		final ScoutGroup group = JpaBaseDao.getEntityManager().find(this.entityClass, id);
 		return group;
 	}
 
-	public Group findByName(final String groupName)
+	public ScoutGroup findByName(final String groupName)
 	{
-		return super.findSingleBySingleParameter(Group.FIND_BY_NAME, "name", groupName);
+		return super.findSingleBySingleParameter(ScoutGroup.FIND_BY_NAME, "name", groupName);
 	}
 
 	@Override
-	public JPAContainer<Group> createVaadinContainer()
+	public JPAContainer<ScoutGroup> createVaadinContainer()
 	{
 		return super.createVaadinContainer();
 	}

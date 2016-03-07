@@ -246,7 +246,7 @@ public class SingleAllocationStep implements WizardStep, ClickListener, Allocati
 			{
 				ReportFilterUIBuilder builder = new ReportFilterUIBuilder();
 
-				ReportParameterConstant<String> param = new ReportParameterConstant<String>("group_id",
+				ReportParameterConstant<String> param = new ReportParameterConstant<String>("ScoutGroup_ID",
 						"" + SMSession.INSTANCE.getGroup().getId());
 				builder.getReportParameters().add(param);
 

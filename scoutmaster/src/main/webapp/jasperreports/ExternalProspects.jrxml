@@ -6,7 +6,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<parameter name="group_id" class="java.lang.String"/>
+	<parameter name="ScoutGroup_ID" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select firstname,lastname, phone1phoneno phoneno
 , concat(a.street, ", ", a.city) as address, n.subject as subject, n.body as body
@@ -20,7 +20,7 @@ join Tag t
 join Note n
 	on n.attachedcontact_id = c.id
 where t.name = 'External Prospect'
-and c.group_id = $P{group_id}
+and c.ScoutGroup_ID = $P{ScoutGroup_ID}
 order by lastname]]>
 	</queryString>
 	<field name="firstname" class="java.lang.String">

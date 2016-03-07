@@ -23,9 +23,9 @@ import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupDao;
-import au.org.scoutmaster.domain.Group;
+import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupType;
+import au.org.scoutmaster.domain.ScoutGroupType;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.ui.SimpleFormLayout;
@@ -114,8 +114,8 @@ public class GroupDetailStep implements WizardStep
 
 	private void loadGroupTypes()
 	{
-		this.groupTypeField.addItem(GroupType.Scouts);
-		this.groupTypeField.addItem(GroupType.GirlGuides);
+		this.groupTypeField.addItem(ScoutGroupType.Scouts);
+		this.groupTypeField.addItem(ScoutGroupType.GirlGuides);
 
 	}
 
@@ -155,7 +155,7 @@ public class GroupDetailStep implements WizardStep
 
 	public GroupSetup getGroupSetup() throws IOException, SAXException
 	{
-		GroupType groupType = (GroupType) this.groupTypeField.getValue();
+		ScoutGroupType groupType = (ScoutGroupType) this.groupTypeField.getValue();
 		GroupSetup setup = GroupSetup.load(groupType, (String) countries.getValue());
 
 		return setup;
@@ -167,13 +167,13 @@ public class GroupDetailStep implements WizardStep
 	 *
 	 * @return
 	 */
-	public Group createGroup()
+	public ScoutGroup createGroup()
 	{
 		// So looks like they are going to register so lets create the group.
 
-		JpaBaseDao<Group, Long> dao = DaoFactory.getGenericDao(Group.class);
+		JpaBaseDao<ScoutGroup, Long> dao = DaoFactory.getGenericDao(ScoutGroup.class);
 
-		Group group = new Group();
+		ScoutGroup group = new ScoutGroup();
 		group.setName(this.groupName.getValue());
 
 		group.setStreet(this.street.getValue());
@@ -182,8 +182,8 @@ public class GroupDetailStep implements WizardStep
 		group.setPostcode(this.postcode.getValue());
 		group.setCountry((String) this.countries.getValue());
 
-		GroupType groupType = (GroupType) this.groupTypeField.getValue();
-		group.setGroupType(groupType);
+		ScoutGroupType groupType = (ScoutGroupType) this.groupTypeField.getValue();
+		group.setScoutGroupType(groupType);
 
 		dao.persist(group);
 		// flush the cache to actualise the id of the group (which is required
@@ -215,6 +215,8 @@ public class GroupDetailStep implements WizardStep
 			}
 
 			// Add the built-in GroupRoles
+
+			// todo setup the permissions for each role
 			JpaBaseDao<GroupRole, Long> daoGroupRole = DaoFactory.getGenericDao(GroupRole.class);
 			List<GroupRole> groupRoles = setup.getGroupRoles();
 			for (GroupRole role : groupRoles)

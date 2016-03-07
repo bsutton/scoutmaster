@@ -12,7 +12,7 @@ import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 @Entity
 @Table(name = "OrganisationType")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Access(AccessType.FIELD)
 public class OrganisationType extends BaseEntity
 {

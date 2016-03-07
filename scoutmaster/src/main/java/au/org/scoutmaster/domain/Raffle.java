@@ -29,7 +29,7 @@ import au.org.scoutmaster.domain.accounting.Money;
  */
 @Entity(name = "Raffle")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Raffle")
 @Access(AccessType.FIELD)
 public class Raffle extends BaseEntity

@@ -28,7 +28,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
  */
 @Entity(name = "RaffleAllocation")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "RaffleAllocation")
 @Access(AccessType.FIELD)
 public class RaffleAllocation extends BaseEntity implements ChildCrudEntity

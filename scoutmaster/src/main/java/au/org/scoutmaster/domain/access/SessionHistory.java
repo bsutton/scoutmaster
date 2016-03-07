@@ -24,7 +24,7 @@ import au.org.scoutmaster.domain.BaseEntity;
  */
 @Entity
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "SessionHistory")
 @Access(AccessType.FIELD)
 public class SessionHistory extends BaseEntity

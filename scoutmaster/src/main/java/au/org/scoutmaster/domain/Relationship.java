@@ -32,7 +32,7 @@ import au.com.vaadinutils.dao.JpaEntityHelper;
  */
 @Entity(name = "Relationship")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Relationship")
 @Access(AccessType.FIELD)
 @NamedQueries(

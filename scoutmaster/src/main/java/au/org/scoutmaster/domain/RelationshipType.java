@@ -26,7 +26,7 @@ import au.org.scoutmaster.dao.RelationshipTypeDao;
 
 @Entity(name = "RelationshipType")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "RelationshipType")
 @Access(AccessType.FIELD)
 @NamedQueries(

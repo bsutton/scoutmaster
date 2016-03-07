@@ -86,8 +86,8 @@ public class LoginAttemptView extends BaseCrudView<LoginAttempt> implements View
 	protected void resetFilters()
 	{
 		super.resetFilters();
-		getContainer().addContainerFilter(
-				new Compare.Equal(new Path(LoginAttempt_.user, User_.group).getName(), SMSession.INSTANCE.getGroup()));
+		getContainer().addContainerFilter(new Compare.Equal(new Path(LoginAttempt_.user, User_.scoutGroup).getName(),
+				SMSession.INSTANCE.getGroup()));
 	}
 
 	@Override

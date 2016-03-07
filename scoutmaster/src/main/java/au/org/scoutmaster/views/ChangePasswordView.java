@@ -28,6 +28,7 @@ import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.validator.PasswordValidator;
 
 @Menu(display = "Change Password", path = "Admin")
+
 public class ChangePasswordView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;

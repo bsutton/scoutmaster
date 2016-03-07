@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+        ">
+
+	
+	<changeSet author="bsutton" id="1.0.62.1">
+		<renameColumn tableName="Address" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="CommunicationLog" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Contact" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Contact_Relationship" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Contact_Tag" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="CreditNote" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="CreditNote_CreditNoteLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="CreditNoteLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Document" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Event" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Event_Contact" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Event_Document" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="ForgottenPasswordReset" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="GroupRole" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="GroupRole_Tag" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Household" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Household_CommunicationLog" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Household_Note" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Household_Tag" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="ImportColumnFieldMapping" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="ImportUsermapping" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Invoice" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Invoice_InvoiceLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Invoice_Payment" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="InvoiceLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Note" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Organisation" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Organisation_CommunicationLog" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Organisation_Contact" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Organisation_note" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Organisation_Tag" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="OrganisationType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Payment" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Payment_Invoice" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Product" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Purchase" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Purchase_PurchaseLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="PurchaseLine" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Qualification" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="QualificationType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Raffle" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="RaffleAllocation" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="RaffleBook" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Relationship" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="RelationshipType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="School" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="School_Address" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="School_Contact" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Section" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Section_CommunicationLog" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Section_Contact" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Section_SectionTryout" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Section_TransitionMember" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionMeetingDefaults" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionTryout" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionTryoutType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionTryoutType_Section" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SectionType_QualificationType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SessionHistory" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="SMSProvider" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Tag" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Task" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="Taskstatus" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="TaskType" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailparameterentity" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailrecipient" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailschedule" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailschedule_tblreportemailparameterentity" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailschedule_tblreportemailrecipient" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailschedule_tblreportemailscheduleddateparameter" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailscheduleddateparameter" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="tblreportemailsender" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="TransitionMember" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+		<renameColumn tableName="User" newColumnName="ScoutGroup_ID" oldColumnName="group_id"  columnDataType="BIGINT(19)" />
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.62.2">
+    	<renameTable newTableName="ScoutGroup" oldTableName="Group"/>
+	</changeSet>
+	
+	<changeSet author="bsutton" id="1.0.62.3">
+
+		<createTable tableName="Permission">
+			<column autoIncrement="true" name="ID" type="BIGINT(19)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="CONSISTENCYVERSION" type="BIGINT(19)">
+				<constraints nullable="false" />
+			</column>
+			<column name="CREATED" type="date" valueComputed="now()" />
+			<column name="UPDATED" type="date" valueComputed="now()" />
+
+			<column name="featureName" type="VARCHAR(255)" />
+			<column name="Action" type="varchar(32)" defaultValue="Scouts" />
+			<column name="editedByUser" type="BIT(1)" defaultValueNumeric="0" />
+			<column name="roleHash" type="INT(10)" />
+		</createTable>
+
+		<createIndex indexName="Permission_FeatureAction" tableName="Permission" unique="true">
+			<column name="featureName" />
+			<column name="Action" />
+		</createIndex>
+
+	</changeSet>
+	
+</databaseChangeLog>
+
+		

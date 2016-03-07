@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity(name = "SectionMeetingDefaults")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "SectionMeetingDefaults")
 @Access(AccessType.FIELD)
 public class SectionMeetingDefaults extends BaseEntity

@@ -36,11 +36,29 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.access.User;
 import au.org.scoutmaster.domain.access.User_;
 import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.views.actions.UserActionInviteUser;
 
+// @formatter:off
+@iFeature(
+	name = "UserView"
+	,permissions = {
+	@iPermission(action = Action.LIST, roles = { eRole.GROUP_LEADER })
+	, @iPermission(action = Action.DELETE, roles = { eRole.GROUP_LEADER })
+	, @iPermission(action = Action.EDIT, roles = { eRole.GROUP_LEADER })
+	, @iPermission(action = Action.NEW, roles = { eRole.GROUP_LEADER })
+	, @iPermission(action = Action.CHANGE_USER_ROLES, roles = { eRole.GROUP_LEADER })
+	, @iPermission(action = Action.RESET_PASSWORD, roles = { eRole.MEMBER })
+	, @iPermission(action = Action.MANAGE_SELF, roles = { eRole.MEMBER }),
+})
+// @formatter:on
 @Menu(display = "Users", path = "Admin.Security")
+
 public class UserView extends BaseCrudView<User>
 		implements View, Selected<User>, TextChangeListener, FocusListener, HelpProvider
 {
@@ -118,8 +136,8 @@ public class UserView extends BaseCrudView<User>
 	protected void resetFilters()
 	{
 		super.resetFilters();
-		// We must force the group filter as the user table is not multi-tenant.
-		getContainer().addContainerFilter(new Compare.Equal(User_.group.getName(), SMSession.INSTANCE.getGroup()));
+		// We must force the eRole filter as the user table is not multi-tenant.
+		getContainer().addContainerFilter(new Compare.Equal(User_.scoutGroup.getName(), SMSession.INSTANCE.getGroup()));
 	}
 
 	@Override

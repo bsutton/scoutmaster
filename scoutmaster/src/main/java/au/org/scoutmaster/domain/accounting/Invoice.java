@@ -24,7 +24,7 @@ import au.org.scoutmaster.domain.Contact;
 
 @Entity
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "Invoice")
 @Access(AccessType.FIELD)
 public class Invoice extends BaseEntity

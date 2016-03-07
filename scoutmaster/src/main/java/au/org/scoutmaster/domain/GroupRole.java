@@ -19,6 +19,8 @@ import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.simpleframework.xml.Attribute;
 
+import au.org.scoutmaster.domain.access.Permission;
+
 /**
  * A Role within the Scout Group.
  *
@@ -32,7 +34,7 @@ import org.simpleframework.xml.Attribute;
  */
 @Entity(name = "GroupRole")
 @Multitenant
-@TenantDiscriminatorColumn(name = "Group_ID")
+@TenantDiscriminatorColumn(name = "ScoutGroup_ID")
 @Table(name = "GroupRole")
 @Access(AccessType.FIELD)
 @NamedQueries(
@@ -106,6 +108,8 @@ public class GroupRole extends BaseEntity
 	@ManyToMany(targetEntity = Tag.class, fetch = FetchType.EAGER)
 	private Set<Tag> tags = new HashSet<Tag>();
 
+	private Set<Permission> permissions;
+
 	public Set<Tag> getTags()
 	{
 		return this.tags;
@@ -137,6 +141,12 @@ public class GroupRole extends BaseEntity
 	public void addTag(Tag tag)
 	{
 		this.tags.add(tag);
+
+	}
+
+	public void addPermission(Permission permission)
+	{
+		this.permissions.add(permission);
 
 	}
 
