@@ -13,9 +13,9 @@ import com.vaadin.navigator.ViewProvider;
 import au.com.vaadinutils.crud.CrudSecurityManager;
 import au.com.vaadinutils.crud.security.SecurityManagerFactoryProxy;
 import au.com.vaadinutils.help.HelpSplitPanel;
-import au.org.scoutmaster.application.AccessDeniedView;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.application.ScoutmasterViewEnum;
+import au.org.scoutmaster.security.AccessDeniedView;
 import au.org.scoutmaster.views.ContactView;
 import au.org.scoutmaster.views.LoginView;
 

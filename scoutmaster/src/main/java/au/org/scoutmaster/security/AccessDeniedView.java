@@ -1,4 +1,4 @@
-package au.org.scoutmaster.application;
+package au.org.scoutmaster.security;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
