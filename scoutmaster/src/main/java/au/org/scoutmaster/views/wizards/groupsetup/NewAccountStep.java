@@ -20,14 +20,13 @@ import com.vaadin.ui.TextField;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.dao.security.UserDao;
 import au.org.scoutmaster.domain.Address;
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.ScoutGroup;
-import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.PreferredEmail;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.ScoutGroup;
+import au.org.scoutmaster.domain.security.SecurityRole;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.ui.SimpleFormLayout;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.validator.PasswordValidator;
@@ -55,7 +54,7 @@ public class NewAccountStep implements WizardStep
 
 	private TextField lastname;
 
-	private ComboBox groupRoleField;
+	private ComboBox securityRoleField;
 
 	private GroupSetupWizardView wizard;
 
@@ -184,31 +183,31 @@ public class NewAccountStep implements WizardStep
 			form.addComponent(lastname);
 			this.lastname.setRequired(true);
 
-			this.groupRoleField = new ComboBox("Which Role best describes your role in the group.");
-			form.addComponent(groupRoleField);
-			this.groupRoleField.setRequired(true);
+			this.securityRoleField = new ComboBox("Which Role best describes your role in the group.");
+			form.addComponent(securityRoleField);
+			this.securityRoleField.setRequired(true);
 
 			// focus the username field when user arrives to the login view
 			this.username.focus();
 		}
 
-		loadGroupRoles();
+		loadSecurityRoles();
 
 		return form;
 
 	}
 
-	private void loadGroupRoles()
+	private void loadSecurityRoles()
 	{
 		GroupSetup group;
 		try
 		{
 			group = this.wizard.getGroupDetailStep().getGroupSetup();
 
-			for (GroupRole role : group.getGroupRoles())
+			for (SecurityRole role : group.getSecurityRoles())
 			{
 
-				groupRoleField.addItem(role);
+				this.securityRoleField.addItem(role);
 			}
 		}
 		catch (IOException | SAXException e)
@@ -254,7 +253,8 @@ public class NewAccountStep implements WizardStep
 
 		// We also create a Contact for this user.
 		JpaBaseDao<Contact, Long> daoContact = DaoFactory.getGenericDao(Contact.class);
-		JpaBaseDao<GroupRole, Long> daoGroupRole = DaoFactory.getGenericDao(GroupRole.class);
+		// JpaBaseDao<GroupRole, Long> daoGroupRole =
+		// DaoFactory.getGenericDao(GroupRole.class);
 		JpaBaseDao<Address, Long> daoAddress = DaoFactory.getGenericDao(Address.class);
 
 		Contact contact = new Contact();

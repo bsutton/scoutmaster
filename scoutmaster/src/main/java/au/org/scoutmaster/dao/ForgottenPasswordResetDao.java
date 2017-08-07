@@ -12,9 +12,9 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.EntityManagerProvider;
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.dao.security.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.util.RandomString;
 
 public class ForgottenPasswordResetDao extends JpaBaseDao<ForgottenPasswordReset, Long> implements

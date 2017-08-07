@@ -23,9 +23,21 @@ import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Tag;
 import au.org.scoutmaster.domain.Tag_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 @Menu(display = "Tags", path = "Members")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
 public class TagView extends BaseCrudView<Tag> implements View, Selected<Tag>
 {
 

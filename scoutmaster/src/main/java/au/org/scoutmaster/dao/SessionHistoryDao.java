@@ -4,7 +4,7 @@ import com.vaadin.addon.jpacontainer.JPAContainer;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.Dao;
-import au.org.scoutmaster.domain.access.SessionHistory;
+import au.org.scoutmaster.domain.security.SessionHistory;
 
 
 public class SessionHistoryDao extends JpaBaseDao<SessionHistory, Long> implements Dao<SessionHistory, Long>

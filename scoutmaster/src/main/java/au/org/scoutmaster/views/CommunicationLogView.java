@@ -28,11 +28,21 @@ import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.CommunicationType_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User;
+import au.org.scoutmaster.domain.security.User_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 @Menu(display = "Communication Log", path = "Communication")
+
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
 public class CommunicationLogView extends BaseCrudView<CommunicationLog> implements View, Selected<CommunicationLog>
 {
 

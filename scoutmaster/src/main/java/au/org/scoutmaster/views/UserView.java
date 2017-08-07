@@ -33,32 +33,29 @@ import au.com.vaadinutils.menu.Menu;
 import au.com.vaadinutils.validator.MobilePhoneValidator;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User;
+import au.org.scoutmaster.domain.security.User_;
 import au.org.scoutmaster.help.HelpPageIdentifier;
 import au.org.scoutmaster.security.Action;
-import au.org.scoutmaster.security.eRole;
+import au.org.scoutmaster.security.eSecurityRole;
 import au.org.scoutmaster.security.annotations.iFeature;
 import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.views.actions.UserActionInviteUser;
 
+@Menu(display = "Users", path = "Admin.Security")
 // @formatter:off
-@iFeature(
-	name = "UserView"
-	,permissions = {
-	@iPermission(action = Action.LIST, roles = { eRole.GROUP_LEADER })
-	, @iPermission(action = Action.DELETE, roles = { eRole.GROUP_LEADER })
-	, @iPermission(action = Action.EDIT, roles = { eRole.GROUP_LEADER })
-	, @iPermission(action = Action.NEW, roles = { eRole.GROUP_LEADER })
-	, @iPermission(action = Action.CHANGE_USER_ROLES, roles = { eRole.GROUP_LEADER })
-	, @iPermission(action = Action.RESET_PASSWORD, roles = { eRole.MEMBER })
-	, @iPermission(action = Action.MANAGE_SELF, roles = { eRole.MEMBER }),
+@iFeature(	permissions = {
+	@iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER })
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT,  eSecurityRole.GROUP_LEADER })
+	, @iPermission(action = Action.EDIT, roles = {  eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER })
+	, @iPermission(action = Action.NEW, roles = {  eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER })
+	, @iPermission(action = Action.CHANGE_USER_ROLES, roles = {  eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER })
+	, @iPermission(action = Action.RESET_PASSWORD, roles = { eSecurityRole.USER })
+	, @iPermission(action = Action.MANAGE_SELF, roles = { eSecurityRole.USER }),
 })
 // @formatter:on
-@Menu(display = "Users", path = "Admin.Security")
-
 public class UserView extends BaseCrudView<User>
 		implements View, Selected<User>, TextChangeListener, FocusListener, HelpProvider
 {

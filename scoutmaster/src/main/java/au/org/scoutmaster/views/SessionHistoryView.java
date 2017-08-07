@@ -20,12 +20,22 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.SessionHistory;
-import au.org.scoutmaster.domain.access.SessionHistory_;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.SessionHistory;
+import au.org.scoutmaster.domain.security.SessionHistory_;
+import au.org.scoutmaster.domain.security.User_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 @Menu(display = "Session History", path = "Admin.Security")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class SessionHistoryView extends BaseCrudView<SessionHistory> implements View, Selected<SessionHistory>
 {
 

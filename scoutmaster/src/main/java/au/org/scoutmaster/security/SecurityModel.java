@@ -12,11 +12,14 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.base.Objects;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.domain.access.Permission;
-import au.org.scoutmaster.domain.access.Permission_;
-import au.org.scoutmaster.domain.access.Role;
-import au.org.scoutmaster.domain.access.Role_;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.security.Feature;
+import au.org.scoutmaster.domain.security.Feature_;
+import au.org.scoutmaster.domain.security.Permission;
+import au.org.scoutmaster.domain.security.Permission_;
+import au.org.scoutmaster.domain.security.SecurityRole;
+import au.org.scoutmaster.domain.security.SecurityRole_;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.security.annotations.iFeature;
 import au.org.scoutmaster.security.annotations.iPermission;
 
@@ -48,23 +51,27 @@ public class SecurityModel
 	private List<Permission> permissions = new ArrayList<>();
 
 	/**
-	 * Loads a security model from an annotatin.
+	 * Loads a security model from an annotating.
 	 *
 	 * @param feature
 	 * @throws SecurityException
 	 */
-	SecurityModel(iFeature feature) throws SecurityException
+	SecurityModel(Class<?> clazz, iFeature feature) throws SecurityException
 	{
-		this.featureName = feature.name();
+		this.featureName = clazz.getSimpleName();
 
 		santityCheckPermissions(feature.permissions());
 
 		// We need to sync the permissions with the databases permissions
 
-		JpaBaseDao<Permission, Long> dao = JpaBaseDao.getGenericDao(Permission.class);
-		JpaBaseDao<Role, Long> daoRole = JpaBaseDao.getGenericDao(Role.class);
+		JpaBaseDao<Permission, Long> daoPermission = JpaBaseDao.getGenericDao(Permission.class);
+		JpaBaseDao<SecurityRole, Long> daoRole = JpaBaseDao.getGenericDao(SecurityRole.class);
 
-		List<Permission> dbPermissions = dao.findAllByAttribute(Permission_.featureName, featureName, null);
+		JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+		Feature jpaFeature = daoFeature.findOneByAttribute(Feature_.name, featureName);
+
+		List<Permission> dbPermissions = daoPermission.findAllByAttribute(Permission_.feature, jpaFeature,
+				Permission_.action);
 
 		// Take a copy of the permissions so we can work out what is missing
 		// from the db.
@@ -83,11 +90,11 @@ public class SecurityModel
 				// been locally changed.
 				if (!dbPermission.editedByUser())
 				{
-					List<Role> missingRoles = new ArrayList<>(annoPermission.getRoles());
+					List<SecurityRole> missingRoles = new ArrayList<>(annoPermission.getRoles());
 					// copy the array as we need to update the original.
-					for (Role dbRole : new CopyOnWriteArrayList<Role>(dbPermission.getRoles()))
+					for (SecurityRole dbRole : new CopyOnWriteArrayList<SecurityRole>(dbPermission.getRoles()))
 					{
-						Role annoRole = findAndRemove(missingRoles, dbRole);
+						SecurityRole annoRole = findAndRemove(missingRoles, dbRole);
 						// If the db role isn't in the list of annotation roles
 						// then we need to delete the db role
 						if (annoRole == null)
@@ -102,13 +109,13 @@ public class SecurityModel
 					// are created when we create the tenant.
 					// In fact if the Roles are missing from the DB we should
 					// throw an exception.
-					for (Role annoRole : missingRoles)
+					for (SecurityRole annoRole : missingRoles)
 					{
 						// Add the role to the permission as required.
 						dbPermission.addRole(annoRole);
 
 						// Check the role is already in the db (as required)
-						Role role = daoRole.findOneByAttribute(Role_.erole, annoRole.getERole());
+						SecurityRole role = daoRole.findOneByAttribute(SecurityRole_.erole, annoRole.getERole());
 						if (role == null)
 							throw new MissingRoleException("The role: " + role + " from permission " + annoPermission
 									+ " is missing from the database");
@@ -120,7 +127,7 @@ public class SecurityModel
 			{
 				// The db permission wasn't found in the annotation so it needs
 				// to be removed.
-				dao.remove(dbPermission);
+				daoPermission.remove(dbPermission);
 			}
 		}
 
@@ -129,16 +136,16 @@ public class SecurityModel
 		{
 			sanityCheckDuplicateRoles(permission);
 
-			for (Role role : permission.getRoles())
+			for (SecurityRole role : permission.getRoles())
 			{
 				// Check the role is already in the db (as required)
-				Role dbRole = daoRole.findOneByAttribute(Role_.erole, role.getERole());
+				SecurityRole dbRole = daoRole.findOneByAttribute(SecurityRole_.erole, role.getERole());
 				if (dbRole == null)
 					throw new MissingRoleException(
 							"The role: " + role + " from permission " + permission + " is missing from the database");
 			}
 
-			dao.persist(permission);
+			daoPermission.persist(permission);
 
 		}
 	}
@@ -147,9 +154,12 @@ public class SecurityModel
 	{
 		List<Permission> permissions = new ArrayList<>();
 
+		JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+		Feature jpaFeature = daoFeature.findOneByAttribute(Feature_.name, featureName);
+
 		for (iPermission ipermission : ipermissions)
 		{
-			permissions.add(new Permission(this.featureName, ipermission));
+			permissions.add(new Permission(jpaFeature, ipermission));
 		}
 		return permissions;
 	}
@@ -172,8 +182,8 @@ public class SecurityModel
 	private void sanityCheckDuplicateRoles(Permission annoPermission) throws SecurityException
 	{
 		// First sanity check : there should be no duplicate roles.
-		Set<Role> dupTest = new HashSet<>();
-		for (Role role : annoPermission.getRoles())
+		Set<SecurityRole> dupTest = new HashSet<>();
+		for (SecurityRole role : annoPermission.getRoles())
 		{
 			if (!dupTest.add(role))
 			{
@@ -183,10 +193,10 @@ public class SecurityModel
 		}
 	}
 
-	private Role findAndRemove(List<Role> missingRoles, Role dbRole)
+	private SecurityRole findAndRemove(List<SecurityRole> missingRoles, SecurityRole dbRole)
 	{
-		Role found = null;
-		for (Role role : missingRoles)
+		SecurityRole found = null;
+		for (SecurityRole role : missingRoles)
 		{
 			if (role.equals(dbRole))
 			{
@@ -219,9 +229,10 @@ public class SecurityModel
 	 * @param featureName
 	 * @param permissions
 	 */
-	public SecurityModel(String featureName, List<Permission> permissions)
+	public SecurityModel(Class<?> clazz, List<Permission> permissions)
 	{
-		this.featureName = featureName;
+		this.featureName = clazz.getSimpleName();
+		;
 		this.permissions = permissions;
 
 	}
@@ -242,7 +253,7 @@ public class SecurityModel
 			{
 				// we have found the action of interest.
 				// See if the user has a role that matches one of our roles
-				for (Role role : permission.getRoles())
+				for (SecurityRole role : permission.getRoles())
 				{
 					if (user.hasRole(role.getERole()))
 					{
@@ -258,24 +269,27 @@ public class SecurityModel
 	/**
 	 * Purge the feature from the database.
 	 */
-	public void purgeFromDB(String featureName)
+	public void purgeFromDB(Feature feature)
 	{
 		JpaBaseDao<Permission, Long> daoPermission = JpaBaseDao.getGenericDao(Permission.class);
-		JpaBaseDao<Role, Long> daoRole = JpaBaseDao.getGenericDao(Role.class);
+		JpaBaseDao<SecurityRole, Long> daoRole = JpaBaseDao.getGenericDao(SecurityRole.class);
 
-		List<Permission> permissions = daoPermission.findAllByAttributeLike(Permission_.featureName, featureName + ":%",
-				null);
+		List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.feature, feature,
+				Permission_.action);
 
 		for (Permission permission : permissions)
 		{
-			for (Role role : permission.getRoles())
+			for (SecurityRole role : permission.getRoles())
 				daoRole.remove(role);
 			daoPermission.remove(permission);
 		}
 
+		JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+		daoFeature.remove(feature);
+
 	}
 
-	static int hashRole(List<eRole> roles)
+	static int hashRole(List<eSecurityRole> roles)
 	{
 		return Objects.hashCode(roles.toArray());
 	}

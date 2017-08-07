@@ -11,10 +11,10 @@ import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.xml.sax.SAXException;
 
-import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.ScoutGroupType;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
+import au.org.scoutmaster.domain.security.SecurityRole;
 import au.org.scoutmaster.servlets.VaadinServlet;
 
 @Root(name = "Group")
@@ -34,7 +34,7 @@ public class GroupSetup
 	@ElementList(name = "GroupRoles", inline = true, type = XMLGroupRole.class)
 	private List<XMLGroupRole> xmlGroupRoles;
 	private List<Tag> tags;
-	private List<GroupRole> groupRoles;
+	private List<SecurityRole> securityRoles;
 	private ArrayList<SectionType> sectionTypes;
 
 	public List<SectionType> getSectionTypes()
@@ -65,18 +65,18 @@ public class GroupSetup
 		return tags;
 	}
 
-	public List<GroupRole> getGroupRoles()
+	public List<SecurityRole> getSecurityRoles()
 	{
-		if (groupRoles == null)
+		if (securityRoles == null)
 		{
-			groupRoles = new ArrayList<>();
+			securityRoles = new ArrayList<>();
 
 			for (XMLGroupRole xmlRole : this.xmlGroupRoles)
 			{
-				groupRoles.add(xmlRole.getGroupRole());
+				securityRoles.add(xmlRole.getGroupRole());
 			}
 		}
-		return groupRoles;
+		return securityRoles;
 	}
 
 	static GroupSetup parse(File xml) throws SAXException

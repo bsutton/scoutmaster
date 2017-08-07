@@ -3,7 +3,7 @@ package au.org.scoutmaster.security;
 import au.com.vaadinutils.crud.CrudSecurityManager;
 import au.com.vaadinutils.crud.security.AllowAllSecurityManager;
 import au.com.vaadinutils.crud.security.SecurityManagerFactory;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 
 public class SecurityFactoryImpl implements SecurityManagerFactory
 {

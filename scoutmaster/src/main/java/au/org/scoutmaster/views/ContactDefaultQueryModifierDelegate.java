@@ -18,8 +18,6 @@ import au.com.vaadinutils.dao.QueryModifierAdaptor;
 import au.org.scoutmaster.domain.BaseEntity_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
@@ -67,40 +65,40 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 			if (this.fullTextSearch != null && !this.fullTextSearch.isEmpty())
 			{
 				final Join<Contact, SectionType> sectionJoin = fromContact.join(Contact_.section, JoinType.LEFT);
-				final Join<Contact, GroupRole> groupRoleJoin = fromContact.join(Contact_.groupRole, JoinType.LEFT);
+				// final Join<Contact, GroupRole> groupRoleJoin =
+				// fromContact.join(Contact_.groupRole, JoinType.LEFT);
 
-				fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)), "%"
-						+ this.fullTextSearch.toUpperCase() + "%");
+				fullTextSearchPredicate = builder.like(builder.upper(fromContact.get(Contact_.firstname)),
+						"%" + this.fullTextSearch.toUpperCase() + "%");
+				fullTextSearchPredicate = builder.or(builder.like(builder.upper(fromContact.get(Contact_.lastname)),
+						"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+
 				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(fromContact.get(Contact_.lastname)),
-								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-
-				fullTextSearchPredicate = builder.or(builder.like(
-						builder.function("date_format", String.class, fromContact.get(Contact_.birthDate),
+						builder.like(builder.function("date_format", String.class, fromContact.get(Contact_.birthDate),
 								builder.literal("%Y-%m-%d")), "%" + this.fullTextSearch.toUpperCase() + "%"),
-								fullTextSearchPredicate);
+						fullTextSearchPredicate);
 
 				// Section
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
+				fullTextSearchPredicate = builder.or(builder.like(builder.upper(sectionJoin.get(SectionType_.name)),
+						"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+
+				// // Group Role
+				// fullTextSearchPredicate = builder.or(
+				// builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
+				// "%" + this.fullTextSearch.toUpperCase() + "%"),
+				// fullTextSearchPredicate);
+
+				fullTextSearchPredicate = builder
+						.or(builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
 
-				// Group Role
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(groupRoleJoin.get(GroupRole_.name)),
+				fullTextSearchPredicate = builder
+						.or(builder.like(builder.upper(fromContact.get(Contact_.phone2).get(Phone_.phoneNo)),
 								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
 
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(fromContact.get(Contact_.phone1).get(Phone_.phoneNo)), "%"
-								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(fromContact.get(Contact_.phone2).get(Phone_.phoneNo)), "%"
-								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
-
-				fullTextSearchPredicate = builder.or(
-						builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)), "%"
-								+ this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
+				fullTextSearchPredicate = builder
+						.or(builder.like(builder.upper(fromContact.get(Contact_.phone3).get(Phone_.phoneNo)),
+								"%" + this.fullTextSearch.toUpperCase() + "%"), fullTextSearchPredicate);
 
 			}
 
@@ -115,8 +113,8 @@ public class ContactDefaultQueryModifierDelegate extends QueryModifierAdaptor
 			}
 			if (this.excludedTags != null && this.excludedTags.size() != 0)
 			{
-				finalAnds.add(builder.not(fromContact.get(BaseEntity_.id).in(
-						buildWhereIn(query, builder, this.excludedTags))));
+				finalAnds.add(builder
+						.not(fromContact.get(BaseEntity_.id).in(buildWhereIn(query, builder, this.excludedTags))));
 			}
 			if (fullTextSearchPredicate != null)
 			{

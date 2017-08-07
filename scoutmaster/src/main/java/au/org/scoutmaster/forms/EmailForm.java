@@ -40,7 +40,7 @@ import au.com.vaadinutils.validator.EmailValidator;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.domain.Contact;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.wizards.bulkEmail.AttachedFileLayout;

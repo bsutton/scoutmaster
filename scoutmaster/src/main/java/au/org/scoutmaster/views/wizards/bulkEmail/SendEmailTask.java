@@ -31,7 +31,7 @@ import au.org.scoutmaster.domain.CommunicationType;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.SMTPServerSetting;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.forms.EmailAddressType;
 import au.org.scoutmaster.util.SMNotification;
 

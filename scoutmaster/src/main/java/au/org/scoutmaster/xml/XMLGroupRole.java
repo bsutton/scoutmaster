@@ -61,7 +61,7 @@ public class XMLGroupRole
 	 * assigned to the contact.
 	 */
 	@ElementList(entry = "Permission", required = false, inline = true)
-	private Set<XMLPermission> xmlPermission = new HashSet<>();
+	private Set<XMLSecurityRole> xmlPermission = new HashSet<>();
 
 	/**
 	 * The set of tags that should be added to a contact when this role is
@@ -105,7 +105,7 @@ public class XMLGroupRole
 			role.addTag(xmlTag.getTag());
 		}
 
-		for (XMLPermission xmlPermission : xmlPermission)
+		for (XMLSecurityRole xmlPermission : xmlPermission)
 		{
 			role.addPermission(xmlPermission.createPermission());
 		}

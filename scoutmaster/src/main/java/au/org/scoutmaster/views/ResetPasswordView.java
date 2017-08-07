@@ -2,8 +2,8 @@ package au.org.scoutmaster.views;
 
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.dao.security.UserDao;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.validator.UsernameValidator;
 

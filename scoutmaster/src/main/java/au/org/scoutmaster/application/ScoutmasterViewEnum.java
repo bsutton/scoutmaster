@@ -36,6 +36,7 @@ import au.org.scoutmaster.views.reports.ExternalProspectsReport;
 import au.org.scoutmaster.views.reports.MemberAddressReport;
 import au.org.scoutmaster.views.reports.MemberReport;
 import au.org.scoutmaster.views.reports.RaffleAllocationsReportView;
+import au.org.scoutmaster.views.security.PermissionView;
 import au.org.scoutmaster.views.wizards.bulkEmail.BulkEmailWizardView;
 import au.org.scoutmaster.views.wizards.bulkSMS.BulkSMSWizardView;
 import au.org.scoutmaster.views.wizards.groupmaintenance.GroupMaintenanceWizardView;
@@ -93,6 +94,7 @@ public enum ScoutmasterViewEnum
 	, User(UserView.NAME, UserView.class)
 	, SessionHistory(SessionHistoryView.NAME, SessionHistoryView.class)
 	, LoginAttempt(LoginAttemptView.NAME, LoginAttemptView.class)
+	, Permission(PermissionView.NAME, PermissionView.class)
 
 
 	// viewMap.add(new ViewMap(SectionBulkEmailWizard.NAME,

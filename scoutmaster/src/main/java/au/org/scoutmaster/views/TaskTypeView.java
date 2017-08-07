@@ -3,16 +3,6 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.TaskType;
-import au.org.scoutmaster.domain.TaskType_;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -22,7 +12,29 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.domain.TaskType;
+import au.org.scoutmaster.domain.TaskType_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+
 @Menu(display = "Task Types", path = "Admin.Lists")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
 public class TaskTypeView extends BaseCrudView<TaskType> implements View, Selected<TaskType>
 {
 
@@ -59,8 +71,8 @@ public class TaskTypeView extends BaseCrudView<TaskType> implements View, Select
 	{
 		final JPAContainer<TaskType> container = DaoFactory.getGenericDao(TaskType.class).createVaadinContainer();
 		container.sort(new String[]
-				{ TaskType_.name.getName() }, new boolean[]
-						{ true });
+		{ TaskType_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<TaskType> builder = new HeadingPropertySet.Builder<TaskType>();
 		builder.addColumn("TaskType", TaskType_.name).addColumn("Description", TaskType_.description);

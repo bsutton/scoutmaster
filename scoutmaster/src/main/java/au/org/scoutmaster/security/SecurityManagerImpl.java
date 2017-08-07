@@ -2,7 +2,7 @@ package au.org.scoutmaster.security;
 
 import au.com.vaadinutils.crud.CrudSecurityManager;
 import au.org.scoutmaster.application.SMSession;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 
 /**
  * A SecurityManager is created each time a users logs into scoutmaster.
@@ -40,7 +40,7 @@ public class SecurityManagerImpl implements CrudSecurityManager
 	@Override
 	public boolean canUserView()
 	{
-		return canUser(Action.LIST);
+		return canUser(Action.ACCESS);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class SecurityManagerImpl implements CrudSecurityManager
 	@Override
 	public boolean isUserSuperUser()
 	{
-		return user.hasRole(eRole.SYS_ADMIN);
+		return user.hasRole(eSecurityRole.TECH_SUPPORT);
 	}
 
 	@Override

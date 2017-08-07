@@ -1,11 +1,11 @@
 package au.org.scoutmaster.domain;
 
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2015-11-24T19:08:01.005+1100")
+@Generated(value="Dali", date="2016-03-11T22:34:18.887+1100")
 @StaticMetamodel(Document.class)
 public class Document_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Document, User> addedBy;

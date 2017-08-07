@@ -19,10 +19,12 @@ import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Transaction;
 import au.org.scoutmaster.DatabaseProvider;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.Permission;
-import au.org.scoutmaster.domain.access.Permission_;
-import au.org.scoutmaster.domain.access.Role;
-import au.org.scoutmaster.domain.access.Role_;
+import au.org.scoutmaster.domain.security.Feature;
+import au.org.scoutmaster.domain.security.Feature_;
+import au.org.scoutmaster.domain.security.Permission;
+import au.org.scoutmaster.domain.security.Permission_;
+import au.org.scoutmaster.domain.security.SecurityRole;
+import au.org.scoutmaster.domain.security.SecurityRole_;
 import au.org.scoutmaster.security.annotations.iFeature;
 import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.security.testViews.DuplicateActionView;
@@ -34,6 +36,7 @@ import au.org.scoutmaster.security.testViews.MultipleActionView4;
 
 public class SecurityModelTest
 {
+	@SuppressWarnings("unused")
 	private static Logger logger = LogManager.getLogger();
 	static private EntityManager em;
 
@@ -60,37 +63,42 @@ public class SecurityModelTest
 			deletePermission(MultipleActionView.class);
 
 			// Create the standard set of Roles (if they don't already exist.
-			createRole(eRole.COMMITTEE_MEMBER);
-			createRole(eRole.GROUP_LEADER);
-			createRole(eRole.GUARDIAN);
-			createRole(eRole.LEADER);
-			createRole(eRole.MEMBER);
-			createRole(eRole.NONE);
-			createRole(eRole.PRESIDENT);
-			createRole(eRole.QUARTER_MASTER);
-			createRole(eRole.SECRETARY);
-			createRole(eRole.SYS_ADMIN);
+			createRole(eSecurityRole.COMMITTEE_MEMBER);
+			createRole(eSecurityRole.GROUP_LEADER);
+			createRole(eSecurityRole.ADULT_MEMBER);
+			createRole(eSecurityRole.LEADER);
+			createRole(eSecurityRole.YOUTH_MEMBER);
+			createRole(eSecurityRole.NONE);
+			createRole(eSecurityRole.PRESIDENT);
+			createRole(eSecurityRole.QUARTERMASTER);
+			createRole(eSecurityRole.SECRETARY);
+			createRole(eSecurityRole.TECH_SUPPORT);
 
 			t.commit();
 		}
 
 	}
 
-	private static void createRole(eRole erole)
+	private static void createRole(eSecurityRole erole)
 	{
-		JpaBaseDao<Role, Long> daoRole = DaoFactory.getGenericDao(Role.class);
+		JpaBaseDao<SecurityRole, Long> daoRole = DaoFactory.getGenericDao(SecurityRole.class);
 
-		Role role = daoRole.findOneByAttribute(Role_.erole, erole);
+		SecurityRole role = daoRole.findOneByAttribute(SecurityRole_.erole, erole);
 		if (role == null)
-			daoRole.persist(new Role(erole));
+			daoRole.persist(new SecurityRole(erole));
 
 	}
 
 	private static void deletePermission(Class<?> clazz)
 	{
 		JpaBaseDao<Permission, Long> daoPermission = DaoFactory.getGenericDao(Permission.class);
-		List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.featureName, clazz.getSimpleName(),
-				Permission_.featureName);
+
+		JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+		Feature feature = daoFeature.findOneByAttribute(Feature_.name, clazz.getSimpleName());
+
+		List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.feature, feature,
+				Permission_.action);
+
 		for (Permission permission : permissions)
 		{
 			// permission.removeAllRoles();
@@ -105,7 +113,7 @@ public class SecurityModelTest
 		try (Transaction t = new Transaction(em))
 		{
 			iFeature annotation = DuplicateActionView.class.getAnnotation(iFeature.class);
-			new SecurityModel(annotation);
+			new SecurityModel(DuplicateActionView.class, annotation);
 			t.commit();
 		}
 
@@ -118,7 +126,7 @@ public class SecurityModelTest
 		try (Transaction t = new Transaction(em))
 		{
 			iFeature annotation = DuplicateRoleView.class.getAnnotation(iFeature.class);
-			new SecurityModel(annotation);
+			new SecurityModel(DuplicateRoleView.class, annotation);
 			t.commit();
 		}
 	}
@@ -129,10 +137,10 @@ public class SecurityModelTest
 		try (Transaction t = new Transaction(em))
 		{
 			iFeature annotation = MultipleActionView.class.getAnnotation(iFeature.class);
-			new SecurityModel(annotation);
+			new SecurityModel(MultipleActionView.class, annotation);
 			t.commit();
 
-			checkPermissionsAndRoles(annotation);
+			checkPermissionsAndRoles(MultipleActionView.class, annotation);
 
 		}
 	}
@@ -156,10 +164,10 @@ public class SecurityModelTest
 
 			iFeature annotation = MultipleActionView2.class.getAnnotation(iFeature.class);
 
-			new SecurityModel(annotation);
+			new SecurityModel(MultipleActionView2.class, annotation);
 			t.commit();
 
-			checkPermissionsAndRoles(annotation);
+			checkPermissionsAndRoles(MultipleActionView2.class, annotation);
 
 		}
 	}
@@ -185,10 +193,10 @@ public class SecurityModelTest
 			// @formatter:on
 			iFeature annotation = MultipleActionView3.class.getAnnotation(iFeature.class);
 
-			new SecurityModel(annotation);
+			new SecurityModel(MultipleActionView3.class, annotation);
 			t.commit();
 
-			checkPermissionsAndRoles(annotation);
+			checkPermissionsAndRoles(MultipleActionView3.class, annotation);
 
 		}
 	}
@@ -204,55 +212,50 @@ public class SecurityModelTest
 	{
 		try (Transaction t = new Transaction(em))
 		{
-			// @formatter:off
-//			// None of these changes should be applied ad the feature has been user edited.
-//			@iPermission(action = Action.NEW, roles ={ eRole.COMMITTEE_MEMBER, eRole.LEADER})
-//			// re-add secretary
-//			, @iPermission(action = Action.DELETE, roles ={ eRole.GROUP_LEADER, eRole.PRESIDENT, eRole.SECRETARY })
-//			// Remove Role President
-//			, @iPermission(action = Action.ACCESS_MEMBER_DETAILS, roles ={ eRole.GROUP_LEADER}) //, eRole.PRESIDENT
-			// @formatter:on
-
 			iFeature annotation = MultipleActionView4.class.getAnnotation(iFeature.class);
 
 			// Start by marking the two permissions as User edited
 			JpaBaseDao<Permission, Long> daoPermission = DaoFactory.getGenericDao(Permission.class);
-			List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.featureName, annotation.name(),
-					Permission_.featureName);
+			JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+			Feature feature = daoFeature.findOneByAttribute(Feature_.name, MultipleActionView4.class.getSimpleName());
+
+			List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.feature, feature,
+					Permission_.action);
+
 			for (Permission permission : permissions)
 			{
 				if (permission.getAction().equals(Action.DELETE)
-						|| permission.getAction().equals(Action.ACCESS_MEMBER_DETAILS))
+						|| permission.getAction().equals(Action.SENSITIVE_ACCESS))
 				{
 					permission.setEditedByUser(true);
 					daoPermission.merge(permission);
 				}
 			}
 
-			new SecurityModel(annotation);
+			new SecurityModel(MultipleActionView4.class, annotation);
 			t.commit();
 
 			// Check each permission individually
 
 			// Check we have only the expected permissions
-			permissions = daoPermission.findAllByAttribute(Permission_.featureName, annotation.name(),
-					Permission_.featureName);
+
+			permissions = daoPermission.findAllByAttribute(Permission_.feature, feature, Permission_.action);
 			for (Permission permission : permissions)
 			{
 				Action action = permission.getAction();
 				switch (action)
 				{
-					case ACCESS_MEMBER_DETAILS:
-						confirmRoles(permission, new eRole[]
-						{ eRole.GROUP_LEADER, eRole.PRESIDENT });
+					case SENSITIVE_ACCESS:
+						confirmRoles(permission, new eSecurityRole[]
+						{ eSecurityRole.GROUP_LEADER, eSecurityRole.PRESIDENT });
 						break;
 					case DELETE:
-						confirmRoles(permission, new eRole[]
-						{ eRole.GROUP_LEADER, eRole.PRESIDENT });
+						confirmRoles(permission, new eSecurityRole[]
+						{ eSecurityRole.GROUP_LEADER, eSecurityRole.PRESIDENT });
 						break;
 					case NEW:
-						confirmRoles(permission, new eRole[]
-						{ eRole.LEADER, eRole.COMMITTEE_MEMBER });
+						confirmRoles(permission, new eSecurityRole[]
+						{ eSecurityRole.LEADER, eSecurityRole.COMMITTEE_MEMBER });
 						break;
 					default:
 						throw new UnexpectedPermissionException("Unexcected Permission: " + action);
@@ -263,16 +266,16 @@ public class SecurityModelTest
 		}
 	}
 
-	private void confirmRoles(Permission permission, eRole[] eroles) throws SecurityException
+	private void confirmRoles(Permission permission, eSecurityRole[] eroles) throws SecurityException
 	{
 		if (permission.getRoles().size() != eroles.length)
 			throw new SecurityException("The expected number of roles doesn't match permission:" + permission.getRoles()
 					+ " expected " + eroles);
 
-		for (Role role : permission.getRoles())
+		for (SecurityRole role : permission.getRoles())
 		{
 			boolean found = false;
-			for (eRole erole : eroles)
+			for (eSecurityRole erole : eroles)
 			{
 				if (role.getERole() == erole)
 				{
@@ -287,13 +290,17 @@ public class SecurityModelTest
 
 	}
 
-	private void checkPermissionsAndRoles(iFeature annotation) throws SecurityException
+	private void checkPermissionsAndRoles(Class<?> clazz, iFeature annotation) throws SecurityException
 	{
 		// Now confirm that all of the correct permissions/roles were
 		// created.
 		JpaBaseDao<Permission, Long> daoPermission = DaoFactory.getGenericDao(Permission.class);
-		List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.featureName, annotation.name(),
-				Permission_.featureName);
+
+		JpaBaseDao<Feature, Long> daoFeature = DaoFactory.getGenericDao(Feature.class);
+		Feature feature = daoFeature.findOneByAttribute(Feature_.name, clazz.getSimpleName());
+
+		List<Permission> permissions = daoPermission.findAllByAttribute(Permission_.feature, feature,
+				Permission_.action);
 		Map<Action, iPermission> expected = new HashMap<>();
 		// load expected into a map for easy access.
 		for (iPermission expect : annotation.permissions())
@@ -305,13 +312,13 @@ public class SecurityModelTest
 			if (expected.containsKey(permission.getAction()))
 			{
 				// check all of the roles have been created
-				Map<String, Role> expectedRoles = new HashMap<>();
+				Map<String, SecurityRole> expectedRoles = new HashMap<>();
 				// fill the map
-				for (Role expectedRole : permission.getRoles())
+				for (SecurityRole expectedRole : permission.getRoles())
 				{
 					expectedRoles.put(expectedRole.getName(), expectedRole);
 				}
-				for (Role role : permission.getRoles())
+				for (SecurityRole role : permission.getRoles())
 				{
 					if (expectedRoles.containsKey(role.getName()))
 					{
@@ -331,8 +338,7 @@ public class SecurityModelTest
 			else
 			{
 				// unexpected permission in db.
-				throw new UnexpectedPermissionException(
-						"Unexpected permission in db: " + permission.getFeatureName() + ":" + permission.getAction());
+				throw new UnexpectedPermissionException("Unexpected permission in db: " + permission.toString());
 			}
 		}
 

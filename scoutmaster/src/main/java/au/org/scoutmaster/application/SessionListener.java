@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 import au.com.vaadinutils.dao.EntityManagerThread;
 import au.com.vaadinutils.dao.JpaBaseDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.SessionHistory;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.SessionHistory;
+import au.org.scoutmaster.domain.security.User;
 
 public class SessionListener implements HttpSessionListener
 {

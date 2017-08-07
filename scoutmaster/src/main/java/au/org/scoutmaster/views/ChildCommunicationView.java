@@ -15,7 +15,7 @@ import au.org.scoutmaster.domain.CommunicationLog_;
 import au.org.scoutmaster.domain.CommunicationType_;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User_;
 
 import javax.persistence.metamodel.SingularAttribute;
 

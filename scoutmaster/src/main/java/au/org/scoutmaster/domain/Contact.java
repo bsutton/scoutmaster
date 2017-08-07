@@ -120,9 +120,9 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Phone 1")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType") ),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone") ),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo") )
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone1PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone1PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone1PhoneNo"))
 
 	})
 	private Phone phone1 = new Phone();
@@ -130,9 +130,9 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Phone 2")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType") ),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone") ),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo") )
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone2PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone2PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone2PhoneNo"))
 
 	})
 	private Phone phone2 = new Phone();
@@ -140,9 +140,9 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 	@FormField(displayName = "Phone 3")
 	@Embedded
 	@AttributeOverrides(
-	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType") ),
-			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone") ),
-			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo") )
+	{ @AttributeOverride(name = "phoneType", column = @Column(name = "phone3PhoneType")),
+			@AttributeOverride(name = "primaryPhone", column = @Column(name = "phone3PrimaryPhone")),
+			@AttributeOverride(name = "phoneNo", column = @Column(name = "phone3PhoneNo"))
 
 	})
 	private Phone phone3 = new Phone();
@@ -231,11 +231,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 
 	@FormField(displayName = "Affiliated Since")
 	private Date affiliatedSince = new Date(new java.util.Date().getTime());
-
-	@FormField(displayName = "Group Role")
-	@ManyToOne(targetEntity = GroupRole.class)
-	private GroupRole groupRole;
-
+	//
+	// @FormField(displayName = "Group Role")
+	// @ManyToOne(targetEntity = GroupRole.class)
+	// private GroupRole groupRole;
+	//
 	@FormField(displayName = "Medicare No")
 	private String medicareNo = "";
 
@@ -625,11 +625,11 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		this.affiliatedSince = affiliatedSince;
 	}
 
-	public void setRole(final GroupRole role)
-	{
-		this.groupRole = role;
-	}
-
+	// public void setRole(final GroupRole role)
+	// {
+	// this.groupRole = role;
+	// }
+	//
 	public void setMedicareNo(final String medicareNo)
 	{
 		this.medicareNo = medicareNo;
@@ -769,10 +769,10 @@ public class Contact extends BaseEntity implements Importable, CrudEntity
 		return this.affiliatedSince;
 	}
 
-	public GroupRole getRole()
-	{
-		return this.groupRole;
-	}
+	// public GroupRole getRole()
+	// {
+	// return this.groupRole;
+	// }
 
 	public String getMedicareNo()
 	{

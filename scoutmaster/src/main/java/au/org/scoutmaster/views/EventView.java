@@ -36,11 +36,25 @@ import au.org.scoutmaster.dao.EventDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Event;
 import au.org.scoutmaster.domain.Event_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import au.org.scoutmaster.validator.DateRangeValidator;
 import au.org.scoutmaster.views.actions.EventActionCopy;
 
 @Menu(display = "Events", path = "Calendar")
+
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class EventView extends BaseCrudView<Event>
 		implements View, Selected<Event>, AutoCompleteParent<Contact>, ValueChangeListener
 {

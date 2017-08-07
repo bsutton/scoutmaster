@@ -22,9 +22,9 @@ import au.com.vaadinutils.dao.Path;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.LoginAttempt;
-import au.org.scoutmaster.domain.access.LoginAttempt_;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.LoginAttempt;
+import au.org.scoutmaster.domain.security.LoginAttempt_;
+import au.org.scoutmaster.domain.security.User_;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
 @Menu(display = "Login Attempts", path = "Admin.Security")

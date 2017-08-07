@@ -24,7 +24,6 @@ import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.GroupDao;
 import au.org.scoutmaster.domain.ScoutGroup;
-import au.org.scoutmaster.domain.GroupRole;
 import au.org.scoutmaster.domain.ScoutGroupType;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.Tag;
@@ -214,16 +213,17 @@ public class GroupDetailStep implements WizardStep
 				daoTag.persist(tag);
 			}
 
-			// Add the built-in GroupRoles
-
-			// todo setup the permissions for each role
-			JpaBaseDao<GroupRole, Long> daoGroupRole = DaoFactory.getGenericDao(GroupRole.class);
-			List<GroupRole> groupRoles = setup.getGroupRoles();
-			for (GroupRole role : groupRoles)
-			{
-				daoGroupRole.persist(role);
-				daoGroupRole.flush();
-			}
+			// // Add the built-in GroupRoles
+			//
+			// // todo setup the permissions for each role
+			// JpaBaseDao<GroupRole, Long> daoGroupRole =
+			// DaoFactory.getGenericDao(GroupRole.class);
+			// List<GroupRole> groupRoles = setup.getGroupRoles();
+			// for (GroupRole role : groupRoles)
+			// {
+			// daoGroupRole.persist(role);
+			// daoGroupRole.flush();
+			// }
 
 		}
 		catch (IOException | SAXException e)

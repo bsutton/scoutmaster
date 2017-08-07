@@ -14,7 +14,7 @@ import org.eclipse.persistence.annotations.Multitenant;
 import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
 import org.joda.time.DateTime;
 
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 
 /**
  * When a user needs to reset their password we generate a random string which

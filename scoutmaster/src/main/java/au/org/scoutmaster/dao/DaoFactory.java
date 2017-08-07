@@ -1,9 +1,9 @@
 package au.org.scoutmaster.dao;
 
 import au.com.vaadinutils.dao.JpaBaseDao;
-import au.org.scoutmaster.dao.access.LoginAttemptDao;
-import au.org.scoutmaster.dao.access.SessionHistoryDao;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.dao.security.LoginAttemptDao;
+import au.org.scoutmaster.dao.security.SessionHistoryDao;
+import au.org.scoutmaster.dao.security.UserDao;
 import au.org.scoutmaster.domain.BaseEntity;
 
 public class DaoFactory
@@ -37,11 +37,11 @@ public class DaoFactory
 		return (EventDao) instantiateDAO(EventDao.class);
 	}
 
-	public GroupRoleDao getGroupRoleDao()
-	{
-		return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
-	}
-
+	// public GroupRoleDao getGroupRoleDao()
+	// {
+	// return (GroupRoleDao) instantiateDAO(GroupRoleDao.class);
+	// }
+	//
 	public InvoiceDao getInvoiceDao()
 	{
 		return (InvoiceDao) instantiateDAO(InvoiceDao.class);

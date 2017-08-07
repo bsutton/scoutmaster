@@ -8,10 +8,10 @@ import au.com.vaadinutils.listener.CompleteListener;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.ForgottenPasswordResetDao;
 import au.org.scoutmaster.dao.SMTPSettingsDao;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.dao.security.UserDao;
 import au.org.scoutmaster.domain.ForgottenPasswordReset;
 import au.org.scoutmaster.domain.SMTPServerSetting;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.ui.SendEmailWorkingDialog;
 import au.org.scoutmaster.util.SMNotification;
 

@@ -22,7 +22,7 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.views.wizards.bulkSMS.SMSTransmission;
 
 public class SMSSession implements Closeable

@@ -109,4 +109,57 @@ abstract public class BaseEntity implements Serializable, CrudEntity
 		this.consistencyVersion = consistencyVersion;
 	}
 
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((this.consistencyVersion == null) ? 0 : this.consistencyVersion.hashCode());
+		result = prime * result + ((this.created == null) ? 0 : this.created.hashCode());
+		result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
+		result = prime * result + ((this.updated == null) ? 0 : this.updated.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BaseEntity other = (BaseEntity) obj;
+		if (this.consistencyVersion == null)
+		{
+			if (other.consistencyVersion != null)
+				return false;
+		}
+		else if (!this.consistencyVersion.equals(other.consistencyVersion))
+			return false;
+		if (this.created == null)
+		{
+			if (other.created != null)
+				return false;
+		}
+		else if (!this.created.equals(other.created))
+			return false;
+		if (this.id == null)
+		{
+			if (other.id != null)
+				return false;
+		}
+		else if (!this.id.equals(other.id))
+			return false;
+		if (this.updated == null)
+		{
+			if (other.updated != null)
+				return false;
+		}
+		else if (!this.updated.equals(other.updated))
+			return false;
+		return true;
+	}
+
 }

@@ -8,7 +8,7 @@ import au.org.scoutmaster.domain.CommunicationLog;
 import au.org.scoutmaster.domain.CommunicationLog_;
 import au.org.scoutmaster.domain.CommunicationType_;
 import au.org.scoutmaster.domain.Contact_;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User_;
 
 public class CommunicationLogDao extends JpaBaseDao<CommunicationLog, Long> implements Dao<CommunicationLog, Long>
 {

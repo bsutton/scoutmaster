@@ -153,12 +153,12 @@ public class NavigatorUI extends UI
 			if (!isSecurityManagerValid(page))
 			{
 				final String message = "<h1>Security Features have not been added to '" + page.getViewClass()
-						+ "'. Please add the Security Annotation (@Feature) and rebuild the project.</h1>";
+						+ "'. Please add the Security Annotation (@iFeature) and rebuild the project.</h1>";
 				final Label label = new Label(message, ContentMode.HTML);
 				label.setStyleName(ValoTheme.LABEL_FAILURE);
 				this.setContent(label);
 				logger.error(
-						"Security Features have not been aded to {}. Please add the Security Annotations (@Feature) and rebuild the project.",
+						"Security Features have not been added or are invalid for {}. Please add the Security Annotations (@iFeature) and rebuild the project. Check the logs for details.",
 						page.getViewClass());
 				throw new ConfigurationException(message);
 			}

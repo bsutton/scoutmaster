@@ -92,7 +92,8 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
+				.addColumn("Member", Contact_.isMember);
+		/// .addColumn("Group Role", Contact_.groupRole);
 
 		this.selectableTable = new SearchableSelectableEntityTable<Contact>("Contact")
 		{
@@ -108,7 +109,9 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 							new SimpleStringFilter(Contact_.lastname.getName(), filterString, true, false),
 							new SimpleStringFilter(Contact.PRIMARY_PHONE, filterString, true, false),
 							new SimpleStringFilter(Contact_.isMember.getName(), filterString, true, false),
-							new SimpleStringFilter(Contact_.groupRole.getName(), filterString, true, false),
+							// new
+							// SimpleStringFilter(Contact_.groupRole.getName(),
+							// filterString, true, false),
 							new SimpleStringFilter(Contact_.section.getName(), filterString, true, false));
 				}
 				else
@@ -188,8 +191,8 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 		return enough;
 	}
 
-	private void preAllocateBooks(final Raffle raffle, final Collection<Long> selectedIds,
-			final List<RaffleBook> books, final int requiredBooks)
+	private void preAllocateBooks(final Raffle raffle, final Collection<Long> selectedIds, final List<RaffleBook> books,
+			final int requiredBooks)
 	{
 		int bookIndex = 0;
 		for (final Long selectedId : selectedIds)

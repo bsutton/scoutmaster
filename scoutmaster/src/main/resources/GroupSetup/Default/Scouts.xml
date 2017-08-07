@@ -43,49 +43,49 @@
 	<GroupRole enumName="None"
 		description="Any contact that doesn't have a role within the Scout Group."
 		name="None">
-				<Permission name="None"/>
+				<SecurityRole name="None"/>
 		</GroupRole>
 	<GroupRole enumName="SectionHelper"
 		description="An adult that assists with delivering section programs but who is not a Leader. "
 		name="Section Helpers">
-		<Permission name="Volunteer"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Volunteer"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Section Helpers" />
 	</GroupRole>
 	<GroupRole enumName="AssistantLeader"
 		description="An qualified Leader that assists the Section Leader in delivering programs."
 		name="Assistant Leaders" >
-		<Permission name="Leader"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Assistant Leaders" />
 		<RoleTag name="Leaders" />
 		</GroupRole>
 	<GroupRole enumName="CommitteeMember"
 		description="A member of the Group's organising committee." name="Committee Member" >
-		<Permission name="CommitteeMember"/>
-		<Permission name="Member"/>
+		<SecurityRole name="CommitteeMember"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Committee Member" />
 		</GroupRole>
 	<GroupRole enumName="CouncilMember"
 		description="A member of the Group's Council, normally a Section Leader."
 		name="Council Member" >
-		<Permission name="Leader"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Council Member" />
 		</GroupRole>
 		
 	<GroupRole enumName="Guardian" 
 		description="A Legal Guardian of a Youth Member."
 		name="Guardian" >
-		<Permission name="Guardian"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Guardian"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Parent" />
 		</GroupRole>
 	<GroupRole enumName="GroupLeader"
 		description="The Scout Group's CEO"
 		name="Group Leader" primaryRole="1" >
-		<Permission name="GroupLeader"/>
-		<Permission name="Member"/> 
+		<SecurityRole name="GroupLeader"/>
+		<SecurityRole name="Member"/> 
 		<RoleTag name="Group Leader" />
 		<RoleTag name="Committee Member" />
 		<RoleTag name="Council Member" />
@@ -94,63 +94,63 @@
 	<GroupRole enumName="Leaders"
 		description=" A leader of a Section"
 		name="Leaders" >
-		<Permission name="Leader"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Leaders" />
 		</GroupRole>
 	<GroupRole enumName="Parent"
 		description="A Parent of a Youth Member or a Prospective Youth Member"
 		name="Parent" >
-		<Permission>Guardian<Permission>
-		</Permission>Member</Permission>
+		<SecurityRole>Guardian<SecurityRole>
+		</SecurityRole>Member</SecurityRole>
 		<RoleTag name="Parent" />
 		</GroupRole>
 	<GroupRole enumName="President"
 		description=" The President of the Scout Group's organising Committee."
 		name="President" >
-		<Permission name="President"/>
-		<Permission name="Member"/>
+		<SecurityRole name="President"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Committee Member" />
 		</GroupRole>
 	<GroupRole enumName="QuarterMaster"
 		description=" The QuarterMaster responsible for equipment management."
 		name="QuarterMaster" >
-		<Permission name="QuarterMaster"/>
-		<Permission name="Member"/>
+		<SecurityRole name="QuarterMaster"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Quartermaster" />
 		</GroupRole>
 	<GroupRole enumName="RecruitmentOfficer"
 		description="The committee member responsible recruitment." name="Recruitment Officer" >
-		<Permission name="CommitteeMember"/>
-		<Permission name="Member"/>
+		<SecurityRole name="CommitteeMember"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Committee Member" />
 		</GroupRole>
 	<GroupRole enumName="Secretary"
 		description="The Secretary of the Scout Group's organising Committee."
 		name="Secretary" >
-		<Permission name="Secretary"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Secretary"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Committee Member" />
 		<RoleTag name="Secretary" />
 		</GroupRole>
 	<GroupRole enumName="Treasurer"
 		description="The Treasurer of the Scout Group's organising Committee."
 		name="Treasurer" >
-		<Permission name="Treasurer"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Treasurer"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Committee Member" />
 		<RoleTag name="Treasurer" />
 		</GroupRole>
 	<GroupRole enumName="Volunteer"
 		description="A person who Volunteers time within the Scout Group."
 		name="Volunteer" >
-		<Permission name="Volunteer"/>
-		<Permission name="Member"/>
+		<SecurityRole name="Volunteer"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Volunteer" />
 		</GroupRole>
 	<GroupRole enumName="YouthMember"
 		description="A youth who is an member of the Scout Group." name="Youth Member" >
-		<Permission name="Member"/>
+		<SecurityRole name="Member"/>
 		<RoleTag name="Youth Member" />
 		</GroupRole>
 

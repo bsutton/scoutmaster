@@ -4,20 +4,19 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 
 import au.org.scoutmaster.security.Action;
-import au.org.scoutmaster.security.eRole;
+import au.org.scoutmaster.security.eSecurityRole;
 import au.org.scoutmaster.security.annotations.iFeature;
 import au.org.scoutmaster.security.annotations.iPermission;
 
 // @formatter:off
-	@iFeature(name = "MultipleActionView"
-			, permissions =
+	@iFeature(permissions =
 			{
 					// None of these changes should be applied ad the feature has been user edited.
-					@iPermission(action = Action.NEW, roles ={ eRole.COMMITTEE_MEMBER, eRole.LEADER})
+					@iPermission(action = Action.NEW, roles ={ eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
 					// re-add secretary
-					, @iPermission(action = Action.DELETE, roles ={ eRole.GROUP_LEADER, eRole.PRESIDENT, eRole.SECRETARY })
+					, @iPermission(action = Action.DELETE, roles ={ eSecurityRole.GROUP_LEADER, eSecurityRole.PRESIDENT, eSecurityRole.SECRETARY })
 					// Remove Role President
-					, @iPermission(action = Action.ACCESS_MEMBER_DETAILS, roles ={ eRole.GROUP_LEADER}) //, eRole.PRESIDENT
+					, @iPermission(action = Action.SENSITIVE_ACCESS, roles ={ eSecurityRole.GROUP_LEADER}) //, eRole.PRESIDENT
 			}
 	)
 	// @formatter:on

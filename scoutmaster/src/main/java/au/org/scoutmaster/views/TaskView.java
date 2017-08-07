@@ -3,6 +3,16 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.FormHelper;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -24,21 +34,23 @@ import au.org.scoutmaster.domain.TaskStatus_;
 import au.org.scoutmaster.domain.TaskType;
 import au.org.scoutmaster.domain.TaskType_;
 import au.org.scoutmaster.domain.Task_;
-import au.org.scoutmaster.domain.access.User;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User;
+import au.org.scoutmaster.domain.security.User_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
-
 @Menu(display = "Tasks", path = "Admin")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
 public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 {
 
@@ -67,7 +79,7 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<User>().setLabel("Added By").setField(Task_.addedBy)
-		.setListFieldName(User_.username).build();
+				.setListFieldName(User_.username).build();
 
 		overviewForm.newLine();
 
@@ -81,19 +93,19 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskStatus>().setLabel("Status").setField(Task_.taskStatus)
-		.setListFieldName(TaskStatus_.name).build();
+				.setListFieldName(TaskStatus_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<TaskType>().setLabel("Type").setField(Task_.taskType)
-		.setListFieldName(TaskType_.name).build();
+				.setListFieldName(TaskType_.name).build();
 		overviewForm.newLine();
 
 		formHelper.new EntityFieldBuilder<Contact>().setLabel("With Contact").setField(Task_.withContact)
-		.setListFieldName("fullname").build();
+				.setListFieldName("fullname").build();
 
 		overviewForm.newLine();
 		formHelper.new EntityFieldBuilder<Section>().setLabel("Section").setField(Task_.section)
-		.setListFieldName(Section_.name).build();
+				.setListFieldName(Section_.name).build();
 
 		overviewForm.newLine();
 		overviewForm.colspan(2);
@@ -123,13 +135,13 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 	{
 		final JPAContainer<Task> container = DaoFactory.getGenericDao(Task.class).createVaadinContainer();
 		container.sort(new String[]
-				{ Task_.dueDate.getName() }, new boolean[]
-						{ false });
+		{ Task_.dueDate.getName() }, new boolean[]
+		{ false });
 
 		final Builder<Task> builder = new HeadingPropertySet.Builder<Task>();
 		builder.addColumn("Owner", Task_.addedBy).addColumn("Subject", Task_.subject)
-		.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
-		.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
+				.addColumn("Due Date", Task_.dueDate).addColumn("Status", Task_.taskStatus)
+				.addColumn("Private", Task_.privateTask).addColumn("Type", Task_.taskType);
 
 		super.init(Task.class, container, builder.build());
 
@@ -142,11 +154,14 @@ public class TaskView extends BaseCrudView<Task> implements View, Selected<Task>
 		{
 			return new Or(new SimpleStringFilter(Task_.dueDate.getName(), filterString, true, false),
 					new SimpleStringFilter(new Path(Task_.taskType, TaskType_.name).getName(), filterString, true,
-							false), new SimpleStringFilter(new Path(Task_.withContact, Contact_.lastname).getName(),
-									filterString, true, false), new SimpleStringFilter(new Path(Task_.withContact,
-											Contact_.firstname).getName(), filterString, true, false), new SimpleStringFilter(new Path(
-													Task_.addedBy, User_.username).getName(), filterString, true, false),
-													new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
+							false),
+					new SimpleStringFilter(new Path(Task_.withContact, Contact_.lastname).getName(), filterString, true,
+							false),
+					new SimpleStringFilter(new Path(Task_.withContact, Contact_.firstname).getName(), filterString,
+							true, false),
+					new SimpleStringFilter(new Path(Task_.addedBy, User_.username).getName(), filterString, true,
+							false),
+					new SimpleStringFilter(Task_.subject.getName(), filterString, true, false));
 		}
 		else
 		{

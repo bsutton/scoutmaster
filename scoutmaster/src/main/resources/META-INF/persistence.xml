@@ -15,7 +15,6 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.Contact</class>
 		<class>au.org.scoutmaster.domain.Document</class>
 		<class>au.org.scoutmaster.domain.Event</class>
-		<class>au.org.scoutmaster.domain.GroupRole</class>
 		<class>au.org.scoutmaster.domain.SMTPServerSetting</class>
 		<class>au.org.scoutmaster.domain.ForgottenPasswordReset</class>
 		<class>au.org.scoutmaster.domain.Household</class>
@@ -49,11 +48,11 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.Timestampable</class>
 		<class>au.org.scoutmaster.domain.TransitionMember</class>
 		<class>au.org.scoutmaster.domain.Version</class>
-		<class>au.org.scoutmaster.domain.access.Permission</class>
-		<class>au.org.scoutmaster.domain.access.Role</class>
-		<class>au.org.scoutmaster.domain.access.SessionHistory</class>
+		<class>au.org.scoutmaster.domain.security.Permission</class>
+		<class>au.org.scoutmaster.domain.security.SecurityRole</class>
+		<class>au.org.scoutmaster.domain.security.SessionHistory</class>
 		<class>au.org.scoutmaster.domain.ScoutGroup</class>
-		<class>au.org.scoutmaster.domain.access.User</class>
+		<class>au.org.scoutmaster.domain.security.User</class>
 		<class>au.org.scoutmaster.domain.accounting.Money</class>
 		<class>au.org.scoutmaster.domain.accounting.MoneyWithTax</class>
 		<class>au.org.scoutmaster.domain.accounting.CreditNote</class>
@@ -65,7 +64,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>au.org.scoutmaster.domain.accounting.Product</class>
 		<class>au.org.scoutmaster.domain.Color</class>
 		<class>au.org.scoutmaster.domain.RaffleAllocation</class>
-		<class>au.org.scoutmaster.domain.access.LoginAttempt</class>
+		<class>au.org.scoutmaster.domain.security.LoginAttempt</class>
 		
 		<!--  Vaadin Utils entities -->
 		<class>au.com.vaadinutils.jasper.scheduler.entities.ReportEmailParameterEntity</class>
@@ -83,7 +82,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 			Change the ds at the top of this persistence-unit to scoutmaster-test-ds 
 			and create an additional resource in tomcats server.xml (/var/lib/tomcat7/conf/server.xml) similar to:
 			 
-			<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="40" maxIdle="4" 
+			<Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxTotal="40" maxIdle="4" 
 			name="jdbc/scoutmaster-test-ds" password="XXXXXX" 
 			type="javax.sql.DataSource" url="jdbc:mysql://localhost/scoutmaster-test?sessionVariables=storage_engine=InnoDB" username="scoutmaster"/>
 			-->

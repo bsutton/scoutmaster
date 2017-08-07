@@ -16,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
+import au.org.scoutmaster.dao.security.UserDao;
 
 @Menu(display = "Group Maintenance", path = "Wizards")
 public class GroupMaintenanceWizardView extends VerticalLayout implements View, WizardProgressListener

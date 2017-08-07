@@ -12,7 +12,7 @@ import au.org.scoutmaster.dao.SMSProviderDao;
 import au.org.scoutmaster.domain.Phone;
 import au.org.scoutmaster.domain.SMSProvider;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.fields.TagField;
 
 import com.vaadin.data.validator.StringLengthValidator;

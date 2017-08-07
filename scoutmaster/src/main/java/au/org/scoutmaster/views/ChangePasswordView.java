@@ -23,12 +23,20 @@ import au.com.vaadinutils.listener.ClickEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.dao.security.UserDao;
+import au.org.scoutmaster.domain.security.User;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.validator.PasswordValidator;
 
 @Menu(display = "Change Password", path = "Admin")
 
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.USER }) })
+/** @formatter:on **/
 public class ChangePasswordView extends CustomComponent implements View, Button.ClickListener
 {
 	private static final long serialVersionUID = 1L;

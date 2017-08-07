@@ -3,6 +3,15 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.AbstractLayout;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -16,18 +25,22 @@ import au.org.scoutmaster.domain.QualificationType;
 import au.org.scoutmaster.domain.QualificationType_;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.AbstractLayout;
-import com.vaadin.ui.VerticalLayout;
-
 @Menu(display = "Section Type", path = "Admin.Lists")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class SectionTypeView extends BaseCrudView<SectionType> implements View, Selected<SectionType>
 {
 
@@ -100,7 +113,7 @@ public class SectionTypeView extends BaseCrudView<SectionType> implements View, 
 
 		final Builder<SectionType> builder = new HeadingPropertySet.Builder<SectionType>();
 		builder.addColumn("Section", SectionType_.name).addColumn("Description", SectionType_.description)
-		.addColumn("Starting Age", SectionType_.startingAge).addColumn("End Age", SectionType_.endingAge);
+				.addColumn("Starting Age", SectionType_.startingAge).addColumn("End Age", SectionType_.endingAge);
 
 		super.init(SectionType.class, container, builder.build());
 

@@ -3,6 +3,13 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.ui.AbstractLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
 import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
@@ -12,16 +19,22 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.OrganisationTypeDao;
 import au.org.scoutmaster.domain.OrganisationType;
 import au.org.scoutmaster.domain.OrganisationType_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.navigator.View;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.ui.AbstractLayout;
-
 @Menu(display = "Organisation Types", path = "Admin.Lists")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class OrganisationTypeView extends BaseCrudView<OrganisationType> implements View, Selected<OrganisationType>
 {
 
@@ -52,8 +65,8 @@ public class OrganisationTypeView extends BaseCrudView<OrganisationType> impleme
 		final JPAContainer<OrganisationType> container = new DaoFactory().getDao(OrganisationTypeDao.class)
 				.createVaadinContainer();
 		container.sort(new String[]
-				{ OrganisationType_.name.getName() }, new boolean[]
-						{ true });
+		{ OrganisationType_.name.getName() }, new boolean[]
+		{ true });
 
 		final Builder<OrganisationType> builder = new HeadingPropertySet.Builder<OrganisationType>();
 		builder.addColumn("Type Name", OrganisationType_.name);

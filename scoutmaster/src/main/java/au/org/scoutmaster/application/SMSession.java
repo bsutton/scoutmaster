@@ -12,7 +12,7 @@ import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.domain.ScoutGroup;
 import au.org.scoutmaster.domain.SectionType;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 
 public enum SMSession
 {

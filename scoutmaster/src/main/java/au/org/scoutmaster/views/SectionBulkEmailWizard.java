@@ -36,11 +36,24 @@ import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.jasper.JasperEmailSettingsImpl;
 import au.org.scoutmaster.jasper.SMJasperReportProperties;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.views.SectionBulkEmailWizard.ContactRecipient;
 import net.sf.jasperreports.engine.JRException;
 
 @Menu(display = "Section", path = "Test")
+/** @formatter:off **/
+@iFeature( permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class SectionBulkEmailWizard extends WizardView<SectionType, Contact, ContactRecipient> implements View
 {
 	private static final long serialVersionUID = 1L;

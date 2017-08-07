@@ -6,7 +6,7 @@ import au.com.vaadinutils.dao.JpaBaseDao;
 import au.com.vaadinutils.dao.Path;
 import au.org.scoutmaster.domain.Document;
 import au.org.scoutmaster.domain.Document_;
-import au.org.scoutmaster.domain.access.User_;
+import au.org.scoutmaster.domain.security.User_;
 
 public class DocumentDao extends JpaBaseDao<Document, Long> implements Dao<Document, Long>
 {

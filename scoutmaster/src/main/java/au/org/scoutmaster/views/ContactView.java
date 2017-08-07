@@ -48,28 +48,42 @@ import au.com.vaadinutils.listener.MouseEventLogged;
 import au.com.vaadinutils.menu.Menu;
 import au.org.scoutmaster.dao.ContactDao;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.GroupRoleDao;
 import au.org.scoutmaster.dao.SectionTypeDao;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.Gender;
-import au.org.scoutmaster.domain.GroupRole;
-import au.org.scoutmaster.domain.GroupRole_;
 import au.org.scoutmaster.domain.PhoneType;
 import au.org.scoutmaster.domain.Phone_;
 import au.org.scoutmaster.domain.PreferredCommunications;
 import au.org.scoutmaster.domain.SectionType;
 import au.org.scoutmaster.domain.SectionType_;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.fields.TagField;
 import au.org.scoutmaster.forms.EmailForm;
 import au.org.scoutmaster.help.HelpPageIdentifier;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
 import au.org.scoutmaster.util.ButtonEventSource;
 import au.org.scoutmaster.util.SMMultiColumnFormLayout;
 import rx.util.functions.Action1;
 
 @Menu(display = "Contacts", path = "Members")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.SENSITIVE_ACCESS, roles = { eSecurityRole.GROUP_LEADER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.MANAGE_SELF, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT_TAGS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT_WARD, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER, eSecurityRole.ADULT_MEMBER})
+	} )
+/** @formatter:on **/
+
 public class ContactView extends BaseCrudView<Contact> implements View, Selected<Contact>, HelpProvider
 {
 
@@ -105,7 +119,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private TagField tagSearchField;
 
-	private ComboBox groupRoleField;
+	// private ComboBox groupRoleField;
 
 	private ComboBox sectionTypeField;
 
@@ -165,25 +179,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		overviewForm.setColumnFieldWidth(2, 80);
 		overviewForm.setMargin(true);
 
-		// overviewForm.setColumnLabelWidth(0, 100);
-		// overviewForm.setColumnLabelWidth(1, 0);
-		// overviewForm.setColumnLabelWidth(2, 60);
-		// overviewForm.setColumnFieldWidth(0, 100);
-		// overviewForm.setColumnFieldWidth(1, 100);
-		// overviewForm.setColumnFieldWidth(2, 20);
-
-		// overviewForm.setSizeFull();
-
-		final FormHelper<Contact> formHelper = overviewForm.getFormHelper();
-
-		// overviewForm.setMargin(true);
 		this.tabs.addTab(overviewForm, "Overview");
 		overviewForm.bindBooleanField("Active", Contact_.active);
 		overviewForm.newLine();
 		overviewForm.colspan(3);
-		this.groupRoleField = formHelper.new EntityFieldBuilder<GroupRole>().setLabel("Role")
-				.setField(Contact_.groupRole).setListFieldName(GroupRole_.name).build();
-		this.groupRoleField.addValueChangeListener(this.changeListener);
+		// this.groupRoleField = formHelper.new
+		// EntityFieldBuilder<GroupRole>().setLabel("Role")
+		// .setField(Contact_.groupRole).setListFieldName(GroupRole_.name).build();
+		// this.groupRoleField.addValueChangeListener(this.changeListener);
 
 		overviewForm.newLine();
 		overviewForm.colspan(3);
@@ -459,7 +462,7 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 	private final class ChangeListener implements Property.ValueChangeListener
 	{
-		private GroupRole currentGroupRole;
+		// private GroupRole currentGroupRole;
 		private SectionType currentSectionType;
 		private Date currentBirthDate;
 		private Boolean currentIsMember;
@@ -470,14 +473,14 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		{
 			if (contact != null)
 			{
-				this.currentGroupRole = contact.getRole();
+				// this.currentGroupRole = contact.getRole();
 				this.currentSectionType = contact.getSection();
 				this.currentBirthDate = contact.getBirthDate();
 				this.currentIsMember = contact.getIsMember();
 			}
 			else
 			{
-				this.currentGroupRole = null;
+				// this.currentGroupRole = null;
 				this.currentSectionType = null;
 				this.currentBirthDate = null;
 				this.currentIsMember = null;
@@ -491,72 +494,78 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 
 			@SuppressWarnings("rawtypes")
 			final Property source = event.getProperty();
+			//
+			// if (source == ContactView.this.groupRoleField)
+			// {
+			// final Long newGroupRoleId = (Long)
+			// event.getProperty().getValue();
+			// if (newGroupRoleId != null && this.currentGroupRole != null
+			// && this.currentGroupRole.getId().equals(newGroupRoleId))
+			// {
+			// final GroupRoleDao daoGroupRole = new
+			// DaoFactory().getGroupRoleDao();
+			//
+			// final GroupRole newGroupRole =
+			// daoGroupRole.findById(newGroupRoleId);
+			//
+			// if (newGroupRole != null)
+			// {
+			//
+			// final GroupRole oldGroupRole = this.currentGroupRole;
+			//
+			// // Update the tag which represents this role
+			// if (newGroupRole != oldGroupRole && newGroupRole != null)
+			// {
+			// // Contact contact = ContactView.this.getCurrent();
+			// // First remove the old set of tags associated with
+			// // the
+			// // group
+			// if (oldGroupRole != null)
+			// {
+			// for (final Tag tag : oldGroupRole.getTags())
+			// {
+			// ContactView.this.tagField.removeToken(tag);
+			// }
+			// }
+			//
+			// // Now add the new set of tags associated with the
+			// // new
+			// // group role.
+			// for (final Tag tag : newGroupRole.getTags())
+			// {
+			// ContactView.this.tagField.addToken(tag);
+			// }
+			//
+			// }
+			//
+			// switch (newGroupRole.getBuiltIn())
+			// {
+			// case YouthMember:
+			// showYouth(true);
+			// break;
+			// default:
+			// showYouth(false);
+			// break;
+			// }
+			// this.currentGroupRole = newGroupRole;
+			// }
+			// else
+			// {
+			// throw new IllegalStateException("No group role found for : " +
+			// newGroupRoleId);
+			// }
+			//
+			// }
+			//
+			// if (newGroupRoleId == null)
+			// {
+			// showYouth(true);
+			// this.currentGroupRole = null;
+			// }
+			// }
+			// else
 
-			if (source == ContactView.this.groupRoleField)
-			{
-				final Long newGroupRoleId = (Long) event.getProperty().getValue();
-				if (newGroupRoleId != null && this.currentGroupRole != null
-						&& this.currentGroupRole.getId().equals(newGroupRoleId))
-				{
-					final GroupRoleDao daoGroupRole = new DaoFactory().getGroupRoleDao();
-
-					final GroupRole newGroupRole = daoGroupRole.findById(newGroupRoleId);
-
-					if (newGroupRole != null)
-					{
-
-						final GroupRole oldGroupRole = this.currentGroupRole;
-
-						// Update the tag which represents this role
-						if (newGroupRole != oldGroupRole && newGroupRole != null)
-						{
-							// Contact contact = ContactView.this.getCurrent();
-							// First remove the old set of tags associated with
-							// the
-							// group
-							if (oldGroupRole != null)
-							{
-								for (final Tag tag : oldGroupRole.getTags())
-								{
-									ContactView.this.tagField.removeToken(tag);
-								}
-							}
-
-							// Now add the new set of tags associated with the
-							// new
-							// group role.
-							for (final Tag tag : newGroupRole.getTags())
-							{
-								ContactView.this.tagField.addToken(tag);
-							}
-
-						}
-
-						switch (newGroupRole.getBuiltIn())
-						{
-							case YouthMember:
-								showYouth(true);
-								break;
-							default:
-								showYouth(false);
-								break;
-						}
-						this.currentGroupRole = newGroupRole;
-					}
-					else
-					{
-						throw new IllegalStateException("No group role found for : " + newGroupRoleId);
-					}
-
-				}
-
-				if (newGroupRoleId == null)
-				{
-					showYouth(true);
-					this.currentGroupRole = null;
-				}
-			}
-			else if (source == ContactView.this.birthDate)
+			if (source == ContactView.this.birthDate)
 			{
 				final ContactDao daoContact = new DaoFactory().getContactDao();
 
@@ -720,7 +729,8 @@ public class ContactView extends BaseCrudView<Contact> implements View, Selected
 		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
-				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
+				.addColumn("Member", Contact_.isMember);
+		// .addColumn("Group Role", Contact_.groupRole);
 
 		super.init(Contact.class, container, builder.build());
 

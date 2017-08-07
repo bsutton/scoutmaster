@@ -8,7 +8,7 @@ import org.apache.velocity.runtime.RuntimeConstants;
 
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.util.VelocityFormatException;
 
 public class Message

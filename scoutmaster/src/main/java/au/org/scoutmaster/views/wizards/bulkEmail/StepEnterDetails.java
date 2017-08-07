@@ -28,7 +28,7 @@ import com.vaadin.ui.VerticalLayout;
 import au.com.vaadinutils.fields.CKEditorEmailField;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.domain.Tag;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.fields.TagField;
 
 public class StepEnterDetails implements WizardStep

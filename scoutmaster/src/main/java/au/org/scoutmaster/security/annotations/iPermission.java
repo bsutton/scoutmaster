@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import au.org.scoutmaster.security.Action;
-import au.org.scoutmaster.security.eRole;
+import au.org.scoutmaster.security.eSecurityRole;
 
 /**
  * An iFeature creates a linkage between a particular View and the set of
@@ -31,6 +31,6 @@ public @interface iPermission
 	 *
 	 * @return
 	 */
-	eRole[] roles();
+	eSecurityRole[] roles();
 
 }

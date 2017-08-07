@@ -18,7 +18,7 @@ import au.com.vaadinutils.crud.MultiColumnFormLayout;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Phone;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.util.SMNotification;
 import au.org.scoutmaster.util.VelocityFormatException;
 

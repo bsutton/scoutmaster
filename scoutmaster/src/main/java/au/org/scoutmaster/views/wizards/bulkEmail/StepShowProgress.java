@@ -24,7 +24,7 @@ import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Importable;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.util.SMNotification;
 
 public class StepShowProgress implements WizardStep, ProgressTaskListener<EmailTransmission>

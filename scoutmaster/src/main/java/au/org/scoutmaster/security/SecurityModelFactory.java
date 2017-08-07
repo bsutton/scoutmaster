@@ -1,6 +1,7 @@
 package au.org.scoutmaster.security;
 
 import java.lang.annotation.Annotation;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
@@ -11,8 +12,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import au.com.vaadinutils.menu.Menu;
-import au.com.vaadinutils.menu.Menus;
 import au.org.scoutmaster.security.annotations.iFeature;
 
 public class SecurityModelFactory
@@ -25,7 +24,7 @@ public class SecurityModelFactory
 			.build(new CacheLoader<Class<?>, Optional<SecurityModel>>()
 			{
 				@Override
-				public Optional<SecurityModel> load(Class<?> view) throws Exception
+				public Optional<SecurityModel> load(Class<?> view) throws SecurityException
 				{
 
 					SecurityModel securityModel = readAnnotations(view);
@@ -55,7 +54,7 @@ public class SecurityModelFactory
 			// resulting in the SecurityModel being loaded.
 			return cache.get(baseCrudViewClass).orNull();
 		}
-		catch (Exception e)
+		catch (ExecutionException e)
 		{
 			logger.error(e, e);
 		}
@@ -75,31 +74,12 @@ public class SecurityModelFactory
 	{
 		SecurityModel securityModel = null;
 
-		Menu menu = null;
-		Menus menus = baseCrudView.getAnnotation(Menus.class);
-		if (menus != null)
-		{
-			if (menus.menus().length > 0)
-			{
-				menu = menus.menus()[0];
-			}
-		}
-		else
-		{
-			menu = baseCrudView.getAnnotation(Menu.class);
-		}
-		String menuName = "";
-		if (menu != null)
-		{
-			menuName = menu.display();
-		}
-
 		for (Annotation annotation : baseCrudView.getAnnotations())
 		{
 			if (annotation instanceof iFeature)
 			{
 				iFeature feature = ((iFeature) annotation);
-				securityModel = new SecurityModel(feature);
+				securityModel = new SecurityModel(baseCrudView, feature);
 			}
 		}
 		return securityModel;

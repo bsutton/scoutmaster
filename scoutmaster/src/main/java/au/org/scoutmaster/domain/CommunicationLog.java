@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import au.com.vaadinutils.crud.ChildCrudEntity;
 import au.com.vaadinutils.crud.CrudEntity;
 import au.com.vaadinutils.dao.JpaEntityHelper;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 
 /**
  * Used to log a variety of activities

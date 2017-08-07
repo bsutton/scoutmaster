@@ -19,7 +19,7 @@ import au.com.vaadinutils.crud.ValidatingFieldGroup;
 import au.com.vaadinutils.crud.splitFields.SplitLabel;
 import au.com.vaadinutils.ui.SingleEntityWizardStep;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.domain.security.User;
 import au.org.scoutmaster.validator.PasswordValidator;
 import au.org.scoutmaster.validator.UsernameValidator;
 

@@ -29,10 +29,10 @@ import com.vaadin.ui.themes.Reindeer;
 import au.com.vaadinutils.listener.ClickEventLogged;
 import au.org.scoutmaster.application.SMSession;
 import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.access.LoginAttemptDao;
-import au.org.scoutmaster.dao.access.UserDao;
-import au.org.scoutmaster.domain.access.LoginAttempt;
-import au.org.scoutmaster.domain.access.User;
+import au.org.scoutmaster.dao.security.LoginAttemptDao;
+import au.org.scoutmaster.dao.security.UserDao;
+import au.org.scoutmaster.domain.security.LoginAttempt;
+import au.org.scoutmaster.domain.security.User;
 
 public class LoginView extends CustomComponent implements View, Button.ClickListener
 {

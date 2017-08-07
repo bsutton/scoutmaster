@@ -3,17 +3,6 @@ package au.org.scoutmaster.views;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import au.com.vaadinutils.crud.BaseCrudView;
-import au.com.vaadinutils.crud.HeadingPropertySet;
-import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
-import au.com.vaadinutils.crud.ValidatingFieldGroup;
-import au.com.vaadinutils.menu.Menu;
-import au.org.scoutmaster.dao.DaoFactory;
-import au.org.scoutmaster.dao.QualificationTypeDao;
-import au.org.scoutmaster.domain.QualificationType;
-import au.org.scoutmaster.domain.QualificationType_;
-import au.org.scoutmaster.util.SMMultiColumnFormLayout;
-
 import com.vaadin.addon.jpacontainer.JPAContainer;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.util.filter.Or;
@@ -23,7 +12,31 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.VerticalLayout;
 
+import au.com.vaadinutils.crud.BaseCrudView;
+import au.com.vaadinutils.crud.HeadingPropertySet;
+import au.com.vaadinutils.crud.HeadingPropertySet.Builder;
+import au.com.vaadinutils.crud.ValidatingFieldGroup;
+import au.com.vaadinutils.menu.Menu;
+import au.org.scoutmaster.dao.DaoFactory;
+import au.org.scoutmaster.dao.QualificationTypeDao;
+import au.org.scoutmaster.domain.QualificationType;
+import au.org.scoutmaster.domain.QualificationType_;
+import au.org.scoutmaster.security.Action;
+import au.org.scoutmaster.security.eSecurityRole;
+import au.org.scoutmaster.security.annotations.iFeature;
+import au.org.scoutmaster.security.annotations.iPermission;
+import au.org.scoutmaster.util.SMMultiColumnFormLayout;
+
 @Menu(display = "Qualification Type", path = "Admin.Lists")
+/** @formatter:off **/
+@iFeature(permissions =
+	{ @iPermission(action = Action.ACCESS, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.DELETE, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.EDIT, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	, @iPermission(action = Action.NEW, roles = { eSecurityRole.TECH_SUPPORT, eSecurityRole.GROUP_LEADER, eSecurityRole.COMMITTEE_MEMBER, eSecurityRole.LEADER})
+	} )
+/** @formatter:on **/
+
 public class QualificationTypeView extends BaseCrudView<QualificationType> implements View, Selected<QualificationType>
 {
 
@@ -75,7 +88,7 @@ public class QualificationTypeView extends BaseCrudView<QualificationType> imple
 		final Builder<QualificationType> builder = new HeadingPropertySet.Builder<QualificationType>();
 		builder.addColumn("Qualification", QualificationType_.name)
 				.addColumn("Description", QualificationType_.description)
-		.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
+				.addColumn("Expires", QualificationType_.expires).addColumn("Valid For", QualificationType_.validFor);
 
 		super.init(QualificationType.class, container, builder.build());
 
