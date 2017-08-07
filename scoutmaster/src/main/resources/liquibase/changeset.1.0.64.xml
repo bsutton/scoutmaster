@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+        ">
+
+
+	<changeSet author="bsutton" id="1.0.64.1">
+
+
+		<dropForeignKeyConstraint baseTableName="contact"
+			constraintName="FK_Contact_GROUPROLE_ID" />
+
+		<dropForeignKeyConstraint baseTableName="grouprole_tag"
+			constraintName="FK_GroupRole_Tag_GroupRole_ID" />
+
+		<dropForeignKeyConstraint baseTableName="user_role"
+			constraintName="FK_User_Role_belongsTo_ID" />
+
+		<dropIndex tableName="contact" indexName="FK_Contact_GROUPROLE_ID" />
+
+		<dropColumn tableName="permission" columnName="featureName" />
+
+		<addColumn tableName="permission">
+			<column name="feature_id" type="BIGINT(20) not null"
+				afterColumn="roleHash" />
+		</addColumn>
+
+
+		<createIndex tableName="permission" indexName="fk_permission_feature1_idx">
+			<column name="feature_ID" />
+		</createIndex>
+
+		<addColumn tableName="permission_role">
+			<column name="permission_ID" type="BIGINT(20) not null"
+				afterColumn="accessibleBy_id" />
+		</addColumn>
+
+		<addColumn tableName="permission_role">
+			<column name="role_ID" type="BIGINT(20) not null" afterColumn="permission_ID" />
+		</addColumn>
+
+		<createIndex tableName="permission_role"
+			indexName="fk_permission_role_permission1_idx">
+			<column name="permission_ID" />
+		</createIndex>
+
+		<createIndex tableName="permission_role" indexName="fk_permission_role_role1_idx">
+			<column name="role_ID" />
+		</createIndex>
+
+
+		<renameTable oldTableName="role" newTableName="SecurityRole" />
+
+
+		<addColumn tableName="user">
+			<column name="contact_id" type="BIGINT(20) not null"
+				afterColumn="ScoutGroup_ID" />
+		</addColumn>
+
+		<createIndex tableName="user" indexName="contact_id_UNIQUE"
+			unique="true">
+			<column name="contact_id" />
+		</createIndex>
+
+
+		<dropTable cascadeConstraints="true" tableName="role_feature" />
+		<dropTable cascadeConstraints="true" tableName="grouprole" />
+
+
+		<addForeignKeyConstraint baseTableName="permission"
+			constraintName="fk_address_person" baseColumnNames="feature_ID"
+			referencedTableName="feature" referencedColumnNames="id" onDelete="NO ACTION"
+			onUpdate="NO ACTION" />
+
+		<addForeignKeyConstraint baseTableName="permission_role"
+			constraintName="fk_permission_securityrole_permission"
+			baseColumnNames="permission_ID" referencedTableName="permission"
+			referencedColumnNames="id" onDelete="NO ACTION" onUpdate="NO ACTION" />
+
+		<addForeignKeyConstraint baseTableName="permission_role"
+			constraintName="fk_permission_securityrole" baseColumnNames="role_ID"
+			referencedTableName="SecurityRole" referencedColumnNames="id"
+			onDelete="NO ACTION" onUpdate="NO ACTION" />
+
+
+		<addForeignKeyConstraint baseTableName="user"
+			constraintName="fk_user_contact" baseColumnNames="contact_ID"
+			referencedTableName="contact" referencedColumnNames="id" onDelete="NO ACTION"
+			onUpdate="NO ACTION" />
+
+		<addForeignKeyConstraint baseTableName="user_role"
+			constraintName="FK_User_SecurityRole_belongsTo_ID" baseColumnNames="belongsTo_ID"
+			referencedTableName="SecurityRole" referencedColumnNames="id"
+			onDelete="NO ACTION" onUpdate="NO ACTION" />
+
+
+
+		<renameTable oldTableName="permission_role" newTableName="permission_securityrole" />
+
+		<renameTable oldTableName="user_role" newTableName="user_securityrole" />
+
+	</changeSet>
+
+	<changeSet author="bsutton" id="1.0.64.2">
+
+Is the problem the term 'securityrole'	
+
+Security roles are some what abstract concepts that perhaps should be hidden from the user view.
+
+GroupRoles are tanagible roles that a Group Leader intuitively understands.
+
+The model has been to let the user chose a 'Group Role' which then defines the set of permissions that the user with that roles has.
+
+So should we be assigning 'Group Roles' to a user and really our security roles are things like
+'Contact Read/Write'
+
+Just rename Security Role to Group Role and add the additional Group Roles as defined below.
+
+Of course you can't then define the Group Roles as they become intrinsic (which is what started us down this rabbit hole)
+The concept of a 'localised' Group Role Name might solve this. This file then is just a mapping from the intrinsic group role name to a localised
+group role name.
+We could also let them define the description here.
+Where does localisation begin and end?
+Database string perhaps have to be localised differently to java strings.
+Is what we are doing he localisation? to some extent I think it is.
+	<GroupRole enumName="SectionHelper"
+		description="An adult that assists with delivering section programs but who is not a Leader. "
+		name="Section Helpers">
+		<SecurityRole name="Volunteer"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Section Helpers" />
+	</GroupRole>
+	<GroupRole enumName="AssistantLeader"
+		description="An qualified Leader that assists the Section Leader in delivering programs."
+		name="Assistant Leaders" >
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Assistant Leaders" />
+		<RoleTag name="Leaders" />
+		</GroupRole>
+	<GroupRole enumName="CommitteeMember"
+		description="A member of the Group's organising committee." name="Committee Member" >
+		<SecurityRole name="CommitteeMember"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="CouncilMember"
+		description="A member of the Group's Council, normally a Section Leader."
+		name="Council Member" >
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Council Member" />
+		</GroupRole>
+		
+	<GroupRole enumName="Guardian" 
+		description="A Legal Guardian of a Youth Member."
+		name="Guardian" >
+		<SecurityRole name="Guardian"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Parent" />
+		</GroupRole>
+	<GroupRole enumName="GroupLeader"
+		description="The Scout Group's CEO"
+		name="Group Leader" primaryRole="1" >
+		<SecurityRole name="GroupLeader"/>
+		<SecurityRole name="Member"/> 
+		<RoleTag name="Group Leader" />
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Council Member" />
+		</GroupRole>
+		
+	<GroupRole enumName="Leaders"
+		description=" A leader of a Section"
+		name="Leaders" >
+		<SecurityRole name="Leader"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Leaders" />
+		</GroupRole>
+	<GroupRole enumName="Parent"
+		description="A Parent of a Youth Member or a Prospective Youth Member"
+		name="Parent" >
+		<SecurityRole>Guardian<SecurityRole>
+		</SecurityRole>Member</SecurityRole>
+		<RoleTag name="Parent" />
+		</GroupRole>
+	<GroupRole enumName="President"
+		description=" The President of the Scout Group's organising Committee."
+		name="President" >
+		<SecurityRole name="President"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="QuarterMaster"
+		description=" The QuarterMaster responsible for equipment management."
+		name="QuarterMaster" >
+		<SecurityRole name="QuarterMaster"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Quartermaster" />
+		</GroupRole>
+	<GroupRole enumName="RecruitmentOfficer"
+		description="The committee member responsible recruitment." name="Recruitment Officer" >
+		<SecurityRole name="CommitteeMember"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Committee Member" />
+		</GroupRole>
+	<GroupRole enumName="Secretary"
+		description="The Secretary of the Scout Group's organising Committee."
+		name="Secretary" >
+		<SecurityRole name="Secretary"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Secretary" />
+		</GroupRole>
+	<GroupRole enumName="Treasurer"
+		description="The Treasurer of the Scout Group's organising Committee."
+		name="Treasurer" >
+		<SecurityRole name="Treasurer"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Committee Member" />
+		<RoleTag name="Treasurer" />
+		</GroupRole>
+	<GroupRole enumName="Volunteer"
+		description="A person who Volunteers time within the Scout Group."
+		name="Volunteer" >
+		<SecurityRole name="Volunteer"/>
+		<SecurityRole name="Member"/>
+		<RoleTag name="Volunteer" />
+		</GroupRole>
+	<GroupRole enumName="YouthMember"
+		description="A youth who is an member of the Scout Group." name="Youth Member" >
+		<SecurityRole name="Member"/>
+		<RoleTag name="Youth Member" />
+		</GroupRole>
+	
+		<insert tableName="SecurityRole">
+			<column name="erole" value="ADULT_MEMBER" />
+			<column name="localisedName" value="Adult Member" />
+			<column name="description" value="Full Access to their own details as well as any members that they are the guardian of." />
+		</insert>
+		
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="YOUTH_MEMBER" />
+			<column name="localisedName" value="Youth Member" />
+			<column name="description" value="Contact Read/Write Access to their own details. A Child Member cannot change their DOB." />
+		</insert>
+		
+		
+		<insert tableName="SecurityRole">
+			<column name="erole" value="COMMITTEE_MEMBER" />
+			<column name="localisedName" value="Committee Member" />
+			<column name="description" value="Contact Read Access" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="COMMUNICATIONS_OFFICER" />
+			<column name="localisedName" value="Communications Officer" />
+			<column name="description" value="Contact Read/Write Access, Communications Access" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="GROUP_LEADER" />
+			<column name="localisedName" value="Group Leader" />
+			<column name="description" value="Contact Full Access, Communications Access, Create User, Assign Security Roles" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="LEADER" />
+			<column name="localisedName" value="Leader" />
+			<column name="description" value="Contact Read/Write/Sensitive of all Contacts. May add Volunteer, Child Member and Adult Member users." />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="PRESIDENT" />
+			<column name="localisedName" value="President" />
+			<column name="description" value="Full Contact Access." />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="QUARTERMASTER" />
+			<column name="localisedName" value="Quartermaster" />
+			<column name="description" value="Contact Read Access" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="SECRETARY" />
+			<column name="localisedName" value="Secretary" />
+			<column name="description" value="Contact Read/Write/Sensitive Access" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="TREASURER" />
+			<column name="localisedName" value="Treasurer" />
+			<column name="description" value="Contact Read/Write/Financial Access" />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="USER" />
+			<column name="localisedName" value="User" />
+			<column name="description" value="Implicit. If they have a user account then they have the user securityrole which gives basic operations such as login and own password maintenance." />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="VOLUNTEER" />
+			<column name="localisedName" value="Volunteer" />
+			<column name="description" value="Access to broad group information (e.g. forthcoming activities) but no access to the Contact list." />
+		</insert>
+
+		<insert tableName="SecurityRole">
+			<column name="erole" value="TECH_SUPPORT" />
+			<column name="localisedName" value="Tech Support" />
+			<column name="description" value="Access everything with the exclusion of Sensitive information. However access needs to be given by the Group Leader and then only for a defined period of time." />
+		</insert>
+
+
+	</changeSet>
+</databaseChangeLog>
+
+		
