@@ -7,7 +7,7 @@ import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2016-02-21T11:09:12.416+1100")
+@Generated(value="Dali", date="2017-08-07T16:53:32.884+1000")
 @StaticMetamodel(Contact.class)
 public class Contact_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Contact, Boolean> active;
@@ -38,7 +38,6 @@ public class Contact_ extends BaseEntity_ {
 	public static volatile SingularAttribute<Contact, SectionType> section;
 	public static volatile SingularAttribute<Contact, String> hobbies;
 	public static volatile SingularAttribute<Contact, Date> affiliatedSince;
-	public static volatile SingularAttribute<Contact, GroupRole> groupRole;
 	public static volatile SingularAttribute<Contact, String> medicareNo;
 	public static volatile SingularAttribute<Contact, Boolean> ambulanceSubscriber;
 	public static volatile SingularAttribute<Contact, Boolean> privateMedicalInsurance;
@@ -59,5 +58,6 @@ public class Contact_ extends BaseEntity_ {
 	public static volatile ListAttribute<Contact, Note> notes;
 	public static volatile ListAttribute<Contact, CommunicationLog> activities;
 	public static volatile SingularAttribute<Contact, String> importId;
+	public static volatile SingularAttribute<Contact, GroupRole> groupRole;
 	public static volatile SingularAttribute<Contact, SectionType> sectionEligibility;
 }
