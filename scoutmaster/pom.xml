@@ -10,7 +10,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<vaadin.version>7.6.1</vaadin.version>
+		<vaadin.version>7.6.6</vaadin.version>
 		<liquibase.version>3.4.2</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jasperreports.version>6.2.0</jasperreports.version>
@@ -45,12 +45,13 @@
 
 		<!-- temporary repo until the dragdrop layout does a formal release for 
 			7.6 -->
-		<!-- Works around https://github.com/johndevs/dragdroplayouts/issues/42 -->
+		<!-- Works around https://github.com/johndevs/dragdroplayouts/issues/42 
 		<repository>
 			<id>dragdroplayouts</id>
 			<name>dragdroplayouts</name>
 			<url>http://mvn.jasoft.fi/maven2-snapshots/</url>
 		</repository>
+		-->
 
 
 
@@ -215,11 +216,16 @@
 			<groupId>commons-lang</groupId>
 			<version>2.6</version>
 		</dependency>
+		
+		<!-- 
+		
 		<dependency>
 			<groupId>org.marre.smsj</groupId>
 			<artifactId>org.marre.smsj</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		-->
+		
 
 
 		<dependency>

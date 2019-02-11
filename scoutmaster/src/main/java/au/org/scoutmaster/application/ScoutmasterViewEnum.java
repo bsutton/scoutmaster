@@ -30,7 +30,7 @@ import au.org.scoutmaster.views.TaskView;
 import au.org.scoutmaster.views.UserView;
 import au.org.scoutmaster.views.accounting.InvoiceView;
 import au.org.scoutmaster.views.calendar.CalendarView;
-import au.org.scoutmaster.views.calendar.PublicCalendarView;
+import au.org.scoutmaster.views.publicui.PublicCalendarView;
 import au.org.scoutmaster.views.reports.CalendarReportView;
 import au.org.scoutmaster.views.reports.ExternalProspectsReport;
 import au.org.scoutmaster.views.reports.MemberAddressReport;

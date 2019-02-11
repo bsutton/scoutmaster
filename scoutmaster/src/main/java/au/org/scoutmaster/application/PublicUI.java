@@ -12,7 +12,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import au.com.vaadinutils.menu.ViewMapping;
-import au.org.scoutmaster.views.calendar.PublicCalendarView;
+import au.org.scoutmaster.views.publicui.PublicCalendarView;
 
 /**
  * Check this out.

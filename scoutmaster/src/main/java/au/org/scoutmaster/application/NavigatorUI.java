@@ -266,6 +266,7 @@ public class NavigatorUI extends UI
 		public void afterViewChange(final ViewChangeEvent event)
 		{
 			// For some reason the page title is set to null after each
+
 			// navigation transition.
 			getPage().setTitle("Scoutmaster");
 			currentView = event.getNewView();

@@ -2,7 +2,6 @@ package au.org.scoutmaster.views.wizards.groupmaintenance;
 
 import java.util.List;
 
-import org.marre.sms.SmsException;
 import org.vaadin.teemu.wizards.WizardStep;
 
 import com.vaadin.data.validator.StringLengthValidator;
@@ -165,19 +164,17 @@ public class SmsProviderStep extends SingleEntityWizardStep<SMSProvider>
 								final SMSTransmission transmission = new SMSTransmission(null, contact, message,
 										recipient);
 								final SMSProviderDao daoSMSProvider = new DaoFactory().getSMSProviderDao();
-
-								try
-								{
-									daoSMSProvider.send(provider, transmission, SmsProviderStep.this);
-								}
-								catch (final SmsException e)
-								{
-									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-								}
-								catch (final Throwable e)
-								{
-									Notification.show(e.getMessage(), Type.ERROR_MESSAGE);
-								}
+								/*
+								 * MARRE is missing
+								 * 
+								 * try { daoSMSProvider.send(provider,
+								 * transmission, SmsProviderStep.this); } catch
+								 * (final SmsException e) {
+								 * Notification.show(e.getMessage(),
+								 * Type.ERROR_MESSAGE); } catch (final Throwable
+								 * e) { Notification.show(e.getMessage(),
+								 * Type.ERROR_MESSAGE); }
+								 */
 								return true;
 							}
 

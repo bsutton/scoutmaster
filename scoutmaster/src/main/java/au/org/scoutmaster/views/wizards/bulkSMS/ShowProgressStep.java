@@ -19,7 +19,6 @@ import com.vaadin.ui.VerticalLayout;
 import au.com.vaadinutils.fields.PoJoTable;
 import au.com.vaadinutils.ui.WorkingDialog;
 import au.com.vaadinutils.util.MutableInteger;
-import au.com.vaadinutils.util.ProgressBarWorker;
 import au.com.vaadinutils.util.ProgressTaskListener;
 import au.org.scoutmaster.dao.DaoFactory;
 import au.org.scoutmaster.dao.PhoneDao;
@@ -138,11 +137,15 @@ public class ShowProgressStep implements WizardStep, ProgressTaskListener<SMSTra
 			final SMSProvider provider = this.messagingWizardView.getDetails().getProvider();
 
 			final SendMessageTask task = new SendMessageTask(this, provider, detailsStep.getMessage(), transmissions);
-			this.workDialog = new WorkingDialog("Sending SMS messages", "Sending...", task);
-			final ProgressBarWorker<SMSTransmission> worker = new ProgressBarWorker<SMSTransmission>(task);
-			worker.start();
-
-			UI.getCurrent().addWindow(this.workDialog);
+			/*
+			 * MARRE is missing this.workDialog = new
+			 * WorkingDialog("Sending SMS messages", "Sending...", task); final
+			 * ProgressBarWorker<SMSTransmission> worker = new
+			 * ProgressBarWorker<SMSTransmission>(task); worker.start();
+			 * 
+			 * 
+			 * UI.getCurrent().addWindow(this.workDialog);
+			 */
 
 		}
 

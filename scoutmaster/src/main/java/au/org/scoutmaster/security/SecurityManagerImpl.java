@@ -79,4 +79,10 @@ public class SecurityManagerImpl implements CrudSecurityManager
 		return this.user.getId();
 	}
 
+	@Override
+	public String getUserDisallowedReason(Enum<?> outboundContactHub)
+	{
+		return this.getClass().getSimpleName();
+	}
+
 }

@@ -1,5 +1,14 @@
 package au.org.scoutmaster.views;
 
+import javax.persistence.metamodel.SingularAttribute;
+
+import com.vaadin.addon.jpacontainer.JPAContainer;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.util.filter.Or;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.VerticalLayout;
+
 import au.com.vaadinutils.crud.BaseCrudView;
 import au.com.vaadinutils.crud.ChildCrudView;
 import au.com.vaadinutils.crud.HeadingPropertySet;
@@ -17,23 +26,14 @@ import au.org.scoutmaster.domain.Contact;
 import au.org.scoutmaster.domain.Contact_;
 import au.org.scoutmaster.domain.access.User_;
 
-import javax.persistence.metamodel.SingularAttribute;
-
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.data.Container.Filter;
-import com.vaadin.data.util.filter.Or;
-import com.vaadin.data.util.filter.SimpleStringFilter;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.VerticalLayout;
-
 public class ChildCommunicationView extends ChildCrudView<Contact, CommunicationLog>
 {
 	private static final long serialVersionUID = 1L;
 
 	public ChildCommunicationView(final BaseCrudView<Contact> parentCrud)
 	{
-		super(parentCrud, Contact.class, CommunicationLog.class, BaseEntity_.id, CommunicationLog_.withContact
-				.getName());
+		super(parentCrud, Contact.class, CommunicationLog.class, BaseEntity_.id,
+				CommunicationLog_.withContact.getName());
 
 		final JPAContainer<CommunicationLog> container = new DaoFactory().getCommunicationLogDao()
 				.createVaadinContainer();
@@ -41,10 +41,10 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 		{ CommunicationLog_.activityDate.getName() }, new boolean[]
 		{ false });
 
-		final Builder<CommunicationLog> builder = new HeadingPropertySet.Builder<CommunicationLog>();
+		final Builder<CommunicationLog> builder = new HeadingPropertySet.Builder<>();
 		builder.addColumn("Subject", CommunicationLog_.subject).addColumn("Type", CommunicationLog_.type)
 				.addColumn("Communication Date", CommunicationLog_.activityDate)
-		.addColumn("Added By", CommunicationLog_.addedBy);
+				.addColumn("Added By", CommunicationLog_.addedBy);
 
 		super.init(CommunicationLog.class, container, builder.build());
 		super.activateEditMode(false);
@@ -62,7 +62,6 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 		super.fieldGroup.bind(detailsEditor, CommunicationLog_.details.getName());
 		layout.addComponent(detailsEditor);
 
-
 		return layout;
 	}
 
@@ -79,20 +78,23 @@ public class ChildCommunicationView extends ChildCrudView<Contact, Communication
 			show = false;
 		}
 
-		this.newButton.setVisible(show);
+		this.actionNewButton.setVisible(show);
 	}
 
 	@Override
 	protected Filter getContainerFilter(final String filterString, final boolean advancedSearchActive)
 	{
-		return new Or(new Or(new Or(new Or(new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(),
-				filterString, true, false), new SimpleStringFilter(new Path(CommunicationLog_.type,
-				CommunicationType_.name).getName(), filterString, true, false)), new SimpleStringFilter(new Path(
-				CommunicationLog_.withContact, Contact_.lastname).getName(), filterString, true, false)),
+		return new Or(new Or(new Or(new Or(
+				new Or(new SimpleStringFilter(CommunicationLog_.activityDate.getName(), filterString, true, false),
+						new SimpleStringFilter(new Path(CommunicationLog_.type, CommunicationType_.name).getName(),
+								filterString, true, false)),
+				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.lastname).getName(),
+						filterString, true, false)),
 				new SimpleStringFilter(new Path(CommunicationLog_.withContact, Contact_.firstname).getName(),
-						filterString, true, false)), new SimpleStringFilter(new Path(CommunicationLog_.addedBy,
-				User_.username).getName(), filterString, true, false)), new SimpleStringFilter(
-				CommunicationLog_.subject.getName(), filterString, true, false));
+						filterString, true, false)),
+				new SimpleStringFilter(new Path(CommunicationLog_.addedBy, User_.username).getName(), filterString,
+						true, false)),
+				new SimpleStringFilter(CommunicationLog_.subject.getName(), filterString, true, false));
 	}
 
 	@Override

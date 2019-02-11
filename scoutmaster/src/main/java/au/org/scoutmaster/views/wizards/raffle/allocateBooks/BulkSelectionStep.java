@@ -76,7 +76,7 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 
 		layout.addComponent(label);
 
-		final MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<RaffleBook>(1, null);
+		final MultiColumnFormLayout<RaffleBook> overviewForm = new MultiColumnFormLayout<>(1, null);
 		overviewForm.setColumnFieldWidth(0, 200);
 		final FormHelper<RaffleBook> formHelper = overviewForm.getFormHelper();
 
@@ -89,7 +89,7 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 		this.noOfBooksField = overviewForm.addTextField("No. of Books");
 		this.noOfBooksField.setDescription("The no. of books to allocate to each Contact");
 
-		final Builder<Contact> builder = new HeadingPropertySet.Builder<Contact>();
+		final Builder<Contact> builder = new HeadingPropertySet.Builder<>();
 		builder.addColumn("Firstname", Contact_.firstname).addColumn("Lastname", Contact_.lastname)
 				.addColumn("Section", Contact_.section).addColumn("Phone", Contact.PRIMARY_PHONE)
 				.addColumn("Member", Contact_.isMember).addColumn("Group Role", Contact_.groupRole);
@@ -125,7 +125,7 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 			}
 
 			@Override
-			public HeadingPropertySet<Contact> getHeadingPropertySet()
+			public HeadingPropertySet getHeadingPropertySet()
 			{
 				return builder.build();
 			}
@@ -188,8 +188,8 @@ public class BulkSelectionStep implements WizardStep, SelectStep
 		return enough;
 	}
 
-	private void preAllocateBooks(final Raffle raffle, final Collection<Long> selectedIds,
-			final List<RaffleBook> books, final int requiredBooks)
+	private void preAllocateBooks(final Raffle raffle, final Collection<Long> selectedIds, final List<RaffleBook> books,
+			final int requiredBooks)
 	{
 		int bookIndex = 0;
 		for (final Long selectedId : selectedIds)
