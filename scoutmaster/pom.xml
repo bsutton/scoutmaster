@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.6.6</vaadin.version>
-		<liquibase.version>3.4.2</liquibase.version>
+		<liquibase.version>4.8.0</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jasperreports.version>6.2.0</jasperreports.version>
 		<eclipselink.version>2.5.1</eclipselink.version>
