@@ -11,7 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<vaadin.version>7.6.6</vaadin.version>
-		<liquibase.version>3.4.2</liquibase.version>
+		<liquibase.version>4.8.0</liquibase.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jasperreports.version>6.2.0</jasperreports.version>
 		<eclipselink.version>2.5.1</eclipselink.version>
@@ -250,7 +250,7 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>3.8</version>
+			<version>4.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -287,7 +287,7 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
-			<version>2.0-rc1</version>
+			<version>2.12.4</version>
 		</dependency>
 
 		<!-- used to suppress warnings -->
@@ -322,7 +322,7 @@
 		<dependency>
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
-			<version>2.7</version>
+			<version>2.7.1</version>
 
 			<exclusions>
 				<exclusion>
